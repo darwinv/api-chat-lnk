@@ -2,24 +2,25 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class Countries(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-    code_phone = models.CharField(max_length=3, unique=True)
+    name = models.CharField(max_length=90, unique=True)
+    code_phone = models.CharField(max_length=4, unique=True)
     iso_code = models.CharField(max_length=4, unique=True)
     def __str__(self):
         return self.name
 
 class Department(models.Model):
-    name = models.CharField(max_length=45)
+    name = models.CharField(max_length=55)
 
 class Province(models.Model):
-    name = models.CharField(max_length=45)
+    name = models.CharField(max_length=55)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
 
 class District(models.Model):
-    name = models.CharField(max_length=45)
+    name = models.CharField(max_length=55)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
     def __str__(self):
         return self.name
+
 class Address(models.Model):
     street = models.CharField(max_length=155)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
@@ -56,7 +57,7 @@ class User(AbstractUser):
     email_exact = models.CharField(max_length=150, unique=True)
     telephone = models.CharField(max_length=14)
     cellphone = models.CharField(max_length=14)
-    photo = models.CharField(max_length=150) ## instalar pillow para ImageField
+    photo = models.CharField(max_length=250, default='preview.png') ## instalar pillow para ImageField
     options_documents = (
         ('0', 'DNI'),
         ('1', 'Passport'),
@@ -92,14 +93,14 @@ class Seller(User):
 
 
 class Objection(models.Model):
-    name = models.CharField(max_length=45)
+    name = models.CharField(max_length=65)
     def __str__(self):
         return self.name
 
 
 class SellerContactNoEfective(models.Model):
     contact_firstname = models.CharField(max_length=45, null=True)
-    contact_lastname = models.CharField(max_length=45, null=True)
+    contact_lastname = models.CharField(max_length=55, null=True)
     options_type = (
         ('n', 'Natural'),
         ('b', 'Bussiness'),
@@ -190,7 +191,7 @@ class Client(User):
 
 class Category(models.Model):
     name = models.CharField(max_length=45, unique=True)
-    image = models.CharField(max_length=59)
+    image = models.CharField(max_length=169)
     description = models.CharField(max_length=255)
     payment_per_answer = models.FloatField()
     def __str__(self):
@@ -205,7 +206,7 @@ class Specialist(User):
     )
     type_specialist = models.CharField(max_length=1, choices=options_type)
     star_rating = models.IntegerField(null=True)
-    cv = models.FileField(upload_to='specialist_cv', null=True)
+    cv = models.CharField(max_length=150)
     payment_per_answer = models.FloatField()
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
 
@@ -270,7 +271,7 @@ class Product(models.Model):
 
 class Purchase(models.Model):
     total_amount = models.FloatField()
-    reference_number = models.CharField(max_length=20)
+    reference_number = models.CharField(max_length=30)
     fee_number = models.PositiveIntegerField()
     latitude = models.CharField(max_length=45, null=True)
     longitude = models.CharField(max_length=45, null=True)
