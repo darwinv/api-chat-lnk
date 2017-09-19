@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .models import User, Client
+from api.models import User, Client
 from api.serializers import ClientSerializer
+from rest_framework.response import Response
 # Create your views here.
 
-class Client(APIView):
+class ClientView(APIView):
     # Lista todos los clientes naturales o crea uno nuevo
     # no olvidar lo de los permisos permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     def get(self, request):
@@ -13,6 +14,12 @@ class Client(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        data = {
+            'name': request.data.get('name'),
+            'age': int(request.data.get('age')),
+            'breed': request.data.get('breed'),
+            'color': request.data.get('color')
+        }
         serializer = ClientSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
