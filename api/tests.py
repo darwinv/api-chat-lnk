@@ -1,14 +1,20 @@
-from django.test import TestCase
+
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 import json
+from .models import Client as Cliente
+from rest_framework import status
+from .serializers import ClientSerializer
 # Create your tests here.
 
-# token = Token.objects.get(user__username='lauren')
+
 client = APIClient()
+client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
+
+# user = User.objects.get(username='admin')
 # client.credentials(Authorization='Bearer ' + token.key)
-client.force_authenticate(user=None)
+# force_authenticate(request, user=user, token='zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
 class CreateNaturalClient(APITestCase):
     # Prueba para verificar la insercion de cliente natural
@@ -20,6 +26,8 @@ class CreateNaturalClient(APITestCase):
             'first_name': 'darwin',
             'last_name': 'vasquez',
             'civil_state': 's',
+            'password': 'intel12345',
+            'confirm_password': 'intel12345',
             'birthdate': '2017-09-19',
             'photo': 'test.jpg',
             'sex': 'm',
@@ -29,17 +37,37 @@ class CreateNaturalClient(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             'activity_description': 'Loremp iptsum',
-            'level_instruction': 1,
+            'level_instruction': 'Superior Concluida',
             'institute': 'UNEFA',
-            'profession': 1,
+            'profession': 'Programmer',
             'ocupation': 'i',
             'about': 'iptsum aabout',
-            'ciiu': '1440'
+            'commercial_group': '',
+            'economic_sector': '',
+            'ciiu': '1440',
+            'nationality': 'Peru'
         }
+
     def test_create_natural_client(self):
-        response = client.post(
+        response = self.client.post(
             reverse('clients'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        self.assertEqual(response.data, 'ey')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+class GetAllClients(APITestCase):
+    """ Test module for GET all clients API """
+
+    def setUp(self):
+        pass
+
+    def test_get_all_clients(self):
+        # get API response
+        response = client.get(reverse('clients'))
+        # get data from db
+        clients = Cliente.objects.all()
+        serializer = ClientSerializer(clients, many=True)
+        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
