@@ -23,8 +23,6 @@ class ClientView(APIView):
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
             data['commercial_group'] = ''
-
-
         serializer = ClientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

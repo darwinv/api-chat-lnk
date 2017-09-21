@@ -29,6 +29,12 @@ class CreateNaturalClient(APITestCase):
             'password': 'intel12345',
             'confirm_password': 'intel12345',
             'birthdate': '2017-09-19',
+            "address": {
+                "street": "esteban camere",
+                "department": "Lima",
+                "province": "Lima",
+                "district": "Surco"
+            },
             'photo': 'test.jpg',
             'sex': 'm',
             'document_type': '1',
@@ -54,8 +60,8 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        self.assertEqual(response.data, 'ey')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data, 'ey')
 
 class GetAllClients(APITestCase):
     """ Test module for GET all clients API """
