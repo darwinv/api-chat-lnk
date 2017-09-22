@@ -3,9 +3,9 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 import json
-from .models import Client as Cliente
+from ..models import Client as Cliente
 from rest_framework import status
-from .serializers import ClientSerializer
+from ..serializers import ClientSerializer
 # Create your tests here.
 
 
@@ -37,7 +37,7 @@ class CreateNaturalClient(APITestCase):
             },
             'photo': 'test.jpg',
             'sex': 'm',
-            'document_type': '1',
+            'document_type': '2',
             'document_number': '144013012',
             'email_exact': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
@@ -54,6 +54,38 @@ class CreateNaturalClient(APITestCase):
             'nationality': 'Peru'
         }
 
+    def test_invalid_email(self):
+        data = self.valid_payload
+        data['email_exact']='asdasd'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        #self.assertEqual(response.data, 'ey')
+    def test_invalid_photo(self):
+        data = self.valid_payload
+        data['photo'] = 'tex.xcf'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        # self.assertEqual(response.data, 'ey')
+
+    def test_invalid_countries(self):
+        data = self.valid_payload
+        data['nationality'] = 'Atlantida'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        # self.assertEqual(response.data, 'ey')
+
     def test_create_natural_client(self):
         response = self.client.post(
             reverse('clients'),
@@ -61,7 +93,7 @@ class CreateNaturalClient(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data, 'ey')
+        # self.assertEqual(response.data, 'ey')
 
 class GetAllClients(APITestCase):
     """ Test module for GET all clients API """

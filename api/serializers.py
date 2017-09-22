@@ -2,7 +2,17 @@ from rest_framework import serializers
 from api.models import Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
 from api.models import Province, District
+from django.utils import six
 
+class CustomChoiceField(serializers.ChoiceField):
+    def __init__(self, choices, **kwargs):
+        self.choices_to_dict = choices
+        serializers.ChoiceField.__init__(self, choices,**kwargs)
+
+    def to_representation(self, value):
+        # model = Client._meta
+        dictionary = dict(self.choices_to_dict)
+        return dictionary.get(value)
 
 class AddressSerializer(serializers.ModelSerializer):
     department = serializers.SlugRelatedField(queryset=Department.objects.all(), slug_field='name')
@@ -25,10 +35,12 @@ class ClientSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(allow_blank=False, write_only=True)
     type_client = serializers.SerializerMethodField()
     sex = serializers.SerializerMethodField()
-    document_type = serializers.SerializerMethodField()
+    # document_type = serializers.SerializerMethodField()
+    document_type = CustomChoiceField(choices=Client.options_documents)
     civil_state = serializers.SerializerMethodField()
     ocupation = serializers.SerializerMethodField()
     address = AddressSerializer()
+    email_exact = serializers.EmailField()
 
     def get_type_client(self,obj):
         return obj.get_type_client_display()
@@ -36,8 +48,8 @@ class ClientSerializer(serializers.ModelSerializer):
     def get_sex(self,obj):
         return obj.get_sex_display()
 
-    def get_document_type(self,obj):
-        return obj.get_document_type_display()
+    # def get_document_type(self,obj):
+    #     return obj.get_document_type_display()
 
     def get_civil_state(self,obj):
         return obj.get_civil_state_display()
@@ -46,8 +58,12 @@ class ClientSerializer(serializers.ModelSerializer):
         return obj.get_ocupation_display()
 
     def validate(self, data):
+        extension = data['photo'].split(".")[1]  # [0] returns path+filename
+        valid_extensions = ['png', 'jpg', 'jpeg']
+        if not extension.lower() in valid_extensions:
+             raise serializers.ValidationError(u"Unsupported image extension.")
         if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError("Passwords don't match")
+            raise serializers.ValidationError(u"Passwords don't match")
         del data['confirm_password']
         return data
 

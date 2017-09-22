@@ -7,6 +7,11 @@ from rest_framework import status, permissions
 
 # Create your views here.
 
+# Constantes
+PREFIX_CODE_CLIENT = 'c'
+ROLE_CLIENT = 2
+#Fin de constates
+
 class ClientView(APIView):
     # Lista todos los clientes naturales o crea uno nuevo
     # no olvidar lo de los permisos permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -18,8 +23,8 @@ class ClientView(APIView):
 
     def post(self, request):
         data = request.data
-        data['code'] = 'c' + request.data.get('document_number')
-        data['role'] = 2
+        data['code'] = PREFIX_CODE_CLIENT + request.data.get('document_number')
+        data['role'] = ROLE_CLIENT
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
             data['commercial_group'] = ''
