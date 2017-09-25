@@ -16,6 +16,7 @@ client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 # client.credentials(Authorization='Bearer ' + token.key)
 # force_authenticate(request, user=user, token='zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
+# Prueba para verificar la insercion de cliente natural
 class CreateNaturalClient(APITestCase):
     # Prueba para verificar la insercion de cliente natural
     def setUp(self):
@@ -46,10 +47,8 @@ class CreateNaturalClient(APITestCase):
             'level_instruction': 'Superior Concluida',
             'institute': 'UNEFA',
             'profession': 'Programmer',
-            'ocupation': 'i',
+            'ocupation': 'd',
             'about': 'iptsum aabout',
-            'commercial_group': '',
-            'economic_sector': '',
             'ciiu': '1440',
             'nationality': 'Peru'
         }
@@ -94,6 +93,61 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
+
+# Prueba para verificar la insercion de cliente juridico
+class CreateBussinessClientTestCase(APITestCase):
+    def setUp(self):
+        self.valid_payload = {
+            'username': 'alpanet',
+            'nick': 'alpanet',
+            'type_client': 'b',
+            'password': 'intel12345',
+            'confirm_password': 'intel12345',
+            "bussiness_name": 'Alpanet',
+            "address": {
+                "street": "esteban camere",
+                "department": "Lima",
+                "province": "Lima",
+                "district": "Surco"
+            },
+            'photo': 'test.jpg',
+            'document_type': '2',
+            'document_number': '144013012',
+            'email_exact': 'darwin.vasqz@gmail.com',
+            'telephone': '921471559',
+            'cellphone': '921471559',
+            'activity_description': 'computers and programs',
+            "agent_firstname": "Daniel",
+            "agent_lastname": "Molina",
+            'position': 'manager',
+            'about': 'iptsum aabout',
+            'commercial_group': 'Technologies',
+            'economic_sector': 'Secondary',
+            'ciiu': '1240',
+            'nationality': 'Peru'
+        }
+
+    def test_empty_bussiness_fields(self):
+        data = self.valid_payload
+        del data['agent_lastname']
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_bussines_client(self):
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # self.assertEqual(response.data, 'ey')
+
+
+
 
 class GetAllClients(APITestCase):
     """ Test module for GET all clients API """

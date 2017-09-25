@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from api.models import Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
-from api.models import Province, District
+from api.models import Province, District, Category
 from django.utils import six
 
 class CustomChoiceField(serializers.ChoiceField):
@@ -33,38 +33,46 @@ class ClientSerializer(serializers.ModelSerializer):
     economic_sector = serializers.SlugRelatedField(queryset=EconomicSector.objects.all(), slug_field='name', allow_null=True)
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(allow_blank=False, write_only=True)
-    type_client = serializers.SerializerMethodField()
-    sex = serializers.SerializerMethodField()
-    # document_type = serializers.SerializerMethodField()
+    type_client = CustomChoiceField(choices=Client.options_type)
+    sex = CustomChoiceField(choices=Client.options_sex, allow_blank=True)
     document_type = CustomChoiceField(choices=Client.options_documents)
-    civil_state = serializers.SerializerMethodField()
-    ocupation = serializers.SerializerMethodField()
+    civil_state = CustomChoiceField(choices=Client.options_civil_state, allow_blank=True)
+    ocupation = CustomChoiceField(choices=Client.options_ocupation, allow_blank=True)
     address = AddressSerializer()
     email_exact = serializers.EmailField()
 
-    def get_type_client(self,obj):
-        return obj.get_type_client_display()
-
-    def get_sex(self,obj):
-        return obj.get_sex_display()
-
-    # def get_document_type(self,obj):
-    #     return obj.get_document_type_display()
-
-    def get_civil_state(self,obj):
-        return obj.get_civil_state_display()
-
-    def get_ocupation(self,obj):
-        return obj.get_ocupation_display()
+    # Por si es necesario usarlo se usa el metodo
+    # type_client = serializers.SerializerMethodField()
+    # def get_type_client(self,obj):
+    #     return obj.get_type_client_display()
+    def validate_bussines_client(self,data):
+        if 'bussiness_name' not in data:
+            raise serializers.ValidationError(u"Bussiness name required.")
+        if data['commercial_group'] == None:
+            raise serializers.ValidationError(u"commercial_group must no be empty.")
+        if data['economic_sector'] == None:
+            raise serializers.ValidationError(u"economic_sector must no be empty.")
+        if 'position' not in data:
+            raise serializers.ValidationError(u"Position required.")
+        if 'agent_firstname' not in data:
+            raise serializers.ValidationError(u"agent_firstname required.")
+        if 'agent_lastname' not in data:
+            raise serializers.ValidationError(u"agent_lastname required.")
+        return
 
     def validate(self, data):
         extension = data['photo'].split(".")[1]  # [0] returns path+filename
         valid_extensions = ['png', 'jpg', 'jpeg']
+
         if not extension.lower() in valid_extensions:
              raise serializers.ValidationError(u"Unsupported image extension.")
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError(u"Passwords don't match")
         del data['confirm_password']
+
+        if data['type_client'] == 'b':
+            self.validate_bussines_client(data)
+
         return data
 
     def create(self, validated_data):
@@ -88,3 +96,8 @@ class ClientSerializer(serializers.ModelSerializer):
         'bussiness_name', 'agent_firstname', 'agent_lastname', 'position',
         'commercial_group', 'economic_sector','institute', 'profession',
         'ocupation', 'about', 'nationality')
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('id', 'name', 'image', 'description')
