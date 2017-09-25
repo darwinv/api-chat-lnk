@@ -4,7 +4,7 @@ from api.models import Client, Category
 from api.serializers import ClientSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions
-
+from api.serializers import CategorySerializer
 # Create your views here.
 
 # Constantes
@@ -45,7 +45,7 @@ class ClientView(APIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class CategoryView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
         specialities = Category.objects.all()
         serializer = CategorySerializer(specialities, many=True)
