@@ -10,10 +10,14 @@ class Countries(models.Model):
 
 class Department(models.Model):
     name = models.CharField(max_length=55)
+    def __str__(self):
+        return self.name
 
 class Province(models.Model):
     name = models.CharField(max_length=55)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
+    def __str__(self):
+        return self.name
 
 class District(models.Model):
     name = models.CharField(max_length=55)
