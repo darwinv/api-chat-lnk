@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from api.models import Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
-from api.models import Province, District, Category
+from api.models import Province, District, Category, Specialist
 from django.utils import six
 
 class CustomChoiceField(serializers.ChoiceField):
@@ -28,7 +28,6 @@ class ClientSerializer(serializers.ModelSerializer):
     level_instruction = serializers.SlugRelatedField(queryset=LevelInstruction.objects.all(), slug_field='name', allow_null=True)
     profession = serializers.SlugRelatedField(queryset=Profession.objects.all(), slug_field='name', allow_null=True)
     nationality = serializers.SlugRelatedField(queryset=Countries.objects.all(), slug_field='name')
-    # role = serializers.SlugRelatedField(queryset=Role.objects.all(), slug_field='name')
     commercial_group = serializers.SlugRelatedField(queryset=CommercialGroup.objects.all(), slug_field='name', allow_null=True)
     economic_sector = serializers.SlugRelatedField(queryset=EconomicSector.objects.all(), slug_field='name', allow_null=True)
     password = serializers.CharField(write_only=True)
@@ -96,6 +95,23 @@ class ClientSerializer(serializers.ModelSerializer):
         'bussiness_name', 'agent_firstname', 'agent_lastname', 'position',
         'commercial_group', 'economic_sector','institute', 'profession',
         'ocupation', 'about', 'nationality')
+
+class SpecialistSerializer(serializers.ModelSerializer):
+    nationality = serializers.SlugRelatedField(queryset=Countries.objects.all(), slug_field='name')
+    password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(allow_blank=False, write_only=True)
+    document_type = CustomChoiceField(choices=Specialist.options_documents)
+    type_specialist = CustomChoiceField(choices=Specialist.options_type)
+    address = AddressSerializer()
+    email_exact = serializers.EmailField()
+    category = serializers.SlugRelatedField(queryset=Category.objects.all(), slug_field='name')
+    class Meta:
+        model = Specialist
+        fields = ('id', 'username', 'nick', 'first_name', 'last_name',
+        'type_specialist','password','confirm_password', 'photo','document_type',
+        'document_number','address', 'ruc', 'email_exact', 'code', 'telephone',
+        'cellphone', 'bussiness_name', 'payment_per_answer','cv','star_rating',
+        'category','nationality')
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

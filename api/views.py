@@ -1,10 +1,10 @@
 
 from rest_framework.views import APIView
-from api.models import Client, Category
+from api.models import Client, Category, Specialist
 from api.serializers import ClientSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from api.serializers import CategorySerializer
+from api.serializers import CategorySerializer, SpecialistSerializer
 from django.http import Http404
 # Create your views here.
 
@@ -58,6 +58,8 @@ class ClientDetailView(APIView):
         serializer = ClientSerializer(client)
         return Response(serializer.data)
 
+# Fin de Clientes
+
 class CategoryListView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
@@ -77,5 +79,12 @@ class CategoryDetailView(APIView):
         category = self.get_object(pk)
         serializer = CategorySerializer(category)
         return Response(serializer.data)
-    # def perform_create(self, serializer):
-    #     serializer.save()
+# ------------ Fin de Categorias o Especialidades -----------------
+
+#---------- ------ Inicio de Especialistas -----------------
+class SpecialistListView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get(self, request):
+        specialists = Specialist.objects.all()
+        serializer = SpecialistSerializer(specialists, many=True)
+        return Response(serializer.data)

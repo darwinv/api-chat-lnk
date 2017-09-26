@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Role, User, Seller, Client, Category
+from .models import Role, User, Seller, Client, Category, Specialist
 # Register your models here.
 
 class ClientNaturalAdmin(admin.ModelAdmin):
@@ -18,6 +18,13 @@ class ClientBussinessAdmin(admin.ModelAdmin):
      'ciiu', 'activity_description','agent_firstname', 'agent_lastname','position',
      'about','anonymous','role','nationality')
 
+class SpecialistAdmin(admin.ModelAdmin):
+    fields = ('username', 'nick','password','photo','first_name', 'last_name',
+    'bussiness_name','type_specialist','email_exact','telephone',
+    'cellphone','document_type', 'document_number',
+    'ruc','code','payment_per_answer','anonymous','role','category')
+
 # admin.site.register(Client,ClientNaturalAdmin)
 admin.site.register(Client,ClientBussinessAdmin)
 admin.site.register(Category)
+admin.site.register(Specialist,SpecialistAdmin)

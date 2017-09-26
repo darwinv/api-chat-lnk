@@ -210,7 +210,7 @@ class Specialist(User):
     )
     type_specialist = models.CharField(max_length=1, choices=options_type)
     star_rating = models.IntegerField(null=True)
-    cv = models.CharField(max_length=150)
+    cv = models.CharField(max_length=150,null=True)
     payment_per_answer = models.FloatField()
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
 
