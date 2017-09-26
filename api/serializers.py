@@ -4,6 +4,21 @@ from api.models import CommercialGroup, EconomicSector, Address, Department
 from api.models import Province, District, Category, Specialist
 from django.utils import six
 
+
+class CommonValidation():
+
+    def match_passwords(self,password,confirm_password):
+        if password != confirm_password:
+            raise serializers.ValidationError(u"Passwords don't match")
+
+    def validate_img(self,photo):
+        extension = photo.split(".")[1]  # [0] returns path+filename
+        valid_extensions = ['png', 'jpg', 'jpeg']
+        if not extension.lower() in valid_extensions:
+            raise serializers.ValidationError(u"Unsupported image extension.")
+
+
+
 class CustomChoiceField(serializers.ChoiceField):
     def __init__(self, choices, **kwargs):
         self.choices_to_dict = choices
@@ -60,18 +75,12 @@ class ClientSerializer(serializers.ModelSerializer):
         return
 
     def validate(self, data):
-        extension = data['photo'].split(".")[1]  # [0] returns path+filename
-        valid_extensions = ['png', 'jpg', 'jpeg']
-
-        if not extension.lower() in valid_extensions:
-             raise serializers.ValidationError(u"Unsupported image extension.")
-        if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError(u"Passwords don't match")
+        validation = CommonValidation()
+        validation.validate_img(photo=data['photo'])
+        validation.match_passwords(data['password'],data['confirm_password'])
         del data['confirm_password']
-
         if data['type_client'] == 'b':
             self.validate_bussines_client(data)
-
         return data
 
     def create(self, validated_data):
@@ -97,7 +106,7 @@ class ClientSerializer(serializers.ModelSerializer):
         'ocupation', 'about', 'nationality')
 
 class SpecialistSerializer(serializers.ModelSerializer):
-    nationality = serializers.SlugRelatedField(queryset=Countries.objects.all(), slug_field='name')
+    nationality = serializers.SlugRelatedField(queryset=Countries.objects.all(), slug_field='name',required=False)
     password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(allow_blank=False, write_only=True)
     document_type = CustomChoiceField(choices=Specialist.options_documents)
@@ -105,6 +114,26 @@ class SpecialistSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
     email_exact = serializers.EmailField()
     category = serializers.SlugRelatedField(queryset=Category.objects.all(), slug_field='name')
+
+    def validate(self,data):
+        validation = CommonValidation()
+        validation.validate_img(photo=data['photo'])
+        validation.match_passwords(data['password'],data['confirm_password'])
+        del data['confirm_password']
+        return data
+
+    def create(self, validated_data):
+        data_address = validated_data.pop('address')
+        # address = AddressSerializer(data=data_address)
+        address = Address.objects.create(**data_address)
+        validated_data['address'] = address
+        password = validated_data.pop('password', None)
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
+
     class Meta:
         model = Specialist
         fields = ('id', 'username', 'nick', 'first_name', 'last_name',

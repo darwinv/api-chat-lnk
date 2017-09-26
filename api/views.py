@@ -11,6 +11,8 @@ from django.http import Http404
 # Constantes
 PREFIX_CODE_CLIENT = 'c'
 ROLE_CLIENT = 2
+ROLE_SPECIALIST = 3
+PREFIX_CODE_SPECIALIST = 's'
 DATE_FAKE = '1900-01-01'
 #Fin de constates
 
@@ -81,10 +83,20 @@ class CategoryDetailView(APIView):
         return Response(serializer.data)
 # ------------ Fin de Categorias o Especialidades -----------------
 
-#---------- ------ Inicio de Especialistas -----------------
+#---------- ------ Inicio de Especialistas ------------------------------
 class SpecialistListView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.AllowAny]
     def get(self, request):
         specialists = Specialist.objects.all()
         serializer = SpecialistSerializer(specialists, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        data = request.data
+        data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number')
+        data['role'] = ROLE_SPECIALIST
+        serializer = SpecialistSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
