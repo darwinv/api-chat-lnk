@@ -5,6 +5,7 @@ from api.serializers import ClientSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from api.serializers import CategorySerializer
+from django.http import Http404
 # Create your views here.
 
 # Constantes
@@ -13,7 +14,7 @@ ROLE_CLIENT = 2
 DATE_FAKE = '1900-01-01'
 #Fin de constates
 
-class ClientView(APIView):
+class ClientListView(APIView):
     # Lista todos los clientes naturales o crea uno nuevo
     # no olvidar lo de los permisos permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     permission_classes = [permissions.AllowAny]
@@ -44,11 +45,37 @@ class ClientView(APIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-class CategoryView(APIView):
+class ClientDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get_object(self, pk):
+        try:
+            return Client.objects.get(pk=pk)
+        except Client.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        client = self.get_object(pk)
+        serializer = ClientSerializer(client)
+        return Response(serializer.data)
+
+class CategoryListView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
         specialities = Category.objects.all()
         serializer = CategorySerializer(specialities, many=True)
+        return Response(serializer.data)
+
+class CategoryDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get_object(self, pk):
+        try:
+            return Category.objects.get(pk=pk)
+        except Category.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        category = self.get_object(pk)
+        serializer = CategorySerializer(category)
         return Response(serializer.data)
     # def perform_create(self, serializer):
     #     serializer.save()

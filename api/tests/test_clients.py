@@ -147,6 +147,11 @@ class CreateBussinessClientTestCase(APITestCase):
         # self.assertEqual(response.data, 'ey')
 
 
+class GetDetailClient(APITestCase):
+    def setUp(self):
+        pass
+    def test_get_client(self):
+        pass
 
 
 class GetAllClients(APITestCase):
