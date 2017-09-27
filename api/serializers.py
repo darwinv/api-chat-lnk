@@ -108,6 +108,8 @@ class ClientSerializer(serializers.ModelSerializer):
 class SpecialistSerializer(serializers.ModelSerializer):
     nationality = serializers.SlugRelatedField(queryset=Countries.objects.all(), slug_field='name',required=False)
     password = serializers.CharField(write_only=True)
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
     confirm_password = serializers.CharField(allow_blank=False, write_only=True)
     document_type = CustomChoiceField(choices=Specialist.options_documents)
     type_specialist = CustomChoiceField(choices=Specialist.options_type)
@@ -119,6 +121,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
         validation = CommonValidation()
         validation.validate_img(photo=data['photo'])
         validation.match_passwords(data['password'],data['confirm_password'])
+        if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",category__name=data["category"]).exists():
+            raise serializers.ValidationError(u"Main specialist already exists.")
         del data['confirm_password']
         return data
 

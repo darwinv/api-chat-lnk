@@ -15,6 +15,8 @@ class CreateSpecialistCase(APITestCase):
             'username': 'julia',
             'nick': 'julia',
             'password': 'intel12345',
+            "first_name": "juliana",
+            "last_name": "garzon",
             'confirm_password': 'intel12345',
             "type_specialist": "m",
             "address": {
@@ -34,14 +36,36 @@ class CreateSpecialistCase(APITestCase):
             "payment_per_answer": 2.2,
             "category": "Agroindustria"
         }
+
+    def test_invalid_names(self):
+        data = self.valid_payload
+        del data['last_name']
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_empty_names(self):
+        data = self.valid_payload
+        data["last_name"] = ""
+        data["first_name"] = ""
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
     def test_create_specialist(self):
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data, 'ey')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # self.assertEqual(response.data, 'ey')
 
 class GetSpecialistCase(APITestCase):
     def setUp(self):
