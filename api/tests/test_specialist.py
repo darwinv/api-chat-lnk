@@ -17,7 +17,6 @@ class CreateSpecialistCase(APITestCase):
             'password': 'intel12345',
             "first_name": "juliana",
             "last_name": "garzon",
-            'confirm_password': 'intel12345',
             "type_specialist": "m",
             "address": {
                 "street": "jupiter 209",
@@ -57,7 +56,7 @@ class CreateSpecialistCase(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        
+
     def test_create_specialist(self):
         response = self.client.post(
             reverse('specialists'),
@@ -66,6 +65,48 @@ class CreateSpecialistCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
+class UpdateSpecialistCase(APITestCase):
+    def setUp(self):
+        self.valid_payload = {
+            'username': 'julia',
+            'nick': 'julia',
+            'password': 'intel12345',
+            "first_name": "juliana",
+            "last_name": "garzon",
+            "type_specialist": "m",
+            "address": {
+                "street": "jupiter 209",
+                "department": "Lima",
+                "province": "Lima",
+                "district": "Surco"
+            },
+            'photo': 'preview.jpg',
+            'document_type': '2',
+            'document_number': '144013012',
+            'email_exact': 'darwin.vasqz@gmail.com',
+            'telephone': '921471559',
+            'cellphone': '921471559',
+            "ruc": "2009918312",
+            "bussiness_name": "agropatria",
+            "payment_per_answer": 2.2,
+            "category": "Agroindustria"
+        }
+
+        # self.assertEqual(self.resp.data["id"], 'ey')
+
+    def test_can_update_specialist(self):
+        send = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.valid_payload["nick"] = "juiol"
+        response = self.client.put(
+            reverse('specialist-detail', kwargs={'pk': send.data["id"]}),
+            self.valid_payload, format='json'
+        )
+        # self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, 'ey')
 
 class GetSpecialistCase(APITestCase):
     def setUp(self):

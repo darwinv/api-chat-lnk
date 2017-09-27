@@ -27,7 +27,6 @@ class CreateNaturalClient(APITestCase):
             'last_name': 'vasquez',
             'civil_state': 's',
             'password': 'intel12345',
-            'confirm_password': 'intel12345',
             'birthdate': '2017-09-19',
             "address": {
                 "street": "esteban camere",
@@ -83,16 +82,7 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # self.assertEqual(response.data, 'ey')
-    def test_passwd_invalids(self):
-        data = self.valid_payload
-        data['confirm_password'] = '00123'
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        
+
     def test_create_natural_client(self):
         response = self.client.post(
             reverse('clients'),

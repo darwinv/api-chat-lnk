@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 from api.models import Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
 from api.models import Province, District, Category, Specialist
@@ -7,9 +8,9 @@ from django.utils import six
 
 class CommonValidation():
 
-    def match_passwords(self,password,confirm_password):
-        if password != confirm_password:
-            raise serializers.ValidationError(u"Passwords don't match")
+    # def match_passwords(self,password,confirm_password):
+    #     if password != confirm_password:
+    #         raise serializers.ValidationError(u"Passwords don't match")
 
     def validate_img(self,photo):
         extension = photo.split(".")[1]  # [0] returns path+filename
@@ -46,14 +47,14 @@ class ClientSerializer(serializers.ModelSerializer):
     commercial_group = serializers.SlugRelatedField(queryset=CommercialGroup.objects.all(), slug_field='name', allow_null=True)
     economic_sector = serializers.SlugRelatedField(queryset=EconomicSector.objects.all(), slug_field='name', allow_null=True)
     password = serializers.CharField(write_only=True)
-    confirm_password = serializers.CharField(allow_blank=False, write_only=True)
+    # confirm_password = serializers.CharField(allow_blank=False, write_only=True)
     type_client = CustomChoiceField(choices=Client.options_type)
     sex = CustomChoiceField(choices=Client.options_sex, allow_blank=True)
     document_type = CustomChoiceField(choices=Client.options_documents)
     civil_state = CustomChoiceField(choices=Client.options_civil_state, allow_blank=True)
     ocupation = CustomChoiceField(choices=Client.options_ocupation, allow_blank=True)
     address = AddressSerializer()
-    email_exact = serializers.EmailField()
+    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=Client.objects.all())])
 
     # Por si es necesario usarlo se usa el metodo
     # type_client = serializers.SerializerMethodField()
@@ -77,8 +78,8 @@ class ClientSerializer(serializers.ModelSerializer):
     def validate(self, data):
         validation = CommonValidation()
         validation.validate_img(photo=data['photo'])
-        validation.match_passwords(data['password'],data['confirm_password'])
-        del data['confirm_password']
+        # validation.match_passwords(data['password'],data['confirm_password'])
+        # del data['confirm_password']
         if data['type_client'] == 'b':
             self.validate_bussines_client(data)
         return data
@@ -98,7 +99,7 @@ class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = ('id', 'username', 'nick','type_client', 'first_name', 'last_name',
-        'password','confirm_password', 'photo','sex','document_type', 'document_number',
+        'password', 'photo','sex','document_type', 'document_number',
         'civil_state','birthdate','address', 'ruc', 'email_exact', 'code',
         'telephone', 'cellphone', 'ciiu', 'activity_description', 'level_instruction',
         'bussiness_name', 'agent_firstname', 'agent_lastname', 'position',
@@ -110,7 +111,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
-    confirm_password = serializers.CharField(allow_blank=False, write_only=True)
+    # confirm_password = serializers.CharField(allow_blank=False, write_only=True)
     document_type = CustomChoiceField(choices=Specialist.options_documents)
     type_specialist = CustomChoiceField(choices=Specialist.options_type)
     address = AddressSerializer()
@@ -120,10 +121,10 @@ class SpecialistSerializer(serializers.ModelSerializer):
     def validate(self,data):
         validation = CommonValidation()
         validation.validate_img(photo=data['photo'])
-        validation.match_passwords(data['password'],data['confirm_password'])
-        if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",category__name=data["category"]).exists():
-            raise serializers.ValidationError(u"Main specialist already exists.")
-        del data['confirm_password']
+        # validation.match_passwords(data['password'],data['confirm_password'])
+        if self.instance and self.instance.username != data["username"]:
+            if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",category__name=data["category"]).exists():
+                raise serializers.ValidationError(u"Main specialist already exists.")
         return data
 
     def create(self, validated_data):
@@ -137,11 +138,13 @@ class SpecialistSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+    # def update(self, instance, validated_data):
+    #     data_address = validated_data.pop('address')
 
     class Meta:
         model = Specialist
         fields = ('id', 'username', 'nick', 'first_name', 'last_name',
-        'type_specialist','password','confirm_password', 'photo','document_type',
+        'type_specialist','password', 'photo','document_type',
         'document_number','address', 'ruc', 'email_exact', 'code', 'telephone',
         'cellphone', 'bussiness_name', 'payment_per_answer','cv','star_rating',
         'category','nationality')

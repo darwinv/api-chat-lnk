@@ -100,3 +100,27 @@ class SpecialistListView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class SpecialistDetailView(APIView):
+    permission_classes = [permissions.AllowAny]
+    def get_object(self, pk):
+        try:
+            return Specialist.objects.get(pk=pk)
+        except Specialist.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        specialist = self.get_object(pk)
+        serializer = SpecialistSerializer(specialist)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        data = request.data
+        data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number')
+        data['role'] = ROLE_SPECIALIST
+        specialist = self.get_object(pk)
+        serializer = SpecialistSerializer(specialist, data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
