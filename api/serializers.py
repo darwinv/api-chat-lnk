@@ -163,10 +163,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
             address.street = data_address['street']
             address.save()
             instance.address = address
-            # validated_data['address'] = address
-            # address = AddressSerializer(data=data_address)
-        #  pdb.set_trace()
-        # instance.address = address
         instance.save()
         return instance
 
