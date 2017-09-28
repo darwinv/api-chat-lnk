@@ -27,9 +27,8 @@ class ClientListView(APIView):
 
     def post(self, request):
         data = request.data
-        data['code'] = PREFIX_CODE_CLIENT + request.data.get('document_number')
+        data['code'] = PREFIX_CODE_CLIENT + str(request.data.get('document_number'))
         data['role'] = ROLE_CLIENT
-
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
             data['commercial_group'] = ''
@@ -116,10 +115,12 @@ class SpecialistDetailView(APIView):
 
     def put(self, request, pk):
         data = request.data
-        data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number')
-        data['role'] = ROLE_SPECIALIST
         specialist = self.get_object(pk)
-        serializer = SpecialistSerializer(specialist, data)
+        data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number',specialist.document_number)
+        data['photo'] = request.data.get('photo',specialist.photo)
+        data['username'] = specialist.username
+        data['role'] = ROLE_SPECIALIST
+        serializer = SpecialistSerializer(specialist, data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

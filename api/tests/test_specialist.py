@@ -75,7 +75,7 @@ class UpdateSpecialistCase(APITestCase):
             "last_name": "garzon",
             "type_specialist": "m",
             "address": {
-                "street": "jupiter 209",
+                "street": "camere 209",
                 "department": "Lima",
                 "province": "Lima",
                 "district": "Surco"
@@ -94,19 +94,49 @@ class UpdateSpecialistCase(APITestCase):
 
         # self.assertEqual(self.resp.data["id"], 'ey')
 
-    def test_can_update_specialist(self):
+    # def test_can_update_specialist(self):
+    #     send = self.client.post(
+    #         reverse('specialists'),
+    #         data=json.dumps(self.valid_payload),
+    #         content_type='application/json'
+    #     )
+    #     data={'nick': 'eecih'}
+    #     print(send)
+    #     self.valid_payload["nick"] = "juiol"
+    #     response = self.client.put(
+    #         reverse('specialist-detail', kwargs={'pk': send.data["id"]}),
+    #         data, format='json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # self.assertEqual(response.data["nick"], 'ey')
+
+
+    def test_can_change_address(self):
+
+
+        data_address = {
+            "address": {
+                "street": "jupiter 209",
+                "department": "Lima",
+                "province": "Lima",
+                "district": "Surco"
+            }
+          }
+
+
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        self.valid_payload["nick"] = "juiol"
+
+
+        data={'address': data_address["address"]}
         response = self.client.put(
             reverse('specialist-detail', kwargs={'pk': send.data["id"]}),
-            self.valid_payload, format='json'
+            data, format='json'
         )
-        # self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, 'ey')
+        self.assertEqual(response.data['id'], send.data["id"])
 
 class GetSpecialistCase(APITestCase):
     def setUp(self):

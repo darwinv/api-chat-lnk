@@ -4,7 +4,7 @@ from api.models import Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
 from api.models import Province, District, Category, Specialist
 from django.utils import six
-
+import pdb
 
 class CommonValidation():
 
@@ -37,7 +37,6 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('street','department', 'province', 'district')
-
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -138,8 +137,38 @@ class SpecialistSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
-    # def update(self, instance, validated_data):
-    #     data_address = validated_data.pop('address')
+
+    def update(self, instance, validated_data):
+        instance.nick = validated_data.get('nick', instance.nick)
+        instance.first_name = validated_data.get('first_name',instance.first_name)
+        instance.last_name = validated_data.get('last_name',instance.last_name)
+        instance.photo = validated_data.get('photo',instance.photo)
+        instance.type_specialist = validated_data.get('type_specialist',instance.type_specialist)
+        instance.document_type = validated_data.get('document_type',instance.document_type)
+        instance.document_number = validated_data.get('document_number',instance.document_number)
+        instance.email_exact = validated_data.get('email_exact',instance.email_exact)
+        instance.telephone = validated_data.get('telephone',instance.telephone)
+        instance.cellphone = validated_data.get('cellphone',instance.cellphone)
+        instance.ruc = validated_data.get('ruc',instance.ruc)
+        instance.bussiness_name = validated_data.get('bussiness_name',instance.bussiness_name)
+        instance.payment_per_answer = validated_data.get('payment_per_answer',instance.payment_per_answer)
+        instance.category = validated_data.get('category',instance.category)
+        data = validated_data
+        if 'address' in validated_data:
+            data_address = validated_data.pop('address')
+            address = Address.objects.get(pk=instance.id)
+            address.department = Department.objects.get(name=data_address["department"].name)
+            address.province = Province.objects.get(name=data_address["province"].name)
+            address.district = District.objects.get(name=data_address["district"].name)
+            address.street = data_address['street']
+            address.save()
+            instance.address = address
+            # validated_data['address'] = address
+            # address = AddressSerializer(data=data_address)
+        #  pdb.set_trace()
+        # instance.address = address
+        instance.save()
+        return instance
 
     class Meta:
         model = Specialist
