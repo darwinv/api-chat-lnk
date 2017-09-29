@@ -8,7 +8,6 @@ from rest_framework import status
 from ..serializers import ClientSerializer
 # Create your tests here.
 
-
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
@@ -28,7 +27,6 @@ class CreateNaturalClient(APITestCase):
             'last_name': 'vasquez',
             'civil_state': 's',
             'password': 'intel12345',
-            'confirm_password': 'intel12345',
             'birthdate': '2017-09-19',
             "address": {
                 "street": "esteban camere",
