@@ -1,0 +1,386 @@
+[
+  {
+    "model": "api.role",
+    "pk": 1,
+    "fields": {
+      "name": "admin",
+      "created_at": "2017-9-19 10:33:50"
+    }
+  },
+  {
+    "model": "api.role",
+    "pk": 2,
+    "fields": {
+      "name": "client",
+      "created_at": "2017-9-19 10:33:50"
+    }
+  },
+  {
+    "model": "api.role",
+    "pk": 3,
+    "fields": {
+      "name": "specialist",
+      "created_at": "2017-9-19 10:33:50"
+    }
+  },
+  {
+    "model": "api.role",
+    "pk": 4,
+    "fields": {
+      "name": "seller",
+      "created_at": "2017-9-19 10:33:50"
+    }
+  },
+  {
+    "model": "api.countries",
+    "pk": 1,
+    "fields": {
+      "name": "Peru",
+      "code_phone": 51,
+      "iso_code": "PE"
+    }
+  },
+  {
+    "model": "api.profession",
+    "pk": 1,
+    "fields": {
+      "name": "Programmer"
+    }
+  },
+  {
+    "model": "api.levelinstruction",
+    "pk": 1,
+    "fields": {
+      "name": "College Concluded"
+    }
+  },
+  {
+    "model": "api.economicsector",
+    "pk": 1,
+    "fields": {
+      "name": "Primary"
+    }
+  },
+  {
+    "model": "api.economicsector",
+    "pk": 2,
+    "fields": {
+      "name": "Secondary"
+    }
+  },
+  {
+    "model": "api.commercialgroup",
+    "pk": 1,
+    "fields": {
+        "name": "Technologies"
+    }
+  },
+  {
+    "model": "api.commercialgroup",
+    "pk": 2,
+    "fields": {
+        "name": "Agriculture"
+    }
+  },
+  {
+    "model": "api.department",
+    "pk": 1,
+    "fields": {
+      "name": "Lima"
+    }
+  },
+  {
+    "model": "api.province",
+    "pk": 1,
+    "fields": {
+      "name": "Lima",
+      "department_id":1
+    }
+  },
+  {
+    "model": "api.district",
+    "pk": 1,
+    "fields": {
+      "name": "Surco",
+      "province_id":1
+    }
+  },
+   {
+    "model": "api.district",
+    "pk": 2,
+    "fields": {
+      "name": "Miraflores",
+      "province_id":1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 1,
+    "fields": {
+      "name": "Agroindustria",
+      "image": "agro.png",
+      "description": "actividad economica que comprende la produccion industrializacion y comercialización de productos agropecuarios forestales y otros recursos naturales biológicos.",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 2,
+    "fields": {
+      "name": "Alimentaria",
+      "image": "alimentos.png",
+      "description": "es la parte de la industria que se encarga de todos los procesos relacionados con la cadena alimentaria. ",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 3,
+    "fields": {
+      "name": "Automatizacion",
+      "image": "automate.png",
+      "description": "uso de sistemas o elementos computarizadosy electromecánicos para controlar maquinarias o procesos industriales",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 4,
+    "fields": {
+      "name": "Impuestos",
+      "image": "tax.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 5,
+    "fields": {
+      "name": "Contabilidad",
+      "image": "accounting.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 6,
+    "fields": {
+      "name": "Derecho Tributario",
+      "image": "tribute.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 7,
+    "fields": {
+      "name": "Finanzas",
+      "image": "finance.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 8,
+    "fields": {
+      "name": "Seguros",
+      "image": "assurance.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 9,
+    "fields": {
+      "name": "Derecho Corporativo",
+      "image": "lawcorporative.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 10,
+    "fields": {
+      "name": "Comercio Exterior",
+      "image": "foreign_trade.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur adipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 11,
+    "fields": {
+      "name": "Tecnologia de la Información",
+      "image": "tic.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 12,
+    "fields": {
+      "name": "Propiedad Intelectual",
+      "image": "copyright.png",
+      "description": "Lorem ipsum dolor sit amet, consete sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 13,
+    "fields": {
+      "name": "Publicidad",
+      "image": "advertising.png",
+      "description": "Lorem ipsum dolor sit amet, consetetut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 14,
+    "fields": {
+      "name": "Piscologia Organizacional",
+      "image": "psichology.png",
+      "description": "Lorem ipsum dolor sit amet, conseteturidunt ptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 15,
+    "fields": {
+      "name": "Contrataciones con el Estado",
+      "image": "state_contracts.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunttuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 16,
+    "fields": {
+      "name": "Marketing",
+      "image": "marketing.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 17,
+    "fields": {
+      "name": "Mecanica",
+      "image": "mechanics.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur nt tuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 18,
+    "fields": {
+      "name": "Derecho Notarial y Registral",
+      "image": "notarylaw.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 19,
+    "fields": {
+      "name": "Gestion de Proyectos",
+      "image": "projects.png",
+      "description": "Lorem ipsum dolor sit amet, conseteturnt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 20,
+    "fields": {
+      "name": "Electricidad",
+      "image": "electricity.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidutuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 21,
+    "fields": {
+      "name": "Derecho Procesal Civil",
+      "image": "procedural_law.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 22,
+    "fields": {
+      "name": "Electronica",
+      "image": "electronics.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 23,
+    "fields": {
+      "name": "Derecho Penal",
+      "image": "criminal_law.png",
+      "description": "Lorem ipsum dolor sit amet, conseteturnt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 24,
+    "fields": {
+      "name": "Derecho Laboral",
+      "image": "labor_law.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 25,
+    "fields": {
+      "name": "Gastronomia",
+      "image": "gastronomy.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor inviduntut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 26,
+    "fields": {
+      "name": "Plasticos",
+      "image": "plastic.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunttuas",
+      "payment_per_answer": 1
+    }
+  },
+  {
+    "model": "api.category",
+    "pk": 27,
+    "fields": {
+      "name": "Derecho Minero",
+      "image": "mining_law.png",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+      "payment_per_answer": 1
+    }
+  }
+]
