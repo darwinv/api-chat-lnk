@@ -9,7 +9,7 @@ from ..serializers import SpecialistSerializer
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
-class CreateSpecialistCase(APITestCase):
+class CreateSpecialist(APITestCase):
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -39,6 +39,26 @@ class CreateSpecialistCase(APITestCase):
     def test_invalid_names(self):
         data = self.valid_payload
         del data['last_name']
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_category(self):
+        data = self.valid_payload
+        data['category'] = 'Exploracion Espacial'
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_type_specialist(self):
+        data = self.valid_payload
+        data['type_specialist'] = 'r'
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),

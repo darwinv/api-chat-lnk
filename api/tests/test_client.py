@@ -42,7 +42,7 @@ class CreateNaturalClient(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             'activity_description': 'Loremp iptsum',
-            'level_instruction': 'Superior Concluida',
+            'level_instruction': 'College Concluded',
             'institute': 'UNEFA',
             'profession': 'Programmer',
             'ocupation': 'd',
@@ -82,6 +82,36 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # self.assertEqual(response.data, 'ey')
+    def test_invalid_typeclient(self):
+        data = self.valid_payload
+        data['type_client'] = 'x'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_civilstate(self):
+        data = self.valid_payload
+        data['civil_state'] = 'o'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+    def test_invalid_birthdate(self):
+        data = self.valid_payload
+        data['birthdate'] = '2017/09/19'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_natural_client(self):
         response = self.client.post(
@@ -93,14 +123,13 @@ class CreateNaturalClient(APITestCase):
         # self.assertEqual(response.data, 'ey')
 
 # Prueba para verificar la insercion de cliente juridico
-class CreateBussinessClientTestCase(APITestCase):
+class CreateBussinessClient(APITestCase):
     def setUp(self):
         self.valid_payload = {
             'username': 'alpanet',
             'nick': 'alpanet',
             'type_client': 'b',
             'password': 'intel12345',
-            'confirm_password': 'intel12345',
             "bussiness_name": 'Alpanet',
             "address": {
                 "street": "esteban camere",
@@ -128,6 +157,26 @@ class CreateBussinessClientTestCase(APITestCase):
     def test_empty_bussiness_fields(self):
         data = self.valid_payload
         del data['agent_lastname']
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_commercial_group(self):
+        data = self.valid_payload
+        data['commercial_group'] = "nada"
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_economic_sector(self):
+        data = self.valid_payload
+        data['economic_sector'] = "nada"
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),

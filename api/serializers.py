@@ -8,16 +8,11 @@ import pdb
 
 class CommonValidation():
 
-    # def match_passwords(self,password,confirm_password):
-    #     if password != confirm_password:
-    #         raise serializers.ValidationError(u"Passwords don't match")
-
     def validate_img(self,photo):
-        extension = photo.split(".")[1]  # [0] returns path+filename
+        extension = photo.split(".")[1]
         valid_extensions = ['png', 'jpg', 'jpeg']
         if not extension.lower() in valid_extensions:
             raise serializers.ValidationError(u"Unsupported image extension.")
-
 
 
 class CustomChoiceField(serializers.ChoiceField):
@@ -26,7 +21,6 @@ class CustomChoiceField(serializers.ChoiceField):
         serializers.ChoiceField.__init__(self, choices,**kwargs)
 
     def to_representation(self, value):
-        # model = Client._meta
         dictionary = dict(self.choices_to_dict)
         return dictionary.get(value)
 
@@ -34,6 +28,7 @@ class AddressSerializer(serializers.ModelSerializer):
     department = serializers.SlugRelatedField(queryset=Department.objects.all(), slug_field='name')
     province = serializers.SlugRelatedField(queryset=Province.objects.all(), slug_field='name')
     district = serializers.SlugRelatedField(queryset=District.objects.all(), slug_field='name')
+
     class Meta:
         model = Address
         fields = ('street','department', 'province', 'district')
@@ -46,7 +41,6 @@ class ClientSerializer(serializers.ModelSerializer):
     commercial_group = serializers.SlugRelatedField(queryset=CommercialGroup.objects.all(), slug_field='name', allow_null=True)
     economic_sector = serializers.SlugRelatedField(queryset=EconomicSector.objects.all(), slug_field='name', allow_null=True)
     password = serializers.CharField(write_only=True)
-    # confirm_password = serializers.CharField(allow_blank=False, write_only=True)
     type_client = CustomChoiceField(choices=Client.options_type)
     sex = CustomChoiceField(choices=Client.options_sex, allow_blank=True)
     document_type = CustomChoiceField(choices=Client.options_documents)
@@ -54,6 +48,16 @@ class ClientSerializer(serializers.ModelSerializer):
     ocupation = CustomChoiceField(choices=Client.options_ocupation, allow_blank=True)
     address = AddressSerializer()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=Client.objects.all())])
+
+    class Meta:
+        model = Client
+        fields = ('id', 'username', 'nick','type_client', 'first_name', 'last_name',
+        'password', 'photo','sex','document_type', 'document_number',
+        'civil_state','birthdate','address', 'ruc', 'email_exact', 'code',
+        'telephone', 'cellphone', 'ciiu', 'activity_description', 'level_instruction',
+        'bussiness_name', 'agent_firstname', 'agent_lastname', 'position',
+        'commercial_group', 'economic_sector','institute', 'profession',
+        'ocupation', 'about', 'nationality')
 
     # Por si es necesario usarlo se usa el metodo
     # type_client = serializers.SerializerMethodField()
@@ -77,15 +81,12 @@ class ClientSerializer(serializers.ModelSerializer):
     def validate(self, data):
         validation = CommonValidation()
         validation.validate_img(photo=data['photo'])
-        # validation.match_passwords(data['password'],data['confirm_password'])
-        # del data['confirm_password']
         if data['type_client'] == 'b':
             self.validate_bussines_client(data)
         return data
 
     def create(self, validated_data):
         data_address = validated_data.pop('address')
-        # address = AddressSerializer(data=data_address)
         address = Address.objects.create(**data_address)
         validated_data['address'] = address
         password = validated_data.pop('password', None)
@@ -95,32 +96,30 @@ class ClientSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-    class Meta:
-        model = Client
-        fields = ('id', 'username', 'nick','type_client', 'first_name', 'last_name',
-        'password', 'photo','sex','document_type', 'document_number',
-        'civil_state','birthdate','address', 'ruc', 'email_exact', 'code',
-        'telephone', 'cellphone', 'ciiu', 'activity_description', 'level_instruction',
-        'bussiness_name', 'agent_firstname', 'agent_lastname', 'position',
-        'commercial_group', 'economic_sector','institute', 'profession',
-        'ocupation', 'about', 'nationality')
+
 
 class SpecialistSerializer(serializers.ModelSerializer):
     nationality = serializers.SlugRelatedField(queryset=Countries.objects.all(), slug_field='name',required=False)
     password = serializers.CharField(write_only=True)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
-    # confirm_password = serializers.CharField(allow_blank=False, write_only=True)
     document_type = CustomChoiceField(choices=Specialist.options_documents)
     type_specialist = CustomChoiceField(choices=Specialist.options_type)
     address = AddressSerializer()
     email_exact = serializers.EmailField()
     category = serializers.SlugRelatedField(queryset=Category.objects.all(), slug_field='name')
 
+    class Meta:
+        model = Specialist
+        fields = ('id', 'username', 'nick', 'first_name', 'last_name',
+        'type_specialist','password', 'photo','document_type',
+        'document_number','address', 'ruc', 'email_exact', 'code', 'telephone',
+        'cellphone', 'bussiness_name', 'payment_per_answer','cv','star_rating',
+        'category','nationality')
+
     def validate(self,data):
         validation = CommonValidation()
         validation.validate_img(photo=data['photo'])
-        # validation.match_passwords(data['password'],data['confirm_password'])
         if self.instance and self.instance.username != data["username"]:
             if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",category__name=data["category"]).exists():
                 raise serializers.ValidationError(u"Main specialist already exists.")
@@ -128,7 +127,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         data_address = validated_data.pop('address')
-        # address = AddressSerializer(data=data_address)
         address = Address.objects.create(**data_address)
         validated_data['address'] = address
         password = validated_data.pop('password', None)
@@ -166,13 +164,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-    class Meta:
-        model = Specialist
-        fields = ('id', 'username', 'nick', 'first_name', 'last_name',
-        'type_specialist','password', 'photo','document_type',
-        'document_number','address', 'ruc', 'email_exact', 'code', 'telephone',
-        'cellphone', 'bussiness_name', 'payment_per_answer','cv','star_rating',
-        'category','nationality')
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
