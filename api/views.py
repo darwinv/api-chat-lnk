@@ -5,6 +5,7 @@ from api.serializers import ClientSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from api.serializers import CategorySerializer, SpecialistSerializer
+from api.serializers import SpecialistAccountSerializer
 from django.http import Http404
 # Create your views here.
 
@@ -130,3 +131,16 @@ class SpecialistDetailView(APIView):
         specialist = self.get_object(pk)
         specialist.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class SpecialistAccountView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get_object(self, pk):
+        try:
+            return Specialist.objects.get(pk=pk)
+        except Specialist.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        specialist = self.get_object(pk)
+        serializer = SpecialistAccountSerializer(specialist)
+        return Response(serializer.data)

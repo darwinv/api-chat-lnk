@@ -171,6 +171,11 @@ class GetSpecialistCase(APITestCase):
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+# class GetAccountSpecialist(APITestCase):
+#     def setUp(self):
+#         pass
+#
+
 class DeleteSpecialistCase(APITestCase):
     def setUp(self):
         self.valid_payload = {

@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from api.models import Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
-from api.models import Province, District, Category, Specialist
+from api.models import Province, District, Category, Specialist, Query, Answer
 from django.utils import six
 import pdb
 
@@ -120,6 +120,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
     def validate(self,data):
         validation = CommonValidation()
         validation.validate_img(photo=data['photo'])
+        # Asegurarse que solo haya un especialista principal por categoria.
         if self.instance and self.instance.username != data["username"]:
             if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",category__name=data["category"]).exists():
                 raise serializers.ValidationError(u"Main specialist already exists.")
@@ -164,6 +165,62 @@ class SpecialistSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class QueryAccountSerializer(serializers.ModelSerializer):
+    client = serializers.SerializerMethodField()
+    date = serializers.SerializerMethodField()
+    time = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Query
+        fields = ('title','client','date','time')
+
+    def get_date(self,obj):
+        return obj.created_at.date()
+
+    def get_time(self,obj):
+        return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+
+    def get_client(self,obj):
+        return obj.client.nick
+
+class AnswerQueryAccountSerializer(serializers.ModelSerializer):
+    query = QueryAccountSerializer()
+    date = serializers.SerializerMethodField()
+    time = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Answer
+        fields = ('id','date','time','query')
+
+    def get_date(self, obj):
+        return obj.created_at.date()
+    def get_time(self, obj):
+        return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+
+# Serializer para consultar estado de cuenta del Especialista.
+class SpecialistAccountSerializer(serializers.ModelSerializer):
+    category = serializers.SlugRelatedField(read_only=True,slug_field='name')
+    answer_query = serializers.SerializerMethodField()
+    photo_category = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Specialist
+        fields = ('id','first_name','last_name','code','nick','email_exact',
+                  'photo','category','photo_category','answer_query')
+
+        # No son campos editables ya que son de consulta solamente.
+        read_only_fields = ('id','first_name','last_name','code','nick',
+                            'email_exact','photo','category','photo_category',
+                            'answer_query')
+
+    # Traer por respuesta relacionada
+    def get_answer_query(self, obj):
+        answer = obj.answer_set.all()
+        return AnswerQueryAccountSerializer(answer,many=True).data
+
+    def get_photo_category(self,obj):
+        img = obj.category.image
+        return img
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
