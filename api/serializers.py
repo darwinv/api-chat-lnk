@@ -1,10 +1,22 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from api.models import Client, LevelInstruction, Profession, Role, Countries
+from api.models import User, Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
 from api.models import Province, District, Category, Specialist
 from django.utils import six
 import pdb
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer que unicamente va ser utilizada para
+    el servicio que devuelve todos los usuarios
+    Este servicio es requerido por la web de administracion
+    Unicamente expone el id y el nombre de usuario
+    """
+    class Meta:
+        model = User
+        fields = ('id', 'username')
 
 class CommonValidation():
 

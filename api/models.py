@@ -198,8 +198,8 @@ class Category(models.Model):
     image = models.CharField(max_length=169)
     description = models.CharField(max_length=255)
     payment_per_answer = models.FloatField()
-    def __str__(self):
-        return self.name
+    #def __str__(self):
+    #    return self.name
 
 
 class Specialist(User):
