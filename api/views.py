@@ -1,12 +1,15 @@
 
 from rest_framework.views import APIView
-from api.models import Client, Category, Specialist
+from rest_framework.generics import ListCreateAPIView, UpdateAPIView
+from api.models import User, Client, Category, Specialist
 from api.serializers import ClientSerializer
 from rest_framework.response import Response
-from rest_framework import status, permissions
-from api.serializers import CategorySerializer, SpecialistSerializer
-from api.serializers import SpecialistAccountSerializer
+from rest_framework import status, permissions, viewsets
+import django_filters.rest_framework
+from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
 from django.http import Http404
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import generics
 # Create your views here.
 
 # Constantes
@@ -17,14 +20,24 @@ PREFIX_CODE_SPECIALIST = 's'
 DATE_FAKE = '1900-01-01'
 #Fin de constates
 
-class ClientListView(APIView):
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('username',)
+
+class ClientListView(ListCreateAPIView, UpdateAPIView):
     # Lista todos los clientes naturales o crea uno nuevo
     # no olvidar lo de los permisos permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     permission_classes = [permissions.AllowAny]
-    def get(self, request):
-        clients = Client.objects.all()
-        serializer = ClientSerializer(clients, many=True)
-        return Response(serializer.data)
+    serializer_class = ClientSerializer
+    queryset = Client.objects.all()
+
+    #def get(self, request):
+    #    clients = Client.objects.all()
+    #    serializer = ClientSerializer(clients, many=True)
+    #    return Response(serializer.data)
 
     def post(self, request):
         data = request.data
@@ -84,12 +97,16 @@ class CategoryDetailView(APIView):
 # ------------ Fin de Categorias o Especialidades -----------------
 
 #---------- ------ Inicio de Especialistas ------------------------------
-class SpecialistListView(APIView):
+
+class SpecialistListView(ListCreateAPIView, UpdateAPIView):
     permission_classes = [permissions.AllowAny]
-    def get(self, request):
-        specialists = Specialist.objects.all()
-        serializer = SpecialistSerializer(specialists, many=True)
-        return Response(serializer.data)
+    queryset = Specialist.objects.all()
+    serializer_class = SpecialistSerializer
+
+    #def get(self, request):
+    #   specialists = Specialist.objects.all()
+    #   serializer = SpecialistSerializer(specialists, many=True)
+    #   return Response(serializer.data)
 
     def post(self, request):
         data = request.data
