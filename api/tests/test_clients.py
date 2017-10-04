@@ -11,12 +11,13 @@ from ..serializers import ClientSerializer
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
-# user = User.objects.get(username='admin')
-# client.credentials(Authorization='Bearer ' + token.key)
-# force_authenticate(request, user=user, token='zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
+#user = User.objects.get(username='admin')
+#client.credentials(Authorization='Bearer ' + token.key)
+#force_authenticate(request, user=user, token='zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
-# Prueba para verificar la insercion de cliente natural
+#Prueba para verificar la insercion de cliente natural
 class CreateNaturalClient(APITestCase):
+    fixtures = ['data']
     # Prueba para verificar la insercion de cliente natural
     def setUp(self):
         self.valid_payload = {
@@ -89,11 +90,13 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        print response.data
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
 
 # Prueba para verificar la insercion de cliente juridico
 class CreateBussinessClientTestCase(APITestCase):
+    fixtures = ['data']
     def setUp(self):
         self.valid_payload = {
             'username': 'alpanet',
@@ -141,6 +144,7 @@ class CreateBussinessClientTestCase(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        print response.data
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
 
@@ -164,5 +168,5 @@ class GetAllClients(APITestCase):
         # get data from db
         clients = Cliente.objects.all()
         serializer = ClientSerializer(clients, many=True)
-        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.data['results'], serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

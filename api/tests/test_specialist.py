@@ -10,6 +10,7 @@ client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
 class CreateSpecialistCase(APITestCase):
+    fixtures = ['data']
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -63,9 +64,11 @@ class CreateSpecialistCase(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        print response.data
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
 class UpdateSpecialistCase(APITestCase):
+    fixtures = ['data']
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -116,30 +119,39 @@ class UpdateSpecialistCase(APITestCase):
 
         data_address = {
             "address": {
-                "street": "jupiter 209",
+                "street": "jupiter 208",
                 "department": "Lima",
                 "province": "Lima",
                 "district": "Surco"
             }
           }
 
-
+        # agregar el especialista por defecto
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
 
-
+        #crear direccion nueva
         data={'address': data_address["address"]}
+
+        #actualizar la direccion del especialista
         response = self.client.put(
             reverse('specialist-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
         )
+
         self.assertEqual(response.data['id'], send.data["id"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        #veririficar que se actualizo la direccion
+        print data['address']['street']
+        print send.data["address"]['street']
+        self.assertEqual(data['address']['street'], response.data["address"]['street'])
+
 class GetSpecialistCase(APITestCase):
+    fixtures = ['data']
     def setUp(self):
         pass
     def test_get_all_specialists(self):
@@ -148,10 +160,13 @@ class GetSpecialistCase(APITestCase):
         # get data from db
         specialists = Specialist.objects.all()
         serializer = SpecialistSerializer(specialists, many=True)
-        self.assertEqual(response.data, serializer.data)
+
+        self.assertEqual(response.data['results'], serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class DeleteSpecialistCase(APITestCase):
+    fixtures = ['data']
+
     def setUp(self):
         self.valid_payload = {
             'username': 'maria',
@@ -184,9 +199,11 @@ class DeleteSpecialistCase(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        data={'address': "hee"}
+
+        self.assertEqual(send.status_code, status.HTTP_201_CREATED)
+
         response = self.client.delete(
             reverse('specialist-detail', kwargs={'pk': send.data["id"]}),
-            data, format='json'
+            None, format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
