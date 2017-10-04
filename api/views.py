@@ -4,8 +4,7 @@ from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Category, Specialist
 from api.serializers import ClientSerializer
 from rest_framework.response import Response
-from rest_framework import status, permissions, viewsets
-import django_filters.rest_framework
+from rest_framework import status, permissions, viewsets import django_filters
 from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
