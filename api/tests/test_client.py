@@ -17,6 +17,7 @@ client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
 # Prueba para verificar la insercion de cliente natural
 class CreateNaturalClient(APITestCase):
+    fixtures = ['data']
     # Prueba para verificar la insercion de cliente natural
     def setUp(self):
         self.valid_payload = {
@@ -42,7 +43,7 @@ class CreateNaturalClient(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             'activity_description': 'Loremp iptsum',
-            'level_instruction': 'College Concluded',
+            'level_instruction': 'Superior Concluida',
             'institute': 'UNEFA',
             'profession': 'Programmer',
             'ocupation': 'd',
@@ -82,6 +83,7 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # self.assertEqual(response.data, 'ey')
+
     def test_invalid_typeclient(self):
         data = self.valid_payload
         data['type_client'] = 'x'
@@ -123,7 +125,8 @@ class CreateNaturalClient(APITestCase):
         # self.assertEqual(response.data, 'ey')
 
 # Prueba para verificar la insercion de cliente juridico
-class CreateBussinessClient(APITestCase):
+class CreateBussinessClientTestCase(APITestCase):
+    fixtures = ['data']
     def setUp(self):
         self.valid_payload = {
             'username': 'alpanet',
@@ -213,5 +216,5 @@ class GetAllClients(APITestCase):
         # get data from db
         clients = Cliente.objects.all()
         serializer = ClientSerializer(clients, many=True)
-        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.data['results'], serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
