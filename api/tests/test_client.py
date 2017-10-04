@@ -11,11 +11,11 @@ from ..serializers import ClientSerializer
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
-#user = User.objects.get(username='admin')
-#client.credentials(Authorization='Bearer ' + token.key)
-#force_authenticate(request, user=user, token='zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
+# user = User.objects.get(username='admin')
+# client.credentials(Authorization='Bearer ' + token.key)
+# force_authenticate(request, user=user, token='zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
-#Prueba para verificar la insercion de cliente natural
+# Prueba para verificar la insercion de cliente natural
 class CreateNaturalClient(APITestCase):
     fixtures = ['data']
     # Prueba para verificar la insercion de cliente natural
@@ -84,13 +84,43 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # self.assertEqual(response.data, 'ey')
 
+    def test_invalid_typeclient(self):
+        data = self.valid_payload
+        data['type_client'] = 'x'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_civilstate(self):
+        data = self.valid_payload
+        data['civil_state'] = 'o'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+    def test_invalid_birthdate(self):
+        data = self.valid_payload
+        data['birthdate'] = '2017/09/19'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_create_natural_client(self):
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        print response.data
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
 
@@ -103,7 +133,6 @@ class CreateBussinessClientTestCase(APITestCase):
             'nick': 'alpanet',
             'type_client': 'b',
             'password': 'intel12345',
-            'confirm_password': 'intel12345',
             "bussiness_name": 'Alpanet',
             "address": {
                 "street": "esteban camere",
@@ -138,13 +167,32 @@ class CreateBussinessClientTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_invalid_commercial_group(self):
+        data = self.valid_payload
+        data['commercial_group'] = "nada"
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_economic_sector(self):
+        data = self.valid_payload
+        data['economic_sector'] = "nada"
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_create_bussines_client(self):
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        print response.data
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
 
