@@ -10,6 +10,7 @@ from api.serializers import UserSerializer, CategorySerializer, SpecialistSerial
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
+import pdb
 # Create your views here.
 
 # Constantes
@@ -34,7 +35,7 @@ class ClientListView(ListCreateAPIView, UpdateAPIView):
     serializer_class = ClientSerializer
     queryset = Client.objects.all()
 
-    #def get(self, request):
+    # def get(self, request):
     #    clients = Client.objects.all()
     #    serializer = ClientSerializer(clients, many=True)
     #    return Response(serializer.data)
@@ -103,10 +104,36 @@ class SpecialistListView(ListCreateAPIView, UpdateAPIView):
     queryset = Specialist.objects.all()
     serializer_class = SpecialistSerializer
 
-    #def get(self, request):
-    #   specialists = Specialist.objects.all()
-    #   serializer = SpecialistSerializer(specialists, many=True)
-    #   return Response(serializer.data)
+    # funcion para localizar especialista principal
+    def get_object(self, pk):
+        try:
+            return Specialist.objects.get(pk=pk)
+        except Specialist.DoesNotExist:
+            raise Http404
+
+    # Funcion personalizada para
+    # devolver los especialistas asociados a un principal si envian el
+    #  parametro [main_specialist]
+    def list(self, request):
+
+        # en dado caso que exista el parametro "main_specialist", se devuelve
+        # el listado de especialistas asociados, caso contrario devuelve todos
+        # pdb.set_trace()
+        if 'main_specialist' in request.query_params:
+            specialist = self.get_object(request.query_params["main_specialist"])
+            queryset = Specialist.objects.filter(category_id=specialist.category).exclude(type_specialist='m')
+            serializer = SpecialistSerializer(queryset, many=True)
+        else:
+            queryset = self.get_queryset()
+            serializer = SpecialistSerializer(queryset, many=True)
+
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
+
 
     def post(self, request):
         data = request.data

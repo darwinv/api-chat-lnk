@@ -51,7 +51,7 @@ class CreateNaturalClient(APITestCase):
             'ciiu': '1440',
             'nationality': 'Peru'
         }
-
+    # responder error al enviar email invalido 
     def test_invalid_email(self):
         data = self.valid_payload
         data['email_exact']='asdasd'
