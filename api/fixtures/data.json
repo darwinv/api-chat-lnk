@@ -387,7 +387,7 @@
   "model": "api.user",
   "pk": 1,
   "fields": {
-    "password": "pbkdf2_sha256$36000$oI25GkdM5hoN$CjylyniI238wdkJtwddeOi/VVqGrkfRS/uaGK6pFuoI=",
+    "password": "pbkdf2_sha256$36000$ZoKwG4C5uFXR$IDtDvqi2/fH+4Jw4NfiZd0JW13TJ2ARQM4FhAfWZn5g=",
     "last_login": "2017-10-02T22:26:08.423Z",
     "is_superuser": true,
     "username": "admin",
@@ -445,10 +445,11 @@
    }
   },
   {
-    "model": "api.Levelinstruction",
+    "model": "api.Parameter",
     "pk": 1,
     "fields": {
-      "name": "Superior Concluida"
+      "parameter": "time_delay_response",
+      "value": 24
     }
   }
 ]

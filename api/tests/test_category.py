@@ -11,8 +11,7 @@ client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
 class GetCategories(APITestCase):
     def setUp(self):
-        pass
-        # fixtures = ['data']
+        fixtures = ['data']
 
     def test_get_categories(self):
         # get API response
