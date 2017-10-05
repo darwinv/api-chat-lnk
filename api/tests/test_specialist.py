@@ -212,6 +212,7 @@ class GetSpecialistCase(APITestCase):
 
     # no funciona la prueba debido a que para
     def test_get_associates_by_main(self):
+        fixtures = ['data']
         data_first_associate = {
             'username': 'maria',
             'nick': 'maria',

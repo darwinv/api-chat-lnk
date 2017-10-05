@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
 from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
+from api.serializers import SpecialistAccountSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
@@ -19,7 +20,7 @@ ROLE_CLIENT = 2
 ROLE_SPECIALIST = 3
 PREFIX_CODE_SPECIALIST = 's'
 DATE_FAKE = '1900-01-01'
-#Fin de constates
+# Fin de constates
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):

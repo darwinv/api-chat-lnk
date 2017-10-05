@@ -177,14 +177,31 @@ class SpecialistSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-class QueryAccountSerializer(serializers.ModelSerializer):
-    client = serializers.SerializerMethodField()
+
+
+class AnswerAccountSerializer(serializers.ModelSerializer):
     date = serializers.SerializerMethodField()
     time = serializers.SerializerMethodField()
 
     class Meta:
+        model = Answer
+        fields = ('id','date','time','specialist')
+
+    def get_date(self, obj):
+        return obj.created_at.date()
+    def get_time(self, obj):
+        return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+
+class QueryAnswerSerializer(serializers.ModelSerializer):
+    client = serializers.SerializerMethodField()
+    date = serializers.SerializerMethodField()
+    time = serializers.SerializerMethodField()
+    status = CustomChoiceField(choices=Query.option_status)
+    answer = serializers.SerializerMethodField()
+
+    class Meta:
         model = Query
-        fields = ('title','client','date','time')
+        fields = ('title','client','date','time','status','answer')
 
     def get_date(self,obj):
         return obj.created_at.date()
@@ -195,40 +212,32 @@ class QueryAccountSerializer(serializers.ModelSerializer):
     def get_client(self,obj):
         return obj.client.nick
 
-class AnswerQueryAccountSerializer(serializers.ModelSerializer):
-    query = QueryAccountSerializer()
-    date = serializers.SerializerMethodField()
-    time = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Answer
-        fields = ('id','date','time','query')
-
-    def get_date(self, obj):
-        return obj.created_at.date()
-    def get_time(self, obj):
-        return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+    def get_answer(self,obj):
+        answer_related = obj.answer_set.all()
+        return AnswerAccountSerializer(answer_related,many=True).data
 
 # Serializer para consultar estado de cuenta del Especialista.
 class SpecialistAccountSerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(read_only=True,slug_field='name')
-    answer_query = serializers.SerializerMethodField()
+    query_answer = serializers.SerializerMethodField()
     photo_category = serializers.SerializerMethodField()
 
     class Meta:
         model = Specialist
         fields = ('id','first_name','last_name','code','nick','email_exact',
-                  'photo','category','photo_category','answer_query')
+                  'photo','category','photo_category','query_answer')
 
         # No son campos editables ya que son de consulta solamente.
         read_only_fields = ('id','first_name','last_name','code','nick',
                             'email_exact','photo','category','photo_category',
-                            'answer_query')
+                            'query_answer')
 
-    # Traer por respuesta relacionada
-    def get_answer_query(self, obj):
-        answer = obj.answer_set.all()
-        return AnswerQueryAccountSerializer(answer,many=True).data
+    # Traer por consulta relacionada
+    def get_query_answer(self, obj):
+        query = obj.query_set.all()
+        return QueryAnswerSerializer(answer,many=True).data
+
+
 
     def get_photo_category(self,obj):
         img = obj.category.image
