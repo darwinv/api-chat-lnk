@@ -229,7 +229,7 @@ class QueryAnswerSerializer(serializers.ModelSerializer):
         return AnswerAccountSerializer(answer_related,many=True).data
 
     # Verificar si el tiempo desde que se hizo la consulta fue superado al del
-    # parametro y en base a eso determinar si esta con retraso o a tiempo 
+    # parametro y en base a eso determinar si esta con retraso o a tiempo
     def get_is_delayed(self,obj):
         date_query = obj.created_at
         time_delay = Parameter.objects.get(parameter="time_delay_response")
@@ -256,7 +256,7 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Specialist
         fields = ('id','first_name','last_name','code','nick','email_exact',
-                  'photo','category','photo_category','query_answer')
+                  'photo','category','photo_category','payment_per_answer','query_answer')
 
         # No son campos editables ya que son de consulta solamente.
         read_only_fields = ('id','first_name','last_name','code','nick',
