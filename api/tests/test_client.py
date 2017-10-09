@@ -31,9 +31,9 @@ class CreateNaturalClient(APITestCase):
             'birthdate': '2017-09-19',
             "address": {
                 "street": "esteban camere",
-                "department": "Lima",
-                "province": "Lima",
-                "district": "Surco"
+                "department": 1,
+                "province": 1,
+                "district": 1
             },
             'photo': 'test.png',
             'sex': 'm',
@@ -143,12 +143,12 @@ class CreateBussinessClient(APITestCase):
             'nick': 'alpanet',
             'type_client': 'b',
             'password': 'intel12345',
-            "bussiness_name": 'Alpanet',
+            "business_name": 'Alpanet',
             "address": {
                 "street": "esteban camere",
-                "department": "Lima",
-                "province": "Lima",
-                "district": "Surco"
+                "department": 1,
+                "province": 1,
+                "district": 1
             },
             'photo': 'test.jpg',
             'document_type': '2',
@@ -220,9 +220,9 @@ class GetDetailClient(APITestCase):
             'birthdate': '2017-09-19',
             "address": {
                 "street": "esteban camere",
-                "department": "Lima",
-                "province": "Lima",
-                "district": "Surco"
+                "department": 1,
+                "province": 1,
+                "district": 1
             },
             'photo': 'test.jpg',
             'sex': 'm',
@@ -232,13 +232,13 @@ class GetDetailClient(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             'activity_description': 'Loremp iptsum',
-            'level_instruction': 'College Concluded',
+            'level_instruction': 1,
             'institute': 'UNEFA',
-            'profession': 'Programmer',
+            'profession': 1,
             'ocupation': 'd',
             'about': 'iptsum aabout',
             'ciiu': '1440',
-            'nationality': 'Peru'
+            'nationality': 1
         }
 
     def test_get_client(self):

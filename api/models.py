@@ -180,7 +180,7 @@ class Client(User):
     )
     ocupation = models.CharField(max_length=1, choices=options_ocupation)
     about = models.CharField(max_length=255)
-    bussiness_name = models.CharField(max_length=45, null=True)
+    business_name = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
     agent_lastname = models.CharField(max_length=45, null=True)
     position = models.CharField(max_length=45, null=True)
@@ -198,12 +198,12 @@ class Category(models.Model):
     image = models.CharField(max_length=169)
     description = models.CharField(max_length=255)
     payment_per_answer = models.FloatField()
-    # def __str__(self):
-    #    return self.name
+    def __str__(self):
+       return self.name
 
 
 class Specialist(User):
-    bussiness_name = models.CharField(max_length=55)
+    business_name = models.CharField(max_length=55)
     options_type = (
         ('m', 'Main'),
         ('a', 'Associate'),

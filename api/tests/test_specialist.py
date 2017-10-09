@@ -22,9 +22,9 @@ class CreateSpecialist(APITestCase):
             "type_specialist": "m",
             "address": {
                 "street": "jupiter 209",
-                "department": "Lima",
-                "province": "Lima",
-                "district": "Surco"
+                "department": 1,
+                "province": 1,
+                "district": 1
             },
             'photo': 'preview.jpg',
             'document_type': '2',
@@ -33,9 +33,9 @@ class CreateSpecialist(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             "ruc": "2009918312",
-            "bussiness_name": "agropatria",
+            "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": "Agroindustria"
+            "category": 1
         }
 
     def test_invalid_names(self):
@@ -99,9 +99,9 @@ class UpdateSpecialistCase(APITestCase):
             "type_specialist": "m",
             "address": {
                 "street": "camere 209",
-                "department": "Lima",
-                "province": "Lima",
-                "district": "Surco"
+                "department": 1,
+                "province": 1,
+                "district": 1
             },
             'photo': 'preview.jpg',
             'document_type': '2',
@@ -110,9 +110,9 @@ class UpdateSpecialistCase(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             "ruc": "2009918312",
-            "bussiness_name": "agropatria",
+            "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": "Agroindustria"
+            "category": 1
         }
 
         # self.assertEqual(self.resp.data["id"], 'ey')
@@ -135,14 +135,12 @@ class UpdateSpecialistCase(APITestCase):
 
 
     def test_can_change_address(self):
-
-
         data_address = {
             "address": {
                 "street": "jupiter 208",
-                "department": "Lima",
-                "province": "Lima",
-                "district": "Surco"
+                "department": 1,
+                "province": 1,
+                "district": 1
             }
           }
 
@@ -182,9 +180,9 @@ class GetSpecialistCase(APITestCase):
             "type_specialist": "m",
             "address": {
                 "street": "camere 209",
-                "department": "Lima",
-                "province": "Lima",
-                "district": "Surco"
+                "department": 1,
+                "province": 1,
+                "district": 1
             },
             'photo': 'preview.jpg',
             'document_type': '2',
@@ -193,9 +191,9 @@ class GetSpecialistCase(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             "ruc": "2009918312",
-            "bussiness_name": "agropatria",
+            "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": "Agroindustria"
+            "category": 1
         }
 
 
@@ -222,9 +220,9 @@ class GetSpecialistCase(APITestCase):
             "type_specialist": "a",
             "address": {
                 "street": "camere 209",
-                "department": "Lima",
-                "province": "Lima",
-                "district": "Surco"
+                "department": 1,
+                "province": 1,
+                "district": 1
             },
             'photo': 'preview.jpg',
             'document_type': '2',
@@ -233,9 +231,9 @@ class GetSpecialistCase(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             "ruc": "9999",
-            "bussiness_name": "agropatria",
+            "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": "Agroindustria"
+            "category": 1
         }
 
         data_second_associate = {
@@ -247,9 +245,9 @@ class GetSpecialistCase(APITestCase):
             "type_specialist": "a",
             "address": {
                 "street": "camere 209",
-                "department": "Lima",
-                "province": "Lima",
-                "district": "Surco"
+                "department": 1,
+                "province": 1,
+                "district": 1
             },
             'photo': 'preview.jpg',
             'document_type': '2',
@@ -258,9 +256,9 @@ class GetSpecialistCase(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             "ruc": "88888",
-            "bussiness_name": "agropatria",
+            "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": "Agroindustria"
+            "category": 1
         }
 
         # agregamos los asociados
@@ -300,9 +298,9 @@ class DeleteSpecialistCase(APITestCase):
             "type_specialist": "m",
             "address": {
                 "street": "camere 209",
-                "department": "Lima",
-                "province": "Lima",
-                "district": "Surco"
+                "department": 1,
+                "province": 1,
+                "district": 1
             },
             'photo': 'preview.jpg',
             'document_type': '2',
@@ -311,9 +309,9 @@ class DeleteSpecialistCase(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             "ruc": "2009918312",
-            "bussiness_name": "agropatria",
+            "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": "Agroindustria"
+            "category": 1
         }
 
     def test_delete_specialist(self):

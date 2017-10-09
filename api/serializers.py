@@ -43,14 +43,23 @@ class CustomChoiceField(serializers.ChoiceField):
         return dictionary.get(value)
 
 class AddressSerializer(serializers.ModelSerializer):
-    department = serializers.SlugRelatedField(queryset=Department.objects.all(), slug_field='name')
-    province = serializers.SlugRelatedField(queryset=Province.objects.all(), slug_field='name')
-    district = serializers.SlugRelatedField(queryset=District.objects.all(), slug_field='name')
+    department_name = serializers.SerializerMethodField()
+    province_name = serializers.SerializerMethodField()
+    district_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Address
-        fields = ('street','department', 'province', 'district')
+        fields = ('street','department','department_name', 'province', 'province_name',
+                  'district','district_name')
 
+    def get_department_name(self,obj):
+        return str(obj.department)
+
+    def get_province_name(self,obj):
+        return str(obj.province)
+
+    def get_district_name(self,obj):
+        return str(obj.district)
 
 class ClientSerializer(serializers.ModelSerializer):
     # level_instruction = serializers.SlugRelatedField(queryset=LevelInstruction.objects.all(), slug_field='name', allow_null=True)
@@ -74,7 +83,7 @@ class ClientSerializer(serializers.ModelSerializer):
         'password', 'photo','sex','document_type', 'document_number','civil_state',
         'birthdate','address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
         'ciiu', 'activity_description', 'level_instruction','level_instruction_name',
-        'bussiness_name', 'agent_firstname','agent_lastname','position',
+        'business_name', 'agent_firstname','agent_lastname','position',
         'commercial_group', 'commercial_group_name','economic_sector',
         'economic_sector_name','institute', 'profession','profession_name',
         'ocupation', 'about', 'nationality','nationality_name')
@@ -98,8 +107,8 @@ class ClientSerializer(serializers.ModelSerializer):
     # def get_type_client(self,obj):
     #     return obj.get_type_client_display()
     def validate_bussines_client(self,data):
-        if 'bussiness_name' not in data:
-            raise serializers.ValidationError(u"Bussiness name required.")
+        if 'business_name' not in data:
+            raise serializers.ValidationError(u"Business name required.")
         if data['commercial_group'] == None:
             raise serializers.ValidationError(u"commercial_group must no be empty.")
         if data['economic_sector'] == None:
@@ -134,7 +143,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
 
 class SpecialistSerializer(serializers.ModelSerializer):
-    nationality = serializers.SlugRelatedField(queryset=Countries.objects.all(), slug_field='name',required=False)
+    nationality_name = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
@@ -142,15 +151,21 @@ class SpecialistSerializer(serializers.ModelSerializer):
     type_specialist = serializers.ChoiceField(choices=Specialist.options_type)
     address = AddressSerializer()
     email_exact = serializers.EmailField()
-    category = serializers.SlugRelatedField(queryset=Category.objects.all(), slug_field='name')
+    category_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Specialist
         fields = ('id', 'username', 'nick', 'first_name', 'last_name',
         'type_specialist','password', 'photo','document_type',
         'document_number','address', 'ruc', 'email_exact', 'code', 'telephone',
-        'cellphone', 'bussiness_name', 'payment_per_answer','cv','star_rating',
-        'category','nationality')
+        'cellphone', 'business_name', 'payment_per_answer','cv','star_rating',
+        'category','category_name','nationality','nationality_name')
+
+    def get_nationality_name(self,obj):
+        return str(obj.nationality)
+
+    def get_category_name(self,obj):
+        return str(obj.category)
 
     def validate(self,data):
         validation = CommonValidation()
@@ -185,7 +200,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
         instance.telephone = validated_data.get('telephone',instance.telephone)
         instance.cellphone = validated_data.get('cellphone',instance.cellphone)
         instance.ruc = validated_data.get('ruc',instance.ruc)
-        instance.bussiness_name = validated_data.get('bussiness_name',instance.bussiness_name)
+        instance.business_name = validated_data.get('business_name',instance.business_name)
         instance.payment_per_answer = validated_data.get('payment_per_answer',instance.payment_per_answer)
         instance.category = validated_data.get('category',instance.category)
         data = validated_data
