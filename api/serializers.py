@@ -53,30 +53,46 @@ class AddressSerializer(serializers.ModelSerializer):
 
 
 class ClientSerializer(serializers.ModelSerializer):
-    level_instruction = serializers.SlugRelatedField(queryset=LevelInstruction.objects.all(), slug_field='name', allow_null=True)
-    profession = serializers.SlugRelatedField(queryset=Profession.objects.all(), slug_field='name', allow_null=True)
-    nationality = serializers.SlugRelatedField(queryset=Countries.objects.all(), slug_field='name')
-    commercial_group = serializers.SlugRelatedField(queryset=CommercialGroup.objects.all(), slug_field='name', allow_null=True)
-    economic_sector = serializers.SlugRelatedField(queryset=EconomicSector.objects.all(), slug_field='name', allow_null=True)
+    # level_instruction = serializers.SlugRelatedField(queryset=LevelInstruction.objects.all(), slug_field='name', allow_null=True)
+    level_instruction_name = serializers.SerializerMethodField()
+    profession_name = serializers.SerializerMethodField()
+    nationality_name = serializers.SerializerMethodField()
+    commercial_group_name = serializers.SerializerMethodField()
+    economic_sector_name = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)
-    type_client = CustomChoiceField(choices=Client.options_type)
-    sex = CustomChoiceField(choices=Client.options_sex, allow_blank=True)
-    document_type = CustomChoiceField(choices=Client.options_documents)
-    civil_state = CustomChoiceField(choices=Client.options_civil_state, allow_blank=True)
-    ocupation = CustomChoiceField(choices=Client.options_ocupation, allow_blank=True)
+    type_client = serializers.ChoiceField(choices=Client.options_type)
+    sex = serializers.ChoiceField(choices=Client.options_sex, allow_blank=True)
+    document_type = serializers.ChoiceField(choices=Client.options_documents)
+    civil_state = serializers.ChoiceField(choices=Client.options_civil_state, allow_blank=True)
+    ocupation = serializers.ChoiceField(choices=Client.options_ocupation, allow_blank=True)
     address = AddressSerializer()
-    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=Client.objects.all())])
+    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
 
     class Meta:
         model = Client
         fields = ('id', 'username', 'nick','type_client', 'first_name', 'last_name',
-        'password', 'photo','sex','document_type', 'document_number',
-        'civil_state','birthdate','address', 'ruc', 'email_exact', 'code',
-        'telephone', 'cellphone', 'ciiu', 'activity_description', 'level_instruction',
-        'bussiness_name', 'agent_firstname', 'agent_lastname', 'position',
-        'commercial_group', 'economic_sector','institute', 'profession',
-        'ocupation', 'about', 'nationality')
+        'password', 'photo','sex','document_type', 'document_number','civil_state',
+        'birthdate','address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
+        'ciiu', 'activity_description', 'level_instruction','level_instruction_name',
+        'bussiness_name', 'agent_firstname','agent_lastname','position',
+        'commercial_group', 'commercial_group_name','economic_sector',
+        'economic_sector_name','institute', 'profession','profession_name',
+        'ocupation', 'about', 'nationality','nationality_name')
 
+    def get_level_instruction_name(self,obj):
+        return str(obj.level_instruction)
+
+    def get_profession_name(self,obj):
+        return str(obj.profession)
+
+    def get_nationality_name(self,obj):
+        return str(obj.nationality)
+
+    def get_commercial_group_name(self,obj):
+        return str(obj.commercial_group)
+
+    def get_economic_sector_name(self,obj):
+        return str(obj.economic_sector)
     # Por si es necesario usarlo se usa el metodo
     # type_client = serializers.SerializerMethodField()
     # def get_type_client(self,obj):
@@ -122,8 +138,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
-    document_type = CustomChoiceField(choices=Specialist.options_documents)
-    type_specialist = CustomChoiceField(choices=Specialist.options_type)
+    document_type = serializers.ChoiceField(choices=Specialist.options_documents)
+    type_specialist = serializers.ChoiceField(choices=Specialist.options_type)
     address = AddressSerializer()
     email_exact = serializers.EmailField()
     category = serializers.SlugRelatedField(queryset=Category.objects.all(), slug_field='name')
@@ -212,7 +228,7 @@ class QueryAnswerSerializer(serializers.ModelSerializer):
     client = serializers.SerializerMethodField()
     date = serializers.SerializerMethodField()
     time = serializers.SerializerMethodField()
-    status = CustomChoiceField(choices=Query.option_status)
+    status = serializers.ChoiceField(choices=Query.option_status)
     answer = serializers.SerializerMethodField()
     is_delayed = serializers.SerializerMethodField()
 

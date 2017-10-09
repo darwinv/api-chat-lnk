@@ -43,13 +43,13 @@ class CreateNaturalClient(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             'activity_description': 'Loremp iptsum',
-            'level_instruction': 'College Concluded',
+            'level_instruction': 1,
             'institute': 'UNEFA',
-            'profession': 'Programmer',
+            'profession': 1,
             'ocupation': 'd',
             'about': 'iptsum aabout',
             'ciiu': '1440',
-            'nationality': 'Peru'
+            'nationality': 1
         }
     # responder error al enviar email invalido
     def test_invalid_email(self):
@@ -135,7 +135,7 @@ class CreateNaturalClient(APITestCase):
         # self.assertEqual(response.data, 'ey')
 
 # Prueba para verificar la insercion de cliente juridico
-class CreateBussinessClientTestCase(APITestCase):
+class CreateBussinessClient(APITestCase):
     fixtures = ['data']
     def setUp(self):
         self.valid_payload = {
@@ -161,10 +161,10 @@ class CreateBussinessClientTestCase(APITestCase):
             "agent_lastname": "Molina",
             'position': 'manager',
             'about': 'iptsum aabout',
-            'commercial_group': 'Technologies',
-            'economic_sector': 'Secondary',
+            'commercial_group': 1,
+            'economic_sector': 1,
             'ciiu': '1240',
-            'nationality': 'Peru'
+            'nationality': 1
         }
 
     def test_empty_bussiness_fields(self):

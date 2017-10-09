@@ -280,7 +280,7 @@ class GetSpecialistCase(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        
+
         url = "{}?main_specialist={}".format(reverse('specialists'),send.data["id"])
         response = client.get(url)
         self.assertEqual(Specialist.objects.filter(category__name=send.data["category"]).exclude(type_specialist='m').count(),
