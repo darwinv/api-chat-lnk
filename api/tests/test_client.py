@@ -35,7 +35,7 @@ class CreateNaturalClient(APITestCase):
                 "province": "Lima",
                 "district": "Surco"
             },
-            'photo': 'test.jpg',
+            'photo': 'test.png',
             'sex': 'm',
             'document_type': '2',
             'document_number': '144013012',
@@ -43,7 +43,7 @@ class CreateNaturalClient(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             'activity_description': 'Loremp iptsum',
-            'level_instruction': 'Superior Concluida',
+            'level_instruction': 'College Concluded',
             'institute': 'UNEFA',
             'profession': 'Programmer',
             'ocupation': 'd',
@@ -62,9 +62,19 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         #self.assertEqual(response.data, 'ey')
-    def test_invalid_photo(self):
+    def test_invalid_photo_extension(self):
         data = self.valid_payload
         data['photo'] = 'tex.xcf'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_photo_url(self):
+        data = self.valid_payload
+        data['photo'] = 'tex'
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),

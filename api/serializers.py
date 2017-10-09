@@ -23,10 +23,14 @@ class UserSerializer(serializers.ModelSerializer):
 class CommonValidation():
 
     def validate_img(self,photo):
-        extension = photo.split(".")[1]
-        valid_extensions = ['png', 'jpg', 'jpeg']
-        if not extension.lower() in valid_extensions:
-            raise serializers.ValidationError(u"Unsupported image extension.")
+        try:
+            extension = photo.split(".")[1]
+            valid_extensions = ['png', 'jpg', 'jpeg', 'svg']
+            if not extension.lower() in valid_extensions:
+                raise serializers.ValidationError(u"Unsupported image extension.")
+        except Exception as e:
+            raise serializers.ValidationError(u"Unsupported url of photo.")
+
 
 
 class CustomChoiceField(serializers.ChoiceField):
@@ -94,7 +98,8 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         validation = CommonValidation()
-        validation.validate_img(photo=data['photo'])
+        if 'photo' in data:
+            validation.validate_img(photo=data['photo'])
         if data['type_client'] == 'b':
             self.validate_bussines_client(data)
         return data
@@ -133,7 +138,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
     def validate(self,data):
         validation = CommonValidation()
-        validation.validate_img(photo=data['photo'])
+        if 'photo' in data:
+            validation.validate_img(photo=data['photo'])
         # Asegurarse que solo haya un especialista principal por categoria.
         if self.instance and self.instance.username != data["username"]:
             if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",category__name=data["category"]).exists():
