@@ -168,7 +168,7 @@ class UpdateSpecialistCase(APITestCase):
         print (send.data["address"]['street'])
         self.assertEqual(data['address']['street'], response.data["address"]['street'])
 
-class GetSpecialistCase(APITestCase):
+class GetSpecialists(APITestCase):
     fixtures = ['data']
     def setUp(self):
         self.valid_payload = {
@@ -281,7 +281,8 @@ class GetSpecialistCase(APITestCase):
 
         url = "{}?main_specialist={}".format(reverse('specialists'),send.data["id"])
         response = client.get(url)
-        self.assertEqual(Specialist.objects.filter(category__name=send.data["category"]).exclude(type_specialist='m').count(),
+        # pdb.set_trace()
+        self.assertEqual(Specialist.objects.filter(category=send.data["category"]).exclude(type_specialist='m').count(),
                                                    response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
