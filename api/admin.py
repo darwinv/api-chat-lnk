@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import Role, User, Seller, Client, Category, Specialist, Query, Answer
+from .models import Department, Province, District
 # Register your models here.
 
 class ClientNaturalAdmin(admin.ModelAdmin):
@@ -32,3 +33,6 @@ admin.site.register(Category)
 admin.site.register(Specialist,SpecialistAdmin)
 admin.site.register(Query,QueryAdmin)
 admin.site.register(Answer)
+admin.site.register(Department)
+admin.site.register(Province)
+admin.site.register(District)

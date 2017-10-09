@@ -35,7 +35,7 @@ class CreateNaturalClient(APITestCase):
                 "province": "Lima",
                 "district": "Surco"
             },
-            'photo': 'test.jpg',
+            'photo': 'test.png',
             'sex': 'm',
             'document_type': '2',
             'document_number': '144013012',
@@ -43,7 +43,7 @@ class CreateNaturalClient(APITestCase):
             'telephone': '921471559',
             'cellphone': '921471559',
             'activity_description': 'Loremp iptsum',
-            'level_instruction': 'Superior Concluida',
+            'level_instruction': 'College Concluded',
             'institute': 'UNEFA',
             'profession': 'Programmer',
             'ocupation': 'd',
@@ -51,7 +51,7 @@ class CreateNaturalClient(APITestCase):
             'ciiu': '1440',
             'nationality': 'Peru'
         }
-    # responder error al enviar email invalido 
+    # responder error al enviar email invalido
     def test_invalid_email(self):
         data = self.valid_payload
         data['email_exact']='asdasd'
@@ -62,9 +62,19 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         #self.assertEqual(response.data, 'ey')
-    def test_invalid_photo(self):
+    def test_invalid_photo_extension(self):
         data = self.valid_payload
         data['photo'] = 'tex.xcf'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_photo_url(self):
+        data = self.valid_payload
+        data['photo'] = 'tex'
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
@@ -199,9 +209,49 @@ class CreateBussinessClientTestCase(APITestCase):
 
 class GetDetailClient(APITestCase):
     def setUp(self):
-        pass
+        self.valid_payload = {
+            'username': 'darwin',
+            'nick': 'dar',
+            'type_client': 'n',
+            'first_name': 'darwin',
+            'last_name': 'vasquez',
+            'civil_state': 's',
+            'password': 'intel12345',
+            'birthdate': '2017-09-19',
+            "address": {
+                "street": "esteban camere",
+                "department": "Lima",
+                "province": "Lima",
+                "district": "Surco"
+            },
+            'photo': 'test.jpg',
+            'sex': 'm',
+            'document_type': '2',
+            'document_number': '144013012',
+            'email_exact': 'darwin.vasqz@gmail.com',
+            'telephone': '921471559',
+            'cellphone': '921471559',
+            'activity_description': 'Loremp iptsum',
+            'level_instruction': 'College Concluded',
+            'institute': 'UNEFA',
+            'profession': 'Programmer',
+            'ocupation': 'd',
+            'about': 'iptsum aabout',
+            'ciiu': '1440',
+            'nationality': 'Peru'
+        }
+
     def test_get_client(self):
-        pass
+        send = self.client.post(
+            reverse('clients'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        response = client.get(reverse('client-detail',
+                         kwargs={'pk': send.data["id"]}),format='json')
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(send.data["username"], response.data["username"])
 
 
 class GetAllClients(APITestCase):

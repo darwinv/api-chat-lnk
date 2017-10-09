@@ -61,7 +61,7 @@ class User(AbstractUser):
     email_exact = models.CharField(max_length=150, unique=True)
     telephone = models.CharField(max_length=14)
     cellphone = models.CharField(max_length=14)
-    photo = models.CharField(max_length=250, default='preview.png') ## instalar pillow para ImageField
+    photo = models.CharField(max_length=250, default='preview.png', null=True)
     options_documents = (
         ('0', 'DNI'),
         ('1', 'Passport'),
@@ -198,7 +198,7 @@ class Category(models.Model):
     image = models.CharField(max_length=169)
     description = models.CharField(max_length=255)
     payment_per_answer = models.FloatField()
-    #def __str__(self):
+    # def __str__(self):
     #    return self.name
 
 

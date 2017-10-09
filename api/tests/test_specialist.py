@@ -212,6 +212,7 @@ class GetSpecialistCase(APITestCase):
 
     # no funciona la prueba debido a que para
     def test_get_associates_by_main(self):
+        fixtures = ['data']
         data_first_associate = {
             'username': 'maria',
             'nick': 'maria',
@@ -279,8 +280,7 @@ class GetSpecialistCase(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # pdb.set_trace()
-        # response = client.get(resolve(''))
+        
         url = "{}?main_specialist={}".format(reverse('specialists'),send.data["id"])
         response = client.get(url)
         self.assertEqual(Specialist.objects.filter(category__name=send.data["category"]).exclude(type_specialist='m').count(),

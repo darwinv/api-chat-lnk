@@ -17,5 +17,5 @@ urlpatterns = [
     url(r'^categories/(?P<pk>[0-9]+)/$', views.CategoryDetailView.as_view(), name='category-detail'),
     url(r'^specialists/$', views.SpecialistListView.as_view(), name='specialists'),
     url(r'^specialists/(?P<pk>[0-9]+)/$', views.SpecialistDetailView.as_view(), name='specialist-detail'),
-    url(r'^specialists/(?P<pk>[0-9]+)/account_status/$', views.SpecialistAccountView.as_view(), name='specialist-account-status'),
+    url(r'^account_status/specialists/(?P<pk>[0-9]+)/$', views.SpecialistAccountView.as_view(), name='specialist-account-status'),
 ]
