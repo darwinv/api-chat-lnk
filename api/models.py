@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 class Countries(models.Model):
     name = models.CharField(max_length=90, unique=True)
-    code_phone = models.CharField(max_length=4, unique=True)
+    code_phone = models.CharField(max_length=4)
     iso_code = models.CharField(max_length=4, unique=True)
     def __str__(self):
         return self.name
