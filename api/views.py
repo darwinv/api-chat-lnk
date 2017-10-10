@@ -169,12 +169,13 @@ class SpecialistDetailView(APIView):
         data['photo'] = request.data.get('photo',specialist.photo)
         data['username'] = specialist.username
         data['role'] = ROLE_SPECIALIST
+        
         serializer = SpecialistSerializer(specialist, data, partial=True)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        print(serializer.errors)
-        print("------------------------------------")
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self,request,pk):

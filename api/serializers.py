@@ -206,11 +206,13 @@ class SpecialistSerializer(serializers.ModelSerializer):
         data = validated_data
         if 'address' in validated_data:
             data_address = validated_data.pop('address')
-            address = Address.objects.get(pk=instance.id)
+
+            address = Address.objects.get(pk=instance.address_id)
             address.department = Department.objects.get(name=data_address["department"].name)
             address.province = Province.objects.get(name=data_address["province"].name)
             address.district = District.objects.get(name=data_address["district"].name)
             address.street = data_address['street']
+
             address.save()
             instance.address = address
         instance.save()
