@@ -107,7 +107,7 @@ class SellerContactNoEfective(models.Model):
     contact_lastname = models.CharField(max_length=55, null=True)
     options_type = (
         ('n', 'Natural'),
-        ('b', 'Bussiness'),
+        ('b', 'Business'),
     )
 
     type_contact = models.CharField(max_length=1, choices=options_type)

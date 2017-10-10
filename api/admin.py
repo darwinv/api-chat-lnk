@@ -12,7 +12,7 @@ class ClientNaturalAdmin(admin.ModelAdmin):
      'ocupation', 'about','anonymous','role','nationality')
 
 class ClientBussinessAdmin(admin.ModelAdmin):
-    fields  = ('username','nick','password','photo','bussiness_name',
+    fields  = ('username','nick','password','photo','business_name',
      'type_client', 'document_type', 'document_number', 'email_exact',
      'code','telephone', 'cellphone', 'commercial_group', 'economic_sector',
      'ciiu', 'activity_description','agent_firstname', 'agent_lastname',
@@ -20,7 +20,7 @@ class ClientBussinessAdmin(admin.ModelAdmin):
 
 class SpecialistAdmin(admin.ModelAdmin):
     fields = ('username', 'nick','password','photo','first_name', 'last_name',
-    'bussiness_name','type_specialist','email_exact','telephone',
+    'business_name','type_specialist','email_exact','telephone',
     'cellphone','document_type', 'document_number',
     'ruc','code','payment_per_answer','anonymous','role','category')
 
