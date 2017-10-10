@@ -8,6 +8,10 @@ class Countries(models.Model):
     def __str__(self):
         return self.name
 
+class Ciiu(models.Model):
+    code = models.CharField(max_length=4, unique=True)
+    description = models.CharField(max_length=255)
+
 class Department(models.Model):
     name = models.CharField(max_length=55)
     def __str__(self):

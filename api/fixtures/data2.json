@@ -18726,5 +18726,3357 @@
   "fields": {
     "name": "Writer"
   }
-}
+},
+  {
+    "model": "api.ciiu",
+    "pk": 1,
+    "fields": {
+      "code": "0111",
+      "description": "CULTIVO DE CEREALES (EXCEPTO ARROZ), LEGUMBRES Y SEMILLAS OLEAGINOSAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 2,
+    "fields": {
+      "code": "0112",
+      "description": "CULTIVO DE ARROZ"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 3,
+    "fields": {
+      "code": "0113",
+      "description": "CULTIVO DE HORTALIZAS Y MELONES, RA\u00cdCES Y TUB\u00c9RCULOS."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 4,
+    "fields": {
+      "code": "0114",
+      "description": "CULTIVO DE CA\u00d1A DE AZ\u00daCAR"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 5,
+    "fields": {
+      "code": "0115",
+      "description": "CULTIVO DE TABACO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 6,
+    "fields": {
+      "code": "0116",
+      "description": "CULTIVO DE PLANTAS DE FIBRA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 7,
+    "fields": {
+      "code": "0119",
+      "description": "CULTIVO DE OTRAS PLANTAS NO PERENNES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 8,
+    "fields": {
+      "code": "0121",
+      "description": "CULTIVO DE UVA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 9,
+    "fields": {
+      "code": "0122",
+      "description": "CULTIVO DE FRUTAS TROPICALES Y SUBTROPICALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 10,
+    "fields": {
+      "code": "0123",
+      "description": "CULTIVO DE  C\u00cdTRICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 11,
+    "fields": {
+      "code": "0124",
+      "description": "CULTIVO DE FRUTAS DE PEPITA Y DE HUESO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 12,
+    "fields": {
+      "code": "0125",
+      "description": "CULTIVO DE OTROS FRUTOS Y NUECES DE \u00c1RBOLES Y ARBUSTOS "
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 13,
+    "fields": {
+      "code": "0126",
+      "description": "CULTIVO DE FRUTOS OLEAGINOSOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 14,
+    "fields": {
+      "code": "0127",
+      "description": "CULTIVO DE PLANTAS CON LAS QUE SE PREPARAN BEBIDAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 15,
+    "fields": {
+      "code": "0128",
+      "description": "CULTIVO DE ESPECIAS Y DE PLANTAS AROM\u00c1TICAS, MEDICINALES Y FARMACEUTICAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 16,
+    "fields": {
+      "code": "0129",
+      "description": "CULTIVO DE OTRAS PLANTAS NO PERENNES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 17,
+    "fields": {
+      "code": "0130",
+      "description": "PROPAGACI\u00d3N DE PLANTAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 18,
+    "fields": {
+      "code": "0141",
+      "description": "CR\u00cdA DE GANADO BOVINO Y B\u00daFALOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 19,
+    "fields": {
+      "code": "0142",
+      "description": "CR\u00cdA DE CABALLOS Y OTROS EQUINOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 20,
+    "fields": {
+      "code": "0143",
+      "description": "CR\u00cdA DE CAMELLOS Y OTROS CAM\u00c9LIDOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 21,
+    "fields": {
+      "code": "0144",
+      "description": "CR\u00cdA DE OVEJAS Y CABRAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 22,
+    "fields": {
+      "code": "0145",
+      "description": "CR\u00cdA DE CERDOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 23,
+    "fields": {
+      "code": "0146",
+      "description": "CR\u00cdA DE AVES DE CORRAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 24,
+    "fields": {
+      "code": "0149",
+      "description": "CR\u00cdA DE OTROS ANIMALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 25,
+    "fields": {
+      "code": "0150",
+      "description": "CULTIVO DE PRODUCTOS AGR\u00ccCOLAS EN COMBINACI\u00d2N CON LA CR\u00ccA DE ANIMALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 26,
+    "fields": {
+      "code": "0161",
+      "description": "ACTIVIDADES DE APOYO A LA AGRICULTURA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 27,
+    "fields": {
+      "code": "0162",
+      "description": "ACTIVIDADES DE APOYO A LA GANADER\u00cdA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 28,
+    "fields": {
+      "code": "0163",
+      "description": "ACTIVIDADES POSCOSECHA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 29,
+    "fields": {
+      "code": "0164",
+      "description": "TRATAMIENTO DE SEMILLAS PARA PROPAGACI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 30,
+    "fields": {
+      "code": "0170",
+      "description": "CAZA ORDINARIA Y MEDIANTE TRAMPAS Y ACTIVIDADES DE SERVICIOS CONEXAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 31,
+    "fields": {
+      "code": "0210",
+      "description": "SILVICULTURA Y OTRAS ACTIVIDADES FORESTALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 32,
+    "fields": {
+      "code": "0220",
+      "description": "EXTRACCI\u00d3N DE MADERA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 33,
+    "fields": {
+      "code": "0230",
+      "description": "RECOLECCI\u00d3N DE PRODUCTOS FORESTALES DISTINTOS DE LA MADERA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 34,
+    "fields": {
+      "code": "0240",
+      "description": "SERVICIOS DE APOYO A LA SILVICULTURA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 35,
+    "fields": {
+      "code": "0311",
+      "description": "PESCA MAR\u00cdTIMA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 36,
+    "fields": {
+      "code": "0312",
+      "description": "PESCA DE AGUA DULCE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 37,
+    "fields": {
+      "code": "0321",
+      "description": "ACUICULTURA MAR\u00cdTIMA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 38,
+    "fields": {
+      "code": "0322",
+      "description": "ACUICULTURA DE AGUA DULCE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 39,
+    "fields": {
+      "code": "0510",
+      "description": "EXTRACCI\u00d3N DE CARB\u00d3N DE PIEDRA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 40,
+    "fields": {
+      "code": "0520",
+      "description": "EXTRACCI\u00d3N DE LIGNITO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 41,
+    "fields": {
+      "code": "0610",
+      "description": "EXTRACCI\u00d3N DE PETR\u00d3LEO CRUDO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 42,
+    "fields": {
+      "code": "0620",
+      "description": "EXTRACCI\u00d3N DE GAS NATURAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 43,
+    "fields": {
+      "code": "0710",
+      "description": "EXTRACCI\u00d3N DE MINERALES DE HIERRO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 44,
+    "fields": {
+      "code": "0721",
+      "description": "EXTRACCI\u00d3N DE MINERALES DE URANIO Y TORIO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 45,
+    "fields": {
+      "code": "0729",
+      "description": "EXTRACCI\u00d3N DE OTROS MINERALES METAL\u00cdFEROS NO FERROSOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 46,
+    "fields": {
+      "code": "0810",
+      "description": "EXTRACCI\u00d3N DE PIEDRA, ARENA Y ARCILLA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 47,
+    "fields": {
+      "code": "0891",
+      "description": "EXTRACCI\u00d3N DE MINERALES PARA LA FABRICACI\u00d3N DE ABONOS Y PRODUCTOS QU\u00cdMICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 48,
+    "fields": {
+      "code": "0892",
+      "description": "EXTRACCI\u00d3N DE TURBA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 49,
+    "fields": {
+      "code": "0893",
+      "description": "EXTRACCI\u00d3N DE SAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 50,
+    "fields": {
+      "code": "0899",
+      "description": "EXPLOTACI\u00d3N DE OTRAS MINAS Y CANTERAS N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 51,
+    "fields": {
+      "code": "0910",
+      "description": "ACTIVIDADES DE APOYO PARA LA EXTRACCI\u00d3N DE PETR\u00d3LEO Y GAS NATURAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 52,
+    "fields": {
+      "code": "0990",
+      "description": "ACTIVIDADES DE APOYO PARA OTRAS ACTIVIDADES DE EXPLOTACI\u00d3N DE MINAS Y CANTERAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 53,
+    "fields": {
+      "code": "1010",
+      "description": "ELABORACI\u00d2N Y CONSERVACI\u00d3N DE CARNE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 54,
+    "fields": {
+      "code": "1020",
+      "description": "ELABORACI\u00d2N Y CONSERVACI\u00d3N DE PESCADOS, CRUST\u00c1CEOS Y MOLUSCOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 55,
+    "fields": {
+      "code": "1030",
+      "description": "ELABORACI\u00d2N Y CONSERVACI\u00d3N DE FRUTAS,LEGUMBRES Y HORTALIZAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 56,
+    "fields": {
+      "code": "1040",
+      "description": "ELABORACI\u00d3N DE ACEITES Y GRASAS DE ORIGEN VEGETAL Y ANIMAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 57,
+    "fields": {
+      "code": "1050",
+      "description": "ELABORACI\u00d3N DE PRODUCTOS L\u00c1CTEOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 58,
+    "fields": {
+      "code": "1061",
+      "description": "ELABORACI\u00d3N DE PRODUCTOS DE MOLINER\u00cdA."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 59,
+    "fields": {
+      "code": "1062",
+      "description": "ELABORACI\u00d3N DE ALMIDONES Y PRODUCTOS DERIVADOS DEL ALMID\u00d3N."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 60,
+    "fields": {
+      "code": "1071",
+      "description": "ELABORACI\u00d3N DE PRODUCTOS DE PANADER\u00cdA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 61,
+    "fields": {
+      "code": "1072",
+      "description": "ELABORACI\u00d3N DE AZ\u00daCAR"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 62,
+    "fields": {
+      "code": "1073",
+      "description": "ELABORACI\u00d3N DE CACAO Y CHOCOLATE Y DE PRODUCTOS DE CONFITER\u00cdA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 63,
+    "fields": {
+      "code": "1074",
+      "description": "ELABORACI\u00d3N DE MACARRONES, FIDEOS, ALCUZCUS Y PRODUCTOS FARIN\u00c1CEOS SIMILARES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 64,
+    "fields": {
+      "code": "1075",
+      "description": "ELABORACI\u00d3N DE COMIDAS Y PLATOS PREPARADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 65,
+    "fields": {
+      "code": "1079",
+      "description": "ELABORACI\u00d3N DE OTROS PRODUCTOS ALIMENTICIOS N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 66,
+    "fields": {
+      "code": "1080",
+      "description": "ELABORACI\u00d3N DE PIENSOS PREPARADOS PARA ANIMALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 67,
+    "fields": {
+      "code": "1101",
+      "description": "DESTILACI\u00d3N, RECTIFICACI\u00d3N Y MEZCLA DE BEBIDAS ALCOH\u00d3LICAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 68,
+    "fields": {
+      "code": "1102",
+      "description": "ELABORACI\u00d3N DE VINOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 69,
+    "fields": {
+      "code": "1103",
+      "description": "ELABORACI\u00d3N DE BEBIDAS MALTEADAS Y DE MALTA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 70,
+    "fields": {
+      "code": "1104",
+      "description": "ELABORACI\u00d3N DE BEBIDAS NO ALCOH\u00d3LICAS; PRODUCCI\u00d3N DE AGUAS MINERALES Y OTRAS AGUAS EMBOTELLADAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 71,
+    "fields": {
+      "code": "1200",
+      "description": "ELABORACI\u00d3N DE PRODUCTOS DE TABACO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 72,
+    "fields": {
+      "code": "1311",
+      "description": "PREPARACI\u00d3N E HILATURA DE FIBRAS TEXTILES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 73,
+    "fields": {
+      "code": "1312",
+      "description": "TEJEDURA DE PRODUCTOS TEXTILES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 74,
+    "fields": {
+      "code": "1313",
+      "description": "ACABADO DE PRODUCTOS TEXTILES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 75,
+    "fields": {
+      "code": "1391",
+      "description": "FABRICACI\u00d3N DE TEJIDOS DE PUNTO Y GANCHILLO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 76,
+    "fields": {
+      "code": "1392",
+      "description": "FABRICACI\u00d3N DE ART\u00cdCULOS CONFECCIONADOS DE MATERIALES TEXTILES, EXCEPTO PRENDAS DE VESTIR"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 77,
+    "fields": {
+      "code": "1393",
+      "description": "FABRICACI\u00d3N DE TAPICES Y ALFOMBRAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 78,
+    "fields": {
+      "code": "1394",
+      "description": "FABRICACI\u00d3N DE CUERDAS, CORDELES, BRAMANTES Y REDES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 79,
+    "fields": {
+      "code": "1399",
+      "description": "FABRICACI\u00d3N DE OTROS PRODUCTOS TEXTILES N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 80,
+    "fields": {
+      "code": "1410",
+      "description": "FABRICACI\u00d3N DE PRENDAS DE VESTIR, EXCEPTO PRENDAS DE PIEL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 81,
+    "fields": {
+      "code": "1420",
+      "description": "FABRICACI\u00d3N DE ART\u00cdCULOS DE PIEL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 82,
+    "fields": {
+      "code": "1430",
+      "description": "FABRICACI\u00d3N DE ARTICULOS DE PUNTO Y GANCHILLO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 83,
+    "fields": {
+      "code": "1511",
+      "description": "CURTIDO Y ADOBO DE CUEROS; ADOBO Y TE\u00d1IDO DE PIELES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 84,
+    "fields": {
+      "code": "1512",
+      "description": "FABRICACI\u00d3N DE MALETAS, BOLSOS DE MANO, Y ART\u00cdCULOS SIMILARES,Y DE ARTICULOS DE TALABARTER\u00cdA Y GUARNICIONER\u00cdA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 85,
+    "fields": {
+      "code": "1520",
+      "description": "FABRICACI\u00d3N DE CALZADO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 86,
+    "fields": {
+      "code": "1610",
+      "description": "ASERRADOS Y ACEPILLADURA DE MADERA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 87,
+    "fields": {
+      "code": "1621",
+      "description": "FABRICACI\u00d3N DE HOJAS DE MADERA PARA ENCHAPADO Y TABLEROS A BASE DE MADERA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 88,
+    "fields": {
+      "code": "1622",
+      "description": "FABRICACI\u00d3N DE PARTES Y PIEZAS DE CARPINTER\u00cdA PARA EDIFICIOS Y CONSTRUCCIONES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 89,
+    "fields": {
+      "code": "1623",
+      "description": "FABRICACI\u00d3N DE RECIPIENTES DE MADERA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 90,
+    "fields": {
+      "code": "1629",
+      "description": "FABRICACI\u00d3N DE OTROS PRODUCTOS DE MADERA; FABRICACI\u00d3N DE ART\u00cdCULOS DE CORCHO, PAJA Y MATERIALES TRENZABLES."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 91,
+    "fields": {
+      "code": "1701",
+      "description": "FABRICACI\u00d3N DE PASTA DE MADERA, PAPEL Y CART\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 92,
+    "fields": {
+      "code": "1702",
+      "description": "FABRICACI\u00d3N DEL PAPEL Y CART\u00d3N ONDULADO Y DE ENVASES DE PAPEL Y CART\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 93,
+    "fields": {
+      "code": "1709",
+      "description": "FABRICACI\u00d3N DE OTROS ART\u00cdCULOS DEL PAPEL Y CART\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 94,
+    "fields": {
+      "code": "1811",
+      "description": "IMPRESI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 95,
+    "fields": {
+      "code": "1812",
+      "description": "ACTIVIDADES DE SERVICIOS RELACIONADAS CON LA IMPRESI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 96,
+    "fields": {
+      "code": "1820",
+      "description": "REPRODUCCI\u00d3N DE GRABACIONES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 97,
+    "fields": {
+      "code": "1910",
+      "description": "FABRICACI\u00d3N DE PRODUCTOS DE HORNOS DE COQUE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 98,
+    "fields": {
+      "code": "1920",
+      "description": "FABRICACI\u00d3N DE PRODUCTOS DE LA REFINACI\u00d3N DEL PETR\u00d3LEO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 99,
+    "fields": {
+      "code": "2011",
+      "description": "FABRICACI\u00d3N DE SUSTANCIAS QU\u00cdMICAS B\u00c1SICAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 100,
+    "fields": {
+      "code": "2012",
+      "description": "FABRICACI\u00d3N ABONOS Y COMPUESTOS DE NITR\u00d3GENO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 101,
+    "fields": {
+      "code": "2013",
+      "description": "FABRICACI\u00d3N DE PL\u00c1STICOS Y DE CAUCHO SINT\u00c9TICO EN FORMAS PRIMARIAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 102,
+    "fields": {
+      "code": "2021",
+      "description": "FABRICACI\u00d3N DE PLAGUICIDAS Y OTROS PRODUCTOS QU\u00cdMICOS DE USO AGROPECUARIO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 103,
+    "fields": {
+      "code": "2022",
+      "description": "FABRICACI\u00d3N DE PINTURAS, BARNICES Y PRODUCTOS DE REVESTIMIENTO SIMILARES, TINTAS DE IMPRENTA Y MASILLAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 104,
+    "fields": {
+      "code": "2023",
+      "description": "FABRICACI\u00d3N DE JABONES Y DETERGENTES, PREPARADOS PARA LIMPIAR Y PULIR, PERFUMES Y PREPARADOS DE TOCADOR."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 105,
+    "fields": {
+      "code": "2029",
+      "description": "FABRICACI\u00d3N DE OTROS PRODUCTOS QU\u00cdMICOS N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 106,
+    "fields": {
+      "code": "2030",
+      "description": "FABRICACI\u00d3N DE FIBRAS ARTIFICIALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 107,
+    "fields": {
+      "code": "2100",
+      "description": "FABRICACI\u00d3N DE PRODUCTOS FARMAC\u00c9UTICOS, SUSTANCIAS QU\u00cdMICAS MEDICINALES Y PRODUCTOS BOT\u00c1NICOS DE USO FARMAC\u00c9UTICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 108,
+    "fields": {
+      "code": "2211",
+      "description": "FABRICACI\u00d3N DE CUBIERTAS Y C\u00c1MARAS DE CAUCHO; RECAUCHUTADO Y RENOVACI\u00d3N DE CUBIERTAS DE CAUCHO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 109,
+    "fields": {
+      "code": "2219",
+      "description": "FABRICACI\u00d3N DE OTROS PRODUCTOS DE CAUCHO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 110,
+    "fields": {
+      "code": "2220",
+      "description": "FABRICACI\u00d3N DE PRODUCTOS DE PL\u00c1STICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 111,
+    "fields": {
+      "code": "2310",
+      "description": "FABRICACI\u00d3N DE VIDRIO Y DE PRODUCTOS DE VIDRIO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 112,
+    "fields": {
+      "code": "2391",
+      "description": "FABRICACI\u00d3N DE PRODUCTOS REFRACTARIOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 113,
+    "fields": {
+      "code": "2392",
+      "description": "FABRICACI\u00d3N DE MATERIALES DE CONSTRUCCI\u00d3N DE ARCILLA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 114,
+    "fields": {
+      "code": "2393",
+      "description": "FABRICACI\u00d3N DE OTROS PRODUCTOS DE PORCELANA Y DE CER\u00c1MICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 115,
+    "fields": {
+      "code": "2394",
+      "description": "FABRICACI\u00d3N DE CEMENTO, CAL Y YESO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 116,
+    "fields": {
+      "code": "2395",
+      "description": "FABRICACI\u00d3N DE ART\u00cdCULOS DE HORMIG\u00d3N, DE CEMENTO Y DE YESO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 117,
+    "fields": {
+      "code": "2396",
+      "description": "CORTE, TALLA Y ACABADO DE LA PIEDRA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 118,
+    "fields": {
+      "code": "2399",
+      "description": "FABRICACI\u00d3N DE OTROS PRODUCTOS MINERALES NO MET\u00c1LICOS N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 119,
+    "fields": {
+      "code": "2410",
+      "description": "INDUSTRIAS B\u00c1SICAS DE HIERRO Y ACERO "
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 120,
+    "fields": {
+      "code": "2420",
+      "description": "FABRICACI\u00d3N DE PRODUCTOS PRIMARIOS DE METALES PRECIOSOS Y OTROS METALES NO FERROSOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 121,
+    "fields": {
+      "code": "2431",
+      "description": "FUNDICI\u00d3N DE HIERRO Y ACERO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 122,
+    "fields": {
+      "code": "2432",
+      "description": "FUNDICI\u00d3N DE METALES NO FERROSOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 123,
+    "fields": {
+      "code": "2511",
+      "description": "FABRICACI\u00d3N DE PRODUCTOS MET\u00c1LICOS PARA USO ESTRUCTURAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 124,
+    "fields": {
+      "code": "2512",
+      "description": "FABRICACI\u00d3N DE TANQUES, DEP\u00d3SITOS Y RECIPIENTES DE METAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 125,
+    "fields": {
+      "code": "2513",
+      "description": "FABRICACI\u00d3N DE LOS GENERADORES DEL VAPOR, EXCEPTO CALDERAS DE AGUA CALIENTE PARA CALEFACCI\u00d3N CENTRAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 126,
+    "fields": {
+      "code": "2520",
+      "description": "FABRICACI\u00d3N DE ARMAS Y MUNICIONES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 127,
+    "fields": {
+      "code": "2591",
+      "description": "FORJA, PRENSADO, ESTAMPADO Y LAMINADO DE METALES; PULVIMETALURGIA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 128,
+    "fields": {
+      "code": "2592",
+      "description": "TRATAMIENTO Y REVESTIMIENTO DE METALES; MAQUINADO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 129,
+    "fields": {
+      "code": "2593",
+      "description": "FABRICACI\u00d3N DE ART\u00cdCULOS DE CUCHILLER\u00cdA, HERRAMIENTAS DE MANO Y ART\u00cdCULOS DE FERRETER\u00cdA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 130,
+    "fields": {
+      "code": "2599",
+      "description": "FABRICACI\u00d3N DE OTROS PRODUCTOS ELABORADOS DE METAL N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 131,
+    "fields": {
+      "code": "2610",
+      "description": "FABRICACI\u00d3N DE COMPONENTES Y TABLEROS ELECTR\u00d3NICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 132,
+    "fields": {
+      "code": "2620",
+      "description": "FABRICACI\u00d3N DE ORDENADORES Y EQUIPO PERIF\u00c9RICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 133,
+    "fields": {
+      "code": "2630",
+      "description": "FABRICACI\u00d3N DE EQUIPOS DE COMUNICACIONES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 134,
+    "fields": {
+      "code": "2640",
+      "description": "FABRICACI\u00d3N DE APARATOS ELECTR\u00d3NICOS DE CONSUMO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 135,
+    "fields": {
+      "code": "2651",
+      "description": "FABRICACI\u00d3N DE EQUIPO DE MEDICI\u00d3N, PRUEBA, NAVEGACI\u00d3N Y CONTROL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 136,
+    "fields": {
+      "code": "2652",
+      "description": "FABRICACI\u00d3N DE RELOJES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 137,
+    "fields": {
+      "code": "2660",
+      "description": "FABRICACI\u00d3N DE EQUIPO DE IRRADIACI\u00d3N Y EQUIPO ELECTR\u00d3NICO DE USO M\u00c9DICO Y TERAP\u00c9UTICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 138,
+    "fields": {
+      "code": "2670",
+      "description": "FABRICACI\u00d3N DE INSTRUMENTOS \u00d3PTICOS Y EQUIPO FOTOGR\u00c1FICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 139,
+    "fields": {
+      "code": "2680",
+      "description": "FABRICACI\u00d3N DE SOPORTES MAGN\u00c9TICOS Y \u00d3PTICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 140,
+    "fields": {
+      "code": "2710",
+      "description": "FABRICACI\u00d3N DE MOTORES, GENERADORES Y TRANSFORMADORES EL\u00c9CTRICOS Y APARATOS DE DISTRIBUCI\u00d3N Y CONTROL DE LA ENERG\u00cdA EL\u00c9CTRICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 141,
+    "fields": {
+      "code": "2720",
+      "description": "FABRICACI\u00d3N DE PILAS, BATER\u00cdAS Y ACUMULADORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 142,
+    "fields": {
+      "code": "2731",
+      "description": "FABRICACI\u00d3N DE CABLES DE FIBRA \u00d3PTICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 143,
+    "fields": {
+      "code": "2732",
+      "description": "FABRICACI\u00d3N DE OTROS HILOS Y CABLES EL\u00c9CTRICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 144,
+    "fields": {
+      "code": "2733",
+      "description": "FABRICACI\u00d3N DE DISPOSITIVOS DE CABLEADO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 145,
+    "fields": {
+      "code": "2740",
+      "description": "FABRICACI\u00d3N DE EQUIPO EL\u00c9CTRICO DE ILUMINACI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 146,
+    "fields": {
+      "code": "2750",
+      "description": "FABRICACI\u00d3N DE APARATOS DE USO DOM\u00c9STICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 147,
+    "fields": {
+      "code": "2790",
+      "description": "FABRICACI\u00d3N DE OTROS TIPOS DE EQUIPO EL\u00c9CTRICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 148,
+    "fields": {
+      "code": "2811",
+      "description": "FABRICACI\u00d3N DE MOTORES Y TURBINAS, EXCEPTO MOTORES PARA AERONAVES, VEH\u00cdCULOS AUTOMOTORES Y MOTOCICLETAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 149,
+    "fields": {
+      "code": "2812",
+      "description": "FABRICACI\u00d3N DE EQUIPO DE PROPULSI\u00d3N DE FLUIDOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 150,
+    "fields": {
+      "code": "2813",
+      "description": "FABRICACI\u00d3N DE BOMBAS, COMPRESORES, GRIFOS Y V\u00c1LVULAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 151,
+    "fields": {
+      "code": "2814",
+      "description": "FABRICACI\u00d3N DE COJINETES, ENGRANAJES, TRENES DE ENGRANAJES Y PIEZAS DE TRANSMISI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 152,
+    "fields": {
+      "code": "2815",
+      "description": "FABRICACI\u00d3N DE HORNOS, HOGARES Y QUEMADORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 153,
+    "fields": {
+      "code": "2816",
+      "description": "FABRICACI\u00d3N DE EQUIPO DE ELEVACI\u00d3N Y MANIPULACI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 154,
+    "fields": {
+      "code": "2817",
+      "description": "FABRICACI\u00d3N DE MAQUINARIA Y EQUIPO DE OFICINA (EXCEPTO ORDENADORES Y EQUIPO PERIF\u00c9RICO)"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 155,
+    "fields": {
+      "code": "2818",
+      "description": "FABRICACI\u00d3N DE HERRAMIENTAS DE MANO MOTORIZADAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 156,
+    "fields": {
+      "code": "2819",
+      "description": "FABRICACI\u00d3N DE OTROS TIPOS DE MAQUINARIA DE USO GENERAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 157,
+    "fields": {
+      "code": "2821",
+      "description": "FABRICACI\u00d3N DE MAQUINARIA AGROPECUARIA Y FORESTAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 158,
+    "fields": {
+      "code": "2822",
+      "description": "FABRICACI\u00d3N DE MAQUINARIA PARA LA CONFORMACI\u00d3N DE METALES Y DE M\u00c1QUINAS HERRAMIENTA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 159,
+    "fields": {
+      "code": "2823",
+      "description": "FABRICACI\u00d3N DE MAQUINARIA METAL\u00daRGICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 160,
+    "fields": {
+      "code": "2824",
+      "description": "FABRICACI\u00d3N DE MAQUINARIA PARA EXPLOTACI\u00d3N DE MINAS Y CANTERAS Y PARA OBRAS DE CONSTRUCCI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 161,
+    "fields": {
+      "code": "2825",
+      "description": "FABRICACI\u00d3N DE MAQUINARIA PARA LA ELABORACI\u00d3N DE ALIMENTOS, BEBIDAS Y TABACO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 162,
+    "fields": {
+      "code": "2826",
+      "description": "FABRICACI\u00d3N DE MAQUINARIA PARA LA ELABORACI\u00d3N DE PRODUCTOS TEXTILES, PRENDAS DE VESTIR Y CUEROS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 163,
+    "fields": {
+      "code": "2829",
+      "description": "FABRICACI\u00d3N DE OTROS TIPOS DE MAQUINARIA DE USO ESPECIAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 164,
+    "fields": {
+      "code": "2910",
+      "description": "FABRICACI\u00d3N DE VEH\u00cdCULOS AUTOMOTORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 165,
+    "fields": {
+      "code": "2920",
+      "description": "FABRICACI\u00d3N DE CARROCER\u00cdAS PARA VEH\u00cdCULOS AUTOMOTORES; FABRICACI\u00d3N DE REMOLQUES Y SEMIRREMOLQUES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 166,
+    "fields": {
+      "code": "2930",
+      "description": "FABRICACI\u00d3N DE PARTES, PIEZAS Y ACCESORIOS PARA VEH\u00cdCULOS DE AUTOMOTORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 167,
+    "fields": {
+      "code": "3011",
+      "description": "CONSTRUCCI\u00d3N DE BUQUES Y ESTRUCTURAS FLOTANTES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 168,
+    "fields": {
+      "code": "3012",
+      "description": "CONSTRUCCI\u00d3N DE EMBARCACIONES DE RECREO Y DEPORTE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 169,
+    "fields": {
+      "code": "3020",
+      "description": "FABRICACI\u00d3N DE LOCOMOTORAS Y DE MATERIAL RODANTE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 170,
+    "fields": {
+      "code": "3030",
+      "description": "FABRICACI\u00d3N DE AERONAVES Y  NAVES ESPACIALES Y MAQUINARIA CONEXA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 171,
+    "fields": {
+      "code": "3040",
+      "description": "FABRICACI\u00d3N DE VEH\u00cdCULOS MILITARES DE COMBATE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 172,
+    "fields": {
+      "code": "3091",
+      "description": "FABRICACI\u00d3N DE MOTOCICLETAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 173,
+    "fields": {
+      "code": "3092",
+      "description": "FABRICACI\u00d3N DE BICICLETAS Y DE SILLONES DE RUEDAS PARA INV\u00c1LIDOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 174,
+    "fields": {
+      "code": "3099",
+      "description": "FABRICACI\u00d3N DE OTROS TIPOS DE EQUIPO DE TRANSPORTE N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 175,
+    "fields": {
+      "code": "3100",
+      "description": "FABRICACI\u00d3N DE MUEBLES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 176,
+    "fields": {
+      "code": "3211",
+      "description": "FABRICACI\u00d3N DE JOYAS Y ART\u00cdCULOS CONEXOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 177,
+    "fields": {
+      "code": "3212",
+      "description": "FABRICACI\u00d3N DE BISUTER\u00cdA Y ART\u00cdCULOS CONEXOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 178,
+    "fields": {
+      "code": "3220",
+      "description": "FABRICACI\u00d3N DE INSTRUMENTOS DE M\u00daSICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 179,
+    "fields": {
+      "code": "3230",
+      "description": "FABRICACI\u00d3N DE ART\u00cdCULOS DE DEPORTE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 180,
+    "fields": {
+      "code": "3240",
+      "description": "FABRICACI\u00d3N DE JUEGOS Y JUGUETES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 181,
+    "fields": {
+      "code": "3250",
+      "description": "FABRICACI\u00d3N DE INSTRUMENTOS Y MATERIALES M\u00c9DICOS Y ODONTOL\u00d3GICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 182,
+    "fields": {
+      "code": "3290",
+      "description": "OTRAS INDUSTRIAS MANUFACTURERAS N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 183,
+    "fields": {
+      "code": "3311",
+      "description": "REPARACI\u00d3N DE PRODUCTOS ELABORADOS DE METAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 184,
+    "fields": {
+      "code": "3312",
+      "description": "REPARACI\u00d3N DE MAQUINARIA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 185,
+    "fields": {
+      "code": "3313",
+      "description": "REPARACI\u00d3N DE EQUIPO ELECTR\u00d3NICO Y \u00d3PTICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 186,
+    "fields": {
+      "code": "3314",
+      "description": "REPARACI\u00d3N DE EQUIPO EL\u00c9CTRICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 187,
+    "fields": {
+      "code": "3315",
+      "description": "REPARACI\u00d3N DE EQUIPO DE TRANSPORTE, EXCEPTO VEH\u00cdCULOS AUTOMOTORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 188,
+    "fields": {
+      "code": "3319",
+      "description": "REPARACI\u00d3N DE OTROS TIPOS DE EQUIPO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 189,
+    "fields": {
+      "code": "3320",
+      "description": "INSTALACI\u00d3N DE MAQUINARIA Y EQUIPO INDUSTRIALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 190,
+    "fields": {
+      "code": "3510",
+      "description": "GENERACI\u00d3N, TRANSMISI\u00d3N Y DISTRIBUCI\u00d3N DE ENERG\u00cdA EL\u00c9CTRICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 191,
+    "fields": {
+      "code": "3520",
+      "description": "FABRICACI\u00d3N DEL GAS; DISTRIBUCI\u00d3N DE COMBUSTIBLES GASEOSOS POR TUBER\u00cdAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 192,
+    "fields": {
+      "code": "3530",
+      "description": "SUMINISTRO DE VAPOR Y AIRE ACONDICIONADO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 193,
+    "fields": {
+      "code": "3600",
+      "description": "CAPTACI\u00d3N, TRATAMIENTO Y DISTRIBUCI\u00d3N DE AGUA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 194,
+    "fields": {
+      "code": "3700",
+      "description": "EVACUACI\u00d3N DE AGUAS RESIDUALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 195,
+    "fields": {
+      "code": "3811",
+      "description": "RECOGIDA DE DESECHOS NO PELIGROSOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 196,
+    "fields": {
+      "code": "3812",
+      "description": "RECOGIDA DE DESECHOS PELIGROSOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 197,
+    "fields": {
+      "code": "3821",
+      "description": "TRATAMIENTO Y ELIMINACI\u00d3N DE DESECHOS NO PELIGROSOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 198,
+    "fields": {
+      "code": "3822",
+      "description": "TRATAMIENTO Y ELIMINACI\u00d3N DE DESECHOS PELIGROSOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 199,
+    "fields": {
+      "code": "3830",
+      "description": "RECUPERACI\u00d3N DE MATERIALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 200,
+    "fields": {
+      "code": "3900",
+      "description": "ACTIVIDADES DE DESCONTAMINACI\u00d3N Y OTROS SERVICIOS DE GESTI\u00d3N DE DESECHOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 201,
+    "fields": {
+      "code": "4100",
+      "description": "CONSTRUCCI\u00d3N DE EDIFICIOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 202,
+    "fields": {
+      "code": "4210",
+      "description": "CONSTRUCCI\u00d3N DE CARRETERAS Y L\u00cdNEAS DE FERROCARRIL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 203,
+    "fields": {
+      "code": "4220",
+      "description": "CONSTRUCCI\u00d3N DE PROYECTOS DE SERVICIO P\u00daBLICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 204,
+    "fields": {
+      "code": "4290",
+      "description": "CONSTRUCCI\u00d3N DE OTRAS OBRAS DE INGENIER\u00cdA CIVIL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 205,
+    "fields": {
+      "code": "4311",
+      "description": "DEMOLICI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 206,
+    "fields": {
+      "code": "4312",
+      "description": "PREPARACI\u00d3N DEL TERRENO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 207,
+    "fields": {
+      "code": "4321",
+      "description": "INSTALACIONES EL\u00c9CTRICAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 208,
+    "fields": {
+      "code": "4322",
+      "description": "INSTALACIONES DE FONTANER\u00cdA, CALEFACCI\u00d3N Y AIRE ACONDICIONADO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 209,
+    "fields": {
+      "code": "4329",
+      "description": "OTRAS INSTALACIONES PARA OBRAS DE CONSTRUCCI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 210,
+    "fields": {
+      "code": "4330",
+      "description": "TERMINACI\u00d3N Y ACABADO DE EDIFICIOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 211,
+    "fields": {
+      "code": "4390",
+      "description": "OTRAS ACTIVIDADES ESPECIALIZADAS DE LA CONSTRUCCI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 212,
+    "fields": {
+      "code": "4510",
+      "description": "VENTA DE VEH\u00cdCULOS AUTOMOTORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 213,
+    "fields": {
+      "code": "4520",
+      "description": "MANTENIMIENTO Y REPARACI\u00d3N DE VEH\u00cdCULOS AUTOMOTORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 214,
+    "fields": {
+      "code": "4530",
+      "description": "VENTAS DE PARTES, PIEZAS Y ACCESORIOS PARA VEH\u00cdCULOS AUTOMOTORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 215,
+    "fields": {
+      "code": "4540",
+      "description": "VENTA, MANTENIMIENTO Y REPARACI\u00d3N DE MOTOCICLETAS Y DE SUS PARTES, PIEZAS Y ACCESORIOS."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 216,
+    "fields": {
+      "code": "4610",
+      "description": "VENTA AL POR MAYOR A CAMBIO DE UNA RETRIBUCI\u00d3N O POR CONTRATA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 217,
+    "fields": {
+      "code": "4620",
+      "description": "VENTA AL POR MAYOR DE MATERIAS PRIMAS AGROPECUARIAS Y ANIMALES VIVOS."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 218,
+    "fields": {
+      "code": "4630",
+      "description": "VENTA AL POR MAYOR DE ALIMENTOS, BEBIDAS Y TABACO."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 219,
+    "fields": {
+      "code": "4641",
+      "description": "VENTA AL POR MAYOR DE PRODUCTOS TEXTILES, PRENDAS DE VESTIR Y CALZADO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 220,
+    "fields": {
+      "code": "4649",
+      "description": "VENTA AL POR MAYOR DE OTROS ENSERES DOM\u00c9STICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 221,
+    "fields": {
+      "code": "4651",
+      "description": "VENTA AL POR MAYOR DE ORDENADORES, EQUIPO PERIF\u00c9RICO Y PROGRAMAS DE INFORM\u00c1TICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 222,
+    "fields": {
+      "code": "4652",
+      "description": "VENTA AL POR MAYOR DE EQUIPO, PARTES Y PIEZAS ELECTR\u00d3NICOS Y DE TELECOMUNICACIONES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 223,
+    "fields": {
+      "code": "4653",
+      "description": "VENTA AL POR MAYOR DE MAQUINARIA, EQUIPO Y MATERIALES AGROPECUARIOS "
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 224,
+    "fields": {
+      "code": "4659",
+      "description": "VENTA AL POR MAYOR DE OTROS TIPOS DE MAQUINARIA Y EQUIPO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 225,
+    "fields": {
+      "code": "4661",
+      "description": "VENTA AL POR MAYOR DE COMBUSTIBLES S\u00d3LIDOS, L\u00cdQUIDOS Y GASEOSOS Y  PRODUCTOS CONEXOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 226,
+    "fields": {
+      "code": "4662",
+      "description": "VENTA AL POR MAYOR DE METALES Y MINERALES METAL\u00cdFEROS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 227,
+    "fields": {
+      "code": "4663",
+      "description": "VENTA AL POR MAYOR DE MATERIALES DE CONSTRUCCI\u00d3N, ART\u00cdCULOS DE FERRETER\u00cdA Y EQUIPO Y MATERIALES DE FONTANER\u00cdA Y CALEFACCI\u00d3N."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 228,
+    "fields": {
+      "code": "4669",
+      "description": "VENTA AL POR MAYOR DE DESPERDICIOS, DESECHOS, CHATARRA Y OTROS PRODUCTOS N.C.P "
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 229,
+    "fields": {
+      "code": "4690",
+      "description": "VENTA AL POR MAYOR NO ESPECIALIZADA "
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 230,
+    "fields": {
+      "code": "4711",
+      "description": "VENTA AL POR MENOR EN COMERCIOS NO ESPECIALIZADOS CON PREDOMINIO DE LA VENTA DE ALIMENTOS, BEBIDAS O TABACO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 231,
+    "fields": {
+      "code": "4719",
+      "description": "OTRAS ACTIVIDADES DE VENTA AL POR MENOR EN COMERCIOS NO ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 232,
+    "fields": {
+      "code": "4721",
+      "description": "VENTA AL POR MENOR DE ALIMENTOS EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 233,
+    "fields": {
+      "code": "4722",
+      "description": "VENTA AL POR MENOR DE BEBIDAS EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 234,
+    "fields": {
+      "code": "4723",
+      "description": "VENTA AL POR MENOR DE PRODUCTOS DE TABACO EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 235,
+    "fields": {
+      "code": "4730",
+      "description": "VENTA AL POR MENOR DE COMBUSTIBLES PARA VEH\u00cdCULOS AUTOMOTORES EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 236,
+    "fields": {
+      "code": "4741",
+      "description": "VENTA AL POR MENOR DE ORDENADORES, EQUIPO PERIF\u00c9RICO, PROGRAMAS INFORM\u00c1TICOS Y EQUIPO DE TELECOMUNICACIONES EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 237,
+    "fields": {
+      "code": "4742",
+      "description": "VENTA AL POR MENOR DE EQUIPO DE SONIDO Y DE V\u00cdDEO EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 238,
+    "fields": {
+      "code": "4751",
+      "description": "VENTA AL POR MENOR DE PRODUCTOS TEXTILES EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 239,
+    "fields": {
+      "code": "4752",
+      "description": "VENTA AL POR MENOR DE ART\u00cdCULOS DE FERRETER\u00cdA, PINTURAS Y PRODUCTOS DE VIDRIO EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 240,
+    "fields": {
+      "code": "4753",
+      "description": "VENTA AL POR MENOR DE TAPICES, ALFOMBRAS Y CUBRIMIENTOS PARA PAREDES Y PISOS EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 241,
+    "fields": {
+      "code": "4759",
+      "description": "VENTA AL POR MENOR DE APARATOS EL\u00c9CTRICOS DE USO DOM\u00c9STICO,  MUEBLES, EQUIPO DE ILUMINACI\u00d3N Y OTROS ENSERES DOM\u00c9STICOS EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 242,
+    "fields": {
+      "code": "4761",
+      "description": "VENTA AL POR MENOR DE LIBROS, PERI\u00d3DICOS Y ART\u00cdCULOS DE PAPELER\u00cdA EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 243,
+    "fields": {
+      "code": "4762",
+      "description": "VENTA AL POR MENOR DE GRABACIONES DE M\u00daSICA Y DE V\u00cdDEO EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 244,
+    "fields": {
+      "code": "4763",
+      "description": "VENTA AL POR MENOR DE EQUIPO DE DEPORTE EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 245,
+    "fields": {
+      "code": "4764",
+      "description": "VENTA AL POR MENOR DE JUEGOS Y  JUGUETES EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 246,
+    "fields": {
+      "code": "4771",
+      "description": "VENTA AL POR MENOR DE PRENDAS DE VESTIR, CALZADO Y ART\u00cdCULOS DE CUERO EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 247,
+    "fields": {
+      "code": "4772",
+      "description": "VENTA AL POR MENOR DE PRODUCTOS FARMAC\u00c9UTICOS Y MEDICINALES, COSM\u00c9TICOS Y ART\u00cdCULOS DE TOCADOR EN COMERCIOS ESPECIALIZADOS   "
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 248,
+    "fields": {
+      "code": "4773",
+      "description": "VENTA AL POR MENOR DE OTROS PRODUCTOS NUEVOS EN COMERCIOS ESPECIALIZADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 249,
+    "fields": {
+      "code": "4774",
+      "description": "VENTA AL POR MENOR DE ART\u00cdCULOS DE SEGUNDA MANO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 250,
+    "fields": {
+      "code": "4781",
+      "description": "VENTA AL POR MENOR DE ALIMENTOS, BEBIDAS Y TABACO EN PUESTOS DE VENTA Y MERCADOS "
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 251,
+    "fields": {
+      "code": "4782",
+      "description": "VENTA AL POR MENOR DE PRODUCTOS TEXTILES, PRENDAS DE VESTIR Y CALZADO EN PUESTOS DE VENTA Y MERCADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 252,
+    "fields": {
+      "code": "4789",
+      "description": "VENTA AL POR MENOR DE OTROS PRODUCTOS EN PUESTOS DE VENTA Y MERCADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 253,
+    "fields": {
+      "code": "4791",
+      "description": "VENTA AL POR MENOR POR CORREO Y POR INTERNET"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 254,
+    "fields": {
+      "code": "4799",
+      "description": "OTRAS ACTIVIDADES DE VENTA AL POR MENOR NO REALIZADAS EN COMERCIOS, PUESTOS DE VENTA O MERCADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 255,
+    "fields": {
+      "code": "4911",
+      "description": "TRANSPORTE INTERURBANO DE PASAJEROS POR FERROCARRIL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 256,
+    "fields": {
+      "code": "4912",
+      "description": "TRANSPORTE DE CARGA POR FERROCARRIL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 257,
+    "fields": {
+      "code": "4921",
+      "description": "TRANSPORTE URBANO Y SUBURBANO DE PASAJEROS POR V\u00cdA TERRESTRE "
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 258,
+    "fields": {
+      "code": "4922",
+      "description": "OTRAS ACTIVIDADES DE TRANSPORTE POR V\u00cdA TERRESTRE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 259,
+    "fields": {
+      "code": "4923",
+      "description": "TRANSPORTE DE CARGA POR CARRETERA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 260,
+    "fields": {
+      "code": "4930",
+      "description": "TRANSPORTE POR TUBER\u00cdAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 261,
+    "fields": {
+      "code": "5011",
+      "description": "TRANSPORTE DE PASAJEROS MAR\u00cdTIMO Y DE CABOTAJE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 262,
+    "fields": {
+      "code": "5012",
+      "description": "TRANSPORTE DE CARGA MAR\u00cdTIMO Y DE CABOTAJE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 263,
+    "fields": {
+      "code": "5021",
+      "description": "TRANSPORTE DE PASAJEROS POR V\u00cdAS DE NAVEGACI\u00d3N INTERIORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 264,
+    "fields": {
+      "code": "5022",
+      "description": "TRANSPORTE DE CARGA, POR V\u00cdAS DE NAVEGACI\u00d3N INTERIORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 265,
+    "fields": {
+      "code": "5110",
+      "description": "TRANSPORTE DE PASAJEROS POR V\u00cdA A\u00c9REA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 266,
+    "fields": {
+      "code": "5120",
+      "description": "TRANSPORTE DE CARGA POR V\u00cdA A\u00c9REA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 267,
+    "fields": {
+      "code": "5210",
+      "description": "ALMACENAMIENTO Y DEP\u00d3SITO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 268,
+    "fields": {
+      "code": "5221",
+      "description": "ACTIVIDADES DE SERVICIOS VINCULADAS AL TRANSPORTE TERRESTRE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 269,
+    "fields": {
+      "code": "5222",
+      "description": "ACTIVIDADES DE SERVICIOS VINCULADAS AL TRANSPORTE ACU\u00c1TICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 270,
+    "fields": {
+      "code": "5223",
+      "description": "ACTIVIDADES DE SERVICIOS VINCULADAS AL TRANSPORTE A\u00c9REO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 271,
+    "fields": {
+      "code": "5224",
+      "description": "MANIPULACI\u00d3N DE CARGA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 272,
+    "fields": {
+      "code": "5229",
+      "description": "OTRAS ACTIVIDADES DE APOYO AL TRANSPORTE"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 273,
+    "fields": {
+      "code": "5310",
+      "description": "ACTIVIDADES POSTALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 274,
+    "fields": {
+      "code": "5320",
+      "description": "ACTIVIDADES DE MENSAJER\u00cdA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 275,
+    "fields": {
+      "code": "5510",
+      "description": "ACTIVIDADES DE ALOJAMIENTO PARA ESTANCIAS CORTAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 276,
+    "fields": {
+      "code": "5520",
+      "description": "ACTIVIDADES DE CAMPAMENTOS, PARQUES DE VEH\u00cdCULOS RECREATIVOS Y PARQUES DE CARAVANAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 277,
+    "fields": {
+      "code": "5590",
+      "description": "OTRAS ACTIVIDADES DE ALOJAMIENTO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 278,
+    "fields": {
+      "code": "5610",
+      "description": "ACTIVIDADES DE RESTAURANTES Y DE SERVICIO M\u00d3VIL DE COMIDAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 279,
+    "fields": {
+      "code": "5621",
+      "description": "SUMINISTRO DE COMIDAS POR ENCARGO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 280,
+    "fields": {
+      "code": "5629",
+      "description": "OTRAS ACTIVIDADES DE SERVICIO DE COMIDAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 281,
+    "fields": {
+      "code": "5630",
+      "description": "ACTIVIDADES DE SERVICIO DE BEBIDAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 282,
+    "fields": {
+      "code": "5811",
+      "description": "EDICI\u00d3N DE LIBROS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 283,
+    "fields": {
+      "code": "5812",
+      "description": "EDICI\u00d3N DE DIRECTORIOS Y LISTAS DE CORREO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 284,
+    "fields": {
+      "code": "5813",
+      "description": "EDICI\u00d3N DE PERI\u00d3DICOS, REVISTAS Y OTRAS PUBLICACIONES PERI\u00d3DICAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 285,
+    "fields": {
+      "code": "5819",
+      "description": "OTRAS ACTIVIDADES DE EDICI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 286,
+    "fields": {
+      "code": "5820",
+      "description": "EDICI\u00d3N DE PROGRAMAS DE INFORM\u00c1TICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 287,
+    "fields": {
+      "code": "5911",
+      "description": "ACTIVIDADES DE PRODUCCI\u00d3N DE PEL\u00cdCULAS CINEMATOGR\u00c1FICAS, V\u00cdDEOS Y PROGRAMAS DE TELEVISI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 288,
+    "fields": {
+      "code": "5912",
+      "description": "ACTIVIDADES DE POSTPRODUCCI\u00d3N DE PEL\u00cdCULAS CINEMATOGR\u00c1FICAS, V\u00cdDEOS Y PROGRAMAS DE TELEVISI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 289,
+    "fields": {
+      "code": "5913",
+      "description": "ACTIVIDADES DE DISTRIBUCI\u00d3N DE PEL\u00cdCULAS CINEMATOGR\u00c1FICAS, V\u00cdDEOS Y PROGRAMAS DE TELEVISI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 290,
+    "fields": {
+      "code": "5914",
+      "description": "ACTIVIDADES DE EXHIBICI\u00d3N DE PEL\u00cdCULAS CINEMATOGR\u00c1FICAS Y CINTAS DE V\u00cdDEO "
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 291,
+    "fields": {
+      "code": "5920",
+      "description": "ACTIVIDADES DE GRABACI\u00d3N DE SONIDO Y EDICI\u00d3N DE M\u00daSICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 292,
+    "fields": {
+      "code": "6010",
+      "description": "TRANSMISIONES DE RADIO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 293,
+    "fields": {
+      "code": "6020",
+      "description": "PROGRAMACI\u00d3N Y TRANSMISIONES DE TELEVISI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 294,
+    "fields": {
+      "code": "6110",
+      "description": "ACTIVIDADES DE TELECOMUNICACIONES AL\u00c1MBRICAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 295,
+    "fields": {
+      "code": "6120",
+      "description": "ACTIVIDADES DE TELECOMUNICACIONES INAL\u00c1MBRICAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 296,
+    "fields": {
+      "code": "6130",
+      "description": "ACTIVIDADES DE TELECOMUNICACIONES POR SAT\u00c9LITE."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 297,
+    "fields": {
+      "code": "6190",
+      "description": "OTRAS ACTIVIDADES DE TELECOMUNICACI\u00d3N."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 298,
+    "fields": {
+      "code": "6201",
+      "description": "PROGRAMACI\u00d3N INFORM\u00c1TICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 299,
+    "fields": {
+      "code": "6202",
+      "description": "CONSULTOR\u00cdA DE INFORM\u00c1TICA Y DE GESTI\u00d3N DE INSTALACIONES INFORM\u00c1TICAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 300,
+    "fields": {
+      "code": "6209",
+      "description": "OTRAS ACTIVIDADES DE TECNOLOG\u00cdA DE LA INFORMACI\u00d3N Y DE SERVICIOS INFORM\u00c1TICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 301,
+    "fields": {
+      "code": "6311",
+      "description": "PROCESAMIENTO DE DATOS, HOSPEDAJE Y ACTIVIDADES CONEXAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 302,
+    "fields": {
+      "code": "6312",
+      "description": "PORTALES WEB"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 303,
+    "fields": {
+      "code": "6391",
+      "description": "ACTIVIDADES DE AGENCIAS DE NOTICIAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 304,
+    "fields": {
+      "code": "6399",
+      "description": "OTRAS ACTIVIDADES DE SERVICIOS DE INFORMACI\u00d3N N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 305,
+    "fields": {
+      "code": "6411",
+      "description": "BANCA CENTRAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 306,
+    "fields": {
+      "code": "6419",
+      "description": "OTROS TIPOS DE INTERMEDIACI\u00d3N MONETARIA."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 307,
+    "fields": {
+      "code": "6420",
+      "description": "ACTIVIDADES DE SOCIEDADES DE CARTERA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 308,
+    "fields": {
+      "code": "6430",
+      "description": "FONDOS Y SOCIEDADES DE INVERSI\u00d3N Y ENTIDADES FINANCIERAS SIMILARES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 309,
+    "fields": {
+      "code": "6491",
+      "description": "ARRENDAMIENTO FINANCIERO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 310,
+    "fields": {
+      "code": "6492",
+      "description": "OTRAS ACTIVIDADES DE CONCESI\u00d3N DE CR\u00c9DITO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 311,
+    "fields": {
+      "code": "6499",
+      "description": "OTRAS ACTIVIDADES DE SERVICIOS FINANCIEROS, EXCEPTO LAS DE SEGUROS Y FONDOS DE PENSIONES, N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 312,
+    "fields": {
+      "code": "6511",
+      "description": "SEGUROS DE VIDA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 313,
+    "fields": {
+      "code": "6512",
+      "description": "SEGUROS GENERALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 314,
+    "fields": {
+      "code": "6520",
+      "description": "REASEGUROS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 315,
+    "fields": {
+      "code": "6530",
+      "description": "FONDOS DE PENSIONES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 316,
+    "fields": {
+      "code": "6611",
+      "description": "ADMINISTRACI\u00d3N DE MERCADOS FINANCIEROS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 317,
+    "fields": {
+      "code": "6612",
+      "description": "CORRETAJE DE VALORES Y DE CONTRATOS DE PRODUCTOS B\u00c1SICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 318,
+    "fields": {
+      "code": "6619",
+      "description": "OTRAS ACTIVIDADES AUXILIARES DE LAS ACTIVIDADES DE SERVICIOS FINANCIEROS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 319,
+    "fields": {
+      "code": "6621",
+      "description": "EVALUACI\u00d3N DE RIESGOS Y DA\u00d1OS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 320,
+    "fields": {
+      "code": "6622",
+      "description": "ACTIVIDADES DE AGENTES Y CORREDORES DE SEGUROS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 321,
+    "fields": {
+      "code": "6629",
+      "description": "OTRAS ACTIVIDADES AUXILIARES DE LAS ACTIVIDADES DE SEGUROS Y FONDOS DE PENSIONES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 322,
+    "fields": {
+      "code": "6630",
+      "description": "ACTIVIDADES DE GESTI\u00d3N DE FONDOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 323,
+    "fields": {
+      "code": "6810",
+      "description": "ACTIVIDADES INMOBILIARIAS REALIZADAS CON BIENES PROPIOS O ARRENDADOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 324,
+    "fields": {
+      "code": "6820",
+      "description": "ACTIVIDADES INMOBILIARIAS REALIZADAS A CAMBIO DE UNA RETRIBUCI\u00d3N O POR CONTRATA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 325,
+    "fields": {
+      "code": "6910",
+      "description": "ACTIVIDADES JUR\u00cdDICAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 326,
+    "fields": {
+      "code": "6920",
+      "description": "ACTIVIDADES DE CONTABILIDAD, TENEDUR\u00cdA DE LIBROS Y AUDITOR\u00cdA; CONSULTOR\u00cdA FISCAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 327,
+    "fields": {
+      "code": "7010",
+      "description": "ACTIVIDADES DE OFICINAS CENTRALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 328,
+    "fields": {
+      "code": "7020",
+      "description": "ACTIVIDADES DE CONSULTOR\u00cdA DE GESTI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 329,
+    "fields": {
+      "code": "7110",
+      "description": "ACTIVIDADES DE ARQUITECTURA E INGENIER\u00cdA Y ACTIVIDADES CONEXAS DE CONSULTOR\u00cdA T\u00c9CNICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 330,
+    "fields": {
+      "code": "7120",
+      "description": "ENSAYOS Y AN\u00c1LISIS T\u00c9CNICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 331,
+    "fields": {
+      "code": "7210",
+      "description": "INVESTIGACI\u00d3N Y DESARROLLO EXPERIMENTAL EN EL CAMPO DE LAS CIENCIAS NATURALES Y LA INGENIER\u00cdA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 332,
+    "fields": {
+      "code": "7220",
+      "description": "INVESTIGACI\u00d3N Y DESARROLLO EXPERIMENTAL EN EL CAMPO DE LAS CIENCIAS SOCIALES Y LAS HUMANIDADES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 333,
+    "fields": {
+      "code": "7310",
+      "description": "PUBLICIDAD"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 334,
+    "fields": {
+      "code": "7320",
+      "description": "ESTUDIOS DE MERCADO Y ENCUESTAS DE OPINI\u00d3N P\u00daBLICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 335,
+    "fields": {
+      "code": "7410",
+      "description": "ACTIVIDADES ESPECIALIZADAS DE DISE\u00d1O"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 336,
+    "fields": {
+      "code": "7420",
+      "description": "ACTIVIDADES DE FOTOGRAF\u00cdA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 337,
+    "fields": {
+      "code": "7490",
+      "description": "OTRAS ACTIVIDADES PROFESIONALES, CIENT\u00cdFICAS Y T\u00c9CNICAS N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 338,
+    "fields": {
+      "code": "7500",
+      "description": "ACTIVIDADES VETERINARIAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 339,
+    "fields": {
+      "code": "7710",
+      "description": "ALQUILER Y ARRENDAMIENTO DE VEH\u00cdCULOS AUTOMOTORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 340,
+    "fields": {
+      "code": "7721",
+      "description": "ALQUILER Y ARRENDAMIENTO DE EQUIPO RECREATIVO Y DEPORTIVO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 341,
+    "fields": {
+      "code": "7722",
+      "description": "ALQUILER DE CINTAS DE V\u00cdDEO Y DISCOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 342,
+    "fields": {
+      "code": "7729",
+      "description": "ALQUILER Y ARRENDAMIENTO DE OTROS EFECTOS PERSONALES Y ENSERES DOM\u00c9STICOS "
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 343,
+    "fields": {
+      "code": "7730",
+      "description": "ALQUILER Y ARRENDAMIENTO DE OTROS TIPOS DE MAQUINARIA, EQUIPO Y BIENES TANGIBLES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 344,
+    "fields": {
+      "code": "7740",
+      "description": "ARRENDAMIENTO DE PROPIEDAD INTELECTUAL Y PRODUCTOS SIMILARES, EXCEPTO OBRAS PROTEGIDAS  POR DERECHOS DE AUTOR"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 345,
+    "fields": {
+      "code": "7810",
+      "description": "ACTIVIDADES DE AGENCIAS DE EMPLEO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 346,
+    "fields": {
+      "code": "7820",
+      "description": "ACTIVIDADES DE AGENCIAS DE EMPLEO TEMPORAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 347,
+    "fields": {
+      "code": "7830",
+      "description": "OTRAS ACTIVIDADES DE DOTACI\u00d3N DE RECURSOS HUMANOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 348,
+    "fields": {
+      "code": "7911",
+      "description": "ACTIVIDADES DE AGENCIAS DE VIAJES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 349,
+    "fields": {
+      "code": "7912",
+      "description": "ACTIVIDADES DE OPERADORES TUR\u00cdSTICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 350,
+    "fields": {
+      "code": "7990",
+      "description": "OTROS SERVICIOS DE RESERVAS Y ACTIVIDADES CONEXAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 351,
+    "fields": {
+      "code": "8010",
+      "description": "ACTIVIDADES DE SEGURIDAD PRIVADA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 352,
+    "fields": {
+      "code": "8020",
+      "description": "ACTIVIDADES DE SERVICIO DE SISTEMAS DE SEGURIDAD"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 353,
+    "fields": {
+      "code": "8030",
+      "description": "ACTIVIDADES DE INVESTIGACI\u00d3N"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 354,
+    "fields": {
+      "code": "8110",
+      "description": "ACTIVIDADES COMBINADAS DE APOYO A INSTALACIONES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 355,
+    "fields": {
+      "code": "8121",
+      "description": "LIMPIEZA GENERAL DE EDIFICIOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 356,
+    "fields": {
+      "code": "8129",
+      "description": "OTRAS ACTIVIDADES DE LIMPIEZA DE EDIFICIOS E INSTALACIONES INDUSTRIALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 357,
+    "fields": {
+      "code": "8130",
+      "description": "ACTIVIDADES DE PAISAJISMO Y SERVICIOS DE MANTENIMIENTO CONEXOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 358,
+    "fields": {
+      "code": "8211",
+      "description": "ACTIVIDADES COMBINADAS DE SERVICIOS ADMINISTRATIVOS DE OFICINA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 359,
+    "fields": {
+      "code": "8219",
+      "description": "FOTOCOPIADO, PREPARACI\u00d3N DE DOCUMENTOS Y OTRAS ACTIVIDADES ESPECIALIZADAS DE APOYO DE OFICINA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 360,
+    "fields": {
+      "code": "8220",
+      "description": "ACTIVIDADES DE CENTROS DE LLAMADAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 361,
+    "fields": {
+      "code": "8230",
+      "description": "ORGANIZACI\u00d3N DE CONVENCIONES Y EXPOSICIONES COMERCIALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 362,
+    "fields": {
+      "code": "8291",
+      "description": "ACTIVIDADES DE AGENCIAS DE COBRO Y AGENCIAS DE CALIFICACI\u00d3N CREDITICIA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 363,
+    "fields": {
+      "code": "8292",
+      "description": "ACTIVIDADES DE ENVASADO Y EMPAQUETADO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 364,
+    "fields": {
+      "code": "8299",
+      "description": "OTRAS ACTIVIDADES DE SERVICIOS DE APOYO A LAS EMPRESAS N.C.P"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 365,
+    "fields": {
+      "code": "8411",
+      "description": "ACTIVIDADES DE LA ADMINISTRACI\u00d3N P\u00daBLICA EN GENERAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 366,
+    "fields": {
+      "code": "8412",
+      "description": "REGULACI\u00d3N DE LAS ACTIVIDADES DE ORGANISMOS QUE PRESTAN SERVICIOS SANITARIOS, EDUCATIVOS, CULTURALES Y OTROS SERVICIOS SOCIALES, EXCEPTO SERVICIOS DE SEGURIDAD SOCIAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 367,
+    "fields": {
+      "code": "8413",
+      "description": "REGULACI\u00d3N Y FACILITACI\u00d3N DE LA ACTIVIDAD ECON\u00d3MICA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 368,
+    "fields": {
+      "code": "8421",
+      "description": "RELACIONES EXTERIORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 369,
+    "fields": {
+      "code": "8422",
+      "description": "ACTIVIDADES DE DEFENSA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 370,
+    "fields": {
+      "code": "8423",
+      "description": "ACTIVIDADES DE MANTENIMIENTO DEL ORDEN P\u00daBLICO Y DE SEGURIDAD"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 371,
+    "fields": {
+      "code": "8430",
+      "description": "ACTIVIDADES DE PLANES DE SEGURIDAD SOCIAL DE AFILIACI\u00d3N OBLIGATORIA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 372,
+    "fields": {
+      "code": "8510",
+      "description": "ENSE\u00d1ANZA PREESCOLAR Y PRIMARIA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 373,
+    "fields": {
+      "code": "8521",
+      "description": "ENSE\u00d1ANZA SECUNDARIA DE FORMACI\u00d3N GENERAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 374,
+    "fields": {
+      "code": "8522",
+      "description": "ENSE\u00d1ANZA SECUNDARIA DE FORMACI\u00d3N T\u00c9CNICA Y PROFESIONAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 375,
+    "fields": {
+      "code": "8530",
+      "description": "ENSE\u00d1ANZA SUPERIOR"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 376,
+    "fields": {
+      "code": "8541",
+      "description": "EDUCACI\u00d3N DEPORTIVA Y RECREATIVA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 377,
+    "fields": {
+      "code": "8542",
+      "description": "ENSE\u00d1ANZA CULTURAL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 378,
+    "fields": {
+      "code": "8549",
+      "description": "OTROS TIPOS DE ENSE\u00d1ANZA N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 379,
+    "fields": {
+      "code": "8550",
+      "description": "ACTIVIDADES DE APOYO A LA ENSE\u00d1ANZA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 380,
+    "fields": {
+      "code": "8610",
+      "description": "ACTIVIDADES DE HOSPITALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 381,
+    "fields": {
+      "code": "8620",
+      "description": "ACTIVIDADES DE M\u00c9DICOS Y ODONT\u00d3LOGOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 382,
+    "fields": {
+      "code": "8690",
+      "description": "OTRAS ACTIVIDADES DE ATENCI\u00d3N DE LA SALUD HUMANA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 383,
+    "fields": {
+      "code": "8710",
+      "description": "ACTIVIDADES DE ATENCI\u00d3N DE ENFERMER\u00cdA EN INSTITUCIONES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 384,
+    "fields": {
+      "code": "8720",
+      "description": "ACTIVIDADES DE ATENCI\u00d3N EN INSTITUCIONES PARA PERSONAS CON RETRASO MENTAL, ENFERMOS MENTALES Y TOXIC\u00d3MANOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 385,
+    "fields": {
+      "code": "8730",
+      "description": "ACTIVIDADES DE ATENCI\u00d3N EN INSTITUCIONES PARA PERSONAS DE EDAD PERSONAS CON DISCAPACIDAD"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 386,
+    "fields": {
+      "code": "8790",
+      "description": "OTRAS ACTIVIDADES DE ATENCI\u00d3N EN INSTITUCIONES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 387,
+    "fields": {
+      "code": "8810",
+      "description": "ACTIVIDADES DE ASISTENCIA SOCIAL SIN ALOJAMIENTO PARA PERSONAS DE EDAD Y PERSONAS CON DISCAPACIDAD"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 388,
+    "fields": {
+      "code": "8890",
+      "description": "OTRAS ACTIVIDADES DE ASISTENCIA SOCIAL SIN ALOJAMIENTO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 389,
+    "fields": {
+      "code": "9000",
+      "description": "ACTIVIDADES CREATIVAS, ART\u00cdSTICAS Y DE ENTRETENIMIENTO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 390,
+    "fields": {
+      "code": "9101",
+      "description": "ACTIVIDADES DE BIBLIOTECAS Y ARCHIVOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 391,
+    "fields": {
+      "code": "9102",
+      "description": "ACTIVIDADES DE MUSEOS Y GESTI\u00d3N DE LUGARES Y EDIFICIOS HIST\u00d3RICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 392,
+    "fields": {
+      "code": "9103",
+      "description": "ACTIVIDADES DE JARDINES BOT\u00c1NICOS Y ZOOL\u00d3GICOS Y RESERVAS NATURALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 393,
+    "fields": {
+      "code": "9200",
+      "description": "ACTIVIDADES DE JUEGOS DE AZAR Y APUESTAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 394,
+    "fields": {
+      "code": "9311",
+      "description": "GESTI\u00d3N DE INSTALACIONES DEPORTIVAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 395,
+    "fields": {
+      "code": "9312",
+      "description": "ACTIVIDADES DE CLUBES DEPORTIVOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 396,
+    "fields": {
+      "code": "9319",
+      "description": "OTRAS ACTIVIDADES DEPORTIVAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 397,
+    "fields": {
+      "code": "9321",
+      "description": "ACTIVIDADES DE PARQUES DE ATRACCIONES Y PARQUES TEM\u00c1TICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 398,
+    "fields": {
+      "code": "9329",
+      "description": "OTRAS ACTIVIDADES DE ESPARCIMIENTO Y RECREATIVAS N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 399,
+    "fields": {
+      "code": "9411",
+      "description": "ACTIVIDADES DE ASOCIACIONES EMPRESARIALES Y DE EMPLEADORES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 400,
+    "fields": {
+      "code": "9412",
+      "description": "ACTIVIDADES DE ASOCIACIONES PROFESIONALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 401,
+    "fields": {
+      "code": "9420",
+      "description": "ACTIVIDADES DE SINDICATOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 402,
+    "fields": {
+      "code": "9491",
+      "description": "ACTIVIDADES DE ORGANIZACIONES RELIGIOSAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 403,
+    "fields": {
+      "code": "9492",
+      "description": "ACTIVIDADES DE ORGANIZACIONES POL\u00cdTICAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 404,
+    "fields": {
+      "code": "9499",
+      "description": "ACTIVIDADES DE OTRAS ASOCIACIONES N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 405,
+    "fields": {
+      "code": "9511",
+      "description": "REPARACI\u00d3N DE ORDENADORES Y EQUIPO PERIF\u00c9RICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 406,
+    "fields": {
+      "code": "9512",
+      "description": "REPARACI\u00d3N DE EQUIPOS COMUNICACIONALES"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 407,
+    "fields": {
+      "code": "9521",
+      "description": "REPARACI\u00d3N DE APARATOS ELECTR\u00d3NICOS DE CONSUMO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 408,
+    "fields": {
+      "code": "9522",
+      "description": "REPARACI\u00d3N DE APARATOS DE USO DOM\u00c9STICO Y EQUIPO DOM\u00c9STICO Y DE JARDINER\u00cdA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 409,
+    "fields": {
+      "code": "9523",
+      "description": "REPARACI\u00d3N DE CALZADO Y ART\u00cdCULOS DE CUERO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 410,
+    "fields": {
+      "code": "9524",
+      "description": "REPARACI\u00d3N DE MUEBLES Y ACCESORIOS DOM\u00c9STICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 411,
+    "fields": {
+      "code": "9529",
+      "description": "REPARACI\u00d3N DE OTROS EFECTOS PERSONALES Y ENSERES DOM\u00c9STICOS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 412,
+    "fields": {
+      "code": "9601",
+      "description": "LAVADO Y LIMPIEZA, INCLUIDA LA LIMPIEZA EN SECO, DE PRODUCTOS TEXTILES Y DE PIEL"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 413,
+    "fields": {
+      "code": "9602",
+      "description": "PELUQUER\u00cdA Y OTROS TRATAMIENTOS DE BELLEZA"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 414,
+    "fields": {
+      "code": "9603",
+      "description": "POMPAS F\u00daNEBRES Y ACTIVIDADES CONEXAS"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 415,
+    "fields": {
+      "code": "9609",
+      "description": "OTRAS ACTIVIDADES DE SERVICIOS PERSONALES N.C.P."
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 416,
+    "fields": {
+      "code": "9700",
+      "description": "ACTIVIDADES DE LOS HOGARES COMO EMPLEADORES DE PERSONAL DOM\u00c9STICO"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 417,
+    "fields": {
+      "code": "9810",
+      "description": "ACTIVIDADES NO DIFERENCIADAS DE LOS HOGARES COMO PRODUCTORES DE BIENES PARA USO PROPIO (NO USAR)"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 418,
+    "fields": {
+      "code": "9820",
+      "description": "ACTIVIDADES NO DIFERENCIADAS DE LOS HOGARES COMO PRODUCTORES DE SERVICIOS PARA USO PROPIO (NO USAR)"
+    }
+  },
+  {
+    "model": "api.ciiu",
+    "pk": 419,
+    "fields": {
+      "code": "9900",
+      "description": "ACTIVIDADES DE ORGANIZACIONES Y \u00d3RGANOS EXTRATERRITORIALES"
+    }
+  }
 ]
