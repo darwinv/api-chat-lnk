@@ -413,8 +413,8 @@ class TransactionCode(models.Model):
 
 class Quota(models.Model):
     value = models.PositiveIntegerField()
-    end = models.DateTimeField()
-    start = models.DateTimeField()
+    end = models.DateField()
+    start = models.DateField()
 # Ingresar en parametros number_requery
 # language
 # tax
