@@ -2,12 +2,12 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Category, Specialist
-from api.serializers import ClientSerializer
+from api.serializers.actors import ClientSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
-from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
-from api.serializers import SpecialistAccountSerializer
+from api.serializers.actors import UserSerializer, CategorySerializer, SpecialistSerializer
+from api.serializers.actors import SpecialistAccountSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
@@ -169,13 +169,13 @@ class SpecialistDetailView(APIView):
         data['photo'] = request.data.get('photo',specialist.photo)
         data['username'] = specialist.username
         data['role'] = ROLE_SPECIALIST
-        
+
         serializer = SpecialistSerializer(specialist, data, partial=True)
 
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self,request,pk):
@@ -195,3 +195,4 @@ class SpecialistAccountView(APIView):
         specialist = self.get_object(pk)
         serializer = SpecialistAccountSerializer(specialist)
         return Response(serializer.data)
+# -------------

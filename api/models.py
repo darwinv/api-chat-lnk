@@ -335,18 +335,26 @@ class CulqiPayment(models.Model):
     status = models.CharField(max_length=1, choices=option_status)
     credit_cartd = models.ForeignKey(CreditCard, on_delete=models.PROTECT)
 
+
+# Cuando se reconsulta pasa a Requested Derived y se asigna
+# al especialista que respondio previamente,
+# la reconsulta tiene precedente y no se descuenta del plan
+
 class Query(models.Model):
     title = models.CharField(max_length=50)
     message = models.TextField()
     has_precedent = models.BooleanField()
     option_status = (
-        ('0', 'Pending'),
-        ('1', 'Accepted'),
-        ('2', 'Declined'),
-        ('3', 'Answered'),
+        ('0', 'Requested'), # Preguntada, pendiente de derivar o responder
+        ('1', 'Requested Derived'), # derivada, pendiente de declinar o responder
+        ('2', 'Pending Response'), # derivada a asociado, pendiente de respuesta
+        ('3', 'Pending Main Response'), # principal, pendiente de respuesta
+        ('4', 'Answered Main'), # respondida por principal
+        ('5', 'Answered'), # respondida por asociado
+        ('6', 'Absolved Main'), # resuelta por principal
+        ('7', 'Absolved'), # resuelta por asociado
     )
     status = models.CharField(max_length=1, choices=option_status)
-    declined_motive = models.CharField(max_length=255, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     precedent = models.OneToOneField('self', on_delete=models.PROTECT, blank=True, null=True)
@@ -355,6 +363,12 @@ class Query(models.Model):
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
     def __str__(self):
         return self.title
+
+# Motivos de declinar la consulta
+class DeclinedMotive(models.Model):
+    motive = models.CharField(max_length=255)
+    query_id = models.ForeignKey(Query, on_delete=models.PROTECT)
+    specialist_id = models.ForeignKey(Specialist, on_delete=models.PROTECT)
 
 class QueryLog(Query):
     actions = models.CharField(max_length=10)

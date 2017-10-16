@@ -71,6 +71,7 @@ class ClientSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     type_client = serializers.ChoiceField(choices=Client.options_type)
     sex = serializers.ChoiceField(choices=Client.options_sex, allow_blank=True)
+    # sex_value = CustomChoiceField(choices=Client.options_sex)
     document_type = serializers.ChoiceField(choices=Client.options_documents)
     civil_state = serializers.ChoiceField(choices=Client.options_civil_state, allow_blank=True)
     ocupation = serializers.ChoiceField(choices=Client.options_ocupation, allow_blank=True)
