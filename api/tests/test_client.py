@@ -61,7 +61,7 @@ class CreateNaturalClient(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        #self.assertEqual(response.data, 'ey')
+        # self.assertEqual(response.data, 'ey')
     def test_invalid_photo_extension(self):
         data = self.valid_payload
         data['photo'] = 'tex.xcf'
