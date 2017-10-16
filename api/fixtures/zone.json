@@ -1,0 +1,22 @@
+[{
+	"model": "api.zone",
+	"pk": 1,
+	"fields": {
+		"name": "zona a",
+		"districts": [1, 2]
+	}
+}, {
+	"model": "api.zone",
+	"pk": 2,
+	"fields": {
+		"name": "zona b",
+		"districts": [2]
+	}
+}, {
+	"model": "api.zone",
+	"pk": 3,
+	"fields": {
+		"name": "zona c",
+		"districts": [1]
+	}
+}]

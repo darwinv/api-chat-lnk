@@ -82,14 +82,10 @@ class User(AbstractUser):
 
 class Seller(User):
     cv = models.CharField(max_length=100, null=True, blank=True)
-    monthly_fee_plans = models.PositiveIntegerField()
-    monthly_fee_contacts = models.PositiveIntegerField()
-    monthly_promotional_plans = models.PositiveIntegerField()
-    count_month_promotional = models.PositiveIntegerField()
-    count_month_plans = models.PositiveIntegerField()
-    count_month_contacts = models.PositiveIntegerField()
-    start_date = models.DateField()
-    end_date = models.DateField()
+    monthly_promotional_plans = models.PositiveIntegerField(null=True)
+    count_month_promotional = models.PositiveIntegerField(null=True)
+    count_month_plans = models.PositiveIntegerField(null=True)
+    count_month_contacts = models.PositiveIntegerField(null=True)
     zone = models.ForeignKey(Zone, on_delete=models.PROTECT)
     class Meta:
         verbose_name = 'Seller'

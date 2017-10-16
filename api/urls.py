@@ -18,4 +18,8 @@ urlpatterns = [
     url(r'^specialists/$', views.SpecialistListView.as_view(), name='specialists'),
     url(r'^specialists/(?P<pk>[0-9]+)/$', views.SpecialistDetailView.as_view(), name='specialist-detail'),
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$', views.SpecialistAccountView.as_view(), name='specialist-account-status'),
+
+    url(r'^sellers/$', views.SellerListView.as_view(), name='sellers'),
+    url(r'^sellers/(?P<pk>[0-9]+)/$', views.SellerDetailView.as_view(), name='seller-detail'),
+
 ]

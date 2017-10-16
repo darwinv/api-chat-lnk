@@ -1,0 +1,17 @@
+[{
+	"model": "api.quota",
+	"pk": 1,
+	"fields": {
+		"value": 50,
+		"end": "2017-09-01",
+		"start": "2017-09-30"
+	}
+}, {
+	"model": "api.quota",
+	"pk": 2,
+	"fields": {
+		"value": 5,
+		"end": "2017-10-01",
+		"start": "2017-10-31"
+	}
+}]

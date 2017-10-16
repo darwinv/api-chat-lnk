@@ -195,3 +195,36 @@ class SpecialistAccountView(APIView):
         specialist = self.get_object(pk)
         serializer = SpecialistAccountSerializer(specialist)
         return Response(serializer.data)
+# ------------ Fin de Especialistas -----------------
+
+
+#---------- ------ Inicio de Vendedores ------------------------------
+
+class SellerListView(ListCreateAPIView, UpdateAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Seller.objects.all()
+    serializer_class = SellerSerializer
+
+    # funcion para localizar especialista principal
+    def get_object(self, pk):
+        try:
+            return Seller.objects.get(pk=pk,type_specialist='m')
+        except Seller.DoesNotExist:
+            raise Http404
+
+    # Funcion personalizada para
+    # devolver los especialistas asociados a un principal si envian el
+    #  parametro [main_specialist]
+    def list(self, request):
+                
+        queryset = self.get_queryset()
+        serializer = SellerSerializer(queryset, many=True)
+
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
+
+# ------------ Fin de Vendedores -----------------
