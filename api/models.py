@@ -193,6 +193,7 @@ class Client(User):
     commercial_group = models.ForeignKey(CommercialGroup, on_delete=models.PROTECT, null=True)
     economic_sector = models.ForeignKey(EconomicSector, on_delete=models.PROTECT, null=True)
     level_instruction = models.ForeignKey(LevelInstruction, on_delete=models.PROTECT, null=True)
+    seller_asigned = models.ForeignKey(Seller, on_delete=models.PROTECT, null=True)
 
     class Meta:
         verbose_name = 'Client'
@@ -267,17 +268,6 @@ class Plan(models.Model):
         return self.name
 
 
-class Product(models.Model):
-    name = models.CharField(max_length=45)
-    query_amount = models.IntegerField()
-    expiration_number = models.PositiveIntegerField()
-    price = models.FloatField()
-    is_active = models.BooleanField()
-    created_at = models.DateTimeField()
-    plan = models.ForeignKey(Plan, on_delete=models.PROTECT)
-    def __str__(self):
-        return self.name
-
 class Purchase(models.Model):
     total_amount = models.FloatField()
     reference_number = models.CharField(max_length=30)
@@ -296,10 +286,22 @@ class Purchase(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     promotion = models.ForeignKey(Promotion, on_delete=models.PROTECT, null=True)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT, null=True)
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     def __str__(self):
         return self.reference_number
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=45)
+    query_amount = models.IntegerField()
+    expiration_number = models.PositiveIntegerField()
+    price = models.FloatField()
+    is_active = models.BooleanField()
+    created_at = models.DateTimeField()
+    plan = models.ForeignKey(Plan, on_delete=models.PROTECT)
+    purchases = models.ManyToManyField(Purchase, db_table='products_purchase')
+    def __str__(self):
+        return self.name
 
 class PaymentType(models.Model):
     name = models.CharField(max_length=45)
@@ -428,6 +430,10 @@ class TransactionCode(models.Model):
     short_description = models.CharField(max_length=25)
     long_description = models.CharField(max_length=250)
 
+class Quota(models.Model):
+    value = models.PositiveIntegerField()
+    end = models.DateField()
+    start = models.DateField()
 # Ingresar en parametros number_requery
 # language
 # tax

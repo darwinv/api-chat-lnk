@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Role, User, Seller, Client, Category, Specialist, Query, Answer
+from .models import Role, User, Seller, Client, Category, Specialist, Query, Answer, Quota
 from .models import Department, Province, District
 # Register your models here.
 
@@ -36,3 +36,4 @@ admin.site.register(Answer)
 admin.site.register(Department)
 admin.site.register(Province)
 admin.site.register(District)
+admin.site.register(Quota)
