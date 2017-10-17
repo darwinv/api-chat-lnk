@@ -4,7 +4,7 @@ from django.urls import reverse
 import json
 from ..models import Specialist
 from rest_framework import status
-from ..serializers import SpecialistSerializer
+from api.serializers.actors import SpecialistSerializer
 import pdb
 
 client = APIClient()

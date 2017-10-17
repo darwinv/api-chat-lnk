@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from api.models import User, Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
-from api.models import Province, District, Category, Specialist, Query, Answer
+from api.models import Province, District, Specialist, Query, Answer
 from api.models import Parameter
 from django.utils import six
 import pdb
@@ -313,8 +313,3 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
     def get_photo_category(self,obj):
         img = obj.category.image
         return img
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ('id', 'name', 'image', 'description')
