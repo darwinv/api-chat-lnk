@@ -1,0 +1,14 @@
+[{
+	"model": "api.seller",
+	"pk": 43,
+	"fields": {
+		"cv": null,
+		"monthly_promotional_plans": null,
+		"count_month_promotional": null,
+		"count_month_plans": null,
+		"count_month_contacts": null,
+		"zone": 1,
+		"groups": [],
+		"user_permissions": []
+	}
+}]

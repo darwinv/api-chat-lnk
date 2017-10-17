@@ -11,6 +11,7 @@ router.register(r'users', actors.UserViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+
     url(r'^clients/$', actors.ClientListView.as_view(), name='clients'),
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(), name='client-detail'),
     url(r'^categories/$', category.CategoryListView.as_view(), name='categories'),
@@ -19,5 +20,5 @@ urlpatterns = [
     url(r'^specialists/(?P<pk>[0-9]+)/$', actors.SpecialistDetailView.as_view(), name='specialist-detail'),
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$', actors.SpecialistAccountView.as_view(), name='specialist-account-status'),
     url(r'^queries/$', querys.QueryListView.as_view(), name='queries'),
-    # url(r'^queries/category/(?P<pk>[0-9]+)/$', querys.QueryCategoryListView.as_view(), name='queries-category'),
+    url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
 ]

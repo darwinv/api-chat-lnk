@@ -3,7 +3,7 @@ from rest_framework.validators import UniqueValidator
 from api.models import User, Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
 from api.models import Province, District, Specialist, Query, Answer
-from api.models import Parameter
+from api.models import Parameter, Seller
 from django.utils import six
 import pdb
 from datetime import datetime
@@ -313,3 +313,20 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
     def get_photo_category(self,obj):
         img = obj.category.image
         return img
+<<<<<<< HEAD
+=======
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('id', 'name', 'image', 'description')
+
+
+class SellerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Seller
+        fields = ('zone', 'username', 'nick', 'password', 'first_name',
+        'last_name','email_exact', 'telephone','cellphone',
+        'document_type','code', 'document_number', 'ruc')
+>>>>>>> 3b16a6792c6003ee1298aea9e664765aeaa88bdd

@@ -1,13 +1,13 @@
 
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import User, Client, Category, Specialist
+from api.models import User, Client, Category, Specialist, Seller
 from api.serializers.actors import ClientSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
 from api.serializers.actors import UserSerializer, SpecialistSerializer
-from api.serializers.actors import SpecialistAccountSerializer
+from api.serializers.actors import SpecialistAccountSerializer, SellerSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
@@ -174,4 +174,39 @@ class SpecialistAccountView(APIView):
         specialist = self.get_object(pk)
         serializer = SpecialistAccountSerializer(specialist)
         return Response(serializer.data)
-# -------------
+
+
+
+# ------------ Fin de Especialistas -----------------
+
+
+#---------- ------ Inicio de Vendedores ------------------------------
+
+class SellerListView(ListCreateAPIView, UpdateAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Seller.objects.all()
+    serializer_class = SellerSerializer
+
+    # funcion para localizar especialista principal
+    def get_object(self, pk):
+        try:
+            return Seller.objects.get(pk=pk,type_specialist='m')
+        except Seller.DoesNotExist:
+            raise Http404
+
+    # Funcion personalizada para
+    # devolver los especialistas asociados a un principal si envian el
+    #  parametro [main_specialist]
+    def list(self, request):
+
+        queryset = self.get_queryset()
+        serializer = SellerSerializer(queryset, many=True)
+
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
+
+# ------------ Fin de Vendedores -----------------
