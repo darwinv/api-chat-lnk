@@ -308,19 +308,9 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
         answer = obj.query_set.all()
         return QueryAnswerSerializer(answer,many=True).data
 
-
-
     def get_photo_category(self,obj):
         img = obj.category.image
         return img
-<<<<<<< HEAD
-=======
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ('id', 'name', 'image', 'description')
-
 
 class SellerSerializer(serializers.ModelSerializer):
 
@@ -329,4 +319,3 @@ class SellerSerializer(serializers.ModelSerializer):
         fields = ('zone', 'username', 'nick', 'password', 'first_name',
         'last_name','email_exact', 'telephone','cellphone',
         'document_type','code', 'document_number', 'ruc')
->>>>>>> 3b16a6792c6003ee1298aea9e664765aeaa88bdd
