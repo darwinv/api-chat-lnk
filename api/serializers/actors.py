@@ -3,7 +3,7 @@ from rest_framework.validators import UniqueValidator
 from api.models import User, Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
 from api.models import Province, District, Category, Specialist, Query, Answer
-from api.models import Parameter
+from api.models import Parameter, Seller
 from django.utils import six
 import pdb
 from datetime import datetime
@@ -71,6 +71,7 @@ class ClientSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     type_client = serializers.ChoiceField(choices=Client.options_type)
     sex = serializers.ChoiceField(choices=Client.options_sex, allow_blank=True)
+    # sex_value = CustomChoiceField(choices=Client.options_sex)
     document_type = serializers.ChoiceField(choices=Client.options_documents)
     civil_state = serializers.ChoiceField(choices=Client.options_civil_state, allow_blank=True)
     ocupation = serializers.ChoiceField(choices=Client.options_ocupation, allow_blank=True)
@@ -317,3 +318,12 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('id', 'name', 'image', 'description')
+
+
+class SellerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Seller
+        fields = ('zone', 'username', 'nick', 'password', 'first_name',
+        'last_name','email_exact', 'telephone','cellphone',
+        'document_type','code', 'document_number', 'ruc')

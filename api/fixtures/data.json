@@ -32,26 +32,52 @@
     }
   },
   {
-    "model": "api.countries",
-    "pk": 1,
-    "fields": {
-      "name": "Peru",
-      "code_phone": 51,
-      "iso_code": "PE"
-    }
-  },
-  {
-    "model": "api.profession",
-    "pk": 1,
-    "fields": {
-      "name": "Programmer"
-    }
-  },
-  {
     "model": "api.levelinstruction",
     "pk": 1,
     "fields": {
       "name": "College Concluded"
+    }
+  },
+  {
+    "model": "api.levelinstruction",
+    "pk": 2,
+    "fields": {
+      "name": "College Student"
+    }
+  },
+  {
+    "model": "api.levelinstruction",
+    "pk": 3,
+    "fields": {
+      "name": "Technical Superior"
+    }
+  },
+  {
+    "model": "api.levelinstruction",
+    "pk": 4,
+    "fields": {
+      "name": "High School Concluded"
+    }
+  },
+  {
+    "model": "api.levelinstruction",
+    "pk": 5,
+    "fields": {
+      "name": "High School Unfinished"
+    }
+  },
+  {
+    "model": "api.levelinstruction",
+    "pk": 6,
+    "fields": {
+      "name": "School Concluded"
+    }
+  },
+  {
+    "model": "api.levelinstruction",
+    "pk": 7,
+    "fields": {
+      "name": "School Unfinished"
     }
   },
   {
