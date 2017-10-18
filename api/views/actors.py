@@ -7,10 +7,11 @@ from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
 from api.serializers.actors import UserSerializer, SpecialistSerializer
-from api.serializers.actors import SpecialistAccountSerializer, SellerSerializer
+from api.serializers.actors import SpecialistAccountSerializer, SellerSerializer, MediaSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
+from rest_framework.parsers import JSONParser, MultiPartParser
 import pdb
 # Create your views here.
 
@@ -223,3 +224,36 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
         return Response(serializer.data)
 
 # ------------ Fin de Vendedores -----------------
+
+
+
+
+class FileUploadView(ListCreateAPIView, UpdateAPIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = Specialist.objects.all()
+    serializer_class = MediaSerializer
+    parser_classes = (JSONParser, MultiPartParser)
+
+    def post(self, request):
+        data = request.data
+
+        serializer = MediaSerializer(
+            data = data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+            #serializer.save()
+
+            destination = open('/Users/alfonsomunoz/' + data['filename'], 'wb+')
+            for chunk in data['photo'].chunks():
+                destination.write(chunk)
+
+            destination.close()
+
+        #guardar archivo en disco
+        #reemplazar por subir imagen al aws
+
+
+        return Response(serializer.data['filename'])
+
