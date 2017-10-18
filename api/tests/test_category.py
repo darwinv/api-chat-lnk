@@ -4,7 +4,7 @@ from django.urls import reverse
 import json
 from ..models import Category
 from rest_framework import status
-from api.serializers import CategorySerializer
+from api.serializers.category import CategorySerializer
 
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
@@ -15,7 +15,7 @@ class GetCategories(APITestCase):
 
     def test_get_categories(self):
         # get API response
-        response = client.get(reverse('categorys'))
+        response = client.get(reverse('categories'))
         # get data from db
         specialities = Category.objects.all()
         serializer = CategorySerializer(specialities, many=True)

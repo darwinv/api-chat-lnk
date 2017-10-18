@@ -2,8 +2,10 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from api.models import User, Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
+
 from api.models import Province, District, Category, Specialist, Query, Answer
 from api.models import Parameter, Seller, Quota, Product, Purchase
+from api.models import Province, District, Specialist, Query, Answer
 from django.utils import six
 import pdb
 from datetime import datetime
@@ -310,17 +312,9 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
         answer = obj.query_set.all()
         return QueryAnswerSerializer(answer,many=True).data
 
-
-
     def get_photo_category(self,obj):
         img = obj.category.image
         return img
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ('id', 'name', 'image', 'description')
-
 
 class SellerSerializer(serializers.ModelSerializer):
     quota = serializers.SerializerMethodField()
@@ -335,6 +329,7 @@ class SellerSerializer(serializers.ModelSerializer):
         fields  = ('address','count_plans_seller','count_queries','quota','id','zone', 'username', 'nick', 'password', 'first_name',
         'last_name','email_exact', 'telephone','cellphone',
         'document_type','code', 'document_number', 'ruc')
+
 
         # No son campos editables ya que son de consulta solamente.
         read_only_fields = ('quota','id')
@@ -355,3 +350,4 @@ class SellerSerializer(serializers.ModelSerializer):
     # def get_count_plans_seller(self,obj):
     #     time_delay = Quota.objects.get(start__gte='2017-09-22',end__gte='2017-09-22')
     #     return time_delay.value
+

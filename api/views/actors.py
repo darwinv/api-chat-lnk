@@ -6,7 +6,7 @@ from api.serializers.actors import ClientSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
-from api.serializers.actors import UserSerializer, CategorySerializer, SpecialistSerializer
+from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SpecialistAccountSerializer, SellerSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
@@ -76,27 +76,6 @@ class ClientDetailView(APIView):
         return Response(serializer.data)
 
 # Fin de Clientes
-
-class CategoryListView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    def get(self, request):
-        specialities = Category.objects.all()
-        serializer = CategorySerializer(specialities, many=True)
-        return Response(serializer.data)
-
-class CategoryDetailView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    def get_object(self, pk):
-        try:
-            return Category.objects.get(pk=pk)
-        except Category.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk):
-        category = self.get_object(pk)
-        serializer = CategorySerializer(category)
-        return Response(serializer.data)
-# ------------ Fin de Categorias o Especialidades -----------------
 
 #---------- ------ Inicio de Especialistas ------------------------------
 
@@ -219,7 +198,7 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
     # devolver los especialistas asociados a un principal si envian el
     #  parametro [main_specialist]
     def list(self, request):
-                
+
         queryset = self.get_queryset()
         serializer = SellerSerializer(queryset, many=True)
 
