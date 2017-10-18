@@ -21,4 +21,7 @@ urlpatterns = [
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$', actors.SpecialistAccountView.as_view(), name='specialist-account-status'),
     url(r'^queries/$', querys.QueryListView.as_view(), name='queries'),
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
+
+    #files
+    url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
 ]

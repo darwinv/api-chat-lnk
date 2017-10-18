@@ -319,3 +319,21 @@ class SellerSerializer(serializers.ModelSerializer):
         fields = ('zone', 'username', 'nick', 'password', 'first_name',
         'last_name','email_exact', 'telephone','cellphone',
         'document_type','code', 'document_number', 'ruc')
+
+
+
+class MediaSerializer(serializers.Serializer):
+    photo = serializers.ImageField(
+        max_length = None,
+        required = False,
+        allow_empty_file = False)
+    filename = serializers.CharField()
+
+    # class Meta:
+    #     #model = Specialist
+    #     fields = (
+    #         'photo',
+    #         'filename'
+    #     )
+
+
