@@ -75,6 +75,19 @@ class ClientDetailView(APIView):
         serializer = ClientSerializer(client)
         return Response(serializer.data)
 
+class ClientDetailByUsername(APIView):
+    def get_object(self, username):
+        try:
+            return Client.objects.get(username=username)
+        except Client.DoesNotExist:
+            raise Http404
+        
+    def get(self, request, username):
+        client = self.get_object(username)
+        serializer = ClientSerializer(client)
+        return Response(serializer.data)
+
+
 # Fin de Clientes
 
 #---------- ------ Inicio de Especialistas ------------------------------
