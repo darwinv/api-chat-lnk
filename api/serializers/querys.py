@@ -11,11 +11,11 @@ from django.utils import timezone
 
 class QuerySerializer(serializers.ModelSerializer):
     status = serializers.ChoiceField(choices=Query.option_status, read_only=True)
-    time = serializers.SerializerMethodField()
+    last_time = serializers.SerializerMethodField()
     class Meta:
         model = Query
-        fields = ('title', 'message', 'status', 'time','category', 'client', 'specialist')
+        fields = ('title', 'message', 'status', 'last_time','category', 'client', 'specialist')
 
     # Devuelvo la hora y minuto separados
-    def get_time(self,obj):
-        return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+    def get_last_time(self,obj):
+        return str(obj.last_modified.date()) + ' ' + str(obj.last_modified.hour) + ':' + str(obj.last_modified.minute)
