@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers, viewsets
 from api import views
-from api.views import actors, querys, category
+from api.views import actors, querys, category, utilities
 
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
@@ -11,7 +11,6 @@ router.register(r'users', actors.UserViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-
     url(r'^clients/$', actors.ClientListView.as_view(), name='clients'),
     url(r'^clients/(?P<username>\w+)/$', actors.ClientDetailByUsername.as_view(), name='client-detail-username'),
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(), name='client-detail'),
@@ -22,4 +21,5 @@ urlpatterns = [
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$', actors.SpecialistAccountView.as_view(), name='specialist-account-status'),
     url(r'^queries/$', querys.QueryListView.as_view(), name='queries'),
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
+    url(r'^email/$', utilities.send_mail, name='mail'),
 ]

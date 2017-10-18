@@ -19,13 +19,22 @@ class QueryListView(ListCreateAPIView):
     serializer_class = QuerySerializer
 
     def list(self, request):
-        # pdb.set_trace()
+        status = request.query_params.get('status', None)
         try:
             queryset = Query.objects.filter(client_id=request.query_params["client"])
             # si se envia la categoria se filtra por la misma, en caso contrario
             # devuelve todas
+            if status is not None:
+                if status == 'absolved':
+                    queryset = Query.objects.filter(Q(status=6) | Q(status=7),
+                                                client_id=request.query_params["client"])
+                elif status == 'pending':
+                    queryset = Query.objects.filter(status__lte=5,
+                                                    client_id=request.query_params["client"])
+                else:
+                    raise serializers.ValidationError(detail="Invalid status")
+
             if 'category' in request.query_params:
-                status = request.query_params.get('status', None)
                 if status is not None:
                     if status == 'absolved':
                         queryset = Query.objects.filter(Q(status=6) | Q(status=7),
@@ -47,16 +56,7 @@ class QueryListView(ListCreateAPIView):
                 return self.get_paginated_response(serializer.data)
             return Response(serializer.data)
         except Exception as e:
-            string_error = u"The param(s) " + str(e) + " is mandatory"
+            string_error = u"Exceptison " + str(e)
             raise serializers.ValidationError(detail=string_error)
 
     # def get_queryset(self):
-    #     """
-    #     Optionally restricts the returned purchases to a given user,
-    #     by filtering against a `username` query parameter in the URL.
-    #     """
-    #     queryset = Purchase.objects.all()
-    #     username = self.request.query_params.get('username', None)
-    #     if username is not None:
-    #         queryset = queryset.filter(purchaser__username=username)
-    #     return queryset

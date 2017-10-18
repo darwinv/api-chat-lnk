@@ -7,7 +7,7 @@ SENDER = "amunoz@pympack.com.pe"
 
 # Replace recipient@example.com with a "To" address. If your account
 # is still in the sandbox, this address must be verified.
-RECIPIENT = "amunoz@pympack.com.pe"
+RECIPIENT = "dvasquez@pympack.com.pe"
 
 # Specify a configuration set. If you do not want to use a configuration
 # set, comment the following variable, and the
@@ -45,7 +45,8 @@ CHARSET = "UTF-8"
 # Create a new SES resource and specify a region.
 client = boto3.client('ses', region_name=AWS_REGION)
 
-def enviarCorreo():
+
+def send_mail():
     # Try to send the email.
     try:
         # Provide the contents of the email.
