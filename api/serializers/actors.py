@@ -2,13 +2,17 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from api.models import User, Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
+
+from api.models import Province, District, Category, Specialist, Query, Answer
+from api.models import Parameter, Seller, Quota, Product, Purchase
 from api.models import Province, District, Specialist, Query, Answer
-from api.models import Parameter, Seller
 from django.utils import six
 import pdb
 from datetime import datetime
 from django.utils import timezone
+import json
 
+from django.db.models import Sum
 class UserSerializer(serializers.ModelSerializer):
     """
     Serializer que unicamente va ser utilizada para
@@ -313,12 +317,40 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
         return img
 
 class SellerSerializer(serializers.ModelSerializer):
+    quota = serializers.SerializerMethodField()
+
+    count_plans_seller = serializers.SerializerMethodField()
+    count_queries = serializers.SerializerMethodField()
+
+    address = AddressSerializer()
 
     class Meta:
-        model = Seller
-        fields = ('zone', 'username', 'nick', 'password', 'first_name',
+        model   = Seller
+        fields  = ('address','count_plans_seller','count_queries','quota','id','zone', 'username', 'nick', 'password', 'first_name',
         'last_name','email_exact', 'telephone','cellphone',
         'document_type','code', 'document_number', 'ruc')
+
+
+        # No son campos editables ya que son de consulta solamente.
+        read_only_fields = ('quota','id')
+
+
+    def get_quota(self,obj):
+        time_delay = Quota.objects.get(start__gte='2017-09-22',end__gte='2017-09-22')
+        return time_delay.value
+
+    def get_count_queries(self,obj):
+        count = Product.objects.filter(purchases__isnull=False,purchases__seller=obj.id).aggregate(Sum('query_amount'))
+        return count['query_amount__sum']
+
+    def get_count_plans_seller(self,obj):
+        count = Product.objects.filter(purchases__isnull=False,purchases__seller=obj.id).count()
+        return count
+
+    # def get_count_plans_seller(self,obj):
+    #     time_delay = Quota.objects.get(start__gte='2017-09-22',end__gte='2017-09-22')
+    #     return time_delay.value
+
 
 
 
