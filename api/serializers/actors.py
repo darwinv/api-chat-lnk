@@ -318,7 +318,7 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
 
 class SellerSerializer(serializers.ModelSerializer):
     quota = serializers.SerializerMethodField()
-    
+
     count_plans_seller = serializers.SerializerMethodField()
     count_queries = serializers.SerializerMethodField()
 
@@ -350,4 +350,22 @@ class SellerSerializer(serializers.ModelSerializer):
     # def get_count_plans_seller(self,obj):
     #     time_delay = Quota.objects.get(start__gte='2017-09-22',end__gte='2017-09-22')
     #     return time_delay.value
+
+
+
+
+class MediaSerializer(serializers.Serializer):
+    photo = serializers.ImageField(
+        max_length = None,
+        required = False,
+        allow_empty_file = False)
+    filename = serializers.CharField()
+
+    # class Meta:
+    #     #model = Specialist
+    #     fields = (
+    #         'photo',
+    #         'filename'
+    #     )
+
 

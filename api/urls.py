@@ -22,4 +22,7 @@ urlpatterns = [
     url(r'^queries/$', querys.QueryListView.as_view(), name='queries'),
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
 
+    #files
+    url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
+
 ]
