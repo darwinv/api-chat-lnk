@@ -24,5 +24,4 @@ urlpatterns = [
 
     #files
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
-
 ]

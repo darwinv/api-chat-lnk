@@ -11,7 +11,7 @@ from api.serializers.actors import SpecialistAccountSerializer, SellerSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
-from rest_framework.parsers import JSONParser, MultiPartParser
+from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 import pdb
 # Create your views here.
 
