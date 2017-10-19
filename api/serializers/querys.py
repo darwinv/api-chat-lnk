@@ -14,7 +14,7 @@ class QuerySerializer(serializers.ModelSerializer):
     last_time = serializers.SerializerMethodField()
     class Meta:
         model = Query
-        fields = ('title', 'message', 'status', 'last_time','category', 'client', 'specialist')
+        fields = ('id','title', 'message', 'status', 'last_time','category', 'client', 'specialist')
 
     # Devuelvo la hora y minuto separados
     def get_last_time(self,obj):

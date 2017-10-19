@@ -58,7 +58,7 @@ class QueryListView(ListCreateAPIView):
                 return self.get_paginated_response(serializer.data)
             return Response(serializer.data)
         except Exception as e:
-            string_error = u"Exceptison " + str(e)
+            string_error = u"Exception " + str(e)
             raise serializers.ValidationError(detail=string_error)
 
     # def get_queryset(self):
