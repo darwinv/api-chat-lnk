@@ -22,7 +22,8 @@ urlpatterns = [
     url(r'^queries/$', querys.QueryListView.as_view(), name='queries'),
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
 
-    #files
+    #image
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
+    url(r'^upload_archivo/(?P<filename>[^/]+)$', actors.AllFileUploadView.as_view())
 
 ]

@@ -11,8 +11,11 @@ from api.serializers.actors import SpecialistAccountSerializer, SellerSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
-from rest_framework.parsers import JSONParser, MultiPartParser
+from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 import pdb
+import uuid
+import boto3
+
 # Create your views here.
 
 # Constantes
@@ -229,18 +232,50 @@ class FileUploadView(ListCreateAPIView, UpdateAPIView):
             partial=True
         )
 
+        # creando nombre de archivo
+        filename = str(uuid.uuid4())
+        filename = filename + '.png';
+
         if serializer.is_valid():
             #serializer.save()
 
-            destination = open('/Users/alfonsomunoz/' + data['filename'], 'wb+')
+            destination = open(filename, 'wb+')
             for chunk in data['photo'].chunks():
                 destination.write(chunk)
 
             destination.close()
 
+        self.uploadImageToS3(filename)
+
+        #eliminar archivo temporal
+
         #guardar archivo en disco
         #reemplazar por subir imagen al aws
-
-
         return Response(serializer.data['filename'])
 
+    def uploadImageToS3(self, filename):
+
+        #subir archivo con libreria boto
+        s3 = boto3.client('s3')
+
+        s3.upload_file(
+            filename, 'linkup-photos', filename,
+            ExtraArgs={'ACL': 'public-read'}
+        )
+
+        # devolviendo ruta al archivo
+        return 'https://s3.amazonaws.com/linkup-photos/' + filename;
+
+class AllFileUploadView(APIView):
+    parser_classes = (FileUploadParser,)
+
+    def put(self, request, filename, format=None):
+        file_obj = request.data['file']
+
+        destination = open('/Users/alfonsomunoz/' + filename, 'wb+')
+        for chunk in file_obj.chunks():
+            destination.write(chunk)
+
+        destination.close()
+
+        return Response(status=204)
