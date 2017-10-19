@@ -24,6 +24,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username')
 
+class UserPhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('photo',)
+
 class CommonValidation():
 
     def validate_img(self,photo):
@@ -359,7 +364,6 @@ class MediaSerializer(serializers.Serializer):
         max_length = None,
         required = False,
         allow_empty_file = False)
-    filename = serializers.CharField()
 
     # class Meta:
     #     #model = Specialist
