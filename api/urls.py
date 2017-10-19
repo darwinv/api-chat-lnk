@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers, viewsets
 from api import views
-from api.views import actors, querys, category
+from api.views import actors, querys, category, utilities
 
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
@@ -11,8 +11,8 @@ router.register(r'users', actors.UserViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
-
     url(r'^clients/$', actors.ClientListView.as_view(), name='clients'),
+    url(r'^clients/(?P<username>\w+)/$', actors.ClientDetailByUsername.as_view(), name='client-detail-username'),
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(), name='client-detail'),
     url(r'^categories/$', category.CategoryListView.as_view(), name='categories'),
     url(r'^categories/(?P<pk>[0-9]+)/$', category.CategoryDetailView.as_view(), name='category-detail'),
@@ -22,7 +22,9 @@ urlpatterns = [
     url(r'^queries/$', querys.QueryListView.as_view(), name='queries'),
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
 
-    #files
+    #image
+    url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(), name='upload-photo'),
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
+    # url(r'^upload_archivo/(?P<filename>[^/]+)$', actors.AllFileUploadView.as_view())
 
 ]

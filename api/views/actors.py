@@ -2,7 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Category, Specialist, Seller
-from api.serializers.actors import ClientSerializer
+from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
@@ -11,8 +11,11 @@ from api.serializers.actors import SpecialistAccountSerializer, SellerSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
-from rest_framework.parsers import JSONParser, MultiPartParser
-import pdb
+from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
+import pdb, os
+import uuid
+import boto3
+
 # Create your views here.
 
 # Constantes
@@ -75,6 +78,19 @@ class ClientDetailView(APIView):
         client = self.get_object(pk)
         serializer = ClientSerializer(client)
         return Response(serializer.data)
+
+class ClientDetailByUsername(APIView):
+    def get_object(self, username):
+        try:
+            return Client.objects.get(username=username)
+        except Client.DoesNotExist:
+            raise Http404
+
+    def get(self, request, username):
+        client = self.get_object(username)
+        serializer = ClientSerializer(client)
+        return Response(serializer.data)
+
 
 # Fin de Clientes
 
@@ -212,8 +228,58 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
 
 # ------------ Fin de Vendedores -----------------
 
+# Subir la foto de un usuario
+class PhotoUploadView(APIView):
+    permission_classes = [permissions.AllowAny]
+    queryset = User.objects.all()
+    parser_classes = (JSONParser, MultiPartParser)
+
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        data = request.data
+        user = self.get_object(pk)
+        media_serializer = MediaSerializer(
+            data = data,
+            partial=True
+        )
+        # creando nombre de archivo
+        filename = str(uuid.uuid4())
+        filename = filename + '.png';
+
+        if media_serializer.is_valid():
+            destination = open(filename, 'wb+')
+            for chunk in data['photo'].chunks():
+                destination.write(chunk)
+
+            destination.close()
+
+        name_photo = self.upload_photo_s3(filename)
+        os.remove(filename)
+        serializer = UserPhotoSerializer(user, data={'photo': name_photo }, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+    def upload_photo_s3(self, filename):
+
+        #subir archivo con libreria boto
+        s3 = boto3.client('s3')
+
+        s3.upload_file(
+            filename, 'linkup-photos', filename,
+            ExtraArgs={'ACL': 'public-read'}
+        )
+        # devolviendo ruta al archivo
+        return 'https://s3.amazonaws.com/linkup-photos/' + filename;
+
+# --------------------------------------------------
 
 class FileUploadView(ListCreateAPIView, UpdateAPIView):
     permission_classes = [permissions.AllowAny]
@@ -229,18 +295,50 @@ class FileUploadView(ListCreateAPIView, UpdateAPIView):
             partial=True
         )
 
+        # creando nombre de archivo
+        filename = str(uuid.uuid4())
+        filename = filename + '.png';
+
         if serializer.is_valid():
             #serializer.save()
 
-            destination = open('/Users/alfonsomunoz/' + data['filename'], 'wb+')
+            destination = open(filename, 'wb+')
             for chunk in data['photo'].chunks():
                 destination.write(chunk)
 
             destination.close()
 
+        name=self.uploadImageToS3(filename)
+
+        #eliminar archivo temporal
+
         #guardar archivo en disco
         #reemplazar por subir imagen al aws
+        return Response(serializer.data['filename']+str(name))
 
+    def uploadImageToS3(self, filename):
 
-        return Response(serializer.data['filename'])
+        #subir archivo con libreria boto
+        s3 = boto3.client('s3')
 
+        s3.upload_file(
+            filename, 'linkup-photos', filename,
+            ExtraArgs={'ACL': 'public-read'}
+        )
+
+        # devolviendo ruta al archivo
+        return 'https://s3.amazonaws.com/linkup-photos/' + filename;
+
+class AllFileUploadView(APIView):
+    parser_classes = (FileUploadParser,)
+
+    def put(self, request, filename, format=None):
+        file_obj = request.data['file']
+
+        destination = open('/Users/alfonsomunoz/' + filename, 'wb+')
+        for chunk in file_obj.chunks():
+            destination.write(chunk)
+
+        destination.close()
+
+        return Response(status=204)

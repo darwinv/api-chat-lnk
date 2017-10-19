@@ -46,7 +46,7 @@ class GetAllQuerys(APITestCase):
                                               response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_absolved_queries(self):
+    def test_get_absolved_queries_by_category(self):
         url = "{}?client={}&category={}&status=absolved".format(reverse('queries'),
                                                         self.id_client,
                                                         self.id_category)
@@ -57,13 +57,32 @@ class GetAllQuerys(APITestCase):
                                               response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_pending_queries(self):
+    def test_get_pending_queries_by_category(self):
         url = "{}?client={}&category={}&status=pending".format(reverse('queries'),
                                                         self.id_client,
                                                         self.id_category)
         response = client.get(url)
         self.assertEqual(Query.objects.filter(status__lte=5,
                                               category_id=self.id_category,
+                                              client_id=self.id_client).count(),
+                                              response.data["count"])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+    def test_get_absolved_queries_(self):
+        url = "{}?client={}&status=absolved".format(reverse('queries'),
+                                                        self.id_client)
+        response = client.get(url)
+        self.assertEqual(Query.objects.filter(Q(status=6) | Q(status=7),
+                                              client_id=self.id_client).count(),
+                                              response.data["count"])
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_pending_queries(self):
+        url = "{}?client={}&status=pending".format(reverse('queries'),
+                                                        self.id_client)
+        response = client.get(url)
+        self.assertEqual(Query.objects.filter(status__lte=5,
                                               client_id=self.id_client).count(),
                                               response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)

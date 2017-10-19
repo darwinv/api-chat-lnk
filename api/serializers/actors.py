@@ -26,6 +26,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username')
 
+class UserPhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('photo',)
+
 class CommonValidation():
 
     def validate_img(self,photo):
@@ -157,8 +162,9 @@ class SpecialistSerializer(serializers.ModelSerializer):
     document_type = serializers.ChoiceField(choices=Specialist.options_documents)
     type_specialist = serializers.ChoiceField(choices=Specialist.options_type)
     address = AddressSerializer()
-    email_exact = serializers.EmailField()
+    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
+    photo = serializers.CharField(required=False)
 
     class Meta:
         model = Specialist
@@ -367,7 +373,6 @@ class MediaSerializer(serializers.Serializer):
         max_length = None,
         required = False,
         allow_empty_file = False)
-    filename = serializers.CharField()
 
     # class Meta:
     #     #model = Specialist
@@ -375,5 +380,3 @@ class MediaSerializer(serializers.Serializer):
     #         'photo',
     #         'filename'
     #     )
-
-
