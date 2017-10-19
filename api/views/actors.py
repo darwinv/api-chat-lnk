@@ -5,7 +5,9 @@ from api.models import User, Client, Category, Specialist, Seller
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
-import django_filters.rest_framework
+from django_filters import rest_framework as filters
+from rest_framework import filters as searchfilters
+# import django_filters.rest_framework
 from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SpecialistAccountSerializer, SellerSerializer, MediaSerializer
 from django.http import Http404
@@ -30,7 +32,7 @@ DATE_FAKE = '1900-01-01'
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('username',)
 
 class ClientListView(ListCreateAPIView, UpdateAPIView):
@@ -39,6 +41,9 @@ class ClientListView(ListCreateAPIView, UpdateAPIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = ClientSerializer
     queryset = Client.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,searchfilters.SearchFilter,)
+    filter_fields = ('nick',)
+    search_fields = ('email_exact', 'first_name')
 
     # def get(self, request):
     #    clients = Client.objects.all()
