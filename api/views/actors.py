@@ -82,7 +82,7 @@ class ClientDetailByUsername(APIView):
             return Client.objects.get(username=username)
         except Client.DoesNotExist:
             raise Http404
-        
+
     def get(self, request, username):
         client = self.get_object(username)
         serializer = ClientSerializer(client)
@@ -245,7 +245,7 @@ class FileUploadView(ListCreateAPIView, UpdateAPIView):
         if serializer.is_valid():
             #serializer.save()
 
-            destination = open('/Users/alfonsomunoz/' + data['filename'], 'wb+')
+            destination = open('' + data['filename'], 'wb+')
             for chunk in data['photo'].chunks():
                 destination.write(chunk)
 
@@ -256,4 +256,3 @@ class FileUploadView(ListCreateAPIView, UpdateAPIView):
 
 
         return Response(serializer.data['filename'])
-

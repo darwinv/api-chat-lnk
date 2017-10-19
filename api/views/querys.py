@@ -35,6 +35,8 @@ class QueryListView(ListCreateAPIView):
                     raise serializers.ValidationError(detail="Invalid status")
 
             if 'category' in request.query_params:
+                queryset = Query.objects.filter(client_id=request.query_params["client"],
+                                                category_id=request.query_params["category"])
                 if status is not None:
                     if status == 'absolved':
                         queryset = Query.objects.filter(Q(status=6) | Q(status=7),

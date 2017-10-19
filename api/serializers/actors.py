@@ -155,7 +155,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
     document_type = serializers.ChoiceField(choices=Specialist.options_documents)
     type_specialist = serializers.ChoiceField(choices=Specialist.options_type)
     address = AddressSerializer()
-    email_exact = serializers.EmailField()
+    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
 
     class Meta:
@@ -367,5 +367,3 @@ class MediaSerializer(serializers.Serializer):
     #         'photo',
     #         'filename'
     #     )
-
-
