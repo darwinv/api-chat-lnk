@@ -162,6 +162,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
+    photo = serializers.CharField(required=False)
 
     class Meta:
         model = Specialist
