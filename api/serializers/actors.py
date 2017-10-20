@@ -162,7 +162,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
-    photo = serializers.CharField(required=False)
+    photo = serializers.CharField(read_only=True)
 
     class Meta:
         model = Specialist
@@ -179,9 +179,9 @@ class SpecialistSerializer(serializers.ModelSerializer):
         return str(obj.category)
 
     def validate(self,data):
-        validation = CommonValidation()
-        if 'photo' in data:
-            validation.validate_img(photo=data['photo'])
+        # validation = CommonValidation()
+        # if 'photo' in data:
+        #     validation.validate_img(photo=data['photo'])
         # Asegurarse que solo haya un especialista principal por categoria.
         if self.instance and self.instance.username != data["username"]:
             if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",category__name=data["category"]).exists():

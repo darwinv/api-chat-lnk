@@ -6,7 +6,7 @@ from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 from django_filters import rest_framework as filters
-from rest_framework import filters as searchfilters
+from rest_framework import filters as searchfilters, serializers
 # import django_filters.rest_framework
 from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SpecialistAccountSerializer, SellerSerializer, MediaSerializer
@@ -255,14 +255,15 @@ class PhotoUploadView(APIView):
         # creando nombre de archivo
         filename = str(uuid.uuid4())
         filename = filename + '.png';
-
         if media_serializer.is_valid():
             destination = open(filename, 'wb+')
             for chunk in data['photo'].chunks():
                 destination.write(chunk)
-
             destination.close()
+        else:
+            raise serializers.ValidationError(media_serializer.errors)
 
+        # pdb.set_trace()
         name_photo = self.upload_photo_s3(filename)
         os.remove(filename)
         serializer = UserPhotoSerializer(user, data={'photo': name_photo }, partial=True)
