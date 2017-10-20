@@ -86,3 +86,22 @@ class GetAllQuerys(APITestCase):
                                               client_id=self.id_client).count(),
                                               response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class CreateQuery(APITestCase):
+    fixtures = ['data','data2','test_address','test_query']
+    def setUp(self):
+        self.valid_payload = {
+            "title" : "Visa Solicitud",
+            "message": "lorem iptsum",
+            "category": 1,
+            "client": 2
+        }
+
+    def test_create_first_query(self):
+        response = self.client.post(
+            reverse('queries'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # self.assertEqual(response.data, "ee")
