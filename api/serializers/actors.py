@@ -8,11 +8,13 @@ from api.models import Parameter, Seller, Quota, Product, Purchase
 from api.models import Province, District, Specialist, Query, Answer
 from django.utils import six
 import pdb
-from datetime import datetime
+import datetime
 from django.utils import timezone
 import json
 
 from django.db.models import Sum
+from datetime import date
+
 class UserSerializer(serializers.ModelSerializer):
     """
     Serializer que unicamente va ser utilizada para
@@ -342,8 +344,17 @@ class SellerSerializer(serializers.ModelSerializer):
 
 
     def get_quota(self,obj):
-        time_delay = Quota.objects.get(start__gte='2017-09-22',end__gte='2017-09-22')
-        return time_delay.value
+        value = 0
+
+        try:
+            today = datetime.datetime.now()
+            time_delay = Quota.objects.get(date__year=today.year, date__month=today.month)
+
+            value = time_delay.value
+        except Exception as e:
+            print(e.args)
+            print("---------------ERROR---------------")
+        return value
 
     def get_count_queries(self,obj):
         count = Product.objects.filter(purchases__isnull=False,purchases__seller=obj.id).aggregate(Sum('query_amount'))
@@ -353,9 +364,6 @@ class SellerSerializer(serializers.ModelSerializer):
         count = Product.objects.filter(purchases__isnull=False,purchases__seller=obj.id).count()
         return count
 
-    # def get_count_plans_seller(self,obj):
-    #     time_delay = Quota.objects.get(start__gte='2017-09-22',end__gte='2017-09-22')
-    #     return time_delay.value
 
 
 
