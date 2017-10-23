@@ -210,27 +210,15 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
 
-    # funcion para localizar especialista principal
-    def get_object(self, pk):
-        try:
-            return Seller.objects.get(pk=pk,type_specialist='m')
-        except Seller.DoesNotExist:
-            raise Http404
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = {
+        'first_name': ['exact','contains'],
+        'last_name': ['exact','contains'],
+        'email_exact': ['exact','contains'],
+        'ruc': ['exact','contains'],
+    }
 
-    # Funcion personalizada para
-    # devolver los especialistas asociados a un principal si envian el
-    #  parametro [main_specialist]
-    def list(self, request):
 
-        queryset = self.get_queryset()
-        serializer = SellerSerializer(queryset, many=True)
-
-        # pagination
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        return Response(serializer.data)
 
 # ------------ Fin de Vendedores -----------------
 
