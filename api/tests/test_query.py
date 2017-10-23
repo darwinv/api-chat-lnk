@@ -88,9 +88,24 @@ class GetAllQuerys(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 #
-# class GetDetailQuery(APITestCase):
+class GetDetailQuery(APITestCase):
+    fixtures = ['data','data2','test_address','test_query']
+    def setUp(self):
+        self.id_client = 2
+        self.id_category = 1
+        self.id_query = 1
 
+    def test_get_query(self):
+        response = client.get(reverse('query-detail',
+                     kwargs={'pk': self.id_query }),format='json')
 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_invalid_query(self):
+        response = client.get(reverse('query-detail',
+                     kwargs={'pk': 100 }),format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 class CreateQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']
