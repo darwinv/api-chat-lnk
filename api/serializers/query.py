@@ -9,9 +9,25 @@ import pdb
 from datetime import datetime
 from django.utils import timezone
 
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ('message')
+
 
 
 class QuerySerializer(serializers.ModelSerializer):
+    messages = MessageSerializer()
+
+    class Meta:
+        model = Query
+        fields = ('title','status','messages','last_modified',
+                  'client', 'specialist', 'category')
+
+        read_only_fields = ('status','last_modified')
+
+
+class QueryListSerializer(serializers.ModelSerializer):
     status = serializers.ChoiceField(choices=Query.option_status, read_only=True)
     last_time = serializers.SerializerMethodField()
     # media_files = FilesSerializer()
@@ -30,7 +46,6 @@ class QuerySerializer(serializers.ModelSerializer):
     def get_last_msg(self, obj):
         # pdb.set_trace()
         msg =  obj.message_set.all().last()
-
         return msg.message
     # definir las validaciones correspondientes al crear una consulta
     def validate(self,data):

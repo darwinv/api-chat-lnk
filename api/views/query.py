@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 import django_filters.rest_framework
 # from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
-from api.serializers.query import QuerySerializer
+from api.serializers.query import QueryListSerializer, QuerySerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 # from rest_framework import generics
@@ -16,7 +16,7 @@ import pdb
 class QueryListView(ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Query.objects.all()
-    serializer_class = QuerySerializer
+    serializer_class = QueryListSerializer
 
     def list(self, request):
         status = request.query_params.get('status', None)
@@ -50,7 +50,7 @@ class QueryListView(ListCreateAPIView):
                         queryset = Query.objects.filter(client_id=request.query_params["client"],
                                                         category_id=request.query_params["category"])
 
-            serializer = QuerySerializer(queryset, many=True)
+            serializer = QueryListSerializer(queryset, many=True)
             # pagination
             page = self.paginate_queryset(queryset)
             if page is not None:
@@ -62,3 +62,16 @@ class QueryListView(ListCreateAPIView):
             raise serializers.ValidationError(detail=string_error)
 
     # def get_queryset(self):
+
+class QueryDetailView(APIView):
+    permission_classes = [permissions.AllowAny]
+    def get_object(self, pk):
+        try:
+            return Query.objects.get(pk=pk)
+        except Query.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        query = self.get_object(pk)
+        serializer = QuerySerializer(query)
+        return Response(serializer.data)
