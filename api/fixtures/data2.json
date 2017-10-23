@@ -109,37 +109,6 @@
     }
   },
   {
-    "model": "api.department",
-    "pk": 1,
-    "fields": {
-      "name": "Lima"
-    }
-  },
-  {
-    "model": "api.province",
-    "pk": 1,
-    "fields": {
-      "name": "Lima",
-      "department_id":1
-    }
-  },
-  {
-    "model": "api.district",
-    "pk": 1,
-    "fields": {
-      "name": "Surco",
-      "province_id":1
-    }
-  },
-   {
-    "model": "api.district",
-    "pk": 2,
-    "fields": {
-      "name": "Miraflores",
-      "province_id":1
-    }
-  },
-  {
     "model": "api.category",
     "pk": 1,
     "fields": {

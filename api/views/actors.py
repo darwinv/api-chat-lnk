@@ -10,7 +10,7 @@ from rest_framework import filters as searchfilters
 from rest_framework import serializers
 # import django_filters.rest_framework
 from api.serializers.actors import UserSerializer, SpecialistSerializer
-from api.serializers.actors import SpecialistAccountSerializer, SellerSerializer, MediaSerializer
+from api.serializers.actors import SellerSerializer, MediaSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics

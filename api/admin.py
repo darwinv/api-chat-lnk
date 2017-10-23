@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Role, User, Seller, Client, Category, Specialist, Query, Answer, Quota,Seller,Zone
-from .models import Department, Province, District
+from .models import Role, User, Seller, Client, Category, Specialist, Query,Quota,Seller,Zone
+from .models import Department, Province, District, Message
 # Register your models here.
+
 
 class ClientNaturalAdmin(admin.ModelAdmin):
     fields = ('username','nick','password','photo','first_name', 'last_name',
@@ -24,8 +25,14 @@ class SpecialistAdmin(admin.ModelAdmin):
     'cellphone','document_type', 'document_number',
     'ruc','code','payment_per_answer','anonymous','role','category')
 
+
+class MessageInline(admin.TabularInline):
+    model = Message
+    extra = 1
+
 class QueryAdmin(admin.ModelAdmin):
-    exclude = ('declined_motive',)
+    inlines = [MessageInline]
+    exclude = ('calification',)
 
 class SellerAdmin(admin.ModelAdmin):
     fields = ('zone','username', 'nick','password','first_name', 'last_name',
@@ -37,7 +44,6 @@ admin.site.register(Client,ClientNaturalAdmin)
 admin.site.register(Category)
 admin.site.register(Specialist,SpecialistAdmin)
 admin.site.register(Query,QueryAdmin)
-admin.site.register(Answer)
 admin.site.register(Department)
 admin.site.register(Province)
 admin.site.register(District)

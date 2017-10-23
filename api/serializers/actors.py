@@ -3,9 +3,9 @@ from rest_framework.validators import UniqueValidator
 from api.models import User, Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
 
-from api.models import Province, District, Category, Specialist, Query, Answer
+from api.models import Province, District, Category, Specialist, Query
 from api.models import Parameter, Seller, Quota, Product, Purchase
-from api.models import Province, District, Specialist, Query, Answer
+from api.models import Province, District, Specialist, Query
 from django.utils import six
 import pdb
 import datetime
@@ -237,98 +237,99 @@ class SpecialistSerializer(serializers.ModelSerializer):
         return instance
 
 
-class AnswerAccountSerializer(serializers.ModelSerializer):
-    date = serializers.SerializerMethodField()
-    time = serializers.SerializerMethodField()
-    time_elapsed = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Answer
-        fields = ('id', 'date', 'time', 'specialist', 'created_at', 'time_elapsed')
-
-    def get_date(self, obj):
-        return obj.created_at.date()
-
-    def get_time(self, obj):
-        return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
-
-    def get_time_elapsed(self, obj):
-        # d.strftime("%Y-%m-%d %H:%M:%S")
-        date_query = obj.query.created_at
-        date_answer = obj.created_at
-        diff = date_answer - date_query
-        return str(diff)
 
 
-class QueryAnswerSerializer(serializers.ModelSerializer):
-    client = serializers.SerializerMethodField()
-    date = serializers.SerializerMethodField()
-    time = serializers.SerializerMethodField()
-    status = serializers.ChoiceField(choices=Query.option_status)
-    answer = serializers.SerializerMethodField()
-    is_delayed = serializers.SerializerMethodField()
+# class AnswerAccountSerializer(serializers.ModelSerializer):
+#     date = serializers.SerializerMethodField()
+#     time = serializers.SerializerMethodField()
+#     time_elapsed = serializers.SerializerMethodField()
+#
+#     class Meta:
+#         model = Answer
+#         fields = ('id','date','time','specialist','created_at','time_elapsed')
+#
+#     def get_date(self, obj):
+#         return obj.created_at.date()
+#     def get_time(self, obj):
+#         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+#
+#     def get_time_elapsed(self, obj):
+#         # d.strftime("%Y-%m-%d %H:%M:%S")
+#         date_query = obj.query.created_at
+#         date_answer = obj.created_at
+#         diff = date_answer - date_query
+#         return str(diff)
 
-    class Meta:
-        model = Query
-        fields = ('title', 'client', 'date', 'time', 'status', 'created_at', 'answer', 'is_delayed')
+# class QueryAnswerSerializer(serializers.ModelSerializer):
+#     client = serializers.SerializerMethodField()
+#     date = serializers.SerializerMethodField()
+#     time = serializers.SerializerMethodField()
+#     status = serializers.ChoiceField(choices=Query.option_status)
+#     answer = serializers.SerializerMethodField()
+#     is_delayed = serializers.SerializerMethodField()
+#
+#     class Meta:
+#         model = Query
+#         fields = ('title','client','date','time','status','created_at','answer','is_delayed')
+#
+#     def get_date(self,obj):
+#         return obj.created_at.date()
+#
+#     # Devuelvo la hora y minuto separados
+#     def get_time(self,obj):
+#         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+#
+#     def get_client(self,obj):
+#         return obj.client.nick
+#     # Devuelvo la respuesta relacionada a la consulta
+#     def get_answer(self,obj):
+#         answer_related = obj.answer_set.all()
+#         return AnswerAccountSerializer(answer_related,many=True).data
+#
+#     # Verificar si el tiempo desde que se hizo la consulta fue superado al del
+#     # parametro y en base a eso determinar si esta con retraso o a tiempo
+#     def get_is_delayed(self,obj):
+#         date_query = obj.created_at
+#         time_delay = Parameter.objects.get(parameter="time_delay_response")
+#         try:
+#             answer =  obj.answer_set.get(pk=obj.id)
+#             date_elapsed = answer.created_at
+#         except:
+#             date_elapsed = timezone.now()
+#         diff = date_elapsed - date_query
+#         days = diff.days*24
+#         hours = diff.seconds // 3600
+#         if days >= int(time_delay.value) or hours >= int(time_delay.value):
+#             return True
+#         return False
 
-    def get_date(self, obj):
-        return obj.created_at.date()
-
-    # Devuelvo la hora y minuto separados
-    def get_time(self, obj):
-        return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
-
-    def get_client(self, obj):
-        return obj.client.nick
-
-    # Devuelvo la respuesta relacionada a la consulta
-    def get_answer(self, obj):
-        answer_related = obj.answer_set.all()
-        return AnswerAccountSerializer(answer_related, many=True).data
-
-    # Verificar si el tiempo desde que se hizo la consulta fue superado al del
-    # parametro y en base a eso determinar si esta con retraso o a tiempo
-    def get_is_delayed(self, obj):
-        date_query = obj.created_at
-        time_delay = Parameter.objects.get(parameter="time_delay_response")
-        try:
-            answer = obj.answer_set.get(pk=obj.id)
-            date_elapsed = answer.created_at
-        except:
-            date_elapsed = timezone.now()
-        diff = date_elapsed - date_query
-        days = diff.days * 24
-        hours = diff.seconds // 3600
-        if days >= int(time_delay.value) or hours >= int(time_delay.value):
-            return True
-        return False
 
 
 # Serializer para consultar estado de cuenta del Especialista.
-class SpecialistAccountSerializer(serializers.ModelSerializer):
-    category = serializers.SlugRelatedField(read_only=True, slug_field='name')
-    query_answer = serializers.SerializerMethodField()
-    photo_category = serializers.SerializerMethodField()
+# class SpecialistAccountSerializer(serializers.ModelSerializer):
+#     category = serializers.SlugRelatedField(read_only=True,slug_field='name')
+#     query_answer = serializers.SerializerMethodField()
+#     photo_category = serializers.SerializerMethodField()
+#
+#     class Meta:
+#         model = Specialist
+#         fields = ('id','first_name','last_name','code','nick','email_exact',
+#                   'photo','category','photo_category','payment_per_answer','query_answer')
+#
+#         # No son campos editables ya que son de consulta solamente.
+#         read_only_fields = ('id','first_name','last_name','code','nick',
+#                             'email_exact','photo','category','photo_category',
+#                             'query_answer')
+#
+#     # Traer por consulta relacionada
+#     def get_query_answer(self, obj):
+#         answer = obj.query_set.all()
+#         return QueryAnswerSerializer(answer,many=True).data
+#
+#     def get_photo_category(self,obj):
+#         img = obj.category.image
+#         return img
 
-    class Meta:
-        model = Specialist
-        fields = ('id', 'first_name', 'last_name', 'code', 'nick', 'email_exact',
-                  'photo', 'category', 'photo_category', 'payment_per_answer', 'query_answer')
-
-        # No son campos editables ya que son de consulta solamente.
-        read_only_fields = ('id', 'first_name', 'last_name', 'code', 'nick',
-                            'email_exact', 'photo', 'category', 'photo_category',
-                            'query_answer')
-
-    # Traer por consulta relacionada
-    def get_query_answer(self, obj):
-        answer = obj.query_set.all()
-        return QueryAnswerSerializer(answer, many=True).data
-
-    def get_photo_category(self, obj):
-        img = obj.category.image
-        return img
 
 
 class SellerSerializer(serializers.ModelSerializer):
