@@ -340,8 +340,6 @@ class CulqiPayment(models.Model):
 
 class Query(models.Model):
     title = models.CharField(max_length=50)
-    message = models.TextField()
-    has_precedent = models.BooleanField()
     option_status = (
         ('0', 'Requested'), # Preguntada, pendiente de derivar o responder
         ('1', 'Requested Derived'), # derivada, pendiente de declinar o responder
@@ -355,7 +353,7 @@ class Query(models.Model):
     status = models.CharField(max_length=1, choices=option_status)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
-    precedent = models.OneToOneField('self', on_delete=models.PROTECT, blank=True, null=True)
+    calification = models.PositiveSmallIntegerField()
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
@@ -372,16 +370,19 @@ class QueryLog(Query):
     actions = models.CharField(max_length=10)
     changed_on = models.DateTimeField()
 
-class Answer(models.Model):
+class Message(models.Model):
     message = models.TextField()
-    calification = models.PositiveSmallIntegerField()
+    options_msg_type = (
+        ('q', 'query'), # es de tipo consulta
+        ('r', 'requery'), # es de tipo reconsulta
+        ('a', 'answer'), # es de tipo respuesta
+        )
+    msg_type = models.CharField(max_length=1, choices=options_msg_type)
     created_at = models.DateTimeField(auto_now_add=True)
-    query = models.ForeignKey(Query, on_delete=models.PROTECT)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
-    def __str__(self):
-        return "RE: " + self.query.title
+    query = models.ForeignKey(Query, on_delete=models.PROTECT)
 
-class QueryAnswerFiles(models.Model):
+class MessageFile(models.Model):
     url = models.CharField(max_length=100)
     options_type_file = (
         ('0', 'Image'),
@@ -389,8 +390,7 @@ class QueryAnswerFiles(models.Model):
         ('2', 'Document'),
     )
     type_file = models.CharField(max_length=1, choices=options_type_file)
-    answer = models.ForeignKey(Answer, on_delete=models.PROTECT, null=True)
-    query = models.ForeignKey(Query, on_delete=models.PROTECT, null=True)
+    message = models.ForeignKey(Message, on_delete=models.PROTECT)
 
 class Interval(models.Model):
     interval = models.IntegerField()
