@@ -11,7 +11,7 @@ client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
 class CreateSpecialist(APITestCase):
-    fixtures = ['data']
+    fixtures = ['data','data2']
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -88,7 +88,7 @@ class CreateSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
 class UpdateSpecialistCase(APITestCase):
-    fixtures = ['data']
+    fixtures = ['data','data2']
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -169,7 +169,7 @@ class UpdateSpecialistCase(APITestCase):
         self.assertEqual(data['address']['street'], response.data["address"]['street'])
 
 class GetSpecialists(APITestCase):
-    fixtures = ['data']
+    fixtures = ['data','data2']
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -286,8 +286,8 @@ class GetSpecialists(APITestCase):
                                                    response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-class DeleteSpecialistCase(APITestCase):
-    fixtures = ['data']
+class DeleteSpecialist(APITestCase):
+    fixtures = ['data','data2']
 
     def setUp(self):
         self.valid_payload = {

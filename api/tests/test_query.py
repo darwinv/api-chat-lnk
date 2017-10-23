@@ -87,6 +87,11 @@ class GetAllQuerys(APITestCase):
                                               response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+#
+# class GetDetailQuery(APITestCase):
+
+
+
 class CreateQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']
     def setUp(self):
