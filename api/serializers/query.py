@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from api.models import User, Client, LevelInstruction, Profession, Role, Countries
 from api.models import CommercialGroup, EconomicSector, Address, Department
-from api.models import Province, District, Category, Specialist, Query
+from api.models import Province, District, Category, Specialist, Query, Message
 from api.models import Parameter
 from django.utils import six
 import pdb
@@ -10,9 +10,11 @@ from datetime import datetime
 from django.utils import timezone
 
 class MessageSerializer(serializers.ModelSerializer):
+    msg_type = serializers.ChoiceField(choices=Message.options_msg_type)
+
     class Meta:
         model = Message
-        fields = ('message')
+        fields = ('message','msg_type','created_at')
 
 
 
