@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers, viewsets
 from api import views
-from api.views import actors, querys, category, utilities
+from api.views import actors, query, category, utilities
 
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^specialists/$', actors.SpecialistListView.as_view(), name='specialists'),
     url(r'^specialists/(?P<pk>[0-9]+)/$', actors.SpecialistDetailView.as_view(), name='specialist-detail'),
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$', actors.SpecialistAccountView.as_view(), name='specialist-account-status'),
-    url(r'^queries/$', querys.QueryListView.as_view(), name='queries'),
+    url(r'^queries/$', query.QueryListView.as_view(), name='queries'),
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
 
     #image
