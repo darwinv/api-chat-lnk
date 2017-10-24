@@ -15,6 +15,7 @@ import json
 from django.db.models import Sum
 from datetime import date
 
+
 class UserSerializer(serializers.ModelSerializer):
     """
     Serializer que unicamente va ser utilizada para
@@ -22,18 +23,20 @@ class UserSerializer(serializers.ModelSerializer):
     Este servicio es requerido por la web de administracion
     Unicamente expone el id y el nombre de usuario
     """
+
     class Meta:
         model = User
         fields = ('id', 'username')
+
 
 class UserPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('photo',)
 
-class CommonValidation():
 
-    def validate_img(self,photo):
+class CommonValidation():
+    def validate_img(self, photo):
         try:
             extension = photo.split(".")[1]
             valid_extensions = ['png', 'jpg', 'jpeg', 'svg']
@@ -43,15 +46,15 @@ class CommonValidation():
             raise serializers.ValidationError(u"Unsupported url of photo.")
 
 
-
 class CustomChoiceField(serializers.ChoiceField):
     def __init__(self, choices, **kwargs):
         self.choices_to_dict = choices
-        serializers.ChoiceField.__init__(self, choices,**kwargs)
+        serializers.ChoiceField.__init__(self, choices, **kwargs)
 
     def to_representation(self, value):
         dictionary = dict(self.choices_to_dict)
         return dictionary.get(value)
+
 
 class AddressSerializer(serializers.ModelSerializer):
     department_name = serializers.SerializerMethodField()
@@ -60,17 +63,18 @@ class AddressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Address
-        fields = ('street','department','department_name', 'province', 'province_name',
-                  'district','district_name')
+        fields = ('street', 'department', 'department_name', 'province', 'province_name',
+                  'district', 'district_name')
 
-    def get_department_name(self,obj):
+    def get_department_name(self, obj):
         return str(obj.department)
 
-    def get_province_name(self,obj):
+    def get_province_name(self, obj):
         return str(obj.province)
 
-    def get_district_name(self,obj):
+    def get_district_name(self, obj):
         return str(obj.district)
+
 
 class ClientSerializer(serializers.ModelSerializer):
     # level_instruction = serializers.SlugRelatedField(queryset=LevelInstruction.objects.all(), slug_field='name', allow_null=True)
@@ -91,34 +95,35 @@ class ClientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Client
-        fields = ('id', 'username', 'nick','type_client', 'first_name', 'last_name',
-        'password', 'photo','sex','document_type', 'document_number','civil_state',
-        'birthdate','address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
-        'ciiu', 'activity_description', 'level_instruction','level_instruction_name',
-        'business_name', 'agent_firstname','agent_lastname','position',
-        'commercial_group', 'commercial_group_name','economic_sector',
-        'economic_sector_name','institute', 'profession','profession_name',
-        'ocupation', 'about', 'nationality','nationality_name')
+        fields = ('id', 'username', 'nick', 'type_client', 'first_name', 'last_name',
+                  'password', 'photo', 'sex', 'document_type', 'document_number', 'civil_state',
+                  'birthdate', 'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
+                  'ciiu', 'activity_description', 'level_instruction', 'level_instruction_name',
+                  'business_name', 'agent_firstname', 'agent_lastname', 'position',
+                  'commercial_group', 'commercial_group_name', 'economic_sector',
+                  'economic_sector_name', 'institute', 'profession', 'profession_name',
+                  'ocupation', 'about', 'nationality', 'nationality_name')
 
-    def get_level_instruction_name(self,obj):
+    def get_level_instruction_name(self, obj):
         return str(obj.level_instruction)
 
-    def get_profession_name(self,obj):
+    def get_profession_name(self, obj):
         return str(obj.profession)
 
-    def get_nationality_name(self,obj):
+    def get_nationality_name(self, obj):
         return str(obj.nationality)
 
-    def get_commercial_group_name(self,obj):
+    def get_commercial_group_name(self, obj):
         return str(obj.commercial_group)
 
-    def get_economic_sector_name(self,obj):
+    def get_economic_sector_name(self, obj):
         return str(obj.economic_sector)
+
     # Por si es necesario usarlo se usa el metodo
     # type_client = serializers.SerializerMethodField()
     # def get_type_client(self,obj):
     #     return obj.get_type_client_display()
-    def validate_bussines_client(self,data):
+    def validate_bussines_client(self, data):
         if 'business_name' not in data:
             raise serializers.ValidationError(u"Business name required.")
         if data['commercial_group'] == None:
@@ -153,7 +158,6 @@ class ClientSerializer(serializers.ModelSerializer):
         return instance
 
 
-
 class SpecialistSerializer(serializers.ModelSerializer):
     nationality_name = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)
@@ -169,24 +173,25 @@ class SpecialistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Specialist
         fields = ('id', 'username', 'nick', 'first_name', 'last_name',
-        'type_specialist','password', 'photo','document_type',
-        'document_number','address', 'ruc', 'email_exact', 'code', 'telephone',
-        'cellphone', 'business_name', 'payment_per_answer','cv','star_rating',
-        'category','category_name','nationality','nationality_name')
+                  'type_specialist', 'password', 'photo', 'document_type',
+                  'document_number', 'address', 'ruc', 'email_exact', 'code', 'telephone',
+                  'cellphone', 'business_name', 'payment_per_answer', 'cv', 'star_rating',
+                  'category', 'category_name', 'nationality', 'nationality_name')
 
-    def get_nationality_name(self,obj):
+    def get_nationality_name(self, obj):
         return str(obj.nationality)
 
-    def get_category_name(self,obj):
+    def get_category_name(self, obj):
         return str(obj.category)
 
-    def validate(self,data):
+    def validate(self, data):
         # validation = CommonValidation()
         # if 'photo' in data:
         #     validation.validate_img(photo=data['photo'])
         # Asegurarse que solo haya un especialista principal por categoria.
         if self.instance and self.instance.username != data["username"]:
-            if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",category__name=data["category"]).exists():
+            if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
+                                                                            category__name=data["category"]).exists():
                 raise serializers.ValidationError(u"Main specialist already exists.")
         return data
 
@@ -203,19 +208,19 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.nick = validated_data.get('nick', instance.nick)
-        instance.first_name = validated_data.get('first_name',instance.first_name)
-        instance.last_name = validated_data.get('last_name',instance.last_name)
-        instance.photo = validated_data.get('photo',instance.photo)
-        instance.type_specialist = validated_data.get('type_specialist',instance.type_specialist)
-        instance.document_type = validated_data.get('document_type',instance.document_type)
-        instance.document_number = validated_data.get('document_number',instance.document_number)
-        instance.email_exact = validated_data.get('email_exact',instance.email_exact)
-        instance.telephone = validated_data.get('telephone',instance.telephone)
-        instance.cellphone = validated_data.get('cellphone',instance.cellphone)
-        instance.ruc = validated_data.get('ruc',instance.ruc)
-        instance.business_name = validated_data.get('business_name',instance.business_name)
-        instance.payment_per_answer = validated_data.get('payment_per_answer',instance.payment_per_answer)
-        instance.category = validated_data.get('category',instance.category)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.photo = validated_data.get('photo', instance.photo)
+        instance.type_specialist = validated_data.get('type_specialist', instance.type_specialist)
+        instance.document_type = validated_data.get('document_type', instance.document_type)
+        instance.document_number = validated_data.get('document_number', instance.document_number)
+        instance.email_exact = validated_data.get('email_exact', instance.email_exact)
+        instance.telephone = validated_data.get('telephone', instance.telephone)
+        instance.cellphone = validated_data.get('cellphone', instance.cellphone)
+        instance.ruc = validated_data.get('ruc', instance.ruc)
+        instance.business_name = validated_data.get('business_name', instance.business_name)
+        instance.payment_per_answer = validated_data.get('payment_per_answer', instance.payment_per_answer)
+        instance.category = validated_data.get('category', instance.category)
         data = validated_data
         if 'address' in validated_data:
             data_address = validated_data.pop('address')
@@ -230,6 +235,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
             instance.address = address
         instance.save()
         return instance
+
 
 
 
@@ -324,26 +330,22 @@ class SpecialistSerializer(serializers.ModelSerializer):
 #         img = obj.category.image
 #         return img
 
+
+
 class SellerSerializer(serializers.ModelSerializer):
     quota = serializers.SerializerMethodField()
-
     count_plans_seller = serializers.SerializerMethodField()
     count_queries = serializers.SerializerMethodField()
-
     address = AddressSerializer()
 
     class Meta:
-        model   = Seller
-        fields  = ('address','count_plans_seller','count_queries','quota','id','zone', 'username', 'nick', 'password', 'first_name',
-        'last_name','email_exact', 'telephone','cellphone',
-        'document_type','code', 'document_number', 'ruc')
+        model = Seller
+        fields = (
+        'address', 'count_plans_seller', 'count_queries', 'quota', 'id', 'zone', 'username', 'nick', 'password',
+        'first_name',
+        'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'code', 'document_number', 'ruc')
 
-
-        # No son campos editables ya que son de consulta solamente.
-        read_only_fields = ('quota','id')
-
-
-    def get_quota(self,obj):
+    def get_quota(self, obj):
         value = 0
 
         try:
@@ -356,23 +358,20 @@ class SellerSerializer(serializers.ModelSerializer):
             print("---------------ERROR---------------")
         return value
 
-    def get_count_queries(self,obj):
-        count = Product.objects.filter(purchases__isnull=False,purchases__seller=obj.id).aggregate(Sum('query_amount'))
+    def get_count_queries(self, obj):        
+        count = Product.objects.filter(purchases__isnull=False, purchases__seller=obj.id).aggregate(Sum('query_amount'))
         return count['query_amount__sum']
 
-    def get_count_plans_seller(self,obj):
-        count = Product.objects.filter(purchases__isnull=False,purchases__seller=obj.id).count()
+    def get_count_plans_seller(self, obj):
+        count = Product.objects.filter(purchases__isnull=False, purchases__seller=obj.id).count()
         return count
-
-
-
 
 
 class MediaSerializer(serializers.Serializer):
     photo = serializers.ImageField(
-        max_length = None,
-        required = False,
-        allow_empty_file = False)
+        max_length=None,
+        required=False,
+        allow_empty_file=False)
 
     # class Meta:
     #     #model = Specialist

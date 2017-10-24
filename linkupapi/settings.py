@@ -35,12 +35,12 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'oauth2_provider',
     'rest_framework',
+    'django_filters',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django_filters',
+    'django.contrib.staticfiles',    
     'api.apps.ApiConfig'
 ]
 
@@ -134,5 +134,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 20,
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
 }
