@@ -24,8 +24,10 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ('message','msg_type','time',
+        fields = ('id','message','msg_type','time',
                  'media_files','code_specialist','specialist')
+
+        read_only_fields = ('id',)
 
     def get_time(self,obj):
         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)

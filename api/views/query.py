@@ -61,7 +61,8 @@ class QueryListView(ListCreateAPIView):
             string_error = u"Exception " + str(e)
             raise serializers.ValidationError(detail=string_error)
 
-    # def get_queryset(self):
+    def post(self, request):
+        pass
 
 class QueryDetailView(APIView):
     permission_classes = [permissions.AllowAny]
