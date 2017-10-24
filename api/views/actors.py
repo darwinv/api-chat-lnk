@@ -5,10 +5,16 @@ from api.models import User, Client, Category, Specialist, Seller
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
+
+
+import django_filters
+
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
 from rest_framework import serializers
+from django.db import connection  # Depuracion de queries
 # import django_filters.rest_framework
+
 from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SellerSerializer, MediaSerializer
 from django.http import Http404
@@ -205,19 +211,64 @@ class SpecialistAccountView(APIView):
 
 #---------- ------ Inicio de Vendedores ------------------------------
 
+
+class SellerFilter(django_filters.FilterSet):
+    #count_plans_seller = django_filters.CharFilter(name='count_month_plans', lookup_expr='gt')
+    is_published = filters.BooleanFilter(name='date_published', method='filter_is_published')
+
+    def filter_count(self, qs, name, value):
+
+        #iterar lista de vendedores
+
+        #para cada vendedor calcular cantidad de planes  vendidos
+        
+        count = Product.objects.filter(purchases__isnull=False, purchases__seller=obj.id).count()
+
+
+        
+        return count
+
+    count_plans_seller = django_filters.CharFilter(name='count_plans_seller', lookup_expr='gt')
+    first_name = django_filters.CharFilter(name='first_name', lookup_expr='exact')
+    ruc = django_filters.CharFilter(name='ruc', lookup_expr='contains')
+
+    class Meta:
+        model = Seller
+        fields = {
+            'last_name': ['exact','contains'],
+            'email_exact': ['exact','contains'],
+            'ruc': ['exact','contains'],
+        }
+
 class SellerListView(ListCreateAPIView, UpdateAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
 
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = {
-        'first_name': ['exact','contains'],
-        'last_name': ['exact','contains'],
-        'email_exact': ['exact','contains'],
-        'ruc': ['exact','contains'],
-    }
 
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = SellerFilter
+
+    # Funcion personalizada para
+    # devolver los vendedores
+    # parametro [main_specialist]
+    # def list(self, request):
+
+    #     queryset = self.get_queryset()
+    #     serializer = SellerSerializer(queryset, many=True)
+    #     print(serializer)
+    #     print("------------------------------------")
+        
+    #     # pagination
+    #     page = self.paginate_queryset(queryset)
+    #     if page is not None:
+    #         serializer = self.get_serializer(page, many=True)
+    #         return self.get_paginated_response(serializer.data)
+    #     return Response(serializer.data)
+
+
+    #     filter_backends = (filters.DjangoFilterBackend,)
+    #     filter_class = SellerFilter
 
 
 # ------------ Fin de Vendedores -----------------

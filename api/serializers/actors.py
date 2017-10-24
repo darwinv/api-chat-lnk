@@ -358,7 +358,7 @@ class SellerSerializer(serializers.ModelSerializer):
             print("---------------ERROR---------------")
         return value
 
-    def get_count_queries(self, obj):
+    def get_count_queries(self, obj):        
         count = Product.objects.filter(purchases__isnull=False, purchases__seller=obj.id).aggregate(Sum('query_amount'))
         return count['query_amount__sum']
 
