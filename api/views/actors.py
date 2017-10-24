@@ -1,7 +1,7 @@
 
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import User, Client, Category, Specialist, Seller
+from api.models import User, Client, Category, Specialist, Seller, Product
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
@@ -214,26 +214,32 @@ class SpecialistAccountView(APIView):
 
 class SellerFilter(django_filters.FilterSet):
     #count_plans_seller = django_filters.CharFilter(name='count_month_plans', lookup_expr='gt')
-    is_published = filters.BooleanFilter(name='date_published', method='filter_is_published')
+
+    count = filters.NumberFilter(name='ruc', method='filter_count')
 
     def filter_count(self, qs, name, value):
 
-        #iterar lista de vendedores
+        #todos los id de vendedores que han vendido mas que value
+        sellers_ids = []
+        for seller in Seller.objects.all():
+            #calcular cantidad vendida
+            count = Product.objects.filter(purchases__isnull=False, purchases__seller=seller.id).count()
 
-        #para cada vendedor calcular cantidad de planes  vendidos
-        
-        count = Product.objects.filter(purchases__isnull=False, purchases__seller=obj.id).count()
+            #si la cantidad vendida es mayor que el parametro
+            #agregar a la lista
+            if count > value:
+                sellers_ids.append(seller.id)
 
 
-        
-        return count
+        return qs.filter(id__in= sellers_ids)
 
-    count_plans_seller = django_filters.CharFilter(name='count_plans_seller', lookup_expr='gt')
+    #count_plans_seller = django_filters.CharFilter(name='count_plans_seller', lookup_expr='gt')
     first_name = django_filters.CharFilter(name='first_name', lookup_expr='exact')
     ruc = django_filters.CharFilter(name='ruc', lookup_expr='contains')
 
     class Meta:
         model = Seller
+
         fields = {
             'last_name': ['exact','contains'],
             'email_exact': ['exact','contains'],
@@ -249,26 +255,36 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = SellerFilter
 
-    # Funcion personalizada para
-    # devolver los vendedores
-    # parametro [main_specialist]
-    # def list(self, request):
+    def list(self, request):
 
-    #     queryset = self.get_queryset()
-    #     serializer = SellerSerializer(queryset, many=True)
-    #     print(serializer)
-    #     print("------------------------------------")
-        
-    #     # pagination
-    #     page = self.paginate_queryset(queryset)
-    #     if page is not None:
-    #         serializer = self.get_serializer(page, many=True)
-    #         return self.get_paginated_response(serializer.data)
-    #     return Response(serializer.data)
+        if 'sales' in request.query_params:
+            sales = request.query_params["sales"]
 
+            # todos los id de vendedores que han vendido mas que value
+            sellers_ids = []
+            for seller in Seller.objects.all():
+                # calcular cantidad vendida
+                count = Product.objects.filter(purchases__isnull=False, purchases__seller=seller.id).count()
 
-    #     filter_backends = (filters.DjangoFilterBackend,)
-    #     filter_class = SellerFilter
+                # si la cantidad vendida es mayor que el parametro
+                # agregar a la lista
+                if count > int(sales):
+                    sellers_ids.append(seller.id)
+
+            queryset = self.get_queryset().filter(id__in=sellers_ids)
+
+            serializer = SellerSerializer(queryset, many=True)
+        else:
+            queryset = self.get_queryset()
+            serializer = SellerSerializer(queryset, many=True)
+
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        return Response(serializer.data)
 
 
 # ------------ Fin de Vendedores -----------------
