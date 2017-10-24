@@ -120,8 +120,19 @@ class CreateQuery(APITestCase):
             "category": 1,
             "client": 2
         }
+    # validar si el titulo esta muy largo
+    def test_title_large(self):
+        data = self.valid_payload
+        data["title"] = "aasdsjkl asd aksd kasjd laksdjkasdl asdklasjdkasdjlkasdj"
+        response = self.client.post(
+            reverse('queries'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_first_query(self):
+
+    def test_create_query(self):
         response = self.client.post(
             reverse('queries'),
             data=json.dumps(self.valid_payload),

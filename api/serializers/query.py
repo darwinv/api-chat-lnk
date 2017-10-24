@@ -71,6 +71,8 @@ class QueryCreateUpdateSerializer(serializers.ModelSerializer):
         validated_data["specialist"] = Specialist.objects.get(type_specialist="m",
                                                         category_id=validated_data["category"])
         data_message = validated_data.pop('message')
+        validated_data["status"] = 0
+        data_message["msg_type"] = "q"
         query = Query.objects.create(**validated_data)
         message = Message.objects.create(query=query,**data_message)
         return query

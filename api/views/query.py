@@ -64,15 +64,20 @@ class QueryListView(ListCreateAPIView):
     def post(self, request):
         data = request.data
         # import pdb; pdb.set_trace()
-        data["message"]["specialist"] = Specialist.objects.get(type_specialist="m",
-                                                        category_id=data["category"])
+        try:
+            data["message"]["specialist"] = Specialist.objects.get(type_specialist="m",
+                                                            category_id=data["category"])
 
-        serializer = QueryCreateUpdateSerializer(data=data)
+            serializer = QueryCreateUpdateSerializer(data=data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status.HTTP_201_CREATED)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status.HTTP_201_CREATED)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            string_error = u"Exception: " + str(e) + " required"
+            raise serializers.ValidationError(detail=string_error)
+
 
 class QueryDetailView(APIView):
     permission_classes = [permissions.AllowAny]
