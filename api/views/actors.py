@@ -224,7 +224,7 @@ class SellerFilter(django_filters.FilterSet):
         
         count = Product.objects.filter(purchases__isnull=False, purchases__seller=obj.id).count()
 
-
+        
         
         return count
 
