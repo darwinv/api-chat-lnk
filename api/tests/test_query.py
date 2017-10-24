@@ -112,7 +112,11 @@ class CreateQuery(APITestCase):
     def setUp(self):
         self.valid_payload = {
             "title" : "Visa Solicitud",
-            "message": "lorem iptsum",
+            "message": {
+                "message": "Lorem ipsum dolor sit amet,anctus e",
+                "msg_type": "q",
+                "media_files": []
+            },
             "category": 1,
             "client": 2
         }
@@ -124,4 +128,5 @@ class CreateQuery(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # import pdb; pdb.set_trace()
         # self.assertEqual(response.data, "ee")

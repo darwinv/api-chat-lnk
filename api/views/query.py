@@ -1,16 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import Query
+from api.models import Query, Specialist
 from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 import django_filters.rest_framework
 # from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
-from api.serializers.query import QueryListSerializer, QuerySerializer
+from api.serializers.query import QueryCreateUpdateSerializer, QueryListSerializer, QuerySerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 # from rest_framework import generics
-import pdb
+# import pdb
 
 
 class QueryListView(ListCreateAPIView):
@@ -62,7 +62,17 @@ class QueryListView(ListCreateAPIView):
             raise serializers.ValidationError(detail=string_error)
 
     def post(self, request):
-        pass
+        data = request.data
+        # import pdb; pdb.set_trace()
+        data["message"]["specialist"] = Specialist.objects.get(type_specialist="m",
+                                                        category_id=data["category"])
+
+        serializer = QueryCreateUpdateSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class QueryDetailView(APIView):
     permission_classes = [permissions.AllowAny]
