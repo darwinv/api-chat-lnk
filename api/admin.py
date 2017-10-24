@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import Role, User, Seller, Client, Category, Specialist, Query,Quota,Seller,Zone
-from .models import Department, Province, District, Message
+from .models import Department, Province, District, Message, MessageFile
 # Register your models here.
 
 
@@ -25,10 +25,16 @@ class SpecialistAdmin(admin.ModelAdmin):
     'cellphone','document_type', 'document_number',
     'ruc','code','payment_per_answer','anonymous','role','category')
 
+class MessageFileInline(admin.TabularInline):
+    model = MessageFile
+    extra = 1
 
 class MessageInline(admin.TabularInline):
     model = Message
     extra = 1
+
+class MessageAdmin(admin.ModelAdmin):
+    inlines = [MessageFileInline]
 
 class QueryAdmin(admin.ModelAdmin):
     inlines = [MessageInline]
@@ -44,6 +50,7 @@ admin.site.register(Client,ClientNaturalAdmin)
 admin.site.register(Category)
 admin.site.register(Specialist,SpecialistAdmin)
 admin.site.register(Query,QueryAdmin)
+admin.site.register(Message,MessageAdmin)
 admin.site.register(Department)
 admin.site.register(Province)
 admin.site.register(District)
