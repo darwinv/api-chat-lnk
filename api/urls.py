@@ -19,8 +19,8 @@ urlpatterns = [
     url(r'^specialists/$', actors.SpecialistListView.as_view(), name='specialists'),
     url(r'^specialists/(?P<pk>[0-9]+)/$', actors.SpecialistDetailView.as_view(), name='specialist-detail'),
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$', actors.SpecialistAccountView.as_view(), name='specialist-account-status'),
-    url(r'^queries/$', query.QueryListView.as_view(), name='queries'),
-    url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'),
+    url(r'^queries/$', query.QueryListView.as_view(), name='queries'), # consulta
+    url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'), # reconsulta
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
 
     #image
