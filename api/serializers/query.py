@@ -39,7 +39,7 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_code_specialist(self, obj):
         return str(obj.specialist.code)
 
-class QuerySerializer(serializers.ModelSerializer):
+class QueryDetailSerializer(serializers.ModelSerializer):
     messages = serializers.SerializerMethodField()
     code_client = serializers.SerializerMethodField()
 
@@ -57,7 +57,7 @@ class QuerySerializer(serializers.ModelSerializer):
     def get_code_client(self,obj):
         return str(obj.client.code)
 
-class QueryCreateUpdateSerializer(serializers.ModelSerializer):
+class QueryCreateSerializer(serializers.ModelSerializer):
     # el message para este serializer
     # solo se puede escribir ya que drf no soporta la representacion
     # de writable nested relations,
@@ -84,6 +84,31 @@ class QueryCreateUpdateSerializer(serializers.ModelSerializer):
     #         'title': obj.title,
     #         'msj': obj.get_message
     #     }
+
+
+# se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
+class QueryUpdateSerializer(serializers.ModelSerializer):
+    # el message para este serializer
+    # solo se puede escribir ya que drf no soporta la representacion
+    # de writable nested relations,
+    message = MessageSerializer(write_only=True)
+    class Meta:
+        model = Query
+        fields = ('id','title','status','message','category','client')
+        read_only_fields = ('status',)
+
+    def update(self, instance, validated_data):
+        data_message = validated_data.pop('message')
+        specialist = Specialist.objects.get(pk=instance.specialist_id)
+        data_message["specialist"] = specialist
+        # se compara si el status fue respondida, entonces debemos declarar
+        # que el tipo de mensaje es reconsulta, y que pasa a estatus 1,
+        # (pendiente de declinar o responder por el especialista)
+        if int(instance.status) == 4 or int(instance.status) == 5:
+            data_message["msg_type"] = 'r'
+            instance.status = 1
+        message = Message.objects.create(query=instance,**data_message)
+        return instance
 
 
 class QueryListSerializer(serializers.ModelSerializer):

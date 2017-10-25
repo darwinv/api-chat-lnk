@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 import django_filters.rest_framework
 # from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
-from api.serializers.query import QueryCreateUpdateSerializer, QueryListSerializer, QuerySerializer
+from api.serializers.query import QueryCreateSerializer, QueryListSerializer
+from api.serializers.query import QueryUpdateSerializer, QueryDetailSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 # from rest_framework import generics
@@ -68,7 +69,7 @@ class QueryListView(ListCreateAPIView):
             data["message"]["specialist"] = Specialist.objects.get(type_specialist="m",
                                                             category_id=data["category"])
 
-            serializer = QueryCreateUpdateSerializer(data=data)
+            serializer = QueryCreateSerializer(data=data)
 
             if serializer.is_valid():
                 serializer.save()
@@ -89,5 +90,14 @@ class QueryDetailView(APIView):
 
     def get(self, request, pk):
         query = self.get_object(pk)
-        serializer = QuerySerializer(query)
+        serializer = QueryDetailSerializer(query)
         return Response(serializer.data)
+
+    def put(self, request, pk):
+        data = request.data
+        query = self.get_object(pk)
+        serializer = QueryUpdateSerializer(query, data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
