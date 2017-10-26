@@ -178,22 +178,26 @@ class UpdateQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-# class SkipReQuery(APITestCase):
-#     fixtures = ['data','data2','test_address','test_query']
-#     def setUp(self):
-#         self.id_client = 2
-#         self.id_category = 1
-#         self.id_query = 1
-#         self.valid_payload = {
-#         "status":'7'
-#         }
-#
-#     def test_skip_requery(self):
-#         query = Query.objects.get(pk=self.id_query)
-#         query.status = 5
-#         query.save()
+class SkipReQuery(APITestCase):
+    fixtures = ['data','data2','test_address','test_query']
+    def setUp(self):
+        self.id_client = 2
+        self.id_category = 1
+        self.id_query = 11
+        self.valid_payload = {
+        "status":7
+        }
 
-
+    def test_skip_requery(self):
+        query = Query.objects.get(pk=self.id_query)
+        query.status = 5
+        query.save()
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': self.id_query}),
+            self.valid_payload, format='json'
+        )
+        self.assertEqual(int(response.data["status"]), 7)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class CreateReQuery(APITestCase):

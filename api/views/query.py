@@ -7,7 +7,7 @@ from rest_framework import status, permissions, viewsets, serializers
 import django_filters.rest_framework
 # from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
 from api.serializers.query import QueryCreateSerializer, QueryListSerializer
-from api.serializers.query import QueryUpdateSerializer, QueryDetailSerializer
+from api.serializers.query import QueryUpdateSerializer, QueryDetailSerializer, QueryUpdateStatusSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 # from rest_framework import generics

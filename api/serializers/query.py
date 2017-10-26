@@ -16,6 +16,7 @@ class MessageFileSerializer(serializers.ModelSerializer):
         model = MessageFile
         fields = ('url','type_file')
 
+# Serializer de Mensajes
 class MessageSerializer(serializers.ModelSerializer):
     msg_type = serializers.ChoiceField(choices=Message.options_msg_type)
     time = serializers.SerializerMethodField()
@@ -32,6 +33,7 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_time(self,obj):
         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
 
+    # devolver los archivos adjuntos al msj
     def get_media_files(self,obj):
         medias = obj.messagefile_set.all()
         return MessageFileSerializer(medias,many=True).data
@@ -57,6 +59,7 @@ class QueryDetailSerializer(serializers.ModelSerializer):
     def get_code_client(self,obj):
         return str(obj.client.code)
 
+# Serializer para crear consulta
 class QueryCreateSerializer(serializers.ModelSerializer):
     # el message para este serializer
     # solo se puede escribir ya que drf no soporta la representacion
@@ -108,8 +111,11 @@ class QueryUpdateSerializer(serializers.ModelSerializer):
             data_message["msg_type"] = 'r'
             instance.status = 1
         message = Message.objects.create(query=instance,**data_message)
+        instance.save()
         return instance
 
+# serializer para actualizar solo status de la consulta sin
+# enviar msjs
 class QueryUpdateStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Query
