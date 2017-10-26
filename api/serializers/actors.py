@@ -225,10 +225,12 @@ class SpecialistSerializer(serializers.ModelSerializer):
         if 'address' in validated_data:
             data_address = validated_data.pop('address')
 
+            # pdb.set_trace()
             address = Address.objects.get(pk=instance.address_id)
-            address.department = Department.objects.get(name=data_address["department"].name)
-            address.province = Province.objects.get(name=data_address["province"].name)
-            address.district = District.objects.get(name=data_address["district"].name)
+            # pdb.set_trace()
+            address.department = Department.objects.get(pk=data_address["department"].id)
+            address.province = Province.objects.get(pk=data_address["province"].id)
+            address.district = District.objects.get(pk=data_address["district"].id)
             address.street = data_address['street']
 
             address.save()
