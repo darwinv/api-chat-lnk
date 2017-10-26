@@ -110,6 +110,13 @@ class QueryUpdateSerializer(serializers.ModelSerializer):
         message = Message.objects.create(query=instance,**data_message)
         return instance
 
+class QueryUpdateStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Query
+        fields = ('id','title','status')
+        read_only_fields = ('title',)
+    # def update(self, instance,validated_data):
+
 
 class QueryListSerializer(serializers.ModelSerializer):
     status = serializers.ChoiceField(choices=Query.option_status, read_only=True)

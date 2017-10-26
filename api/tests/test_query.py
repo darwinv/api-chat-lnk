@@ -148,12 +148,12 @@ class UpdateQuery(APITestCase):
             "title" : "Visa Solicitud",
             "message": {
                 "message": "Lorem ipsum dolor sit amet,anctus e",
+                "msg_type": "q",
                 "media_files": []
             },
             "category": 1,
             "client": 2
         }
-
 
     def test_add_message_to_query(self):
         send = self.client.post(
@@ -168,14 +168,33 @@ class UpdateQuery(APITestCase):
             "media_files": []
             }
         }
-        # print(send)
+        # import pdb; pdb.set_trace()
         response = self.client.put(
             reverse('query-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
         )
-        # import pdb; pdb.set_trace()
+
         # self.assertEqual(response.data, "ee")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+# class SkipReQuery(APITestCase):
+#     fixtures = ['data','data2','test_address','test_query']
+#     def setUp(self):
+#         self.id_client = 2
+#         self.id_category = 1
+#         self.id_query = 1
+#         self.valid_payload = {
+#         "status":'7'
+#         }
+#
+#     def test_skip_requery(self):
+#         query = Query.objects.get(pk=self.id_query)
+#         query.status = 5
+#         query.save()
+
+
+
 
 class CreateReQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']
@@ -190,7 +209,6 @@ class CreateReQuery(APITestCase):
             "category": 1,
             "client": 2
         }
-
 
     def test_make_requery(self):
         send = self.client.post(
