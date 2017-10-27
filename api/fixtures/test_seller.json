@@ -19789,10 +19789,6 @@
   "pk": 43,
   "fields": {
     "cv": null,
-    "monthly_promotional_plans": null,
-    "count_month_promotional": null,
-    "count_month_plans": null,
-    "count_month_contacts": null,
     "zone": 1,
     "groups": [],
     "user_permissions": []
@@ -19802,10 +19798,6 @@
   "pk": 44,
   "fields": {
     "cv": null,
-    "monthly_promotional_plans": null,
-    "count_month_promotional": null,
-    "count_month_plans": null,
-    "count_month_contacts": null,
     "zone": 2,
     "groups": [],
     "user_permissions": []
@@ -19815,10 +19807,6 @@
   "pk": 46,
   "fields": {
     "cv": null,
-    "monthly_promotional_plans": null,
-    "count_month_promotional": null,
-    "count_month_plans": null,
-    "count_month_contacts": null,
     "zone": 1,
     "groups": [],
     "user_permissions": []
@@ -19828,10 +19816,6 @@
   "pk": 47,
   "fields": {
     "cv": null,
-    "monthly_promotional_plans": null,
-    "count_month_promotional": null,
-    "count_month_plans": null,
-    "count_month_contacts": null,
     "zone": 2,
     "groups": [],
     "user_permissions": []
@@ -19841,10 +19825,6 @@
   "pk": 48,
   "fields": {
     "cv": null,
-    "monthly_promotional_plans": null,
-    "count_month_promotional": null,
-    "count_month_plans": null,
-    "count_month_contacts": null,
     "zone": 2,
     "groups": [],
     "user_permissions": []
@@ -19854,10 +19834,6 @@
   "pk": 49,
   "fields": {
     "cv": null,
-    "monthly_promotional_plans": null,
-    "count_month_promotional": null,
-    "count_month_plans": null,
-    "count_month_contacts": null,
     "zone": 2,
     "groups": [],
     "user_permissions": []
@@ -21172,9 +21148,51 @@
     "created_at": "2017-10-17T14:55:05Z"
   }
 }, {
+  "model": "api.product",
+  "pk": 2,
+  "fields": {
+    "name": "test",
+    "query_amount": 12,
+    "expiration_number": 1,
+    "price": 11.0,
+    "is_active": true,
+    "created_at": "2017-10-17T14:54:37Z",
+    "plan": 1,
+    "is_billable": 1
+  }
+}, {
+  "model": "api.product",
+  "pk": 3,
+  "fields": {
+    "name": "test",
+    "query_amount": 13,
+    "expiration_number": 1,
+    "price": 11.0,
+    "is_active": true,
+    "created_at": "2017-10-17T14:54:37Z",
+    "plan": 1,
+    "is_billable": 1
+  }
+}, {
+  "model": "api.product",
+  "pk": 4,
+  "fields": {
+    "name": "test",
+    "query_amount": 14,
+    "expiration_number": 1,
+    "price": 11.0,
+    "is_active": true,
+    "created_at": "2017-10-17T14:54:37Z",
+    "plan": 1,
+    "is_billable": 1
+  }
+}, {
   "model": "api.purchase",
   "pk": 1,
   "fields": {
+    "code": 1,
+    "query_amount": 1,
+    "product": 3,
     "total_amount": 1.0,
     "reference_number": "1",
     "fee_number": 1,
@@ -21194,6 +21212,9 @@
   "model": "api.purchase",
   "pk": 2,
   "fields": {
+    "code": 1,
+    "query_amount": 1,
+    "product": 3,
     "total_amount": 1.0,
     "reference_number": "1",
     "fee_number": 1,
@@ -21213,6 +21234,9 @@
   "model": "api.purchase",
   "pk": 3,
   "fields": {
+    "code": 1,
+    "query_amount": 1,
+    "product": 3,
     "total_amount": 1.0,
     "reference_number": "1",
     "fee_number": 1,
@@ -21227,45 +21251,6 @@
     "promotion": null,
     "seller": 43,
     "client": 4
-  }
-}, {
-  "model": "api.product",
-  "pk": 2,
-  "fields": {
-    "name": "test",
-    "query_amount": 12,
-    "expiration_number": 1,
-    "price": 11.0,
-    "is_active": true,
-    "created_at": "2017-10-17T14:54:37Z",
-    "plan": 1,
-    "purchases": [1]
-  }
-}, {
-  "model": "api.product",
-  "pk": 3,
-  "fields": {
-    "name": "test",
-    "query_amount": 13,
-    "expiration_number": 1,
-    "price": 11.0,
-    "is_active": true,
-    "created_at": "2017-10-17T14:54:37Z",
-    "plan": 1,
-    "purchases": [2]
-  }
-}, {
-  "model": "api.product",
-  "pk": 4,
-  "fields": {
-    "name": "test",
-    "query_amount": 14,
-    "expiration_number": 1,
-    "price": 11.0,
-    "is_active": true,
-    "created_at": "2017-10-17T14:54:37Z",
-    "plan": 1,
-    "purchases": [3]
   }
 }, {
   "model": "api.quota",
