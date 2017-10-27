@@ -137,6 +137,8 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
         # se comprueba si hay calification en data
         # si se quiere calificar la respuesta debe estar absuelta primero
         if 'calification' in validated_data:
+            if int(validated_data["calification"]) > 5:
+                raise serializers.ValidationError(u"Invalid calification.")
             if int(instance.status) < 6:
                 raise serializers.ValidationError(u"to qualify, it must be absolved first.")
             instance.calification = validated_data["calification"]

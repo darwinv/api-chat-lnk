@@ -257,7 +257,7 @@ class SetCalification(APITestCase):
         self.id_category = 1
         self.id_query = 1
         self.valid_payload = {
-        "calification":4
+        "calification":0
         }
 
     def test_qualify(self):
@@ -268,6 +268,18 @@ class SetCalification(APITestCase):
             reverse('query-detail', kwargs={'pk': self.id_query}),
             self.valid_payload, format='json'
         )
-        # import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
         self.assertEqual(int(response.data["calification"]), 4)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_invalid_calification(self):
+        data = self.valid_payload
+        data['calification']=10
+        query = Query.objects.get(pk=self.id_query)
+        query.status = 7
+        query.save()
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': self.id_query}),
+            self.valid_payload, format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
