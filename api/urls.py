@@ -23,6 +23,9 @@ urlpatterns = [
     url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'),
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
 
+    url(r'^sellers_report/$', actors.Report.as_view(), name='sellers_report'),
+    url(r'^sellers_report_sql/$', actors.ReportSQL.as_view(), name='sellers_report'),
+
     #image
     url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(), name='upload-photo'),
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
