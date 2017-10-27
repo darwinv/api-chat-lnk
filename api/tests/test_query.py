@@ -249,3 +249,25 @@ class CreateReQuery(APITestCase):
         self.assertEqual(int(response.data["status"]), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # import pdb; pdb.set_trace()
+
+class SetCalification(APITestCase):
+    fixtures = ['data','data2','test_address','test_query']
+    def setUp(self):
+        self.id_client = 2
+        self.id_category = 1
+        self.id_query = 1
+        self.valid_payload = {
+        "calification":4
+        }
+
+    def test_qualify(self):
+        query = Query.objects.get(pk=self.id_query)
+        query.status = 7
+        query.save()
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': self.id_query}),
+            self.valid_payload, format='json'
+        )
+        # import pdb; pdb.set_trace()
+        self.assertEqual(int(response.data["calification"]), 4)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
