@@ -66,7 +66,7 @@ class User(AbstractUser):
     email_exact = models.CharField(max_length=150, unique=True)
     telephone = models.CharField(max_length=14)
     cellphone = models.CharField(max_length=14)
-    photo = models.CharField(max_length=250, default='preview.png', null=True)
+    photo = models.CharField(max_length=250, null=True)
     options_documents = (
         ('0', 'DNI'),
         ('1', 'Passport'),
@@ -358,7 +358,7 @@ class Query(models.Model):
     title = models.CharField(max_length=50)
     option_status = (
         ('0', 'Requested'), # Preguntada, pendiente de derivar o responder
-        ('1', 'Requested Derived'), # derivada, pendiente de declinar o responder
+        ('1', 'Requested Derived'), # derivada, pendiente de declinar o responder, reconsulta
         ('2', 'Pending Response'), # derivada a asociado, pendiente de respuesta
         ('3', 'Pending Main Response'), # principal, pendiente de respuesta
         ('4', 'Answered Main'), # respondida por principal

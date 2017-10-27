@@ -141,3 +141,101 @@ class CreateQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # import pdb; pdb.set_trace()
         # self.assertEqual(response.data, "ee")
+class UpdateQuery(APITestCase):
+    fixtures = ['data','data2','test_address','test_query']
+    def setUp(self):
+        self.valid_payload = {
+            "title" : "Visa Solicitud",
+            "message": {
+                "message": "Lorem ipsum dolor sit amet,anctus e",
+                "msg_type": "q",
+                "media_files": []
+            },
+            "category": 1,
+            "client": 2
+        }
+
+    def test_add_message_to_query(self):
+        send = self.client.post(
+            reverse('queries'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        data={
+            "message": {
+            "message": "reconsulta",
+            "msg_type": "q",
+            "media_files": []
+            }
+        }
+        # import pdb; pdb.set_trace()
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': send.data["id"]}),
+            data, format='json'
+        )
+
+        # self.assertEqual(response.data, "ee")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class SkipReQuery(APITestCase):
+    fixtures = ['data','data2','test_address','test_query']
+    def setUp(self):
+        self.id_client = 2
+        self.id_category = 1
+        self.id_query = 1
+        self.valid_payload = {
+        "status":7
+        }
+
+    def test_skip_requery(self):
+        query = Query.objects.get(pk=self.id_query)
+        query.status = 5
+        query.save()
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': self.id_query}),
+            self.valid_payload, format='json'
+        )
+        self.assertEqual(int(response.data["status"]), 7)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class CreateReQuery(APITestCase):
+    fixtures = ['data','data2','test_address','test_query']
+    def setUp(self):
+        self.valid_payload = {
+            "title" : "Visa Solicitud",
+            "message": {
+                "message": "Lorem ipsum dolor sit amet,anctus e",
+                "msg_type": "q",
+                "media_files": []
+            },
+            "category": 1,
+            "client": 2
+        }
+
+    def test_make_requery(self):
+        send = self.client.post(
+            reverse('queries'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        data={
+            "message": {
+            "message": "reconsulta",
+            "msg_type": "r",
+            "media_files": []
+            }
+        }
+        # print(send)
+        query = Query.objects.get(pk=send.data["id"])
+        query.status = 4
+        query.save()
+        self.assertEqual(int(Query.objects.get(pk=send.data["id"]).status), 4)
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': send.data["id"]}),
+            data, format='json'
+        )
+        self.assertEqual(int(response.data["status"]), 1)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # import pdb; pdb.set_trace()
