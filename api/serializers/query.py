@@ -121,7 +121,9 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
         model = Query
         fields = ('id','title','status')
         read_only_fields = ('title',)
+
     # def update(self, instance,validated_data):
+
 
 
 class QueryListSerializer(serializers.ModelSerializer):

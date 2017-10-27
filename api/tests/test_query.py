@@ -183,7 +183,7 @@ class SkipReQuery(APITestCase):
     def setUp(self):
         self.id_client = 2
         self.id_category = 1
-        self.id_query = 11
+        self.id_query = 1
         self.valid_payload = {
         "status":7
         }
