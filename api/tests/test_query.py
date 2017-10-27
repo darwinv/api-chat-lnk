@@ -257,7 +257,7 @@ class SetCalification(APITestCase):
         self.id_category = 1
         self.id_query = 1
         self.valid_payload = {
-        "calification":0
+        "calification":1
         }
 
     def test_qualify(self):
