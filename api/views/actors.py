@@ -257,9 +257,10 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = SellerFilter
 
-class SellerAccountView(APIView):
-
+class SellerAccountView(ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    serializer_class = SellerAccountSerializer
+
     def get_object(self, pk):
         try:
             return Specialist.objects.get(pk=pk)
@@ -268,7 +269,7 @@ class SellerAccountView(APIView):
 
     def get(self, request, pk):
         # creacion de QuerySet para listadaos
-        q = Seller.objects.filter(id=pk,purchase__fee__status=1)\
+        queryset = Seller.objects.filter(id=pk,purchase__fee__status=1)\
             .values('id','purchase__total_amount',
                                   'purchase__id','purchase__code','purchase__query_amount',
                                   'purchase__product__is_billable','purchase__product__expiration_number','purchase__product__name',
@@ -277,18 +278,14 @@ class SellerAccountView(APIView):
                                   )\
             .order_by('purchase__fee__date')
 
+        serializer = SellerAccountSerializer(queryset, many=True)
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
 
-
-        print (q.query)
-
-        #opcional
-        #s = ReportFullSellerSerializer(q,many=True)
-        s = SellerAccountSerializer(q, many=True)
-
-        # serializer = SpecialistAccountSerializer(specialist)
-        # return Response(serializer.data)
-
-        return Response(s.data)
 
 # ------------ Fin de Vendedores -----------------
 
