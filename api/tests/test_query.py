@@ -155,6 +155,34 @@ class UpdateQuery(APITestCase):
             "client": 2
         }
 
+    def test_absolved_query(self):
+        send = self.client.post(
+            reverse('queries'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+
+        data={
+            "message": {
+            "message": "reconsulta",
+            "msg_type": "q",
+            "media_files": []
+            }
+        }
+        q = Query.objects.get(pk=send.data["id"])
+        q.status = 7
+        q.save()
+
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': send.data["id"]}),
+            data, format='json'
+        )
+
+        # self.assertEqual(response.data, "ee")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+
     def test_add_message_to_query(self):
         send = self.client.post(
             reverse('queries'),
@@ -257,7 +285,7 @@ class SetCalification(APITestCase):
         self.id_category = 1
         self.id_query = 1
         self.valid_payload = {
-        "calification":1
+        "calification":4
         }
 
     def test_qualify(self):
@@ -268,7 +296,6 @@ class SetCalification(APITestCase):
             reverse('query-detail', kwargs={'pk': self.id_query}),
             self.valid_payload, format='json'
         )
-        import pdb; pdb.set_trace()
         self.assertEqual(int(response.data["calification"]), 4)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

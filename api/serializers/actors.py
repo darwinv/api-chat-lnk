@@ -93,7 +93,7 @@ class ClientSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     photo = serializers.CharField(read_only=True)
-    
+
     class Meta:
         model = Client
         fields = ('id', 'username', 'nick', 'type_client', 'first_name', 'last_name',
