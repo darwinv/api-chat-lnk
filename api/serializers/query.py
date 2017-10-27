@@ -117,16 +117,31 @@ class QueryUpdateSerializer(serializers.ModelSerializer):
 # serializer para actualizar solo status de la consulta sin
 # enviar msjs
 class QueryUpdateStatusSerializer(serializers.ModelSerializer):
+    status = serializers.ChoiceField(choices=Query.option_status)
     class Meta:
         model = Query
-        fields = ('id','title','status')
+        fields = ('id','title','status','calification')
         read_only_fields = ('title',)
 
     def update(self, instance,validated_data):
-        if int(validated_data["status"]) == 7:
-            if int(instance.status) != 4 and int(instance.status) != 5:
-                raise serializers.ValidationError(u"to skip requery, it must be answered first.")
-        instance.status = validated_data["status"]
+        # se comprueba si hay un status
+        if 'status' in validated_data:
+            # si se quiere omitr la reconsulta, se debe garantizar que
+            # la consulta fue respondida
+            if int(validated_data["status"]) == 7:
+                if int(instance.status) != 4 and int(instance.status) != 5:
+                    raise serializers.ValidationError(u"to skip requery, it must be answered first.")
+
+            instance.status = validated_data["status"]
+
+        # se comprueba si hay calification en data
+        # si se quiere calificar la respuesta debe estar absuelta primero
+        if 'calification' in validated_data:
+            if int(validated_data["calification"]) > 5:
+                raise serializers.ValidationError(u"Invalid calification.")
+            if int(instance.status) < 6:
+                raise serializers.ValidationError(u"to qualify, it must be absolved first.")
+            instance.calification = validated_data["calification"]
         instance.save()
         return instance
 

@@ -92,7 +92,8 @@ class ClientSerializer(serializers.ModelSerializer):
     ocupation = serializers.ChoiceField(choices=Client.options_ocupation, allow_blank=True)
     address = AddressSerializer()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
-
+    photo = serializers.CharField(read_only=True)
+    
     class Meta:
         model = Client
         fields = ('id', 'username', 'nick', 'type_client', 'first_name', 'last_name',
@@ -140,8 +141,8 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         validation = CommonValidation()
-        if 'photo' in data:
-            validation.validate_img(photo=data['photo'])
+        # if 'photo' in data:
+        #     validation.validate_img(photo=data['photo'])
         if data['type_client'] == 'b':
             self.validate_bussines_client(data)
         return data
@@ -360,7 +361,7 @@ class SellerSerializer(serializers.ModelSerializer):
             print("---------------ERROR---------------")
         return value
 
-    def get_count_queries(self, obj):        
+    def get_count_queries(self, obj):
         count = Product.objects.filter(purchases__isnull=False, purchases__seller=obj.id).aggregate(Sum('query_amount'))
         return count['query_amount__sum']
 
