@@ -188,6 +188,7 @@ class SkipReQuery(APITestCase):
         "status":7
         }
 
+    # omitir reconsulta de manera exitosa
     def test_skip_requery(self):
         query = Query.objects.get(pk=self.id_query)
         query.status = 5
@@ -196,9 +197,18 @@ class SkipReQuery(APITestCase):
             reverse('query-detail', kwargs={'pk': self.id_query}),
             self.valid_payload, format='json'
         )
+        # import pdb; pdb.set_trace()
         self.assertEqual(int(response.data["status"]), 7)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    # omitir reconsulta sin haberla respondido antes
+    def test_skip_requery_unanswered(self):
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': self.id_query}),
+            self.valid_payload, format='json'
+        )
+        # self.assertEqual(int(response.data["status"]), 7)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 class CreateReQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']

@@ -97,8 +97,7 @@ class QueryDetailView(APIView):
         data = request.data
         query = self.get_object(pk)
         if 'status' in data:
-            if int(data["status"]) >= 7:
-                serializer = QueryUpdateStatusSerializer(query, data, partial=True)
+            serializer = QueryUpdateStatusSerializer(query, data, partial=True)
         else:
             serializer = QueryUpdateSerializer(query, data, partial=True)
         if serializer.is_valid():

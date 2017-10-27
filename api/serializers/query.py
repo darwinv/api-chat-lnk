@@ -122,7 +122,13 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
         fields = ('id','title','status')
         read_only_fields = ('title',)
 
-    # def update(self, instance,validated_data):
+    def update(self, instance,validated_data):
+        if int(validated_data["status"]) == 7:
+            if int(instance.status) != 4 and int(instance.status) != 5:
+                raise serializers.ValidationError(u"to skip requery, it must be answered first.")
+        instance.status = validated_data["status"]
+        instance.save()
+        return instance
 
 
 
