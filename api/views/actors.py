@@ -1,7 +1,7 @@
 
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import User, Client, Category, Specialist, Seller, Product, PaymentType
+from api.models import User, Client, Specialist, Seller, Product, Purchase
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
@@ -217,7 +217,7 @@ class SellerFilter(filters.FilterSet):
         sellers_ids = []
         for seller in Seller.objects.all():
             #calcular cantidad vendida
-            count = Product.objects.filter(purchases__isnull=False, purchases__seller=seller.id).count()
+            count = Purchase.objects.filter(seller=seller.id).count()
 
             #si la cantidad vendida es mayor que el parametro
             #agregar a la lista
@@ -230,7 +230,7 @@ class SellerFilter(filters.FilterSet):
         sellers_ids = []
         for seller in Seller.objects.all():
             #calcular cantidad vendida
-            count_result = Product.objects.filter(purchases__isnull=False, purchases__seller=seller.id).aggregate(Sum('query_amount'))
+            count_result = Product.objects.filter(purchase__seller__isnull=False, purchase__seller=seller.id).aggregate(Sum('query_amount'))
             count = count_result['query_amount__sum']
             #si la cantidad vendida es mayor que el parametro
             #agregar a la lista
