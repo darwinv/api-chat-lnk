@@ -361,13 +361,24 @@ class SellerSerializer(serializers.ModelSerializer):
             print("---------------ERROR---------------")
         return value
 
-    def get_count_queries(self, obj):
-        result = Product.objects.filter(purchases__seller__isnull=False, purchases__seller=obj.id).aggregate(Sum('query_amount'))
-        return result['query_amount__sum']
 
     def get_count_plans_seller(self, obj):
-        result = Product.objects.filter(purchases__isnull=False, purchases__seller=obj.id).count()
+        """
+        :param obj:
+        :return: cantidad de planes/ventas realizadas por el vendedor
+        """
+        result = Purchase.objects.filter(seller=obj.id).count()
+
         return result
+
+    def get_count_queries(self, obj):
+        """
+        :param obj:
+        :return: cantidad de consultas de los productos que ha vendido el usuario vendedor
+        """
+        result = Product.objects.filter(purchase__seller__isnull=False, purchase__seller=obj.id).aggregate(Sum('query_amount'))
+
+        return result['query_amount__sum']
 
 
 # Serializer para consultar estado de cuenta del Vendedor.
