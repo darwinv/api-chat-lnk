@@ -1,12 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import Query, Specialist
+from api.models import Query, Specialist, Message
 from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 import django_filters.rest_framework
 # from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
-from api.serializers.query import QueryCreateSerializer, QueryListSerializer
+from api.serializers.query import QueryCreateSerializer, QueryListSerializer, MessageSerializer
 from api.serializers.query import QueryUpdateSerializer, QueryDetailSerializer, QueryUpdateStatusSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
@@ -89,8 +89,16 @@ class QueryDetailView(APIView):
             raise Http404
 
     def get(self, request, pk):
-        query = self.get_object(pk)
-        serializer = QueryDetailSerializer(query)
+        # si el argumento lastmsg existe, se debe volver,
+        # el ultimo mensaje de consulta, por detalle
+        # android especifico
+        if 'last_msg' in request.query_params:
+            # import pdb; pdb.set_trace()
+            msg = Message.objects.filter(query_id=pk).last()
+            serializer = MessageSerializer(msg)
+        else:
+            query = self.get_object(pk)
+            serializer = QueryDetailSerializer(query)
         return Response(serializer.data)
 
     def put(self, request, pk):

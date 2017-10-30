@@ -41,6 +41,7 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_code_specialist(self, obj):
         return str(obj.specialist.code)
 
+# Serializer para detalle de consulta
 class QueryDetailSerializer(serializers.ModelSerializer):
     messages = serializers.SerializerMethodField()
     code_client = serializers.SerializerMethodField()
@@ -58,6 +59,10 @@ class QueryDetailSerializer(serializers.ModelSerializer):
 
     def get_code_client(self,obj):
         return str(obj.client.code)
+
+
+# serializer para traer el ultimo mensaje de consulta, por detalle
+# android especifico
 
 # Serializer para crear consulta
 class QueryCreateSerializer(serializers.ModelSerializer):
@@ -167,20 +172,5 @@ class QueryListSerializer(serializers.ModelSerializer):
         return str(obj.last_modified.date()) + ' ' + str(obj.last_modified.hour) + ':' + str(obj.last_modified.minute)
 
     def get_last_msg(self, obj):
-        # pdb.set_trace()
         msg =  obj.message_set.all().last()
         return msg.message
-    #
-    # # definir las validaciones correspondientes al crear una consulta
-    # def validate(self,data):
-    #     # asignaremos el status 0 para la primera vez que sea creada
-    #     data["has_precedent"] = False
-    #     data["status"] = 0
-    #     return data
-    #
-    # def create(self, validated_data):
-    #     validated_data['specialist'] = Specialist.objects.get(type_specialist="m",
-    #                                                           category_id = validated_data['category'])
-    #     instance = self.Meta.model(**validated_data)
-    #     instance.save()
-    #     return instance

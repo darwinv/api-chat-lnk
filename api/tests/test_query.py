@@ -107,6 +107,13 @@ class GetDetailQuery(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_get_last_mgs(self):
+        url = "{}?last_msg".format(reverse('query-detail', kwargs={'pk': self.id_query }))
+        response = client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+
 class CreateQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']
     def setUp(self):
