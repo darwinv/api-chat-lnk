@@ -1,16 +1,17 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import Query
+from api.models import Query, Specialist
 from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 import django_filters.rest_framework
 # from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
-from api.serializers.query import QueryListSerializer, QuerySerializer
+from api.serializers.query import QueryCreateSerializer, QueryListSerializer
+from api.serializers.query import QueryUpdateSerializer, QueryDetailSerializer, QueryUpdateStatusSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 # from rest_framework import generics
-import pdb
+# import pdb
 
 
 class QueryListView(ListCreateAPIView):
@@ -61,7 +62,23 @@ class QueryListView(ListCreateAPIView):
             string_error = u"Exception " + str(e)
             raise serializers.ValidationError(detail=string_error)
 
-    # def get_queryset(self):
+    def post(self, request):
+        data = request.data
+        # import pdb; pdb.set_trace()
+        try:
+            data["message"]["specialist"] = Specialist.objects.get(type_specialist="m",
+                                                            category_id=data["category"])
+
+            serializer = QueryCreateSerializer(data=data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status.HTTP_201_CREATED)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            string_error = u"Exception: " + str(e) + " required"
+            raise serializers.ValidationError(detail=string_error)
+
 
 class QueryDetailView(APIView):
     permission_classes = [permissions.AllowAny]
@@ -73,5 +90,18 @@ class QueryDetailView(APIView):
 
     def get(self, request, pk):
         query = self.get_object(pk)
-        serializer = QuerySerializer(query)
+        serializer = QueryDetailSerializer(query)
         return Response(serializer.data)
+
+    def put(self, request, pk):
+        data = request.data
+        query = self.get_object(pk)
+        if 'status' in data:
+            if int(data["status"]) >= 7:
+                serializer = QueryUpdateStatusSerializer(query, data, partial=True)
+        else:
+            serializer = QueryUpdateSerializer(query, data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

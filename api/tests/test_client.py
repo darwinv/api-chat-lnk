@@ -84,7 +84,7 @@ class CreateNaturalClient(APITestCase):
 
     def test_invalid_countries(self):
         data = self.valid_payload
-        data['nationality'] = 'Atlantida'
+        data['nationality'] = 500
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),

@@ -5,7 +5,7 @@ from api.models import CommercialGroup, EconomicSector, Address, Department
 
 from api.models import Province, District, Category, Specialist, Query
 from api.models import Parameter, Seller, Quota, Product, Purchase
-from api.models import Province, District, Specialist, Query
+from api.models import Province, District, Specialist, Query, Fee
 from django.utils import six
 import pdb
 import datetime
@@ -225,10 +225,12 @@ class SpecialistSerializer(serializers.ModelSerializer):
         if 'address' in validated_data:
             data_address = validated_data.pop('address')
 
+            # pdb.set_trace()
             address = Address.objects.get(pk=instance.address_id)
-            address.department = Department.objects.get(name=data_address["department"].name)
-            address.province = Province.objects.get(name=data_address["province"].name)
-            address.district = District.objects.get(name=data_address["district"].name)
+            # pdb.set_trace()
+            address.department = Department.objects.get(pk=data_address["department"].id)
+            address.province = Province.objects.get(pk=data_address["province"].id)
+            address.district = District.objects.get(pk=data_address["district"].id)
             address.street = data_address['street']
 
             address.save()
@@ -243,16 +245,16 @@ class SpecialistSerializer(serializers.ModelSerializer):
 #     date = serializers.SerializerMethodField()
 #     time = serializers.SerializerMethodField()
 #     time_elapsed = serializers.SerializerMethodField()
-#
+
 #     class Meta:
 #         model = Answer
 #         fields = ('id','date','time','specialist','created_at','time_elapsed')
-#
+
 #     def get_date(self, obj):
 #         return obj.created_at.date()
 #     def get_time(self, obj):
 #         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
-#
+
 #     def get_time_elapsed(self, obj):
 #         # d.strftime("%Y-%m-%d %H:%M:%S")
 #         date_query = obj.query.created_at
@@ -267,25 +269,25 @@ class SpecialistSerializer(serializers.ModelSerializer):
 #     status = serializers.ChoiceField(choices=Query.option_status)
 #     answer = serializers.SerializerMethodField()
 #     is_delayed = serializers.SerializerMethodField()
-#
+
 #     class Meta:
 #         model = Query
 #         fields = ('title','client','date','time','status','created_at','answer','is_delayed')
-#
+
 #     def get_date(self,obj):
 #         return obj.created_at.date()
-#
+
 #     # Devuelvo la hora y minuto separados
 #     def get_time(self,obj):
 #         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
-#
+
 #     def get_client(self,obj):
 #         return obj.client.nick
 #     # Devuelvo la respuesta relacionada a la consulta
 #     def get_answer(self,obj):
 #         answer_related = obj.answer_set.all()
 #         return AnswerAccountSerializer(answer_related,many=True).data
-#
+
 #     # Verificar si el tiempo desde que se hizo la consulta fue superado al del
 #     # parametro y en base a eso determinar si esta con retraso o a tiempo
 #     def get_is_delayed(self,obj):
@@ -305,33 +307,33 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
 
 
-# Serializer para consultar estado de cuenta del Especialista.
+# # Serializer para consultar estado de cuenta del Especialista.
 # class SpecialistAccountSerializer(serializers.ModelSerializer):
 #     category = serializers.SlugRelatedField(read_only=True,slug_field='name')
 #     query_answer = serializers.SerializerMethodField()
 #     photo_category = serializers.SerializerMethodField()
-#
+
 #     class Meta:
 #         model = Specialist
 #         fields = ('id','first_name','last_name','code','nick','email_exact',
 #                   'photo','category','photo_category','payment_per_answer','query_answer')
-#
+
 #         # No son campos editables ya que son de consulta solamente.
 #         read_only_fields = ('id','first_name','last_name','code','nick',
 #                             'email_exact','photo','category','photo_category',
 #                             'query_answer')
-#
+
 #     # Traer por consulta relacionada
 #     def get_query_answer(self, obj):
 #         answer = obj.query_set.all()
 #         return QueryAnswerSerializer(answer,many=True).data
-#
+
 #     def get_photo_category(self,obj):
 #         img = obj.category.image
 #         return img
 
 
-
+# Serializer para traer el listado de vendedores
 class SellerSerializer(serializers.ModelSerializer):
     quota = serializers.SerializerMethodField()
     count_plans_seller = serializers.SerializerMethodField()
@@ -359,12 +361,65 @@ class SellerSerializer(serializers.ModelSerializer):
         return value
 
     def get_count_queries(self, obj):        
-        count = Product.objects.filter(purchases__isnull=False, purchases__seller=obj.id).aggregate(Sum('query_amount'))
-        return count['query_amount__sum']
+        result = Product.objects.filter(purchases__seller__isnull=False, purchases__seller=obj.id).aggregate(Sum('query_amount'))
+        return result['query_amount__sum']
 
     def get_count_plans_seller(self, obj):
-        count = Product.objects.filter(purchases__isnull=False, purchases__seller=obj.id).count()
-        return count
+        result = Product.objects.filter(purchases__isnull=False, purchases__seller=obj.id).count()
+        return result
+
+
+# Serializer para consultar estado de cuenta del Vendedor.
+class SellerAccountSerializer(serializers.ModelSerializer):
+    amount_accumulated = serializers.SerializerMethodField()
+    fee_accumulated = serializers.SerializerMethodField()
+
+    # A continuacion se definen los campos enviados desde
+    # el querySet para que el serializador los reconozca
+    purchase__total_amount = serializers.CharField()
+    purchase__id = serializers.CharField()
+    purchase__code = serializers.CharField()
+    purchase__query_amount = serializers.CharField()
+    purchase__product__is_billable = serializers.CharField()
+    purchase__product__expiration_number = serializers.CharField()
+    purchase__product__name = serializers.CharField()
+    purchase__client__code = serializers.CharField()
+    purchase__client__nick = serializers.CharField()
+    purchase__fee__date = serializers.CharField()
+    purchase__fee__fee_amount = serializers.CharField()
+    purchase__fee__status = serializers.CharField()
+    purchase__fee__payment_type__name = serializers.CharField()
+
+
+
+    class Meta:
+        model = Seller
+        fields = (
+            'amount_accumulated', 'fee_accumulated',
+            # Los campos a continuacion son enviados en el querySet pero han sido
+            # redeclarados para que el serializer los reconozca
+            'purchase__total_amount','purchase__id','purchase__code','purchase__query_amount',
+            'purchase__product__is_billable','purchase__product__expiration_number',
+            'purchase__product__name','purchase__client__code',
+            'purchase__client__nick', 'purchase__fee__date','purchase__fee__fee_amount',
+            'purchase__fee__status','purchase__fee__payment_type__name'
+        )
+
+
+    def get_amount_accumulated(self, obj):
+        # Esta funcion calcula la sumatoria de los pagos  efectuados en cada cuota,
+        # respecto a una venta y fecha especificada
+        result = Fee.objects.filter(purchase_id=obj['purchase__id'], date__lte=obj['purchase__fee__date'],
+                                   status=obj['purchase__fee__status']).aggregate(Sum('fee_amount'))
+
+        return result['fee_amount__sum']
+
+    def get_fee_accumulated(self, obj):
+        # Esta funcion calcula la cantidad de los pagos  efectuados en cada cuota,
+        # respecto a una venta y fecha especificada
+        result = Fee.objects.filter(purchase_id=obj['purchase__id'], date__lte=obj['purchase__fee__date'],
+                                   status=obj['purchase__fee__status']).count()
+        return result
 
 
 class MediaSerializer(serializers.Serializer):

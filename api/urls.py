@@ -19,12 +19,11 @@ urlpatterns = [
     url(r'^specialists/$', actors.SpecialistListView.as_view(), name='specialists'),
     url(r'^specialists/(?P<pk>[0-9]+)/$', actors.SpecialistDetailView.as_view(), name='specialist-detail'),
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$', actors.SpecialistAccountView.as_view(), name='specialist-account-status'),
-    url(r'^queries/$', query.QueryListView.as_view(), name='queries'),
-    url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'),
+    url(r'^queries/$', query.QueryListView.as_view(), name='queries'), # consulta
+    url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'), # reconsulta
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
 
-    url(r'^sellers_report/$', actors.Report.as_view(), name='sellers_report'),
-    url(r'^sellers_report_sql/$', actors.ReportSQL.as_view(), name='sellers_report'),
+    url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(),name='seller-account-status'),
 
     #image
     url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(), name='upload-photo'),

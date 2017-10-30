@@ -16,6 +16,7 @@ class MessageFileSerializer(serializers.ModelSerializer):
         model = MessageFile
         fields = ('url','type_file')
 
+# Serializer de Mensajes
 class MessageSerializer(serializers.ModelSerializer):
     msg_type = serializers.ChoiceField(choices=Message.options_msg_type)
     time = serializers.SerializerMethodField()
@@ -24,12 +25,15 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ('message','msg_type','time',
+        fields = ('id','message','msg_type','time',
                  'media_files','code_specialist','specialist')
+
+        read_only_fields = ('id','time','media_files','code_specialist')
 
     def get_time(self,obj):
         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
 
+    # devolver los archivos adjuntos al msj
     def get_media_files(self,obj):
         medias = obj.messagefile_set.all()
         return MessageFileSerializer(medias,many=True).data
@@ -37,7 +41,7 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_code_specialist(self, obj):
         return str(obj.specialist.code)
 
-class QuerySerializer(serializers.ModelSerializer):
+class QueryDetailSerializer(serializers.ModelSerializer):
     messages = serializers.SerializerMethodField()
     code_client = serializers.SerializerMethodField()
 
@@ -55,38 +59,104 @@ class QuerySerializer(serializers.ModelSerializer):
     def get_code_client(self,obj):
         return str(obj.client.code)
 
+# Serializer para crear consulta
+class QueryCreateSerializer(serializers.ModelSerializer):
+    # el message para este serializer
+    # solo se puede escribir ya que drf no soporta la representacion
+    # de writable nested relations,
+    message = MessageSerializer(write_only=True)
+
+    class Meta:
+        model = Query
+        fields = ('id','title','message','category','client')
+
+    def create(self, validated_data):
+        validated_data["specialist"] = Specialist.objects.get(type_specialist="m",
+                                                        category_id=validated_data["category"])
+        data_message = validated_data.pop('message')
+        validated_data["status"] = 0
+        data_message["msg_type"] = "q"
+        query = Query.objects.create(**validated_data)
+        message = Message.objects.create(query=query,**data_message)
+        return query
+
+    # Si se llega a necesitar devolver personalizada la respuesta
+    # redefinir este metodo y descomentarlo
+    #  def to_representation(self, obj):
+    #     return {
+    #         'title': obj.title,
+    #         'msj': obj.get_message
+    #     }
+
+
+# se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
+class QueryUpdateSerializer(serializers.ModelSerializer):
+    # el message para este serializer
+    # solo se puede escribir ya que drf no soporta la representacion
+    # de writable nested relations,
+    message = MessageSerializer(write_only=True)
+    class Meta:
+        model = Query
+        fields = ('id','title','status','message','category','client')
+        read_only_fields = ('status',)
+
+    def update(self, instance, validated_data):
+        data_message = validated_data.pop('message')
+        specialist = Specialist.objects.get(pk=instance.specialist_id)
+        data_message["specialist"] = specialist
+        # se compara si el status fue respondida, entonces debemos declarar
+        # que el tipo de mensaje es reconsulta, y que pasa a estatus 1,
+        # (pendiente de declinar o responder por el especialista)
+        if int(instance.status) == 4 or int(instance.status) == 5:
+            data_message["msg_type"] = 'r'
+            instance.status = 1
+        message = Message.objects.create(query=instance,**data_message)
+        instance.save()
+        return instance
+
+# serializer para actualizar solo status de la consulta sin
+# enviar msjs
+class QueryUpdateStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Query
+        fields = ('id','title','status')
+        read_only_fields = ('title',)
+
+    # def update(self, instance,validated_data):
+
+
 
 class QueryListSerializer(serializers.ModelSerializer):
     status = serializers.ChoiceField(choices=Query.option_status, read_only=True)
-    last_time = serializers.SerializerMethodField()
+    last_modified = serializers.SerializerMethodField()
     # media_files = FilesSerializer()
     last_msg = serializers.SerializerMethodField()
 
     class Meta:
         model = Query
-        fields = ('id','title','last_msg','status', 'last_time','category',
+        fields = ('id','title','last_msg','status', 'last_modified','category',
                  'client','specialist')
         read_only_fields = ('specialist','id','last_time')
 
     # Devuelvo la hora y minuto separados
-    def get_last_time(self,obj):
+    def get_last_modified(self,obj):
         return str(obj.last_modified.date()) + ' ' + str(obj.last_modified.hour) + ':' + str(obj.last_modified.minute)
 
     def get_last_msg(self, obj):
         # pdb.set_trace()
         msg =  obj.message_set.all().last()
         return msg.message
-
-    # definir las validaciones correspondientes al crear una consulta
-    def validate(self,data):
-        # asignaremos el status 0 para la primera vez que sea creada
-        data["has_precedent"] = False
-        data["status"] = 0
-        return data
-
-    def create(self, validated_data):
-        validated_data['specialist'] = Specialist.objects.get(type_specialist="m",
-                                                              category_id = validated_data['category'])
-        instance = self.Meta.model(**validated_data)
-        instance.save()
-        return instance
+    #
+    # # definir las validaciones correspondientes al crear una consulta
+    # def validate(self,data):
+    #     # asignaremos el status 0 para la primera vez que sea creada
+    #     data["has_precedent"] = False
+    #     data["status"] = 0
+    #     return data
+    #
+    # def create(self, validated_data):
+    #     validated_data['specialist'] = Specialist.objects.get(type_specialist="m",
+    #                                                           category_id = validated_data['category'])
+    #     instance = self.Meta.model(**validated_data)
+    #     instance.save()
+    #     return instance

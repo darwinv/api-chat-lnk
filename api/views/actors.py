@@ -1,22 +1,18 @@
 
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import User, Client, Category, Specialist, Seller, Product
+from api.models import User, Client, Category, Specialist, Seller, Product, PaymentType
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
+from rest_framework import serializers
 
-
-import django_filters
-
+from django.db.models import Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
-from rest_framework import serializers
-from django.db import connection  # Depuracion de queries
-# import django_filters.rest_framework
 
 from api.serializers.actors import UserSerializer, SpecialistSerializer
-from api.serializers.actors import SellerSerializer, MediaSerializer
+from api.serializers.actors import SellerSerializer, SellerAccountSerializer, MediaSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
@@ -212,13 +208,11 @@ class SpecialistAccountView(APIView):
 #---------- ------ Inicio de Vendedores ------------------------------
 
 
-class SellerFilter(django_filters.FilterSet):
-    #count_plans_seller = django_filters.CharFilter(name='count_month_plans', lookup_expr='gt')
+class SellerFilter(filters.FilterSet):
+    count_plans_seller = filters.NumberFilter(name='count_plans_seller', method='filter_count_plans')
+    count_queries_seller = filters.NumberFilter(name='count_queries_seller', method='filter_count_queries')
 
-    count = filters.NumberFilter(name='ruc', method='filter_count')
-
-    def filter_count(self, qs, name, value):
-
+    def filter_count_plans(self, qs, name, value):
         #todos los id de vendedores que han vendido mas que value
         sellers_ids = []
         for seller in Seller.objects.all():
@@ -229,18 +223,27 @@ class SellerFilter(django_filters.FilterSet):
             #agregar a la lista
             if count > value:
                 sellers_ids.append(seller.id)
-
-
         return qs.filter(id__in= sellers_ids)
 
-    #count_plans_seller = django_filters.CharFilter(name='count_plans_seller', lookup_expr='gt')
-    first_name = django_filters.CharFilter(name='first_name', lookup_expr='exact')
-    ruc = django_filters.CharFilter(name='ruc', lookup_expr='contains')
+    def filter_count_queries(self, qs, name, value):
+        #todos los id de vendedores que han vendido mas que value
+        sellers_ids = []
+        for seller in Seller.objects.all():
+            #calcular cantidad vendida
+            count_result = Product.objects.filter(purchases__isnull=False, purchases__seller=seller.id).aggregate(Sum('query_amount'))
+            count = count_result['query_amount__sum']
+            #si la cantidad vendida es mayor que el parametro
+            #agregar a la lista
+            if count and count > value:
+                sellers_ids.append(seller.id)
+        return qs.filter(id__in= sellers_ids)
+
 
     class Meta:
         model = Seller
 
         fields = {
+            'first_name': ['exact','contains'],
             'last_name': ['exact','contains'],
             'email_exact': ['exact','contains'],
             'ruc': ['exact','contains'],
@@ -251,39 +254,36 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
 
-
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = SellerFilter
 
-    def list(self, request):
+class SellerAccountView(ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    serializer_class = SellerAccountSerializer
 
-        if 'sales' in request.query_params:
-            sales = request.query_params["sales"]
+    def get_object(self, pk):
+        try:
+            return Specialist.objects.get(pk=pk)
+        except Specialist.DoesNotExist:
+            raise Http404
 
-            # todos los id de vendedores que han vendido mas que value
-            sellers_ids = []
-            for seller in Seller.objects.all():
-                # calcular cantidad vendida
-                count = Product.objects.filter(purchases__isnull=False, purchases__seller=seller.id).count()
+    def get(self, request, pk):
+        # creacion de QuerySet para listadaos
+        queryset = Seller.objects.filter(id=pk,purchase__fee__status=1)\
+            .values('id','purchase__total_amount',
+                                  'purchase__id','purchase__code','purchase__query_amount',
+                                  'purchase__product__is_billable','purchase__product__expiration_number','purchase__product__name',
+                                  'purchase__client__code','purchase__client__nick', 'purchase__fee__date',
+                                  'purchase__fee__fee_amount','purchase__fee__status','purchase__fee__payment_type__name'
+                                  )\
+            .order_by('purchase__fee__date')
 
-                # si la cantidad vendida es mayor que el parametro
-                # agregar a la lista
-                if count > int(sales):
-                    sellers_ids.append(seller.id)
-
-            queryset = self.get_queryset().filter(id__in=sellers_ids)
-
-            serializer = SellerSerializer(queryset, many=True)
-        else:
-            queryset = self.get_queryset()
-            serializer = SellerSerializer(queryset, many=True)
-
+        serializer = SellerAccountSerializer(queryset, many=True)
         # pagination
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-
         return Response(serializer.data)
 
 

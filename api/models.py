@@ -66,7 +66,7 @@ class User(AbstractUser):
     email_exact = models.CharField(max_length=150, unique=True)
     telephone = models.CharField(max_length=14)
     cellphone = models.CharField(max_length=14)
-    photo = models.CharField(max_length=250, default='preview.png', null=True)
+    photo = models.CharField(max_length=250, null=True)
     options_documents = (
         ('0', 'DNI'),
         ('1', 'Passport'),
@@ -87,10 +87,6 @@ class User(AbstractUser):
 
 class Seller(User):
     cv = models.CharField(max_length=100, null=True, blank=True)
-    monthly_promotional_plans = models.PositiveIntegerField(null=True)
-    count_month_promotional = models.PositiveIntegerField(null=True)
-    count_month_plans = models.PositiveIntegerField(null=True)
-    count_month_contacts = models.PositiveIntegerField(null=True)
     zone = models.ForeignKey(Zone, on_delete=models.PROTECT)
     class Meta:
         verbose_name = 'Seller'
@@ -263,13 +259,27 @@ class Plan(models.Model):
     def __str__(self):
         return self.name
 
+class Product(models.Model):
+    name = models.CharField(max_length=45)
+    query_amount = models.IntegerField()
+    expiration_number = models.PositiveIntegerField()
+    price = models.FloatField()
+    is_active = models.BooleanField()
+    is_billable = models.BooleanField()
+    created_at = models.DateTimeField()
+    plan = models.ForeignKey(Plan, on_delete=models.PROTECT)
+    seller = models.ManyToManyField(Seller, through='products_seller_no_billable')
+    def __str__(self):
+        return self.name
 
 class Purchase(models.Model):
+    code = models.PositiveIntegerField()
     total_amount = models.FloatField()
     reference_number = models.CharField(max_length=30)
     fee_number = models.PositiveIntegerField()
     latitude = models.CharField(max_length=45, null=True)
     longitude = models.CharField(max_length=45, null=True)
+    query_amount = models.PositiveIntegerField()
     query_available = models.PositiveIntegerField()
     is_promotional = models.BooleanField()
     last_number_fee_paid = models.PositiveIntegerField()
@@ -283,26 +293,22 @@ class Purchase(models.Model):
     promotion = models.ForeignKey(Promotion, on_delete=models.PROTECT, null=True)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT, null=True)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
     def __str__(self):
         return self.reference_number
 
 
-class Product(models.Model):
-    name = models.CharField(max_length=45)
-    query_amount = models.IntegerField()
-    expiration_number = models.PositiveIntegerField()
-    price = models.FloatField()
-    is_active = models.BooleanField()
-    created_at = models.DateTimeField()
-    plan = models.ForeignKey(Plan, on_delete=models.PROTECT)
-    purchases = models.ManyToManyField(Purchase, db_table='products_purchase')
-    def __str__(self):
-        return self.name
+
+
+class products_seller_no_billable(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
+    query_amount_no_billable = models.IntegerField()
+    query_amount_no_billable_available = models.IntegerField()
+    date = models.DateField(unique=True)
 
 class PaymentType(models.Model):
     name = models.CharField(max_length=45)
-    api_client = models.TextField(null=True)
-    tablename = models.CharField(max_length=17, null=True)
     def __str__(self):
         return self.name
 
@@ -311,8 +317,18 @@ class Fee(models.Model):
     fee_order_number = models.PositiveIntegerField()
     fee_amount = models.FloatField()
     transaction_code = models.CharField(max_length=45)
+    
     purchase = models.ForeignKey(Purchase, on_delete=models.PROTECT)
-    payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
+    payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)    
+    api_client = models.TextField(null=True)
+    tablename = models.CharField(max_length=17, null=True)
+    option_status = (
+        ('1', 'Wait'),
+        ('2', 'Ready'),
+    )
+    status = models.CharField(max_length=1, choices=option_status)
+    date = models.DateField()
+    datetime_payment = models.DateTimeField(null=True)
     def __str__(self):
         return self.reference_number
 
@@ -342,7 +358,7 @@ class Query(models.Model):
     title = models.CharField(max_length=50)
     option_status = (
         ('0', 'Requested'), # Preguntada, pendiente de derivar o responder
-        ('1', 'Requested Derived'), # derivada, pendiente de declinar o responder
+        ('1', 'Requested Derived'), # derivada, pendiente de declinar o responder, reconsulta
         ('2', 'Pending Response'), # derivada a asociado, pendiente de respuesta
         ('3', 'Pending Main Response'), # principal, pendiente de respuesta
         ('4', 'Answered Main'), # respondida por principal
@@ -428,6 +444,7 @@ class TransactionCode(models.Model):
 
 class Quota(models.Model):
     value = models.PositiveIntegerField()
+    count_contacts = models.PositiveIntegerField(null=True)
     date = models.DateField(unique=True)
 
 # Ingresar en parametros number_requery
