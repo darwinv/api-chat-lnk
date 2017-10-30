@@ -92,6 +92,7 @@ class ClientSerializer(serializers.ModelSerializer):
     ocupation = serializers.ChoiceField(choices=Client.options_ocupation, allow_blank=True)
     address = AddressSerializer()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
+    photo = serializers.CharField(read_only=True)
 
     class Meta:
         model = Client
@@ -140,8 +141,8 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         validation = CommonValidation()
-        if 'photo' in data:
-            validation.validate_img(photo=data['photo'])
+        # if 'photo' in data:
+        #     validation.validate_img(photo=data['photo'])
         if data['type_client'] == 'b':
             self.validate_bussines_client(data)
         return data
