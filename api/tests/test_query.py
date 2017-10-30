@@ -155,6 +155,34 @@ class UpdateQuery(APITestCase):
             "client": 2
         }
 
+    def test_absolved_query(self):
+        send = self.client.post(
+            reverse('queries'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+
+        data={
+            "message": {
+            "message": "reconsulta",
+            "msg_type": "q",
+            "media_files": []
+            }
+        }
+        q = Query.objects.get(pk=send.data["id"])
+        q.status = 7
+        q.save()
+
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': send.data["id"]}),
+            data, format='json'
+        )
+
+        # self.assertEqual(response.data, "ee")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+
     def test_add_message_to_query(self):
         send = self.client.post(
             reverse('queries'),
@@ -188,6 +216,7 @@ class SkipReQuery(APITestCase):
         "status":7
         }
 
+    # omitir reconsulta de manera exitosa
     def test_skip_requery(self):
         query = Query.objects.get(pk=self.id_query)
         query.status = 5
@@ -196,9 +225,18 @@ class SkipReQuery(APITestCase):
             reverse('query-detail', kwargs={'pk': self.id_query}),
             self.valid_payload, format='json'
         )
+        # import pdb; pdb.set_trace()
         self.assertEqual(int(response.data["status"]), 7)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    # omitir reconsulta sin haberla respondido antes
+    def test_skip_requery_unanswered(self):
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': self.id_query}),
+            self.valid_payload, format='json'
+        )
+        # self.assertEqual(int(response.data["status"]), 7)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 class CreateReQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']
@@ -239,3 +277,36 @@ class CreateReQuery(APITestCase):
         self.assertEqual(int(response.data["status"]), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # import pdb; pdb.set_trace()
+
+class SetCalification(APITestCase):
+    fixtures = ['data','data2','test_address','test_query']
+    def setUp(self):
+        self.id_client = 2
+        self.id_category = 1
+        self.id_query = 1
+        self.valid_payload = {
+        "calification":4
+        }
+
+    def test_qualify(self):
+        query = Query.objects.get(pk=self.id_query)
+        query.status = 7
+        query.save()
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': self.id_query}),
+            self.valid_payload, format='json'
+        )
+        self.assertEqual(int(response.data["calification"]), 4)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_invalid_calification(self):
+        data = self.valid_payload
+        data['calification']=10
+        query = Query.objects.get(pk=self.id_query)
+        query.status = 7
+        query.save()
+        response = self.client.put(
+            reverse('query-detail', kwargs={'pk': self.id_query}),
+            self.valid_payload, format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

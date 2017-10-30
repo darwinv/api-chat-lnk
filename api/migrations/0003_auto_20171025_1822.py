@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('api', '0002_auto_20171023_1141'),
     ]
-
+    
     operations = [
         migrations.CreateModel(
             name='products_seller_no_billable',

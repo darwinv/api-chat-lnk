@@ -61,25 +61,25 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # self.assertEqual(response.data, 'ey')
-    def test_invalid_photo_extension(self):
-        data = self.valid_payload
-        data['photo'] = 'tex.xcf'
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    # def test_invalid_photo_extension(self):
+    #     data = self.valid_payload
+    #     data['photo'] = 'tex.xcf'
+    #     response = self.client.post(
+    #         reverse('clients'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_invalid_photo_url(self):
-        data = self.valid_payload
-        data['photo'] = 'tex'
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    # def test_invalid_photo_url(self):
+    #     data = self.valid_payload
+    #     data['photo'] = 'tex'
+    #     response = self.client.post(
+    #         reverse('clients'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # self.assertEqual(response.data, 'ey')
 
     def test_invalid_countries(self):
