@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers, viewsets
 from api import views
-from api.views import actors, query, category, utilities
+from api.views import actors, query, category, utilities, email
 
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
@@ -30,5 +30,8 @@ urlpatterns = [
     url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(), name='upload-photo'),
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
     # url(r'^upload_archivo/(?P<filename>[^/]+)$', actors.AllFileUploadView.as_view())
+
+    # email
+    url(r'^mail/$', email.mail, name='mails'),
 
 ]
