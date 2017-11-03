@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers, viewsets
 from api import views
-from api.views import actors, query, category, utilities
+from api.views import actors, query, category, utilities, email
 
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$', actors.SpecialistAccountView.as_view(), name='specialist-account-status'),
     url(r'^queries/$', query.QueryListView.as_view(), name='queries'), # consulta
     url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'), # reconsulta
+    # url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'), # reconsulta
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
 
     url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(),name='seller-account-status'),
@@ -29,5 +30,8 @@ urlpatterns = [
     url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(), name='upload-photo'),
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
     # url(r'^upload_archivo/(?P<filename>[^/]+)$', actors.AllFileUploadView.as_view())
+
+    # email
+    url(r'^mail/$', email.mail, name='mails'),
 
 ]
