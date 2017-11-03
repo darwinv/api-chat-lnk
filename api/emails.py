@@ -26,11 +26,12 @@ class BasicEmailAmazon(object):
 
 
 
-    def sendmail(self,**kwargs):
+    def sendmail(self,args):
+
         # Create a new SES resource and specify a region.
         client = boto3.client('ses', region_name=self.region)
-        # import pdb; pdb.set_trace()
-        d = (kwargs)
+        d = (args)
+        #
         html = get_template(self.template_html)
         txt = get_template(self.template_txt)
         html_content = html.render(d)

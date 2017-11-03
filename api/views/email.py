@@ -7,6 +7,7 @@ def mail(request):
     if request.method == 'POST':
         mail = BasicEmailAmazon(subject='epale',to='darwin.vasqz@gmail.com',
                                 template='base')
-        return Response(mail.sendmail())
+        # import pdb; pdb.set_trace()
+        return Response(mail.sendmail(args=request.data))
     #     return Response({"message": "Got some data!", "data": request.data})
     # return Response({"message": "Hello, world!"})
