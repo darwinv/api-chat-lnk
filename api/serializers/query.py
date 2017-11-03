@@ -65,7 +65,7 @@ class QueryDetailSerializer(serializers.ModelSerializer):
 # android especifico
 
 # Serializer para crear consulta
-class QueryCreateSerializer(serializers.ModelSerializer):
+class QuerySerializer(serializers.ModelSerializer):
     # el message para este serializer
     # solo se puede escribir ya que drf no soporta la representacion
     # de writable nested relations,
@@ -74,6 +74,23 @@ class QueryCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Query
         fields = ('id','title','message','category','client')
+
+    def update(self, instance, validated_data):
+        # no se puede agregar msjs de ningun tipo una vez hah sido absuelta
+        if int(instance.status) == 6 or int(instance.status) == 7:
+            raise serializers.ValidationError(u"Query Absolved - can'not add more msgs")
+        data_message = validated_data.pop('message')
+        specialist = Specialist.objects.get(pk=instance.specialist_id)
+        data_message["specialist"] = specialist
+        # se compara si el status fue respondida, entonces debemos declarar
+        # que el tipo de mensaje es reconsulta, y que pasa a estatus 1,
+        # (pendiente de declinar o responder por el especialista)
+        if int(instance.status) == 4 or int(instance.status) == 5:
+            data_message["msg_type"] = 'r'
+            instance.status = 1
+        message = Message.objects.create(query=instance,**data_message)
+        instance.save()
+        return instance
 
     def create(self, validated_data):
         validated_data["specialist"] = Specialist.objects.get(type_specialist="m",
@@ -92,37 +109,38 @@ class QueryCreateSerializer(serializers.ModelSerializer):
          return {
             'id': obj.id,
             'title': obj.title,
-            'msj': message
+            'msj': message,
+            'status': obj.status
          }
 
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
-class QueryUpdateSerializer(serializers.ModelSerializer):
-    # el message para este serializer
-    # solo se puede escribir ya que drf no soporta la representacion
-    # de writable nested relations,
-    message = MessageSerializer(write_only=True)
-    class Meta:
-        model = Query
-        fields = ('id','title','status','message','category','client')
-        read_only_fields = ('status',)
-
-    def update(self, instance, validated_data):
-        # no se puede agregar msjs de ningun tipo una vez hah sido absuelta
-        if int(instance.status) == 6 or int(instance.status) == 7:
-            raise serializers.ValidationError(u"Query Absolved - can'not add more msgs")
-        data_message = validated_data.pop('message')
-        specialist = Specialist.objects.get(pk=instance.specialist_id)
-        data_message["specialist"] = specialist
-        # se compara si el status fue respondida, entonces debemos declarar
-        # que el tipo de mensaje es reconsulta, y que pasa a estatus 1,
-        # (pendiente de declinar o responder por el especialista)
-        if int(instance.status) == 4 or int(instance.status) == 5:
-            data_message["msg_type"] = 'r'
-            instance.status = 1
-        message = Message.objects.create(query=instance,**data_message)
-        instance.save()
-        return instance
+# class QueryUpdateSerializer(serializers.ModelSerializer):
+#     # el message para este serializer
+#     # solo se puede escribir ya que drf no soporta la representacion
+#     # de writable nested relations,
+#     message = MessageSerializer(write_only=True)
+#     class Meta:
+#         model = Query
+#         fields = ('id','title','status','message','category','client')
+#         read_only_fields = ('status',)
+#
+#     def update(self, instance, validated_data):
+#         # no se puede agregar msjs de ningun tipo una vez hah sido absuelta
+#         if int(instance.status) == 6 or int(instance.status) == 7:
+#             raise serializers.ValidationError(u"Query Absolved - can'not add more msgs")
+#         data_message = validated_data.pop('message')
+#         specialist = Specialist.objects.get(pk=instance.specialist_id)
+#         data_message["specialist"] = specialist
+#         # se compara si el status fue respondida, entonces debemos declarar
+#         # que el tipo de mensaje es reconsulta, y que pasa a estatus 1,
+#         # (pendiente de declinar o responder por el especialista)
+#         if int(instance.status) == 4 or int(instance.status) == 5:
+#             data_message["msg_type"] = 'r'
+#             instance.status = 1
+#         message = Message.objects.create(query=instance,**data_message)
+#         instance.save()
+#         return instance
 
 # serializer para actualizar solo status de la consulta sin
 # enviar msjs
