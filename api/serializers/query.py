@@ -87,11 +87,13 @@ class QueryCreateSerializer(serializers.ModelSerializer):
 
     # Si se llega a necesitar devolver personalizada la respuesta
     # redefinir este metodo y descomentarlo
-    #  def to_representation(self, obj):
-    #     return {
-    #         'title': obj.title,
-    #         'msj': obj.get_message
-    #     }
+    def to_representation(self, obj):
+         message = MessageSerializer(obj.message_set.all().last()).data
+         return {
+            'id': obj.id,
+            'title': obj.title,
+            'msj': message
+         }
 
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta

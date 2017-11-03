@@ -145,9 +145,9 @@ class CreateQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # import pdb; pdb.set_trace()
-        # self.assertEqual(response.data, "ee")
+        self.assertEqual(response.data, "ee")
 class UpdateQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']
     def setUp(self):
