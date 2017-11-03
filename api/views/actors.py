@@ -20,7 +20,6 @@ from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 import pdb, os
 import uuid
 import boto3
-
 # Create your views here.
 
 # Constantes
@@ -257,17 +256,22 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = SellerFilter
 
+
+
 class SellerAccountView(ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = SellerAccountSerializer
 
+
     def get_object(self, pk):
         try:
-            return Specialist.objects.get(pk=pk)
-        except Specialist.DoesNotExist:
+            return Seller.objects.get(pk=pk)
+        except Seller.DoesNotExist:
             raise Http404
 
     def get(self, request, pk):
+
+            
         # creacion de QuerySet para listadaos
         queryset = Seller.objects.filter(id=pk,purchase__fee__status=1)\
             .values('id','purchase__total_amount',
@@ -277,6 +281,16 @@ class SellerAccountView(ListCreateAPIView):
                                   'purchase__fee__fee_amount','purchase__fee__status','purchase__fee__payment_type__name'
                                   )\
             .order_by('purchase__fee__date')
+
+            
+
+
+
+        if 'from_date' in request.query_params:
+            queryset = queryset.extra(where=["date >='"+request.query_params['from_date']+"'"])
+
+        if 'until_date' in request.query_params:
+            queryset = queryset.extra(where=["date <='"+request.query_params['until_date']+"'"])
 
         serializer = SellerAccountSerializer(queryset, many=True)
         # pagination
