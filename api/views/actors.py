@@ -4,9 +4,9 @@ from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from rest_framework.response import Response
-from rest_framework import status, permissions, viewsets
+from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
-
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
 from django.db.models import Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
@@ -15,7 +15,6 @@ from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SellerSerializer, SellerAccountSerializer, MediaSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
-from rest_framework import generics
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 import pdb, os
 import uuid
@@ -33,6 +32,9 @@ DATE_FAKE = '1900-01-01'
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    authentication_classes = (OAuth2Authentication,)
+    # solo el admin puede consultar
+    permission_classes = (permissions.IsAdminUser,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = (filters.DjangoFilterBackend,)
@@ -40,8 +42,9 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ClientListView(ListCreateAPIView, UpdateAPIView):
     # Lista todos los clientes naturales o crea uno nuevo
-    # no olvidar lo de los permisos permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    permission_classes = [permissions.AllowAny]
+    # no olvidar lo de los permisos
+    permission_classes = (permissions.IsAuthenticated,)
+    # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
     serializer_class = ClientSerializer
     queryset = Client.objects.all()
     filter_backends = (filters.DjangoFilterBackend,searchfilters.SearchFilter,)
@@ -75,7 +78,7 @@ class ClientListView(ListCreateAPIView, UpdateAPIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class ClientDetailView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
     def get_object(self, pk):
         try:
             return Client.objects.get(pk=pk)

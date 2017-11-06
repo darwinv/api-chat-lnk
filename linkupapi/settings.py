@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',    
+    'django.contrib.staticfiles',
     'api.apps.ApiConfig'
 ]
 
@@ -53,10 +53,10 @@ REST_FRAMEWORK = {
     ]
 }
 
-# OAUTH2_PROVIDER = {
-#     # this is the list of available scopes
-#     'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
-# }
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+}
 
 
 MIDDLEWARE = [
