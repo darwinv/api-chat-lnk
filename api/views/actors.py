@@ -1,4 +1,3 @@
-
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
@@ -10,10 +9,10 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHa
 from django.db.models import Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
-
 from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SellerSerializer, SellerAccountSerializer, MediaSerializer
 from django.http import Http404
+from api.permissions import IsAdminOnList
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 import pdb, os
@@ -40,10 +39,11 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('username',)
 
-class ClientListView(ListCreateAPIView, UpdateAPIView):
+class ClientListView(ListCreateAPIView):
     # Lista todos los clientes naturales o crea uno nuevo
     # no olvidar lo de los permisos
-    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (IsAdminOnList,)
     # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
     serializer_class = ClientSerializer
     queryset = Client.objects.all()
@@ -78,7 +78,9 @@ class ClientListView(ListCreateAPIView, UpdateAPIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class ClientDetailView(APIView):
-    permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
     def get_object(self, pk):
         try:
             return Client.objects.get(pk=pk)
