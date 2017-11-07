@@ -109,7 +109,7 @@ class QuerySerializer(serializers.ModelSerializer):
          return {
             'id': obj.id,
             'title': obj.title,
-            'msj': message,
+            'message': message,
             'status': obj.status
          }
 
