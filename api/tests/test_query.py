@@ -266,6 +266,7 @@ class CreateReQuery(APITestCase):
             content_type='application/json'
         )
         data={
+            "id": send.data["id"],
             "message": {
             "message": "reconsulta",
             "msg_type": "r",
@@ -281,9 +282,10 @@ class CreateReQuery(APITestCase):
             reverse('query-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
         )
+        # import pdb; pdb.set_trace()
         self.assertEqual(int(response.data["status"]), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # import pdb; pdb.set_trace()
+
 
 class SetCalification(APITestCase):
     fixtures = ['data','data2','test_address','test_query']

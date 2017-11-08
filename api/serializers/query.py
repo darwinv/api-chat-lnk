@@ -48,7 +48,7 @@ class QueryDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Query
-        fields = ('title','status','messages','last_modified',
+        fields = ('id','title','status','messages','last_modified',
                   'client','code_client','specialist', 'category')
         read_only_fields = ('status','last_modified')
 
@@ -109,8 +109,13 @@ class QuerySerializer(serializers.ModelSerializer):
          return {
             'id': obj.id,
             'title': obj.title,
-            'msj': message,
-            'status': obj.status
+            'status': obj.status,
+            'message': message,
+            'last_modified': obj.last_modified,
+            'client': obj.client_id,
+            'code_client': str(obj.client.code),
+            'specialist': obj.specialist_id,
+            'category': obj.category_id
          }
 
 
