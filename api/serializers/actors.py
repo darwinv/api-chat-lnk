@@ -190,10 +190,11 @@ class SpecialistSerializer(serializers.ModelSerializer):
         # if 'photo' in data:
         #     validation.validate_img(photo=data['photo'])
         # Asegurarse que solo haya un especialista principal por categoria.
-        if self.instance and self.instance.username != data["username"]:
-            if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
-                                                                            category__name=data["category"]).exists():
-                raise serializers.ValidationError(u"Main specialist already exists.")
+        # import pdb; pdb.set_trace()
+        category = data.get("category",self.instance.category)
+        if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
+                                                                        category_id=category).exists():
+            raise serializers.ValidationError(u"Main specialist already exists.")
         return data
 
     def create(self, validated_data):
