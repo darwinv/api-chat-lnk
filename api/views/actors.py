@@ -93,6 +93,8 @@ class ClientDetailView(APIView):
         return Response(serializer.data)
 
 class ClientDetailByUsername(APIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated,)
     def get_object(self, username):
         try:
             return Client.objects.get(username=username)
