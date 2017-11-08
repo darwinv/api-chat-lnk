@@ -12,7 +12,7 @@ from rest_framework import filters as searchfilters
 from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SellerSerializer, SellerAccountSerializer, MediaSerializer
 from django.http import Http404
-from api.permissions import IsAdminOnList
+from api.permissions import IsAdminOnList, IsAdminOrOwner
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 import pdb, os
@@ -111,8 +111,9 @@ class ClientDetailByUsername(APIView):
 
 #---------- ------ Inicio de Especialistas ------------------------------
 
-class SpecialistListView(ListCreateAPIView, UpdateAPIView):
-    permission_classes = [permissions.AllowAny]
+class SpecialistListView(ListCreateAPIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAdminUser,)
     queryset = Specialist.objects.all()
     serializer_class = SpecialistSerializer
 
@@ -155,13 +156,11 @@ class SpecialistListView(ListCreateAPIView, UpdateAPIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        print(serializer.errors)
-        print("------------------------------------")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SpecialistDetailView(APIView):
-    permission_classes = [permissions.AllowAny]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (IsAdminOrOwner,)
     def get_object(self, pk):
         try:
             return Specialist.objects.get(pk=pk)
