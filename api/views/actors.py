@@ -163,7 +163,9 @@ class SpecialistDetailView(APIView):
     permission_classes = (IsAdminOrOwner,)
     def get_object(self, pk):
         try:
-            return Specialist.objects.get(pk=pk)
+            obj = Specialist.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
         except Specialist.DoesNotExist:
             raise Http404
 

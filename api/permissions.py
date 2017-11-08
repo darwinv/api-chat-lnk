@@ -13,18 +13,10 @@ class IsAdminUserOrReadOnly(permissions.BasePermission):
         return request.user and request.user.is_staff
 
 class IsAdminOrOwner(permissions.BasePermission):
-
-    def has_permission(self, request, view):
-        # solo puede listar clientes si es admin.
-        import pdb; pdb.set_trace()
-        if request.method in permissions.SAFE_METHODS:
-            return request.user and request.user.is_staff
-        return True
-
     def has_object_permission(self, request, view, obj):
     # Read permissions are allowed to any request,
     # so we'll always allow GET, HEAD or OPTIONS requests.
-        return request.user == obj.id
+        return (request.user and request.user.is_staff) or request.user.id == obj.id
 
 class IsAdminOnList(permissions.BasePermission):
 
