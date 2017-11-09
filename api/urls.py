@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'), # reconsulta
     # url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'), # reconsulta
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
+    url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(), name='seller-detail'),
 
     url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(),name='seller-account-status'),
 

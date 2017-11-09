@@ -404,8 +404,8 @@ class SellerAccountSerializer(serializers.ModelSerializer):
     purchase__fee__payment_type__name = serializers.CharField()
     purchase__fee__reference_number = serializers.CharField()
     purchase__fee_number = serializers.CharField()
-
-
+    purchase__fee__id = serializers.CharField()
+    purchase__fee__fee_order_number = serializers.CharField()
     class Meta:
         model = Seller
         fields = (
@@ -415,9 +415,9 @@ class SellerAccountSerializer(serializers.ModelSerializer):
             'purchase__total_amount','purchase__id','purchase__code','purchase__query_amount',
             'purchase__product__is_billable','purchase__product__expiration_number',
             'purchase__product__name','purchase__client__code',
-            'purchase__client__nick', 'purchase__fee__date','purchase__fee__fee_amount',
+            'purchase__client__nick', 'purchase__fee__date','purchase__fee__fee_amount', 'purchase__fee__id',
             'purchase__fee__status','purchase__fee__payment_type__name','purchase__fee__reference_number',
-            'purchase__fee_number'
+            'purchase__fee_number','purchase__fee__fee_order_number'
         )
 
 

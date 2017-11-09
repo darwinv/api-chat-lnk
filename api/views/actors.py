@@ -256,7 +256,18 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = SellerFilter
 
+class SellerDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get_object(self, pk):
+        try:
+            return Seller.objects.get(pk=pk)
+        except Seller.DoesNotExist:
+            raise Http404
 
+    def get(self, request, pk):
+        seller = self.get_object(pk)
+        serializer = SellerSerializer(seller)
+        return Response(serializer.data)
 
 class SellerAccountView(ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -277,9 +288,9 @@ class SellerAccountView(ListCreateAPIView):
             .values('id','purchase__total_amount',
                                   'purchase__id','purchase__code','purchase__query_amount','purchase__fee_number',
                                   'purchase__product__is_billable','purchase__product__expiration_number','purchase__product__name',
-                                  'purchase__client__code','purchase__client__nick', 'purchase__fee__date',
+                                  'purchase__client__code','purchase__client__nick', 'purchase__fee__date', 'purchase__fee__id',
                                   'purchase__fee__fee_amount','purchase__fee__status','purchase__fee__payment_type__name',
-                                  'purchase__fee__reference_number',
+                                  'purchase__fee__reference_number','purchase__fee__fee_order_number',
                                   )\
             .order_by('purchase__fee__date')
 
