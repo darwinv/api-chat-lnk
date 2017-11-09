@@ -117,6 +117,12 @@ class GetDetailQuery(APITestCase):
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def get_last_query_by_category(self):
+        response = client.get(reverse('last-query-bycategory',
+                     kwargs={'category': self.id_category }),format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class CreateQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']

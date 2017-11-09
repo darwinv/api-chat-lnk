@@ -64,17 +64,17 @@ class QueryDetailSerializer(serializers.ModelSerializer):
 # serializer para traer el ultimo mensaje de consulta, por detalle
 # android especifico
 class QueryDetailLastMsgSerializer(serializers.ModelSerializer):
-    messages = serializers.SerializerMethodField()
+    last_msg = serializers.SerializerMethodField()
     code_client = serializers.SerializerMethodField()
 
     class Meta:
         model = Query
-        fields = ('id','title','status','messages','last_modified',
+        fields = ('id','title','status','last_msg','last_modified',
                   'client','code_client','specialist', 'category','calification')
         read_only_fields = ('status','last_modified')
 
         # Traer por consulta relacionada
-    def get_messages(self, obj):
+    def get_last_msg(self, obj):
         msg =  obj.message_set.all().last()
         return msg.message
 
@@ -214,7 +214,7 @@ class QueryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Query
         fields = ('id','title','last_msg','status', 'last_modified','category',
-                 'client','specialist')
+                 'client','specialist','calification')
         read_only_fields = ('specialist','id','last_time')
 
     # Devuelvo la hora y minuto separados

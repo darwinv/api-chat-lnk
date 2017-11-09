@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$', actors.SpecialistAccountView.as_view(), name='specialist-account-status'),
     url(r'^queries/$', query.QueryListView.as_view(), name='queries'), # consulta
     url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'), # reconsulta
+    url(r'^query-last/(?P<category>[0-9]+)/$', query.QueryLastView.as_view(), name='last-query-bycategory'), # reconsulta
     # url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'), # reconsulta
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
 

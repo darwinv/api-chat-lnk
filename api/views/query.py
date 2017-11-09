@@ -108,7 +108,6 @@ class QueryDetailView(APIView):
 
     def put(self, request, pk):
         data = request.data
-
         query = self.get_object(pk)
         if 'status' in data or 'calification' in data:
             serializer = QueryUpdateStatusSerializer(query, data, partial=True)
@@ -118,3 +117,17 @@ class QueryDetailView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class QueryLastView(APIView):
+    permission_classes = [permissions.AllowAny]
+    def get_object(self,category):
+        try:
+            # import pdb; pdb.set_trace()
+            return Query.objects.filter(category_id=category).all().last()
+        except Query.DoesNotExist:
+            raise Http404
+
+    def get(self, request, category):
+        query = self.get_object(category)
+        serializer = QueryDetailLastMsgSerializer(query)
+        return Response(serializer.data)
