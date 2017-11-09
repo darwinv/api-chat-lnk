@@ -258,7 +258,9 @@ class SellerFilter(filters.FilterSet):
         }
 
 class SellerListView(ListCreateAPIView, UpdateAPIView):
-    permission_classes = [permissions.AllowAny]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAdminUser,)
+    # permission_classes = [permissions.AllowAny]
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
 
@@ -266,7 +268,8 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
     filter_class = SellerFilter
 
 class SellerAccountView(ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAdminUser,)
     serializer_class = SellerAccountSerializer
 
     def get_object(self, pk):
@@ -299,13 +302,16 @@ class SellerAccountView(ListCreateAPIView):
 
 # Subir la foto de un usuario
 class PhotoUploadView(APIView):
-    permission_classes = [permissions.AllowAny]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (IsAdminOrOwner,)
     queryset = User.objects.all()
     parser_classes = (JSONParser, MultiPartParser)
 
     def get_object(self, pk):
         try:
-            return User.objects.get(pk=pk)
+            obj = User.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
         except User.DoesNotExist:
             raise Http404
 

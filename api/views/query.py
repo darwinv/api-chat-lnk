@@ -10,6 +10,7 @@ from api.serializers.query import QuerySerializer, QueryListSerializer, MessageS
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
+from api.permissions import IsAdminOnList, IsAdminOrOwner
 # from rest_framework import generics
 # import pdb
 
