@@ -95,13 +95,14 @@ class CreateSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
 
-        
+
 class DetailSpecialist(APITestCase):
     fixtures = ['data','data2','test_query','test_address']
     def setUp(self):
         self.specialist = 6
 
     def test_get_detail(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = client.get(reverse('specialist-detail',
                          kwargs={'pk': self.specialist}),format='json')
 
@@ -139,6 +140,7 @@ class UpdateSpecialistCase(APITestCase):
         # self.assertEqual(self.resp.data["id"], 'ey')
 
     def test_can_update_specialist(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -147,6 +149,7 @@ class UpdateSpecialistCase(APITestCase):
         data={'nick': 'eecih'}
         print(send)
         self.valid_payload["nick"] = "juiol"
+
         response = self.client.put(
             reverse('specialist-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
@@ -166,6 +169,7 @@ class UpdateSpecialistCase(APITestCase):
           }
 
         # agregar el especialista por defecto
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -221,6 +225,7 @@ class GetSpecialists(APITestCase):
 
     def test_get_all_specialists(self):
         # get API response
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = client.get(reverse('specialists'))
         # get data from db
         specialists = Specialist.objects.all()
@@ -337,6 +342,7 @@ class DeleteSpecialist(APITestCase):
         }
 
     def test_delete_specialist(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
