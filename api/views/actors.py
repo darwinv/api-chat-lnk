@@ -1,19 +1,21 @@
+
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from rest_framework.response import Response
-from rest_framework import status, permissions, viewsets, generics
+from rest_framework import status, permissions, viewsets
 from rest_framework import serializers
-from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
+
 from django.db.models import Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
+
 from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SellerSerializer, SellerAccountSerializer, MediaSerializer
 from django.http import Http404
-from api.permissions import IsAdminOnList, IsAdminOrOwner
 from rest_framework.pagination import PageNumberPagination
+from rest_framework import generics
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 import pdb, os
 import uuid
@@ -31,20 +33,15 @@ DATE_FAKE = '1900-01-01'
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    authentication_classes = (OAuth2Authentication,)
-    # solo el admin puede consultar
-    permission_classes = (permissions.IsAdminUser,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('username',)
 
-class ClientListView(ListCreateAPIView):
+class ClientListView(ListCreateAPIView, UpdateAPIView):
     # Lista todos los clientes naturales o crea uno nuevo
-    # no olvidar lo de los permisos
-    authentication_classes = (OAuth2Authentication,)
-    permission_classes = (IsAdminOnList,)
-    # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    # no olvidar lo de los permisos permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = [permissions.AllowAny]
     serializer_class = ClientSerializer
     queryset = Client.objects.all()
     filter_backends = (filters.DjangoFilterBackend,searchfilters.SearchFilter,)
@@ -78,9 +75,7 @@ class ClientListView(ListCreateAPIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class ClientDetailView(APIView):
-    authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
-    # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get_object(self, pk):
         try:
             return Client.objects.get(pk=pk)
@@ -93,8 +88,6 @@ class ClientDetailView(APIView):
         return Response(serializer.data)
 
 class ClientDetailByUsername(APIView):
-    authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated,)
     def get_object(self, username):
         try:
             return Client.objects.get(username=username)
@@ -111,9 +104,8 @@ class ClientDetailByUsername(APIView):
 
 #---------- ------ Inicio de Especialistas ------------------------------
 
-class SpecialistListView(ListCreateAPIView):
-    authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAdminUser,)
+class SpecialistListView(ListCreateAPIView, UpdateAPIView):
+    permission_classes = [permissions.AllowAny]
     queryset = Specialist.objects.all()
     serializer_class = SpecialistSerializer
 
@@ -156,16 +148,16 @@ class SpecialistListView(ListCreateAPIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        print(serializer.errors)
+        print("------------------------------------")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SpecialistDetailView(APIView):
-    authentication_classes = (OAuth2Authentication,)
-    permission_classes = (IsAdminOrOwner,)
+    permission_classes = [permissions.AllowAny]
     def get_object(self, pk):
         try:
-            obj = Specialist.objects.get(pk=pk)
-            self.check_object_permissions(self.request, obj)
-            return obj
+            return Specialist.objects.get(pk=pk)
         except Specialist.DoesNotExist:
             raise Http404
 

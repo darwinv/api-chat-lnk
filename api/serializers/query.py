@@ -49,7 +49,7 @@ class QueryDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Query
         fields = ('id','title','status','messages','last_modified',
-                  'client','code_client','specialist', 'category')
+                  'client','code_client','specialist', 'category','calification')
         read_only_fields = ('status','last_modified')
 
         # Traer por consulta relacionada
@@ -63,6 +63,24 @@ class QueryDetailSerializer(serializers.ModelSerializer):
 
 # serializer para traer el ultimo mensaje de consulta, por detalle
 # android especifico
+class QueryDetailLastMsgSerializer(serializers.ModelSerializer):
+    messages = serializers.SerializerMethodField()
+    code_client = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Query
+        fields = ('id','title','status','messages','last_modified',
+                  'client','code_client','specialist', 'category','calification')
+        read_only_fields = ('status','last_modified')
+
+        # Traer por consulta relacionada
+    def get_messages(self, obj):
+        msg =  obj.message_set.all().last()
+        return msg.message
+
+    def get_code_client(self,obj):
+        return str(obj.client.code)
+
 
 # Serializer para crear consulta
 class QuerySerializer(serializers.ModelSerializer):

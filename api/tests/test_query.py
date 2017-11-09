@@ -112,6 +112,10 @@ class GetDetailQuery(APITestCase):
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_get_query_with_last_msg(self):
+        url = "{}?query_last_msg".format(reverse('query-detail', kwargs={'pk': self.id_query }))
+        response = client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class CreateQuery(APITestCase):
