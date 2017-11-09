@@ -270,10 +270,11 @@ class SellerAccountView(ListCreateAPIView):
         # creacion de QuerySet para listadaos
         queryset = Seller.objects.filter(id=pk,purchase__fee__status=1)\
             .values('id','purchase__total_amount',
-                                  'purchase__id','purchase__code','purchase__query_amount',
+                                  'purchase__id','purchase__code','purchase__query_amount','purchase__fee_number',
                                   'purchase__product__is_billable','purchase__product__expiration_number','purchase__product__name',
                                   'purchase__client__code','purchase__client__nick', 'purchase__fee__date',
-                                  'purchase__fee__fee_amount','purchase__fee__status','purchase__fee__payment_type__name'
+                                  'purchase__fee__fee_amount','purchase__fee__status','purchase__fee__payment_type__name',
+                                  'purchase__fee__reference_number',
                                   )\
             .order_by('purchase__fee__date')
 

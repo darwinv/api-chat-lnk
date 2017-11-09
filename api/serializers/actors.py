@@ -386,7 +386,8 @@ class SellerSerializer(serializers.ModelSerializer):
 class SellerAccountSerializer(serializers.ModelSerializer):
     amount_accumulated = serializers.SerializerMethodField()
     fee_accumulated = serializers.SerializerMethodField()
-
+    is_billable = serializers.SerializerMethodField()
+    count_products = serializers.SerializerMethodField()
     # A continuacion se definen los campos enviados desde
     # el querySet para que el serializador los reconozca
     purchase__total_amount = serializers.CharField()
@@ -402,20 +403,22 @@ class SellerAccountSerializer(serializers.ModelSerializer):
     purchase__fee__fee_amount = serializers.CharField()
     purchase__fee__status = serializers.CharField()
     purchase__fee__payment_type__name = serializers.CharField()
-
+    purchase__fee__reference_number = serializers.CharField()
+    purchase__fee_number = serializers.CharField()
 
 
     class Meta:
         model = Seller
         fields = (
-            'amount_accumulated', 'fee_accumulated',
+            'amount_accumulated', 'fee_accumulated','is_billable','count_products',
             # Los campos a continuacion son enviados en el querySet pero han sido
             # redeclarados para que el serializer los reconozca
             'purchase__total_amount','purchase__id','purchase__code','purchase__query_amount',
             'purchase__product__is_billable','purchase__product__expiration_number',
             'purchase__product__name','purchase__client__code',
             'purchase__client__nick', 'purchase__fee__date','purchase__fee__fee_amount',
-            'purchase__fee__status','purchase__fee__payment_type__name'
+            'purchase__fee__status','purchase__fee__payment_type__name','purchase__fee__reference_number',
+            'purchase__fee_number'
         )
 
 
@@ -433,6 +436,20 @@ class SellerAccountSerializer(serializers.ModelSerializer):
         result = Fee.objects.filter(purchase_id=obj['purchase__id'], date__lte=obj['purchase__fee__date'],
                                    status=obj['purchase__fee__status']).count()
         return result
+
+    def get_is_billable(self, obj):
+        # Retorna si es facturable o no, formato texto
+        if obj['purchase__product__is_billable']:
+            result = "FAC"
+        else:
+            result = "NO FAC"
+
+        return result
+
+    def get_count_products(self, obj):
+        # Retorna cantidad de productos (de momento se compra ssiemrpe un solo producto)
+        return 1
+
 
 
 class MediaSerializer(serializers.Serializer):
