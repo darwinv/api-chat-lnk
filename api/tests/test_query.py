@@ -151,7 +151,7 @@ class CreateQuery(APITestCase):
         )
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    
+
 class UpdateQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']
     def setUp(self):
@@ -236,7 +236,6 @@ class SkipReQuery(APITestCase):
             reverse('query-detail', kwargs={'pk': self.id_query}),
             self.valid_payload, format='json'
         )
-        # import pdb; pdb.set_trace()
         self.assertEqual(int(response.data["status"]), 7)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

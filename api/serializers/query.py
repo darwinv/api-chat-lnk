@@ -123,21 +123,19 @@ class QuerySerializer(serializers.ModelSerializer):
     # Si se llega a necesitar devolver personalizada la respuesta
     # redefinir este metodo y descomentarlo
     def to_representation(self, obj):
-        # import pdb; pdb.set_trace()
-        msg = obj.message_set.all().order_by('-created_at')[:1]
         ms = MessageSerializer(obj.message_set.all().order_by('-created_at')[:1],many=True).data
-
          # message = MessageSerializer(obj.message_set.all().last()).data
         return {
             'id': obj.id,
             'title': obj.title,
             'status': obj.status,
-            'message': ms,
+            'messages': ms,
             'last_modified': obj.last_modified,
             'client': obj.client_id,
             'code_client': str(obj.client.code),
             'specialist': obj.specialist_id,
-            'category': obj.category_id
+            'category': obj.category_id,
+            'calification': obj.calification
          }
 
 
@@ -200,6 +198,11 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+    def to_representation(self,obj):
+        return {
+        "calification":obj.calification,
+        "status":obj.status
+    }
 
 
 class QueryListSerializer(serializers.ModelSerializer):
