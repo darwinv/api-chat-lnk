@@ -5,7 +5,7 @@ from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 import django_filters.rest_framework
-# from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
+from rest_framework import filters
 from api.serializers.query import QuerySerializer, QueryListSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
@@ -51,6 +51,7 @@ class QueryListView(ListCreateAPIView):
                     else:
                         queryset = Query.objects.filter(client_id=request.query_params["client"],
                                                         category_id=request.query_params["category"])
+
 
             serializer = QueryListSerializer(queryset, many=True)
             # pagination

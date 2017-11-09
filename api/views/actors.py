@@ -6,7 +6,6 @@ from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 from rest_framework import serializers
-
 from django.db.models import Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
