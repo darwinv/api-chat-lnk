@@ -18,7 +18,6 @@ class IsAdminOrOwner(permissions.BasePermission):
     # so we'll always allow GET, HEAD or OPTIONS requests.
         return (request.user and request.user.is_staff) or request.user.id == obj.id
 
-
 class IsAdminOnList(permissions.BasePermission):
 
     def has_permission(self, request, view):
