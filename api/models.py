@@ -290,15 +290,13 @@ class Purchase(models.Model):
     status = models.CharField(max_length=1, choices=option_status)
     expiration_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
-    promotion = models.ForeignKey(Promotion, on_delete=models.PROTECT, null=True)
+    promotion = models.ForeignKey(Promotion, on_delete=models.PROTECT, null=True, blank=True)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT, null=True)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     def __str__(self):
         return self.reference_number
-
-
-
+        
 
 class products_seller_no_billable(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)

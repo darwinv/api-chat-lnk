@@ -206,10 +206,16 @@ class SpecialistAccountView(APIView):
 
 #---------- ------ Inicio de Vendedores ------------------------------
 
+   
+        
 
 class SellerFilter(filters.FilterSet):
     count_plans_seller = filters.NumberFilter(name='count_plans_seller', method='filter_count_plans')
     count_queries_seller = filters.NumberFilter(name='count_queries_seller', method='filter_count_queries')
+    
+
+    
+
 
     def filter_count_plans(self, qs, name, value):
         #todos los id de vendedores que han vendido mas que value
@@ -240,12 +246,11 @@ class SellerFilter(filters.FilterSet):
 
     class Meta:
         model = Seller
-
         fields = {
             'first_name': ['exact','contains'],
             'last_name': ['exact','contains'],
-            'email_exact': ['exact','contains'],
             'ruc': ['exact','contains'],
+            'email_exact': ['exact','contains'],            
         }
 
 class SellerListView(ListCreateAPIView, UpdateAPIView):
@@ -255,6 +260,7 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = SellerFilter
+
 
 class SellerDetailView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]

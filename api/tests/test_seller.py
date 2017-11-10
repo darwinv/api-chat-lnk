@@ -4,44 +4,25 @@ from django.urls import reverse
 import json
 from ..models import Seller
 from rest_framework import status
-from ..serializers import SellerSerializer
+from api.serializers.actors import SellerSerializer
 import pdb
 
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
 
 
-class GetSellers(APITestCase):
-    fixtures = ['data']
+class GetAllSellers(APITestCase):
+    """ Test module for GET all sellers API """
+
     def setUp(self):
-        self.valid_payload = {
-			"id_zone": "2",
-			"id_username": "olopezTestPrimer",
-			"id_nick": "whatever",
-			"id_password": "123456",
-			"id_first_name": "oscar",
-			"id_last_name": "lopez",
-			"id_email_exact": "mai@mail.scom",
-			"id_telephone": "55443254",
-			"id_cellphone": "32534323134325",
-			"id_document_type": "0",
-			"id_code": "23245445235",
-			"id_document_number": "3143254325",
-			"id_ruc": "132514325323"
-		}
+        pass
 
-
-
-    def test_get_all_specialists(self):
+    def test_get_all_sellers(self):
         # get API response
-        response = client.get(reverse('specialists'))
+        response = client.get(reverse('sellers'))
         # get data from db
-        specialists = Seller.objects.all()
-        serializer = SellerSerializer(specialists, many=True)
-
+        sellers = Seller.objects.all()
+        serializer = SellerSerializer(sellers, many=True)
+        print(response.data['results'])
         self.assertEqual(response.data['results'], serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    # no funciona la prueba debido a que para
-    def test_get_associates_by_main(self):
-        pass
