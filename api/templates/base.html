@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title> </title>
+        <style type="text/css">
+           body{    padding-right: auto;
+                   padding-left: auto;
+                   margin-right: 45px;
+                   margin-left: 45px;}
+           p {font-family: Helvetica, freesans, Arial, sans-serif;
+              font-size: 20px}
+           .logo{background-color: #06070f;}
+           h1 {margin-top: 1px; border-radius: 5px;}
+           .cuerpo {
+               margin: 40px;
+           }
+           footer{
+               border-radius:10px;
+               background-color:#0a0b22; color:white;
+           }
+       </style>
+    </head>
+<body>
+     <!--  Linkup logo  -->
+    <center>
+        {% include 'lib/header.html' %}
+    <h1 style="background-color:#0a0b22; color:white"> Prueba {{nombre}}</h1>
+<div class="cuerpo" style="text-align: justify;">
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget lobortis eros.
+   Suspendisse potenti. Integer eu purus sapien. Fusce at nisi quis elit accumsan rutrum.
+   Nam gravida ac augue sit amet aliquet. Quisque laoreet tempor ex, quis tempus ligula fringilla ac.
+    Aliquam lacinia scelerisque elit, ac mattis eros imperdiet a.
+    </p>
+ </div>
+
+{% include 'lib/footer.html' %}
+
+         </center>
+    </body>
+
+</html>

@@ -46,6 +46,8 @@ CHARSET = "UTF-8"
 client = boto3.client('ses', region_name=AWS_REGION)
 
 
+
+
 def send_mail():
     # Try to send the email.
     try:

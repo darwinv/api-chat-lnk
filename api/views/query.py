@@ -1,13 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import Query, Specialist
+from api.models import Query, Specialist, Message
 from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 import django_filters.rest_framework
-# from api.serializers import UserSerializer, CategorySerializer, SpecialistSerializer
-from api.serializers.query import QueryCreateSerializer, QueryListSerializer
-from api.serializers.query import QueryUpdateSerializer, QueryDetailSerializer, QueryUpdateStatusSerializer
+from rest_framework import filters
+from api.serializers.query import QuerySerializer, QueryListSerializer, MessageSerializer
+from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
+from api.serializers.query import QueryDetailLastMsgSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 # from rest_framework import generics
@@ -21,6 +22,7 @@ class QueryListView(ListCreateAPIView):
 
     def list(self, request):
         status = request.query_params.get('status', None)
+
         try:
             queryset = Query.objects.filter(client_id=request.query_params["client"])
             # si se envia la categoria se filtra por la misma, en caso contrario
@@ -50,6 +52,10 @@ class QueryListView(ListCreateAPIView):
                     else:
                         queryset = Query.objects.filter(client_id=request.query_params["client"],
                                                         category_id=request.query_params["category"])
+            if 'order' in request.query_params:
+                # import pdb; pdb.set_trace()
+                if request.query_params["order"] == 'desc':
+                    queryset = queryset.order_by('-created_at')
 
             serializer = QueryListSerializer(queryset, many=True)
             # pagination
@@ -69,8 +75,7 @@ class QueryListView(ListCreateAPIView):
             data["message"]["specialist"] = Specialist.objects.get(type_specialist="m",
                                                             category_id=data["category"])
 
-            serializer = QueryCreateSerializer(data=data)
-
+            serializer = QuerySerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status.HTTP_201_CREATED)
@@ -89,8 +94,20 @@ class QueryDetailView(APIView):
             raise Http404
 
     def get(self, request, pk):
-        query = self.get_object(pk)
-        serializer = QueryDetailSerializer(query)
+        # si el argumento lastmsg existe, se debe volver,
+        # el ultimo mensaje de consulta, por detalle
+        # android especifico
+
+        if 'last_msg' in request.query_params:
+            # import pdb; pdb.set_trace()
+            msg = Message.objects.filter(query_id=pk).last()
+            serializer = MessageSerializer(msg)
+        elif 'query_last_msg' in request.query_params:
+            query = self.get_object(pk)
+            serializer = QueryDetailLastMsgSerializer(query)
+        else:
+            query = self.get_object(pk)
+            serializer = QueryDetailSerializer(query)
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -99,8 +116,22 @@ class QueryDetailView(APIView):
         if 'status' in data or 'calification' in data:
             serializer = QueryUpdateStatusSerializer(query, data, partial=True)
         else:
-            serializer = QueryUpdateSerializer(query, data, partial=True)
+            serializer = QuerySerializer(query, data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class QueryLastView(APIView):
+    permission_classes = [permissions.AllowAny]
+    def get_object(self,category):
+        try:
+            # import pdb; pdb.set_trace()
+            return Query.objects.filter(category_id=category).all().last()
+        except Query.DoesNotExist:
+            raise Http404
+
+    def get(self, request, category):
+        query = self.get_object(category)
+        serializer = QueryDetailLastMsgSerializer(query)
+        return Response(serializer.data)

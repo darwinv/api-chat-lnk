@@ -107,6 +107,23 @@ class GetDetailQuery(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_get_last_mgs(self):
+        url = "{}?last_msg".format(reverse('query-detail', kwargs={'pk': self.id_query }))
+        response = client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_query_with_last_msg(self):
+        url = "{}?query_last_msg".format(reverse('query-detail', kwargs={'pk': self.id_query }))
+        response = client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def get_last_query_by_category(self):
+        response = client.get(reverse('last-query-bycategory',
+                     kwargs={'category': self.id_category }),format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class CreateQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']
     def setUp(self):
@@ -138,9 +155,9 @@ class CreateQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # import pdb; pdb.set_trace()
-        # self.assertEqual(response.data, "ee")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
 class UpdateQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']
     def setUp(self):
@@ -225,7 +242,6 @@ class SkipReQuery(APITestCase):
             reverse('query-detail', kwargs={'pk': self.id_query}),
             self.valid_payload, format='json'
         )
-        # import pdb; pdb.set_trace()
         self.assertEqual(int(response.data["status"]), 7)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -259,6 +275,7 @@ class CreateReQuery(APITestCase):
             content_type='application/json'
         )
         data={
+            "id": send.data["id"],
             "message": {
             "message": "reconsulta",
             "msg_type": "r",
@@ -274,9 +291,10 @@ class CreateReQuery(APITestCase):
             reverse('query-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
         )
+        # import pdb; pdb.set_trace()
         self.assertEqual(int(response.data["status"]), 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # import pdb; pdb.set_trace()
+
 
 class SetCalification(APITestCase):
     fixtures = ['data','data2','test_address','test_query']
