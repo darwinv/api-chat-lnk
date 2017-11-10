@@ -39,7 +39,7 @@ class MessageAdmin(admin.ModelAdmin):
 
 class QueryAdmin(admin.ModelAdmin):
     inlines = [MessageInline]
-    exclude = ('calification',)
+    readonly_fields = ('calification',)
 
 class SellerAdmin(admin.ModelAdmin):
     fields = ('zone','username', 'nick','password','first_name', 'last_name',

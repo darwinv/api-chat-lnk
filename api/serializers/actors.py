@@ -186,13 +186,21 @@ class SpecialistSerializer(serializers.ModelSerializer):
         return str(obj.category)
 
     def validate(self, data):
-        # validation = CommonValidation()
-        # if 'photo' in data:
-        #     validation.validate_img(photo=data['photo'])
+        flag = True
+        if hasattr(self.instance, 'type_specialist'):
+            if self.instance.type_specialist == 'm':
+                flag = False
+
         # Asegurarse que solo haya un especialista principal por categoria.
-        if self.instance and self.instance.username != data["username"]:
-            if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
-                                                                            category__name=data["category"]).exists():
+        if hasattr(self.instance, 'category'):
+            category = self.instance.category
+        else:
+            category = data.get("category")
+
+        if self.instance and self.instance.username != data["username"] or 'type_specialist' in data:
+
+            if flag and data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
+                                                                           category_id=category).exists():
                 raise serializers.ValidationError(u"Main specialist already exists.")
         return data
 

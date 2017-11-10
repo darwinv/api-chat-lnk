@@ -112,6 +112,16 @@ class GetDetailQuery(APITestCase):
         response = client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_get_query_with_last_msg(self):
+        url = "{}?query_last_msg".format(reverse('query-detail', kwargs={'pk': self.id_query }))
+        response = client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def get_last_query_by_category(self):
+        response = client.get(reverse('last-query-bycategory',
+                     kwargs={'category': self.id_category }),format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class CreateQuery(APITestCase):
@@ -145,9 +155,9 @@ class CreateQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # import pdb; pdb.set_trace()
-        # self.assertEqual(response.data, "ee")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
 class UpdateQuery(APITestCase):
     fixtures = ['data','data2','test_address','test_query']
     def setUp(self):
@@ -232,7 +242,6 @@ class SkipReQuery(APITestCase):
             reverse('query-detail', kwargs={'pk': self.id_query}),
             self.valid_payload, format='json'
         )
-        # import pdb; pdb.set_trace()
         self.assertEqual(int(response.data["status"]), 7)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

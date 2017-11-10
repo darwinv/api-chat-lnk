@@ -49,7 +49,7 @@ class QueryDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Query
         fields = ('id','title','status','messages','last_modified',
-                  'client','code_client','specialist', 'category')
+                  'client','code_client','specialist', 'category','calification')
         read_only_fields = ('status','last_modified')
 
         # Traer por consulta relacionada
@@ -63,6 +63,24 @@ class QueryDetailSerializer(serializers.ModelSerializer):
 
 # serializer para traer el ultimo mensaje de consulta, por detalle
 # android especifico
+class QueryDetailLastMsgSerializer(serializers.ModelSerializer):
+    last_msg = serializers.SerializerMethodField()
+    code_client = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Query
+        fields = ('id','title','status','last_msg','last_modified',
+                  'client','code_client','specialist', 'category','calification')
+        read_only_fields = ('status','last_modified')
+
+        # Traer por consulta relacionada
+    def get_last_msg(self, obj):
+        msg =  obj.message_set.all().last()
+        return msg.message
+
+    def get_code_client(self,obj):
+        return str(obj.client.code)
+
 
 # Serializer para crear consulta
 class QuerySerializer(serializers.ModelSerializer):
@@ -105,17 +123,19 @@ class QuerySerializer(serializers.ModelSerializer):
     # Si se llega a necesitar devolver personalizada la respuesta
     # redefinir este metodo y descomentarlo
     def to_representation(self, obj):
-         message = MessageSerializer(obj.message_set.all().last()).data
-         return {
+        ms = MessageSerializer(obj.message_set.all().order_by('-created_at')[:1],many=True).data
+         # message = MessageSerializer(obj.message_set.all().last()).data
+        return {
             'id': obj.id,
             'title': obj.title,
             'status': obj.status,
-            'message': message,
+            'messages': ms,
             'last_modified': obj.last_modified,
             'client': obj.client_id,
             'code_client': str(obj.client.code),
             'specialist': obj.specialist_id,
-            'category': obj.category_id
+            'category': obj.category_id,
+            'calification': obj.calification
          }
 
 
@@ -178,6 +198,11 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+    def to_representation(self,obj):
+        return {
+        "calification":obj.calification,
+        "status":obj.status
+    }
 
 
 class QueryListSerializer(serializers.ModelSerializer):
@@ -189,7 +214,7 @@ class QueryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Query
         fields = ('id','title','last_msg','status', 'last_modified','category',
-                 'client','specialist')
+                 'client','specialist','calification')
         read_only_fields = ('specialist','id','last_time')
 
     # Devuelvo la hora y minuto separados

@@ -315,9 +315,9 @@ class Fee(models.Model):
     fee_order_number = models.PositiveIntegerField()  # El numero de cuota que se esta pagando
     fee_amount = models.FloatField()  # total pagado para esta cuota
     transaction_code = models.CharField(max_length=45)
-    
+
     purchase = models.ForeignKey(Purchase, on_delete=models.PROTECT)
-    payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)    
+    payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
     api_client = models.TextField(null=True)
     tablename = models.CharField(max_length=17, null=True)
     option_status = (
