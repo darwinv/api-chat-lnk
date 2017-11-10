@@ -22,6 +22,7 @@ class QueryListView(ListCreateAPIView):
 
     def list(self, request):
         status = request.query_params.get('status', None)
+
         try:
             queryset = Query.objects.filter(client_id=request.query_params["client"])
             # si se envia la categoria se filtra por la misma, en caso contrario
@@ -51,7 +52,10 @@ class QueryListView(ListCreateAPIView):
                     else:
                         queryset = Query.objects.filter(client_id=request.query_params["client"],
                                                         category_id=request.query_params["category"])
-
+            if 'order' in request.query_params:
+                # import pdb; pdb.set_trace()
+                if request.query_params["order"] == 'desc':
+                    queryset = queryset.order_by('-created_at')
 
             serializer = QueryListSerializer(queryset, many=True)
             # pagination
