@@ -10,12 +10,13 @@ from api.serializers.query import QuerySerializer, QueryListSerializer, MessageS
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
-from api.permissions import IsAdminOnList, IsAdminOrOwner
-# from rest_framework import generics
+from api.permissions import IsAdminOnList, IsAdminOrOwner, IsOwner
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
 # import pdb
 
 
 class QueryListView(ListCreateAPIView):
+    authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.AllowAny]
     queryset = Query.objects.all()
     serializer_class = QueryListSerializer
