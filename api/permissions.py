@@ -1,4 +1,4 @@
-from rest_framework import permissions
+from rest_framework import permissions, serializers
 
 
 class IsAdminUserOrReadOnly(permissions.BasePermission):
@@ -15,8 +15,13 @@ class IsAdminUserOrReadOnly(permissions.BasePermission):
 # Solo puede verlo el propio user
 class IsOwner(permissions.BasePermission):
     def has_permission(self, request, view):
-        client = request.query_params['client']
-        return request.user.id == client
+        # import pdb; pdb.set_trace()
+        try:
+            client = int(request.query_params['client'])
+            return request.user.id == client
+        except Exception as e:
+            string_error = u"Exception " + str(e)
+            raise serializers.ValidationError(detail=string_error)
 
 # Solo el admin y/o el user
 class IsAdminOrOwner(permissions.BasePermission):

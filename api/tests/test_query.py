@@ -10,7 +10,7 @@ import pdb
 # Create your tests here.
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
+client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
 
 class GetAllQuerys(APITestCase):
     """ Test module for GET all Querys API """
@@ -26,8 +26,9 @@ class GetAllQuerys(APITestCase):
         url = "{}?client={}".format(reverse('queries'),self.id_client)
         response = client.get(url)
         # get data from db
-        self.assertEqual(Query.objects.filter(client_id=self.id_client).count(), response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Query.objects.filter(client_id=self.id_client).count(), response.data["count"])
+
 
     def test_invalid_client(self):
         response = client.get(reverse('queries'))

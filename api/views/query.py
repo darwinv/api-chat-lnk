@@ -17,7 +17,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHa
 
 class QueryListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsOwner]
     queryset = Query.objects.all()
     serializer_class = QueryListSerializer
 
@@ -83,6 +83,9 @@ class QueryListView(ListCreateAPIView):
 
 
 class QueryDetailView(APIView):
+    # se debe definir todos los sets de permisos
+    # ejemplo solo el principal puede derivar
+    # solo el cliente puede preguntar, etc
     permission_classes = [permissions.AllowAny]
     def get_object(self, pk):
         try:
