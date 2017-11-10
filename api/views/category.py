@@ -11,7 +11,9 @@ import pdb
 class CategoryListView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
-        specialities = Category.objects.all()
+        # Category.objects.all()
+        # devuelve solo las especialidades con especialista principal
+        specialities = Category.objects.filter(specialist__type_specialist='m')
         serializer = CategorySerializer(specialities, many=True)
         return Response(serializer.data)
 
