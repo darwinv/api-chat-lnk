@@ -356,6 +356,10 @@ class SellerSerializer(serializers.ModelSerializer):
         'first_name',
         'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'code', 'document_number', 'ruc')
 
+    def __init__(self,*args, **kwargs):
+        super(SellerSerializer, self).__init__(*args, **kwargs)
+
+
     def get_quota(self, obj):
         value = 0
 
@@ -366,7 +370,6 @@ class SellerSerializer(serializers.ModelSerializer):
             value = time_delay.value
         except Exception as e:
             print(e.args)
-            print("---------------ERROR---------------")
         return value
 
 
@@ -384,7 +387,7 @@ class SellerSerializer(serializers.ModelSerializer):
         :param obj:
         :return: cantidad de consultas de los productos que ha vendido el usuario vendedor
         """
-        result = Product.objects.filter(purchase__seller__isnull=False, purchase__seller=obj.id).aggregate(Sum('query_amount'))
+        result = Purchase.objects.filter(seller__isnull=False, seller=obj.id).aggregate(Sum('query_amount'))
 
         return result['query_amount__sum']
 
@@ -412,8 +415,8 @@ class SellerAccountSerializer(serializers.ModelSerializer):
     purchase__fee__payment_type__name = serializers.CharField()
     purchase__fee__reference_number = serializers.CharField()
     purchase__fee_number = serializers.CharField()
-
-
+    purchase__fee__id = serializers.CharField()
+    purchase__fee__fee_order_number = serializers.CharField()
     class Meta:
         model = Seller
         fields = (
@@ -423,9 +426,9 @@ class SellerAccountSerializer(serializers.ModelSerializer):
             'purchase__total_amount','purchase__id','purchase__code','purchase__query_amount',
             'purchase__product__is_billable','purchase__product__expiration_number',
             'purchase__product__name','purchase__client__code',
-            'purchase__client__nick', 'purchase__fee__date','purchase__fee__fee_amount',
+            'purchase__client__nick', 'purchase__fee__date','purchase__fee__fee_amount', 'purchase__fee__id',
             'purchase__fee__status','purchase__fee__payment_type__name','purchase__fee__reference_number',
-            'purchase__fee_number'
+            'purchase__fee_number','purchase__fee__fee_order_number'
         )
 
 

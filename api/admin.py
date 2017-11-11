@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import Role, User, Seller, Client, Category, Specialist, Query,Quota,Seller,Zone
-from .models import Department, Province, District, Message, MessageFile
+from .models import Department, Province, District, Message, MessageFile, Plan, Product
+from .models import Purchase, PaymentType, Fee
 # Register your models here.
 
 
@@ -38,12 +39,20 @@ class MessageAdmin(admin.ModelAdmin):
 
 class QueryAdmin(admin.ModelAdmin):
     inlines = [MessageInline]
-    exclude = ('calification',)
+    readonly_fields = ('calification',)
 
 class SellerAdmin(admin.ModelAdmin):
     fields = ('zone','username', 'nick','password','first_name', 'last_name',
     'email_exact','telephone','cellphone','document_type','code', 'document_number',
     'ruc')
+
+class PlanAdmin(admin.ModelAdmin):
+    fields = ('name',)
+
+class PurchaseAdmin(admin.ModelAdmin):
+    fields = ('client','seller','total_amount','reference_number','fee_number','latitude','longitude','query_available',
+        'is_promotional','last_number_fee_paid','status','expiration_date','promotion','code','product','query_amount')
+
 
 admin.site.register(Client,ClientNaturalAdmin)
 # admin.site.register(Client,ClientBussinessAdmin)
@@ -57,3 +66,8 @@ admin.site.register(District)
 admin.site.register(Quota)
 admin.site.register(Zone)
 admin.site.register(Seller,SellerAdmin)
+admin.site.register(Plan,PlanAdmin)
+admin.site.register(Product)
+admin.site.register(Purchase)
+admin.site.register(PaymentType)
+admin.site.register(Fee)
