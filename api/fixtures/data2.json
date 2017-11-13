@@ -1,5 +1,4 @@
-[
-  {
+[{
     "model": "api.role",
     "pk": 1,
     "fields": {
@@ -98,14 +97,14 @@
     "model": "api.commercialgroup",
     "pk": 1,
     "fields": {
-        "name": "Technologies"
+      "name": "Technologies"
     }
   },
   {
     "model": "api.commercialgroup",
     "pk": 2,
     "fields": {
-        "name": "Agriculture"
+      "name": "Agriculture"
     }
   },
   {
@@ -379,65 +378,65 @@
     }
   },
   {
-  "model": "api.user",
-  "pk": 1,
-  "fields": {
-    "password": "pbkdf2_sha256$36000$ZoKwG4C5uFXR$IDtDvqi2/fH+4Jw4NfiZd0JW13TJ2ARQM4FhAfWZn5g=",
-    "last_login": "2017-10-02T22:26:08.423Z",
-    "is_superuser": true,
-    "username": "admin",
-    "first_name": "",
-    "last_name": "",
-    "email": "",
-    "is_staff": true,
-    "is_active": true,
-    "date_joined": "2017-10-02T21:17:37.995Z",
-    "nick": "",
-    "email_exact": "admin@email",
-    "telephone": "",
-    "cellphone": "",
-    "photo": "preview.png",
-    "document_type": "",
-    "document_number": "00",
-    "ruc": null,
-    "code": "00",
-    "anonymous": true,
-    "updated_at": "2017-10-02T21:17:38.226Z",
-    "nationality": 1,
-    "role": 1,
-    "address": null,
-    "groups": [],
-    "user_permissions": []
-   }
+    "model": "api.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$36000$ZoKwG4C5uFXR$IDtDvqi2/fH+4Jw4NfiZd0JW13TJ2ARQM4FhAfWZn5g=",
+      "last_login": "2017-10-02T22:26:08.423Z",
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2017-10-02T21:17:37.995Z",
+      "nick": "",
+      "email_exact": "admin@email",
+      "telephone": "",
+      "cellphone": "",
+      "photo": "preview.png",
+      "document_type": "",
+      "document_number": "00",
+      "ruc": null,
+      "code": "00",
+      "anonymous": true,
+      "updated_at": "2017-10-02T21:17:38.226Z",
+      "nationality": 1,
+      "role": 1,
+      "address": null,
+      "groups": [],
+      "user_permissions": []
+    }
   },
   {
-  "model": "oauth2_provider.application",
-  "pk": 1,
-  "fields": {
-    "client_id": "FUN5EkBDdiQo8SixJYslF41ZkrjAhQtWKkV7BEE2",
-    "user": null,
-    "redirect_uris": "",
-    "client_type": "public",
-    "authorization_grant_type": "password",
-    "client_secret": "P7pj3QcE6GyhlS0QUzJOJ8SRLlTGHYSMESGr7QzlyKnuMsc4osaaStB6wSiGGxAelKjXv6xJ7p9Go8R5el2KaVlcM4P50IeplkY2CWHxaOc9NI1fLKS9DoWxD9UbG4TN",
-    "name": "",
-    "skip_authorization": false,
-    "created": "2017-10-02T21:19:16.205Z",
-    "updated": "2017-10-02T21:19:16.205Z"
-   }
+    "model": "oauth2_provider.application",
+    "pk": 1,
+    "fields": {
+      "client_id": "FUN5EkBDdiQo8SixJYslF41ZkrjAhQtWKkV7BEE2",
+      "user": null,
+      "redirect_uris": "",
+      "client_type": "public",
+      "authorization_grant_type": "password",
+      "client_secret": "P7pj3QcE6GyhlS0QUzJOJ8SRLlTGHYSMESGr7QzlyKnuMsc4osaaStB6wSiGGxAelKjXv6xJ7p9Go8R5el2KaVlcM4P50IeplkY2CWHxaOc9NI1fLKS9DoWxD9UbG4TN",
+      "name": "",
+      "skip_authorization": false,
+      "created": "2017-10-02T21:19:16.205Z",
+      "updated": "2017-10-02T21:19:16.205Z"
+    }
   },
   {
-   "model": "oauth2_provider.accesstoken",
-   "pk": 1,
-   "fields": {
-    "user": 1,
-    "token": "EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz",
-    "application": 1,
-    "expires": "9999-12-31T23:59:59Z",
-    "scope": "",
-    "created": "2016-12-31T23:59:59Z",
-    "updated": "2017-10-02T22:27:09.173Z"
-   }
+    "model": "oauth2_provider.accesstoken",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "token": "EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz",
+      "application": 1,
+      "expires": "9999-12-31T23:59:59Z",
+      "scope": "",
+      "created": "2016-12-31T23:59:59Z",
+      "updated": "2017-10-02T22:27:09.173Z"
+    }
   },
   {
     "model": "api.Parameter",
@@ -446,5 +445,41 @@
       "parameter": "time_delay_response",
       "value": 24
     }
+  },
+
+  {
+    "model": "api.paymenttype",
+    "pk": 1,
+    "fields": {
+      "name": "Efectivo"
+    }
+  }, {
+    "model": "api.paymenttype",
+    "pk": 2,
+    "fields": {
+      "name": "Transferencia"
+    }
+  }, {
+    "model": "api.paymenttype",
+    "pk": 3,
+    "fields": {
+      "name": "Online"
+    }
+  }, {
+    "model": "api.paymenttype",
+    "pk": 4,
+    "fields": {
+      "name": "Deposito"
+    }
   }
+
+
+
+
+
+
+
+
+
+
 ]

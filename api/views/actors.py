@@ -2,14 +2,14 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
-from api.serializers.actors import ClientSerializer, UserPhotoSerializer
+
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 from rest_framework import serializers
 from django.db.models import Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
-
+from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SellerSerializer, SellerAccountSerializer, MediaSerializer
 from django.http import Http404
@@ -297,6 +297,8 @@ class SellerAccountView(ListCreateAPIView):
                                   )\
             .order_by('purchase__fee__date')
 
+        print(queryset.query)
+        print("------------------------------------")
         serializer = SellerAccountSerializer(queryset, many=True)
         # pagination
         page = self.paginate_queryset(queryset)
