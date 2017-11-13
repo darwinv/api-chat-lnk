@@ -296,7 +296,7 @@ class Purchase(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     def __str__(self):
         return self.reference_number
-        
+
 
 class products_seller_no_billable(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
@@ -395,6 +395,9 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.message
 
 class MessageFile(models.Model):
     url = models.CharField(max_length=100)

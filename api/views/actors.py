@@ -206,16 +206,9 @@ class SpecialistAccountView(APIView):
 
 #---------- ------ Inicio de Vendedores ------------------------------
 
-   
-        
-
 class SellerFilter(filters.FilterSet):
     count_plans_seller = filters.NumberFilter(name='count_plans_seller', method='filter_count_plans')
     count_queries_seller = filters.NumberFilter(name='count_queries_seller', method='filter_count_queries')
-    
-
-    
-
 
     def filter_count_plans(self, qs, name, value):
         #todos los id de vendedores que han vendido mas que value
@@ -243,15 +236,14 @@ class SellerFilter(filters.FilterSet):
                 sellers_ids.append(seller.id)
         return qs.filter(id__in= sellers_ids)
 
+    first_name = filters.CharFilter(name='first_name', lookup_expr='icontains')
+    last_name = filters.CharFilter(name='last_name', lookup_expr='icontains')
+    ruc = filters.CharFilter(name='ruc', lookup_expr='icontains')
+    email_exact = filters.CharFilter(name='email_exact', lookup_expr='icontains')
 
     class Meta:
         model = Seller
-        fields = {
-            'first_name': ['exact','contains'],
-            'last_name': ['exact','contains'],
-            'ruc': ['exact','contains'],
-            'email_exact': ['exact','contains'],            
-        }
+        fields = ['first_name', 'last_name', 'ruc', 'email_exact']
 
 class SellerListView(ListCreateAPIView, UpdateAPIView):
     permission_classes = [permissions.AllowAny]
