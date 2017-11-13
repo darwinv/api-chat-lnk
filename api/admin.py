@@ -36,6 +36,7 @@ class MessageInline(admin.TabularInline):
 
 class MessageAdmin(admin.ModelAdmin):
     inlines = [MessageFileInline]
+    list_display = ('message','msg_type','created_at')
 
 class QueryAdmin(admin.ModelAdmin):
     inlines = [MessageInline]
