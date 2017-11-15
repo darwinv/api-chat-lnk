@@ -16,6 +16,7 @@ from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import generics
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
+from django.utils.translation import ugettext_lazy as _
 import pdb, os
 import uuid
 import boto3
@@ -300,8 +301,11 @@ class SellerAccountView(ListCreateAPIView):
                                   )\
             .order_by('purchase__fee__date')
 
-        print(queryset.query)
+
+        print(_("fooo"))
         print("------------------------------------")
+
+
         serializer = SellerAccountSerializer(queryset, many=True)
         # pagination
         page = self.paginate_queryset(queryset)
