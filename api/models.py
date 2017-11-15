@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import EmailValidator
 
+
+
 class Countries(models.Model):
     name = models.CharField(max_length=90, unique=True)
     code_phone = models.CharField(max_length=4)
@@ -127,16 +129,6 @@ class SellerContactNoEfective(models.Model):
     def __str__(self):
         return self.contact_firstname
 
-class Profession(models.Model):
-    name = models.CharField(max_length=45)
-    def __str__(self):
-        return self.name
-
-class CommercialGroup(models.Model):
-    name = models.CharField(max_length=45)
-    def __str__(self):
-        return self.name
-
 class EconomicSector(models.Model):
     name = models.CharField(max_length=45)
     def __str__(self):
@@ -161,19 +153,32 @@ class Client(User):
     sex = models.CharField(max_length=1, choices=options_sex, null=True)
 
     options_civil_state = (
-        ('s', 'Single'),
-        ('m', 'Married'),
-        ('d', 'Divorce'),
-        ('w', 'Widower'),
+        ('c','cohabiting'),
+        ('e','separated'),
+        ('m','married'),
+        ('w','widower'),
+        ('d','divorced'),
+        ('s','single'),
     )
+
+
+
+
+
     civil_state = models.CharField(max_length=1, choices=options_civil_state, null=True)
     birthdate = models.DateField(null=True)
     ciiu = models.CharField(max_length=4)
     activity_description = models.CharField(max_length=255)
     institute = models.CharField(max_length=100, null=True, blank=True)
+    
     options_ocupation = (
-        ('d', 'Dependent'),
-        ('i', 'Independent'),
+    ('0','Employer'),
+    ('1','Independent worker'),
+    ('2','Employee'),
+    ('3','Worker'),
+    ('4','Worker in a family business'),
+    ('5','Home worker'),
+    ('6','Other'),
     )
     ocupation = models.CharField(max_length=1, choices=options_ocupation)
     about = models.CharField(max_length=255)
@@ -181,8 +186,7 @@ class Client(User):
     agent_firstname = models.CharField(max_length=45, null=True)
     agent_lastname = models.CharField(max_length=45, null=True)
     position = models.CharField(max_length=45, null=True)
-    profession = models.ForeignKey(Profession, on_delete=models.PROTECT, null=True)
-    commercial_group = models.ForeignKey(CommercialGroup, on_delete=models.PROTECT, null=True)
+    profession = models.CharField(max_length=45, null=True)
     economic_sector = models.ForeignKey(EconomicSector, on_delete=models.PROTECT, null=True)
     level_instruction = models.ForeignKey(LevelInstruction, on_delete=models.PROTECT, null=True)
     seller_asigned = models.ForeignKey(Seller, on_delete=models.PROTECT, null=True)
