@@ -23,8 +23,8 @@ msgstr ""
 
 #: .\linkupapi\settings.py:121
 msgid "Spanish"
-msgstr ""
+msgstr "Spanish"
 
 #: .\linkupapi\settings.py:122
 msgid "English"
-msgstr ""
+msgstr "English"

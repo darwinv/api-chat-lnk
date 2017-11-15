@@ -20,12 +20,12 @@ msgstr ""
 
 #: .\api\templates\base.html:27
 msgid "Title"
-msgstr ""
+msgstr "Titulo"
 
 #: .\linkupapi\settings.py:121
 msgid "Spanish"
-msgstr ""
+msgstr "Español"
 
 #: .\linkupapi\settings.py:122
 msgid "English"
-msgstr ""
+msgstr "Ingles"
