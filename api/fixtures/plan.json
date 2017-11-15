@@ -1,0 +1,1 @@
+[{"model": "api.plan", "pk": 1, "fields": {"name": "PymPluss", "created_at": "2017-11-13T19:07:53.754Z"}}, {"model": "api.plan", "pk": 2, "fields": {"name": "Link Pluss", "created_at": "2017-11-13T19:08:03.101Z"}}, {"model": "api.plan", "pk": 3, "fields": {"name": "MinPack", "created_at": "2017-11-13T19:08:20.535Z"}}]
