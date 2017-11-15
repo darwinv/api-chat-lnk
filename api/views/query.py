@@ -11,12 +11,14 @@ from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerial
 from api.serializers.query import QueryDetailLastMsgSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
-# from rest_framework import generics
+from api.permissions import IsAdminOnList, IsAdminOrOwner, IsOwner
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
 # import pdb
 
 # Para Crear y Listado de consultas
 class QueryListView(ListCreateAPIView):
-    permission_classes = [permissions.AllowAny]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [IsOwner]
     queryset = Query.objects.all()
     serializer_class = QueryListSerializer
 # listado de las consultas
@@ -87,6 +89,9 @@ class QueryListView(ListCreateAPIView):
 
 # Detall de consulta
 class QueryDetailView(APIView):
+    # se debe definir todos los sets de permisos
+    # ejemplo solo el principal puede derivar
+    # solo el cliente puede preguntar, etc
     permission_classes = [permissions.AllowAny]
     def get_object(self, pk):
         try:

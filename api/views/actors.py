@@ -1,11 +1,11 @@
-
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
 
 from rest_framework.response import Response
-from rest_framework import status, permissions, viewsets
+from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
 from django.db.models import Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
@@ -13,8 +13,8 @@ from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SellerSerializer, SellerAccountSerializer, MediaSerializer
 from django.http import Http404
+from api.permissions import IsAdminOnList, IsAdminOrOwner
 from rest_framework.pagination import PageNumberPagination
-from rest_framework import generics
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 import pdb, os
 import uuid
@@ -32,6 +32,9 @@ DATE_FAKE = '1900-01-01'
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    authentication_classes = (OAuth2Authentication,)
+    # solo el admin puede consultar
+    permission_classes = (permissions.IsAdminUser,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = (filters.DjangoFilterBackend,)
@@ -40,8 +43,10 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):
     # Lista todos los clientes naturales o crea uno nuevo
-    # no olvidar lo de los permisos permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    permission_classes = [permissions.AllowAny]
+    # no olvidar lo de los permisos
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (IsAdminOnList,)
+    # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
     serializer_class = ClientSerializer
     queryset = Client.objects.all()
     filter_backends = (filters.DjangoFilterBackend,searchfilters.SearchFilter,)
@@ -79,9 +84,9 @@ class ClientListView(ListCreateAPIView):
 # Vista para Detalle del Cliente
 
 class ClientDetailView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    # Metodo para devolver objeto
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
     def get_object(self, pk):
         try:
             return Client.objects.get(pk=pk)
@@ -97,6 +102,8 @@ class ClientDetailView(APIView):
 # Vista para detalle del cliente segun su username
 # se hizo con la finalidad de instanciar una vez logueado
 class ClientDetailByUsername(APIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated,)
     def get_object(self, username):
         try:
             return Client.objects.get(username=username)
@@ -112,9 +119,10 @@ class ClientDetailByUsername(APIView):
 # Fin de Clientes
 
 #---------- ------ Inicio de Especialistas ------------------------------
-# Vista para Listado y Creacion de Especialista
+
 class SpecialistListView(ListCreateAPIView):
-    permission_classes = [permissions.AllowAny]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAdminUser,)
     queryset = Specialist.objects.all()
     serializer_class = SpecialistSerializer
 
@@ -161,11 +169,13 @@ class SpecialistListView(ListCreateAPIView):
 
 # Vista para el detalle del especialista, actualizacion y borrado
 class SpecialistDetailView(APIView):
-    permission_classes = [permissions.AllowAny]
-    # metodo para devolver la instancia segun id
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (IsAdminOrOwner,)
     def get_object(self, pk):
         try:
-            return Specialist.objects.get(pk=pk)
+            obj = Specialist.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
         except Specialist.DoesNotExist:
             raise Http404
     # detalle
@@ -257,7 +267,9 @@ class SellerFilter(filters.FilterSet):
         fields = ['first_name', 'last_name', 'ruc', 'email_exact']
 
 class SellerListView(ListCreateAPIView, UpdateAPIView):
-    permission_classes = [permissions.AllowAny]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAdminUser,)
+    # permission_classes = [permissions.AllowAny]
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
 
@@ -279,7 +291,8 @@ class SellerDetailView(APIView):
         return Response(serializer.data)
 
 class SellerAccountView(ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAdminUser,)
     serializer_class = SellerAccountSerializer
 
     def get_object(self, pk):
@@ -315,14 +328,17 @@ class SellerAccountView(ListCreateAPIView):
 
 # Subir la foto de un usuario
 class PhotoUploadView(APIView):
-    permission_classes = [permissions.AllowAny]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (IsAdminOrOwner,)
     queryset = User.objects.all()
     parser_classes = (JSONParser, MultiPartParser)
 
     # localizo el usuario segun su id
     def get_object(self, pk):
         try:
-            return User.objects.get(pk=pk)
+            obj = User.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
         except User.DoesNotExist:
             raise Http404
 

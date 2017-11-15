@@ -60,7 +60,21 @@
 		"groups": [],
 		"user_permissions": []
 	}
-}, {
+},
+{
+ "model": "oauth2_provider.accesstoken",
+ "pk": 2,
+ "fields": {
+	"user": 2,
+	"token": "j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR",
+	"application": 1,
+	"expires": "9999-12-31T23:59:59Z",
+	"scope": "",
+	"created": "2016-12-31T23:59:59Z",
+	"updated": "2017-10-02T22:27:09.173Z"
+ }
+},
+{
 	"model": "api.user",
 	"pk": 3,
 	"fields": {

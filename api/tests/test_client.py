@@ -8,7 +8,7 @@ from api.serializers.actors import ClientSerializer
 # Create your tests here.
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
+client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
 
 # user = User.objects.get(username='admin')
 # client.credentials(Authorization='Bearer ' + token.key)
@@ -257,7 +257,7 @@ class GetDetailClient(APITestCase):
 
 class GetAllClients(APITestCase):
     """ Test module for GET all clients API """
-
+    fixtures = ['data','data2']
     def setUp(self):
         pass
 

@@ -1,16 +1,19 @@
 from rest_framework.views import APIView
 from api.models import Category
 from api.serializers.category import CategorySerializer
+from api.permissions import IsAdminUserOrReadOnly
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
 from django.http import Http404
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from rest_framework.pagination import PageNumberPagination
 import pdb
 
 # Devuelve las especialidaddes que solo tienen especialista principal
 class CategoryListView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminUserOrReadOnly)
     def get(self, request):
         # Category.objects.all()
         specialities = Category.objects.filter(specialist__type_specialist='m')
@@ -19,7 +22,8 @@ class CategoryListView(APIView):
 
 # detalle de la especialidad
 class CategoryDetailView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminUserOrReadOnly)
     def get_object(self, pk):
         try:
             return Category.objects.get(pk=pk)

@@ -204,6 +204,11 @@ class SpecialistSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(u"Main specialist already exists.")
         return data
 
+        # if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
+        #                                                                 category_id=category).exists():
+        #     raise serializers.ValidationError(u"Main specialist already exists.")
+        # return data
+
     def create(self, validated_data):
         data_address = validated_data.pop('address')
         address = Address.objects.create(**data_address)

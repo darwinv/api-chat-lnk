@@ -7,8 +7,9 @@ from rest_framework import status
 from api.serializers.actors import SpecialistSerializer
 import pdb
 
+
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
+client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
 
 class CreateSpecialist(APITestCase):
     fixtures = ['data','data2']
@@ -41,16 +42,19 @@ class CreateSpecialist(APITestCase):
     def test_invalid_names(self):
         data = self.valid_payload
         del data['last_name']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_category(self):
         data = self.valid_payload
         data['category'] = 'Exploracion Espacial'
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -61,6 +65,7 @@ class CreateSpecialist(APITestCase):
     def test_invalid_type_specialist(self):
         data = self.valid_payload
         data['type_specialist'] = 'r'
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -72,6 +77,7 @@ class CreateSpecialist(APITestCase):
         data = self.valid_payload
         data["last_name"] = ""
         data["first_name"] = ""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -80,6 +86,7 @@ class CreateSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_specialist(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -87,6 +94,21 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
+
+
+class DetailSpecialist(APITestCase):
+    fixtures = ['data','data2','test_query','test_address']
+    def setUp(self):
+        self.specialist = 6
+
+    def test_get_detail(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = client.get(reverse('specialist-detail',
+                         kwargs={'pk': self.specialist}),format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class UpdateSpecialistCase(APITestCase):
     fixtures = ['data','data2']
     def setUp(self):
@@ -118,6 +140,7 @@ class UpdateSpecialistCase(APITestCase):
         # self.assertEqual(self.resp.data["id"], 'ey')
 
     def test_can_update_specialist(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -126,6 +149,7 @@ class UpdateSpecialistCase(APITestCase):
         data={'nick': 'eecih'}
         print(send)
         self.valid_payload["nick"] = "juiol"
+
         response = self.client.put(
             reverse('specialist-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
@@ -145,6 +169,7 @@ class UpdateSpecialistCase(APITestCase):
           }
 
         # agregar el especialista por defecto
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -200,6 +225,7 @@ class GetSpecialists(APITestCase):
 
     def test_get_all_specialists(self):
         # get API response
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = client.get(reverse('specialists'))
         # get data from db
         specialists = Specialist.objects.all()
@@ -210,7 +236,7 @@ class GetSpecialists(APITestCase):
 
     # no funciona la prueba debido a que para
     def test_get_associates_by_main(self):
-        fixtures = ['data']
+        fixtures = ['data','data2']
         data_first_associate = {
             'username': 'maria',
             'nick': 'maria',
@@ -316,6 +342,7 @@ class DeleteSpecialist(APITestCase):
         }
 
     def test_delete_specialist(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
