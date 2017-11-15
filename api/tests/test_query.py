@@ -142,6 +142,7 @@ class CreateQuery(APITestCase):
     def test_title_large(self):
         data = self.valid_payload
         data["title"] = "aasdsjkl asd aksd kasjd laksdjkasdl asdklasjdkasdjlkasdj"
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         response = self.client.post(
             reverse('queries'),
             data=json.dumps(data),
@@ -151,6 +152,7 @@ class CreateQuery(APITestCase):
 
 
     def test_create_query(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         response = self.client.post(
             reverse('queries'),
             data=json.dumps(self.valid_payload),
@@ -174,6 +176,7 @@ class UpdateQuery(APITestCase):
         }
 
     def test_absolved_query(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         send = self.client.post(
             reverse('queries'),
             data=json.dumps(self.valid_payload),
@@ -202,6 +205,7 @@ class UpdateQuery(APITestCase):
 
 
     def test_add_message_to_query(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         send = self.client.post(
             reverse('queries'),
             data=json.dumps(self.valid_payload),
@@ -270,6 +274,7 @@ class CreateReQuery(APITestCase):
         }
 
     def test_make_requery(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         send = self.client.post(
             reverse('queries'),
             data=json.dumps(self.valid_payload),
@@ -288,6 +293,7 @@ class CreateReQuery(APITestCase):
         query.status = 4
         query.save()
         self.assertEqual(int(Query.objects.get(pk=send.data["id"]).status), 4)
+        # self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         response = self.client.put(
             reverse('query-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
