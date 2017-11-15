@@ -34,65 +34,150 @@
     "model": "api.levelinstruction",
     "pk": 1,
     "fields": {
-      "name": "College Concluded"
+      "name": "No level"
     }
   },
   {
     "model": "api.levelinstruction",
     "pk": 2,
     "fields": {
-      "name": "College Student"
+      "name": "Initial"
     }
   },
   {
     "model": "api.levelinstruction",
     "pk": 3,
     "fields": {
-      "name": "Technical Superior"
+      "name": "Primary"
     }
   },
   {
     "model": "api.levelinstruction",
     "pk": 4,
     "fields": {
-      "name": "High School Concluded"
+      "name": "High school"
     }
   },
   {
     "model": "api.levelinstruction",
     "pk": 5,
     "fields": {
-      "name": "High School Unfinished"
+      "name": "Basic special"
     }
   },
   {
     "model": "api.levelinstruction",
     "pk": 6,
     "fields": {
-      "name": "School Concluded"
+      "name": "Superior non-university incomplete"
     }
   },
   {
     "model": "api.levelinstruction",
     "pk": 7,
     "fields": {
-      "name": "School Unfinished"
+      "name": "Superior non-university full"
     }
   },
+  {
+    "model": "api.levelinstruction",
+    "pk": 8,
+    "fields": {
+      "name": "Incomplete university superior"
+    }
+  },
+  {
+    "model": "api.levelinstruction",
+    "pk": 9,
+    "fields": {
+      "name": "Full university superior"
+    }
+  },
+  {
+    "model": "api.levelinstruction",
+    "pk": 10,
+    "fields": {
+      "name": "master's degree"
+    }
+  },
+  {
+    "model": "api.levelinstruction",
+    "pk": 11,
+    "fields": {
+      "name": "Doctorate"
+    }
+  },
+
+
+
+
+
   {
     "model": "api.economicsector",
     "pk": 1,
     "fields": {
-      "name": "Primary"
+      "name": "Farming"
     }
   },
   {
     "model": "api.economicsector",
     "pk": 2,
     "fields": {
-      "name": "Secondary"
+      "name": "Fishing"
     }
   },
+  {
+    "model": "api.economicsector",
+    "pk": 3,
+    "fields": {
+      "name": "Mining"
+    }
+  },
+  {
+    "model": "api.economicsector",
+    "pk": 4,
+    "fields": {
+      "name": "Hydrocarbons"
+    }
+  },
+  {
+    "model": "api.economicsector",
+    "pk": 5,
+    "fields": {
+      "name": "Manufacture"
+    }
+  },
+  {
+    "model": "api.economicsector",
+    "pk": 6,
+    "fields": {
+      "name": "Electricity and Water"
+    }
+  },
+  {
+    "model": "api.economicsector",
+    "pk": 7,
+    "fields": {
+      "name": "Building"
+    }
+  },
+  {
+    "model": "api.economicsector",
+    "pk": 8,
+    "fields": {
+      "name": "Commerce"
+    }
+  },
+  {
+    "model": "api.economicsector",
+    "pk": 9,
+    "fields": {
+      "name": "Services"
+    }
+  },
+
+
+
   {
     "model": "api.commercialgroup",
     "pk": 1,
@@ -112,7 +197,7 @@
     "pk": 1,
     "fields": {
       "name": "Agroindustria",
-      "image": "agro.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-21-3.png",
       "description": "actividad economica que comprende la produccion industrializacion y comercialización de productos agropecuarios forestales y otros recursos naturales biológicos.",
       "payment_per_answer": 1
     }
@@ -122,7 +207,7 @@
     "pk": 2,
     "fields": {
       "name": "Alimentaria",
-      "image": "alimentos.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-27.png",
       "description": "es la parte de la industria que se encarga de todos los procesos relacionados con la cadena alimentaria. ",
       "payment_per_answer": 1
     }
@@ -132,7 +217,7 @@
     "pk": 3,
     "fields": {
       "name": "Automatizacion",
-      "image": "automate.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-04.png",
       "description": "uso de sistemas o elementos computarizadosy electromecánicos para controlar maquinarias o procesos industriales",
       "payment_per_answer": 1
     }
@@ -142,7 +227,7 @@
     "pk": 4,
     "fields": {
       "name": "Impuestos",
-      "image": "tax.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-02.png",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -152,7 +237,7 @@
     "pk": 5,
     "fields": {
       "name": "Contabilidad",
-      "image": "accounting.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-06.png",
       "description": "Lorem ipsum dolor sit amet, consetetur",
       "payment_per_answer": 1
     }
@@ -162,7 +247,7 @@
     "pk": 6,
     "fields": {
       "name": "Derecho Tributario",
-      "image": "tribute.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-07.png",
       "description": "Lorem ipsum dolor sit amet, consetetur",
       "payment_per_answer": 1
     }
@@ -172,7 +257,7 @@
     "pk": 7,
     "fields": {
       "name": "Finanzas",
-      "image": "finance.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-08.png",
       "description": "Lorem ipsum dolor sit amet, consetetur",
       "payment_per_answer": 1
     }
@@ -182,7 +267,7 @@
     "pk": 8,
     "fields": {
       "name": "Seguros",
-      "image": "assurance.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-09.png",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -192,7 +277,7 @@
     "pk": 9,
     "fields": {
       "name": "Derecho Corporativo",
-      "image": "lawcorporative.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-10.png",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -202,7 +287,7 @@
     "pk": 10,
     "fields": {
       "name": "Comercio Exterior",
-      "image": "foreign_trade.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-11.png",
       "description": "Lorem ipsum dolor sit amet, consetetur adipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -212,7 +297,7 @@
     "pk": 11,
     "fields": {
       "name": "Tecnologia de la Información",
-      "image": "tic.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-12.png",
       "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -222,7 +307,7 @@
     "pk": 12,
     "fields": {
       "name": "Propiedad Intelectual",
-      "image": "copyright.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-13.png",
       "description": "Lorem ipsum dolor sit amet, consete sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -232,7 +317,7 @@
     "pk": 13,
     "fields": {
       "name": "Publicidad",
-      "image": "advertising.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-14.png",
       "description": "Lorem ipsum dolor sit amet, consetetut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -242,7 +327,7 @@
     "pk": 14,
     "fields": {
       "name": "Piscologia Organizacional",
-      "image": "psichology.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-15.png",
       "description": "Lorem ipsum dolor sit amet, conseteturidunt ptuas",
       "payment_per_answer": 1
     }
@@ -252,7 +337,7 @@
     "pk": 15,
     "fields": {
       "name": "Contrataciones con el Estado",
-      "image": "state_contracts.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-16.png",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunttuas",
       "payment_per_answer": 1
     }
@@ -262,7 +347,7 @@
     "pk": 16,
     "fields": {
       "name": "Marketing",
-      "image": "marketing.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-17.png",
       "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -272,7 +357,7 @@
     "pk": 17,
     "fields": {
       "name": "Mecanica",
-      "image": "mechanics.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-18.png",
       "description": "Lorem ipsum dolor sit amet, consetetur nt tuas",
       "payment_per_answer": 1
     }
@@ -282,7 +367,7 @@
     "pk": 18,
     "fields": {
       "name": "Derecho Notarial y Registral",
-      "image": "notarylaw.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-19.png",
       "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -292,7 +377,7 @@
     "pk": 19,
     "fields": {
       "name": "Gestion de Proyectos",
-      "image": "projects.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-20.png",
       "description": "Lorem ipsum dolor sit amet, conseteturnt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -302,7 +387,7 @@
     "pk": 20,
     "fields": {
       "name": "Electricidad",
-      "image": "electricity.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-22.png",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidutuas",
       "payment_per_answer": 1
     }
@@ -312,7 +397,7 @@
     "pk": 21,
     "fields": {
       "name": "Derecho Procesal Civil",
-      "image": "procedural_law.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-23.png",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunptuas",
       "payment_per_answer": 1
     }
@@ -322,7 +407,7 @@
     "pk": 22,
     "fields": {
       "name": "Electronica",
-      "image": "electronics.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-24.png",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -332,7 +417,7 @@
     "pk": 23,
     "fields": {
       "name": "Derecho Penal",
-      "image": "criminal_law.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-25.png",
       "description": "Lorem ipsum dolor sit amet, conseteturnt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -342,7 +427,7 @@
     "pk": 24,
     "fields": {
       "name": "Derecho Laboral",
-      "image": "labor_law.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-26.png",
       "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -352,7 +437,7 @@
     "pk": 25,
     "fields": {
       "name": "Gastronomia",
-      "image": "gastronomy.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-27.png",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor inviduntut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
@@ -362,7 +447,7 @@
     "pk": 26,
     "fields": {
       "name": "Plasticos",
-      "image": "plastic.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-28.png",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunttuas",
       "payment_per_answer": 1
     }
@@ -372,7 +457,7 @@
     "pk": 27,
     "fields": {
       "name": "Derecho Minero",
-      "image": "mining_law.png",
+      "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-29.png",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
       "payment_per_answer": 1
     }
