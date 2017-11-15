@@ -101,6 +101,8 @@ class Objection(models.Model):
         return self.name
 
 
+
+
 class SellerContactNoEfective(models.Model):
     contact_firstname = models.CharField(max_length=45, null=True)
     contact_lastname = models.CharField(max_length=55, null=True)
@@ -116,6 +118,7 @@ class SellerContactNoEfective(models.Model):
         ('1', 'Passport'),
         ('2', 'Foreign Card'),
     )
+    
     document_type = models.CharField(max_length=1, choices=options_documents)
     document_number = models.CharField(max_length=18)
     contact_bussinessname = models.CharField(max_length=45, null=True)
@@ -139,18 +142,31 @@ class LevelInstruction(models.Model):
     def __str__(self):
         return self.name
 
-class Client(User):
-    options_type = (
-        ('n', 'Natural'),
-        ('b', 'Bussiness'),
-    )
-    type_client = models.CharField(max_length=1, choices=options_type)
 
-    options_sex = (
-        ('m', 'Male'),
-        ('f', 'Female'),
-    )
-    sex = models.CharField(max_length=1, choices=options_sex, null=True)
+
+class ClassChoisesAPI(object):
+    options_type = options_sex = ()
+
+    def __init__(self):
+        super(ClassChoisesAPI, self).__init__()
+
+        self.options_type = (
+            ('n', 'Natural2'),
+            ('b', 'Bussiness2'),
+        )
+
+        self.options_sex = (
+            ('m', 'Male'),
+            ('f', 'Female'),
+        )
+
+
+class Client(User,ClassChoisesAPI):
+    c = ClassChoisesAPI()
+    
+    type_client = models.CharField(max_length=1, choices=c.options_type)
+
+    sex = models.CharField(max_length=1, choices=c.options_sex, null=True)
 
     options_civil_state = (
         ('c','cohabiting'),

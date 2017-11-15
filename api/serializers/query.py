@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from api.models import User, Client, LevelInstruction, Profession, Role, Countries
-from api.models import CommercialGroup, EconomicSector, Address, Department
+from api.models import User, Client, LevelInstruction, Role, Countries
+from api.models import EconomicSector, Address, Department
 from api.models import Province, District, Category, Specialist, Query, Message
 from api.models import Parameter, MessageFile
 from django.utils import six
