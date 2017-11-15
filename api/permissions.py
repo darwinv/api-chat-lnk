@@ -15,13 +15,16 @@ class IsAdminUserOrReadOnly(permissions.BasePermission):
 # Solo puede verlo el propio user
 class IsOwner(permissions.BasePermission):
     def has_permission(self, request, view):
-        # import pdb; pdb.set_trace()
-        try:
-            client = int(request.query_params['client'])
-            return request.user.id == client
-        except Exception as e:
-            string_error = u"Exception " + str(e)
-            raise serializers.ValidationError(detail=string_error)
+        if request.method in permissions.SAFE_METHODS:
+            try:
+                client = int(request.query_params['client'])
+                return request.user.id == client
+            except Exception as e:
+                string_error = u"Exception " + str(e)
+                raise serializers.ValidationError(detail=string_error)
+
+        if request.method == "POST":
+            return request.user.id == request.data["client"]
 
 # Solo el admin y/o el user
 class IsAdminOrOwner(permissions.BasePermission):
