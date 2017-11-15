@@ -37,7 +37,8 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('username',)
 
-class ClientListView(ListCreateAPIView, UpdateAPIView):
+# Vista para Listar y Crear Clientes
+class ClientListView(ListCreateAPIView):
     # Lista todos los clientes naturales o crea uno nuevo
     # no olvidar lo de los permisos permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     permission_classes = [permissions.AllowAny]
@@ -52,8 +53,10 @@ class ClientListView(ListCreateAPIView, UpdateAPIView):
     #    serializer = ClientSerializer(clients, many=True)
     #    return Response(serializer.data)
 
+    # Metodo post redefinido
     def post(self, request):
         data = request.data
+        # codigo de usuario se crea con su prefijo de cliente y su numero de documento
         data['code'] = PREFIX_CODE_CLIENT + str(request.data.get('document_number'))
         data['role'] = ROLE_CLIENT
         if data['type_client'] == 'n':
@@ -73,8 +76,12 @@ class ClientListView(ListCreateAPIView, UpdateAPIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+# Vista para Detalle del Cliente
+
 class ClientDetailView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    # Metodo para devolver objeto
     def get_object(self, pk):
         try:
             return Client.objects.get(pk=pk)
@@ -86,6 +93,9 @@ class ClientDetailView(APIView):
         serializer = ClientSerializer(client)
         return Response(serializer.data)
 
+
+# Vista para detalle del cliente segun su username
+# se hizo con la finalidad de instanciar una vez logueado
 class ClientDetailByUsername(APIView):
     def get_object(self, username):
         try:
@@ -102,8 +112,8 @@ class ClientDetailByUsername(APIView):
 # Fin de Clientes
 
 #---------- ------ Inicio de Especialistas ------------------------------
-
-class SpecialistListView(ListCreateAPIView, UpdateAPIView):
+# Vista para Listado y Creacion de Especialista
+class SpecialistListView(ListCreateAPIView):
     permission_classes = [permissions.AllowAny]
     queryset = Specialist.objects.all()
     serializer_class = SpecialistSerializer
@@ -122,7 +132,6 @@ class SpecialistListView(ListCreateAPIView, UpdateAPIView):
 
         # en dado caso que exista el parametro "main_specialist", se devuelve
         # el listado de especialistas asociados, caso contrario devuelve todos
-        # pdb.set_trace()
         if 'main_specialist' in request.query_params:
             specialist = self.get_object(request.query_params["main_specialist"])
             queryset = Specialist.objects.filter(category_id=specialist.category).exclude(type_specialist='m')
@@ -138,36 +147,37 @@ class SpecialistListView(ListCreateAPIView, UpdateAPIView):
             return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
 
-
+    # Funcion para crear un especialista
     def post(self, request):
         data = request.data
+        # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number')
         data['role'] = ROLE_SPECIALIST
         serializer = SpecialistSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        print(serializer.errors)
-        print("------------------------------------")
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# Vista para el detalle del especialista, actualizacion y borrado
 class SpecialistDetailView(APIView):
     permission_classes = [permissions.AllowAny]
+    # metodo para devolver la instancia segun id
     def get_object(self, pk):
         try:
             return Specialist.objects.get(pk=pk)
         except Specialist.DoesNotExist:
             raise Http404
-
+    # detalle
     def get(self, request, pk):
         specialist = self.get_object(pk)
         serializer = SpecialistSerializer(specialist)
         return Response(serializer.data)
-
+    # actualizacion
     def put(self, request, pk):
         data = request.data
         specialist = self.get_object(pk)
+        # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number',specialist.document_number)
         data['photo'] = request.data.get('photo',specialist.photo)
         data['username'] = specialist.username
@@ -180,12 +190,13 @@ class SpecialistDetailView(APIView):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    # borrado
     def delete(self,request,pk):
         specialist = self.get_object(pk)
         specialist.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# Vista para estado de cuenta de especialista
 class SpecialistAccountView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get_object(self, pk):
@@ -306,12 +317,14 @@ class PhotoUploadView(APIView):
     queryset = User.objects.all()
     parser_classes = (JSONParser, MultiPartParser)
 
+    # localizo el usuario segun su id
     def get_object(self, pk):
         try:
             return User.objects.get(pk=pk)
         except User.DoesNotExist:
             raise Http404
 
+    # metodo para actualizar
     def put(self, request, pk):
         data = request.data
         user = self.get_object(pk)
@@ -329,17 +342,16 @@ class PhotoUploadView(APIView):
             destination.close()
         else:
             raise serializers.ValidationError(media_serializer.errors)
-
-        # pdb.set_trace()
+        # se sube el archivo a amazon
         name_photo = self.upload_photo_s3(filename)
-        os.remove(filename)
+        os.remove(filename) # se elimina del server local
         serializer = UserPhotoSerializer(user, data={'photo': name_photo }, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+    # metodo para subir foto a s3
     def upload_photo_s3(self, filename):
 
         #subir archivo con libreria boto
