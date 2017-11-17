@@ -34,6 +34,7 @@ msgstr "Natural2 ES"
 msgid "Bussiness2"
 msgstr "Bussiness2 ES"
 
+
 #: .\api\templates\base.html:27
 msgid "Title"
 msgstr "Titulo"
