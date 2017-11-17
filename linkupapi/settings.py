@@ -67,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware'
 ]
 
 ROOT_URLCONF = 'linkupapi.urls'
@@ -121,7 +122,7 @@ LANGUAGES = (
     ('en', _('English')),
 )
 # Set the default language for your site.
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'es-es'
 
 # Tell Django where the project's translation files should be.
 LOCALE_PATHS = (    

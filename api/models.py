@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import EmailValidator
 
-from .api_choices_models import ChoicesAPI as c
+from api.api_choices_models import ChoicesAPI as c
 
 
 class Countries(models.Model):
@@ -273,11 +273,8 @@ class Fee(models.Model):
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
     api_client = models.TextField(null=True)
     tablename = models.CharField(max_length=17, null=True)
-    option_status = (
-        ('1', 'Wait'),
-        ('2', 'Ready'),
-    )
-    status = models.CharField(max_length=1, choices=option_status)
+    
+    status = models.CharField(max_length=1, choices=c.fee_status)
     date = models.DateField()
     datetime_payment = models.DateTimeField(null=True)
     def __str__(self):
@@ -291,13 +288,8 @@ class CreditCard(models.Model):
 
 class CulqiPayment(models.Model):
     culqi_code = models.CharField(max_length=40)
-    option_status = (
-        ('w', 'Wait'),
-        ('d', 'Denied'),
-        ('e', 'Exhaled'),
-        ('p', 'Paid'),
-    )
-    status = models.CharField(max_length=1, choices=option_status)
+    
+    status = models.CharField(max_length=1, choices=c.culqipayment_status)
     credit_cartd = models.ForeignKey(CreditCard, on_delete=models.PROTECT)
 
 
@@ -307,17 +299,8 @@ class CulqiPayment(models.Model):
 
 class Query(models.Model):
     title = models.CharField(max_length=50)
-    option_status = (
-        ('0', 'Requested'), # Preguntada, pendiente de derivar o responder
-        ('1', 'Requested Derived'), # derivada, pendiente de declinar o responder, reconsulta
-        ('2', 'Pending Response'), # derivada a asociado, pendiente de respuesta
-        ('3', 'Pending Main Response'), # principal, pendiente de respuesta
-        ('4', 'Answered Main'), # respondida por principal
-        ('5', 'Answered'), # respondida por asociado
-        ('6', 'Absolved Main'), # resuelta por principal
-        ('7', 'Absolved'), # resuelta por asociado
-    )
-    status = models.CharField(max_length=1, choices=option_status)
+    
+    status = models.CharField(max_length=1, choices=c.query_status)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     calification = models.PositiveSmallIntegerField(null=True)
@@ -339,12 +322,8 @@ class QueryLog(Query):
 
 class Message(models.Model):
     message = models.TextField()
-    options_msg_type = (
-        ('q', 'query'), # es de tipo consulta
-        ('r', 'requery'), # es de tipo reconsulta
-        ('a', 'answer'), # es de tipo respuesta
-        )
-    msg_type = models.CharField(max_length=1, choices=options_msg_type)
+    
+    msg_type = models.CharField(max_length=1, choices=c.message_msg_type)
     created_at = models.DateTimeField(auto_now_add=True)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
@@ -354,12 +333,8 @@ class Message(models.Model):
 
 class MessageFile(models.Model):
     url = models.CharField(max_length=100)
-    options_type_file = (
-        ('0', 'Image'),
-        ('1', 'Voice'),
-        ('2', 'Document'),
-    )
-    type_file = models.CharField(max_length=1, choices=options_type_file)
+    
+    type_file = models.CharField(max_length=1, choices=c.messagefile_type_file)
     message = models.ForeignKey(Message, on_delete=models.PROTECT)
 
 class Interval(models.Model):
@@ -368,12 +343,8 @@ class Interval(models.Model):
         return str(self.interval)
 
 class AlertCategory(models.Model):
-    name_choices = (
-        ('c', 'Critic'),
-        ('m', 'Moderate'),
-        ('p', 'Positive'),
-    )
-    name = models.CharField(max_length=1, choices=name_choices)
+    
+    name = models.CharField(max_length=1, choices=c.alertcategory_name)
     interval = models.ForeignKey(Interval, on_delete=models.PROTECT)
     def __str__(self):
         return self.name

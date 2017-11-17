@@ -2,7 +2,6 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
-
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 from rest_framework import serializers
@@ -302,8 +301,7 @@ class SellerAccountView(ListCreateAPIView):
             .order_by('purchase__fee__date')
 
 
-        print(_("fooo"))
-        print("------------------------------------")
+        # print(_("fooo"))
 
 
         serializer = SellerAccountSerializer(queryset, many=True)

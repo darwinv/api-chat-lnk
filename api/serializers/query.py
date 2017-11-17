@@ -4,6 +4,7 @@ from api.models import User, Client, LevelInstruction, Role, Countries
 from api.models import EconomicSector, Address, Department
 from api.models import Province, District, Category, Specialist, Query, Message
 from api.models import Parameter, MessageFile
+from api.api_choices_models import ChoicesAPI as c
 from django.utils import six
 import pdb
 from datetime import datetime
@@ -11,14 +12,14 @@ from django.utils import timezone
 
 
 class MessageFileSerializer(serializers.ModelSerializer):
-    type_file = serializers.ChoiceField(choices=MessageFile.options_type_file)
+    type_file = serializers.ChoiceField(choices=c.messagefile_type_file)
     class Meta:
         model = MessageFile
         fields = ('url','type_file')
 
 # Serializer de Mensajes
 class MessageSerializer(serializers.ModelSerializer):
-    msg_type = serializers.ChoiceField(choices=Message.options_msg_type)
+    msg_type = serializers.ChoiceField(choices=c.message_msg_type)
     time = serializers.SerializerMethodField()
     media_files = serializers.SerializerMethodField()
     code_specialist = serializers.SerializerMethodField()
@@ -170,7 +171,7 @@ class QuerySerializer(serializers.ModelSerializer):
 # serializer para actualizar solo status de la consulta sin
 # enviar msjs
 class QueryUpdateStatusSerializer(serializers.ModelSerializer):
-    status = serializers.ChoiceField(choices=Query.option_status)
+    status = serializers.ChoiceField(choices=c.query_status)
     class Meta:
         model = Query
         fields = ('id','title','status','calification')
@@ -206,7 +207,7 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
 
 
 class QueryListSerializer(serializers.ModelSerializer):
-    status = serializers.ChoiceField(choices=Query.option_status, read_only=True)
+    status = serializers.ChoiceField(choices=c.query_status, read_only=True)
     last_modified = serializers.SerializerMethodField()
     # media_files = FilesSerializer()
     last_msg = serializers.SerializerMethodField()

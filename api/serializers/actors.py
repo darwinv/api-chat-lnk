@@ -1,13 +1,17 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+
 from api.models import User, Client, LevelInstruction, Role, Countries
 from api.models import EconomicSector, Address, Department
+
 
 from api.models import Province, District, Category, Specialist, Query
 from api.models import Parameter, Seller, Quota, Product, Purchase
 from api.models import Province, District, Specialist, Query, Fee
+from django.utils.translation import ugettext_lazy as _
+from api.api_choices_models import ChoicesAPI as c
+
 from django.utils import six
-import pdb
 import datetime
 from django.utils import timezone
 import json
@@ -83,12 +87,12 @@ class ClientSerializer(serializers.ModelSerializer):
     commercial_group_name = serializers.SerializerMethodField()
     economic_sector_name = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)
-    type_client = serializers.ChoiceField(choices=Client.options_type)
-    sex = serializers.ChoiceField(choices=Client.options_sex, allow_blank=True)
+    type_client = serializers.ChoiceField(choices=c.client_type_client)
+    sex = serializers.ChoiceField(choices=c.client_sex, allow_blank=True)
     # sex_value = CustomChoiceField(choices=Client.options_sex)
-    document_type = serializers.ChoiceField(choices=Client.options_documents)
-    civil_state = serializers.ChoiceField(choices=Client.options_civil_state, allow_blank=True)
-    ocupation = serializers.ChoiceField(choices=Client.options_ocupation, allow_blank=True)
+    document_type = serializers.ChoiceField(choices=c.user_document_type)
+    civil_state = serializers.ChoiceField(choices=c.client_civil_state, allow_blank=True)
+    ocupation = serializers.ChoiceField(choices=c.client_ocupation, allow_blank=True)
     address = AddressSerializer()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     photo = serializers.CharField(read_only=True)
@@ -160,8 +164,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
-    document_type = serializers.ChoiceField(choices=Specialist.options_documents)
-    type_specialist = serializers.ChoiceField(choices=Specialist.options_type)
+    document_type = serializers.ChoiceField(choices=c.user_document_type)
+    type_specialist = serializers.ChoiceField(choices=c.specialist_type_specialist)
     address = AddressSerializer()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
