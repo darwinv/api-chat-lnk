@@ -320,9 +320,10 @@ class Fee(models.Model):
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
     api_client = models.TextField(null=True)
     tablename = models.CharField(max_length=17, null=True)
+    # estado del pago de la cuota
     option_status = (
-        ('1', 'Wait'),
-        ('2', 'Ready'),
+        ('1', 'Pending'),
+        ('2', 'Paid'),
     )
     status = models.CharField(max_length=1, choices=option_status)
     date = models.DateField()
