@@ -144,7 +144,7 @@ class LevelInstruction(models.Model):
 
 
 
-class ClassChoisesAPI(object):
+class ClassChoisesAPI:
     options_type = options_sex = ()
 
     def __init__(self):
@@ -160,13 +160,15 @@ class ClassChoisesAPI(object):
             ('f', 'Female'),
         )
 
+    def get_type(self):
+        self.options_type
 
-class Client(User,ClassChoisesAPI):
+class Client(User):
     c = ClassChoisesAPI()
-    
-    type_client = models.CharField(max_length=1, choices=c.options_type)
 
-    sex = models.CharField(max_length=1, choices=c.options_sex, null=True)
+    type_client = models.CharField(max_length=1, choices=c.get_type)
+
+    sex = models.CharField(max_length=1, choices=c.get_type, null=True)
 
     options_civil_state = (
         ('c','cohabiting'),
