@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import EmailValidator
 
-from django.utils.translation import ugettext_lazy as _
+from .api_choices_models import ChoicesAPI as c
 
 
 class Countries(models.Model):
@@ -70,12 +70,8 @@ class User(AbstractUser):
     telephone = models.CharField(max_length=14)
     cellphone = models.CharField(max_length=14)
     photo = models.CharField(max_length=250, null=True)
-    options_documents = (
-        ('0', 'DNI'),
-        ('1', 'Passport'),
-        ('2', 'Foreign Card'),
-    )
-    document_type = models.CharField(max_length=1, choices=options_documents)
+    
+    document_type = models.CharField(max_length=1, choices=c.user_document_type)
     document_number = models.CharField(max_length=45, unique=True)
     ruc = models.CharField(max_length=40, unique=True, null=True)
     code = models.CharField(max_length=45, unique=True)
@@ -107,20 +103,10 @@ class Objection(models.Model):
 class SellerContactNoEfective(models.Model):
     contact_firstname = models.CharField(max_length=45, null=True)
     contact_lastname = models.CharField(max_length=55, null=True)
-    options_type = (
-        ('n', 'Natural'),
-        ('b', 'Business'),
-    )
-
-    type_contact = models.CharField(max_length=1, choices=options_type)
-
-    options_documents = (
-        ('0', 'DNI'),
-        ('1', 'Passport'),
-        ('2', 'Foreign Card'),
-    )
     
-    document_type = models.CharField(max_length=1, choices=options_documents)
+    type_contact = models.CharField(max_length=1, choices=c.client_type_client)
+    
+    document_type = models.CharField(max_length=1, choices=c.user_document_type)
     document_number = models.CharField(max_length=18)
     contact_bussinessname = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
@@ -143,78 +129,20 @@ class LevelInstruction(models.Model):
     def __str__(self):
         return self.name
 
+class Client(User):
 
+    type_client = models.CharField(max_length=1, choices=c.client_type_client)
 
+    sex = models.CharField(max_length=1, choices=c.client_sex, null=True)
 
-
-
-
-
-
-
-class ClassChoisesAPI:
-    options_type = (
-            ('n', 'Natural'),
-            ('b', 'Bussiness'),
-        )
-
-    options_sex = ()
-
-    def __init__(self):
-        super(ClassChoisesAPI, self).__init__()
-
-        self.options_type = (
-            ('n', 'Natural2'),
-            ('b', 'Bussiness2'),
-        )
-
-        self.options_sex = (
-            ('m', 'Male'),
-            ('f', 'Female'),
-        )
-
-    def get_type(self):
-        return self.options_type
-
-
-
-
-class Client(User,ClassChoisesAPI):
-    c = ClassChoisesAPI()
-
-    type_client = models.CharField(max_length=1, choices=c.get_type())
-
-    sex = models.CharField(max_length=1, choices=c.get_type(), null=True)
-
-    options_civil_state = (
-        ('c','cohabiting'),
-        ('e','separated'),
-        ('m','married'),
-        ('w','widower'),
-        ('d','divorced'),
-        ('s','single'),
-    )
-
-
-
-
-
-    civil_state = models.CharField(max_length=1, choices=options_civil_state, null=True)
+    civil_state = models.CharField(max_length=1, choices=c.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
     ciiu = models.CharField(max_length=4)
     activity_description = models.CharField(max_length=255)
     institute = models.CharField(max_length=100, null=True, blank=True)
     
-    options_ocupation = (
-    ('0','Employer'),
-    ('1','Independent worker'),
-    ('2','Employee'),
-    ('3','Worker'),
-    ('4','Worker in a family business'),
-    ('5','Home worker'),
-    ('6','Other'),
-    )
-    ocupation = models.CharField(max_length=1, choices=options_ocupation)
+    
+    ocupation = models.CharField(max_length=1, choices=c.client_ocupation)
     about = models.CharField(max_length=255)
     business_name = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
@@ -240,11 +168,8 @@ class Category(models.Model):
 
 class Specialist(User):
     business_name = models.CharField(max_length=55)
-    options_type = (
-        ('m', 'Main'),
-        ('a', 'Associate'),
-    )
-    type_specialist = models.CharField(max_length=1, choices=options_type)
+    
+    type_specialist = models.CharField(max_length=1, choices=c.specialist_type_specialist)
     star_rating = models.IntegerField(null=True)
     cv = models.CharField(max_length=150,null=True)
     payment_per_answer = models.FloatField()
@@ -256,12 +181,8 @@ class Specialist(User):
 
 class SpecialistContract(models.Model):
     name_case = models.CharField(max_length=100)
-    options_state = (
-        ('r', 'Requested'),
-        ('a', 'Accepted'),
-        ('d', 'Declined'),
-    )
-    state = models.CharField(max_length=1, choices=options_state)
+    
+    state = models.CharField(max_length=1, choices=c.specialistcontract_state)
     declined_motive = models.CharField(max_length=255, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
@@ -282,11 +203,8 @@ class Promotion(models.Model):
     discount = models.FloatField()
     start_date = models.DateField()
     end_date = models.DateField()
-    options_type = (
-        ('p', 'Percentage'),
-        ('n', 'Number'),
-    )
-    type_discount = models.CharField(max_length=1, choices=options_type)
+    
+    type_discount = models.CharField(max_length=1, choices=c.promotions_type)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.code
@@ -321,11 +239,8 @@ class Purchase(models.Model):
     query_available = models.PositiveIntegerField()
     is_promotional = models.BooleanField()
     last_number_fee_paid = models.PositiveIntegerField()
-    option_status = (
-        ('0', 'Pending'),
-        ('1', 'Paid'),
-    )
-    status = models.CharField(max_length=1, choices=option_status)
+    
+    status = models.CharField(max_length=1, choices=c.purchase_status)
     expiration_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     promotion = models.ForeignKey(Promotion, on_delete=models.PROTECT, null=True, blank=True)

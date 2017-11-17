@@ -112,8 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -122,11 +121,11 @@ LANGUAGES = (
     ('en', _('English')),
 )
 # Set the default language for your site.
-LANGUAGE_CODE = 'es'
+LANGUAGE_CODE = 'en'
 
 # Tell Django where the project's translation files should be.
-LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale/static_db'),
+LOCALE_PATHS = (    
+    os.path.join(BASE_DIR, 'locale/static_db'),   
     os.path.join(BASE_DIR, 'locale'), #python manage.py makemessages -l en
 )
 

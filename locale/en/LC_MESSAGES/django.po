@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-15 16:57-0500\n"
+"POT-Creation-Date: 2017-11-17 11:29-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,22 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: .\api\models.py:157
+msgid "Natural"
+msgstr "Natural EN"
+
+#: .\api\models.py:158
+msgid "Bussiness"
+msgstr "Bussiness EN"
+
+#: .\api\models.py:167
+msgid "Natural2"
+msgstr "Natural2 EN"
+
+#: .\api\models.py:168
+msgid "Bussiness2"
+msgstr "Bussiness2 EN"
 
 #: .\api\templates\base.html:27
 msgid "Title"
@@ -25,10 +41,10 @@ msgstr ""
 msgid "fooo"
 msgstr "bar EN"
 
-#: .\linkupapi\settings.py:121
+#: .\linkupapi\settings.py:120
 msgid "Spanish"
 msgstr "Spanish"
 
-#: .\linkupapi\settings.py:122
+#: .\linkupapi\settings.py:121
 msgid "English"
 msgstr "English"

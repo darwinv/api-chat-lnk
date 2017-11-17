@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from api.models import User, Client, LevelInstruction, Profession, Role, Countries
-from api.models import CommercialGroup, EconomicSector, Address, Department
+from api.models import User, Client, LevelInstruction, Role, Countries
+from api.models import EconomicSector, Address, Department
 
 from api.models import Province, District, Category, Specialist, Query
 from api.models import Parameter, Seller, Quota, Product, Purchase
@@ -79,7 +79,6 @@ class AddressSerializer(serializers.ModelSerializer):
 class ClientSerializer(serializers.ModelSerializer):
     # level_instruction = serializers.SlugRelatedField(queryset=LevelInstruction.objects.all(), slug_field='name', allow_null=True)
     level_instruction_name = serializers.SerializerMethodField()
-    profession_name = serializers.SerializerMethodField()
     nationality_name = serializers.SerializerMethodField()
     commercial_group_name = serializers.SerializerMethodField()
     economic_sector_name = serializers.SerializerMethodField()
@@ -102,14 +101,11 @@ class ClientSerializer(serializers.ModelSerializer):
                   'ciiu', 'activity_description', 'level_instruction', 'level_instruction_name',
                   'business_name', 'agent_firstname', 'agent_lastname', 'position',
                   'commercial_group', 'commercial_group_name', 'economic_sector',
-                  'economic_sector_name', 'institute', 'profession', 'profession_name',
+                  'economic_sector_name', 'institute', 'profession',
                   'ocupation', 'about', 'nationality', 'nationality_name')
 
     def get_level_instruction_name(self, obj):
         return str(obj.level_instruction)
-
-    def get_profession_name(self, obj):
-        return str(obj.profession)
 
     def get_nationality_name(self, obj):
         return str(obj.nationality)
