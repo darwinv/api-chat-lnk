@@ -3,19 +3,15 @@ from rest_framework.validators import UniqueValidator
 
 from api.models import User, Client, LevelInstruction, Role, Countries
 from api.models import EconomicSector, Address, Department
-
-
 from api.models import Province, District, Category, Specialist, Query
 from api.models import Parameter, Seller, Quota, Product, Purchase
 from api.models import Province, District, Specialist, Query, Fee
 from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
-
 from django.utils import six
 import datetime
 from django.utils import timezone
 import json
-
 from django.db.models import Sum
 from datetime import date
 

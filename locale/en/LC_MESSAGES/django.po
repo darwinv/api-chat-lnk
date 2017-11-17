@@ -2,7 +2,7 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -214,7 +214,16 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: .\linkupapi\settings.py:121
+#categorias o especialidades
+msgid "Derecho Tributario"
+msgstr "Tax Law"
+
+
+#: .\api\views\actors.py:305
+msgid "fooo"
+msgstr "bar EN"
+
+#: .\linkupapi\settings.py:120
 msgid "Spanish"
 msgstr "Spanish"
 
