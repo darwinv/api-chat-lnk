@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import EmailValidator
 
+from django.utils.translation import ugettext_lazy as _
 
 
 class Countries(models.Model):
@@ -144,15 +145,27 @@ class LevelInstruction(models.Model):
 
 
 
+
+
+
+
+
+
+
 class ClassChoisesAPI:
-    options_type = options_sex = ()
+    options_type = (
+            ('n', 'Natural'),
+            ('b', 'Bussiness'),
+        )
+
+    options_sex = ()
 
     def __init__(self):
         super(ClassChoisesAPI, self).__init__()
 
         self.options_type = (
-            ('n', 'Natural'),
-            ('b', 'Bussiness'),
+            ('n', 'Natural2'),
+            ('b', 'Bussiness2'),
         )
 
         self.options_sex = (
@@ -161,17 +174,17 @@ class ClassChoisesAPI:
         )
 
     def get_type(self):
-        self.options_type
+        return self.options_type
 
 
 
 
-class Client(User):
+class Client(User,ClassChoisesAPI):
     c = ClassChoisesAPI()
 
-    type_client = models.CharField(max_length=1, choices=ClassChoisesAPI.get_type)
+    type_client = models.CharField(max_length=1, choices=c.get_type())
 
-    sex = models.CharField(max_length=1, choices=c.options_sex, null=True)
+    sex = models.CharField(max_length=1, choices=c.get_type(), null=True)
 
     options_civil_state = (
         ('c','cohabiting'),
