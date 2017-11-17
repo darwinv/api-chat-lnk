@@ -8,4 +8,4 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'image', 'description')
 
     def get_name(self, obj):
-        return _(obj.(name))
+        return _(obj.name)

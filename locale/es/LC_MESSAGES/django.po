@@ -47,6 +47,10 @@ msgstr "bar ES"
 msgid "Spanish"
 msgstr "Español"
 
+#categorias o especialidades
+msgid "Spanish"
+msgstr "Español"
+
 #: .\linkupapi\settings.py:121
 msgid "English"
 msgstr "Ingles"
