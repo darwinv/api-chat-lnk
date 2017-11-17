@@ -151,8 +151,8 @@ class ClassChoisesAPI:
         super(ClassChoisesAPI, self).__init__()
 
         self.options_type = (
-            ('n', 'Natural2'),
-            ('b', 'Bussiness2'),
+            ('n', 'Natural'),
+            ('b', 'Bussiness'),
         )
 
         self.options_sex = (
@@ -163,12 +163,15 @@ class ClassChoisesAPI:
     def get_type(self):
         self.options_type
 
+
+
+
 class Client(User):
     c = ClassChoisesAPI()
 
-    type_client = models.CharField(max_length=1, choices=c.get_type)
+    type_client = models.CharField(max_length=1, choices=ClassChoisesAPI.get_type)
 
-    sex = models.CharField(max_length=1, choices=c.get_type, null=True)
+    sex = models.CharField(max_length=1, choices=c.options_sex, null=True)
 
     options_civil_state = (
         ('c','cohabiting'),
