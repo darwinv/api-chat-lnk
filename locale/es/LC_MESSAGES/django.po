@@ -48,8 +48,8 @@ msgid "Spanish"
 msgstr "Español"
 
 #categorias o especialidades
-msgid "Spanish"
-msgstr "Español"
+msgid "Derecho Tributario"
+msgstr "Derecho Tributario"
 
 #: .\linkupapi\settings.py:121
 msgid "English"
