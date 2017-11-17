@@ -12,7 +12,7 @@ router.register(r'users', actors.UserViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^clients/$', actors.ClientListView.as_view(), name='clients'),
-    url(r'^specialist-users/(?P<username>\w+)/$', actors.SpecialistDetailByUsername.as_view(), name='specialist-detail-username'),
+    url(r'^specialists-users/(?P<username>\w+)/$', actors.SpecialistDetailByUsername.as_view(), name='specialist-detail-username'),
     url(r'^clients-users/(?P<username>\w+)/$', actors.ClientDetailByUsername.as_view(), name='client-detail-username'),
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(), name='client-detail'),
     url(r'^categories/$', category.CategoryListView.as_view(), name='categories'),
