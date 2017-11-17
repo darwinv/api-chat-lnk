@@ -220,9 +220,87 @@ msgstr "Titulo"
 msgid "Spanish"
 msgstr "Español"
 
-#categorias o especialidades
-msgid "Derecho Tributario"
-msgstr "Derecho Tributario"
+# categorias o especialidades
+msgid "Taxes"
+msgstr "Impuestos"
+
+msgid "Accounting"
+msgstr "Contabilidad"
+
+msgid "Tax Law"
+msgstr ""
+
+msgid "Finance"
+msgstr "Finanzas"
+
+msgid "Insurance"
+msgstr "Seguros"
+
+msgid "Foreign trade"
+msgstr "Comercio Exterior"
+
+msgid "Information Technology"
+msgstr "Tecnología de la Información"
+
+msgid "Intellectual property"
+msgstr "Propiedad Intelectual"
+
+msgid "Advertising"
+msgstr "Publicidad"
+
+msgid "Organizational psychology"
+msgstr "Psicología Organizacional"
+
+msgid "Contracting with the State"
+msgstr "Contrataciones con el Estado"
+
+msgid "Marketing"
+msgstr "Marketing"
+
+msgid "Mechanics"
+msgstr "Mecánica"
+
+msgid "Notary and Registry Law"
+msgstr "Derecho Notarial y Registral"
+
+msgid "Project management"
+msgstr "Gestión de Proyectos"
+
+msgid "Electricity"
+msgstr "Electricidad"
+
+msgid "Civil Procedural Law"
+msgstr "Derecho Procesal Civil"
+
+msgid "Agroindustry"
+msgstr "Agroindustria"
+
+msgid "Electronics"
+msgstr "Electrónica"
+
+msgid "Criminal law"
+msgstr "Derecho Penal"
+
+msgid "Food"
+msgstr "Alimentaria"
+
+msgid "Automation"
+msgstr "Automatización"
+
+msgid "Labor Law"
+msgstr "Derecho Laboral"
+
+msgid "Gastronomy"
+msgstr "Gastronomía"
+
+msgid "Plastics"
+msgstr "Plásticos"
+
+msgid "Mining Law"
+msgstr "Derecho Minero"
+
+msgid "Corporate Law"
+msgstr "Derecho Corporativo"
 
 #: .\linkupapi\settings.py:121
 msgid "English"

@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import EmailValidator
-
+from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
 
 
@@ -70,7 +70,7 @@ class User(AbstractUser):
     telephone = models.CharField(max_length=14)
     cellphone = models.CharField(max_length=14)
     photo = models.CharField(max_length=250, null=True)
-    
+
     document_type = models.CharField(max_length=1, choices=c.user_document_type)
     document_number = models.CharField(max_length=45, unique=True)
     ruc = models.CharField(max_length=40, unique=True, null=True)
@@ -103,9 +103,9 @@ class Objection(models.Model):
 class SellerContactNoEfective(models.Model):
     contact_firstname = models.CharField(max_length=45, null=True)
     contact_lastname = models.CharField(max_length=55, null=True)
-    
+
     type_contact = models.CharField(max_length=1, choices=c.client_type_client)
-    
+
     document_type = models.CharField(max_length=1, choices=c.user_document_type)
     document_number = models.CharField(max_length=18)
     contact_bussinessname = models.CharField(max_length=45, null=True)
@@ -140,8 +140,8 @@ class Client(User):
     ciiu = models.CharField(max_length=4)
     activity_description = models.CharField(max_length=255)
     institute = models.CharField(max_length=100, null=True, blank=True)
-    
-    
+
+
     ocupation = models.CharField(max_length=1, choices=c.client_ocupation)
     about = models.CharField(max_length=255)
     business_name = models.CharField(max_length=45, null=True)
@@ -168,7 +168,7 @@ class Category(models.Model):
 
 class Specialist(User):
     business_name = models.CharField(max_length=55)
-    
+
     type_specialist = models.CharField(max_length=1, choices=c.specialist_type_specialist)
     star_rating = models.IntegerField(null=True)
     cv = models.CharField(max_length=150,null=True)
@@ -181,7 +181,7 @@ class Specialist(User):
 
 class SpecialistContract(models.Model):
     name_case = models.CharField(max_length=100)
-    
+
     state = models.CharField(max_length=1, choices=c.specialistcontract_state)
     declined_motive = models.CharField(max_length=255, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -203,7 +203,7 @@ class Promotion(models.Model):
     discount = models.FloatField()
     start_date = models.DateField()
     end_date = models.DateField()
-    
+
     type_discount = models.CharField(max_length=1, choices=c.promotions_type)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
@@ -239,7 +239,7 @@ class Purchase(models.Model):
     query_available = models.PositiveIntegerField()
     is_promotional = models.BooleanField()
     last_number_fee_paid = models.PositiveIntegerField()
-    
+
     status = models.CharField(max_length=1, choices=c.purchase_status)
     expiration_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -273,7 +273,7 @@ class Fee(models.Model):
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
     api_client = models.TextField(null=True)
     tablename = models.CharField(max_length=17, null=True)
-    
+
     status = models.CharField(max_length=1, choices=c.fee_status)
     date = models.DateField()
     datetime_payment = models.DateTimeField(null=True)
@@ -288,7 +288,7 @@ class CreditCard(models.Model):
 
 class CulqiPayment(models.Model):
     culqi_code = models.CharField(max_length=40)
-    
+
     status = models.CharField(max_length=1, choices=c.culqipayment_status)
     credit_cartd = models.ForeignKey(CreditCard, on_delete=models.PROTECT)
 
@@ -299,7 +299,7 @@ class CulqiPayment(models.Model):
 
 class Query(models.Model):
     title = models.CharField(max_length=50)
-    
+
     status = models.CharField(max_length=1, choices=c.query_status)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
@@ -322,7 +322,7 @@ class QueryLog(Query):
 
 class Message(models.Model):
     message = models.TextField()
-    
+
     msg_type = models.CharField(max_length=1, choices=c.message_msg_type)
     created_at = models.DateTimeField(auto_now_add=True)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
@@ -333,7 +333,7 @@ class Message(models.Model):
 
 class MessageFile(models.Model):
     url = models.CharField(max_length=100)
-    
+
     type_file = models.CharField(max_length=1, choices=c.messagefile_type_file)
     message = models.ForeignKey(Message, on_delete=models.PROTECT)
 
@@ -343,7 +343,7 @@ class Interval(models.Model):
         return str(self.interval)
 
 class AlertCategory(models.Model):
-    
+
     name = models.CharField(max_length=1, choices=c.alertcategory_name)
     interval = models.ForeignKey(Interval, on_delete=models.PROTECT)
     def __str__(self):
