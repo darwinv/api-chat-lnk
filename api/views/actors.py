@@ -301,8 +301,6 @@ class SellerAccountView(ListCreateAPIView):
             .order_by('purchase__fee__date')
 
 
-        # print(_("fooo"))
-
 
         serializer = SellerAccountSerializer(queryset, many=True)
         # pagination

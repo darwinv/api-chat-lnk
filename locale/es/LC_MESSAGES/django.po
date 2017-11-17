@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-17 11:25-0500\n"
+"POT-Creation-Date: 2017-11-17 15:16-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,32 +18,205 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\api\models.py:157
+#: .\api\api_choices_models.py:15
+msgid "DNI"
+msgstr "DNI"
+
+#: .\api\api_choices_models.py:16
+msgid "Passport"
+msgstr "Pasaporte"
+
+#: .\api\api_choices_models.py:17
+msgid "Foreign Card"
+msgstr "Tarjeta extranjera"
+
+#: .\api\api_choices_models.py:22
 msgid "Natural"
-msgstr "Natural ES"
+msgstr "Natural"
 
-#: .\api\models.py:158
+#: .\api\api_choices_models.py:23
 msgid "Bussiness"
-msgstr "Bussiness ES"
+msgstr "Juridico"
 
-#: .\api\models.py:167
-msgid "Natural2"
-msgstr "Natural2 ES"
+#: .\api\api_choices_models.py:27
+msgid "Male"
+msgstr "Masculino"
 
-#: .\api\models.py:168
-msgid "Bussiness2"
-msgstr "Bussiness2 ES"
+#: .\api\api_choices_models.py:28
+msgid "Female"
+msgstr "Mujer"
+
+#: .\api\api_choices_models.py:31
+msgid "cohabiting"
+msgstr "cohabitando"
+
+#: .\api\api_choices_models.py:32
+msgid "separated"
+msgstr "apartado"
+
+#: .\api\api_choices_models.py:33
+msgid "married"
+msgstr "casado"
+
+#: .\api\api_choices_models.py:34
+msgid "widower"
+msgstr "viudo"
+
+#: .\api\api_choices_models.py:35
+msgid "divorced"
+msgstr "divorciado"
+
+#: .\api\api_choices_models.py:36
+msgid "single"
+msgstr "soltero"
+
+#: .\api\api_choices_models.py:40
+msgid "Employer"
+msgstr "Empleador"
+
+#: .\api\api_choices_models.py:41
+msgid "Independent worker"
+msgstr "Trabajador independiente"
+
+#: .\api\api_choices_models.py:42
+msgid "Employee"
+msgstr "Empleado"
+
+#: .\api\api_choices_models.py:43
+msgid "Worker"
+msgstr "Obrero"
+
+#: .\api\api_choices_models.py:44
+msgid "Worker in a family business"
+msgstr "Trabajador en una empresa familiar"
+
+#: .\api\api_choices_models.py:45
+msgid "Home worker"
+msgstr "Trabajador a domicilio"
+
+#: .\api\api_choices_models.py:46
+msgid "Other"
+msgstr "Otro"
+
+#: .\api\api_choices_models.py:51
+msgid "Main"
+msgstr "Principal"
+
+#: .\api\api_choices_models.py:52
+msgid "Associate"
+msgstr "Asociado"
+
+#: .\api\api_choices_models.py:57 .\api\api_choices_models.py:91
+msgid "Requested"
+msgstr "Preguntada"
+
+#: .\api\api_choices_models.py:58
+msgid "Accepted"
+msgstr "Aceptado"
+
+#: .\api\api_choices_models.py:59
+msgid "Declined"
+msgstr "Rechazado"
+
+#: .\api\api_choices_models.py:64
+msgid "Percentage"
+msgstr "Porcentaje"
+
+#: .\api\api_choices_models.py:65
+msgid "Number"
+msgstr "Número"
+
+#: .\api\api_choices_models.py:71 .\api\api_choices_models.py:77
+msgid "Pending"
+msgstr "Pendiente"
+
+#: .\api\api_choices_models.py:72 .\api\api_choices_models.py:78
+#: .\api\api_choices_models.py:86
+msgid "Paid"
+msgstr "Pagado"
+
+#: .\api\api_choices_models.py:83
+msgid "Wait"
+msgstr "Espera"
+
+#: .\api\api_choices_models.py:84
+msgid "Denied"
+msgstr "Negado"
+
+#: .\api\api_choices_models.py:85
+msgid "Exhaled"
+msgstr "Exhalado"
+
+#: .\api\api_choices_models.py:92
+msgid "Requested Derived"
+msgstr "Pregunta derivado"
+
+#: .\api\api_choices_models.py:93
+msgid "Pending Response"
+msgstr "Respuesta pendiente"
+
+#: .\api\api_choices_models.py:94
+msgid "Pending Main Response"
+msgstr "Respuesta principal pendiente"
+
+#: .\api\api_choices_models.py:95
+msgid "Answered Main"
+msgstr "Respondido Principal"
+
+#: .\api\api_choices_models.py:96
+msgid "Answered"
+msgstr "Contestada"
+
+#: .\api\api_choices_models.py:97
+msgid "Absolved Main"
+msgstr "Absuelto Principal"
+
+#: .\api\api_choices_models.py:98
+msgid "Absolved"
+msgstr "Absuelto"
+
+#: .\api\api_choices_models.py:104
+msgid "query"
+msgstr "consulta"
+
+#: .\api\api_choices_models.py:105
+msgid "requery"
+msgstr "reconsulta"
+
+#: .\api\api_choices_models.py:106
+msgid "answer"
+msgstr "responder"
+
+#: .\api\api_choices_models.py:111
+msgid "Image"
+msgstr "Imagen"
+
+#: .\api\api_choices_models.py:112
+msgid "Voice"
+msgstr "Voz"
+
+#: .\api\api_choices_models.py:113
+msgid "Document"
+msgstr "Documento"
+
+#: .\api\api_choices_models.py:118
+msgid "Critic"
+msgstr "Crítico"
+
+#: .\api\api_choices_models.py:119
+msgid "Moderate"
+msgstr "Moderar"
+
+#: .\api\api_choices_models.py:120
+msgid "Positive"
+msgstr "Positivo"
 
 
 #: .\api\templates\base.html:27
 msgid "Title"
 msgstr "Titulo"
 
-#: .\api\views\actors.py:305
-msgid "fooo"
-msgstr "bar ES"
-
-#: .\linkupapi\settings.py:120
+#: .\linkupapi\settings.py:121
 msgid "Spanish"
 msgstr "Español"
 
