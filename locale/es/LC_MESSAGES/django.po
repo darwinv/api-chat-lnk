@@ -35,7 +35,7 @@ msgid "Natural"
 msgstr "Natural"
 
 #: .\api\api_choices_models.py:23
-msgid "Bussiness"
+msgid "Business"
 msgstr "Juridico"
 
 #: .\api\api_choices_models.py:27
@@ -44,7 +44,7 @@ msgstr "Masculino"
 
 #: .\api\api_choices_models.py:28
 msgid "Female"
-msgstr "Mujer"
+msgstr "Femenino"
 
 #: .\api\api_choices_models.py:31
 msgid "cohabiting"

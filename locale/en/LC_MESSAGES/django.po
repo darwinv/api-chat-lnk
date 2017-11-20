@@ -34,8 +34,8 @@ msgid "Natural"
 msgstr "Natural"
 
 #: .\api\api_choices_models.py:23
-msgid "Bussiness"
-msgstr "Bussiness"
+msgid "Business"
+msgstr "Business"
 
 #: .\api\api_choices_models.py:27
 msgid "Male"

@@ -20,7 +20,7 @@ class ChoicesAPI:
     # Client Model
     client_type_client = (
         ('n',_('Natural')),
-        ('b',_('Bussiness')),
+        ('b',_('Business')),
     )
 
     client_sex = (
