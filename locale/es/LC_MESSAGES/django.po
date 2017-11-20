@@ -228,7 +228,7 @@ msgid "Accounting"
 msgstr "Contabilidad"
 
 msgid "Tax Law"
-msgstr ""
+msgstr "Derecho Tributario"
 
 msgid "Finance"
 msgstr "Finanzas"
