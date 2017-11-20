@@ -1,13 +1,13 @@
 
 from django.utils.translation import ugettext_lazy as _
-        
+
 class ChoicesAPI:
     """
         Clase Choices para manejo de opciones en los modelos
         cada atributo de la clase es una opcion de modelo
         la estructura en los nombres de los choises es la siguiente
         nombre del modelo + piso + nombre de atributo
-        e.g: "client_type_client" o "client_sex" 
+        e.g: "client_type_client" o "client_sex"
     """
 
     # User Model
@@ -24,8 +24,8 @@ class ChoicesAPI:
     )
 
     client_sex = (
-        ('n',_('Male')),
-        ('b',_('Female')),
+        ('m',_('Male')),
+        ('f',_('Female')),
     )
     client_civil_state = (
         ('c',_('cohabiting')),
@@ -119,4 +119,3 @@ class ChoicesAPI:
         ('m',_('Moderate')),
         ('p',_('Positive')),
     )
-

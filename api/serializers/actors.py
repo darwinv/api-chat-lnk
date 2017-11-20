@@ -80,9 +80,9 @@ class ClientSerializer(serializers.ModelSerializer):
     # level_instruction = serializers.SlugRelatedField(queryset=LevelInstruction.objects.all(), slug_field='name', allow_null=True)
     level_instruction_name = serializers.SerializerMethodField()
     nationality_name = serializers.SerializerMethodField()
-    commercial_group_name = serializers.SerializerMethodField()
     economic_sector_name = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)
+    profession = serializers.CharField(allow_blank=True)
     type_client = serializers.ChoiceField(choices=c.client_type_client)
     sex = serializers.ChoiceField(choices=c.client_sex, allow_blank=True)
     # sex_value = CustomChoiceField(choices=Client.options_sex)
@@ -99,8 +99,7 @@ class ClientSerializer(serializers.ModelSerializer):
                   'password', 'photo', 'sex', 'document_type', 'document_number', 'civil_state',
                   'birthdate', 'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
                   'ciiu', 'activity_description', 'level_instruction', 'level_instruction_name',
-                  'business_name', 'agent_firstname', 'agent_lastname', 'position',
-                  'commercial_group', 'commercial_group_name', 'economic_sector',
+                  'business_name', 'agent_firstname', 'agent_lastname', 'position', 'economic_sector',
                   'economic_sector_name', 'institute', 'profession',
                   'ocupation', 'about', 'nationality', 'nationality_name')
 
@@ -109,9 +108,6 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def get_nationality_name(self, obj):
         return str(obj.nationality)
-
-    def get_commercial_group_name(self, obj):
-        return str(obj.commercial_group)
 
     def get_economic_sector_name(self, obj):
         return str(obj.economic_sector)
@@ -123,8 +119,6 @@ class ClientSerializer(serializers.ModelSerializer):
     def validate_bussines_client(self, data):
         if 'business_name' not in data:
             raise serializers.ValidationError(u"Business name required.")
-        if data['commercial_group'] == None:
-            raise serializers.ValidationError(u"commercial_group must no be empty.")
         if data['economic_sector'] == None:
             raise serializers.ValidationError(u"economic_sector must no be empty.")
         if 'position' not in data:
