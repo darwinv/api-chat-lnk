@@ -104,13 +104,13 @@ class ClientSerializer(serializers.ModelSerializer):
                   'ocupation', 'about', 'nationality', 'nationality_name')
 
     def get_level_instruction_name(self, obj):
-        return str(obj.level_instruction)
+        return _(str(obj.level_instruction))
 
     def get_nationality_name(self, obj):
         return str(obj.nationality)
 
     def get_economic_sector_name(self, obj):
-        return str(obj.economic_sector)
+        return _(str(obj.economic_sector))
 
     # Por si es necesario usarlo se usa el metodo
     # type_client = serializers.SerializerMethodField()
@@ -173,7 +173,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
         return str(obj.nationality)
 
     def get_category_name(self, obj):
-        return str(obj.category)
+        return _(str(obj.category))
 
     def validate(self, data):
         flag = True

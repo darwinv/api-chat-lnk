@@ -302,6 +302,72 @@ msgstr "Derecho Minero"
 msgid "Corporate Law"
 msgstr "Derecho Corporativo"
 
+# --------------------
+#Nivel Instruccion
+
+msgid "No level"
+msgstr "Sin nivel"
+
+msgid "Initial"
+msgstr "Inicial"
+
+msgid "Primary"
+msgstr "Primaria"
+
+msgid "High school"
+msgstr "Secundaria"
+
+msgid "Basic special"
+msgstr "Básica especial"
+
+msgid "Superior non-university incomplete"
+msgstr "Superior no universitaria incompleta"
+
+msgid "Superior non-university full"
+msgstr "Superior no universitaria completa"
+
+msgid "Incomplete university superior"
+msgstr "Superior universitaria incompleta"
+
+msgid "Full university superior"
+msgstr "Superior universitaria completa"
+
+msgid "master's degree"
+msgstr "Maestría"
+
+msgid "Doctorate"
+msgstr "Doctorado"
+
+# ----------------
+# Sector Economico
+
+msgid "Farming"
+msgstr "Agropecuario"
+
+msgid "Fishing"
+msgstr "Pesca"
+
+msgid "Mining"
+msgstr "Minería"
+
+msgid "Hydrocarbons"
+msgstr "Hidrocarburos"
+
+msgid "Manufacture"
+msgstr "Manufactura"
+
+msgid "Electricity and Water"
+msgstr "Electricidad y Agua"
+
+msgid "Building"
+msgstr "Construcción"
+
+msgid "Commerce"
+msgstr "Comercio"
+
+msgid "Services"
+msgstr "Servicios"
+
 #: .\linkupapi\settings.py:121
 msgid "English"
 msgstr "Ingles"

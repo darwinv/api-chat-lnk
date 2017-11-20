@@ -5,6 +5,7 @@ from api.models import EconomicSector, Address, Department
 from api.models import Province, District, Category, Specialist, Query, Message
 from api.models import Parameter, MessageFile
 from api.api_choices_models import ChoicesAPI as c
+from django.utils.translation import ugettext_lazy as _
 from django.utils import six
 import pdb
 from datetime import datetime
@@ -46,11 +47,12 @@ class MessageSerializer(serializers.ModelSerializer):
 class QueryDetailSerializer(serializers.ModelSerializer):
     messages = serializers.SerializerMethodField()
     code_client = serializers.SerializerMethodField()
+    category_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Query
         fields = ('id','title','status','messages','last_modified',
-                  'client','code_client','specialist', 'category','calification')
+                  'client','code_client','specialist', 'category','category_name','calification')
         read_only_fields = ('status','last_modified')
 
         # Traer por consulta relacionada
@@ -61,17 +63,20 @@ class QueryDetailSerializer(serializers.ModelSerializer):
     def get_code_client(self,obj):
         return str(obj.client.code)
 
+    def get_category_name(self, obj):
+        return _(str(obj.category))
 
 # serializer para traer el ultimo mensaje de consulta, por detalle
 # android especifico
 class QueryDetailLastMsgSerializer(serializers.ModelSerializer):
     last_msg = serializers.SerializerMethodField()
     code_client = serializers.SerializerMethodField()
+    category_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Query
         fields = ('id','title','status','last_msg','last_modified',
-                  'client','code_client','specialist', 'category','calification')
+                  'client','code_client','specialist', 'category','category_name','calification')
         read_only_fields = ('status','last_modified')
 
         # Traer por consulta relacionada
@@ -82,6 +87,8 @@ class QueryDetailLastMsgSerializer(serializers.ModelSerializer):
     def get_code_client(self,obj):
         return str(obj.client.code)
 
+    def get_category_name(self, obj):
+        return _(str(obj.category))
 
 # Serializer para crear consulta
 class QuerySerializer(serializers.ModelSerializer):
@@ -136,6 +143,7 @@ class QuerySerializer(serializers.ModelSerializer):
             'code_client': str(obj.client.code),
             'specialist': obj.specialist_id,
             'category': obj.category_id,
+            'category_name':_(str(obj.category)),
             'calification': obj.calification
          }
 
@@ -211,16 +219,20 @@ class QueryListSerializer(serializers.ModelSerializer):
     last_modified = serializers.SerializerMethodField()
     # media_files = FilesSerializer()
     last_msg = serializers.SerializerMethodField()
+    category_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Query
         fields = ('id','title','last_msg','status', 'last_modified','category',
-                 'client','specialist','calification')
+                 'category_name','client','specialist','calification')
         read_only_fields = ('specialist','id','last_time')
 
     # Devuelvo la hora y minuto separados
     def get_last_modified(self,obj):
         return str(obj.last_modified.date()) + ' ' + str(obj.last_modified.hour) + ':' + str(obj.last_modified.minute)
+
+    def get_category_name(self, obj):
+        return _(str(obj.category))
 
     def get_last_msg(self, obj):
         msg =  obj.message_set.all().last()
