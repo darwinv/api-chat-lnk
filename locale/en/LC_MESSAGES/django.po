@@ -215,8 +215,7 @@ msgid "Title"
 msgstr ""
 
 #categorias o especialidades
-msgid "Derecho Tributario"
-msgstr "Tax Law"
+
 
 
 #: .\api\views\actors.py:305
