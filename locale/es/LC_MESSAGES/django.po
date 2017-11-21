@@ -18,6 +18,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "required"
+msgstr "requerido"
+
+msgid "Specialist"
+msgstr "Especialista"
+
+msgid "already"
+msgstr "ya"
+
+msgid "exists"
+msgstr "existe"
+
+msgid "must no be empty"
+msgstr "No debe estar vacio"
+
+
 #: .\api\api_choices_models.py:15
 msgid "DNI"
 msgstr "DNI"
