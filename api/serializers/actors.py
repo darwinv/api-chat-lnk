@@ -113,7 +113,7 @@ class ClientSerializer(serializers.ModelSerializer):
         return _(str(obj.level_instruction))
 
     def get_nationality_name(self, obj):
-        return str(obj.nationality)
+        return _(str(obj.nationality))
 
     def get_economic_sector_name(self, obj):
         return _(str(obj.economic_sector))
@@ -191,7 +191,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
                   'category', 'category_name', 'nationality', 'nationality_name')
 
     def get_nationality_name(self, obj):
-        return str(obj.nationality)
+        return _(str(obj.nationality))
 
     def get_category_name(self, obj):
         return _(str(obj.category))
