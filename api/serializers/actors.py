@@ -135,16 +135,18 @@ class ClientSerializer(serializers.ModelSerializer):
         return _(obj.get_ocupation_display())
 
     def validate_bussines_client(self, data):
+        required = _("required")
         if 'business_name' not in data:
-            raise serializers.ValidationError(u"business_name required.")
+            raise serializers.ValidationError(f"business_name {required}")
         if data['economic_sector'] == None:
-            raise serializers.ValidationError(u"economic_sector must no be empty.")
+            empty =  _("must no be empty")
+            raise serializers.ValidationError(f"economic_sector {empty}")
         if 'position' not in data:
-            raise serializers.ValidationError(u"Position required.")
+            raise serializers.ValidationError(f"position {required}")
         if 'agent_firstname' not in data:
-            raise serializers.ValidationError(u"agent_firstname required.")
+            raise serializers.ValidationError(f"agent_firstname {required}")
         if 'agent_lastname' not in data:
-            raise serializers.ValidationError(u"agent_lastname required.")
+            raise serializers.ValidationError(f"agent_lastname {required}")
         return
 
     def validate(self, data):
@@ -203,6 +205,10 @@ class SpecialistSerializer(serializers.ModelSerializer):
         return _(obj.get_type_specialist_display())
 
     def validate(self, data):
+        main = _('Main')
+        spec = _('Specialist')
+        already = _('already')
+        exists = _('exists')
         flag = True
         if hasattr(self.instance, 'type_specialist'):
             if self.instance.type_specialist == 'm':
@@ -215,11 +221,14 @@ class SpecialistSerializer(serializers.ModelSerializer):
             category = data.get("category")
 
         if self.instance and self.instance.username != data["username"] or 'type_specialist' in data:
-
             if flag and data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
-                                                                           category_id=category).exists():
-                raise serializers.ValidationError(u"Main specialist already exists.")
+                                                                                    category_id=category).exists():
+                # f"economic_sector {empty}"
+                output = "%(main)s %(specialist)s %(already)s %(exists)s " % {'main':main, 'specialist': spec,
+                                                                             'already':already, 'exists':exists} 
+                raise serializers.ValidationError(output)
         return data
+
 
         # if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
         #                                                                 category_id=category).exists():
