@@ -84,30 +84,30 @@ class ClientSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     profession = serializers.CharField(allow_blank=True)
     type_client = serializers.ChoiceField(choices=c.client_type_client)
-    type_client_value = serializers.SerializerMethodField()
+    type_client_name = serializers.SerializerMethodField()
     sex = serializers.ChoiceField(choices=c.client_sex, allow_blank=True)
-    sex_value = serializers.SerializerMethodField()
+    sex_name = serializers.SerializerMethodField()
     document_type = serializers.ChoiceField(choices=c.user_document_type)
-    document_type_value = serializers.SerializerMethodField()
+    document_type_name = serializers.SerializerMethodField()
     civil_state = serializers.ChoiceField(choices=c.client_civil_state, allow_blank=True)
-    civil_state_value = serializers.SerializerMethodField()
+    civil_state_name = serializers.SerializerMethodField()
     ocupation = serializers.ChoiceField(choices=c.client_ocupation, allow_blank=True)
-    ocupation_value = serializers.SerializerMethodField()
+    ocupation_name = serializers.SerializerMethodField()
     address = AddressSerializer()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     photo = serializers.CharField(read_only=True)
 
     class Meta:
         model = Client
-        fields = ('id', 'username', 'nick', 'type_client', 'type_client_value',
-                  'first_name', 'last_name', 'password', 'photo', 'sex','sex_value',
-                  'document_type','document_type_value', 'document_number',
-                  'civil_state', 'civil_state_value','birthdate', 'address',
+        fields = ('id', 'username', 'nick', 'type_client', 'type_client_name',
+                  'first_name', 'last_name', 'password', 'photo', 'sex','sex_name',
+                  'document_type','document_type_name', 'document_number',
+                  'civil_state', 'civil_state_name','birthdate', 'address',
                   'ruc', 'email_exact', 'code', 'telephone', 'cellphone', 'ciiu',
                   'activity_description', 'level_instruction', 'level_instruction_name',
                   'business_name', 'agent_firstname', 'agent_lastname', 'position',
                   'economic_sector','economic_sector_name', 'institute', 'profession',
-                  'ocupation', 'ocupation_value', 'about', 'nationality', 'nationality_name')
+                  'ocupation', 'ocupation_name', 'about', 'nationality', 'nationality_name')
 
     def get_level_instruction_name(self, obj):
         return _(str(obj.level_instruction))
@@ -119,24 +119,24 @@ class ClientSerializer(serializers.ModelSerializer):
         return _(str(obj.economic_sector))
 
     # se devuelve el valor leible y traducido
-    def get_type_client_value(self,obj):
+    def get_type_client_name(self,obj):
         return _(obj.get_type_client_display())
 
-    def get_sex_value(self,obj):
+    def get_sex_name(self,obj):
         return _(obj.get_sex_display())
 
-    def get_document_type_value(self,obj):
+    def get_document_type_name(self,obj):
         return _(obj.get_document_type_display())
 
-    def get_civil_state_value(self,obj):
+    def get_civil_state_name(self,obj):
         return _(obj.get_civil_state_display())
 
-    def get_ocupation_value(self,obj):
+    def get_ocupation_name(self,obj):
         return _(obj.get_ocupation_display())
 
     def validate_bussines_client(self, data):
         if 'business_name' not in data:
-            raise serializers.ValidationError(u"Business name required.")
+            raise serializers.ValidationError(u"business_name required.")
         if data['economic_sector'] == None:
             raise serializers.ValidationError(u"economic_sector must no be empty.")
         if 'position' not in data:
@@ -173,9 +173,9 @@ class SpecialistSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     document_type = serializers.ChoiceField(choices=c.user_document_type)
-    document_type_value = serializers.SerializerMethodField()
+    document_type_name = serializers.SerializerMethodField()
     type_specialist = serializers.ChoiceField(choices=c.specialist_type_specialist)
-    type_specialist_value = serializers.SerializerMethodField()
+    type_specialist_name = serializers.SerializerMethodField()
     address = AddressSerializer()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
@@ -184,8 +184,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Specialist
         fields = ('id', 'username', 'nick', 'first_name', 'last_name',
-                  'type_specialist', 'type_specialist_value','password',
-                  'photo', 'document_type','document_type_value', 'document_number',
+                  'type_specialist', 'type_specialist_name','password',
+                  'photo', 'document_type','document_type_name', 'document_number',
                   'address', 'ruc','email_exact', 'code', 'telephone', 'cellphone',
                   'business_name', 'payment_per_answer', 'cv', 'star_rating',
                   'category', 'category_name', 'nationality', 'nationality_name')
@@ -196,10 +196,10 @@ class SpecialistSerializer(serializers.ModelSerializer):
     def get_category_name(self, obj):
         return _(str(obj.category))
 
-    def get_document_type_value(self,obj):
+    def get_document_type_name(self,obj):
         return _(obj.get_document_type_display())
 
-    def get_type_specialist_value(self,obj):
+    def get_type_specialist_name(self,obj):
         return _(obj.get_type_specialist_display())
 
     def validate(self, data):

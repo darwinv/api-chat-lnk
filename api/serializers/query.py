@@ -21,14 +21,14 @@ class MessageFileSerializer(serializers.ModelSerializer):
 # Serializer de Mensajes
 class MessageSerializer(serializers.ModelSerializer):
     msg_type = serializers.ChoiceField(choices=c.message_msg_type)
-    msg_type_value = serializers.SerializerMethodField()
+    msg_type_name = serializers.SerializerMethodField()
     time = serializers.SerializerMethodField()
     media_files = serializers.SerializerMethodField()
     code_specialist = serializers.SerializerMethodField()
 
     class Meta:
         model = Message
-        fields = ('id','message','msg_type','msg_type_value','time',
+        fields = ('id','message','msg_type','msg_type_name','time',
                  'media_files','code_specialist','specialist')
 
         read_only_fields = ('id','time','media_files','code_specialist')
@@ -44,7 +44,7 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_code_specialist(self, obj):
         return str(obj.specialist.code)
 
-    def get_msg_type_value(self, obj):
+    def get_msg_type_name(self, obj):
         return _(obj.get_msg_type_display())
 
 # Serializer para detalle de consulta
