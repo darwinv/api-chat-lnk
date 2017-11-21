@@ -44,8 +44,8 @@ class CreateNaturalClient(APITestCase):
             'activity_description': 'Loremp iptsum',
             'level_instruction': 1,
             'institute': 'UNEFA',
-            'profession': 1,
-            'ocupation': 'd',
+            'profession': "Administrador",
+            'ocupation': '0',
             'about': 'iptsum aabout',
             'ciiu': '1440',
             'nationality': 1
@@ -130,8 +130,9 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
 
 # Prueba para verificar la insercion de cliente juridico
 class CreateBussinessClient(APITestCase):
@@ -160,7 +161,6 @@ class CreateBussinessClient(APITestCase):
             "agent_lastname": "Molina",
             'position': 'manager',
             'about': 'iptsum aabout',
-            'commercial_group': 1,
             'economic_sector': 1,
             'ciiu': '1240',
             'nationality': 1
@@ -169,16 +169,6 @@ class CreateBussinessClient(APITestCase):
     def test_empty_bussiness_fields(self):
         data = self.valid_payload
         del data['agent_lastname']
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_invalid_commercial_group(self):
-        data = self.valid_payload
-        data['commercial_group'] = "nada"
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
@@ -203,7 +193,7 @@ class CreateBussinessClient(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        # self.assertEqual(response.data, 'ey')
+
 
 
 class GetDetailClient(APITestCase):
@@ -234,8 +224,8 @@ class GetDetailClient(APITestCase):
             'activity_description': 'Loremp iptsum',
             'level_instruction': 1,
             'institute': 'UNEFA',
-            'profession': 1,
-            'ocupation': 'd',
+            'profession': 'Administrador',
+            'ocupation': '0',
             'about': 'iptsum aabout',
             'ciiu': '1440',
             'nationality': 1

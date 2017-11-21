@@ -1,7 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
-
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
@@ -16,6 +15,7 @@ from django.http import Http404
 from api.permissions import IsAdminOnList, IsAdminOrOwner
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
+from django.utils.translation import ugettext_lazy as _
 import pdb, os
 import uuid
 import boto3
@@ -330,8 +330,8 @@ class SellerAccountView(ListCreateAPIView):
                                   )\
             .order_by('purchase__fee__date')
 
-        print(queryset.query)
-        print("------------------------------------")
+
+
         serializer = SellerAccountSerializer(queryset, many=True)
         # pagination
         page = self.paginate_queryset(queryset)
