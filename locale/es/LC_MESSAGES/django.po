@@ -223,149 +223,152 @@ msgstr "Español"
 msgid "English"
 msgstr "Ingles"
 
+
+
+
+
+
+
+
 # categorias o especialidades
-#~ msgid "Taxes"
-#~ msgstr "Impuestos"
+msgid "Taxes"
+msgstr "Impuestos"
 
-#~ msgid "Accounting"
-#~ msgstr "Contabilidad"
+msgid "Accounting"
+msgstr "Contabilidad"
 
-#~ msgid "Tax Law"
-#~ msgstr "Derecho Tributario"
+msgid "Tax Law"
+msgstr "Derecho Tributario"
 
-#~ msgid "Finance"
-#~ msgstr "Finanzas"
+msgid "Finance"
+msgstr "Finanzas"
 
-#~ msgid "Insurance"
-#~ msgstr "Seguros"
+msgid "Insurance"
+msgstr "Seguros"
 
-#~ msgid "Foreign trade"
-#~ msgstr "Comercio Exterior"
+msgid "Foreign trade"
+msgstr "Comercio Exterior"
 
-#~ msgid "Information Technology"
-#~ msgstr "Tecnología de la Información"
+msgid "Information Technology"
+msgstr "Tecnología de la Información"
 
-#~ msgid "Intellectual property"
-#~ msgstr "Propiedad Intelectual"
+msgid "Intellectual property"
+msgstr "Propiedad Intelectual"
 
-#~ msgid "Advertising"
-#~ msgstr "Publicidad"
+msgid "Advertising"
+msgstr "Publicidad"
 
-#~ msgid "Organizational psychology"
-#~ msgstr "Psicología Organizacional"
+msgid "Organizational psychology"
+msgstr "Psicología Organizacional"
 
-#~ msgid "Contracting with the State"
-#~ msgstr "Contrataciones con el Estado"
+msgid "Contracting with the State"
+msgstr "Contrataciones con el Estado"
 
-#~ msgid "Marketing"
-#~ msgstr "Marketing"
+msgid "Marketing"
+msgstr "Marketing"
 
-#~ msgid "Mechanics"
-#~ msgstr "Mecánica"
+msgid "Mechanics"
+msgstr "Mecánica"
 
-#~ msgid "Notary and Registry Law"
-#~ msgstr "Derecho Notarial y Registral"
+msgid "Notary and Registry Law"
+msgstr "Derecho Notarial y Registral"
 
-#~ msgid "Project management"
-#~ msgstr "Gestión de Proyectos"
+msgid "Project management"
+msgstr "Gestión de Proyectos"
 
-#~ msgid "Electricity"
-#~ msgstr "Electricidad"
+msgid "Electricity"
+msgstr "Electricidad"
 
-#~ msgid "Civil Procedural Law"
-#~ msgstr "Derecho Procesal Civil"
+msgid "Civil Procedural Law"
+msgstr "Derecho Procesal Civil"
 
-#~ msgid "Agroindustry"
-#~ msgstr "Agroindustria"
+msgid "Agroindustry"
+msgstr "Agroindustria"
 
-#~ msgid "Electronics"
-#~ msgstr "Electrónica"
+msgid "Electronics"
+msgstr "Electrónica"
 
-#~ msgid "Criminal law"
-#~ msgstr "Derecho Penal"
+msgid "Criminal law"
+msgstr "Derecho Penal"
 
-#~ msgid "Food"
-#~ msgstr "Alimentaria"
+msgid "Food"
+msgstr "Alimentaria"
 
-#~ msgid "Automation"
-#~ msgstr "Automatización"
+msgid "Automation"
+msgstr "Automatización"
 
-#~ msgid "Labor Law"
-#~ msgstr "Derecho Laboral"
+msgid "Labor Law"
+msgstr "Derecho Laboral"
 
-#~ msgid "Gastronomy"
-#~ msgstr "Gastronomía"
+msgid "Gastronomy"
+msgstr "Gastronomía"
 
-#~ msgid "Plastics"
-#~ msgstr "Plásticos"
+msgid "Plastics"
+msgstr "Plásticos"
 
-#~ msgid "Mining Law"
-#~ msgstr "Derecho Minero"
+msgid "Mining Law"
+msgstr "Derecho Minero"
 
-#~ msgid "Corporate Law"
-#~ msgstr "Derecho Corporativo"
+msgid "Corporate Law"
+msgstr "Derecho Corporativo"
 
 # --------------------
 # Nivel Instruccion
-#~ msgid "No level"
-#~ msgstr "Sin nivel"
+msgid "No level"
+msgstr "Sin nivel"
 
-#~ msgid "Initial"
-#~ msgstr "Inicial"
+msgid "Initial"
+msgstr "Inicial"
 
-#~ msgid "Primary"
-#~ msgstr "Primaria"
+msgid "Primary"
+msgstr "Primaria"
 
-#~ msgid "High school"
-#~ msgstr "Secundaria"
+msgid "High school"
+msgstr "Secundaria"
 
-#~ msgid "Basic special"
-#~ msgstr "Básica especial"
+msgid "Basic special"
+msgstr "Básica especial"
 
-#~ msgid "Superior non-university incomplete"
-#~ msgstr "Superior no universitaria incompleta"
+msgid "Superior non-university incomplete"
+msgstr "Superior no universitaria incompleta"
 
-#~ msgid "Superior non-university full"
-#~ msgstr "Superior no universitaria completa"
+msgid "Superior non-university full"
+msgstr "Superior no universitaria completa"
 
-#~ msgid "Incomplete university superior"
-#~ msgstr "Superior universitaria incompleta"
+msgid "Incomplete university superior"
+msgstr "Superior universitaria incompleta"
 
-#~ msgid "Full university superior"
-#~ msgstr "Superior universitaria completa"
+msgid "Full university superior"
+msgstr "Superior universitaria completa"
 
-#~ msgid "master's degree"
-#~ msgstr "Maestría"
+msgid "master's degree"
+msgstr "Maestría"
 
-#~ msgid "Doctorate"
-#~ msgstr "Doctorado"
+msgid "Doctorate"
+msgstr "Doctorado"
 
 # ----------------
 # Sector Economico
-#~ msgid "Farming"
-#~ msgstr "Agropecuario"
+msgid "Farming"
+msgstr "Agropecuario"
 
-#~ msgid "Fishing"
-#~ msgstr "Pesca"
+msgid "Fishing"
+msgstr "Pesca"
 
-#~ msgid "Mining"
-#~ msgstr "Minería"
+msgid "Mining"
+msgstr "Minería"
 
-#~ msgid "Hydrocarbons"
-#~ msgstr "Hidrocarburos"
+msgid "Hydrocarbons"
+msgstr "Hidrocarburos"
 
-#~ msgid "Manufacture"
-#~ msgstr "Manufactura"
+msgid "Manufacture"
+msgstr "Manufactura"
 
-#~ msgid "Electricity and Water"
-#~ msgstr "Electricidad y Agua"
+msgid "Electricity and Water"
+msgstr "Electricidad y Agua"
 
-#~ msgid "Building"
-#~ msgstr "Construcción"
-
-#~ msgid "Commerce"
-#~ msgstr "Comercio"
-
+msgid "Building"
+msgstr "Construcción"
 
 msgid "Commerce"
 msgstr "Comercio"
@@ -1109,6 +1112,8 @@ msgstr "Zambia"
 
 msgid "Zimbabwe"
 msgstr "Zimbabue"
+
+
 
 #--------------------------------
 
