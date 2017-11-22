@@ -229,7 +229,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(output)
         return data
 
-
         # if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
         #                                                                 category_id=category).exists():
         #     raise serializers.ValidationError(u"Main specialist already exists.")
