@@ -15,7 +15,7 @@ client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
 class GetAllQuerys(APITestCase):
     """ Test module for GET all Querys API """
 
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.id_client = 2
         self.id_category = 1
@@ -90,7 +90,7 @@ class GetAllQuerys(APITestCase):
 
 #
 class GetDetailQuery(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.id_client = 2
         self.id_category = 1
@@ -126,7 +126,7 @@ class GetDetailQuery(APITestCase):
 
 
 class CreateQuery(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.valid_payload = {
             "title" : "Visa Solicitud",
@@ -162,7 +162,7 @@ class CreateQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 class UpdateQuery(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.valid_payload = {
             "title" : "Visa Solicitud",
@@ -229,7 +229,7 @@ class UpdateQuery(APITestCase):
 
 
 class SkipReQuery(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.id_client = 2
         self.id_category = 1
@@ -260,7 +260,7 @@ class SkipReQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 class CreateReQuery(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.valid_payload = {
             "title" : "Visa Solicitud",
@@ -304,7 +304,7 @@ class CreateReQuery(APITestCase):
 
 
 class SetCalification(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.id_client = 2
         self.id_category = 1

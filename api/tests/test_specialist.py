@@ -12,7 +12,7 @@ client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
 
 class CreateSpecialist(APITestCase):
-    fixtures = ['data','data2']
+    fixtures = ['data','data2','data3']
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -97,7 +97,7 @@ class CreateSpecialist(APITestCase):
 
 
 class DetailSpecialist(APITestCase):
-    fixtures = ['data','data2','test_query','test_address']
+    fixtures = ['data','data2','data3','test_query','test_address']
     def setUp(self):
         self.specialist = 6
 
@@ -110,7 +110,7 @@ class DetailSpecialist(APITestCase):
 
 
 class UpdateSpecialistCase(APITestCase):
-    fixtures = ['data','data2']
+    fixtures = ['data','data2','data3']
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -194,7 +194,7 @@ class UpdateSpecialistCase(APITestCase):
         self.assertEqual(data['address']['street'], response.data["address"]['street'])
 
 class GetSpecialists(APITestCase):
-    fixtures = ['data','data2']
+    fixtures = ['data','data2','data3']
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -236,7 +236,7 @@ class GetSpecialists(APITestCase):
 
     # no funciona la prueba debido a que para
     def test_get_associates_by_main(self):
-        fixtures = ['data','data2']
+        fixtures = ['data','data2','data3']
         data_first_associate = {
             'username': 'maria',
             'nick': 'maria',
@@ -288,6 +288,7 @@ class GetSpecialists(APITestCase):
         }
 
         # agregamos los asociados
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         send_associate1 = self.client.post(
             reverse('specialists'),
             data=json.dumps(data_first_associate),
@@ -304,16 +305,16 @@ class GetSpecialists(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-
+        # import pdb; pdb.set_trace()
         url = "{}?main_specialist={}".format(reverse('specialists'),send.data["id"])
         response = client.get(url)
-        # pdb.set_trace()
+
         self.assertEqual(Specialist.objects.filter(category=send.data["category"]).exclude(type_specialist='m').count(),
                                                    response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class DeleteSpecialist(APITestCase):
-    fixtures = ['data','data2']
+    fixtures = ['data','data2','data3']
 
     def setUp(self):
         self.valid_payload = {

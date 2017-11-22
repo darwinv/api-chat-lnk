@@ -1136,4 +1136,3 @@ msgstr "Zimbabue"
 #: .\linkupapi\settings.py:121
 msgid "English"
 msgstr "Ingles"
-
