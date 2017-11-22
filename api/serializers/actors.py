@@ -137,16 +137,16 @@ class ClientSerializer(serializers.ModelSerializer):
     def validate_bussines_client(self, data):
         required = _("required")
         if 'business_name' not in data:
-            raise serializers.ValidationError(f"business_name {required}")
+            raise serializers.ValidationError("business_name {}".format(required))
         if data['economic_sector'] == None:
             empty =  _("must no be empty")
-            raise serializers.ValidationError(f"economic_sector {empty}")
+            raise serializers.ValidationError("economic_sector{}".format(empty))
         if 'position' not in data:
-            raise serializers.ValidationError(f"position {required}")
+            raise serializers.ValidationError("position {}".format(required))
         if 'agent_firstname' not in data:
-            raise serializers.ValidationError(f"agent_firstname {required}")
+            raise serializers.ValidationError("agent_firstname {}".format(required))
         if 'agent_lastname' not in data:
-            raise serializers.ValidationError(f"agent_lastname {required}")
+            raise serializers.ValidationError("agent_lastname {}".format(required))
         return
 
     def validate(self, data):
