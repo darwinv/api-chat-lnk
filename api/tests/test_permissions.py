@@ -10,7 +10,7 @@ client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
 
 class GetUsers(APITestCase):
-    fixtures = ['data','data2']
+    fixtures = ['data','data2','data3']
     def setUp(self):
         self.url = '/users/'
     def test_get_users(self):

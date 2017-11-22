@@ -197,7 +197,7 @@ class CreateBussinessClient(APITestCase):
 
 
 class GetDetailClient(APITestCase):
-    fixtures = ['data','data2']
+    fixtures = ['data','data2','data3']
     def setUp(self):
         self.valid_payload = {
             'username': 'darwin',
@@ -240,19 +240,19 @@ class GetDetailClient(APITestCase):
         # import pdb; pdb.set_trace()
         response = client.get(reverse('client-detail',
                          kwargs={'pk': send.data["id"]}),format='json')
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # self.assertEqual(send.data["username"], response.data["username"])
+
 
 
 class GetAllClients(APITestCase):
     """ Test module for GET all clients API """
-    fixtures = ['data','data2']
+    fixtures = ['data','data2','data3']
     def setUp(self):
         pass
 
     def test_get_all_clients(self):
         # get API response
+        # client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = client.get(reverse('clients'))
         # get data from db
         clients = Cliente.objects.all()

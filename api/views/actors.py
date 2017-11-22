@@ -206,6 +206,23 @@ class SpecialistDetailView(APIView):
         specialist.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+# Vista para detalle del cliente segun su username
+# se hizo con la finalidad de instanciar una vez logueado
+class SpecialistDetailByUsername(APIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    def get_object(self, username):
+        try:
+            return Specialist.objects.get(username=username)
+        except Specialist.DoesNotExist:
+            raise Http404
+
+    def get(self, request, username):
+        specialist = self.get_object(username)
+        serializer = SpecialistSerializer(client)
+        return Response(serializer.data)
+
+
 # Vista para estado de cuenta de especialista
 class SpecialistAccountView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]

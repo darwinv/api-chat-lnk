@@ -225,7 +225,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
                                                                                     category_id=category).exists():
                 # f"economic_sector {empty}"
                 output = "%(main)s %(specialist)s %(already)s %(exists)s " % {'main':main, 'specialist': spec,
-                                                                             'already':already, 'exists':exists} 
+                                                                             'already':already, 'exists':exists}
                 raise serializers.ValidationError(output)
         return data
 
@@ -489,7 +489,6 @@ class SellerAccountSerializer(serializers.ModelSerializer):
     def get_count_products(self, obj):
         # Retorna cantidad de productos (de momento se compra ssiemrpe un solo producto)
         return 1
-
 
 
 class MediaSerializer(serializers.Serializer):
