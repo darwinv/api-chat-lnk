@@ -204,30 +204,26 @@ class SpecialistSerializer(serializers.ModelSerializer):
     def get_type_specialist_name(self,obj):
         return _(obj.get_type_specialist_display())
 
-    def validate(self, data):
-        main = _('Main')
-        spec = _('Specialist')
-        already = _('already')
-        exists = _('exists')
-        flag = True
-        if hasattr(self.instance, 'type_specialist'):
-            if self.instance.type_specialist == 'm':
-                flag = False
-
-        # Asegurarse que solo haya un especialista principal por categoria.
-        if hasattr(self.instance, 'category'):
-            category = self.instance.category
-        else:
-            category = data.get("category")
-
-        if self.instance and self.instance.username != data["username"] or 'type_specialist' in data:
-            if flag and data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
-                                                                                    category_id=category).exists():
-                # f"economic_sector {empty}"
-                output = "%(main)s %(specialist)s %(already)s %(exists)s " % {'main':main, 'specialist': spec,
-                                                                             'already':already, 'exists':exists}
-                raise serializers.ValidationError(output)
-        return data
+    # def validate(self, data):
+    #     flag = True
+    #     if hasattr(self.instance, 'type_specialist'):
+    #         if self.instance.type_specialist == 'm':
+    #             flag = False
+    #
+    #     # Asegurarse que solo haya un especialista principal por categoria.
+    #     if hasattr(self.instance, 'category'):
+    #         category = self.instance.category
+    #     else:
+    #         category = data.get("category")
+    #
+    #     if self.instance and self.instance.username != data["username"] or 'type_specialist' in data:
+    #         if flag and data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
+    #                                                                                 category_id=category).exists():
+    #
+    #             output = "%(main)s %(specialist)s %(already)s %(exists)s " % {'main':main, 'specialist': spec,
+    #                                                                          'already':already, 'exists':exists}
+    #             raise serializers.ValidationError(output)
+    #     return data
 
         # if data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
         #                                                                 category_id=category).exists():
@@ -235,17 +231,31 @@ class SpecialistSerializer(serializers.ModelSerializer):
         # return data
 
     def create(self, validated_data):
+        main = _('Main')
+        spec = _('Specialist')
+        already = _('already')
+        exists = _('exists')
         data_address = validated_data.pop('address')
         address = Address.objects.create(**data_address)
         validated_data['address'] = address
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
+        if validated_data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
+                                                                                  category_id=validated_data["category"]).exists():
+            output = "%(main)s %(specialist)s %(already)s %(exists)s " % {'main':main, 'specialist': spec,
+                                                                         'already':already, 'exists':exists}
+            raise serializers.ValidationError(output)
         if password is not None:
             instance.set_password(password)
         instance.save()
         return instance
 
     def update(self, instance, validated_data):
+        main = _('Main')
+        spec = _('Specialist')
+        already = _('already')
+        exists = _('exists')
+        category = validated_data.get("category",None)
         instance.nick = validated_data.get('nick', instance.nick)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
@@ -260,7 +270,13 @@ class SpecialistSerializer(serializers.ModelSerializer):
         instance.business_name = validated_data.get('business_name', instance.business_name)
         instance.payment_per_answer = validated_data.get('payment_per_answer', instance.payment_per_answer)
         instance.category = validated_data.get('category', instance.category)
-        data = validated_data
+        if instance.type_specialist == "m" and Specialist.objects.filter(type_specialist="m",
+                                                                        category_id=category
+                                                                        ).exclude(pk=instance.id).exists():
+
+           output = "%(main)s %(specialist)s %(already)s %(exists)s " % {'main':main, 'specialist': spec,
+                                                                        'already':already, 'exists':exists}
+           raise serializers.ValidationError(output)
         if 'address' in validated_data:
             data_address = validated_data.pop('address')
 
