@@ -24,7 +24,6 @@ class QueryListView(ListCreateAPIView):
 # listado de las consultas
     def list(self, request):
         status = request.query_params.get('status', None)
-
         try:
             queryset = Query.objects.filter(client_id=request.query_params["client"])
             # si se envia la categoria se filtra por la misma, en caso contrario
