@@ -12,7 +12,7 @@ client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
 
 
 class GetAllSellers(APITestCase):
-    fixtures = ['data','data2','data3']
+    fixtures = ['data', 'data2', 'data3']
     """ Test module for GET all sellers API """
 
     def setUp(self):
