@@ -138,9 +138,8 @@ class SpecialistListView(ListCreateAPIView):
 
     # Funcion personalizada para
     # devolver los especialistas asociados a un principal si envian el
-    #  parametro [main_specialist]
+    # parametro [main_specialist]
     def list(self, request):
-
         # en dado caso que exista el parametro "main_specialist", se devuelve
         # el listado de especialistas asociados, caso contrario devuelve todos
         if 'main_specialist' in request.query_params:
