@@ -157,8 +157,52 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_no_address(self):
+        """Solicitud invalida por no tener enviar el password."""
+        data = self.valid_payload
+        del data["address"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_ciiu(self):
+        """Solicitud invalida por no enviar el ciiu."""
+        data = self.valid_payload
+        del data["ciiu"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_profession(self):
+        """Solicitud invalida por no enviar la profesion."""
+        data = self.valid_payload
+        del data["profession"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_ocupation(self):
+        """Solicitud invalida por no enviar la profesion."""
+        data = self.valid_payload
+        del data["ocupation"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_countries(self):
+        """Solicitud invalida por enviar codigo de pais inexistente."""
         data = self.valid_payload
         data['nationality'] = 500
         response = self.client.post(
@@ -170,6 +214,7 @@ class CreateNaturalClient(APITestCase):
         # self.assertEqual(response.data, 'ey')
 
     def test_invalid_typeclient(self):
+        """Solicitud invalida por enviar tipo de cliente desconocido."""
         data = self.valid_payload
         data['type_client'] = 'x'
         response = self.client.post(
@@ -180,6 +225,7 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_civilstate(self):
+        """Solicitud invalida por enviar estado civil desconocido."""
         data = self.valid_payload
         data['civil_state'] = 't'
         response = self.client.post(
@@ -211,7 +257,24 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_no_optionals(self):
+        """Solicitud valida ya que no valida campos opcionales."""
+        data = self.valid_payload
+        del data["telephone"]
+        del data["cellphone"]
+        del data["activity_description"]
+        del data["level_instruction"]
+        del data["about"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        # self.assertEqual(response.data, 'ey')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_create_natural_client(self):
+        """Solicitud valida."""
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(self.valid_payload),
