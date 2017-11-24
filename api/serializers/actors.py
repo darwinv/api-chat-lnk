@@ -106,6 +106,10 @@ class ClientSerializer(serializers.ModelSerializer):
     ocupation = serializers.ChoiceField(choices=c.client_ocupation, allow_blank=True)
     ocupation_name = serializers.SerializerMethodField()
     address = AddressSerializer()
+    nick = serializers.CharField(required=True)
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+    birthdate = serializers.DateField(required=True)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     photo = serializers.CharField(read_only=True)
 
