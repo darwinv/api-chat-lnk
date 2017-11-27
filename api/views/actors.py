@@ -1,3 +1,4 @@
+"""Vista de todos los Actores."""
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
@@ -32,9 +33,11 @@ DATE_FAKE = '1900-01-01'
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    """Vista para traer datos de usuarios (Logueo en la web)."""
+
     authentication_classes = (OAuth2Authentication,)
     # solo el admin puede consultar
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = (filters.DjangoFilterBackend,)

@@ -141,7 +141,7 @@ class QuerySerializer(serializers.ModelSerializer):
         """Redefinido metodo actualizar."""
         # no se puede agregar msjs de ningun tipo una vez hah sido absuelta
         if int(instance.status) == 6 or int(instance.status) == 7:
-            raise serializers.ValidationError(u"Query Absolved - can'not add more msgs")
+            raise serializers.ValidationError(u"Query Absolved - can'not add more messages")
         data_message = validated_data.pop('message')
         specialist = Specialist.objects.get(pk=instance.specialist_id)
         data_message["specialist"] = specialist
