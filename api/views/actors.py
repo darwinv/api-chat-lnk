@@ -88,11 +88,13 @@ class ClientListView(ListCreateAPIView):
 
 class ClientDetailView(APIView):
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    permission_classes = (IsAdminOrOwner,)
     # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
     def get_object(self, pk):
         try:
-            return Client.objects.get(pk=pk)
+            obj = Client.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
         except Client.DoesNotExist:
             raise Http404
 
@@ -100,6 +102,7 @@ class ClientDetailView(APIView):
         client = self.get_object(pk)
         serializer = ClientSerializer(client)
         return Response(serializer.data)
+
 
 
 # Vista para detalle del cliente segun su username

@@ -80,8 +80,8 @@ class User(AbstractUser):
     #      db_table = 'user'
     nick = models.CharField(max_length=45, blank=True)
     email_exact = models.CharField(max_length=150, unique=True)
-    telephone = models.CharField(max_length=14)
-    cellphone = models.CharField(max_length=14)
+    telephone = models.CharField(max_length=14, null=True)
+    cellphone = models.CharField(max_length=14, null=True)
     photo = models.CharField(max_length=250, null=True)
 
     document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
@@ -157,11 +157,10 @@ class Client(User):
     civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
     ciiu = models.CharField(max_length=4)
-    activity_description = models.CharField(max_length=255)
+    activity_description = models.CharField(max_length=255, null=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
-
-    ocupation = models.CharField(max_length=1, choices=Ch.client_ocupation)
-    about = models.CharField(max_length=255)
+    ocupation = models.CharField(max_length=1, choices=c.client_ocupation)
+    about = models.CharField(max_length=255, null=True)
     business_name = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
     agent_lastname = models.CharField(max_length=45, null=True)
