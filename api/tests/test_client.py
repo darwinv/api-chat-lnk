@@ -379,12 +379,12 @@ class GetDetailClient(APITestCase):
         """Setup."""
         self.valid_payload = {
             'username': 'darwin',
+            'password': 'intel12345',
             'nick': 'dar',
             'type_client': 'n',
             'first_name': 'darwin',
             'last_name': 'vasquez',
             'civil_state': 's',
-            'password': 'intel12345',
             'birthdate': '2017-09-19',
             "address": {
                 "street": "esteban camere",
@@ -392,7 +392,6 @@ class GetDetailClient(APITestCase):
                 "province": 1,
                 "district": 1
             },
-            'photo': 'test.jpg',
             'sex': 'm',
             'document_type': '2',
             'document_number': '144013012',
@@ -402,7 +401,7 @@ class GetDetailClient(APITestCase):
             'activity_description': 'Loremp iptsum',
             'level_instruction': 1,
             'institute': 'UNEFA',
-            'profession': 'Administrador',
+            'profession': "Administrador",
             'ocupation': '0',
             'about': 'iptsum aabout',
             'ciiu': '1440',
@@ -410,6 +409,7 @@ class GetDetailClient(APITestCase):
         }
 
     def test_get_client(self):
+        """Prueba para obtener detalle del cliente."""
         send = self.client.post(
             reverse('clients'),
             data=json.dumps(self.valid_payload),
@@ -417,7 +417,9 @@ class GetDetailClient(APITestCase):
         )
         # import pdb; pdb.set_trace()
         response = client.get(reverse('client-detail',
-                         kwargs={'pk': send.data["id"]}),format='json')
+                                      kwargs={'pk': send.data["id"]}),
+                                              format='json')
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

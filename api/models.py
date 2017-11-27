@@ -159,7 +159,7 @@ class Client(User):
     ciiu = models.CharField(max_length=4)
     activity_description = models.CharField(max_length=255, null=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
-    ocupation = models.CharField(max_length=1, choices=c.client_ocupation)
+    ocupation = models.CharField(max_length=1, choices=Ch.client_ocupation)
     about = models.CharField(max_length=255, null=True)
     business_name = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
