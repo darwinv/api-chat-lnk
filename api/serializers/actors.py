@@ -107,8 +107,8 @@ class ClientSerializer(serializers.ModelSerializer):
     ocupation_name = serializers.SerializerMethodField()
     address = AddressSerializer()
     nick = serializers.CharField(required=True)
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
+    # first_name = serializers.CharField(required=True)
+    # last_name = serializers.CharField(required=True)
     birthdate = serializers.DateField(required=True)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     photo = serializers.CharField(read_only=True)
@@ -158,6 +158,17 @@ class ClientSerializer(serializers.ModelSerializer):
         """Devuelve Ocupación."""
         return _(obj.get_ocupation_display())
 
+    def validate_natural_client(self, data):
+        """Validacion para cuando es natural."""
+        required = _("required")
+        if 'first_name' not in data:
+            raise serializers.ValidationError("first_name {}".format(required))
+
+        if 'last_name' not in data:
+            raise serializers.ValidationError("last_name {}".format(required))
+
+        return
+
     def validate_bussines_client(self, data):
         """Validacion para cuando es juridico."""
         required = _("required")
@@ -165,6 +176,9 @@ class ClientSerializer(serializers.ModelSerializer):
         if 'business_name' not in data:
             raise serializers.ValidationError("business_name {}".format(required))
         # requerido el sector economico
+        if 'economic_sector' not in data:
+            raise serializers.ValidationError("economic_sector {}".format(required))
+        # probar si esta vacio
         if data['economic_sector'] is None:
             empty = _("must no be empty")
             raise serializers.ValidationError("economic_sector{}".format(empty))
@@ -177,13 +191,16 @@ class ClientSerializer(serializers.ModelSerializer):
         # requerido el apellido del representante
         if 'agent_lastname' not in data:
             raise serializers.ValidationError("agent_lastname {}".format(required))
+        # requerido el ruc del cliente
+        if 'ruc' not in data:
+            raise serializers.ValidationError("ruc {}".format(required))
         return
 
     def validate(self, data):
         """Redefinido metodo de validación."""
-        # validation = CommonValidation()
-        # if 'photo' in data:
-        #     validation.validate_img(photo=data['photo'])
+        if data['type_client'] == 'n':
+            self.validate_natural_client(data)
+
         if data['type_client'] == 'b':
             self.validate_bussines_client(data)
         return data

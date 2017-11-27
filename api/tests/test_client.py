@@ -286,8 +286,12 @@ class CreateNaturalClient(APITestCase):
 
 # Prueba para verificar la insercion de cliente juridico
 class CreateBussinessClient(APITestCase):
-    fixtures = ['data','data2']
+    """Test Para Crear Persona juridica."""
+
+    fixtures = ['data', 'data2']
+
     def setUp(self):
+        """Setup."""
         self.valid_payload = {
             'username': 'alpanet',
             'nick': 'alpanet',
@@ -300,7 +304,7 @@ class CreateBussinessClient(APITestCase):
                 "province": 1,
                 "district": 1
             },
-            'photo': 'test.jpg',
+            "ruc": "19231299",
             'document_type': '2',
             'document_number': '144013012',
             'email_exact': 'darwin.vasqz@gmail.com',
@@ -317,8 +321,11 @@ class CreateBussinessClient(APITestCase):
         }
 
     def test_empty_bussiness_fields(self):
+        """Solicitud invalida por no enviar apellido de representante."""
         data = self.valid_payload
-        del data['agent_lastname']
+        # del data['position']
+        del data['ruc']
+        # del data['business_name']
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
@@ -326,7 +333,23 @@ class CreateBussinessClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_no_optionals(self):
+        """Solicitud valida ya que no valida campos opcionales."""
+        data = self.valid_payload
+        del data["telephone"]
+        del data["cellphone"]
+        del data["activity_description"]
+        del data["about"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        # self.assertEqual(response.data, 'ey')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_invalid_economic_sector(self):
+        """Solicitud invalida por enviar sector economico invalida."""
         data = self.valid_payload
         data['economic_sector'] = "nada"
         response = self.client.post(
@@ -337,18 +360,23 @@ class CreateBussinessClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_bussines_client(self):
+        """Crea cliente juridico de manera exitosa."""
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-
 class GetDetailClient(APITestCase):
-    fixtures = ['data','data2','data3']
+    """Detalle del Cliente."""
+
+    fixtures = ['data', 'data2', 'data3']
+
     def setUp(self):
+        """Setup."""
         self.valid_payload = {
             'username': 'darwin',
             'nick': 'dar',
