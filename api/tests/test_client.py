@@ -304,6 +304,7 @@ class CreateBussinessClient(APITestCase):
                 "province": 1,
                 "district": 1
             },
+            "commercial_reason": "Alpanet CA",
             "ruc": "19231299",
             'document_type': '2',
             'document_number': '144013012',
@@ -336,6 +337,7 @@ class CreateBussinessClient(APITestCase):
     def test_no_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""
         data = self.valid_payload
+        del data["commercial_reason"]
         del data["telephone"]
         del data["cellphone"]
         del data["activity_description"]

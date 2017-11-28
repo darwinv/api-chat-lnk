@@ -150,10 +150,11 @@ class LevelInstruction(models.Model):
 
 
 class Client(User):
+    """Modelo de Cliente (herede de usuario)."""
+
     type_client = models.CharField(max_length=1, choices=Ch.client_type_client)
-
     sex = models.CharField(max_length=1, choices=Ch.client_sex, null=True)
-
+    commercial_reason = models.CharField(max_length=45, null=True)
     civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
     ciiu = models.CharField(max_length=4)
@@ -171,6 +172,8 @@ class Client(User):
     seller_asigned = models.ForeignKey(Seller, on_delete=models.PROTECT, null=True)
 
     class Meta:
+        """Modelo de Cliente."""
+
         verbose_name = 'Client'
         verbose_name_plural = 'Clients'
 
