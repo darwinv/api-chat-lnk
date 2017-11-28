@@ -193,8 +193,9 @@ class Category(models.Model):
 
 
 class Specialist(User):
-    business_name = models.CharField(max_length=55)
+    """Modelo de Especialista (herede de user)."""
 
+    business_name = models.CharField(max_length=55)
     type_specialist = models.CharField(max_length=1, choices=Ch.specialist_type_specialist)
     star_rating = models.IntegerField(null=True)
     cv = models.CharField(max_length=150, null=True)
@@ -202,6 +203,8 @@ class Specialist(User):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
 
     class Meta:
+        """Meta datos."""
+
         verbose_name = 'Specialist'
         verbose_name_plural = 'Specialists'
 

@@ -11,9 +11,14 @@ import pdb
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
 
+
 class CreateSpecialist(APITestCase):
-    fixtures = ['data','data2','data3']
+    """Pruebas de Crear especialista."""
+
+    fixtures = ['data', 'data2', 'data3']
+
     def setUp(self):
+        """Setup."""
         self.valid_payload = {
             'username': 'julia',
             'nick': 'julia',
@@ -39,21 +44,142 @@ class CreateSpecialist(APITestCase):
             "category": 1
         }
 
-    def test_invalid_names(self):
+    def test_no_username(self):
+        """Solicitud invalida por no tener el username."""
         data = self.valid_payload
-        del data['last_name']
+        del data["username"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_nick(self):
+        """Solicitud invalida por no tener el nick."""
+        data = self.valid_payload
+        del data["nick"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_names(self):
+        """Solicitud invalida por no tener el apellido o nombre."""
+        data = self.valid_payload
+        del data['first_name']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_email(self):
+        """Solicitud invalida por no enviar el email."""
+        data = self.valid_payload
+        del data['email_exact']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_password(self):
+        """Solicitud invalida por no enviar el email."""
+        data = self.valid_payload
+        del data['password']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_document(self):
+        """Solicitud invalida por no enviar el documento."""
+        data = self.valid_payload
+        del data['document_number']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_address(self):
+        """Solicitud invalida por no enviar la direccion."""
+        data = self.valid_payload
+        del data['address']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_business_name(self):
+        """Solicitud invalida por no enviar el nombre de la empresa."""
+        data = self.valid_payload
+        del data['business_name']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_category(self):
+        """Solicitud invalida por no enviar una especialidad valida."""
         data = self.valid_payload
-        data['category'] = 'Exploracion Espacial'
+        data['category'] = 100
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_category(self):
+        """Solicitud invalida por no enviar una especialidad."""
+        data = self.valid_payload
+        del data['category']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_ruc(self):
+        """Solicitud invalida por no enviar ruc."""
+        data = self.valid_payload
+        del data['ruc']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_payment(self):
+        """Solicitud invalida por no enviar pago por respuesta."""
+        data = self.valid_payload
+        del data['payment_per_answer']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
@@ -63,6 +189,7 @@ class CreateSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_type_specialist(self):
+        """Solicitud invalida por no enviar el tipo de especialista correcto."""
         data = self.valid_payload
         data['type_specialist'] = 'r'
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
@@ -73,7 +200,21 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_no_optionals(self):
+        """Solicitud valida ya que no valida campos opcionales."""
+        data = self.valid_payload
+        del data["telephone"]
+        del data["cellphone"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_empty_names(self):
+        """Solicitud invalida al enviar los nombres vacios."""
         data = self.valid_payload
         data["last_name"] = ""
         data["first_name"] = ""
@@ -86,6 +227,7 @@ class CreateSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_specialist(self):
+        """Solicitud invalida al enviar los nombres vacios."""
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),

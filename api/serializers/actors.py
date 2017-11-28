@@ -223,6 +223,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
     nationality_name = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)
+    nick = serializers.CharField(required=True)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     document_type = serializers.ChoiceField(choices=c.user_document_type)
@@ -233,6 +234,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
     photo = serializers.CharField(read_only=True)
+    ruc = serializers.CharField(required=True)
 
     class Meta:
         """Modelo del especialista y sus campos."""
