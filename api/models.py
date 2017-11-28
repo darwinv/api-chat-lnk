@@ -99,10 +99,14 @@ class User(AbstractUser):
 # Seller herede de User y se vincule 1 a 1
 
 class Seller(User):
+    """Modelo de Vendedor (hereda de User)."""
+
     cv = models.CharField(max_length=100, null=True, blank=True)
     zone = models.ForeignKey(Zone, on_delete=models.PROTECT)
 
     class Meta:
+        """Meta."""
+
         verbose_name = 'Seller'
         verbose_name_plural = 'Sellers'
 

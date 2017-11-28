@@ -289,6 +289,7 @@ class SellerFilter(filters.FilterSet):
         fields = ['first_name', 'last_name', 'ruc', 'email_exact']
 
 class SellerListView(ListCreateAPIView, UpdateAPIView):
+    """Vista de Listado de Vendedores"""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAdminUser,)
     # permission_classes = [permissions.AllowAny]
