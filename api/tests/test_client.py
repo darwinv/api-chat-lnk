@@ -333,7 +333,8 @@ class CreateBussinessClient(APITestCase):
             'about': 'iptsum aabout',
             'economic_sector': 1,
             'ciiu': '1240',
-            'nationality': 1
+            'nationality': 1,
+            'residence_country': 1
         }
 
     def test_empty_bussiness_fields(self):
@@ -366,7 +367,7 @@ class CreateBussinessClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_invalid_economic_sector(self):
-        """Solicitud invalida por enviar sector economico invalida."""
+        """Solicitud invalida por enviar sector economico invalido."""
         data = self.valid_payload
         data['economic_sector'] = "nada"
         response = self.client.post(
@@ -374,6 +375,18 @@ class CreateBussinessClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_residence_country(self):
+        """Solicitud invalida por enviar pais de residencia diferente a peru."""
+        data = self.valid_payload
+        data['residence_country'] = 4
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_bussines_client(self):
