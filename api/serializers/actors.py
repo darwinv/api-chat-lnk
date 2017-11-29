@@ -105,7 +105,7 @@ class ClientSerializer(serializers.ModelSerializer):
     civil_state_name = serializers.SerializerMethodField()
     ocupation = serializers.ChoiceField(choices=c.client_ocupation, allow_blank=True)
     ocupation_name = serializers.SerializerMethodField()
-    address = AddressSerializer()
+    address = AddressSerializer(required=False)
     nick = serializers.CharField(required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
@@ -169,10 +169,12 @@ class ClientSerializer(serializers.ModelSerializer):
         required = _("required")
         if 'first_name' not in data:
             raise serializers.ValidationError("first_name {}".format(required))
-
         if 'last_name' not in data:
             raise serializers.ValidationError("last_name {}".format(required))
-
+        # import pdb; pdb.set_trace()
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if "address" not in data:
+                raise serializers.ValidationError("address {}".format(required))
         return
 
     def validate_bussines_client(self, data):
@@ -191,6 +193,8 @@ class ClientSerializer(serializers.ModelSerializer):
         # requerido la posicion en la empresa
         if 'position' not in data:
             raise serializers.ValidationError("position {}".format(required))
+        if 'address' not in data:
+            raise serializers.ValidationError("address {}".format(required))
         # requerido el nombre del representante
         if 'agent_firstname' not in data:
             raise serializers.ValidationError("agent_firstname {}".format(required))
@@ -200,6 +204,9 @@ class ClientSerializer(serializers.ModelSerializer):
         # requerido el ruc del cliente
         if 'ruc' not in data:
             raise serializers.ValidationError("ruc {}".format(required))
+
+        if data["residence_country"] != Countries.objects.get(name="Peru"):
+            raise serializers.ValidationError("No debe ser juridico y no estar en el pais")
         return
 
     def validate(self, data):
@@ -213,9 +220,10 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Redefinido metodo de crear cliente."""
-        data_address = validated_data.pop('address')
-        address = Address.objects.create(**data_address)
-        validated_data['address'] = address
+        if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+            data_address = validated_data.pop('address')
+            address = Address.objects.create(**data_address)
+            validated_data['address'] = address
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
         if password is not None:

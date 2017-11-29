@@ -54,7 +54,8 @@ class CreateNaturalClient(APITestCase):
             'ocupation': '0',
             'about': 'iptsum aabout',
             'ciiu': '1440',
-            'nationality': 1
+            'nationality': 1,
+            'residence_country': 1
         }
 
     # responder error al enviar email invalido
@@ -166,8 +167,20 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_address_outside_peru(self):
+        """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
+        data = self.valid_payload
+        data["residence_country"] = 4
+        del data["address"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_no_profession(self):
         """Solicitud invalida por no enviar la profesion."""
@@ -202,6 +215,17 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # self.assertEqual(response.data, 'ey')
+
+    def test_invalid_residence_country(self):
+        """Solicitud invalida por enviar codigo de pais inexistente."""
+        data = self.valid_payload
+        data['residence_country'] = 500
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_typeclient(self):
         """Solicitud invalida por enviar tipo de cliente desconocido."""
@@ -261,7 +285,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # self.assertEqual(response.data, 'ey')
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_natural_client(self):
@@ -271,7 +295,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # self.assertEqual(response.data, 'ey')
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
