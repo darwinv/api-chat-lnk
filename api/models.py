@@ -76,6 +76,8 @@ class Role(models.Model):
 # Utilizaremos el metodo de Heredar de AbstractUser
 # para personalizar el modelo de usuarios
 class User(AbstractUser):
+    """Modelo de Usuario hereda de AbstractUser."""
+
     #  class Meta:
     #      db_table = 'user'
     nick = models.CharField(max_length=45, blank=True)
@@ -83,7 +85,6 @@ class User(AbstractUser):
     telephone = models.CharField(max_length=14, null=True)
     cellphone = models.CharField(max_length=14, null=True)
     photo = models.CharField(max_length=250, null=True)
-
     document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
     document_number = models.CharField(max_length=45, unique=True)
     ruc = models.CharField(max_length=40, unique=True, null=True)
@@ -93,6 +94,7 @@ class User(AbstractUser):
     nationality = models.ForeignKey(Countries, on_delete=models.PROTECT, default=1)
     role = models.ForeignKey(Role, on_delete=models.PROTECT, default=1)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
+    residence_country = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="residence")
 
 
 # Aplicamos herencia multi tabla para que
@@ -161,7 +163,7 @@ class Client(User):
     commercial_reason = models.CharField(max_length=45, null=True)
     civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
-    ciiu = models.CharField(max_length=4)
+    ciiu = models.CharField(max_length=4, null=True)
     activity_description = models.CharField(max_length=255, null=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
     ocupation = models.CharField(max_length=1, choices=Ch.client_ocupation)

@@ -24,6 +24,7 @@
 		"anonymous": true,
 		"updated_at": "2017-11-13T17:28:05.688Z",
 		"nationality": 1,
+		"residence_country": 1,
 		"role": 2,
 		"address": null,
 		"type_client": "n",
@@ -40,7 +41,6 @@
 		"agent_lastname": null,
 		"position": null,
 		"profession": 35,
-		
 		"economic_sector": null,
 		"level_instruction": 1,
 		"seller_asigned": null,
@@ -73,6 +73,7 @@
 		"anonymous": true,
 		"updated_at": "2017-11-13T17:32:53.644Z",
 		"nationality": 1,
+		"residence_country": 1,
 		"role": 2,
 		"address": null,
 		"type_client": "n",
@@ -89,7 +90,7 @@
 		"agent_lastname": null,
 		"position": null,
 		"profession": 31,
-		
+
 		"economic_sector": null,
 		"level_instruction": 2,
 		"seller_asigned": null,
@@ -122,6 +123,7 @@
 		"anonymous": true,
 		"updated_at": "2017-11-13T17:34:29.234Z",
 		"nationality": 1,
+		"residence_country": 1,
 		"role": 2,
 		"address": null,
 		"type_client": "b",
@@ -138,7 +140,7 @@
 		"agent_lastname": null,
 		"position": null,
 		"profession": 21,
-		
+
 		"economic_sector": null,
 		"level_instruction": 3,
 		"seller_asigned": null,

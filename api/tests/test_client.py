@@ -166,17 +166,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_no_ciiu(self):
-        """Solicitud invalida por no enviar el ciiu."""
-        data = self.valid_payload
-        del data["ciiu"]
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_profession(self):
@@ -265,6 +255,7 @@ class CreateNaturalClient(APITestCase):
         del data["activity_description"]
         del data["level_instruction"]
         del data["about"]
+        del data["ciiu"]
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),

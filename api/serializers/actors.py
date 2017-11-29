@@ -1,7 +1,7 @@
 """Actores/Usuarios (Clientes, Especialistas, Vendedores)."""
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from api.models import User, Client
+from api.models import User, Client, Countries
 from api.models import Address, Department
 from api.models import Province, District, Specialist
 from api.models import Seller, Quota, Purchase, Fee
@@ -107,7 +107,8 @@ class ClientSerializer(serializers.ModelSerializer):
     ocupation_name = serializers.SerializerMethodField()
     address = AddressSerializer()
     nick = serializers.CharField(required=True)
-    # first_name = serializers.CharField(required=True)
+    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    residence_country_name = serializers.SerializerMethodField()
     # last_name = serializers.CharField(required=True)
     birthdate = serializers.DateField(required=True)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
@@ -120,10 +121,11 @@ class ClientSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'username', 'nick', 'type_client', 'type_client_name', 'first_name', 'last_name', 'password', 'photo',
             'sex', 'sex_name', 'document_type', 'document_type_name', 'document_number', 'civil_state',
-            'civil_state_name', 'birthdate', 'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone', 'ciiu',
-            'activity_description', 'level_instruction', 'level_instruction_name', 'business_name', 'agent_firstname',
-            'agent_lastname', 'position', 'economic_sector', 'economic_sector_name', 'institute', 'profession',
-            'ocupation', 'ocupation_name', 'about', 'nationality', 'nationality_name')
+            'civil_state_name', 'birthdate', 'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
+            'ciiu', 'activity_description', 'level_instruction', 'level_instruction_name', 'business_name',
+            'agent_firstname', 'agent_lastname', 'position', 'economic_sector', 'economic_sector_name',
+            'institute', 'profession', 'ocupation', 'ocupation_name', 'about', 'nationality',
+            'nationality_name', "residence_country", "residence_country_name")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -132,6 +134,10 @@ class ClientSerializer(serializers.ModelSerializer):
     def get_nationality_name(self, obj):
         """Devuelve nacionalidad del cliente."""
         return _(str(obj.nationality))
+
+    def get_residence_country_name(self, obj):
+        """Devuelve resiencia del cliente."""
+        return _(str(obj.residence_country))
 
     def get_economic_sector_name(self, obj):
         """Devuelve sector economico (solo si es juridico)."""
