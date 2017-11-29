@@ -464,3 +464,4 @@ class AllFileUploadView(APIView):
         destination.close()
 
         return Response(status=204)
+
