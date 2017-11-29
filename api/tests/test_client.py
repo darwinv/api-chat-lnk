@@ -54,7 +54,8 @@ class CreateNaturalClient(APITestCase):
             'ocupation': '0',
             'about': 'iptsum aabout',
             'ciiu': '1440',
-            'nationality': 1
+            'nationality': 1,
+            'residence_country': 1
         }
 
     # responder error al enviar email invalido
@@ -168,16 +169,18 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_ciiu(self):
-        """Solicitud invalida por no enviar el ciiu."""
+    def test_no_address_outside_peru(self):
+        """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
         data = self.valid_payload
-        del data["ciiu"]
+        data["residence_country"] = 4
+        del data["address"]
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_no_profession(self):
         """Solicitud invalida por no enviar la profesion."""
@@ -212,6 +215,17 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # self.assertEqual(response.data, 'ey')
+
+    def test_invalid_residence_country(self):
+        """Solicitud invalida por enviar codigo de pais inexistente."""
+        data = self.valid_payload
+        data['residence_country'] = 500
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_typeclient(self):
         """Solicitud invalida por enviar tipo de cliente desconocido."""
@@ -265,12 +279,13 @@ class CreateNaturalClient(APITestCase):
         del data["activity_description"]
         del data["level_instruction"]
         del data["about"]
+        del data["ciiu"]
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        # self.assertEqual(response.data, 'ey')
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_natural_client(self):
@@ -280,7 +295,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # self.assertEqual(response.data, 'ey')
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -318,7 +333,8 @@ class CreateBussinessClient(APITestCase):
             'about': 'iptsum aabout',
             'economic_sector': 1,
             'ciiu': '1240',
-            'nationality': 1
+            'nationality': 1,
+            'residence_country': 1
         }
 
     def test_empty_bussiness_fields(self):
@@ -351,7 +367,7 @@ class CreateBussinessClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_invalid_economic_sector(self):
-        """Solicitud invalida por enviar sector economico invalida."""
+        """Solicitud invalida por enviar sector economico invalido."""
         data = self.valid_payload
         data['economic_sector'] = "nada"
         response = self.client.post(
@@ -359,6 +375,18 @@ class CreateBussinessClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_residence_country(self):
+        """Solicitud invalida por enviar pais de residencia diferente a peru."""
+        data = self.valid_payload
+        data['residence_country'] = 4
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_bussines_client(self):

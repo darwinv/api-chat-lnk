@@ -1,7 +1,7 @@
 """Actores/Usuarios (Clientes, Especialistas, Vendedores)."""
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from api.models import User, Client
+from api.models import User, Client, Countries
 from api.models import Address, Department
 from api.models import Province, District, Specialist
 from api.models import Seller, Quota, Purchase, Fee
@@ -105,9 +105,10 @@ class ClientSerializer(serializers.ModelSerializer):
     civil_state_name = serializers.SerializerMethodField()
     ocupation = serializers.ChoiceField(choices=c.client_ocupation, allow_blank=True)
     ocupation_name = serializers.SerializerMethodField()
-    address = AddressSerializer()
+    address = AddressSerializer(required=False)
     nick = serializers.CharField(required=True)
-    # first_name = serializers.CharField(required=True)
+    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    residence_country_name = serializers.SerializerMethodField()
     # last_name = serializers.CharField(required=True)
     birthdate = serializers.DateField(required=True)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
@@ -120,10 +121,11 @@ class ClientSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'username', 'nick', 'type_client', 'type_client_name', 'first_name', 'last_name', 'password', 'photo',
             'sex', 'sex_name', 'document_type', 'document_type_name', 'document_number', 'civil_state',
-            'civil_state_name', 'birthdate', 'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone', 'ciiu',
-            'activity_description', 'level_instruction', 'level_instruction_name', 'business_name', 'agent_firstname',
-            'agent_lastname', 'position', 'economic_sector', 'economic_sector_name', 'institute', 'profession',
-            'ocupation', 'ocupation_name', 'about', 'nationality', 'nationality_name')
+            'civil_state_name', 'birthdate', 'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
+            'ciiu', 'activity_description', 'level_instruction', 'level_instruction_name', 'business_name',
+            'agent_firstname', 'agent_lastname', 'position', 'economic_sector', 'economic_sector_name',
+            'institute', 'profession', 'ocupation', 'ocupation_name', 'about', 'nationality',
+            'nationality_name', "residence_country", "residence_country_name")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -132,6 +134,10 @@ class ClientSerializer(serializers.ModelSerializer):
     def get_nationality_name(self, obj):
         """Devuelve nacionalidad del cliente."""
         return _(str(obj.nationality))
+
+    def get_residence_country_name(self, obj):
+        """Devuelve resiencia del cliente."""
+        return _(str(obj.residence_country))
 
     def get_economic_sector_name(self, obj):
         """Devuelve sector economico (solo si es juridico)."""
@@ -163,15 +169,18 @@ class ClientSerializer(serializers.ModelSerializer):
         required = _("required")
         if 'first_name' not in data:
             raise serializers.ValidationError("first_name {}".format(required))
-
         if 'last_name' not in data:
             raise serializers.ValidationError("last_name {}".format(required))
-
+        # import pdb; pdb.set_trace()
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if "address" not in data:
+                raise serializers.ValidationError("address {}".format(required))
         return
 
     def validate_bussines_client(self, data):
         """Validacion para cuando es juridico."""
         required = _("required")
+        error1 = _("can not be a legal person and reside in a foreign country")
         # requerido el nombre de la empresa
         if 'business_name' not in data:
             raise serializers.ValidationError("business_name {}".format(required))
@@ -185,6 +194,8 @@ class ClientSerializer(serializers.ModelSerializer):
         # requerido la posicion en la empresa
         if 'position' not in data:
             raise serializers.ValidationError("position {}".format(required))
+        if 'address' not in data:
+            raise serializers.ValidationError("address {}".format(required))
         # requerido el nombre del representante
         if 'agent_firstname' not in data:
             raise serializers.ValidationError("agent_firstname {}".format(required))
@@ -194,6 +205,9 @@ class ClientSerializer(serializers.ModelSerializer):
         # requerido el ruc del cliente
         if 'ruc' not in data:
             raise serializers.ValidationError("ruc {}".format(required))
+
+        if data["residence_country"] != Countries.objects.get(name="Peru"):
+            raise serializers.ValidationError(error1)
         return
 
     def validate(self, data):
@@ -207,9 +221,10 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Redefinido metodo de crear cliente."""
-        data_address = validated_data.pop('address')
-        address = Address.objects.create(**data_address)
-        validated_data['address'] = address
+        if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+            data_address = validated_data.pop('address')
+            address = Address.objects.create(**data_address)
+            validated_data['address'] = address
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
         if password is not None:
