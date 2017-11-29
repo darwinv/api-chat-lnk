@@ -76,14 +76,15 @@ class Role(models.Model):
 # Utilizaremos el metodo de Heredar de AbstractUser
 # para personalizar el modelo de usuarios
 class User(AbstractUser):
+    """Modelo de Usuario hereda de AbstractUser."""
+
     #  class Meta:
     #      db_table = 'user'
     nick = models.CharField(max_length=45, blank=True)
     email_exact = models.CharField(max_length=150, unique=True)
-    telephone = models.CharField(max_length=14)
-    cellphone = models.CharField(max_length=14)
+    telephone = models.CharField(max_length=14, null=True)
+    cellphone = models.CharField(max_length=14, null=True)
     photo = models.CharField(max_length=250, null=True)
-
     document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
     document_number = models.CharField(max_length=45, unique=True)
     ruc = models.CharField(max_length=40, unique=True, null=True)
@@ -93,16 +94,21 @@ class User(AbstractUser):
     nationality = models.ForeignKey(Countries, on_delete=models.PROTECT, default=1)
     role = models.ForeignKey(Role, on_delete=models.PROTECT, default=1)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
+    residence_country = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="residence")
 
 
 # Aplicamos herencia multi tabla para que
 # Seller herede de User y se vincule 1 a 1
 
 class Seller(User):
+    """Modelo de Vendedor (hereda de User)."""
+
     cv = models.CharField(max_length=100, null=True, blank=True)
     zone = models.ForeignKey(Zone, on_delete=models.PROTECT)
 
     class Meta:
+        """Meta."""
+
         verbose_name = 'Seller'
         verbose_name_plural = 'Sellers'
 
@@ -150,18 +156,18 @@ class LevelInstruction(models.Model):
 
 
 class Client(User):
+    """Modelo de Cliente (herede de usuario)."""
+
     type_client = models.CharField(max_length=1, choices=Ch.client_type_client)
-
     sex = models.CharField(max_length=1, choices=Ch.client_sex, null=True)
-
+    commercial_reason = models.CharField(max_length=45, null=True)
     civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
-    ciiu = models.CharField(max_length=4)
-    activity_description = models.CharField(max_length=255)
+    ciiu = models.CharField(max_length=4, null=True)
+    activity_description = models.CharField(max_length=255, null=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
-
     ocupation = models.CharField(max_length=1, choices=Ch.client_ocupation)
-    about = models.CharField(max_length=255)
+    about = models.CharField(max_length=255, null=True)
     business_name = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
     agent_lastname = models.CharField(max_length=45, null=True)
@@ -172,6 +178,8 @@ class Client(User):
     seller_asigned = models.ForeignKey(Seller, on_delete=models.PROTECT, null=True)
 
     class Meta:
+        """Modelo de Cliente."""
+
         verbose_name = 'Client'
         verbose_name_plural = 'Clients'
 
@@ -187,8 +195,9 @@ class Category(models.Model):
 
 
 class Specialist(User):
-    business_name = models.CharField(max_length=55)
+    """Modelo de Especialista (herede de user)."""
 
+    business_name = models.CharField(max_length=55)
     type_specialist = models.CharField(max_length=1, choices=Ch.specialist_type_specialist)
     star_rating = models.IntegerField(null=True)
     cv = models.CharField(max_length=150, null=True)
@@ -196,6 +205,8 @@ class Specialist(User):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
 
     class Meta:
+        """Meta datos."""
+
         verbose_name = 'Specialist'
         verbose_name_plural = 'Specialists'
 

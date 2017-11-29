@@ -52,7 +52,7 @@ class ClientListView(ListCreateAPIView):
     # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
     serializer_class = ClientSerializer
     queryset = Client.objects.all()
-    filter_backends = (filters.DjangoFilterBackend,searchfilters.SearchFilter,)
+    filter_backends = (filters.DjangoFilterBackend, searchfilters.SearchFilter,)
     filter_fields = ('nick',)
     search_fields = ('email_exact', 'first_name')
 
@@ -69,7 +69,6 @@ class ClientListView(ListCreateAPIView):
         data['role'] = ROLE_CLIENT
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
-            data['commercial_group'] = ''
         elif data['type_client'] == 'b':
             data['birthdate'] = DATE_FAKE
             data['sex'] = ''
@@ -88,11 +87,13 @@ class ClientListView(ListCreateAPIView):
 
 class ClientDetailView(APIView):
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+    permission_classes = (IsAdminOrOwner,)
     # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
     def get_object(self, pk):
         try:
-            return Client.objects.get(pk=pk)
+            obj = Client.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
         except Client.DoesNotExist:
             raise Http404
 
@@ -100,6 +101,7 @@ class ClientDetailView(APIView):
         client = self.get_object(pk)
         serializer = ClientSerializer(client)
         return Response(serializer.data)
+
 
 
 # Vista para detalle del cliente segun su username
@@ -121,7 +123,7 @@ class ClientDetailByUsername(APIView):
 
 # Fin de Clientes
 
-#---------- ------ Inicio de Especialistas ------------------------------
+# ---------- ------ Inicio de Especialistas ------------------------------
 
 class SpecialistListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
@@ -132,7 +134,7 @@ class SpecialistListView(ListCreateAPIView):
     # funcion para localizar especialista principal
     def get_object(self, pk):
         try:
-            return Specialist.objects.get(pk=pk,type_specialist='m')
+            return Specialist.objects.get(pk=pk, type_specialist='m')
         except Specialist.DoesNotExist:
             raise Http404
 
@@ -159,8 +161,12 @@ class SpecialistListView(ListCreateAPIView):
 
     # Funcion para crear un especialista
     def post(self, request):
+        """Redefinido funcion para crear especialista."""
+        required = _("required")
         data = request.data
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
+        if "document_number" not in data:
+            raise serializers.ValidationError("document_number {}".format(required))
         data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number')
         data['role'] = ROLE_SPECIALIST
         serializer = SpecialistSerializer(data=data)
@@ -286,6 +292,7 @@ class SellerFilter(filters.FilterSet):
         fields = ['first_name', 'last_name', 'ruc', 'email_exact']
 
 class SellerListView(ListCreateAPIView, UpdateAPIView):
+    """Vista de Listado de Vendedores"""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAdminUser,)
     # permission_classes = [permissions.AllowAny]
