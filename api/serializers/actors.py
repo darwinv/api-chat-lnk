@@ -435,17 +435,33 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
 # Serializer para traer el listado de vendedores
 class SellerSerializer(serializers.ModelSerializer):
+    """Serializer de Vendedor."""
+
     quota = serializers.SerializerMethodField()
     count_plans_seller = serializers.SerializerMethodField()
     count_queries = serializers.SerializerMethodField()
     address = AddressSerializer()
 
     class Meta:
+        """Meta de Vendedor."""
+
         model = Seller
         fields = (
-            'address', 'count_plans_seller', 'count_queries', 'quota', 'id', 'zone', 'username', 'nick', 'password',
+            'id', 'address', 'count_plans_seller', 'count_queries', 'quota', 'zone', 'username', 'nick', 'password',
             'first_name', 'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'code',
             'document_number', 'ruc')
+
+    def create(self, validated_data):
+        """Redefinido metodo de crear vendedor."""
+        data_address = validated_data.pop('address')
+        address = Address.objects.create(**data_address)
+        validated_data['address'] = address
+        password = validated_data.pop('password', None)
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
 
     def __init__(self, *args, **kwargs):
         super(SellerSerializer, self).__init__(*args, **kwargs)

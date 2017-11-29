@@ -27,7 +27,9 @@ import boto3
 PREFIX_CODE_CLIENT = 'c'
 ROLE_CLIENT = 2
 ROLE_SPECIALIST = 3
-PREFIX_CODE_SPECIALIST = 's'
+ROLE_SELLER = 4
+PREFIX_CODE_SPECIALIST = 'E'
+PREFIX_CODE_SELLER = 'V'
 DATE_FAKE = '1900-01-01'
 # Fin de constates
 
@@ -63,8 +65,12 @@ class ClientListView(ListCreateAPIView):
 
     # Metodo post redefinido
     def post(self, request):
+        """Redefinido metodo para crear clientes."""
         data = request.data
+        required = _("required")
         # codigo de usuario se crea con su prefijo de cliente y su numero de documento
+        if "document_number" not in data:
+            raise serializers.ValidationError("document_number {}".format(required))
         data['code'] = PREFIX_CODE_CLIENT + str(request.data.get('document_number'))
         data['role'] = ROLE_CLIENT
         if data['type_client'] == 'n':
@@ -291,8 +297,10 @@ class SellerFilter(filters.FilterSet):
         model = Seller
         fields = ['first_name', 'last_name', 'ruc', 'email_exact']
 
+
 class SellerListView(ListCreateAPIView, UpdateAPIView):
-    """Vista de Listado de Vendedores"""
+    """Vista de Listado y Creacion Vendedores."""
+
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAdminUser,)
     # permission_classes = [permissions.AllowAny]
@@ -301,6 +309,22 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = SellerFilter
+
+    # Funcion para crear un especialista
+    def post(self, request):
+        """Redefinido funcion para crear vendedor."""
+        required = _("required")
+        data = request.data
+        # codigo de usuario se crea con su prefijo de especialista y su numero de documento
+        if "document_number" not in data:
+            raise serializers.ValidationError("document_number {}".format(required))
+        data['code'] = PREFIX_CODE_SELLER + request.data.get('document_number')
+        data['role'] = ROLE_SELLER
+        serializer = SellerSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SellerDetailView(APIView):
