@@ -292,12 +292,11 @@ class SpecialistSerializer(serializers.ModelSerializer):
         validated_data['address'] = address
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
+        # "ruc {}".format(required)
         if validated_data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
                                                                                   category_id=validated_data[
                                                                                       "category"]).exists():
-            output = "%(main)s %(specialist)s %(already)s %(exists)s " % {'main': main, 'specialist': spec,
-                                                                          'already': already, 'exists': exists}
-            raise serializers.ValidationError(output)
+            raise serializers.ValidationError(u"{} {} {} {}".format(spec, main, already, exists))
         if password is not None:
             instance.set_password(password)
         instance.save()
@@ -327,9 +326,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
         if instance.type_specialist == "m" and Specialist.objects.filter(type_specialist="m",
                                                                          category_id=category).exclude(
                                                                          pk=instance.id).exists():
-            output = "%(main)s %(specialist)s %(already)s %(exists)s " % {'main': main, 'specialist': spec,
-                                                                          'already': already, 'exists': exists}
-            raise serializers.ValidationError(output)
+            raise serializers.ValidationError(u"{} {} {} {}".format(main, spec, already, exists))
         if 'address' in validated_data:
             data_address = validated_data.pop('address')
 
