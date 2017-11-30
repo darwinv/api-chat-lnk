@@ -74,6 +74,7 @@ class User(AbstractUser):
     )
     document_type = models.CharField(max_length=1, choices=options_documents)
     document_number = models.CharField(max_length=45, unique=True)
+    img_document_number = models.CharField(max_length=250, null=True)
     ruc = models.CharField(max_length=40, unique=True, null=True)
     code = models.CharField(max_length=45, unique=True)
     anonymous = models.BooleanField(default=True)

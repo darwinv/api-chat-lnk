@@ -26,13 +26,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username')
+        fields = ('id', 'username','img_document_number')
 
 
 class UserPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('photo',)
+
 
 
 class CommonValidation():
@@ -467,6 +468,12 @@ class MediaSerializer(serializers.Serializer):
         max_length=None,
         required=False,
         allow_empty_file=False)
+
+    img_document_number = serializers.ImageField(
+        max_length=None,
+        required=False,
+        allow_empty_file=False)
+
 
     # class Meta:
     #     #model = Specialist
