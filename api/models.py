@@ -104,7 +104,8 @@ class Seller(User):
     """Modelo de Vendedor (hereda de User)."""
 
     cv = models.CharField(max_length=100, null=True, blank=True)
-    zone = models.ForeignKey(Zone, on_delete=models.PROTECT)
+    zone = models.ForeignKey(Zone, on_delete=models.PROTECT, null=True)
+    ciiu = models.CharField(max_length=4, null=True)
 
     class Meta:
         """Meta."""

@@ -271,6 +271,17 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_no_nationality(self):
+        """Solicitud invalida por no enviar nacionalidad."""
+        data = self.valid_payload
+        del data["nationality"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_no_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""
         data = self.valid_payload
