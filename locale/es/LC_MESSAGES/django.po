@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-29 15:51-0500\n"
+"POT-Creation-Date: 2017-11-30 15:39-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,8 +100,8 @@ msgstr "Trabajador a domicilio"
 msgid "Other"
 msgstr "Otro"
 
-#: .\api\api_choices_models.py:51 .\api\serializers\actors.py:282
-#: .\api\serializers\actors.py:304
+#: .\api\api_choices_models.py:51 .\api\serializers\actors.py:286
+#: .\api\serializers\actors.py:307
 msgid "Main"
 msgstr "Principal"
 
@@ -214,34 +214,46 @@ msgstr "Moderar"
 msgid "Positive"
 msgstr "Positivo"
 
-#: .\api\serializers\actors.py:169 .\api\serializers\actors.py:182
-#: .\api\views\actors.py:165
+#: .\api\serializers\actors.py:172 .\api\serializers\actors.py:185
+#: .\api\views\actors.py:70 .\api\views\actors.py:171 .\api\views\actors.py:316
 msgid "required"
 msgstr "requerido"
 
-#: .\api\serializers\actors.py:183
+#: .\api\serializers\actors.py:186
 msgid "can not be a legal person and reside in a foreign country"
 msgstr "No puede ser persona juridica y residir en un pais extranjero"
 
-#: .\api\serializers\actors.py:192
+#: .\api\serializers\actors.py:195
 msgid "must no be empty"
 msgstr "No debe estar vacio"
 
-#: .\api\serializers\actors.py:283 .\api\serializers\actors.py:305
+#: .\api\serializers\actors.py:287 .\api\serializers\actors.py:308
 msgid "Specialist"
 msgstr "Especialista"
 
-#: .\api\serializers\actors.py:284 .\api\serializers\actors.py:306
+#: .\api\serializers\actors.py:288 .\api\serializers\actors.py:309
 msgid "already"
 msgstr "ya"
 
-#: .\api\serializers\actors.py:285 .\api\serializers\actors.py:307
+#: .\api\serializers\actors.py:289 .\api\serializers\actors.py:310
 msgid "exists"
 msgstr "existe"
 
-#: .\api\templates\base.html:27
+#: .\api\templates\base.html:27 .\api\templates\send_credentials.html:27
 msgid "Title"
 msgstr "Titulo"
+
+#: .\api\templates\send_credentials.html:30
+msgid "Credentials"
+msgstr "Credenciales"
+
+#: .\api\templates\send_credentials.html:31
+msgid "User"
+msgstr "Usuario"
+
+#: .\api\templates\send_credentials.html:32
+msgid "Password"
+msgstr "Contraseña"
 
 #: .\linkupapi\settings.py:121
 msgid "Spanish"
