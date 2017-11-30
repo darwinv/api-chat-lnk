@@ -1,34 +1,44 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import EmailValidator
+from api.api_choices_models import ChoicesAPI as Ch
+
 
 class Countries(models.Model):
     name = models.CharField(max_length=90, unique=True)
     code_phone = models.CharField(max_length=4)
     iso_code = models.CharField(max_length=4, unique=True)
+
     def __str__(self):
         return self.name
+
 
 class Ciiu(models.Model):
     code = models.CharField(max_length=4, unique=True)
     description = models.CharField(max_length=255)
 
+
 class Department(models.Model):
     name = models.CharField(max_length=55)
+
     def __str__(self):
         return self.name
+
 
 class Province(models.Model):
     name = models.CharField(max_length=55)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
+
     def __str__(self):
         return self.name
+
 
 class District(models.Model):
     name = models.CharField(max_length=55)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
+
     def __str__(self):
         return self.name
+
 
 class Address(models.Model):
     street = models.CharField(max_length=155)
@@ -36,16 +46,20 @@ class Address(models.Model):
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
     district = models.ForeignKey(District, on_delete=models.PROTECT)
 
+
 class Zone(models.Model):
     name = models.CharField(max_length=45)
     districts = models.ManyToManyField(District, db_table='zones_districts')
+
     def __str__(self):
         return self.name
+
 
 class Permmission(models.Model):
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=220)
     code = models.CharField(max_length=12)
+
 
 # La Clase Rol difiere el funcionamiento de grupo
 # por eso creamos un modelo nuevo
@@ -54,25 +68,24 @@ class Role(models.Model):
     name = models.CharField(max_length=50, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     permissions = models.ManyToManyField(Permmission, db_table='role_permission')
+
     def __str__(self):
         return self.name
+
 
 # Utilizaremos el metodo de Heredar de AbstractUser
 # para personalizar el modelo de usuarios
 class User(AbstractUser):
+    """Modelo de Usuario hereda de AbstractUser."""
+
     #  class Meta:
     #      db_table = 'user'
     nick = models.CharField(max_length=45, blank=True)
     email_exact = models.CharField(max_length=150, unique=True)
-    telephone = models.CharField(max_length=14)
-    cellphone = models.CharField(max_length=14)
+    telephone = models.CharField(max_length=14, null=True)
+    cellphone = models.CharField(max_length=14, null=True)
     photo = models.CharField(max_length=250, null=True)
-    options_documents = (
-        ('0', 'DNI'),
-        ('1', 'Passport'),
-        ('2', 'Foreign Card'),
-    )
-    document_type = models.CharField(max_length=1, choices=options_documents)
+    document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
     document_number = models.CharField(max_length=45, unique=True)
     img_document_number = models.CharField(max_length=250, null=True)
     ruc = models.CharField(max_length=40, unique=True, null=True)
@@ -82,20 +95,29 @@ class User(AbstractUser):
     nationality = models.ForeignKey(Countries, on_delete=models.PROTECT, default=1)
     role = models.ForeignKey(Role, on_delete=models.PROTECT, default=1)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
+    residence_country = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="residence")
+
 
 # Aplicamos herencia multi tabla para que
 # Seller herede de User y se vincule 1 a 1
 
 class Seller(User):
+    """Modelo de Vendedor (hereda de User)."""
+
     cv = models.CharField(max_length=100, null=True, blank=True)
-    zone = models.ForeignKey(Zone, on_delete=models.PROTECT)
+    zone = models.ForeignKey(Zone, on_delete=models.PROTECT, null=True)
+    ciiu = models.CharField(max_length=4, null=True)
+
     class Meta:
+        """Meta."""
+
         verbose_name = 'Seller'
         verbose_name_plural = 'Sellers'
 
 
 class Objection(models.Model):
     name = models.CharField(max_length=65)
+
     def __str__(self):
         return self.name
 
@@ -103,19 +125,10 @@ class Objection(models.Model):
 class SellerContactNoEfective(models.Model):
     contact_firstname = models.CharField(max_length=45, null=True)
     contact_lastname = models.CharField(max_length=55, null=True)
-    options_type = (
-        ('n', 'Natural'),
-        ('b', 'Business'),
-    )
 
-    type_contact = models.CharField(max_length=1, choices=options_type)
+    type_contact = models.CharField(max_length=1, choices=Ch.client_type_client)
 
-    options_documents = (
-        ('0', 'DNI'),
-        ('1', 'Passport'),
-        ('2', 'Foreign Card'),
-    )
-    document_type = models.CharField(max_length=1, choices=options_documents)
+    document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
     document_number = models.CharField(max_length=18)
     contact_bussinessname = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
@@ -125,117 +138,99 @@ class SellerContactNoEfective(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
     objection = models.ForeignKey(Objection, on_delete=models.PROTECT)
+
     def __str__(self):
         return self.contact_firstname
 
-class Profession(models.Model):
-    name = models.CharField(max_length=45)
-    def __str__(self):
-        return self.name
-
-class CommercialGroup(models.Model):
-    name = models.CharField(max_length=45)
-    def __str__(self):
-        return self.name
 
 class EconomicSector(models.Model):
     name = models.CharField(max_length=45)
+
     def __str__(self):
         return self.name
+
 
 class LevelInstruction(models.Model):
     name = models.CharField(max_length=45)
+
     def __str__(self):
         return self.name
 
+
 class Client(User):
-    options_type = (
-        ('n', 'Natural'),
-        ('b', 'Bussiness'),
-    )
-    type_client = models.CharField(max_length=1, choices=options_type)
+    """Modelo de Cliente (herede de usuario)."""
 
-    options_sex = (
-        ('m', 'Male'),
-        ('f', 'Female'),
-    )
-    sex = models.CharField(max_length=1, choices=options_sex, null=True)
-
-    options_civil_state = (
-        ('s', 'Single'),
-        ('m', 'Married'),
-        ('d', 'Divorce'),
-        ('w', 'Widower'),
-    )
-    civil_state = models.CharField(max_length=1, choices=options_civil_state, null=True)
+    type_client = models.CharField(max_length=1, choices=Ch.client_type_client)
+    sex = models.CharField(max_length=1, choices=Ch.client_sex, null=True)
+    commercial_reason = models.CharField(max_length=45, null=True)
+    civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
-    ciiu = models.CharField(max_length=4)
-    activity_description = models.CharField(max_length=255)
+    ciiu = models.CharField(max_length=4, null=True)
+    activity_description = models.CharField(max_length=255, null=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
-    options_ocupation = (
-        ('d', 'Dependent'),
-        ('i', 'Independent'),
-    )
-    ocupation = models.CharField(max_length=1, choices=options_ocupation)
-    about = models.CharField(max_length=255)
+    ocupation = models.CharField(max_length=1, choices=Ch.client_ocupation)
+    about = models.CharField(max_length=255, null=True)
     business_name = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
     agent_lastname = models.CharField(max_length=45, null=True)
     position = models.CharField(max_length=45, null=True)
-    profession = models.ForeignKey(Profession, on_delete=models.PROTECT, null=True)
-    commercial_group = models.ForeignKey(CommercialGroup, on_delete=models.PROTECT, null=True)
+    profession = models.CharField(max_length=45, null=True)
     economic_sector = models.ForeignKey(EconomicSector, on_delete=models.PROTECT, null=True)
     level_instruction = models.ForeignKey(LevelInstruction, on_delete=models.PROTECT, null=True)
     seller_asigned = models.ForeignKey(Seller, on_delete=models.PROTECT, null=True)
 
     class Meta:
+        """Modelo de Cliente."""
+
         verbose_name = 'Client'
         verbose_name_plural = 'Clients'
+
 
 class Category(models.Model):
     name = models.CharField(max_length=45, unique=True)
     image = models.CharField(max_length=169)
     description = models.CharField(max_length=255)
     payment_per_answer = models.FloatField()
+
     def __str__(self):
-       return self.name
+        return self.name
 
 
 class Specialist(User):
+    """Modelo de Especialista (herede de user)."""
+
     business_name = models.CharField(max_length=55)
-    options_type = (
-        ('m', 'Main'),
-        ('a', 'Associate'),
-    )
-    type_specialist = models.CharField(max_length=1, choices=options_type)
+    type_specialist = models.CharField(max_length=1, choices=Ch.specialist_type_specialist)
     star_rating = models.IntegerField(null=True)
-    cv = models.CharField(max_length=150,null=True)
+    cv = models.CharField(max_length=150, null=True)
     payment_per_answer = models.FloatField()
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
 
     class Meta:
+        """Meta datos."""
+
         verbose_name = 'Specialist'
         verbose_name_plural = 'Specialists'
 
+
 class SpecialistContract(models.Model):
     name_case = models.CharField(max_length=100)
-    options_state = (
-        ('r', 'Requested'),
-        ('a', 'Accepted'),
-        ('d', 'Declined'),
-    )
-    state = models.CharField(max_length=1, choices=options_state)
+
+    state = models.CharField(max_length=1, choices=Ch.specialistcontract_state)
     declined_motive = models.CharField(max_length=255, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
+
     def __str__(self):
         return self.name_case
+
 
 class ContractCategory(models.Model):
     url_file = models.CharField(max_length=50)
     created_at = models.DateField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.category
 
@@ -245,20 +240,21 @@ class Promotion(models.Model):
     discount = models.FloatField()
     start_date = models.DateField()
     end_date = models.DateField()
-    options_type = (
-        ('p', 'Percentage'),
-        ('n', 'Number'),
-    )
-    type_discount = models.CharField(max_length=1, choices=options_type)
+
+    type_discount = models.CharField(max_length=1, choices=Ch.promotions_type)
     created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.code
+
 
 class Plan(models.Model):
     name = models.CharField(max_length=45)
     created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.name
+
 
 class Product(models.Model):
     name = models.CharField(max_length=45)
@@ -269,9 +265,11 @@ class Product(models.Model):
     is_billable = models.BooleanField()
     created_at = models.DateTimeField()
     plan = models.ForeignKey(Plan, on_delete=models.PROTECT)
-    seller = models.ManyToManyField(Seller, through='products_seller_no_billable')
+    seller = models.ManyToManyField(Seller, through='ProductsSellerNoBillable')
+
     def __str__(self):
         return self.name
+
 
 class Purchase(models.Model):
     code = models.PositiveIntegerField()
@@ -284,32 +282,33 @@ class Purchase(models.Model):
     query_available = models.PositiveIntegerField()
     is_promotional = models.BooleanField()
     last_number_fee_paid = models.PositiveIntegerField()
-    option_status = (
-        ('0', 'Pending'),
-        ('1', 'Paid'),
-    )
-    status = models.CharField(max_length=1, choices=option_status)
+
+    status = models.CharField(max_length=1, choices=Ch.purchase_status)
     expiration_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     promotion = models.ForeignKey(Promotion, on_delete=models.PROTECT, null=True, blank=True)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT, null=True)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
+
     def __str__(self):
         return self.reference_number
 
 
-class products_seller_no_billable(models.Model):
+class ProductsSellerNoBillable(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
     query_amount_no_billable = models.IntegerField()
     query_amount_no_billable_available = models.IntegerField()
     date = models.DateField(unique=True)
 
+
 class PaymentType(models.Model):
     name = models.CharField(max_length=45)
+
     def __str__(self):
         return self.name
+
 
 class Fee(models.Model):
     reference_number = models.CharField(max_length=20)
@@ -321,15 +320,14 @@ class Fee(models.Model):
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
     api_client = models.TextField(null=True)
     tablename = models.CharField(max_length=17, null=True)
-    option_status = (
-        ('1', 'Wait'),
-        ('2', 'Ready'),
-    )
-    status = models.CharField(max_length=1, choices=option_status)
+
+    status = models.CharField(max_length=1, choices=Ch.fee_status)
     date = models.DateField()
     datetime_payment = models.DateTimeField(null=True)
+
     def __str__(self):
         return self.reference_number
+
 
 class CreditCard(models.Model):
     number_card = models.CharField(max_length=16)
@@ -337,15 +335,11 @@ class CreditCard(models.Model):
     expiration_date = models.DateField()
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
 
+
 class CulqiPayment(models.Model):
     culqi_code = models.CharField(max_length=40)
-    option_status = (
-        ('w', 'Wait'),
-        ('d', 'Denied'),
-        ('e', 'Exhaled'),
-        ('p', 'Paid'),
-    )
-    status = models.CharField(max_length=1, choices=option_status)
+
+    status = models.CharField(max_length=1, choices=Ch.culqipayment_status)
     credit_cartd = models.ForeignKey(CreditCard, on_delete=models.PROTECT)
 
 
@@ -355,25 +349,18 @@ class CulqiPayment(models.Model):
 
 class Query(models.Model):
     title = models.CharField(max_length=50)
-    option_status = (
-        ('0', 'Requested'), # Preguntada, pendiente de derivar o responder
-        ('1', 'Requested Derived'), # derivada, pendiente de declinar o responder, reconsulta
-        ('2', 'Pending Response'), # derivada a asociado, pendiente de respuesta
-        ('3', 'Pending Main Response'), # principal, pendiente de respuesta
-        ('4', 'Answered Main'), # respondida por principal
-        ('5', 'Answered'), # respondida por asociado
-        ('6', 'Absolved Main'), # resuelta por principal
-        ('7', 'Absolved'), # resuelta por asociado
-    )
-    status = models.CharField(max_length=1, choices=option_status)
+
+    status = models.CharField(max_length=1, choices=Ch.query_status)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     calification = models.PositiveSmallIntegerField(null=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
+
     def __str__(self):
         return self.title
+
 
 # Motivos de declinar la consulta
 class DeclinedMotive(models.Model):
@@ -381,18 +368,16 @@ class DeclinedMotive(models.Model):
     query_id = models.ForeignKey(Query, on_delete=models.PROTECT)
     specialist_id = models.ForeignKey(Specialist, on_delete=models.PROTECT)
 
+
 class QueryLog(Query):
     actions = models.CharField(max_length=10)
     changed_on = models.DateTimeField()
 
+
 class Message(models.Model):
     message = models.TextField()
-    options_msg_type = (
-        ('q', 'query'), # es de tipo consulta
-        ('r', 'requery'), # es de tipo reconsulta
-        ('a', 'answer'), # es de tipo respuesta
-        )
-    msg_type = models.CharField(max_length=1, choices=options_msg_type)
+
+    msg_type = models.CharField(max_length=1, choices=Ch.message_msg_type)
     created_at = models.DateTimeField(auto_now_add=True)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
@@ -400,54 +385,56 @@ class Message(models.Model):
     def __str__(self):
         return self.message
 
+
 class MessageFile(models.Model):
     url = models.CharField(max_length=100)
-    options_type_file = (
-        ('0', 'Image'),
-        ('1', 'Voice'),
-        ('2', 'Document'),
-    )
-    type_file = models.CharField(max_length=1, choices=options_type_file)
+
+    type_file = models.CharField(max_length=1, choices=Ch.messagefile_type_file)
     message = models.ForeignKey(Message, on_delete=models.PROTECT)
+
 
 class Interval(models.Model):
     interval = models.IntegerField()
+
     def __str__(self):
         return str(self.interval)
 
+
 class AlertCategory(models.Model):
-    name_choices = (
-        ('c', 'Critic'),
-        ('m', 'Moderate'),
-        ('p', 'Positive'),
-    )
-    name = models.CharField(max_length=1, choices=name_choices)
+    name = models.CharField(max_length=1, choices=Ch.alertcategory_name)
     interval = models.ForeignKey(Interval, on_delete=models.PROTECT)
+
     def __str__(self):
         return self.name
+
 
 class Alert(models.Model):
     title = models.CharField(max_length=100)
     message = models.CharField(max_length=255)
     category = models.ForeignKey(AlertCategory, on_delete=models.PROTECT)
     role = models.ManyToManyField(Role, db_table='role_alert')
+
     def __str__(self):
         return self.title
+
 
 class FeeNextMonthSeller(models.Model):
     fee_promotion = models.PositiveIntegerField()
     fee_contacts = models.PositiveIntegerField()
     fee_products = models.PositiveIntegerField()
 
+
 class TransactionCode(models.Model):
     code = models.CharField(max_length=50)
     short_description = models.CharField(max_length=25)
     long_description = models.CharField(max_length=250)
 
+
 class Quota(models.Model):
     value = models.PositiveIntegerField()
     count_contacts = models.PositiveIntegerField(null=True)
     date = models.DateField(unique=True)
+
 
 # Ingresar en parametros number_requery
 # language
@@ -459,5 +446,6 @@ class Quota(models.Model):
 class Parameter(models.Model):
     parameter = models.CharField(max_length=45)
     value = models.CharField(max_length=50)
+
     def __str__(self):
         return "Parametro: " + self.parameter

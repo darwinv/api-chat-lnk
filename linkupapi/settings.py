@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
+from django.utils.translation import ugettext_lazy as _
 import os
 from django.db import models
 from linkupapi.settings_secret import *
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',    
+    'django.contrib.staticfiles',
     'api.apps.ApiConfig'
 ]
 
@@ -53,10 +53,10 @@ REST_FRAMEWORK = {
     ]
 }
 
-# OAUTH2_PROVIDER = {
-#     # this is the list of available scopes
-#     'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
-# }
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+}
 
 
 MIDDLEWARE = [
@@ -67,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware'
 ]
 
 ROOT_URLCONF = 'linkupapi.urls'
@@ -112,10 +113,24 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGES = (
+    ('es', _('Spanish')),
+    ('en', _('English')),
+)
+# Set the default language for your site.
+LANGUAGE_CODE = 'es'
+
+# Tell Django where the project's translation files should be.
+LOCALE_PATHS = (    
+    os.path.join(BASE_DIR, 'locale/static_db'),   
+    os.path.join(BASE_DIR, 'locale'), #python manage.py makemessages -l en
+)
+
+# LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 

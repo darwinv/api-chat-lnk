@@ -1,0 +1,308 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-22 11:09-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\api\api_choices_models.py:15
+msgid "DNI"
+msgstr ""
+
+#: .\api\api_choices_models.py:16
+msgid "Passport"
+msgstr ""
+
+#: .\api\api_choices_models.py:17
+msgid "Foreign Card"
+msgstr ""
+
+#: .\api\api_choices_models.py:22
+msgid "Natural"
+msgstr "Natural"
+
+#: .\api\api_choices_models.py:23
+msgid "Business"
+msgstr "Business"
+
+#: .\api\api_choices_models.py:27
+msgid "Male"
+msgstr "Male"
+
+#: .\api\api_choices_models.py:28
+msgid "Female"
+msgstr "Female"
+
+#: .\api\api_choices_models.py:31
+msgid "cohabiting"
+msgstr "Cohabiting"
+
+#: .\api\api_choices_models.py:32
+msgid "separated"
+msgstr "Separated"
+
+#: .\api\api_choices_models.py:33
+msgid "married"
+msgstr "Married"
+
+#: .\api\api_choices_models.py:34
+msgid "widower"
+msgstr "Widower"
+
+#: .\api\api_choices_models.py:35
+msgid "divorced"
+msgstr "Divorced"
+
+#: .\api\api_choices_models.py:36
+msgid "single"
+msgstr "Single"
+
+#: .\api\api_choices_models.py:40
+msgid "Employer"
+msgstr "Employer"
+
+#: .\api\api_choices_models.py:41
+msgid "Independent worker"
+msgstr ""
+
+#: .\api\api_choices_models.py:42
+msgid "Employee"
+msgstr ""
+
+#: .\api\api_choices_models.py:43
+msgid "Worker"
+msgstr ""
+
+#: .\api\api_choices_models.py:44
+msgid "Worker in a family business"
+msgstr ""
+
+#: .\api\api_choices_models.py:45
+msgid "Home worker"
+msgstr ""
+
+#: .\api\api_choices_models.py:46
+msgid "Other"
+msgstr ""
+
+#: .\api\api_choices_models.py:51 .\api\serializers\actors.py:208
+msgid "Main"
+msgstr ""
+
+#: .\api\api_choices_models.py:52
+msgid "Associate"
+msgstr ""
+
+#: .\api\api_choices_models.py:57 .\api\api_choices_models.py:91
+msgid "Requested"
+msgstr ""
+
+#: .\api\api_choices_models.py:58
+msgid "Accepted"
+msgstr ""
+
+#: .\api\api_choices_models.py:59
+msgid "Declined"
+msgstr ""
+
+#: .\api\api_choices_models.py:64
+msgid "Percentage"
+msgstr ""
+
+#: .\api\api_choices_models.py:65
+msgid "Number"
+msgstr ""
+
+#: .\api\api_choices_models.py:71 .\api\api_choices_models.py:77
+msgid "Pending"
+msgstr ""
+
+#: .\api\api_choices_models.py:72 .\api\api_choices_models.py:78
+#: .\api\api_choices_models.py:86
+msgid "Paid"
+msgstr ""
+
+#: .\api\api_choices_models.py:83
+msgid "Wait"
+msgstr ""
+
+#: .\api\api_choices_models.py:84
+msgid "Denied"
+msgstr ""
+
+#: .\api\api_choices_models.py:85
+msgid "Exhaled"
+msgstr ""
+
+#: .\api\api_choices_models.py:92
+msgid "Requested Derived"
+msgstr ""
+
+#: .\api\api_choices_models.py:93
+msgid "Pending Response"
+msgstr ""
+
+#: .\api\api_choices_models.py:94
+msgid "Pending Main Response"
+msgstr ""
+
+#: .\api\api_choices_models.py:95
+msgid "Answered Main"
+msgstr ""
+
+#: .\api\api_choices_models.py:96
+msgid "Answered"
+msgstr ""
+
+#: .\api\api_choices_models.py:97
+msgid "Absolved Main"
+msgstr ""
+
+#: .\api\api_choices_models.py:98
+msgid "Absolved"
+msgstr ""
+
+#: .\api\api_choices_models.py:104
+msgid "query"
+msgstr ""
+
+#: .\api\api_choices_models.py:105
+msgid "requery"
+msgstr ""
+
+#: .\api\api_choices_models.py:106
+msgid "answer"
+msgstr ""
+
+#: .\api\api_choices_models.py:111
+msgid "Image"
+msgstr ""
+
+#: .\api\api_choices_models.py:112
+msgid "Voice"
+msgstr ""
+
+#: .\api\api_choices_models.py:113
+msgid "Document"
+msgstr ""
+
+#: .\api\api_choices_models.py:118
+msgid "Critic"
+msgstr ""
+
+#: .\api\api_choices_models.py:119
+msgid "Moderate"
+msgstr ""
+
+#: .\api\api_choices_models.py:120
+msgid "Positive"
+msgstr ""
+
+#: .\api\serializers\actors.py:138
+msgid "required"
+msgstr "required"
+
+#: .\api\serializers\actors.py:142
+msgid "must no be empty"
+msgstr "must no be empty"
+
+#: .\api\serializers\actors.py:209
+msgid "Specialist"
+msgstr ""
+
+#: .\api\serializers\actors.py:210
+msgid "already"
+msgstr ""
+
+#: .\api\serializers\actors.py:211
+msgid "exists"
+msgstr ""
+
+#: .\api\templates\base.html:27
+msgid "Title"
+msgstr ""
+
+#: .\linkupapi\settings.py:121
+msgid "Spanish"
+msgstr "Spanish"
+
+#: .\linkupapi\settings.py:122
+msgid "English"
+msgstr "English"
+
+# Level Instruccion
+#~ msgid "No level"
+#~ msgstr "No level"
+
+#~ msgid "Initial"
+#~ msgstr "Initial"
+
+#~ msgid "Primary"
+#~ msgstr "Primary"
+
+#~ msgid "High school"
+#~ msgstr "High school"
+
+#~ msgid "Basic special"
+#~ msgstr "Basic special"
+
+#~ msgid "Superior non-university incomplete"
+#~ msgstr "Superior non-university incomplete"
+
+#~ msgid "Superior non-university full"
+#~ msgstr "Superior non-university full"
+
+#~ msgid "Incomplete university superior"
+#~ msgstr "Incomplete university superior"
+
+#~ msgid "Full university superior"
+#~ msgstr "Full university superior"
+
+#~ msgid "master's degree"
+#~ msgstr "master's degree"
+
+#~ msgid "Doctorate"
+#~ msgstr "Doctorate"
+
+# Economic Sector
+#~ msgid "Farming"
+#~ msgstr "Farming"
+
+#~ msgid "Fishing"
+#~ msgstr "Fishing"
+
+#~ msgid "Mining"
+#~ msgstr "Mining"
+
+#~ msgid "Hydrocarbons"
+#~ msgstr "Hydrocarbons"
+
+#~ msgid "Manufacture"
+#~ msgstr "Manufacture"
+
+#~ msgid "Electricity and Water"
+#~ msgstr "Electricity and Water"
+
+#~ msgid "Building"
+#~ msgstr "Building"
+
+#~ msgid "Commerce"
+#~ msgstr "Commerce"
+
+#~ msgid "Services"
+#~ msgstr "Services"
+
+#~ msgid "fooo"
+#~ msgstr "bar EN"

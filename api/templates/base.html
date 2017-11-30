@@ -1,3 +1,4 @@
+{% load i18n %}
 <html>
     <head>
         <title> </title>
@@ -23,7 +24,7 @@
      <!--  Linkup logo  -->
     <center>
         {% include 'lib/header.html' %}
-    <h1 style="background-color:#0a0b22; color:white"> Prueba {{nombre}}</h1>
+    <h1 style="background-color:#0a0b22; color:white"> {% trans "Title"|title %} {{nombre}}</h1>
 <div class="cuerpo" style="text-align: justify;">
     <p>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget lobortis eros.
