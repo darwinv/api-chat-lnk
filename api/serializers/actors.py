@@ -91,6 +91,7 @@ class ClientSerializer(serializers.ModelSerializer):
     """Serializer del cliente."""
 
     level_instruction_name = serializers.SerializerMethodField()
+    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     nationality_name = serializers.SerializerMethodField()
     economic_sector_name = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)
@@ -441,6 +442,12 @@ class SellerSerializer(serializers.ModelSerializer):
     count_plans_seller = serializers.SerializerMethodField()
     count_queries = serializers.SerializerMethodField()
     address = AddressSerializer()
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+    nick = serializers.CharField(required=True)
+    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
+    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
 
     class Meta:
         """Meta de Vendedor."""
@@ -449,7 +456,7 @@ class SellerSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'address', 'count_plans_seller', 'count_queries', 'quota', 'zone', 'username', 'nick', 'password',
             'first_name', 'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'code',
-            'document_number', 'ruc')
+            'document_number', 'ruc', 'nationality', 'residence_country')
 
     def create(self, validated_data):
         """Redefinido metodo de crear vendedor."""
