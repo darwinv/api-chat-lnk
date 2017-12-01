@@ -240,20 +240,20 @@ msgid "exists"
 msgstr "existe"
 
 #: .\api\templates\base.html:27 .\api\templates\send_credentials.html:27
-msgid "Title"
-msgstr "Titulo"
+msgid "title"
+msgstr "titulo"
 
 #: .\api\templates\send_credentials.html:30
-msgid "Credentials"
-msgstr "Credenciales"
+msgid "credentials"
+msgstr "credenciales"
 
 #: .\api\templates\send_credentials.html:31
-msgid "User"
-msgstr "Usuario"
+msgid "user"
+msgstr "usuario"
 
 #: .\api\templates\send_credentials.html:32
-msgid "Password"
-msgstr "Contraseña"
+msgid "password"
+msgstr "contraseña"
 
 #: .\linkupapi\settings.py:121
 msgid "Spanish"

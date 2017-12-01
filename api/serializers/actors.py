@@ -253,7 +253,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
     photo = serializers.CharField(read_only=True)
-    ruc = serializers.CharField(required=True)
+    ruc = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
 
     class Meta:
         """Modelo del especialista y sus campos."""
@@ -438,16 +438,20 @@ class SpecialistSerializer(serializers.ModelSerializer):
 class SellerSerializer(serializers.ModelSerializer):
     """Serializer de Vendedor."""
 
+    nationality_name = serializers.SerializerMethodField()
     quota = serializers.SerializerMethodField()
     count_plans_seller = serializers.SerializerMethodField()
     count_queries = serializers.SerializerMethodField()
     address = AddressSerializer()
+    document_type = serializers.ChoiceField(choices=c.user_document_type)
+    document_type_name = serializers.SerializerMethodField()
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     nick = serializers.CharField(required=True)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    residence_country_name = serializers.SerializerMethodField()
 
     class Meta:
         """Meta de Vendedor."""
@@ -455,8 +459,21 @@ class SellerSerializer(serializers.ModelSerializer):
         model = Seller
         fields = (
             'id', 'address', 'count_plans_seller', 'count_queries', 'quota', 'zone', 'username', 'nick', 'password',
-            'first_name', 'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'code',
-            'document_number', 'ruc', 'nationality', 'residence_country')
+            'first_name', 'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'document_type_name',
+            'code', 'document_number', 'ruc', 'nationality', 'nationality_name', 'residence_country',
+            'residence_country_name')
+
+    def get_nationality_name(self, obj):
+        """Devuelvo la nacionalidad del especialista."""
+        return _(str(obj.nationality))
+
+    def get_residence_country_name(self, obj):
+        """Devuelve resiencia del cliente."""
+        return _(str(obj.residence_country))
+
+    def get_document_type_name(self, obj):
+        """Devuelve el tipo de documento de identidad del especialista."""
+        return _(obj.get_document_type_display())
 
     def create(self, validated_data):
         """Redefinido metodo de crear vendedor."""
@@ -468,13 +485,13 @@ class SellerSerializer(serializers.ModelSerializer):
         if password is not None:
             instance.set_password(password)
         instance.save()
-        mail = BasicEmailAmazon(subject='Envio Credenciales', to=validated_data["email_exact"],
-                                template='send_credentials')
+        # mail = BasicEmailAmazon(subject='Envio Credenciales', to=validated_data["email_exact"],
+        #                         template='send_credentials')
         # import pdb; pdb.set_trace()
         credentials = {}
         credentials["user"] = validated_data["username"]
         credentials["pass"] = password
-        print(Response(mail.sendmail(args=credentials)))
+        # print(Response(mail.sendmail(args=credentials)))
         return instance
 
     def __init__(self, *args, **kwargs):
