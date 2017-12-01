@@ -7,12 +7,18 @@ from rest_framework import status
 from api.serializers.actors import SpecialistSerializer
 import pdb
 
+
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
+client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+
 
 class CreateSpecialist(APITestCase):
-    fixtures = ['data','data2']
+    """Pruebas de Crear especialista."""
+
+    fixtures = ['data', 'data2', 'data3']
+
     def setUp(self):
+        """Setup."""
         self.valid_payload = {
             'username': 'julia',
             'nick': 'julia',
@@ -38,9 +44,95 @@ class CreateSpecialist(APITestCase):
             "category": 1
         }
 
-    def test_invalid_names(self):
+    def test_no_username(self):
+        """Solicitud invalida por no tener el username."""
         data = self.valid_payload
-        del data['last_name']
+        del data["username"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_nick(self):
+        """Solicitud invalida por no tener el nick."""
+        data = self.valid_payload
+        del data["nick"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_names(self):
+        """Solicitud invalida por no tener el apellido o nombre."""
+        data = self.valid_payload
+        del data['first_name']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_email(self):
+        """Solicitud invalida por no enviar el email."""
+        data = self.valid_payload
+        del data['email_exact']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_password(self):
+        """Solicitud invalida por no enviar el email."""
+        data = self.valid_payload
+        del data['password']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_document(self):
+        """Solicitud invalida por no enviar el documento."""
+        data = self.valid_payload
+        del data['document_number']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_address(self):
+        """Solicitud invalida por no enviar la direccion."""
+        data = self.valid_payload
+        del data['address']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_business_name(self):
+        """Solicitud invalida por no enviar el nombre de la empresa."""
+        data = self.valid_payload
+        del data['business_name']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -49,8 +141,46 @@ class CreateSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_category(self):
+        """Solicitud invalida por no enviar una especialidad valida."""
         data = self.valid_payload
-        data['category'] = 'Exploracion Espacial'
+        data['category'] = 100
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_category(self):
+        """Solicitud invalida por no enviar una especialidad."""
+        data = self.valid_payload
+        del data['category']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_ruc(self):
+        """Solicitud invalida por no enviar ruc."""
+        data = self.valid_payload
+        del data['ruc']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_payment(self):
+        """Solicitud invalida por no enviar pago por respuesta."""
+        data = self.valid_payload
+        del data['payment_per_answer']
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -59,8 +189,10 @@ class CreateSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_type_specialist(self):
+        """Solicitud invalida por no enviar el tipo de especialista correcto."""
         data = self.valid_payload
         data['type_specialist'] = 'r'
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -68,10 +200,25 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_no_optionals(self):
+        """Solicitud valida ya que no valida campos opcionales."""
+        data = self.valid_payload
+        del data["telephone"]
+        del data["cellphone"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_empty_names(self):
+        """Solicitud invalida al enviar los nombres vacios."""
         data = self.valid_payload
         data["last_name"] = ""
         data["first_name"] = ""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -80,6 +227,8 @@ class CreateSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_specialist(self):
+        """Solicitud invalida al enviar los nombres vacios."""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -87,8 +236,23 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
+
+
+class DetailSpecialist(APITestCase):
+    fixtures = ['data','data2','data3','test_query','test_address']
+    def setUp(self):
+        self.specialist = 6
+
+    def test_get_detail(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = client.get(reverse('specialist-detail',
+                         kwargs={'pk': self.specialist}),format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class UpdateSpecialistCase(APITestCase):
-    fixtures = ['data','data2']
+    fixtures = ['data','data2','data3']
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -118,6 +282,7 @@ class UpdateSpecialistCase(APITestCase):
         # self.assertEqual(self.resp.data["id"], 'ey')
 
     def test_can_update_specialist(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -126,6 +291,7 @@ class UpdateSpecialistCase(APITestCase):
         data={'nick': 'eecih'}
         print(send)
         self.valid_payload["nick"] = "juiol"
+
         response = self.client.put(
             reverse('specialist-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
@@ -145,6 +311,7 @@ class UpdateSpecialistCase(APITestCase):
           }
 
         # agregar el especialista por defecto
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -169,7 +336,7 @@ class UpdateSpecialistCase(APITestCase):
         self.assertEqual(data['address']['street'], response.data["address"]['street'])
 
 class GetSpecialists(APITestCase):
-    fixtures = ['data','data2']
+    fixtures = ['data','data2','data3']
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -200,6 +367,7 @@ class GetSpecialists(APITestCase):
 
     def test_get_all_specialists(self):
         # get API response
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = client.get(reverse('specialists'))
         # get data from db
         specialists = Specialist.objects.all()
@@ -210,7 +378,7 @@ class GetSpecialists(APITestCase):
 
     # no funciona la prueba debido a que para
     def test_get_associates_by_main(self):
-        fixtures = ['data']
+        fixtures = ['data','data2','data3']
         data_first_associate = {
             'username': 'maria',
             'nick': 'maria',
@@ -262,6 +430,7 @@ class GetSpecialists(APITestCase):
         }
 
         # agregamos los asociados
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         send_associate1 = self.client.post(
             reverse('specialists'),
             data=json.dumps(data_first_associate),
@@ -278,16 +447,16 @@ class GetSpecialists(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-
+        # import pdb; pdb.set_trace()
         url = "{}?main_specialist={}".format(reverse('specialists'),send.data["id"])
         response = client.get(url)
-        # pdb.set_trace()
+
         self.assertEqual(Specialist.objects.filter(category=send.data["category"]).exclude(type_specialist='m').count(),
                                                    response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class DeleteSpecialist(APITestCase):
-    fixtures = ['data','data2']
+    fixtures = ['data','data2','data3']
 
     def setUp(self):
         self.valid_payload = {
@@ -316,6 +485,7 @@ class DeleteSpecialist(APITestCase):
         }
 
     def test_delete_specialist(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -329,3 +499,15 @@ class DeleteSpecialist(APITestCase):
             None, format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class CreateSpecialist(APITestCase):
+    fixtures = ['data', 'data2', 'data3']
+
+    def test_delete_specialist(self):
+        send = self.client.post(
+            reverse('upload_'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+

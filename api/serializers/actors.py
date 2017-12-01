@@ -1,38 +1,39 @@
+"""Actores/Usuarios (Clientes, Especialistas, Vendedores)."""
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from api.models import User, Client, LevelInstruction, Profession, Role, Countries
-from api.models import CommercialGroup, EconomicSector, Address, Department
-
-from api.models import Province, District, Category, Specialist, Query
-from api.models import Parameter, Seller, Quota, Product, Purchase
-from api.models import Province, District, Specialist, Query, Fee
-from django.utils import six
-import pdb
-import datetime
-from django.utils import timezone
-import json
-
+from api.models import User, Client, Countries
+from api.models import Address, Department
+from api.models import Province, District, Specialist
+from api.models import Seller, Quota, Purchase, Fee
+from django.utils.translation import ugettext_lazy as _
+from api.api_choices_models import ChoicesAPI as c
+import datetime, string, random
 from django.db.models import Sum
-from datetime import date
-
+from api.emails import BasicEmailAmazon
+from rest_framework.response import Response
+from api.tools import capitalize as cap
 
 class UserSerializer(serializers.ModelSerializer):
     """
-    Serializer que unicamente va ser utilizada para
+
+    Serializer que unicamente va ser utilizada para.
+
     el servicio que devuelve todos los usuarios
     Este servicio es requerido por la web de administracion
-    Unicamente expone el id y el nombre de usuario
+    Unicamente expone el id y el nombre de usuario.
+
     """
 
     class Meta:
-        model = User
-        fields = ('id', 'username')
 
+        model = User
+        fields = ('id', 'username','img_document_number','role','code','document_number','email_exact')
 
 class UserPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('photo',)
+
 
 
 class CommonValidation():
@@ -57,165 +58,267 @@ class CustomChoiceField(serializers.ChoiceField):
 
 
 class AddressSerializer(serializers.ModelSerializer):
+    """
+
+    Direccion del Serializer.
+
+    el servicio que devuelve el ubigeo correspondiente.
+
+    """
+
     department_name = serializers.SerializerMethodField()
     province_name = serializers.SerializerMethodField()
     district_name = serializers.SerializerMethodField()
 
     class Meta:
+        """declaracion del modelo y sus campos."""
+
         model = Address
-        fields = ('street', 'department', 'department_name', 'province', 'province_name',
-                  'district', 'district_name')
+        fields = ('street', 'department', 'department_name', 'province', 'province_name', 'district', 'district_name')
 
     def get_department_name(self, obj):
+        """Devuelve departamento."""
         return str(obj.department)
 
     def get_province_name(self, obj):
+        """Devuelve provincia."""
         return str(obj.province)
 
     def get_district_name(self, obj):
+        """Devuelve distrito."""
         return str(obj.district)
 
 
 class ClientSerializer(serializers.ModelSerializer):
-    # level_instruction = serializers.SlugRelatedField(queryset=LevelInstruction.objects.all(), slug_field='name', allow_null=True)
+    """Serializer del cliente."""
+
     level_instruction_name = serializers.SerializerMethodField()
-    profession_name = serializers.SerializerMethodField()
+    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     nationality_name = serializers.SerializerMethodField()
-    commercial_group_name = serializers.SerializerMethodField()
     economic_sector_name = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True)
-    type_client = serializers.ChoiceField(choices=Client.options_type)
-    sex = serializers.ChoiceField(choices=Client.options_sex, allow_blank=True)
-    # sex_value = CustomChoiceField(choices=Client.options_sex)
-    document_type = serializers.ChoiceField(choices=Client.options_documents)
-    civil_state = serializers.ChoiceField(choices=Client.options_civil_state, allow_blank=True)
-    ocupation = serializers.ChoiceField(choices=Client.options_ocupation, allow_blank=True)
-    address = AddressSerializer()
+    profession = serializers.CharField(allow_blank=True)
+    type_client = serializers.ChoiceField(choices=c.client_type_client)
+    type_client_name = serializers.SerializerMethodField()
+    sex = serializers.ChoiceField(choices=c.client_sex, allow_blank=True)
+    sex_name = serializers.SerializerMethodField()
+    document_type = serializers.ChoiceField(choices=c.user_document_type)
+    document_type_name = serializers.SerializerMethodField()
+    civil_state = serializers.ChoiceField(choices=c.client_civil_state, allow_blank=True)
+    civil_state_name = serializers.SerializerMethodField()
+    ocupation = serializers.ChoiceField(choices=c.client_ocupation, allow_blank=True)
+    ocupation_name = serializers.SerializerMethodField()
+    address = AddressSerializer(required=False)
+    nick = serializers.CharField(required=True)
+    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    residence_country_name = serializers.SerializerMethodField()
+    # last_name = serializers.CharField(required=True)
+    birthdate = serializers.DateField(required=True)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     photo = serializers.CharField(read_only=True)
 
     class Meta:
+        """declaracion del modelo y sus campos."""
+
         model = Client
-        fields = ('id', 'username', 'nick', 'type_client', 'first_name', 'last_name',
-                  'password', 'photo', 'sex', 'document_type', 'document_number', 'civil_state',
-                  'birthdate', 'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
-                  'ciiu', 'activity_description', 'level_instruction', 'level_instruction_name',
-                  'business_name', 'agent_firstname', 'agent_lastname', 'position',
-                  'commercial_group', 'commercial_group_name', 'economic_sector',
-                  'economic_sector_name', 'institute', 'profession', 'profession_name',
-                  'ocupation', 'about', 'nationality', 'nationality_name')
+        fields = (
+            'id', 'username', 'nick', 'type_client', 'type_client_name', 'first_name', 'last_name', 'password', 'photo',
+            'sex', 'sex_name', 'document_type', 'document_type_name', 'document_number', 'civil_state',
+            'civil_state_name', 'birthdate', 'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
+            'ciiu', 'activity_description', 'level_instruction', 'level_instruction_name', 'business_name',
+            'agent_firstname', 'agent_lastname', 'position', 'economic_sector', 'economic_sector_name',
+            'institute', 'profession', 'ocupation', 'ocupation_name', 'about', 'nationality',
+            'nationality_name', "residence_country", "residence_country_name")
 
     def get_level_instruction_name(self, obj):
-        return str(obj.level_instruction)
-
-    def get_profession_name(self, obj):
-        return str(obj.profession)
+        """Devuelve nivel de instrucción."""
+        return _(str(obj.level_instruction))
 
     def get_nationality_name(self, obj):
-        return str(obj.nationality)
+        """Devuelve nacionalidad del cliente."""
+        return _(str(obj.nationality))
 
-    def get_commercial_group_name(self, obj):
-        return str(obj.commercial_group)
+    def get_residence_country_name(self, obj):
+        """Devuelve resiencia del cliente."""
+        return _(str(obj.residence_country))
 
     def get_economic_sector_name(self, obj):
-        return str(obj.economic_sector)
+        """Devuelve sector economico (solo si es juridico)."""
+        return _(str(obj.economic_sector))
 
-    # Por si es necesario usarlo se usa el metodo
-    # type_client = serializers.SerializerMethodField()
-    # def get_type_client(self,obj):
-    #     return obj.get_type_client_display()
+    # se devuelve el valor leible y traducido
+    def get_type_client_name(self, obj):
+        """Devuelve tipo de cliente (Natural/Juridico)."""
+        return _(obj.get_type_client_display())
+
+    def get_sex_name(self, obj):
+        """Devuelve sexo (Masculino/Femenino)."""
+        return _(obj.get_sex_display())
+
+    def get_document_type_name(self, obj):
+        """Devuelve tipo de documento de identidad."""
+        return _(obj.get_document_type_display())
+
+    def get_civil_state_name(self, obj):
+        """Devuelve estado civil."""
+        return _(obj.get_civil_state_display())
+
+    def get_ocupation_name(self, obj):
+        """Devuelve Ocupación."""
+        return _(obj.get_ocupation_display())
+
+    def validate_natural_client(self, data):
+        """Validacion para cuando es natural."""
+        required = _("required")
+        if 'first_name' not in data:
+            raise serializers.ValidationError("first_name {}".format(required))
+        if 'last_name' not in data:
+            raise serializers.ValidationError("last_name {}".format(required))
+        # import pdb; pdb.set_trace()
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if "address" not in data:
+                raise serializers.ValidationError("address {}".format(required))
+        return
+
     def validate_bussines_client(self, data):
+        """Validacion para cuando es juridico."""
+        required = _("required")
+        error1 = _("can not be a legal person and reside in a foreign country")
+        # requerido el nombre de la empresa
         if 'business_name' not in data:
-            raise serializers.ValidationError(u"Business name required.")
-        if data['commercial_group'] == None:
-            raise serializers.ValidationError(u"commercial_group must no be empty.")
-        if data['economic_sector'] == None:
-            raise serializers.ValidationError(u"economic_sector must no be empty.")
+            raise serializers.ValidationError("business_name {}".format(required))
+        # requerido el sector economico
+        if 'economic_sector' not in data:
+            raise serializers.ValidationError("economic_sector {}".format(required))
+        # probar si esta vacio
+        if data['economic_sector'] is None:
+            empty = _("must no be empty")
+            raise serializers.ValidationError("economic_sector{}".format(empty))
+        # requerido la posicion en la empresa
         if 'position' not in data:
-            raise serializers.ValidationError(u"Position required.")
+            raise serializers.ValidationError("position {}".format(required))
+        if 'address' not in data:
+            raise serializers.ValidationError("address {}".format(required))
+        # requerido el nombre del representante
         if 'agent_firstname' not in data:
-            raise serializers.ValidationError(u"agent_firstname required.")
+            raise serializers.ValidationError("agent_firstname {}".format(required))
+        # requerido el apellido del representante
         if 'agent_lastname' not in data:
-            raise serializers.ValidationError(u"agent_lastname required.")
+            raise serializers.ValidationError("agent_lastname {}".format(required))
+        # requerido el ruc del cliente
+        if 'ruc' not in data:
+            raise serializers.ValidationError("ruc {}".format(required))
+
+        if data["residence_country"] != Countries.objects.get(name="Peru"):
+            raise serializers.ValidationError(error1)
         return
 
     def validate(self, data):
-        validation = CommonValidation()
-        # if 'photo' in data:
-        #     validation.validate_img(photo=data['photo'])
+        """Redefinido metodo de validación."""
+        if data['type_client'] == 'n':
+            self.validate_natural_client(data)
+
         if data['type_client'] == 'b':
             self.validate_bussines_client(data)
         return data
 
     def create(self, validated_data):
-        data_address = validated_data.pop('address')
-        address = Address.objects.create(**data_address)
-        validated_data['address'] = address
+        """Redefinido metodo de crear cliente."""
+        if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+            data_address = validated_data.pop('address')
+            address = Address.objects.create(**data_address)
+            validated_data['address'] = address
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
         if password is not None:
             instance.set_password(password)
         instance.save()
+
         return instance
 
 
 class SpecialistSerializer(serializers.ModelSerializer):
+    """Serializer del especialista."""
+
     nationality_name = serializers.SerializerMethodField()
-    password = serializers.CharField(write_only=True)
+    nick = serializers.CharField(required=True)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
-    document_type = serializers.ChoiceField(choices=Specialist.options_documents)
-    type_specialist = serializers.ChoiceField(choices=Specialist.options_type)
+    document_type = serializers.ChoiceField(choices=c.user_document_type)
+    document_type_name = serializers.SerializerMethodField()
+    type_specialist = serializers.ChoiceField(choices=c.specialist_type_specialist)
+    type_specialist_name = serializers.SerializerMethodField()
     address = AddressSerializer()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
     photo = serializers.CharField(read_only=True)
+    ruc = serializers.CharField(required=True)
 
     class Meta:
+        """Modelo del especialista y sus campos."""
+
         model = Specialist
-        fields = ('id', 'username', 'nick', 'first_name', 'last_name',
-                  'type_specialist', 'password', 'photo', 'document_type',
-                  'document_number', 'address', 'ruc', 'email_exact', 'code', 'telephone',
-                  'cellphone', 'business_name', 'payment_per_answer', 'cv', 'star_rating',
-                  'category', 'category_name', 'nationality', 'nationality_name')
+        fields = (
+            'id', 'username', 'nick', 'first_name', 'last_name', 'type_specialist', 'type_specialist_name',
+            'photo', 'document_type', 'document_type_name', 'document_number', 'address', 'ruc', 'email_exact', 'code',
+            'telephone', 'cellphone', 'business_name', 'payment_per_answer', 'cv', 'star_rating', 'category',
+            'category_name', 'nationality', 'nationality_name')
 
     def get_nationality_name(self, obj):
-        return str(obj.nationality)
+        """Devuelvo la nacionalidad del especialista."""
+        return _(str(obj.nationality))
 
     def get_category_name(self, obj):
-        return str(obj.category)
+        """Devuelvo la espacialidad del especialista."""
+        return _(str(obj.category))
 
-    def validate(self, data):
-        flag = True
-        if hasattr(self.instance, 'type_specialist'):
-            if self.instance.type_specialist == 'm':
-                flag = False
+    def get_document_type_name(self, obj):
+        """Devuelve el tipo de documento de identidad del especialista."""
+        return _(obj.get_document_type_display())
 
-        # Asegurarse que solo haya un especialista principal por categoria.
-        if hasattr(self.instance, 'category'):
-            category = self.instance.category
-        else:
-            category = data.get("category")
-
-        if self.instance and self.instance.username != data["username"] or 'type_specialist' in data:
-
-            if flag and data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
-                                                                           category_id=category).exists():
-                raise serializers.ValidationError(u"Main specialist already exists.")
-        return data
+    def get_type_specialist_name(self, obj):
+        """Devuelve el tipo de especialista (Principal/Asociado)."""
+        return _(obj.get_type_specialist_display())
 
     def create(self, validated_data):
+        """Redefinido metodo de crear."""
+        main = _('Main')
+        spec = _('Specialist')
+        already = _('already')
+        exists = _('exists')
         data_address = validated_data.pop('address')
         address = Address.objects.create(**data_address)
         validated_data['address'] = address
-        password = validated_data.pop('password', None)
+        password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        validated_data['key'] = password
         instance = self.Meta.model(**validated_data)
+        if validated_data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
+                                                                                  category_id=validated_data[
+                                                                                      "category"]).exists():
+            output = "%(main)s %(specialist)s %(already)s %(exists)s " % {'main': main, 'specialist': spec,
+                                                                          'already': already, 'exists': exists}
+            raise serializers.ValidationError(detail=output)
         if password is not None:
             instance.set_password(password)
+
         instance.save()
+
+        subject = cap(_('send credencials'))
+        mail = BasicEmailAmazon(subject=subject, to=validated_data["email_exact"],
+                                template='send_credentials')
+        credentials = {}
+        credentials["user"] = validated_data["username"]
+        credentials["pass"] = password
+        Response(mail.sendmail(args=credentials))
         return instance
 
     def update(self, instance, validated_data):
+        """Metodo actualizar redefinido."""
+        main = _('Main')
+        spec = _('Specialist')
+        already = _('already')
+        exists = _('exists')
+        category = validated_data.get("category", None)
         instance.nick = validated_data.get('nick', instance.nick)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
@@ -230,7 +333,12 @@ class SpecialistSerializer(serializers.ModelSerializer):
         instance.business_name = validated_data.get('business_name', instance.business_name)
         instance.payment_per_answer = validated_data.get('payment_per_answer', instance.payment_per_answer)
         instance.category = validated_data.get('category', instance.category)
-        data = validated_data
+        if instance.type_specialist == "m" and Specialist.objects.filter(type_specialist="m",
+                                                                         category_id=category).exclude(
+                                                                         pk=instance.id).exists():
+            output = "%(main)s %(specialist)s %(already)s %(exists)s " % {'main': main, 'specialist': spec,
+                                                                          'already': already, 'exists': exists}
+            raise serializers.ValidationError(detail=output)
         if 'address' in validated_data:
             data_address = validated_data.pop('address')
 
@@ -246,8 +354,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
             instance.address = address
         instance.save()
         return instance
-
-
 
 
 # class AnswerAccountSerializer(serializers.ModelSerializer):
@@ -315,8 +421,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
 #         return False
 
 
-
-# # Serializer para consultar estado de cuenta del Especialista.
+# # Serializer para consultar estado de .
 # class SpecialistAccountSerializer(serializers.ModelSerializer):
 #     category = serializers.SlugRelatedField(read_only=True,slug_field='name')
 #     query_answer = serializers.SerializerMethodField()
@@ -341,24 +446,51 @@ class SpecialistSerializer(serializers.ModelSerializer):
 #         img = obj.category.image
 #         return img
 
-
 # Serializer para traer el listado de vendedores
 class SellerSerializer(serializers.ModelSerializer):
+    """Serializer de Vendedor."""
+
     quota = serializers.SerializerMethodField()
     count_plans_seller = serializers.SerializerMethodField()
     count_queries = serializers.SerializerMethodField()
     address = AddressSerializer()
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
+    nick = serializers.CharField(required=True)
+    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
+    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
 
     class Meta:
+        """Meta de Vendedor."""
+
         model = Seller
         fields = (
-        'address', 'count_plans_seller', 'count_queries', 'quota', 'id', 'zone', 'username', 'nick', 'password',
-        'first_name',
-        'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'code', 'document_number', 'ruc')
+            'id', 'address', 'count_plans_seller', 'count_queries', 'quota', 'zone', 'username', 'nick', 'password',
+            'first_name', 'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'code',
+            'document_number', 'ruc', 'nationality', 'residence_country')
 
-    def __init__(self,*args, **kwargs):
+    def create(self, validated_data):
+        """Redefinido metodo de crear vendedor."""
+        data_address = validated_data.pop('address')
+        address = Address.objects.create(**data_address)
+        validated_data['address'] = address
+        password = validated_data.pop('password', None)
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        mail = BasicEmailAmazon(subject='Envio Credenciales', to=validated_data["email_exact"],
+                                template='send_credentials')
+        # import pdb; pdb.set_trace()
+        credentials = {}
+        credentials["user"] = validated_data["username"]
+        credentials["pass"] = password
+        print(Response(mail.sendmail(args=credentials)))
+        return instance
+
+    def __init__(self, *args, **kwargs):
         super(SellerSerializer, self).__init__(*args, **kwargs)
-
 
     def get_quota(self, obj):
         value = 0
@@ -371,7 +503,6 @@ class SellerSerializer(serializers.ModelSerializer):
         except Exception as e:
             print(e.args)
         return value
-
 
     def get_count_plans_seller(self, obj):
         """
@@ -417,26 +548,24 @@ class SellerAccountSerializer(serializers.ModelSerializer):
     purchase__fee_number = serializers.CharField()
     purchase__fee__id = serializers.CharField()
     purchase__fee__fee_order_number = serializers.CharField()
+
     class Meta:
         model = Seller
-        fields = (
-            'amount_accumulated', 'fee_accumulated','is_billable','count_products',
-            # Los campos a continuacion son enviados en el querySet pero han sido
-            # redeclarados para que el serializer los reconozca
-            'purchase__total_amount','purchase__id','purchase__code','purchase__query_amount',
-            'purchase__product__is_billable','purchase__product__expiration_number',
-            'purchase__product__name','purchase__client__code',
-            'purchase__client__nick', 'purchase__fee__date','purchase__fee__fee_amount', 'purchase__fee__id',
-            'purchase__fee__status','purchase__fee__payment_type__name','purchase__fee__reference_number',
-            'purchase__fee_number','purchase__fee__fee_order_number'
-        )
-
+        fields = ('amount_accumulated', 'fee_accumulated', 'is_billable', 'count_products',
+                  # Los campos a continuacion son enviados en el querySet pero han sido
+                  # redeclarados para que el serializer los reconozca
+                  'purchase__total_amount', 'purchase__id', 'purchase__code', 'purchase__query_amount',
+                  'purchase__product__is_billable', 'purchase__product__expiration_number', 'purchase__product__name',
+                  'purchase__client__code', 'purchase__client__nick', 'purchase__fee__date',
+                  'purchase__fee__fee_amount', 'purchase__fee__id', 'purchase__fee__status',
+                  'purchase__fee__payment_type__name', 'purchase__fee__reference_number', 'purchase__fee_number',
+                  'purchase__fee__fee_order_number')
 
     def get_amount_accumulated(self, obj):
         # Esta funcion calcula la sumatoria de los pagos  efectuados en cada cuota,
         # respecto a una venta y fecha especificada
         result = Fee.objects.filter(purchase_id=obj['purchase__id'], date__lte=obj['purchase__fee__date'],
-                                   status=obj['purchase__fee__status']).aggregate(Sum('fee_amount'))
+                                    status=obj['purchase__fee__status']).aggregate(Sum('fee_amount'))
 
         return result['fee_amount__sum']
 
@@ -444,7 +573,7 @@ class SellerAccountSerializer(serializers.ModelSerializer):
         # Esta funcion calcula la cantidad de los pagos  efectuados en cada cuota,
         # respecto a una venta y fecha especificada
         result = Fee.objects.filter(purchase_id=obj['purchase__id'], date__lte=obj['purchase__fee__date'],
-                                   status=obj['purchase__fee__status']).count()
+                                    status=obj['purchase__fee__status']).count()
         return result
 
     def get_is_billable(self, obj):
@@ -461,12 +590,14 @@ class SellerAccountSerializer(serializers.ModelSerializer):
         return 1
 
 
-
 class MediaSerializer(serializers.Serializer):
-    photo = serializers.ImageField(
+    photo = serializers.ImageField(max_length=None, required=False, allow_empty_file=False)
+
+    img_document_number = serializers.ImageField(
         max_length=None,
         required=False,
         allow_empty_file=False)
+
 
     # class Meta:
     #     #model = Specialist

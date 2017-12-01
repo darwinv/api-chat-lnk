@@ -10,12 +10,12 @@ import pdb
 # Create your tests here.
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer zfMCmzJkLJGkVOwtQipByVSTkXOVEb')
+client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
 
 class GetAllQuerys(APITestCase):
     """ Test module for GET all Querys API """
 
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.id_client = 2
         self.id_category = 1
@@ -26,8 +26,9 @@ class GetAllQuerys(APITestCase):
         url = "{}?client={}".format(reverse('queries'),self.id_client)
         response = client.get(url)
         # get data from db
-        self.assertEqual(Query.objects.filter(client_id=self.id_client).count(), response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Query.objects.filter(client_id=self.id_client).count(), response.data["count"])
+
 
     def test_invalid_client(self):
         response = client.get(reverse('queries'))
@@ -89,7 +90,7 @@ class GetAllQuerys(APITestCase):
 
 #
 class GetDetailQuery(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.id_client = 2
         self.id_category = 1
@@ -125,7 +126,7 @@ class GetDetailQuery(APITestCase):
 
 
 class CreateQuery(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.valid_payload = {
             "title" : "Visa Solicitud",
@@ -141,6 +142,7 @@ class CreateQuery(APITestCase):
     def test_title_large(self):
         data = self.valid_payload
         data["title"] = "aasdsjkl asd aksd kasjd laksdjkasdl asdklasjdkasdjlkasdj"
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         response = self.client.post(
             reverse('queries'),
             data=json.dumps(data),
@@ -150,6 +152,7 @@ class CreateQuery(APITestCase):
 
 
     def test_create_query(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         response = self.client.post(
             reverse('queries'),
             data=json.dumps(self.valid_payload),
@@ -159,7 +162,7 @@ class CreateQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 class UpdateQuery(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.valid_payload = {
             "title" : "Visa Solicitud",
@@ -173,6 +176,7 @@ class UpdateQuery(APITestCase):
         }
 
     def test_absolved_query(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         send = self.client.post(
             reverse('queries'),
             data=json.dumps(self.valid_payload),
@@ -201,6 +205,7 @@ class UpdateQuery(APITestCase):
 
 
     def test_add_message_to_query(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         send = self.client.post(
             reverse('queries'),
             data=json.dumps(self.valid_payload),
@@ -224,7 +229,7 @@ class UpdateQuery(APITestCase):
 
 
 class SkipReQuery(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.id_client = 2
         self.id_category = 1
@@ -255,7 +260,7 @@ class SkipReQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 class CreateReQuery(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.valid_payload = {
             "title" : "Visa Solicitud",
@@ -269,6 +274,7 @@ class CreateReQuery(APITestCase):
         }
 
     def test_make_requery(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         send = self.client.post(
             reverse('queries'),
             data=json.dumps(self.valid_payload),
@@ -287,6 +293,7 @@ class CreateReQuery(APITestCase):
         query.status = 4
         query.save()
         self.assertEqual(int(Query.objects.get(pk=send.data["id"]).status), 4)
+        # self.client.credentials(HTTP_AUTHORIZATION='Bearer j8fUBgZyuOxbyF4NNhlEk5MspDZ8CR')
         response = self.client.put(
             reverse('query-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
@@ -297,7 +304,7 @@ class CreateReQuery(APITestCase):
 
 
 class SetCalification(APITestCase):
-    fixtures = ['data','data2','test_address','test_query']
+    fixtures = ['data','data2','data3','test_address','test_query']
     def setUp(self):
         self.id_client = 2
         self.id_category = 1

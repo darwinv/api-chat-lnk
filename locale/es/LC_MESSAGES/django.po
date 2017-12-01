@@ -1,0 +1,252 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-11-29 15:51-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\api\api_choices_models.py:15
+msgid "DNI"
+msgstr "DNI"
+
+#: .\api\api_choices_models.py:16
+msgid "Passport"
+msgstr "Pasaporte"
+
+#: .\api\api_choices_models.py:17
+msgid "Foreign Card"
+msgstr "Tarjeta extranjera"
+
+#: .\api\api_choices_models.py:22
+msgid "Natural"
+msgstr "Natural"
+
+#: .\api\api_choices_models.py:23
+#, fuzzy
+#| msgid "Business"
+msgid "Bussiness"
+msgstr "Juridico"
+
+#: .\api\api_choices_models.py:27
+msgid "Male"
+msgstr "Masculino"
+
+#: .\api\api_choices_models.py:28
+msgid "Female"
+msgstr "Femenino"
+
+#: .\api\api_choices_models.py:31
+msgid "cohabiting"
+msgstr "cohabitando"
+
+#: .\api\api_choices_models.py:32
+msgid "separated"
+msgstr "apartado"
+
+#: .\api\api_choices_models.py:33
+msgid "married"
+msgstr "casado"
+
+#: .\api\api_choices_models.py:34
+msgid "widower"
+msgstr "viudo"
+
+#: .\api\api_choices_models.py:35
+msgid "divorced"
+msgstr "divorciado"
+
+#: .\api\api_choices_models.py:36
+msgid "single"
+msgstr "soltero"
+
+#: .\api\api_choices_models.py:40
+msgid "Employer"
+msgstr "Empleador"
+
+#: .\api\api_choices_models.py:41
+msgid "Independent worker"
+msgstr "Trabajador independiente"
+
+#: .\api\api_choices_models.py:42
+msgid "Employee"
+msgstr "Empleado"
+
+#: .\api\api_choices_models.py:43
+msgid "Worker"
+msgstr "Obrero"
+
+#: .\api\api_choices_models.py:44
+msgid "Worker in a family business"
+msgstr "Trabajador en una empresa familiar"
+
+#: .\api\api_choices_models.py:45
+msgid "Home worker"
+msgstr "Trabajador a domicilio"
+
+#: .\api\api_choices_models.py:46
+msgid "Other"
+msgstr "Otro"
+
+#: .\api\api_choices_models.py:51 .\api\serializers\actors.py:282
+#: .\api\serializers\actors.py:304
+msgid "Main"
+msgstr "Principal"
+
+#: .\api\api_choices_models.py:52
+msgid "Associate"
+msgstr "Asociado"
+
+#: .\api\api_choices_models.py:57 .\api\api_choices_models.py:90
+msgid "Requested"
+msgstr "Preguntada"
+
+#: .\api\api_choices_models.py:58
+msgid "Accepted"
+msgstr "Aceptado"
+
+#: .\api\api_choices_models.py:59
+msgid "Declined"
+msgstr "Rechazado"
+
+#: .\api\api_choices_models.py:64
+msgid "Percentage"
+msgstr "Porcentaje"
+
+#: .\api\api_choices_models.py:65
+msgid "Number"
+msgstr "Número"
+
+#: .\api\api_choices_models.py:70 .\api\api_choices_models.py:76
+msgid "Pending"
+msgstr "Pendiente"
+
+#: .\api\api_choices_models.py:71 .\api\api_choices_models.py:77
+#: .\api\api_choices_models.py:85
+msgid "Paid"
+msgstr "Pagado"
+
+#: .\api\api_choices_models.py:82
+msgid "Wait"
+msgstr "Espera"
+
+#: .\api\api_choices_models.py:83
+msgid "Denied"
+msgstr "Negado"
+
+#: .\api\api_choices_models.py:84
+msgid "Exhaled"
+msgstr "Exhalado"
+
+#: .\api\api_choices_models.py:91
+msgid "Requested Derived"
+msgstr "Pregunta derivado"
+
+#: .\api\api_choices_models.py:92
+msgid "Pending Response"
+msgstr "Respuesta pendiente"
+
+#: .\api\api_choices_models.py:93
+msgid "Pending Main Response"
+msgstr "Respuesta principal pendiente"
+
+#: .\api\api_choices_models.py:94
+msgid "Answered Main"
+msgstr "Respondido Principal"
+
+#: .\api\api_choices_models.py:95
+msgid "Answered"
+msgstr "Contestada"
+
+#: .\api\api_choices_models.py:96
+msgid "Absolved Main"
+msgstr "Absuelto Principal"
+
+#: .\api\api_choices_models.py:97
+msgid "Absolved"
+msgstr "Absuelto"
+
+#: .\api\api_choices_models.py:102
+msgid "query"
+msgstr "consulta"
+
+#: .\api\api_choices_models.py:103
+msgid "requery"
+msgstr "reconsulta"
+
+#: .\api\api_choices_models.py:104
+msgid "answer"
+msgstr "responder"
+
+#: .\api\api_choices_models.py:109
+msgid "Image"
+msgstr "Imagen"
+
+#: .\api\api_choices_models.py:110
+msgid "Voice"
+msgstr "Voz"
+
+#: .\api\api_choices_models.py:111
+msgid "Document"
+msgstr "Documento"
+
+#: .\api\api_choices_models.py:116
+msgid "Critic"
+msgstr "Crítico"
+
+#: .\api\api_choices_models.py:117
+msgid "Moderate"
+msgstr "Moderar"
+
+#: .\api\api_choices_models.py:118
+msgid "Positive"
+msgstr "Positivo"
+
+#: .\api\serializers\actors.py:169 .\api\serializers\actors.py:182
+#: .\api\views\actors.py:165
+msgid "required"
+msgstr "requerido"
+
+#: .\api\serializers\actors.py:183
+msgid "can not be a legal person and reside in a foreign country"
+msgstr "No puede ser persona juridica y residir en un pais extranjero"
+
+#: .\api\serializers\actors.py:192
+msgid "must no be empty"
+msgstr "No debe estar vacio"
+
+#: .\api\serializers\actors.py:283 .\api\serializers\actors.py:305
+msgid "Specialist"
+msgstr "Especialista"
+
+#: .\api\serializers\actors.py:284 .\api\serializers\actors.py:306
+msgid "already"
+msgstr "ya"
+
+#: .\api\serializers\actors.py:285 .\api\serializers\actors.py:307
+msgid "exists"
+msgstr "existe"
+
+#: .\api\templates\base.html:27
+msgid "Title"
+msgstr "Titulo"
+
+#: .\linkupapi\settings.py:121
+msgid "Spanish"
+msgstr "Español"
+
+#: .\linkupapi\settings.py:122
+msgid "English"
+msgstr "Ingles"
