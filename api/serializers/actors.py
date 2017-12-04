@@ -7,11 +7,11 @@ from api.models import Province, District, Specialist
 from api.models import Seller, Quota, Purchase, Fee
 from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
-import datetime
+import datetime, string, random
 from django.db.models import Sum
 from api.emails import BasicEmailAmazon
 from rest_framework.response import Response
-
+from api.tools import capitalize as cap
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -27,13 +27,13 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = User
-        fields = ('id', 'username')
-
+        fields = ('id', 'username','img_document_number','role','code','document_number','email_exact')
 
 class UserPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('photo',)
+
 
 
 class CommonValidation():
@@ -241,7 +241,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
     """Serializer del especialista."""
 
     nationality_name = serializers.SerializerMethodField()
-    password = serializers.CharField(write_only=True)
     nick = serializers.CharField(required=True)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
@@ -260,7 +259,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
         model = Specialist
         fields = (
-            'id', 'username', 'nick', 'first_name', 'last_name', 'type_specialist', 'type_specialist_name', 'password',
+            'id', 'username', 'nick', 'first_name', 'last_name', 'type_specialist', 'type_specialist_name',
             'photo', 'document_type', 'document_type_name', 'document_number', 'address', 'ruc', 'email_exact', 'code',
             'telephone', 'cellphone', 'business_name', 'payment_per_answer', 'cv', 'star_rating', 'category',
             'category_name', 'nationality', 'nationality_name')
@@ -290,16 +289,27 @@ class SpecialistSerializer(serializers.ModelSerializer):
         data_address = validated_data.pop('address')
         address = Address.objects.create(**data_address)
         validated_data['address'] = address
-        password = validated_data.pop('password', None)
+        password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        validated_data['key'] = password
         instance = self.Meta.model(**validated_data)
         # "ruc {}".format(required)
         if validated_data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
                                                                                   category_id=validated_data[
                                                                                       "category"]).exists():
+
             raise serializers.ValidationError(u"{} {} {} {}".format(spec, main, already, exists))
         if password is not None:
             instance.set_password(password)
+
         instance.save()
+
+        subject = cap(_('send credencials'))
+        mail = BasicEmailAmazon(subject=subject, to=validated_data["email_exact"],
+                                template='send_credentials')
+        credentials = {}
+        credentials["user"] = validated_data["username"]
+        credentials["pass"] = password
+        Response(mail.sendmail(args=credentials))
         return instance
 
     def update(self, instance, validated_data):
@@ -326,7 +336,9 @@ class SpecialistSerializer(serializers.ModelSerializer):
         if instance.type_specialist == "m" and Specialist.objects.filter(type_specialist="m",
                                                                          category_id=category).exclude(
                                                                          pk=instance.id).exists():
+
             raise serializers.ValidationError(u"{} {} {} {}".format(main, spec, already, exists))
+
         if 'address' in validated_data:
             data_address = validated_data.pop('address')
 
@@ -597,6 +609,12 @@ class SellerAccountSerializer(serializers.ModelSerializer):
 
 class MediaSerializer(serializers.Serializer):
     photo = serializers.ImageField(max_length=None, required=False, allow_empty_file=False)
+
+    img_document_number = serializers.ImageField(
+        max_length=None,
+        required=False,
+        allow_empty_file=False)
+
 
     # class Meta:
     #     #model = Specialist

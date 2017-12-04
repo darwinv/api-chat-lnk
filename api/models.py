@@ -87,6 +87,7 @@ class User(AbstractUser):
     photo = models.CharField(max_length=250, null=True)
     document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
     document_number = models.CharField(max_length=45, unique=True)
+    img_document_number = models.CharField(max_length=250, null=True)
     ruc = models.CharField(max_length=40, unique=True, null=True)
     code = models.CharField(max_length=45, unique=True)
     anonymous = models.BooleanField(default=True)
@@ -95,7 +96,7 @@ class User(AbstractUser):
     role = models.ForeignKey(Role, on_delete=models.PROTECT, default=1)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
     residence_country = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="residence")
-
+    key = models.CharField(max_length=45, blank=True, null=True)
 
 # Aplicamos herencia multi tabla para que
 # Seller herede de User y se vincule 1 a 1

@@ -495,3 +495,58 @@ class AllFileUploadView(APIView):
         destination.close()
 
         return Response(status=204)
+
+class DocumentUploadView(APIView):
+    """
+        Actualizacion de imagen referente al documento de identidad
+    """
+    permission_classes = (IsAdminOrOwner,)
+    queryset = User.objects.all()
+    parser_classes = (JSONParser, MultiPartParser)
+
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        data = request.data
+        user = self.get_object(pk)
+        media_serializer = MediaSerializer(
+            data = data,
+            partial=True
+        )
+        # creando nombre de archivo
+        filename = str(uuid.uuid4())
+        filename = filename + '.png';
+        if media_serializer.is_valid():
+            destination = open(filename, 'wb+')
+            for chunk in data['img_document_number'].chunks():
+                destination.write(chunk)
+            destination.close()
+        else:
+            raise serializers.ValidationError(media_serializer.errors)
+
+        # pdb.set_trace()
+        name_photo = upload_photo_s3(filename)
+        os.remove(filename)
+        serializer = UserSerializer(user, data={'img_document_number': name_photo }, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def upload_photo_s3(filename):
+
+    #subir archivo con libreria boto
+    s3 = boto3.client('s3')
+
+    s3.upload_file(
+        filename, 'linkup-photos', filename,
+        ExtraArgs={'ACL': 'public-read'}
+    )
+    # devolviendo ruta al archivo
+    return 'https://s3.amazonaws.com/linkup-photos/' + filename;
+

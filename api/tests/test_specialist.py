@@ -499,3 +499,15 @@ class DeleteSpecialist(APITestCase):
             None, format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class CreateSpecialist(APITestCase):
+    fixtures = ['data', 'data2', 'data3']
+
+    def test_delete_specialist(self):
+        send = self.client.post(
+            reverse('upload_'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+

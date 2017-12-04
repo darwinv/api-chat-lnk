@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-30 15:39-0500\n"
+"POT-Creation-Date: 2017-12-01 14:47-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,8 +100,8 @@ msgstr "Trabajador a domicilio"
 msgid "Other"
 msgstr "Otro"
 
-#: .\api\api_choices_models.py:51 .\api\serializers\actors.py:286
-#: .\api\serializers\actors.py:307
+#: .\api\api_choices_models.py:51 .\api\serializers\actors.py:285
+#: .\api\serializers\actors.py:317
 msgid "Main"
 msgstr "Principal"
 
@@ -227,20 +227,26 @@ msgstr "No puede ser persona juridica y residir en un pais extranjero"
 msgid "must no be empty"
 msgstr "No debe estar vacio"
 
-#: .\api\serializers\actors.py:287 .\api\serializers\actors.py:308
+#: .\api\serializers\actors.py:286 .\api\serializers\actors.py:318
 msgid "Specialist"
 msgstr "Especialista"
 
-#: .\api\serializers\actors.py:288 .\api\serializers\actors.py:309
+#: .\api\serializers\actors.py:287 .\api\serializers\actors.py:319
 msgid "already"
 msgstr "ya"
 
-#: .\api\serializers\actors.py:289 .\api\serializers\actors.py:310
+#: .\api\serializers\actors.py:288 .\api\serializers\actors.py:320
 msgid "exists"
 msgstr "existe"
 
+#: .\api\serializers\actors.py:306
+msgid "send credencials"
+msgstr "enviar credenciales"
+
 #: .\api\templates\base.html:27 .\api\templates\send_credentials.html:27
-msgid "title"
+#, fuzzy
+#| msgid "title"
+msgid "Title"
 msgstr "titulo"
 
 #: .\api\templates\send_credentials.html:30
