@@ -485,13 +485,13 @@ class SellerSerializer(serializers.ModelSerializer):
         if password is not None:
             instance.set_password(password)
         instance.save()
-        # mail = BasicEmailAmazon(subject='Envio Credenciales', to=validated_data["email_exact"],
-        #                         template='send_credentials')
+        mail = BasicEmailAmazon(subject='Envio Credenciales', to=validated_data["email_exact"],
+                                template='send_credentials')
         # import pdb; pdb.set_trace()
         credentials = {}
         credentials["user"] = validated_data["username"]
         credentials["pass"] = password
-        # print(Response(mail.sendmail(args=credentials)))
+        print(Response(mail.sendmail(args=credentials)))
         return instance
 
     def __init__(self, *args, **kwargs):
