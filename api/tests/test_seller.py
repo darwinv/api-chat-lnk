@@ -138,17 +138,17 @@ class CreateSeller(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_residence(self):
-        """Solicitud invalida por no enviar el pais de residencia."""
-        data = self.valid_payload
-        del data["residence_country"]
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
-        response = self.client.post(
-            reverse('sellers'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    # def test_no_residence(self):
+    #     """Solicitud invalida por no enviar el pais de residencia."""
+    #     data = self.valid_payload
+    #     del data["residence_country"]
+    #     self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+    #     response = self.client.post(
+    #         reverse('sellers'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_optionals(self):
         """Solicitud valida al no enviar los campos opcionales."""

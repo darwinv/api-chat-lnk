@@ -462,7 +462,7 @@ class SellerSerializer(serializers.ModelSerializer):
     nick = serializers.CharField(required=True)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
-    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    # residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
 
     class Meta:
@@ -470,7 +470,7 @@ class SellerSerializer(serializers.ModelSerializer):
 
         model = Seller
         fields = (
-            'id', 'address', 'count_plans_seller', 'count_queries', 'quota', 'zone', 'username', 'nick', 'password',
+            'id', 'address', 'count_plans_seller', 'count_queries', 'quota', 'zone', 'username', 'nick',
             'first_name', 'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'document_type_name',
             'code', 'document_number', 'ruc', 'nationality', 'nationality_name', 'residence_country',
             'residence_country_name')
@@ -492,7 +492,8 @@ class SellerSerializer(serializers.ModelSerializer):
         data_address = validated_data.pop('address')
         address = Address.objects.create(**data_address)
         validated_data['address'] = address
-        password = validated_data.pop('password', None)
+        password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        validated_data['key'] = password
         instance = self.Meta.model(**validated_data)
         if password is not None:
             instance.set_password(password)
