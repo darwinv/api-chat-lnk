@@ -96,7 +96,7 @@ class User(AbstractUser):
     role = models.ForeignKey(Role, on_delete=models.PROTECT, default=1)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
     residence_country = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="residence")
-    key = models.CharField(max_length=45, blank=True, null=True)
+    key = models.CharField(max_length=90, blank=True, null=True)
 
 
 # Aplicamos herencia multi tabla para que
@@ -182,7 +182,7 @@ class Client(User):
 
     class Meta:
         """Modelo de Cliente."""
-
+        
         verbose_name = 'Client'
         verbose_name_plural = 'Clients'
 
