@@ -228,6 +228,8 @@ class ClientSerializer(serializers.ModelSerializer):
             data_address = validated_data.pop('address')
             address = Address.objects.create(**data_address)
             validated_data['address'] = address
+        elif 'address' in validated_data:
+            del validated_data['address']
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
         if password is not None:
@@ -474,15 +476,16 @@ class SellerSerializer(serializers.ModelSerializer):
     quota = serializers.SerializerMethodField()
     count_plans_seller = serializers.SerializerMethodField()
     count_queries = serializers.SerializerMethodField()
-    address = AddressSerializer()
+    address = AddressSerializer(required=False)
     document_type = serializers.ChoiceField(choices=c.user_document_type)
     document_type_name = serializers.SerializerMethodField()
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     nick = serializers.CharField(required=True)
+    ruc = serializers.CharField(allow_blank=True, required=False)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
-    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    # residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
 
     class Meta:
@@ -490,7 +493,7 @@ class SellerSerializer(serializers.ModelSerializer):
 
         model = Seller
         fields = (
-            'id', 'address', 'count_plans_seller', 'count_queries', 'quota', 'zone', 'username', 'nick', 'password',
+            'id', 'address', 'count_plans_seller', 'count_queries', 'quota', 'zone', 'username', 'nick',
             'first_name', 'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'document_type_name',
             'code', 'document_number', 'ruc', 'nationality', 'nationality_name', 'residence_country',
             'residence_country_name')
@@ -507,23 +510,42 @@ class SellerSerializer(serializers.ModelSerializer):
         """Devuelve el tipo de documento de identidad del especialista."""
         return _(obj.get_document_type_display())
 
+    def validate(self, data):
+        """Redefinido metodo de validación."""
+        required = _('required')
+        # si la residencia es peru, es obligatoria la dirección
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if 'address' not in data:
+                raise serializers.ValidationError("address {}".format(required))
+        return data
+
     def create(self, validated_data):
         """Redefinido metodo de crear vendedor."""
-        data_address = validated_data.pop('address')
-        address = Address.objects.create(**data_address)
-        validated_data['address'] = address
-        password = validated_data.pop('password', None)
+        # si la residencia es peru, se crea la instancia de la dirección
+        if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+            data_address = validated_data.pop('address')
+            address = Address.objects.create(**data_address)
+            validated_data['address'] = address
+        elif 'address' in validated_data:
+            del validated_data['address']
+
+        # si se encuentra y esta vacio, se debe borrar
+        if 'ruc' in validated_data:
+            if not validated_data['ruc']:
+                del validated_data['ruc']
+        password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        validated_data['key'] = password
         instance = self.Meta.model(**validated_data)
         if password is not None:
             instance.set_password(password)
         instance.save()
-        # mail = BasicEmailAmazon(subject='Envio Credenciales', to=validated_data["email_exact"],
-        #                         template='send_credentials')
+        mail = BasicEmailAmazon(subject='Envio Credenciales', to=validated_data["email_exact"],
+                                template='send_credentials')
         # import pdb; pdb.set_trace()
         credentials = {}
         credentials["user"] = validated_data["username"]
         credentials["pass"] = password
-        # print(Response(mail.sendmail(args=credentials)))
+        print(Response(mail.sendmail(args=credentials)))
         return instance
 
     def __init__(self, *args, **kwargs):
