@@ -113,7 +113,7 @@ class ClientSerializer(serializers.ModelSerializer):
     nick = serializers.CharField(required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
-    # last_name = serializers.CharField(required=True)
+    commercial_reason = serializers.CharField()
     birthdate = serializers.DateField(required=True)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     photo = serializers.CharField(read_only=True)
@@ -129,7 +129,7 @@ class ClientSerializer(serializers.ModelSerializer):
             'ciiu', 'activity_description', 'level_instruction', 'level_instruction_name', 'business_name',
             'agent_firstname', 'agent_lastname', 'position', 'economic_sector', 'economic_sector_name',
             'institute', 'profession', 'ocupation', 'ocupation_name', 'about', 'nationality',
-            'nationality_name', "residence_country", "residence_country_name")
+            'nationality_name', "residence_country", "commercial_reason", "residence_country_name")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -201,6 +201,9 @@ class ClientSerializer(serializers.ModelSerializer):
         # requerido el nombre de la empresa
         if 'business_name' not in data:
             raise serializers.ValidationError("business_name {}".format(required))
+        # requerido el nombre de la empresa
+        if 'commercial_reason' not in data:
+            raise serializers.ValidationError("commercial_reason {}".format(required))
         # requerido el sector economico
         if 'economic_sector' not in data:
             raise serializers.ValidationError("economic_sector {}".format(required))
