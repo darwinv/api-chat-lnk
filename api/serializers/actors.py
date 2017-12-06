@@ -70,6 +70,7 @@ class AddressSerializer(serializers.ModelSerializer):
     province_name = serializers.SerializerMethodField()
     district_name = serializers.SerializerMethodField()
 
+
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -250,11 +251,12 @@ class SpecialistSerializer(serializers.ModelSerializer):
     document_type_name = serializers.SerializerMethodField()
     type_specialist = serializers.ChoiceField(choices=c.specialist_type_specialist)
     type_specialist_name = serializers.SerializerMethodField()
-    address = AddressSerializer()
+    address = AddressSerializer(required=False)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
     photo = serializers.CharField(read_only=True)
-    ruc = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
+    ruc = serializers.CharField(allow_blank=True, required=False)
+    residence_country_name = serializers.SerializerMethodField()
 
     class Meta:
         """Modelo del especialista y sus campos."""
@@ -264,11 +266,15 @@ class SpecialistSerializer(serializers.ModelSerializer):
             'id', 'username', 'nick', 'first_name', 'last_name', 'type_specialist', 'type_specialist_name',
             'photo', 'document_type', 'document_type_name', 'document_number', 'address', 'ruc', 'email_exact', 'code',
             'telephone', 'cellphone', 'business_name', 'payment_per_answer', 'cv', 'star_rating', 'category',
-            'category_name', 'nationality', 'nationality_name')
+            'category_name', 'nationality', 'nationality_name', 'residence_country', 'residence_country_name')
 
     def get_nationality_name(self, obj):
         """Devuelvo la nacionalidad del especialista."""
         return _(str(obj.nationality))
+
+    def get_residence_country_name(self, obj):
+        """Devuelvo la residencia del especialista."""
+        return _(str(obj.residence_country))
 
     def get_category_name(self, obj):
         """Devuelvo la espacialidad del especialista."""
@@ -288,9 +294,20 @@ class SpecialistSerializer(serializers.ModelSerializer):
         spec = _('Specialist')
         already = _('already')
         exists = _('exists')
-        data_address = validated_data.pop('address')
-        address = Address.objects.create(**data_address)
-        validated_data['address'] = address
+
+        # Si la residencia es peru, se crea el address
+        if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+            data_address = validated_data.pop('address')
+            address = Address.objects.create(**data_address)
+            validated_data['address'] = address
+        elif 'address' in validated_data:
+            del validated_data['address']
+
+        # si se encuentra y esta vacio, se debe borrar para guardar null
+        if 'ruc' in validated_data:
+            if not validated_data['ruc']:
+                del validated_data['ruc']
+
         password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
         validated_data['key'] = password
         instance = self.Meta.model(**validated_data)
@@ -335,28 +352,55 @@ class SpecialistSerializer(serializers.ModelSerializer):
         instance.business_name = validated_data.get('business_name', instance.business_name)
         instance.payment_per_answer = validated_data.get('payment_per_answer', instance.payment_per_answer)
         instance.category = validated_data.get('category', instance.category)
+        instance.residence_country = validated_data.get('residence_country', instance.residence_country)
         if instance.type_specialist == "m" and Specialist.objects.filter(type_specialist="m",
                                                                          category_id=category).exclude(
                                                                          pk=instance.id).exists():
 
             raise serializers.ValidationError(u"{} {} {} {}".format(main, spec, already, exists))
 
-        if 'address' in validated_data:
-            data_address = validated_data.pop('address')
+        # Si la residencia es peru, se crea el address
+        if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+            if 'address' in validated_data:
+                data_address = validated_data.pop('address')
 
-            # pdb.set_trace()
-            address = Address.objects.get(pk=instance.address_id)
-            # pdb.set_trace()
-            address.department = Department.objects.get(pk=data_address["department"].id)
-            address.province = Province.objects.get(pk=data_address["province"].id)
-            address.district = District.objects.get(pk=data_address["district"].id)
-            address.street = data_address['street']
+                # si el usuario tenia previamente una direccion registrada
+                if instance.address_id:
+                    # pdb.set_trace()
+                    address = Address.objects.get(pk=instance.address_id)
+                    # pdb.set_trace()
+                    address.department = Department.objects.get(pk=data_address["department"].id)
+                    address.province = Province.objects.get(pk=data_address["province"].id)
+                    address.district = District.objects.get(pk=data_address["district"].id)
+                    address.street = data_address['street']
 
-            address.save()
-            instance.address = address
+                    address.save()
+                else:
+                    address = Address.objects.create(department= Department.objects.get(pk=data_address["department"].id),
+                                                     province= Province.objects.get(pk=data_address["province"].id),
+                                                     district= District.objects.get(pk=data_address["district"].id),
+                                                     street= data_address["street"])
+
+
+                instance.address = address
+        else:
+            instance.address = None
+
         instance.save()
         return instance
 
+    def validate(self, data):
+        """Redefinido metodo de validación."""
+        required = _('required')
+        # si la residencia es peru, es obligatoria la dirección
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if 'address' not in data:
+                raise serializers.ValidationError("address {}".format(required))
+            if 'ruc' not in data:
+                raise serializers.ValidationError("ruc {}".format(required))
+            elif not data['ruc']:
+                raise serializers.ValidationError("ruc {}".format(required))
+        return data
 
 # class AnswerAccountSerializer(serializers.ModelSerializer):
 #     date = serializers.SerializerMethodField()
