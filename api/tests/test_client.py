@@ -58,6 +58,7 @@ class CreateNaturalClient(APITestCase):
             'residence_country': 1
         }
 
+
     # responder error al enviar email invalido
     def test_invalid_email(self):
         """Solicitud invalida por email incorrecto."""

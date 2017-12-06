@@ -124,13 +124,16 @@ class Objection(models.Model):
 
 
 class SellerContactNoEfective(models.Model):
-    contact_firstname = models.CharField(max_length=45, null=True)
-    contact_lastname = models.CharField(max_length=55, null=True)
+    """Contacto No Efectivo."""
 
-    type_contact = models.CharField(max_length=1, choices=Ch.client_type_client)
-
+    firstname = models.CharField(max_length=45, null=True)
+    lastname = models.CharField(max_length=55, null=True)
+    type_contact = models.CharField(max_length=1, choices=Ch.client_type_client)  # si es efectivo o no efectivo
     document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
-    document_number = models.CharField(max_length=18)
+    document_number = models.CharField(max_length=45)
+    email = models.CharField(max_length=150)
+    civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
+    birthdate = models.DateField()
     contact_bussinessname = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
     agent_lastname = models.CharField(max_length=45, null=True)
@@ -182,7 +185,7 @@ class Client(User):
 
     class Meta:
         """Modelo de Cliente."""
-        
+
         verbose_name = 'Client'
         verbose_name_plural = 'Clients'
 
