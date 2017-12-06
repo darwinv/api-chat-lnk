@@ -549,4 +549,3 @@ def upload_photo_s3(filename):
     )
     # devolviendo ruta al archivo
     return 'https://s3.amazonaws.com/linkup-photos/' + filename;
-

@@ -80,10 +80,11 @@ class User(AbstractUser):
 
     #  class Meta:
     #      db_table = 'user'
+    first_name = models.CharField(max_length=30, blank=True)
     nick = models.CharField(max_length=45, blank=True)
     email_exact = models.CharField(max_length=150, unique=True)
-    telephone = models.CharField(max_length=14, null=True)
-    cellphone = models.CharField(max_length=14, null=True)
+    telephone = models.CharField(max_length=14, blank=True)
+    cellphone = models.CharField(max_length=14, blank=True)
     photo = models.CharField(max_length=250, null=True)
     document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
     document_number = models.CharField(max_length=45, unique=True)
@@ -162,15 +163,15 @@ class Client(User):
     """Modelo de Cliente (herede de usuario)."""
 
     type_client = models.CharField(max_length=1, choices=Ch.client_type_client)
-    sex = models.CharField(max_length=1, choices=Ch.client_sex, null=True)
+    sex = models.CharField(max_length=1, choices=Ch.client_sex, blank=True)
     commercial_reason = models.CharField(max_length=45, null=True)
     civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
-    ciiu = models.CharField(max_length=4, null=True)
-    activity_description = models.CharField(max_length=255, null=True)
+    ciiu = models.CharField(max_length=4, blank=True)
+    activity_description = models.CharField(max_length=255,  blank=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
     ocupation = models.CharField(max_length=1, choices=Ch.client_ocupation)
-    about = models.CharField(max_length=255, null=True)
+    about = models.CharField(max_length=255,  blank=True)
     business_name = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
     agent_lastname = models.CharField(max_length=45, null=True)
@@ -182,7 +183,7 @@ class Client(User):
 
     class Meta:
         """Modelo de Cliente."""
-        
+
         verbose_name = 'Client'
         verbose_name_plural = 'Clients'
 

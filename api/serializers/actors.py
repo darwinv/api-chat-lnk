@@ -170,11 +170,24 @@ class ClientSerializer(serializers.ModelSerializer):
     def validate_natural_client(self, data):
         """Validacion para cuando es natural."""
         required = _("required")
-        if 'first_name' not in data:
+        # obligatorio el nombre del cliente
+        if 'first_name' not in data or not data['first_name']:
             raise serializers.ValidationError("first_name {}".format(required))
-        if 'last_name' not in data:
+        # obligatorio el apellido del cliente
+        if 'last_name' not in data or not data['last_name']:
             raise serializers.ValidationError("last_name {}".format(required))
-        # import pdb; pdb.set_trace()
+        # obligatorio el sexo
+        if 'sex' not in data or not data['sex']:
+            raise serializers.ValidationError("sex {}".format(required))
+        # obligatorio el estado civil
+        if 'civil_state' not in data or not data['civil_state']:
+            raise serializers.ValidationError("civil_state {}".format(required))
+        # obligatorio el nivel de instruccion
+        if 'level_instruction' not in data or not data['level_instruction']:
+            raise serializers.ValidationError("level_instruction {}".format(required))
+        # obligatorio la ocupacion
+        if 'ocupation' not in data or not data['ocupation']:
+            raise serializers.ValidationError("ocupation {}".format(required))
         if data["residence_country"] == Countries.objects.get(name="Peru"):
             if "address" not in data:
                 raise serializers.ValidationError("address {}".format(required))
@@ -235,7 +248,6 @@ class ClientSerializer(serializers.ModelSerializer):
         if password is not None:
             instance.set_password(password)
         instance.save()
-
         return instance
 
 
