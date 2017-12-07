@@ -219,6 +219,15 @@ class ClientSerializer(serializers.ModelSerializer):
         # requerido la posicion en la empresa
         if 'position' not in data:
             raise serializers.ValidationError("position {}".format(required))
+        # si reside en peru la direccion es obligatoria.
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if "address" not in data or not data["address"]:
+                raise serializers.ValidationError("address {}".format(required))
+        # sino, la direccion de extranjero es obligatoria
+        else:
+            if "foreign_address" not in data or not data["foreign_address"]:
+                raise serializers.ValidationError("foreign_address {}".format(required))
+
         if 'address' not in data:
             raise serializers.ValidationError("address {}".format(required))
         # requerido el nombre del representante
