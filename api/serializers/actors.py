@@ -290,7 +290,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
             'id', 'username', 'nick', 'first_name', 'last_name', 'type_specialist', 'type_specialist_name',
             'photo', 'document_type', 'document_type_name', 'document_number', 'address', 'ruc', 'email_exact', 'code',
             'telephone', 'cellphone', 'business_name', 'payment_per_answer', 'cv', 'star_rating', 'category',
-            'category_name', 'nationality', 'nationality_name', 'residence_country', 'residence_country_name')
+            'category_name', 'nationality', 'nationality_name', 'residence_country', 'residence_country_name',
+            'foreign_address')
 
     def get_nationality_name(self, obj):
         """Devuelvo la nacionalidad del especialista."""
@@ -424,6 +425,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("ruc {}".format(required))
             elif not data['ruc']:
                 raise serializers.ValidationError("ruc {}".format(required))
+        elif "foreign_address" not in data or not data["foreign_address"]:
+                raise serializers.ValidationError("foreign_address {}".format(required))
         return data
 
 # class AnswerAccountSerializer(serializers.ModelSerializer):
