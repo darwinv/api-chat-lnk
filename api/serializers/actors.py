@@ -203,7 +203,7 @@ class ClientSerializer(serializers.ModelSerializer):
     def validate_bussines_client(self, data):
         """Validacion para cuando es juridico."""
         required = _("required")
-        error1 = _("can not be a legal person and reside in a foreign country")
+        # error1 = _("can not be a legal person and reside in a foreign country")
         # requerido el nombre de la empresa
         if 'business_name' not in data:
             raise serializers.ValidationError("business_name {}".format(required))
@@ -235,8 +235,9 @@ class ClientSerializer(serializers.ModelSerializer):
         if 'ciiu' not in data or not data["ciiu"]:
             raise serializers.ValidationError("ciiu {}".format(required))
         # validacion para residencia
-        if data["residence_country"] != Countries.objects.get(name="Peru"):
-            raise serializers.ValidationError(error1)
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if 'ruc' not in data or not data["ruc"]:
+                raise serializers.ValidationError("ruc {}".format(required))
         return
 
     def validate(self, data):
