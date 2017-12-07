@@ -41,10 +41,10 @@ class District(models.Model):
 
 
 class Address(models.Model):
-    street = models.CharField(max_length=155)
-    department = models.ForeignKey(Department, on_delete=models.PROTECT)
-    province = models.ForeignKey(Province, on_delete=models.PROTECT)
-    district = models.ForeignKey(District, on_delete=models.PROTECT)
+    street = models.CharField(max_length=155, blank=True)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, null=True)
+    province = models.ForeignKey(Province, on_delete=models.PROTECT, null=True)
+    district = models.ForeignKey(District, on_delete=models.PROTECT, null=True)
 
 
 class Zone(models.Model):

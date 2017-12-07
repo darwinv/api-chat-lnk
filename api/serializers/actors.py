@@ -69,8 +69,7 @@ class AddressSerializer(serializers.ModelSerializer):
     department_name = serializers.SerializerMethodField()
     province_name = serializers.SerializerMethodField()
     district_name = serializers.SerializerMethodField()
-
-
+    
     class Meta:
         """declaracion del modelo y sus campos."""
 
