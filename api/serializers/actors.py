@@ -113,7 +113,7 @@ class ClientSerializer(serializers.ModelSerializer):
     nick = serializers.CharField(required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
-    # last_name = serializers.CharField(required=True)
+    commercial_reason = serializers.CharField(required=False)
     birthdate = serializers.DateField(required=True)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     photo = serializers.CharField(read_only=True)
@@ -123,13 +123,15 @@ class ClientSerializer(serializers.ModelSerializer):
 
         model = Client
         fields = (
-            'id', 'username', 'nick', 'type_client', 'type_client_name', 'first_name', 'last_name', 'password', 'photo',
-            'sex', 'sex_name', 'document_type', 'document_type_name', 'document_number', 'civil_state',
-            'civil_state_name', 'birthdate', 'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
-            'ciiu', 'activity_description', 'level_instruction', 'level_instruction_name', 'business_name',
-            'agent_firstname', 'agent_lastname', 'position', 'economic_sector', 'economic_sector_name',
-            'institute', 'profession', 'ocupation', 'ocupation_name', 'about', 'nationality',
-            'nationality_name', "residence_country", "residence_country_name")
+            'id', 'username', 'nick', 'type_client', 'type_client_name', 'first_name',
+            'last_name', 'password', 'photo', 'sex', 'sex_name', 'document_type',
+            'document_type_name', 'document_number', 'civil_state', 'civil_state_name',
+            'birthdate', 'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
+            'ciiu', 'activity_description', 'level_instruction', 'level_instruction_name',
+            'business_name', 'agent_firstname', 'agent_lastname', 'position',
+            'economic_sector', 'economic_sector_name', 'institute', 'profession',
+            'ocupation', 'ocupation_name', 'about', 'nationality', 'nationality_name',
+            "residence_country", "commercial_reason", "foreign_address", "residence_country_name")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -171,14 +173,31 @@ class ClientSerializer(serializers.ModelSerializer):
     def validate_natural_client(self, data):
         """Validacion para cuando es natural."""
         required = _("required")
-        if 'first_name' not in data:
+        # obligatorio el nombre del cliente
+        if 'first_name' not in data or not data['first_name']:
             raise serializers.ValidationError("first_name {}".format(required))
-        if 'last_name' not in data:
+        # obligatorio el apellido del cliente
+        if 'last_name' not in data or not data['last_name']:
             raise serializers.ValidationError("last_name {}".format(required))
-        # import pdb; pdb.set_trace()
+        # obligatorio el sexo
+        if 'sex' not in data or not data['sex']:
+            raise serializers.ValidationError("sex {}".format(required))
+        # obligatorio el estado civil
+        if 'civil_state' not in data or not data['civil_state']:
+            raise serializers.ValidationError("civil_state {}".format(required))
+        # obligatorio el nivel de instruccion
+        if 'level_instruction' not in data or not data['level_instruction']:
+            raise serializers.ValidationError("level_instruction {}".format(required))
+        # obligatorio la ocupacion
+        if 'ocupation' not in data or not data['ocupation']:
+            raise serializers.ValidationError("ocupation {}".format(required))
+        # si reside en peru la direccion es obligatoria.
         if data["residence_country"] == Countries.objects.get(name="Peru"):
-            if "address" not in data:
+            if "address" not in data or not data["address"]:
                 raise serializers.ValidationError("address {}".format(required))
+        else:
+            if "foreign_address" not in data or not data["foreign_address"]:
+                raise serializers.ValidationError("foreign_address {}".format(required))
         return
 
     def validate_bussines_client(self, data):
@@ -188,6 +207,9 @@ class ClientSerializer(serializers.ModelSerializer):
         # requerido el nombre de la empresa
         if 'business_name' not in data:
             raise serializers.ValidationError("business_name {}".format(required))
+        # requerido el nombre de la empresa
+        if 'commercial_reason' not in data:
+            raise serializers.ValidationError("commercial_reason {}".format(required))
         # requerido el sector economico
         if 'economic_sector' not in data:
             raise serializers.ValidationError("economic_sector {}".format(required))
@@ -207,9 +229,12 @@ class ClientSerializer(serializers.ModelSerializer):
         if 'agent_lastname' not in data:
             raise serializers.ValidationError("agent_lastname {}".format(required))
         # requerido el ruc del cliente
-        if 'ruc' not in data:
+        if 'ruc' not in data or not data["ruc"]:
             raise serializers.ValidationError("ruc {}".format(required))
-
+        # requerido el ciiu del cliente juridico
+        if 'ciiu' not in data or not data["ciiu"]:
+            raise serializers.ValidationError("ciiu {}".format(required))
+        # validacion para residencia
         if data["residence_country"] != Countries.objects.get(name="Peru"):
             raise serializers.ValidationError(error1)
         return
@@ -236,7 +261,6 @@ class ClientSerializer(serializers.ModelSerializer):
         if password is not None:
             instance.set_password(password)
         instance.save()
-
         return instance
 
 
@@ -270,7 +294,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
             'id', 'username', 'nick', 'first_name', 'last_name', 'type_specialist', 'type_specialist_name',
             'photo', 'document_type', 'document_type_name', 'document_number', 'address', 'ruc', 'email_exact', 'code',
             'telephone', 'cellphone', 'business_name', 'payment_per_answer', 'cv', 'star_rating', 'category',
-            'category_name', 'nationality', 'nationality_name', 'residence_country', 'residence_country_name')
+            'category_name', 'nationality', 'nationality_name', 'residence_country', 'residence_country_name',
+            'foreign_address')
 
     def get_nationality_name(self, obj):
         """Devuelvo la nacionalidad del especialista."""
@@ -406,6 +431,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("ruc {}".format(required))
             elif not data['ruc']:
                 raise serializers.ValidationError("ruc {}".format(required))
+        elif "foreign_address" not in data or not data["foreign_address"]:
+                raise serializers.ValidationError("foreign_address {}".format(required))
         return data
 
 # class AnswerAccountSerializer(serializers.ModelSerializer):
@@ -515,7 +542,7 @@ class SellerSerializer(serializers.ModelSerializer):
     ruc = serializers.CharField(allow_blank=True, required=False)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
-    # residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
 
     class Meta:
@@ -526,7 +553,7 @@ class SellerSerializer(serializers.ModelSerializer):
             'id', 'address', 'count_plans_seller', 'count_queries', 'quota', 'zone', 'username', 'nick',
             'first_name', 'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'document_type_name',
             'code', 'document_number', 'ruc', 'nationality', 'nationality_name', 'residence_country',
-            'residence_country_name')
+            'residence_country_name', "foreign_address")
 
     def get_nationality_name(self, obj):
         """Devuelvo la nacionalidad del especialista."""
@@ -547,6 +574,9 @@ class SellerSerializer(serializers.ModelSerializer):
         if data["residence_country"] == Countries.objects.get(name="Peru"):
             if 'address' not in data:
                 raise serializers.ValidationError("address {}".format(required))
+        else:
+            if "foreign_address" not in data or not data["foreign_address"]:
+                raise serializers.ValidationError("foreign_address {}".format(required))
         return data
 
     def create(self, validated_data):

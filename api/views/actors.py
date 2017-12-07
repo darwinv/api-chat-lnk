@@ -73,6 +73,8 @@ class ClientListView(ListCreateAPIView):
             raise serializers.ValidationError("document_number {}".format(required))
         data['code'] = PREFIX_CODE_CLIENT + str(request.data.get('document_number'))
         data['role'] = ROLE_CLIENT
+        if 'type_client' not in data or not data['type_client']:
+            raise serializers.ValidationError("document_number {}".format(required))
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
         elif data['type_client'] == 'b':
@@ -82,7 +84,6 @@ class ClientListView(ListCreateAPIView):
             data['level_instruction'] = ''
             data['profession'] = ''
             data['ocupation'] = ''
-
         serializer = ClientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -549,4 +550,3 @@ def upload_photo_s3(filename):
     )
     # devolviendo ruta al archivo
     return 'https://s3.amazonaws.com/linkup-photos/' + filename;
-

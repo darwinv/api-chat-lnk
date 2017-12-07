@@ -57,25 +57,39 @@ class CreateSeller(APITestCase):
     def test_no_lastname(self):
         """Solicitud invalida por no tener el apellido."""
         data = self.valid_payload
-        del data["last_name"]
+        data["last_name"] = ''
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response1 = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["last_name"]
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
             content_type='application/json'
         )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_firstname(self):
         """Solicitud invalida por no tener el nombre."""
         data = self.valid_payload
-        del data["first_name"]
+        data["first_name"] = ''
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response1 = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["first_name"]
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
             content_type='application/json'
         )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_nick(self):
@@ -83,79 +97,140 @@ class CreateSeller(APITestCase):
         data = self.valid_payload
         del data["nick"]
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
-        response = self.client.post(
+        response1 = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
             content_type='application/json'
         )
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+            )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_email(self):
-        """Solicitud invalida por no enviar el correo."""
+        """Solicitud invalida por no enviarl el email."""
         data = self.valid_payload
-        del data["email_exact"]
+        data["email_exact"] = ""
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response1 = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["email_exact"]
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
             content_type='application/json'
         )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_nationality(self):
         """Solicitud invalida por no enviar el pais de nacionalidad."""
         data = self.valid_payload
-        del data["nationality"]
+        data["nationality"] = ""
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response1 = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["nationality"]
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
             content_type='application/json'
         )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_document(self):
         """Solicitud invalida por no enviar el documento."""
         data = self.valid_payload
-        del data["document_number"]
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        data["document_number"] = ""
+        response1 = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["document_number"]
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
             content_type='application/json'
         )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_document_type(self):
+        """Solicitud invalida por no enviar el tipo de documento."""
+        data = self.valid_payload
+        data["document_type"] = ""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response1 = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["document_type"]
+        response = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_address(self):
         """Solicitud invalida por no enviar la direccion."""
         data = self.valid_payload
-        del data["address"]
+        data["address"] = ""
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response1 = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["address"]
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
             content_type='application/json'
         )
-
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    # def test_no_residence(self):
-    #     """Solicitud invalida por no enviar el pais de residencia."""
-    #     data = self.valid_payload
-    #     del data["residence_country"]
-    #     self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
-    #     response = self.client.post(
-    #         reverse('sellers'),
-    #         data=json.dumps(data),
-    #         content_type='application/json'
-    #     )
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_optional_address(self):
-        """Dirección es opcional si la residencia es en el extranjero."""
+    def test_no_residence_country(self):
+        """Solicitud invalida no enviar pais de residencia."""
         data = self.valid_payload
-        data["residence_country"] = 2
+        data['residence_country'] = ""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response1 = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["residence_country"]
+        response = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_foreign_address(self):
+        """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
+        data = self.valid_payload
+        data["residence_country"] = 4
         del data["address"]
+        # se agrega la direccion para ese pais
+        data["foreign_address"] = "lorem pias ipmasjdn kjajsdk iasjd"
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('sellers'),
@@ -163,6 +238,28 @@ class CreateSeller(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_no_foreign_address(self):
+        """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
+        data = self.valid_payload
+        data["residence_country"] = 4
+        del data["address"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        # se agrega la direccion para ese pais
+        data["foreign_address"] = ""
+        response1 = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["foreign_address"]
+        response = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_optionals(self):
         """Solicitud valida al no enviar los campos opcionales."""
@@ -179,29 +276,20 @@ class CreateSeller(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_empty_ruc_on_peru(self):
-        """Solicitud valida al no enviar los campos opcionales."""
+    def test_empty_optionals(self):
+        """Solicitud valida ya que no valida campos opcionales."""
         data = self.valid_payload
-        data["ruc"] = ""
+        del data["cellphone"]
+        del data["ruc"]
+        del data["ciiu"]
+        del data["telephone"]
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_empty_ruc_not_on_peru(self):
-        """Solicitud valida al no enviar los campos opcionales."""
-        data = self.valid_payload
-        data["ruc"] = ""
-        data["residence_country"] = 3
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
-        response = self.client.post(
-            reverse('sellers'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_seller(self):
