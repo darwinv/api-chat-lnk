@@ -839,34 +839,35 @@ class GetDetailClient(APITestCase):
     def setUp(self):
         """Setup."""
         self.valid_payload = {
-            'username': 'darwin',
-            'password': 'intel12345',
-            'nick': 'dar',
-            'type_client': 'n',
-            'first_name': 'darwin',
-            'last_name': 'vasquez',
-            'civil_state': 's',
-            'birthdate': '2017-09-19',
-            "address": {
-                "street": "esteban camere",
-                "department": 1,
-                "province": 1,
-                "district": 1
-            },
-            'sex': 'm',
-            'document_type': '2',
-            'document_number': '144013012',
-            'email_exact': 'darwin.vasqz@gmail.com',
-            'telephone': '921471559',
-            'cellphone': '921471559',
-            'activity_description': 'Loremp iptsum',
-            'level_instruction': 1,
-            'institute': 'UNEFA',
-            'profession': "Administrador",
-            'ocupation': '0',
-            'about': 'iptsum aabout',
-            'ciiu': '1440',
-            'nationality': 1
+                'username': 'darwin',
+                'password': 'intel12345',
+                'nick': 'dar',
+                'type_client': 'n',
+                'first_name': 'darwin',
+                'last_name': 'vasquez',
+                'civil_state': 's',
+                'birthdate': '2017-09-19',
+                "address": {
+                    "street": "esteban camere",
+                    "department": 1,
+                    "province": 1,
+                    "district": 1
+                },
+                'sex': 'm',
+                'document_type': '2',
+                'document_number': '144013012',
+                'email_exact': 'darwin.vasqz@gmail.com',
+                'telephone': '921471559',
+                'cellphone': '921471559',
+                'activity_description': 'Loremp iptsum',
+                'level_instruction': 1,
+                'institute': 'UNEFA',
+                'profession': "Administrador",
+                'ocupation': '0',
+                'about': 'iptsum aabout',
+                'ciiu': '1440',
+                'nationality': 1,
+                'residence_country': 1
         }
 
     def test_get_client(self):
