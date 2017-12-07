@@ -527,7 +527,7 @@ class SellerSerializer(serializers.ModelSerializer):
     ruc = serializers.CharField(allow_blank=True, required=False)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
-    # residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
 
     class Meta:

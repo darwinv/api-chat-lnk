@@ -198,12 +198,12 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
             content_type='application/json'
         )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_password(self):
@@ -443,6 +443,24 @@ class CreateNaturalClient(APITestCase):
             content_type='application/json'
         )
         del data["document_type"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_type_client(self):
+        """Solicitud invalida por no enviar el tipo de documento."""
+        data = self.valid_payload
+        data["type_client"] = ""
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["type_client"]
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
