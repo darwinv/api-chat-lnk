@@ -227,12 +227,6 @@ class CreateNaturalClient(APITestCase):
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
-        data["address"]["district"] = ""
-        response2 = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
         # import pdb; pdb.set_trace()
         data["address"] = ""
         response1 = self.client.post(
@@ -246,7 +240,6 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -600,12 +593,6 @@ class CreateBussinessClient(APITestCase):
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
-        data["address"]["district"] = ""
-        response2 = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
         # import pdb; pdb.set_trace()
         data["address"] = ""
         response1 = self.client.post(
@@ -619,7 +606,7 @@ class CreateBussinessClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)
+        # import pdb; pdb.set_trace()
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
