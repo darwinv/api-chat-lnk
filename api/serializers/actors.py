@@ -113,7 +113,7 @@ class ClientSerializer(serializers.ModelSerializer):
     nick = serializers.CharField(required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
-    commercial_reason = serializers.CharField()
+    commercial_reason = serializers.CharField(required=False)
     birthdate = serializers.DateField(required=True)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     photo = serializers.CharField(read_only=True)
@@ -223,9 +223,12 @@ class ClientSerializer(serializers.ModelSerializer):
         if 'agent_lastname' not in data:
             raise serializers.ValidationError("agent_lastname {}".format(required))
         # requerido el ruc del cliente
-        if 'ruc' not in data:
+        if 'ruc' not in data or not data["ruc"]:
             raise serializers.ValidationError("ruc {}".format(required))
-
+        # requerido el ciiu del cliente juridico
+        if 'ciiu' not in data or not data["ciiu"]:
+            raise serializers.ValidationError("ciiu {}".format(required))
+        # validacion para residencia
         if data["residence_country"] != Countries.objects.get(name="Peru"):
             raise serializers.ValidationError(error1)
         return

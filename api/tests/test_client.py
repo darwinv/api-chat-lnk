@@ -703,7 +703,6 @@ class CreateBussinessClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         del data["ciiu"]
         response = self.client.post(
             reverse('clients'),
