@@ -262,6 +262,20 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_with_address_outside_peru(self):
+        """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
+        data = self.valid_payload
+        data["residence_country"] = 4
+        # del data["address"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
+        # self.assertEqual('', response.data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_no_profession(self):
         """Solicitud invalida por no enviar la profesion."""
         data = self.valid_payload

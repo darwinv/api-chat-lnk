@@ -179,18 +179,6 @@ class CreateSeller(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_empty_ruc(self):
-        """Solicitud valida al no enviar los campos opcionales."""
-        data = self.valid_payload
-        data["ruc"] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
-        response = self.client.post(
-            reverse('sellers'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_create_seller(self):
         """Solicitud valida."""
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
