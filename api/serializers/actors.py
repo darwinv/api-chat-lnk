@@ -258,6 +258,10 @@ class SpecialistSerializer(serializers.ModelSerializer):
     ruc = serializers.CharField(allow_blank=True, required=False)
     residence_country_name = serializers.SerializerMethodField()
 
+    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+
+
     class Meta:
         """Modelo del especialista y sus campos."""
 
@@ -360,7 +364,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(u"{} {} {} {}".format(main, spec, already, exists))
 
         # Si la residencia es peru, se crea el address
-        if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+        if "residence_country" in validated_data and validated_data["residence_country"] == Countries.objects.get(name="Peru"):
             if 'address' in validated_data:
                 data_address = validated_data.pop('address')
 
@@ -393,10 +397,12 @@ class SpecialistSerializer(serializers.ModelSerializer):
         """Redefinido metodo de validación."""
         required = _('required')
         # si la residencia es peru, es obligatoria la dirección
+
         if data["residence_country"] == Countries.objects.get(name="Peru"):
             if 'address' not in data:
                 raise serializers.ValidationError("address {}".format(required))
             if 'ruc' not in data:
+                import pdb; pdb.set_trace()
                 raise serializers.ValidationError("ruc {}".format(required))
             elif not data['ruc']:
                 raise serializers.ValidationError("ruc {}".format(required))

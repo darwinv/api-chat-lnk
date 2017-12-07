@@ -11,7 +11,6 @@ import pdb
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
 
-
 class CreateSpecialist(APITestCase):
     """Pruebas de Crear especialista."""
 
@@ -41,7 +40,9 @@ class CreateSpecialist(APITestCase):
             "ruc": "2009918312",
             "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": 1
+            "category": 1,
+            "nationality": 1,
+            "residence_country": 1
         }
 
     def test_no_username(self):
@@ -84,18 +85,6 @@ class CreateSpecialist(APITestCase):
         """Solicitud invalida por no enviar el email."""
         data = self.valid_payload
         del data['email_exact']
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
-        response = self.client.post(
-            reverse('specialists'),
-            data=json.dumps(self.valid_payload),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_no_password(self):
-        """Solicitud invalida por no enviar el email."""
-        data = self.valid_payload
-        del data['password']
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
@@ -226,8 +215,21 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+
+    def test_empty_nationality(self):
+        """Solicitud invalida al no enviar sitio de residencia."""
+        data = self.valid_payload
+        data["nationality"] = ""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_create_specialist(self):
-        """Solicitud invalida al enviar los nombres vacios."""
+        """Creacion de especialistas."""
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
@@ -236,6 +238,7 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response.data, 'ey')
+
 
 
 class DetailSpecialist(APITestCase):
@@ -276,7 +279,9 @@ class UpdateSpecialistCase(APITestCase):
             "ruc": "2009918312",
             "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": 1
+            "category": 1,
+            "nationality": 1,
+            "residence_country": 1
         }
 
         # self.assertEqual(self.resp.data["id"], 'ey')
@@ -288,7 +293,7 @@ class UpdateSpecialistCase(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        data={'nick': 'eecih'}
+        data={'nick': 'eecih',"residence_country":1}
         print(send)
         self.valid_payload["nick"] = "juiol"
 
@@ -301,13 +306,16 @@ class UpdateSpecialistCase(APITestCase):
 
 
     def test_can_change_address(self):
+        """Poder cambiar la direccion de residencia"""
         data_address = {
             "address": {
                 "street": "jupiter 208",
                 "department": 1,
                 "province": 1,
                 "district": 1
-            }
+            },
+            "residence_country":1,
+            "ruc":2132453421
           }
 
         # agregar el especialista por defecto
@@ -319,14 +327,16 @@ class UpdateSpecialistCase(APITestCase):
         )
 
         # crear direccion nueva
-        data={'address': data_address["address"]}
+        data={'address': data_address["address"],
+                'residence_country':data_address["residence_country"],
+                'ruc':data_address["ruc"]}
 
         # actualizar la direccion del especialista
         response = self.client.put(
             reverse('specialist-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
         )
-
+        #import pdb; pdb.set_trace()
         self.assertEqual(response.data['id'], send.data["id"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -447,7 +457,8 @@ class GetSpecialists(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
+        #import pdb; pdb.set_trace()
         url = "{}?main_specialist={}".format(reverse('specialists'),send.data["id"])
         response = client.get(url)
 
@@ -499,15 +510,4 @@ class DeleteSpecialist(APITestCase):
             None, format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-
-class CreateSpecialist(APITestCase):
-    fixtures = ['data', 'data2', 'data3']
-
-    def test_delete_specialist(self):
-        send = self.client.post(
-            reverse('upload_'),
-            data=json.dumps(self.valid_payload),
-            content_type='application/json'
-        )
 
