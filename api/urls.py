@@ -30,10 +30,9 @@ urlpatterns = [
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(), name='seller-detail'),
+    url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(), name='seller-account-status'),
     # Contacto no efectivo
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
-    url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(), name='seller-account-status'),
-
     # url para subir imagen
     url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(), name='upload-photo'),
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
