@@ -69,7 +69,7 @@ class AddressSerializer(serializers.ModelSerializer):
     department_name = serializers.SerializerMethodField()
     province_name = serializers.SerializerMethodField()
     district_name = serializers.SerializerMethodField()
-    
+
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -539,7 +539,7 @@ class SellerSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     nick = serializers.CharField(required=True)
-    ruc = serializers.CharField(allow_blank=True, required=False)
+    ruc = serializers.CharField(allow_blank=True, allow_null=True, required=False)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
@@ -591,7 +591,7 @@ class SellerSerializer(serializers.ModelSerializer):
 
         # si se encuentra y esta vacio, se debe borrar
         if 'ruc' in validated_data:
-            if not validated_data['ruc']:
+            if not validated_data['ruc'] or validated_data['ruc'] is None:
                 del validated_data['ruc']
         password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
         validated_data['key'] = password
