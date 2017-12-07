@@ -227,18 +227,12 @@ class ClientSerializer(serializers.ModelSerializer):
         else:
             if "foreign_address" not in data or not data["foreign_address"]:
                 raise serializers.ValidationError("foreign_address {}".format(required))
-
-        if 'address' not in data:
-            raise serializers.ValidationError("address {}".format(required))
         # requerido el nombre del representante
         if 'agent_firstname' not in data:
             raise serializers.ValidationError("agent_firstname {}".format(required))
         # requerido el apellido del representante
         if 'agent_lastname' not in data:
             raise serializers.ValidationError("agent_lastname {}".format(required))
-        # requerido el ruc del cliente
-        if 'ruc' not in data or not data["ruc"]:
-            raise serializers.ValidationError("ruc {}".format(required))
         # requerido el ciiu del cliente juridico
         if 'ciiu' not in data or not data["ciiu"]:
             raise serializers.ValidationError("ciiu {}".format(required))
