@@ -97,7 +97,7 @@ class User(AbstractUser):
     role = models.ForeignKey(Role, on_delete=models.PROTECT, default=1)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
     residence_country = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="residence")
-    # foreign_address = models.CharField(max_length=100, blank=True)
+    foreign_address = models.CharField(max_length=100, blank=True)
     key = models.CharField(max_length=90, blank=True, null=True)
 
 

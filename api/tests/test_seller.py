@@ -224,11 +224,13 @@ class CreateSeller(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_optional_address(self):
-        """Dirección es opcional si la residencia es en el extranjero."""
+    def test_foreign_address(self):
+        """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
         data = self.valid_payload
-        data["residence_country"] = 2
+        data["residence_country"] = 4
         del data["address"]
+        # se agrega la direccion para ese pais
+        data["foreign_address"] = "lorem pias ipmasjdn kjajsdk iasjd"
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('sellers'),
@@ -236,6 +238,28 @@ class CreateSeller(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_no_foreign_address(self):
+        """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
+        data = self.valid_payload
+        data["residence_country"] = 4
+        del data["address"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        # se agrega la direccion para ese pais
+        data["foreign_address"] = ""
+        response1 = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["foreign_address"]
+        response = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_optionals(self):
         """Solicitud valida al no enviar los campos opcionales."""

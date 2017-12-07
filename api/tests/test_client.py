@@ -250,11 +250,13 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_address_outside_peru(self):
+    def test_foreign_address(self):
         """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
         data = self.valid_payload
         data["residence_country"] = 4
         del data["address"]
+        # se agrega la direccion para ese pais
+        data["foreign_address"] = "lorem pias ipmasjdn kjajsdk iasjd"
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
@@ -262,19 +264,26 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_with_address_outside_peru(self):
+    def test_no_foreign_address(self):
         """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
         data = self.valid_payload
         data["residence_country"] = 4
-        # del data["address"]
+        del data["address"]
+        # se agrega la direccion para ese pais
+        data["foreign_address"] = ""
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["foreign_address"]
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
-        # self.assertEqual('', response.data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_profession(self):
         """Solicitud invalida por no enviar la profesion."""
@@ -861,6 +870,8 @@ class CreateBussinessClient(APITestCase):
         )
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
 
 
 class GetDetailClient(APITestCase):
