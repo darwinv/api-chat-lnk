@@ -1,7 +1,7 @@
 """Actores/Usuarios (Clientes, Especialistas, Vendedores)."""
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from api.models import User, Client, Countries
+from api.models import User, Client, Countries, SellerContactNoEfective
 from api.models import Address, Department
 from api.models import Province, District, Specialist
 from api.models import Seller, Quota, Purchase, Fee
@@ -91,7 +91,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 class ClientSerializer(serializers.ModelSerializer):
     """Serializer del cliente."""
-
+    username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])
     level_instruction_name = serializers.SerializerMethodField()
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     nationality_name = serializers.SerializerMethodField()
@@ -437,96 +437,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("foreign_address {}".format(required))
         return data
 
-# class AnswerAccountSerializer(serializers.ModelSerializer):
-#     date = serializers.SerializerMethodField()
-#     time = serializers.SerializerMethodField()
-#     time_elapsed = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = Answer
-#         fields = ('id','date','time','specialist','created_at','time_elapsed')
-
-#     def get_date(self, obj):
-#         return obj.created_at.date()
-#     def get_time(self, obj):
-#         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
-
-#     def get_time_elapsed(self, obj):
-#         # d.strftime("%Y-%m-%d %H:%M:%S")
-#         date_query = obj.query.created_at
-#         date_answer = obj.created_at
-#         diff = date_answer - date_query
-#         return str(diff)
-
-# class QueryAnswerSerializer(serializers.ModelSerializer):
-#     client = serializers.SerializerMethodField()
-#     date = serializers.SerializerMethodField()
-#     time = serializers.SerializerMethodField()
-#     status = serializers.ChoiceField(choices=Query.option_status)
-#     answer = serializers.SerializerMethodField()
-#     is_delayed = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = Query
-#         fields = ('title','client','date','time','status','created_at','answer','is_delayed')
-
-#     def get_date(self,obj):
-#         return obj.created_at.date()
-
-#     # Devuelvo la hora y minuto separados
-#     def get_time(self,obj):
-#         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
-
-#     def get_client(self,obj):
-#         return obj.client.nick
-#     # Devuelvo la respuesta relacionada a la consulta
-#     def get_answer(self,obj):
-#         answer_related = obj.answer_set.all()
-#         return AnswerAccountSerializer(answer_related,many=True).data
-
-#     # Verificar si el tiempo desde que se hizo la consulta fue superado al del
-#     # parametro y en base a eso determinar si esta con retraso o a tiempo
-#     def get_is_delayed(self,obj):
-#         date_query = obj.created_at
-#         time_delay = Parameter.objects.get(parameter="time_delay_response")
-#         try:
-#             answer =  obj.answer_set.get(pk=obj.id)
-#             date_elapsed = answer.created_at
-#         except:
-#             date_elapsed = timezone.now()
-#         diff = date_elapsed - date_query
-#         days = diff.days*24
-#         hours = diff.seconds // 3600
-#         if days >= int(time_delay.value) or hours >= int(time_delay.value):
-#             return True
-#         return False
-
-
-# # Serializer para consultar estado de .
-# class SpecialistAccountSerializer(serializers.ModelSerializer):
-#     category = serializers.SlugRelatedField(read_only=True,slug_field='name')
-#     query_answer = serializers.SerializerMethodField()
-#     photo_category = serializers.SerializerMethodField()
-
-#     class Meta:
-#         model = Specialist
-#         fields = ('id','first_name','last_name','code','nick','email_exact',
-#                   'photo','category','photo_category','payment_per_answer','query_answer')
-
-#         # No son campos editables ya que son de consulta solamente.
-#         read_only_fields = ('id','first_name','last_name','code','nick',
-#                             'email_exact','photo','category','photo_category',
-#                             'query_answer')
-
-#     # Traer por consulta relacionada
-#     def get_query_answer(self, obj):
-#         answer = obj.query_set.all()
-#         return QueryAnswerSerializer(answer,many=True).data
-
-#     def get_photo_category(self,obj):
-#         img = obj.category.image
-#         return img
-
 # Serializer para traer el listado de vendedores
 class SellerSerializer(serializers.ModelSerializer):
     """Serializer de Vendedor."""
@@ -710,6 +620,80 @@ class SellerAccountSerializer(serializers.ModelSerializer):
         # Retorna cantidad de productos (de momento se compra ssiemrpe un solo producto)
         return 1
 
+
+# Pensar en hacer un serializer que liste tanto natural como Juridico
+# pero uno para cada registro
+
+class SellerContactNaturalSerializer(serializers.ModelSerializer):
+    """Serializer de Contacto No Efectivo."""
+
+    first_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    last_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    type_contact = serializers.ChoiceField(choices=c.client_type_client)
+    type_contact_name = serializers.SerializerMethodField()
+    document_type = serializers.ChoiceField(choices=c.user_document_type)
+    document_type_name = serializers.SerializerMethodField()
+    email = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContactNoEfective.objects.all())])
+    civil_state = serializers.ChoiceField(choices=c.client_civil_state, allow_blank=True)
+    civil_state_name = serializers.SerializerMethodField()
+    sex = serializers.ChoiceField(choices=c.client_sex, allow_blank=True)
+    sex_name = serializers.SerializerMethodField()
+    ocupation = serializers.ChoiceField(choices=c.client_ocupation, allow_blank=True)
+    ocupation_name = serializers.SerializerMethodField()
+    address = AddressSerializer()
+    birthdate = serializers.DateField(required=True)
+    photo = serializers.CharField(read_only=True)
+    objection_name = serializers.SerializerMethodField()
+    # level_instruction = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    level_instruction_name = serializers.SerializerMethodField()
+    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    nationality_name = serializers.SerializerMethodField()
+
+    class Meta:
+        """Meta de Contacto No Efectivo."""
+
+        model = SellerContactNoEfective
+        fields = ('id', 'first_name', 'last_name', 'type_contact', 'document_type',
+                  'document_number', 'email', 'civil_state', 'civil_state_name', 'birthdate',
+                  'institute', 'sex', 'sex_name', 'document_type_name', 'ocupation_name',
+                  'activity_description', 'photo', 'about', 'cellphone', 'telephone',
+                  'ocupation', 'profession', 'address', 'level_instruction', 'latitude',
+                  'longitude', 'seller', 'objection', 'nationality', 'photo',
+                  'nationality_name', 'level_instruction_name'
+                  )
+
+    def get_level_instruction_name(self, obj):
+        """Devuelve nivel de instrucción."""
+        return _(str(obj.level_instruction))
+
+    def get_nationality_name(self, obj):
+        """Devuelve nacionalidad del cliente."""
+        return _(str(obj.nationality))
+
+    def get_objection_name(self, obj):
+        """Devuelve objecion del contacto."""
+        return _(str(obj.objection))
+
+    # se devuelve el valor leible y traducido
+    def get_type_contact_name(self, obj):
+        """Devuelve tipo de cliente (Natural/Juridico)."""
+        return _(obj.get_type_client_display())
+
+    def get_sex_name(self, obj):
+        """Devuelve sexo (Masculino/Femenino)."""
+        return _(obj.get_sex_display())
+
+    def get_document_type_name(self, obj):
+        """Devuelve tipo de documento de identidad."""
+        return _(obj.get_document_type_display())
+
+    def get_civil_state_name(self, obj):
+        """Devuelve estado civil."""
+        return _(obj.get_civil_state_display())
+
+    def get_ocupation_name(self, obj):
+        """Devuelve Ocupación."""
+        return _(obj.get_ocupation_display())
 
 class MediaSerializer(serializers.Serializer):
     photo = serializers.ImageField(max_length=None, required=False, allow_empty_file=False)

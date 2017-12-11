@@ -3,29 +3,26 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 import json
-from ..models import Client as Cliente
+# from ..models import Client as Cliente
 from rest_framework import status
-from api.serializers.actors import ClientSerializer
+# from api.serializers.actors import ClientSerializer
 
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
 
 
 class CreateNaturalContact(APITestCase):
-    """Prueba de Registro de Cliente Natural."""
+    """Prueba de Registro de Contacto Natural."""
 
-    fixtures = ['data', 'data2']
+    fixtures = ['data', 'data2', 'test_contact']
 
     # Prueba para verificar la insercion de cliente natural
     def setUp(self):
         """Setup."""
         self.valid_payload = {
-            'username': 'darwin',
-            'password': 'intel12345',
-            'nick': 'dar',
-            'type_client': 'n',
             'first_name': 'darwin',
             'last_name': 'vasquez',
+            'type_contact': 'n',
             'civil_state': 's',
             'birthdate': '2017-09-19',
             "address": {
@@ -37,7 +34,7 @@ class CreateNaturalContact(APITestCase):
             'sex': 'm',
             'document_type': '2',
             'document_number': '144013012',
-            'email_exact': 'darwin.vasqz@gmail.com',
+            'email': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
             'cellphone': '921471559',
             'activity_description': 'Loremp iptsum',
@@ -45,12 +42,13 @@ class CreateNaturalContact(APITestCase):
             'institute': 'UNEFA',
             'profession': "Administrador",
             'ocupation': '0',
+            "latitude": "-77.0282400",
+            "longitude": "-12.0431800",
             'about': 'iptsum aabout',
-            'ciiu': '1440',
-            'nationality': 1,
-            'residence_country': 1
+            'objection': 2,
+            'seller': 1,
+            'nationality': 1
         }
-
 
     # responder error al enviar email invalido
     def test_invalid_email(self):
@@ -58,7 +56,7 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data['email_exact'] = 'asdasd'
         response = self.client.post(
-            reverse('contact'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -69,13 +67,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["email_exact"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["email_exact"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -87,13 +85,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["first_name"] = ''
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["first_name"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -105,13 +103,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["last_name"] = ''
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["last_name"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -123,7 +121,7 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         del data["username"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -134,13 +132,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["sex"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["sex"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -152,13 +150,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["document_number"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["document_number"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -170,13 +168,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["civil_state"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["civil_state"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -188,12 +186,12 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data['nick'] = ''
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -205,13 +203,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data['password'] = ''
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["password"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -223,20 +221,20 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["address"]["district"] = ""
         response2 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         # import pdb; pdb.set_trace()
         data["address"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["address"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -252,7 +250,7 @@ class CreateNaturalContact(APITestCase):
         # se agrega la direccion para ese pais
         data["foreign_address"] = "lorem pias ipmasjdn kjajsdk iasjd"
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -266,13 +264,13 @@ class CreateNaturalContact(APITestCase):
         # se agrega la direccion para ese pais
         data["foreign_address"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["foreign_address"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -284,7 +282,7 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         del data["profession"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -295,13 +293,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["ocupation"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["ocupation"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -313,7 +311,7 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data['nationality'] = 500
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -325,7 +323,7 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data['residence_country'] = 500
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -336,13 +334,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data['residence_country'] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["residence_country"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -354,7 +352,7 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data['type_client'] = 'x'
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -365,7 +363,7 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data['civil_state'] = 't'
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -376,7 +374,7 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data['birthdate'] = '2017/09/19'
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -387,13 +385,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["birthdate"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["birthdate"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -405,13 +403,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["nationality"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["nationality"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -423,13 +421,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["level_instruction"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["level_instruction"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -441,13 +439,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["document_type"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["document_type"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -459,13 +457,13 @@ class CreateNaturalContact(APITestCase):
         data = self.valid_payload
         data["type_client"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["type_client"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -481,7 +479,7 @@ class CreateNaturalContact(APITestCase):
         del data["about"]
         del data["ciiu"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -497,7 +495,7 @@ class CreateNaturalContact(APITestCase):
         data["about"] = ""
         data["ciiu"] = ""
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -507,7 +505,7 @@ class CreateNaturalContact(APITestCase):
     def test_create_natural_client(self):
         """Solicitud valida."""
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
@@ -558,14 +556,14 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['business_name'] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data['business_name']
         # del data['business_name']
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -577,14 +575,14 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['nick'] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         del data["nick"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -596,20 +594,20 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data["address"]["district"] = ""
         response2 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         # import pdb; pdb.set_trace()
         data["address"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["address"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -622,13 +620,13 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data["document_number"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["document_number"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -640,13 +638,13 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data["document_type"] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["document_type"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -658,14 +656,14 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['email_exact'] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         del data["email_exact"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -677,14 +675,14 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['commercial_reason'] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         del data["commercial_reason"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -696,14 +694,14 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['ruc'] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         del data["ruc"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -715,14 +713,14 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['economic_sector'] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         del data["economic_sector"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -734,13 +732,13 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['ciiu'] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         del data["ciiu"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -752,14 +750,14 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['agent_lastname'] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         del data["agent_lastname"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -771,14 +769,14 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['agent_firstname'] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         del data["agent_firstname"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -790,14 +788,14 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['position'] = ""
         response1 = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         del data["position"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -812,7 +810,7 @@ class CreateBussinessClient(APITestCase):
         del data["activity_description"]
         del data["about"]
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -826,7 +824,7 @@ class CreateBussinessClient(APITestCase):
         data["activity_description"] = ""
         data["about"] = ""
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -837,7 +835,7 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['economic_sector'] = "nada"
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -848,7 +846,7 @@ class CreateBussinessClient(APITestCase):
         data = self.valid_payload
         data['residence_country'] = 4
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
@@ -858,7 +856,7 @@ class CreateBussinessClient(APITestCase):
     def test_create_bussines_client(self):
         """Crea cliente juridico de manera exitosa."""
         response = self.client.post(
-            reverse('clients'),
+            reverse('contacts'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )

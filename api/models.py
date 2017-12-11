@@ -125,30 +125,6 @@ class Objection(models.Model):
         return self.name
 
 
-class SellerContactNoEfective(models.Model):
-    """Contacto No Efectivo."""
-
-    firstname = models.CharField(max_length=45, null=True)
-    lastname = models.CharField(max_length=55, null=True)
-    type_contact = models.CharField(max_length=1, choices=Ch.client_type_client)  # si es efectivo o no efectivo
-    document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
-    document_number = models.CharField(max_length=45)
-    email = models.CharField(max_length=150)
-    civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
-    birthdate = models.DateField()
-    contact_bussinessname = models.CharField(max_length=45, null=True)
-    agent_firstname = models.CharField(max_length=45, null=True)
-    agent_lastname = models.CharField(max_length=45, null=True)
-    latitude = models.CharField(max_length=45)
-    longitude = models.CharField(max_length=45)
-    created_at = models.DateTimeField(auto_now_add=True)
-    seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
-    objection = models.ForeignKey(Objection, on_delete=models.PROTECT)
-
-    def __str__(self):
-        return self.contact_firstname
-
-
 class EconomicSector(models.Model):
     name = models.CharField(max_length=45)
 
@@ -162,6 +138,46 @@ class LevelInstruction(models.Model):
     def __str__(self):
         return self.name
 
+class SellerContactNoEfective(models.Model):
+    """Contacto No Efectivo."""
+
+    first_name = models.CharField(max_length=45, null=True)
+    last_name = models.CharField(max_length=55, null=True)
+    type_contact = models.CharField(max_length=1, choices=Ch.client_type_client)  # si es efectivo o no efectivo
+    document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
+    document_number = models.CharField(max_length=45)
+    email = models.CharField(max_length=150, null=True)
+    civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
+    birthdate = models.DateField(null=True)
+    institute = models.CharField(max_length=100, null=True, blank=True)
+    ciiu = models.CharField(max_length=4, blank=True)
+    activity_description = models.CharField(max_length=255, null=True, blank=True)
+    photo = models.CharField(max_length=250, null=True)
+    about = models.CharField(max_length=255, null=True, blank=True)
+    cellphone = models.CharField(max_length=14, blank=True, null=True)
+    telephone = models.CharField(max_length=14, blank=True, null=True)
+    ocupation = models.CharField(max_length=1, choices=Ch.client_ocupation, blank=True)
+    profession = models.CharField(max_length=45, null=True)
+    bussiness_name = models.CharField(max_length=45, null=True)
+    commercial_reason = models.CharField(max_length=45, null=True)
+    agent_firstname = models.CharField(max_length=45, null=True)
+    agent_lastname = models.CharField(max_length=45, null=True)
+    sex = models.CharField(max_length=1, choices=Ch.client_sex, blank=True)
+    latitude = models.CharField(max_length=45, blank=True)
+    longitude = models.CharField(max_length=45, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    position = models.CharField(max_length=45, null=True)
+    ruc = models.CharField(max_length=40, unique=True, null=True)
+    seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
+    economic_sector = models.ForeignKey(EconomicSector, on_delete=models.PROTECT, null=True)
+    objection = models.ForeignKey(Objection, on_delete=models.PROTECT)
+    address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
+    level_instruction = models.ForeignKey(LevelInstruction, on_delete=models.PROTECT, null=True)
+    nationality = models.ForeignKey(Countries, on_delete=models.PROTECT, default=1)
+
+    def __str__(self):
+        """Nombre del Contacto."""
+        return self.first_name
 
 class Client(User):
     """Modelo de Cliente (herede de usuario)."""
