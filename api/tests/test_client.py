@@ -836,17 +836,30 @@ class CreateBussinessClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_invalid_residence_country(self):
-        """Solicitud invalida por enviar pais de residencia diferente a peru."""
+    def test_no_ruc_on_foreign_residence(self):
+        """Solicitud invalida por no enviar el ruc con pais extranjero."""
         data = self.valid_payload
-        data['residence_country'] = 1
-        response = self.client.post(
+        data['ruc'] = ""
+        data['residence_country'] = 2
+        data['foreign_address'] = "lorem iptsum"
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_foreign_address(self):
+        """Solicitud invalida por no enviar direccion foranea cuando reside en el extranjero."""
+        data = self.valid_payload
+        data['residence_country'] = 2
+        response1 = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
             content_type='application/json'
         )
         # import pdb; pdb.set_trace()
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_bussines_client(self):
         """Crea cliente juridico de manera exitosa."""

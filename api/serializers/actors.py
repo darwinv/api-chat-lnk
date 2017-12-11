@@ -195,7 +195,7 @@ class ClientSerializer(serializers.ModelSerializer):
             if "address" not in data or not data["address"]:
                 raise serializers.ValidationError("address {}".format(required))
         else:
-            if "foreign_address" not in data or not data["foreign_address"]:
+            if "foreign_address" not in data or not data["foreign_address"] or data["foreign_address"] is None:
                 raise serializers.ValidationError("foreign_address {}".format(required))
         return
 
@@ -203,22 +203,17 @@ class ClientSerializer(serializers.ModelSerializer):
         """Validacion para cuando es juridico."""
         required = _("required")
         inf_fiscal = _("registro de información tributaria ")
-        # error1 = _("can not be a legal person and reside in a foreign country")
         # requerido el nombre de la empresa
-        if 'business_name' not in data:
+        if 'business_name' not in data or data["business_name"] is None:
             raise serializers.ValidationError("business_name {}".format(required))
         # requerido el nombre de la empresa
         if 'commercial_reason' not in data:
             raise serializers.ValidationError("commercial_reason {}".format(required))
         # requerido el sector economico
-        if 'economic_sector' not in data:
+        if 'economic_sector' not in data or data['economic_sector'] is None:
             raise serializers.ValidationError("economic_sector {}".format(required))
-        # probar si esta vacio
-        if data['economic_sector'] is None:
-            empty = _("must no be empty")
-            raise serializers.ValidationError("economic_sector{}".format(empty))
         # requerido la posicion en la empresa
-        if 'position' not in data:
+        if 'position' not in data or data['position'] is None:
             raise serializers.ValidationError("position {}".format(required))
         # si reside en peru la direccion es obligatoria.
         if data["residence_country"] == Countries.objects.get(name="Peru"):
@@ -229,10 +224,10 @@ class ClientSerializer(serializers.ModelSerializer):
             if "foreign_address" not in data or not data["foreign_address"]:
                 raise serializers.ValidationError("foreign_address {}".format(required))
         # requerido el nombre del representante
-        if 'agent_firstname' not in data:
+        if 'agent_firstname' not in data or data["agent_firstname"] is None:
             raise serializers.ValidationError("agent_firstname {}".format(required))
         # requerido el apellido del representante
-        if 'agent_lastname' not in data:
+        if 'agent_lastname' not in data or data["agent_lastname"] is None:
             raise serializers.ValidationError("agent_lastname {}".format(required))
         # requerido el ciiu del cliente juridico
         if 'ciiu' not in data or not data["ciiu"]:

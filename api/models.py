@@ -97,7 +97,7 @@ class User(AbstractUser):
     role = models.ForeignKey(Role, on_delete=models.PROTECT, default=1)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
     residence_country = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="residence")
-    foreign_address = models.CharField(max_length=100, blank=True)
+    foreign_address = models.CharField(max_length=100, blank=True, null=True)
     key = models.CharField(max_length=90, blank=True, null=True)
 
 
@@ -169,10 +169,10 @@ class Client(User):
     civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
     ciiu = models.CharField(max_length=4, blank=True)
-    activity_description = models.CharField(max_length=255,  blank=True)
+    activity_description = models.CharField(max_length=255, null=True, blank=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
     ocupation = models.CharField(max_length=1, choices=Ch.client_ocupation)
-    about = models.CharField(max_length=255,  blank=True)
+    about = models.CharField(max_length=255, null=True, blank=True)
     business_name = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
     agent_lastname = models.CharField(max_length=45, null=True)
