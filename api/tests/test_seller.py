@@ -276,13 +276,29 @@ class CreateSeller(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_null_optionals(self):
+        """Solicitud valida ya que no valida campos opcionales."""
+        data = self.valid_payload
+        data["cellphone"] = None
+        data["ruc"] = None
+        data["ciiu"] = None
+        data["telephone"] = None
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_empty_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""
         data = self.valid_payload
-        del data["cellphone"]
-        del data["ruc"]
-        del data["ciiu"]
-        del data["telephone"]
+        data["cellphone"] = ""
+        data["ruc"] = ""
+        data["ciiu"] = ""
+        data["telephone"] = ""
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('sellers'),

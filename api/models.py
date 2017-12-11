@@ -41,10 +41,10 @@ class District(models.Model):
 
 
 class Address(models.Model):
-    street = models.CharField(max_length=155)
-    department = models.ForeignKey(Department, on_delete=models.PROTECT)
-    province = models.ForeignKey(Province, on_delete=models.PROTECT)
-    district = models.ForeignKey(District, on_delete=models.PROTECT)
+    street = models.CharField(max_length=155, blank=True)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, null=True)
+    province = models.ForeignKey(Province, on_delete=models.PROTECT, null=True)
+    district = models.ForeignKey(District, on_delete=models.PROTECT, null=True)
 
 
 class Zone(models.Model):
@@ -83,8 +83,8 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=30, blank=True)
     nick = models.CharField(max_length=45, blank=True)
     email_exact = models.CharField(max_length=150, unique=True)
-    telephone = models.CharField(max_length=14, blank=True)
-    cellphone = models.CharField(max_length=14, blank=True)
+    telephone = models.CharField(max_length=14, blank=True, null=True)
+    cellphone = models.CharField(max_length=14, blank=True, null=True)
     photo = models.CharField(max_length=250, null=True)
     document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
     document_number = models.CharField(max_length=45, unique=True)
@@ -97,7 +97,7 @@ class User(AbstractUser):
     role = models.ForeignKey(Role, on_delete=models.PROTECT, default=1)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
     residence_country = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="residence")
-    foreign_address = models.CharField(max_length=100, blank=True)
+    foreign_address = models.CharField(max_length=100, blank=True, null=True)
     key = models.CharField(max_length=90, blank=True, null=True)
 
 
@@ -172,10 +172,10 @@ class Client(User):
     civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
     ciiu = models.CharField(max_length=4, blank=True)
-    activity_description = models.CharField(max_length=255,  blank=True)
+    activity_description = models.CharField(max_length=255, null=True, blank=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
     ocupation = models.CharField(max_length=1, choices=Ch.client_ocupation)
-    about = models.CharField(max_length=255,  blank=True)
+    about = models.CharField(max_length=255, null=True, blank=True)
     business_name = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
     agent_lastname = models.CharField(max_length=45, null=True)

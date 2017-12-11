@@ -70,7 +70,6 @@ class AddressSerializer(serializers.ModelSerializer):
     province_name = serializers.SerializerMethodField()
     district_name = serializers.SerializerMethodField()
 
-
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -196,47 +195,50 @@ class ClientSerializer(serializers.ModelSerializer):
             if "address" not in data or not data["address"]:
                 raise serializers.ValidationError("address {}".format(required))
         else:
-            if "foreign_address" not in data or not data["foreign_address"]:
+            if "foreign_address" not in data or not data["foreign_address"] or data["foreign_address"] is None:
                 raise serializers.ValidationError("foreign_address {}".format(required))
         return
 
     def validate_bussines_client(self, data):
         """Validacion para cuando es juridico."""
         required = _("required")
-        error1 = _("can not be a legal person and reside in a foreign country")
+        inf_fiscal = _("registro de información tributaria ")
         # requerido el nombre de la empresa
-        if 'business_name' not in data:
+        if 'business_name' not in data or data["business_name"] is None:
             raise serializers.ValidationError("business_name {}".format(required))
         # requerido el nombre de la empresa
         if 'commercial_reason' not in data:
             raise serializers.ValidationError("commercial_reason {}".format(required))
         # requerido el sector economico
-        if 'economic_sector' not in data:
+        if 'economic_sector' not in data or data['economic_sector'] is None:
             raise serializers.ValidationError("economic_sector {}".format(required))
-        # probar si esta vacio
-        if data['economic_sector'] is None:
-            empty = _("must no be empty")
-            raise serializers.ValidationError("economic_sector{}".format(empty))
         # requerido la posicion en la empresa
-        if 'position' not in data:
+        if 'position' not in data or data['position'] is None:
             raise serializers.ValidationError("position {}".format(required))
-        if 'address' not in data:
-            raise serializers.ValidationError("address {}".format(required))
+        # si reside en peru la direccion es obligatoria.
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if "address" not in data or not data["address"]:
+                raise serializers.ValidationError("address {}".format(required))
+        # sino, la direccion de extranjero es obligatoria
+        else:
+            if "foreign_address" not in data or not data["foreign_address"]:
+                raise serializers.ValidationError("foreign_address {}".format(required))
         # requerido el nombre del representante
-        if 'agent_firstname' not in data:
+        if 'agent_firstname' not in data or data["agent_firstname"] is None:
             raise serializers.ValidationError("agent_firstname {}".format(required))
         # requerido el apellido del representante
-        if 'agent_lastname' not in data:
+        if 'agent_lastname' not in data or data["agent_lastname"] is None:
             raise serializers.ValidationError("agent_lastname {}".format(required))
-        # requerido el ruc del cliente
-        if 'ruc' not in data or not data["ruc"]:
-            raise serializers.ValidationError("ruc {}".format(required))
         # requerido el ciiu del cliente juridico
         if 'ciiu' not in data or not data["ciiu"]:
             raise serializers.ValidationError("ciiu {}".format(required))
         # validacion para residencia
-        if data["residence_country"] != Countries.objects.get(name="Peru"):
-            raise serializers.ValidationError(error1)
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if 'ruc' not in data or not data["ruc"]:
+                raise serializers.ValidationError("ruc {}".format(required))
+        else:
+            if 'ruc' not in data or not data["ruc"]:
+                raise serializers.ValidationError("{} {}".format(inf_fiscal, required))
         return
 
     def validate(self, data):
@@ -282,6 +284,10 @@ class SpecialistSerializer(serializers.ModelSerializer):
     ruc = serializers.CharField(allow_blank=True, required=False)
     residence_country_name = serializers.SerializerMethodField()
 
+    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+
+
     class Meta:
         """Modelo del especialista y sus campos."""
 
@@ -290,7 +296,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
             'id', 'username', 'nick', 'first_name', 'last_name', 'type_specialist', 'type_specialist_name',
             'photo', 'document_type', 'document_type_name', 'document_number', 'address', 'ruc', 'email_exact', 'code',
             'telephone', 'cellphone', 'business_name', 'payment_per_answer', 'cv', 'star_rating', 'category',
-            'category_name', 'nationality', 'nationality_name', 'residence_country', 'residence_country_name')
+            'category_name', 'nationality', 'nationality_name', 'residence_country', 'residence_country_name',
+            'foreign_address')
 
     def get_nationality_name(self, obj):
         """Devuelvo la nacionalidad del especialista."""
@@ -384,7 +391,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(u"{} {} {} {}".format(main, spec, already, exists))
 
         # Si la residencia es peru, se crea el address
-        if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+        if "residence_country" in validated_data and validated_data["residence_country"] == Countries.objects.get(name="Peru"):
             if 'address' in validated_data:
                 data_address = validated_data.pop('address')
 
@@ -417,13 +424,17 @@ class SpecialistSerializer(serializers.ModelSerializer):
         """Redefinido metodo de validación."""
         required = _('required')
         # si la residencia es peru, es obligatoria la dirección
+
         if data["residence_country"] == Countries.objects.get(name="Peru"):
             if 'address' not in data:
                 raise serializers.ValidationError("address {}".format(required))
             if 'ruc' not in data:
+                import pdb; pdb.set_trace()
                 raise serializers.ValidationError("ruc {}".format(required))
             elif not data['ruc']:
                 raise serializers.ValidationError("ruc {}".format(required))
+        elif "foreign_address" not in data or not data["foreign_address"]:
+                raise serializers.ValidationError("foreign_address {}".format(required))
         return data
 
 # class AnswerAccountSerializer(serializers.ModelSerializer):
@@ -530,7 +541,7 @@ class SellerSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     nick = serializers.CharField(required=True)
-    ruc = serializers.CharField(allow_blank=True, required=False)
+    ruc = serializers.CharField(allow_blank=True, allow_null=True, required=False)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
@@ -582,7 +593,7 @@ class SellerSerializer(serializers.ModelSerializer):
 
         # si se encuentra y esta vacio, se debe borrar
         if 'ruc' in validated_data:
-            if not validated_data['ruc']:
+            if not validated_data['ruc'] or validated_data['ruc'] is None:
                 del validated_data['ruc']
         password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
         validated_data['key'] = password
