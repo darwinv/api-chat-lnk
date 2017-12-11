@@ -380,7 +380,7 @@ class SellerAccountView(ListCreateAPIView):
 # Subir la foto de un usuario
 class PhotoUploadView(APIView):
     authentication_classes = (OAuth2Authentication,)
-     permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny]
     queryset = User.objects.all()
     parser_classes = (JSONParser, MultiPartParser)
 
