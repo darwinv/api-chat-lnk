@@ -167,7 +167,7 @@ class CreateNaturalContact(APITestCase):
     def test_invalid_email(self):
         """Solicitud invalida por email incorrecto."""
         data = self.valid_payload
-        data['email_exact'] = 'asdasd'
+        data['email'] = 'asdasd'
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -178,13 +178,31 @@ class CreateNaturalContact(APITestCase):
     def test_no_email(self):
         """Solicitud invalida por no enviarl el email."""
         data = self.valid_payload
-        data["email_exact"] = ""
+        data["email"] = ""
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        del data["email_exact"]
+        del data["email"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_civil_state(self):
+        """Solicitud invalida por no enviar el estado civil."""
+        data = self.valid_payload
+        data["civil_state"] = None
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["civil_state"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -211,16 +229,27 @@ class CreateNaturalContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_civil_state(self):
-        """Solicitud invalida por no enviar el estado civil."""
+    def test_invalid_birthdate(self):
+        """Solicitud invalida por enviar incorrectamente la fecha."""
         data = self.valid_payload
-        data["civil_state"] = ""
+        data['birthdate'] = '2017/09/19'
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_birthdate(self):
+        """Solicitud invalida por no enviar fecha de nacimiento."""
+        data = self.valid_payload
+        data["birthdate"] = ""
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        del data["civil_state"]
+        del data["birthdate"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -324,34 +353,7 @@ class CreateNaturalContact(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_invalid_birthdate(self):
-        """Solicitud invalida por enviar incorrectamente la fecha."""
-        data = self.valid_payload
-        data['birthdate'] = '2017/09/19'
-        response = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_birthdate(self):
-        """Solicitud invalida por no enviar fecha de nacimiento."""
-        data = self.valid_payload
-        data["birthdate"] = ""
-        response1 = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        del data["birthdate"]
-        response = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_nationality(self):
         """Solicitud invalida por no enviar nacionalidad."""
@@ -389,7 +391,6 @@ class CreateNaturalContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-
     def test_no_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""
         data = self.valid_payload
@@ -397,7 +398,7 @@ class CreateNaturalContact(APITestCase):
         del data["cellphone"]
         del data["activity_description"]
         del data["about"]
-        del data["ciiu"]
+        del data["institute"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -413,7 +414,7 @@ class CreateNaturalContact(APITestCase):
         data["cellphone"] = ""
         data["activity_description"] = ""
         data["about"] = ""
-        data["ciiu"] = ""
+        data["institute"] = ""
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),

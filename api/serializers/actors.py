@@ -91,7 +91,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 class ClientSerializer(serializers.ModelSerializer):
     """Serializer del cliente."""
-    
+
     username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])
     level_instruction_name = serializers.SerializerMethodField()
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
@@ -282,9 +282,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
     photo = serializers.CharField(read_only=True)
-    ruc = serializers.CharField(allow_blank=True, required=False)
+    ruc = serializers.CharField(allow_blank=True, required=False, validators=[UniqueValidator(queryset=User.objects.all())])
     residence_country_name = serializers.SerializerMethodField()
-
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
 
@@ -636,7 +635,7 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
     document_type = serializers.ChoiceField(choices=c.user_document_type)
     document_type_name = serializers.SerializerMethodField()
     email = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContactNoEfective.objects.all())])
-    civil_state = serializers.ChoiceField(choices=c.client_civil_state, allow_blank=True)
+    civil_state = serializers.ChoiceField(choices=c.client_civil_state)
     civil_state_name = serializers.SerializerMethodField()
     sex = serializers.ChoiceField(choices=c.client_sex, allow_blank=True)
     sex_name = serializers.SerializerMethodField()
