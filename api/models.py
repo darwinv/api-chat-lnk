@@ -41,7 +41,9 @@ class District(models.Model):
 
 
 class Address(models.Model):
-    street = models.CharField(max_length=155, blank=True)
+    """Direccion."""
+
+    street = models.CharField(max_length=100, blank=True)
     department = models.ForeignKey(Department, on_delete=models.PROTECT, null=True)
     province = models.ForeignKey(Province, on_delete=models.PROTECT, null=True)
     district = models.ForeignKey(District, on_delete=models.PROTECT, null=True)
@@ -90,16 +92,15 @@ class User(AbstractUser):
     document_number = models.CharField(max_length=45, unique=True)
     img_document_number = models.CharField(max_length=250, null=True)
     ruc = models.CharField(max_length=40, unique=True, null=True, blank=True)
-    code = models.CharField(max_length=45, unique=True)
+    code = models.CharField(max_length=45)
     anonymous = models.BooleanField(default=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     nationality = models.ForeignKey(Countries, on_delete=models.PROTECT, default=1)
     role = models.ForeignKey(Role, on_delete=models.PROTECT, default=1)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
     residence_country = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="residence")
-    foreign_address = models.CharField(max_length=100, blank=True, null=True)
+    foreign_address = models.CharField(max_length=200, blank=True, null=True)
     key = models.CharField(max_length=90, blank=True, null=True)
-
 
 # Aplicamos herencia multi tabla para que
 # Seller herede de User y se vincule 1 a 1

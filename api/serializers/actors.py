@@ -91,6 +91,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 class ClientSerializer(serializers.ModelSerializer):
     """Serializer del cliente."""
+    
     username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])
     level_instruction_name = serializers.SerializerMethodField()
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
