@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import Role, User, Seller, Client, Category, Specialist, Query,Quota,Seller,Zone
 from .models import Department, Province, District, Message, MessageFile, Plan, Product
-from .models import Purchase, PaymentType, Fee
+from .models import Purchase, PaymentType, Fee, Objection
 # Register your models here.
 
 
@@ -55,19 +55,20 @@ class PurchaseAdmin(admin.ModelAdmin):
         'is_promotional','last_number_fee_paid','status','expiration_date','promotion','code','product','query_amount')
 
 
-admin.site.register(Client,ClientNaturalAdmin)
+admin.site.register(Client, ClientNaturalAdmin)
 # admin.site.register(Client,ClientBussinessAdmin)
 admin.site.register(Category)
-admin.site.register(Specialist,SpecialistAdmin)
-admin.site.register(Query,QueryAdmin)
-admin.site.register(Message,MessageAdmin)
+admin.site.register(Specialist, SpecialistAdmin)
+admin.site.register(Query, QueryAdmin)
+admin.site.register(Message, MessageAdmin)
 admin.site.register(Department)
 admin.site.register(Province)
 admin.site.register(District)
 admin.site.register(Quota)
 admin.site.register(Zone)
-admin.site.register(Seller,SellerAdmin)
-admin.site.register(Plan,PlanAdmin)
+admin.site.register(Objection)
+admin.site.register(Seller, SellerAdmin)
+admin.site.register(Plan, PlanAdmin)
 admin.site.register(Product)
 admin.site.register(Purchase)
 admin.site.register(PaymentType)

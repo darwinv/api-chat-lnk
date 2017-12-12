@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from api.models import User, Client, Countries, SellerContactNoEfective
-from api.models import Address, Department
+from api.models import Address, Department, Objection
 from api.models import Province, District, Specialist
 from api.models import Seller, Quota, Purchase, Fee
 from django.utils.translation import ugettext_lazy as _
@@ -437,6 +437,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("foreign_address {}".format(required))
         return data
 
+
 # Serializer para traer el listado de vendedores
 class SellerSerializer(serializers.ModelSerializer):
     """Serializer de Vendedor."""
@@ -653,13 +654,14 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
         """Meta de Contacto No Efectivo."""
 
         model = SellerContactNoEfective
-        fields = ('id', 'first_name', 'last_name', 'type_contact', 'document_type',
-                  'document_number', 'email', 'civil_state', 'civil_state_name', 'birthdate',
-                  'institute', 'sex', 'sex_name', 'document_type_name', 'ocupation_name',
-                  'activity_description', 'photo', 'about', 'cellphone', 'telephone',
-                  'ocupation', 'profession', 'address', 'level_instruction', 'latitude',
-                  'longitude', 'seller', 'objection', 'nationality', 'photo',
-                  'nationality_name', 'level_instruction_name'
+        fields = ('id', 'first_name', 'last_name', 'type_contact', 'type_contact_name',
+                  'document_type', 'document_type_name', 'document_number', 'email',
+                  'civil_state', 'civil_state_name', 'birthdate', 'institute',
+                  'sex', 'sex_name', 'ocupation_name', 'activity_description',
+                  'photo', 'about', 'cellphone', 'telephone', 'ocupation',
+                  'profession', 'address', 'level_instruction', 'latitude',
+                  'longitude', 'seller', 'objection', 'objection_name', 'nationality',
+                  'nationality_name', 'level_instruction_name', 'photo'
                   )
 
     def get_level_instruction_name(self, obj):
@@ -677,7 +679,7 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
     # se devuelve el valor leible y traducido
     def get_type_contact_name(self, obj):
         """Devuelve tipo de cliente (Natural/Juridico)."""
-        return _(obj.get_type_client_display())
+        return _(obj.get_type_contact_display())
 
     def get_sex_name(self, obj):
         """Devuelve sexo (Masculino/Femenino)."""
@@ -694,6 +696,15 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
     def get_ocupation_name(self, obj):
         """Devuelve Ocupación."""
         return _(obj.get_ocupation_display())
+
+    def create(self, validated_data):
+        """Redefinido metodo de crear contacto."""
+        data_address = validated_data.pop('address')
+        address = Address.objects.create(**data_address)
+        validated_data['address'] = address
+        instance = self.Meta.model(**validated_data)
+        instance.save()
+        return instance
 
 class MediaSerializer(serializers.Serializer):
     photo = serializers.ImageField(max_length=None, required=False, allow_empty_file=False)

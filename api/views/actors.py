@@ -14,11 +14,10 @@ from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
 from api.serializers.actors import SellerSerializer, SellerAccountSerializer, MediaSerializer
 from django.http import Http404
-from api.permissions import IsAdminOnList, IsAdminOrOwner
-from rest_framework.pagination import PageNumberPagination
+from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 from django.utils.translation import ugettext_lazy as _
-import pdb, os
+import os
 import uuid
 import boto3
 
@@ -381,22 +380,25 @@ class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (IsSeller,)
     serializer_class = SellerContactNaturalSerializer
     queryset = SellerContactNoEfective.objects.all()
 
     def post(self, request):
         """Redefinido funcion para crear vendedor."""
         required = _("required")
+        not_valid = _("not valid")
         data = request.data
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
-        if "type_contact" not in data:
+        if "type_contact" not in data or not data["type_contact"]:
             raise serializers.ValidationError("type_contact {}".format(required))
 
         if data["type_contact"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
         elif data["type_contact"] == 'b':
-            serializers.ValidationError("aun no tengo hecho el de business")
+            raise serializers.ValidationError("aun no tengo hecho el de business")
+        else:
+            raise serializers.ValidationError("type_contact {}".format(not_valid))
 
         if serializer.is_valid():
             serializer.save()
