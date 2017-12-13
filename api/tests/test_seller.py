@@ -15,7 +15,7 @@ client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
 class CreateSeller(APITestCase):
     """Crear prueba para crear vendedor."""
 
-    fixtures = ['data', 'data2', "data3"]
+    fixtures = ['data', 'data2', 'data3']
 
     def setUp(self):
         """Setup."""

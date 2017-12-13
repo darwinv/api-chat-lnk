@@ -99,6 +99,7 @@ class User(AbstractUser):
     residence_country = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="residence")
     foreign_address = models.CharField(max_length=100, blank=True)
     key = models.CharField(max_length=90, blank=True, null=True)
+    status = models.CharField(max_length=1, choices=Ch.user_status)
 
 
 # Aplicamos herencia multi tabla para que

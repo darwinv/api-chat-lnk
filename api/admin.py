@@ -6,25 +6,42 @@ from .models import Purchase, PaymentType, Fee
 # Register your models here.
 
 
+
 class ClientNaturalAdmin(admin.ModelAdmin):
-    fields = ('username','nick','password','photo','first_name', 'last_name',
-     'type_client', 'sex', 'civil_state','birthdate', 'document_type',
-     'document_number','email_exact','code','telephone', 'cellphone','ciiu',
-     'activity_description','level_instruction', 'institute','profession',
-     'ocupation', 'about','anonymous','role','nationality')
+    fields = ('first_name', 'last_name',
+     'sex', 'civil_state','birthdate',
+     'level_instruction', 'institute','profession',
+     'ocupation')
 
 class ClientBussinessAdmin(admin.ModelAdmin):
-    fields  = ('username','nick','password','photo','business_name',
-     'type_client', 'document_type', 'document_number', 'email_exact',
-     'code','telephone', 'cellphone', 'commercial_group', 'economic_sector',
-     'ciiu', 'activity_description','agent_firstname', 'agent_lastname',
-     'position','about','anonymous','role','nationality')
+    fields  = (
+     'economic_sector',
+     'agent_firstname', 'agent_lastname',
+     'position','business_name')
+
+class ClientBase(admin.ModelAdmin):
+    """
+        Esta clase integra todos los campos de usuario, cliente
+        Natural y Cliente Juridico, las validaciones correspondientes
+        deben hacerse a juicio propio, segun los comportamientos de 
+        linkup, ejemplo: RUC es requerido si el usuario es Peruano
+    """
+    fields = ('username','nick','password','photo',
+     'document_type','nationality','ruc',
+     'document_number','email_exact','code','telephone', 'cellphone','ciiu',
+     'activity_description','about','anonymous','role','type_client','status'
+     'first_name', 'last_name',
+     'sex', 'civil_state','birthdate',
+     'level_instruction', 'institute','profession',
+     'ocupation',
+     'business_name','economic_sector','agent_firstname', 'agent_lastname',     
+     'position','seller_asigned')
 
 class SpecialistAdmin(admin.ModelAdmin):
     fields = ('username', 'nick','password','photo','first_name', 'last_name',
     'business_name','type_specialist','email_exact','telephone',
     'cellphone','document_type', 'document_number',
-    'ruc','code','payment_per_answer','anonymous','role','category')
+    'ruc','code','payment_per_answer','anonymous','role','category','status')
 
 class MessageFileInline(admin.TabularInline):
     model = MessageFile
@@ -45,7 +62,7 @@ class QueryAdmin(admin.ModelAdmin):
 class SellerAdmin(admin.ModelAdmin):
     fields = ('zone','username', 'nick','password','first_name', 'last_name',
     'email_exact','telephone','cellphone','document_type','code', 'document_number',
-    'ruc')
+    'ruc','status')
 
 class PlanAdmin(admin.ModelAdmin):
     fields = ('name',)
@@ -55,7 +72,9 @@ class PurchaseAdmin(admin.ModelAdmin):
         'is_promotional','last_number_fee_paid','status','expiration_date','promotion','code','product','query_amount')
 
 
-admin.site.register(Client,ClientNaturalAdmin)
+
+
+admin.site.register(Client,ClientBase)
 # admin.site.register(Client,ClientBussinessAdmin)
 admin.site.register(Category)
 admin.site.register(Specialist,SpecialistAdmin)
