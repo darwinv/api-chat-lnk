@@ -169,6 +169,7 @@ class ClientSerializer(serializers.ModelSerializer):
         """Devuelve Ocupación."""
         return _(obj.get_ocupation_display())
 
+
     def validate_natural_client(self, data):
         """Validacion para cuando es natural."""
         required = _("required")
@@ -384,6 +385,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
         instance.payment_per_answer = validated_data.get('payment_per_answer', instance.payment_per_answer)
         instance.category = validated_data.get('category', instance.category)
         instance.residence_country = validated_data.get('residence_country', instance.residence_country)
+        instance.nationality = validated_data.get('nationality', instance.nationality)
+
         if instance.type_specialist == "m" and Specialist.objects.filter(type_specialist="m",
                                                                          category_id=category).exclude(
                                                                          pk=instance.id).exists():
@@ -415,6 +418,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
                 instance.address = address
         else:
+            if 'foreign_address' in validated_data:
+                instance.foreign_address = validated_data.get('foreign_address', instance.foreign_address)
             instance.address = None
 
         instance.save()
@@ -425,11 +430,10 @@ class SpecialistSerializer(serializers.ModelSerializer):
         required = _('required')
         # si la residencia es peru, es obligatoria la dirección
 
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
+        if "residence_country" in data and data["residence_country"] == Countries.objects.get(name="Peru"):
             if 'address' not in data:
                 raise serializers.ValidationError("address {}".format(required))
             if 'ruc' not in data:
-                import pdb; pdb.set_trace()
                 raise serializers.ValidationError("ruc {}".format(required))
             elif not data['ruc']:
                 raise serializers.ValidationError("ruc {}".format(required))

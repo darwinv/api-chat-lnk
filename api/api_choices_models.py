@@ -16,6 +16,12 @@ class ChoicesAPI:
         ('1', _('Passport')),
         ('2', _('Foreign Card')),
     )
+    user_status = (
+        ('0', _('pending')),
+        ('1', _('activated')),
+        ('2', _('rejected')),
+        ('3', _('deactivated')),
+    )
 
     # Client Model
     client_type_client = (

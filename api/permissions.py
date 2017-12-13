@@ -1,6 +1,5 @@
 from rest_framework import permissions, serializers
 
-
 class IsAdminUserOrReadOnly(permissions.BasePermission):
 
     def has_permission(self, request, view):

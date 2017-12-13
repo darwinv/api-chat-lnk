@@ -237,8 +237,38 @@ class CreateSpecialist(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        # self.assertEqual(response.data, 'ey')
 
+
+
+    def test_create_specialist_foreign(self):
+        """Creacion de especialistas extranjero"""
+        data = self.valid_payload
+        data['residence_country'] = 3
+        data['foreign_address'] = "Calle buena pinta - Casa 66á´05"
+        data['ruc'] = ""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_specialist_foreign_without(self):
+        """Validacion de especialistas extranjero sin foreign_address"""
+
+        data = self.valid_payload
+        self.test_create_specialist_foreign()  # Llamado a crear especialista extranjero
+
+        data['foreign_address'] = ""
+        
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class DetailSpecialist(APITestCase):
@@ -293,14 +323,25 @@ class UpdateSpecialistCase(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        data={'nick': 'eecih',"residence_country":1}
-        print(send)
+        data = {
+            'nick': 'eecih',
+            "address": {
+                "street": "jupiter 208",
+                "department": 1,
+                "province": 1,
+                "district": 1
+            },
+            "residence_country":1,
+            "ruc":2132453421
+          }
         self.valid_payload["nick"] = "juiol"
 
         response = self.client.put(
             reverse('specialist-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
         )
+
+        pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # self.assertEqual(response.data["nick"], 'ey')
 

@@ -1,7 +1,7 @@
 """Urls de API Rest."""
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import actors, query, category, email
+from api.views import actors, query, category, email, authorization
 
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
@@ -31,12 +31,14 @@ urlpatterns = [
     # url para subir imagen
     url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(), name='upload-photo'),
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
-
     url(r'^upload_document/(?P<pk>[0-9]+)/$', actors.DocumentUploadView.as_view(), name='upload-document'),
 
     # url(r'^upload_archivo/(?P<filename>[^/]+)$', actors.AllFileUploadView.as_view())
 
     # email
     url(r'^mail/$', email.mail, name='mails'),
+
+    # Autorizaciones
+    url(r'^authorizations-clients/$', authorization.ClientListView.as_view(), name='authorizations-clients'),
 
 ]
