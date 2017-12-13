@@ -165,7 +165,7 @@ class SellerContactNoEfective(models.Model):
     telephone = models.CharField(max_length=14, blank=True, null=True)
     ocupation = models.CharField(max_length=1, choices=Ch.client_ocupation, blank=True)
     profession = models.CharField(max_length=45, null=True)
-    bussiness_name = models.CharField(max_length=45, null=True)
+    business_name = models.CharField(max_length=45, null=True)
     commercial_reason = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
     agent_lastname = models.CharField(max_length=45, null=True)

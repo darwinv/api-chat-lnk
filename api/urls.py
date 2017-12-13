@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     # Clientes
     url(r'^clients/$', actors.ClientListView.as_view(), name='clients'),
-    url(r'^clients-users/(?P<username>\w+)/$', actors.ClientDetailByUsername.as_view(), name='client-detail-username'),
+     url(r'^clients-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$', actors.ClientDetailByUsername.as_view(), name='client-detail-username'),
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(), name='client-detail'),
     # Especialidades
     url(r'^categories/$', category.CategoryListView.as_view(), name='categories'),

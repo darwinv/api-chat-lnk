@@ -622,7 +622,6 @@ class SellerAccountSerializer(serializers.ModelSerializer):
         return 1
 
 
-
 class SellerContactNaturalSerializer(serializers.ModelSerializer):
     """Serializer de Contacto No Efectivo (tipo natural)."""
 
@@ -710,7 +709,7 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
 class SellerContactBusinessSerializer(serializers.ModelSerializer):
     """Serializer de Contacto No Efectivo (tipo juridico)."""
 
-    bussiness_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    business_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     commercial_reason = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     email = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContactNoEfective.objects.all())])
     address = AddressSerializer()
@@ -734,12 +733,12 @@ class SellerContactBusinessSerializer(serializers.ModelSerializer):
         """Meta de Contacto No Efectivo."""
 
         model = SellerContactNoEfective
-        fields = ('id', 'bussiness_name', 'commercial_reason', 'type_contact', 'type_contact_name',
+        fields = ('id', 'business_name', 'commercial_reason', 'type_contact', 'type_contact_name',
                   'document_type', 'document_type_name', 'document_number', 'email',
-                  'ruc', 'economic_sector', 'activity_description', 'about',
-                  'cellphone', 'telephone', 'address', 'latitude',
+                  'ruc', 'economic_sector', 'activity_description', 'about', 'ciiu',
+                  'cellphone', 'telephone', 'address', 'latitude', 'position',
                   'longitude', 'seller', 'objection', 'objection_name', 'nationality',
-                  'nationality_name', 'photo'
+                  'nationality_name', 'photo', 'agent_firstname', 'agent_lastname'
                   )
 
     def get_nationality_name(self, obj):
