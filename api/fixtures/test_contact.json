@@ -1,0 +1,76 @@
+[{
+	"model": "api.address",
+	"pk": 1,
+	"fields": {
+		"street": "esteban camere",
+		"department": 1,
+		"province": 1,
+		"district": 1
+	}
+},
+
+{
+"model": "api.user",
+"pk": 2,
+"fields": {
+    "password": "pbkdf2_sha256$36000$zYNuNmVAEdJB$/YzAG8AR4SFu5puGwV2+pSOddhqPU2FRk9c/EDIz7dc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sky",
+    "first_name": "Celeste",
+    "last_name": "Rodr\u00edguez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-10-23T15:20:08.687Z",
+    "nick": "sky",
+    "email_exact": "celeste.sky@gmail.com",
+    "telephone": "1234567",
+    "cellphone": "123456789",
+    "photo": "preview.png",
+    "document_type": "0",
+    "document_number": "48464954",
+    "ruc": null,
+    "code": "c48464954",
+    "anonymous": true,
+    "updated_at": "2017-10-23T15:20:08.801Z",
+    "nationality": 1,
+    "residence_country": 1,
+    "role": 4,
+    "address": 1,
+    "groups": [],
+    "user_permissions": []
+}
+},
+{
+  "model": "api.seller",
+  "pk": 2,
+  "fields": {
+    "cv": null,
+    "zone": null,
+    "ciiu": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "token": "RCOM8gcbsOv56QFlcCJpgDENETGCLr",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "",
+    "created": "2016-12-31T23:59:59Z",
+    "updated": "2017-10-02T22:27:09.173Z"
+  }
+},
+{
+  "model": "api.objection",
+  "pk": 1,
+  "fields": {
+    "name": "has an accountant who advises him"
+  }
+}
+]

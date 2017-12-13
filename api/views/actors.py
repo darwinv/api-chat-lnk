@@ -2,6 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
+from api.models import SellerContactNoEfective
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
@@ -10,14 +11,14 @@ from django.db.models import Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
-from api.serializers.actors import UserSerializer, SpecialistSerializer
-from api.serializers.actors import SellerSerializer, SellerAccountSerializer, MediaSerializer
+from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
+from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
+from api.serializers.actors import SellerAccountSerializer, MediaSerializer
 from django.http import Http404
-from api.permissions import IsAdminOnList, IsAdminOrOwner
-from rest_framework.pagination import PageNumberPagination
+from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 from django.utils.translation import ugettext_lazy as _
-import pdb, os
+import os
 import uuid
 import boto3
 
@@ -45,8 +46,11 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('username',)
 
+
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):
+    """Vista Cliente."""
+
     # Lista todos los clientes naturales o crea uno nuevo
     # no olvidar lo de los permisos
     authentication_classes = (OAuth2Authentication,)
@@ -364,8 +368,6 @@ class SellerAccountView(ListCreateAPIView):
                                   )\
             .order_by('purchase__fee__date')
 
-
-
         serializer = SellerAccountSerializer(queryset, many=True)
         # pagination
         page = self.paginate_queryset(queryset)
@@ -373,6 +375,37 @@ class SellerAccountView(ListCreateAPIView):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
+
+
+class ContactListView(ListCreateAPIView):
+    """Vista para Contacto No Efectivo."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (IsSeller,)
+    # aca se debe colocar el serializer para listar todos
+    serializer_class = SellerContactNaturalSerializer
+    queryset = SellerContactNoEfective.objects.all()
+
+    def post(self, request):
+        """Redefinido funcion para crear vendedor."""
+        required = _("required")
+        not_valid = _("not valid")
+        data = request.data
+        # codigo de usuario se crea con su prefijo de especialista y su numero de documento
+        if "type_contact" not in data or not data["type_contact"]:
+            raise serializers.ValidationError("type_contact {}".format(required))
+
+        if data["type_contact"] == 'n':
+            serializer = SellerContactNaturalSerializer(data=data)
+        elif data["type_contact"] == 'b':
+            serializer = SellerContactBusinessSerializer(data=data)
+        else:
+            raise serializers.ValidationError("type_contact {}".format(not_valid))
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # ------------ Fin de Vendedores -----------------
