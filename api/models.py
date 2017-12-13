@@ -136,10 +136,14 @@ class EconomicSector(models.Model):
 
 
 class LevelInstruction(models.Model):
+    """Nivel de Instruccion."""
+
     name = models.CharField(max_length=45)
 
     def __str__(self):
+        """Representacion en String."""
         return self.name
+
 
 class SellerContactNoEfective(models.Model):
     """Contacto No Efectivo."""

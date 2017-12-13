@@ -229,6 +229,42 @@ class CreateNaturalContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_no_ocupation(self):
+        """Solicitud invalida por no enviar la ocupación."""
+        data = self.valid_payload
+        data["ocupation"] = ""
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["ocupation"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_profession(self):
+        """Solicitud invalida por no enviar la profesion."""
+        data = self.valid_payload
+        data["address"] = ""
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["profession"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_invalid_birthdate(self):
         """Solicitud invalida por enviar incorrectamente la fecha."""
         data = self.valid_payload
@@ -278,13 +314,6 @@ class CreateNaturalContact(APITestCase):
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
-        data["address"]["district"] = ""
-        response2 = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        # import pdb; pdb.set_trace()
         data["address"] = ""
         response1 = self.client.post(
             reverse('contacts'),
@@ -292,36 +321,6 @@ class CreateNaturalContact(APITestCase):
             content_type='application/json'
         )
         del data["address"]
-        response = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_no_profession(self):
-        """Solicitud invalida por no enviar la profesion."""
-        data = self.valid_payload
-        del data["profession"]
-        response = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_no_ocupation(self):
-        """Solicitud invalida por no enviar la ocupación."""
-        data = self.valid_payload
-        data["ocupation"] = ""
-        response1 = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        del data["ocupation"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -353,7 +352,23 @@ class CreateNaturalContact(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-
+    def test_no_level_instruction(self):
+        """Solicitud invalida por no enviar el nivel de instruccion."""
+        data = self.valid_payload
+        data["level_instruction"] = ""
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["level_instruction"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_nationality(self):
         """Solicitud invalida por no enviar nacionalidad."""
@@ -373,16 +388,70 @@ class CreateNaturalContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_level_instruction(self):
-        """Solicitud invalida por no enviar el nivel de instruccion."""
+    def test_no_latitude(self):
+        """Solicitud invalida por no enviar latitud del contacto."""
         data = self.valid_payload
-        data["level_instruction"] = ""
+        data["latitude"] = ""
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        del data["level_instruction"]
+        del data["latitude"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_longitude(self):
+        """Solicitud invalida por no enviar longitud del contacto."""
+        data = self.valid_payload
+        data["longitude"] = ""
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["longitude"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_seller(self):
+        """Solicitud invalida por no enviar vendedor."""
+        data = self.valid_payload
+        data["seller"] = ""
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["seller"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_objection(self):
+        """Solicitud invalida por no enviar el tipo de objecion."""
+        data = self.valid_payload
+        data["objection"] = ""
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["objection"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),

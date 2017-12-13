@@ -4,7 +4,7 @@ from rest_framework.validators import UniqueValidator
 from api.models import User, Client, Countries, SellerContactNoEfective
 from api.models import Address, Department, Objection
 from api.models import Province, District, Specialist
-from api.models import Seller, Quota, Purchase, Fee
+from api.models import Seller, Quota, Purchase, Fee, LevelInstruction
 from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
 import datetime, string, random
@@ -630,6 +630,8 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
 
     first_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     last_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    latitude = serializers.CharField(required=True, allow_blank=False)
+    longitude = serializers.CharField(required=True, allow_blank=False)
     type_contact = serializers.ChoiceField(choices=c.client_type_client)
     type_contact_name = serializers.SerializerMethodField()
     document_type = serializers.ChoiceField(choices=c.user_document_type)
@@ -637,15 +639,15 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContactNoEfective.objects.all())])
     civil_state = serializers.ChoiceField(choices=c.client_civil_state)
     civil_state_name = serializers.SerializerMethodField()
-    sex = serializers.ChoiceField(choices=c.client_sex, allow_blank=True)
+    sex = serializers.ChoiceField(choices=c.client_sex)
     sex_name = serializers.SerializerMethodField()
-    ocupation = serializers.ChoiceField(choices=c.client_ocupation, allow_blank=True)
+    ocupation = serializers.ChoiceField(choices=c.client_ocupation)
     ocupation_name = serializers.SerializerMethodField()
     address = AddressSerializer()
     birthdate = serializers.DateField(required=True)
     photo = serializers.CharField(read_only=True)
     objection_name = serializers.SerializerMethodField()
-    # level_instruction = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    level_instruction = serializers.PrimaryKeyRelatedField(queryset=LevelInstruction.objects.all(), required=True)
     level_instruction_name = serializers.SerializerMethodField()
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     nationality_name = serializers.SerializerMethodField()
