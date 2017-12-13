@@ -341,7 +341,7 @@ class UpdateSpecialistCase(APITestCase):
             data, format='json'
         )
 
-        pdb.set_trace()
+        # pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # self.assertEqual(response.data["nick"], 'ey')
 
