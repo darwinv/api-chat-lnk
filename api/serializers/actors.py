@@ -622,11 +622,9 @@ class SellerAccountSerializer(serializers.ModelSerializer):
         return 1
 
 
-# Pensar en hacer un serializer que liste tanto natural como Juridico
-# pero uno para cada registro
 
 class SellerContactNaturalSerializer(serializers.ModelSerializer):
-    """Serializer de Contacto No Efectivo."""
+    """Serializer de Contacto No Efectivo (tipo natural)."""
 
     first_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
     last_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
@@ -698,6 +696,69 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
     def get_ocupation_name(self, obj):
         """Devuelve Ocupación."""
         return _(obj.get_ocupation_display())
+
+    def create(self, validated_data):
+        """Redefinido metodo de crear contacto."""
+        data_address = validated_data.pop('address')
+        address = Address.objects.create(**data_address)
+        validated_data['address'] = address
+        instance = self.Meta.model(**validated_data)
+        instance.save()
+        return instance
+
+
+class SellerContactBusinessSerializer(serializers.ModelSerializer):
+    """Serializer de Contacto No Efectivo (tipo juridico)."""
+
+    bussiness_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    commercial_reason = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    email = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContactNoEfective.objects.all())])
+    address = AddressSerializer()
+    ruc = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    latitude = serializers.CharField(required=True, allow_blank=False)
+    longitude = serializers.CharField(required=True, allow_blank=False)
+    type_contact = serializers.ChoiceField(choices=c.client_type_client)
+    type_contact_name = serializers.SerializerMethodField()
+    document_type = serializers.ChoiceField(choices=c.user_document_type)
+    document_type_name = serializers.SerializerMethodField()
+    ciiu = serializers.CharField(max_length=4, allow_blank=False, allow_null=False)
+    photo = serializers.CharField(read_only=True)
+    agent_firstname = serializers.CharField(max_length=45, allow_blank=False, allow_null=False)
+    agent_lastname = serializers.CharField(max_length=45, allow_blank=False, allow_null=False)
+    position = serializers.CharField(max_length=45, allow_null=True)
+    objection_name = serializers.SerializerMethodField()
+    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    nationality_name = serializers.SerializerMethodField()
+
+    class Meta:
+        """Meta de Contacto No Efectivo."""
+
+        model = SellerContactNoEfective
+        fields = ('id', 'bussiness_name', 'commercial_reason', 'type_contact', 'type_contact_name',
+                  'document_type', 'document_type_name', 'document_number', 'email',
+                  'ruc', 'economic_sector', 'activity_description', 'about',
+                  'cellphone', 'telephone', 'address', 'latitude',
+                  'longitude', 'seller', 'objection', 'objection_name', 'nationality',
+                  'nationality_name', 'photo'
+                  )
+
+    def get_nationality_name(self, obj):
+        """Devuelve nacionalidad del cliente."""
+        return _(str(obj.nationality))
+
+    def get_objection_name(self, obj):
+        """Devuelve objecion del contacto."""
+        return _(str(obj.objection))
+
+    # se devuelve el valor leible y traducido
+    def get_type_contact_name(self, obj):
+        """Devuelve tipo de cliente (Natural/Juridico)."""
+        return _(obj.get_type_contact_display())
+
+    def get_document_type_name(self, obj):
+        """Devuelve tipo de documento de identidad."""
+        return _(obj.get_document_type_display())
+
 
     def create(self, validated_data):
         """Redefinido metodo de crear contacto."""

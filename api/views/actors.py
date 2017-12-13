@@ -12,7 +12,8 @@ from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
-from api.serializers.actors import SellerSerializer, SellerAccountSerializer, MediaSerializer
+from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
+from api.serializers.actors import SellerAccountSerializer, MediaSerializer
 from django.http import Http404
 from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
@@ -381,6 +382,7 @@ class ContactListView(ListCreateAPIView):
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (IsSeller,)
+    # aca se debe colocar el serializer para listar todos
     serializer_class = SellerContactNaturalSerializer
     queryset = SellerContactNoEfective.objects.all()
 
@@ -396,7 +398,7 @@ class ContactListView(ListCreateAPIView):
         if data["type_contact"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
         elif data["type_contact"] == 'b':
-            raise serializers.ValidationError("aun no tengo hecho el de business")
+            serializer = SellerContactBusinessSerializer(data=data)
         else:
             raise serializers.ValidationError("type_contact {}".format(not_valid))
 

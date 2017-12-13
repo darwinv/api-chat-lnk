@@ -294,23 +294,6 @@ class CreateNaturalContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_nick(self):
-        """Solicitud invalida por no enviar el nick o enviarlo vacio."""
-        data = self.valid_payload
-        data['nick'] = ''
-        response1 = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        response = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
@@ -504,16 +487,14 @@ class CreateNaturalContact(APITestCase):
 
 
 # Prueba para verificar la insercion de cliente juridico
-class CreateBussinessClient(APITestCase):
-    """Test Para Crear Persona juridica."""
+class CreateBussinessContact(APITestCase):
+    """Prueba de Registro de Contacto Juridico."""
 
-    fixtures = ['data', 'data2']
+    fixtures = ['data', 'data2', 'data3', 'test_contact']
 
     def setUp(self):
         """Setup."""
         self.valid_payload = {
-            'username': 'alpanet',
-            'nick': 'alpanet',
             'type_client': 'b',
             'password': 'intel12345',
             "business_name": 'Alpanet',
@@ -552,25 +533,6 @@ class CreateBussinessClient(APITestCase):
         )
         del data['business_name']
         # del data['business_name']
-        response = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_no_nick(self):
-        """Solicitud invalida por no enviar el nick o enviarlo vacio."""
-        data = self.valid_payload
-        data['nick'] = ""
-        response1 = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        del data["nick"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
