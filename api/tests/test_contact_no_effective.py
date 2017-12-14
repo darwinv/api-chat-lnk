@@ -494,38 +494,42 @@ class CreateBussinessContact(APITestCase):
 
     def setUp(self):
         """Setup."""
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer RCOM8gcbsOv56QFlcCJpgDENETGCLr')
         self.valid_payload = {
-            'type_client': 'b',
-            'password': 'intel12345',
             "business_name": 'Alpanet',
+            "commercial_reason": "Alpanet CA",
+            'type_contact': 'b',
+            'document_type': '2',
+            'document_number': '144013012',
+            'email': 'darwin.vasqz@gmail.com',
+            "ruc": "19231299",
+            'economic_sector': 1,
+            'activity_description': 'computers and programs',
+            'about': 'iptsum aabout',
+            'cellphone': '921471559',
+            'telephone': '921471559',
             "address": {
                 "street": "esteban camere",
                 "department": 1,
                 "province": 1,
                 "district": 1
             },
-            "commercial_reason": "Alpanet CA",
-            "ruc": "19231299",
-            'document_type': '2',
-            'document_number': '144013012',
-            'email_exact': 'darwin.vasqz@gmail.com',
-            'telephone': '921471559',
-            'cellphone': '921471559',
-            'activity_description': 'computers and programs',
+            "latitude": "-77.0282400",
+            "longitude": "-12.0431800",
+            "seller": 2,
             "agent_firstname": "Daniel",
             "agent_lastname": "Molina",
             'position': 'manager',
-            'about': 'iptsum aabout',
-            'economic_sector': 1,
             'ciiu': '1240',
             'nationality': 1,
-            'residence_country': 1
+            'objection': 1
         }
 
     def test_no_business_name(self):
         """Solicitud invalida por no enviar razon social."""
         data = self.valid_payload
-        data['business_name'] = ""
+        data['business_name'] = None
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -541,42 +545,35 @@ class CreateBussinessContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_address(self):
-        """Solicitud invalida por no enviar direccion."""
+    def test_no_comercial_reason(self):
+        """Solicitud invalida por no enviar el razon comercial."""
         data = self.valid_payload
-        data["address"]["district"] = ""
-        response2 = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        # import pdb; pdb.set_trace()
-        data["address"] = ""
+        data['commercial_reason'] = ""
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        del data["address"]
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        del data["commercial_reason"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_document(self):
-        """Solicitud invalida por no enviar el documento."""
+    def test_no_type_contact(self):
+        """Solicitud invalida por no enviar el tipo de contacto."""
         data = self.valid_payload
-        data["document_number"] = ""
+        data["type_contact"] = None
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        del data["document_number"]
+        del data["type_contact"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -603,17 +600,16 @@ class CreateBussinessContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_email(self):
-        """Solicitud invalida por no enviar el email o enviarlo vacio."""
+    def test_no_document(self):
+        """Solicitud invalida por no enviar el documento."""
         data = self.valid_payload
-        data['email_exact'] = ""
+        data["document_number"] = None
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        del data["email_exact"]
+        del data["document_number"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -622,23 +618,34 @@ class CreateBussinessContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_comercial_reason(self):
-        """Solicitud invalida por no enviar el razon comercial."""
+    def test_no_email(self):
+        """Solicitud invalida por no enviar el email o enviarlo vacio."""
         data = self.valid_payload
-        data['commercial_reason'] = ""
+        data['email'] = None
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        del data["commercial_reason"]
+        del data["email"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_email(self):
+        """Solicitud invalida por email incorrecto."""
+        data = self.valid_payload
+        data['email'] = 'asdasd'
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_ruc(self):
@@ -678,6 +685,26 @@ class CreateBussinessContact(APITestCase):
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_address(self):
+        """Solicitud invalida por no enviar direccion."""
+        data = self.valid_payload
+        # import pdb; pdb.set_trace()
+        data["address"] = ""
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["address"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
     def test_no_ciiu(self):
         """Solicitud invalida por no enviar el ciiu."""
@@ -757,10 +784,10 @@ class CreateBussinessContact(APITestCase):
     def test_no_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""
         data = self.valid_payload
-        del data["telephone"]
-        del data["cellphone"]
+        # del data["telephone"]
+        # del data["cellphone"]
         del data["activity_description"]
-        del data["about"]
+        # del data["about"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -771,39 +798,16 @@ class CreateBussinessContact(APITestCase):
     def test_empty_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""
         data = self.valid_payload
-        data["telephone"] = ""
-        data["cellphone"] = ""
+        # data["telephone"] = ""
+        # data["cellphone"] = ""
         data["activity_description"] = ""
-        data["about"] = ""
+        # data["about"] = ""
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    def test_invalid_economic_sector(self):
-        """Solicitud invalida por enviar sector economico invalido."""
-        data = self.valid_payload
-        data['economic_sector'] = "nada"
-        response = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_invalid_residence_country(self):
-        """Solicitud invalida por enviar pais de residencia diferente a peru."""
-        data = self.valid_payload
-        data['residence_country'] = 4
-        response = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        # import pdb; pdb.set_trace()
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_bussines_client(self):
         """Crea cliente juridico de manera exitosa."""
