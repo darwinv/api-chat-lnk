@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from api.models import User, Client, Countries, SellerContactNoEfective
-from api.models import Address, Department, Objection
+from api.models import Address, Department, Objection, EconomicSector
 from api.models import Province, District, Specialist
 from api.models import Seller, Quota, Purchase, Fee, LevelInstruction
 from django.utils.translation import ugettext_lazy as _
@@ -429,7 +429,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
             if 'address' not in data:
                 raise serializers.ValidationError("address {}".format(required))
             if 'ruc' not in data:
-                import pdb; pdb.set_trace()
                 raise serializers.ValidationError("ruc {}".format(required))
             elif not data['ruc']:
                 raise serializers.ValidationError("ruc {}".format(required))
@@ -728,6 +727,7 @@ class SellerContactBusinessSerializer(serializers.ModelSerializer):
     objection_name = serializers.SerializerMethodField()
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     nationality_name = serializers.SerializerMethodField()
+    economic_sector = serializers.PrimaryKeyRelatedField(queryset=EconomicSector.objects.all(), required=True)
 
     class Meta:
         """Meta de Contacto No Efectivo."""
