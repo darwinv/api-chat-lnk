@@ -34,17 +34,20 @@ class GetClientsToAuthorization(APITestCase):
 	def test_get_all_clients(self):
 		"""Trae listado de clientes ordenados por estatus de autorizacion y compara con el primer registro traido"""
 		result_expected = {
-			'code_seller': None,
-			'name': 'Oscar Lopez',
-			'document': '93923929329',
-			"document_type": '2',
-			"status": "0",
-			"id": "2"
+			"code_seller": None,
+			"name":"Oscar Lopez",
+			"document":"93923929329",
+			"document_type":"2",
+			"status":"0",
+			"document_type_name":"Tarjeta extranjera"
 		}
+		
 		# get API response
 		response = client.get(reverse('authorizations-clients'))
 
+		import pdb
+		pdb.set_trace()
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
-		self.assertEqual(response.data['results'][0], result_expected)
+		self.assertEqual(response.data[0], result_expected)
 
 
