@@ -117,7 +117,7 @@ class ClientDetailView(APIView):
         client = self.get_object(pk)
         serializer = ClientSerializer(client)
         return Response(serializer.data)
-        
+
 
 # Vista para detalle del cliente segun su username
 # se hizo con la finalidad de instanciar una vez logueado

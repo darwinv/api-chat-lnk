@@ -131,7 +131,8 @@ class ClientSerializer(serializers.ModelSerializer):
             'business_name', 'agent_firstname', 'agent_lastname', 'position',
             'economic_sector', 'economic_sector_name', 'institute', 'profession',
             'ocupation', 'ocupation_name', 'about', 'nationality', 'nationality_name',
-            "residence_country", "commercial_reason", "foreign_address", "residence_country_name")
+            "residence_country", "commercial_reason", "foreign_address", "residence_country_name",
+            "status")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -245,11 +246,11 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """Redefinido metodo de validación."""
-        if data['type_client'] == 'n':
-            self.validate_natural_client(data)
-
-        if data['type_client'] == 'b':
-            self.validate_bussines_client(data)
+        if "type_client" in data:
+            if data['type_client'] == 'n':
+                self.validate_natural_client(data)
+            if data['type_client'] == 'b':
+                self.validate_bussines_client(data)
         return data
 
     def create(self, validated_data):

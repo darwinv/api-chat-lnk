@@ -103,7 +103,7 @@ class User(AbstractUser):
     residence_country = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="residence")
     foreign_address = models.CharField(max_length=200, blank=True, null=True)
     key = models.CharField(max_length=90, blank=True, null=True)
-    status = models.CharField(max_length=1, choices=Ch.user_status)
+    status = models.CharField(max_length=1, choices=Ch.user_status, default='0')
 # Aplicamos herencia multi tabla para que
 # Seller herede de User y se vincule 1 a 1
 

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from api.models import Client, User
+from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
 
 class ClientAuthorization(serializers.ModelSerializer):
@@ -21,3 +22,15 @@ class ClientAuthorization(serializers.ModelSerializer):
     def get_document_type_name(self, obj):
         """Devuelve Ocupación."""
         return _(obj.get_document_type_display())
+
+
+class UserStatusSerializer(serializers.ModelSerializer):
+    """Serializer para cambiar el status de los usuarios."""
+
+    status = serializers.ChoiceField(choices=c.user_status)
+
+    class Meta:
+        """Meta de Modelos."""
+    
+        model = User
+        fields = ('id', 'status')
