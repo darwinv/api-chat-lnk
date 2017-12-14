@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from api.models import Client, User
+from django.utils.translation import ugettext_lazy as _
+
 class ClientAuthorization(serializers.ModelSerializer):
     """Serializer del especialista."""
 
@@ -13,7 +15,7 @@ class ClientAuthorization(serializers.ModelSerializer):
     class Meta:
         """Modelo del especialista y sus campos."""
         model = User
-        fields = ('code_seller','name','document','document_type','status')
+        fields = ('code_seller','name','document','document_type','status','document_type_name')
 
 
     def get_document_type_name(self, obj):
