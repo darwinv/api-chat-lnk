@@ -322,10 +322,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Redefinido metodo de crear."""
-        main = _('Main')
-        spec = _('Specialist')
-        already = _('already')
-        exists = _('exists')
+        valid_spec = _('Main Specialist already exists for this speciality')
 
         # Si la residencia es peru, se crea el address
         if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
@@ -348,7 +345,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
                                                                                   category_id=validated_data[
                                                                                       "category"]).exists():
 
-            raise serializers.ValidationError(u"{} {} {} {}".format(spec, main, already, exists))
+            raise serializers.ValidationError(u"{}".format(valid_spec))
         if password is not None:
             instance.set_password(password)
 
@@ -365,10 +362,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Metodo actualizar redefinido."""
-        main = _('Main')
-        spec = _('Specialist')
-        already = _('already')
-        exists = _('exists')
+        valid_spec = _('Main Specialist already exists for this speciality')
         category = validated_data.get("category", None)
         instance.nick = validated_data.get('nick', instance.nick)
         instance.first_name = validated_data.get('first_name', instance.first_name)
@@ -391,7 +385,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
                                                                          category_id=category).exclude(
                                                                          pk=instance.id).exists():
 
-            raise serializers.ValidationError(u"{} {} {} {}".format(main, spec, already, exists))
+            raise serializers.ValidationError(u"{} {} {} {}".format(valid_spec))
 
         # Si la residencia es peru, se crea el address
         if "residence_country" in validated_data and validated_data["residence_country"] == Countries.objects.get(name="Peru"):
