@@ -852,14 +852,14 @@ class CreateBussinessClient(APITestCase):
     def test_invalid_residence_country(self):
         """Solicitud invalida por enviar pais de residencia diferente a peru."""
         data = self.valid_payload
-        data['residence_country'] = 4
+        data['residence_country'] = 1
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
             content_type='application/json'
         )
         # import pdb; pdb.set_trace()
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_bussines_client(self):
         """Crea cliente juridico de manera exitosa."""

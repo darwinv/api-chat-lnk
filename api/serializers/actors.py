@@ -69,7 +69,7 @@ class AddressSerializer(serializers.ModelSerializer):
     department_name = serializers.SerializerMethodField()
     province_name = serializers.SerializerMethodField()
     district_name = serializers.SerializerMethodField()
-    
+
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -203,7 +203,7 @@ class ClientSerializer(serializers.ModelSerializer):
     def validate_bussines_client(self, data):
         """Validacion para cuando es juridico."""
         required = _("required")
-        error1 = _("can not be a legal person and reside in a foreign country")
+        # error1 = _("can not be a legal person and reside in a foreign country")
         # requerido el nombre de la empresa
         if 'business_name' not in data:
             raise serializers.ValidationError("business_name {}".format(required))
@@ -220,6 +220,15 @@ class ClientSerializer(serializers.ModelSerializer):
         # requerido la posicion en la empresa
         if 'position' not in data:
             raise serializers.ValidationError("position {}".format(required))
+        # si reside en peru la direccion es obligatoria.
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if "address" not in data or not data["address"]:
+                raise serializers.ValidationError("address {}".format(required))
+        # sino, la direccion de extranjero es obligatoria
+        else:
+            if "foreign_address" not in data or not data["foreign_address"]:
+                raise serializers.ValidationError("foreign_address {}".format(required))
+
         if 'address' not in data:
             raise serializers.ValidationError("address {}".format(required))
         # requerido el nombre del representante
@@ -235,8 +244,9 @@ class ClientSerializer(serializers.ModelSerializer):
         if 'ciiu' not in data or not data["ciiu"]:
             raise serializers.ValidationError("ciiu {}".format(required))
         # validacion para residencia
-        if data["residence_country"] != Countries.objects.get(name="Peru"):
-            raise serializers.ValidationError(error1)
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if 'ruc' not in data or not data["ruc"]:
+                raise serializers.ValidationError("ruc {}".format(required))
         return
 
     def validate(self, data):
@@ -542,7 +552,7 @@ class SellerSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     nick = serializers.CharField(required=True)
-    ruc = serializers.CharField(allow_blank=True, required=False)
+    ruc = serializers.CharField(allow_blank=True, allow_null=True, required=False)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
@@ -594,7 +604,7 @@ class SellerSerializer(serializers.ModelSerializer):
 
         # si se encuentra y esta vacio, se debe borrar
         if 'ruc' in validated_data:
-            if not validated_data['ruc']:
+            if not validated_data['ruc'] or validated_data['ruc'] is None:
                 del validated_data['ruc']
         password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
         validated_data['key'] = password
