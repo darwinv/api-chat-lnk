@@ -1,5 +1,6 @@
+"""Vista de Autorizaciones."""
 from rest_framework import serializers
-from api.models import Client, User
+from api.models import User
 from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
 

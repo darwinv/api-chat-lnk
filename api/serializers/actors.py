@@ -117,6 +117,7 @@ class ClientSerializer(serializers.ModelSerializer):
     birthdate = serializers.DateField(required=True)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     photo = serializers.CharField(read_only=True)
+    code = serializers.CharField(read_only=True)
 
     class Meta:
         """declaracion del modelo y sus campos."""
@@ -254,6 +255,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Redefinido metodo de crear cliente."""
+        # prefix_country = Countries.objects.get(pk=validated_data["residence_country"]).iso_code
         if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
             data_address = validated_data.pop('address')
             address = Address.objects.create(**data_address)

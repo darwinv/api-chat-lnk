@@ -156,7 +156,7 @@ class GetClientsToAuthorization(APITestCase):
         }
 
         # get API response
-        response = client.get(reverse('authorizations-clients'))
+        response = client.get(reverse('auth-list-clients'))
 
         import pdb
         pdb.set_trace()
