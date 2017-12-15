@@ -42,8 +42,7 @@ class ClientListView(ListCreateAPIView):
                         api_user.document_type
                     ) AS document_type,
                      api_user.`status`,
-                     api_user.id as pk,
-                     1 as id,
+                     api_user.id AS id,
                      date(api_user.date_joined) AS date_join
                     FROM
                         api_user
