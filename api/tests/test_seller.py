@@ -21,7 +21,6 @@ class CreateSeller(APITestCase):
         """Setup."""
         self.valid_payload = {
             'username': 'darwin',
-            'password': 'intel12345',
             'nick': 'dar',
             'first_name': 'darwin',
             'last_name': 'vasquez',

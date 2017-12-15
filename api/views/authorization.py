@@ -1,11 +1,13 @@
+"""Archivo para Autorizaciones."""
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
 from api.models import Client, User
-from api.serializers.authorization import ClientAuthorization
-from api.permissions import IsAdminOrOwner
+from api.serializers.authorization import ClientAuthorization, UserStatusSerializer
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from rest_framework import status, permissions
 from rest_framework.response import Response
+from django.http import Http404
+from api.serializers.actors import ClientSerializer
 
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):
@@ -43,8 +45,7 @@ class ClientListView(ListCreateAPIView):
                     ) AS document_type,
                      api_user.`status`,
                      api_user.id as pk,
-                     1 as id,
-                     date(api_user.date_joined) AS date_join
+                     1 as id
                     FROM
                         api_user
                     INNER JOIN api_role ON api_user.role_id = api_role.id
@@ -66,3 +67,29 @@ class ClientListView(ListCreateAPIView):
         #     serializer = self.get_serializer(page, many=True)
         #     return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
+
+
+class ChangeStatusClientView(APIView):
+    """Vista solo para que el admin pueda cambiar estatus a un cliente."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAdminUser,)
+
+    def get_object(self, pk):
+        """Obtener objeto."""
+        try:
+            obj = Client.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except Client.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Actualizar Objeto."""
+        data = request.data
+        client = self.get_object(pk)
+        serializer = UserStatusSerializer(client, data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
