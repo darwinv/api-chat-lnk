@@ -46,7 +46,9 @@ class CreateNaturalClient(APITestCase):
             'document_number': '144013012',
             'email_exact': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
+            'code_telephone': 18,
             'cellphone': '921471559',
+            'code_cellphone': 1,
             'activity_description': 'Loremp iptsum',
             'level_instruction': 1,
             'institute': 'UNEFA',
@@ -496,6 +498,8 @@ class CreateNaturalClient(APITestCase):
         del data["activity_description"]
         del data["about"]
         del data["ciiu"]
+        del data["code_cellphone"]
+        del data["code_telephone"]
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
@@ -512,6 +516,8 @@ class CreateNaturalClient(APITestCase):
         data["activity_description"] = ""
         data["about"] = ""
         data["ciiu"] = ""
+        data["code_cellphone"] = ""
+        data["code_telephone"] = ""
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
@@ -821,6 +827,8 @@ class CreateBussinessClient(APITestCase):
         del data["cellphone"]
         del data["activity_description"]
         del data["about"]
+        del data["code_cellphone"]
+        del data["code_telephone"]
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
@@ -835,6 +843,8 @@ class CreateBussinessClient(APITestCase):
         data["cellphone"] = ""
         data["activity_description"] = ""
         data["about"] = ""
+        data["code_cellphone"] = ""
+        data["code_telephone"] = ""
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
@@ -918,7 +928,9 @@ class GetDetailClient(APITestCase):
                 'document_number': '144013012',
                 'email_exact': 'darwin.vasqz@gmail.com',
                 'telephone': '921471559',
+                'code_telephone': 18,
                 'cellphone': '921471559',
+                'code_cellphone': 1,
                 'activity_description': 'Loremp iptsum',
                 'level_instruction': 1,
                 'institute': 'UNEFA',
