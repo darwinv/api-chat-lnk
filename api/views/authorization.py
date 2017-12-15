@@ -24,14 +24,14 @@ class ClientListView(ListCreateAPIView):
         """Lista de Clientes por autorizar."""
         # en dado caso que exista el parametro "main_specialist", se devuelve
         # el listado de especialistas asociados, caso contrario devuelve todos
-        condition_status = ""
-        condition_date = ""
+        condition_status = ''
+        condition_date = ''
         if "status" in request.query_params:
             status = request.query_params["status"]
-            condition_status = " AND api.status = {}".format(status)
+            condition_status = " AND api_status = {}".format(status)
         if "date" in request.query_params:
             date = request.query_params["date_joined"]
-            condition_date = " AND api.date_joined = {}".format(date)
+            condition_date = " AND api_date_joined = {}".format(date)
 
         condition = "{}{}".format(condition_status, condition_date)
         query_raw = """SELECT
@@ -70,7 +70,9 @@ class ClientListView(ListCreateAPIView):
                         api_user.`status` ASC,
                         api_user.updated_at ASC"""
 
-        queryset = User.objects.raw(query_raw, params={'condition': condition})
+        print(query_raw) # %(condition)s
+        import pdb; pdb.set_trace()
+        queryset = User.objects.raw(query_raw, params={'condition': condition}) #
         serializer = ClientAuthorization(queryset, many=True)
 
         # pagination
