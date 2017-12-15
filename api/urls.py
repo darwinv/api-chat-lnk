@@ -16,7 +16,7 @@ urlpatterns = [
     # Servicio para logueo
     url(r'^clients-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$', actors.ClientDetailByUsername.as_view(),
         name='client-detail-username'),
-
+    # detalle de cliente
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(), name='client-detail'),
     # Especialidades
     url(r'^categories/$', category.CategoryListView.as_view(), name='categories'),
@@ -48,5 +48,7 @@ urlpatterns = [
 
     # Autorizaciones
     url(r'^authorizations/clients/$', authorization.ClientListView.as_view(), name='authorizations-clients'),
+    url(r'^authorizations/clients/(?P<pk>[0-9]+)/$', authorization.ChangeStatusClientView.as_view(),
+        name='auth-clients'),
 
 ]

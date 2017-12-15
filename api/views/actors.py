@@ -94,13 +94,17 @@ class ClientListView(ListCreateAPIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-# Vista para Detalle del Cliente
 
+# Vista para Detalle del Cliente
 class ClientDetailView(APIView):
+    """Detalle del Cliente, GET/PUT/Delete."""
+
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (IsAdminOrOwner,)
     # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
+
     def get_object(self, pk):
+        """Obtener objeto."""
         try:
             obj = Client.objects.get(pk=pk)
             self.check_object_permissions(self.request, obj)
@@ -109,10 +113,10 @@ class ClientDetailView(APIView):
             raise Http404
 
     def get(self, request, pk):
+        """Detalle."""
         client = self.get_object(pk)
         serializer = ClientSerializer(client)
         return Response(serializer.data)
-
 
 
 # Vista para detalle del cliente segun su username

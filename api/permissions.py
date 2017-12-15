@@ -2,6 +2,7 @@
 
 from rest_framework import permissions, serializers
 
+
 class IsAdminUserOrReadOnly(permissions.BasePermission):
     """Permiso para el administrador o solo lectura."""
 
