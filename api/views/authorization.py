@@ -40,7 +40,7 @@ class ClientListView(ListCreateAPIView):
                     ) AS document,
                     IF (
                         api_client.type_client = 'b',
-                        'ruc',
+                        'RUC',
                         api_user.document_type
                     ) AS document_type,
                      api_user.`status`,
@@ -55,7 +55,7 @@ class ClientListView(ListCreateAPIView):
                         api_user.role_id = 2
                     ORDER BY
                         api_user.`status` ASC,
-                        api_user.updated_at ASC"""
+                        api_user.updated_at DESC"""
 
         queryset = User.objects.raw(query_raw)
 
