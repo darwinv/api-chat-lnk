@@ -59,7 +59,6 @@ class ChangeStatusClient(APITestCase):
         )
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
-        import pdb; pdb.set_trace()
         response = client.put(reverse('auth-clients',
                               kwargs={'pk': send.data["id"]}),
                               data, format='json')

@@ -107,6 +107,7 @@ class User(AbstractUser):
 # Aplicamos herencia multi tabla para que
 # Seller herede de User y se vincule 1 a 1
 
+
 class Seller(User):
     """Modelo de Vendedor (hereda de User)."""
 
