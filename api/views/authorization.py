@@ -21,7 +21,7 @@ class ClientListView(ListCreateAPIView):
         # el listado de especialistas asociados, caso contrario devuelve todos
 
         query_raw = """SELECT
-                        vendedor.`code` AS code_seller,
+                        seller.`code` AS code_seller,
                     IF (
                         api_client.type_client = 'b',
                         api_client.business_name,
@@ -43,12 +43,13 @@ class ClientListView(ListCreateAPIView):
                     ) AS document_type,
                      api_user.`status`,
                      api_user.id as pk,
-                     1 as id 
+                     1 as id,
+                     date(api_user.date_joined) AS date_join
                     FROM
                         api_user
                     INNER JOIN api_role ON api_user.role_id = api_role.id
                     INNER JOIN api_client ON api_client.user_ptr_id = api_user.id
-                    LEFT JOIN api_user AS vendedor ON api_client.seller_asigned_id = vendedor.id
+                    LEFT JOIN api_user AS seller ON api_client.seller_asigned_id = seller.id
                     WHERE
                         api_user.role_id = 2
                     ORDER BY

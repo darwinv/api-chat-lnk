@@ -11,12 +11,12 @@ class ClientAuthorization(serializers.ModelSerializer):
     document_type = serializers.CharField()
     document_type_name = serializers.SerializerMethodField()
     status = serializers.CharField()
+    date_join = serializers.CharField()
 
     class Meta:
         """Modelo del especialista y sus campos."""
         model = User
-        fields = ('code_seller','name','document','document_type','status','document_type_name')
-
+        fields = ('code_seller', 'name', 'document', 'document_type', 'status', 'document_type_name', 'date_join')
 
     def get_document_type_name(self, obj):
         """Devuelve Ocupación."""

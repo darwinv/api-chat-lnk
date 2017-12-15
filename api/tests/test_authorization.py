@@ -45,9 +45,6 @@ class GetClientsToAuthorization(APITestCase):
 		# get API response
 		response = client.get(reverse('authorizations-clients'))
 
-		import pdb
-		pdb.set_trace()
 		self.assertEqual(response.status_code, status.HTTP_200_OK)
 		self.assertEqual(response.data[0], result_expected)
-
-
+		

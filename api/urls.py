@@ -47,6 +47,6 @@ urlpatterns = [
     url(r'^mail/$', email.mail, name='mails'),
 
     # Autorizaciones
-    url(r'^authorizations-clients/$', authorization.ClientListView.as_view(), name='authorizations-clients'),
+    url(r'^authorizations/clients/$', authorization.ClientListView.as_view(), name='authorizations-clients'),
 
 ]
