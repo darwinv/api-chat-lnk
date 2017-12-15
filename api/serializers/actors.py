@@ -132,7 +132,8 @@ class ClientSerializer(serializers.ModelSerializer):
             'business_name', 'agent_firstname', 'agent_lastname', 'position',
             'economic_sector', 'economic_sector_name', 'institute', 'profession',
             'ocupation', 'ocupation_name', 'about', 'nationality', 'nationality_name',
-            "residence_country", "commercial_reason", "foreign_address", "residence_country_name")
+            "residence_country", "commercial_reason", "foreign_address", "residence_country_name",
+            "status", "code_cellphone", "code_telephone")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -170,7 +171,6 @@ class ClientSerializer(serializers.ModelSerializer):
     def get_ocupation_name(self, obj):
         """Devuelve Ocupación."""
         return _(obj.get_ocupation_display())
-
 
     def validate_natural_client(self, data):
         """Validacion para cuando es natural."""
@@ -255,13 +255,17 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Redefinido metodo de crear cliente."""
-        # prefix_country = Countries.objects.get(pk=validated_data["residence_country"]).iso_code
+        CODE_CLIENT = "C"
         if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
             data_address = validated_data.pop('address')
             address = Address.objects.create(**data_address)
             validated_data['address'] = address
-        elif 'address' in validated_data:
-            del validated_data['address']
+            validated_data['code'] = CODE_CLIENT + str(validated_data.get('document_number'))
+        else:
+            prefix_country = Countries.objects.get(pk=validated_data["residence_country"].id).iso_code
+            validated_data['code'] = prefix_country + CODE_CLIENT + str(validated_data.get('document_number'))
+            if 'address' in validated_data:
+                del validated_data['address']
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
         if password is not None:
