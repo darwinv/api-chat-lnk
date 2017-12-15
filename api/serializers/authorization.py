@@ -18,7 +18,7 @@ class ClientAuthorization(serializers.ModelSerializer):
     class Meta:
         """Modelo del especialista y sus campos."""
         model = User
-        fields = ('code_seller', 'name', 'document', 'document_type', 'status', 'document_type_name', 'date_join')
+        fields = ('code_seller', 'name', 'document', 'document_type', 'status', 'document_type_name', 'date_join','id')
 
     def get_document_type_name(self, obj):
         """Devuelve Ocupación."""
