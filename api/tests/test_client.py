@@ -3,7 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 import json
-from ..models import Client as Cliente
+from ..models import Client as Cliente, Countries
 from rest_framework import status
 from api.serializers.actors import ClientSerializer
 # Create your tests here.
@@ -57,7 +57,6 @@ class CreateNaturalClient(APITestCase):
             'nationality': 1,
             'residence_country': 1
         }
-
 
     # responder error al enviar email invalido
     def test_invalid_email(self):
@@ -257,6 +256,23 @@ class CreateNaturalClient(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_check_foreign_code(self):
+        """Chequeo de Codigo."""
+        data = self.valid_payload
+        data["residence_country"] = 4
+        # se agrega la direccion para ese pais
+        data["foreign_address"] = "lorem pias ipmasjdn kjajsdk iasjd"
+
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        code = Countries.objects.get(pk=data["residence_country"]).iso_code + 'C' + data["document_number"]
+        # code = User.objects.get(pk=response.data["id"])
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["code"], code)
 
     def test_no_foreign_address(self):
         """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
@@ -927,7 +943,7 @@ class GetDetailClient(APITestCase):
                                               format='json')
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
 
 class GetAllClients(APITestCase):
     """ Test module for GET all clients API """
