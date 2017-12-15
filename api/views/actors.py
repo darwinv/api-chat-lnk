@@ -83,6 +83,7 @@ class ClientListView(ListCreateAPIView):
             data['level_instruction'] = ''
             data['profession'] = ''
             data['ocupation'] = ''
+        data['role'] = ROLE_CLIENT
         serializer = ClientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

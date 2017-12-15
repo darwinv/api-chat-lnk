@@ -276,6 +276,18 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["code"], code)
 
+    def test_invalid_code_phone(self):
+        """Chequeo de Codigo."""
+        data = self.valid_payload
+        data["code_telephone"] = -1
+        data["code_cellphone"] = 1000
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_no_foreign_address(self):
         """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
         data = self.valid_payload
