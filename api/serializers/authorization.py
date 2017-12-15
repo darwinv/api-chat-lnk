@@ -34,4 +34,3 @@ class UserStatusSerializer(serializers.ModelSerializer):
 
         model = User
         fields = ('id', 'status')
-

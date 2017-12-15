@@ -927,7 +927,8 @@ class GetDetailClient(APITestCase):
                                               format='json')
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
+
 
 class GetAllClients(APITestCase):
     """ Test module for GET all clients API """

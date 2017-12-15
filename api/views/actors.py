@@ -2,7 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
-from api.models import SellerContactNoEfective
+from api.models import SellerContactNoEfective, Countries
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
@@ -25,7 +25,7 @@ import boto3
 # Create your views here.
 
 # Constantes
-PREFIX_CODE_CLIENT = 'c'
+PREFIX_CODE_CLIENT = 'C'
 ROLE_CLIENT = 2
 ROLE_SPECIALIST = 3
 ROLE_SELLER = 4
@@ -51,6 +51,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class ClientListView(ListCreateAPIView):
     """Vista Cliente."""
 
+    required = _("required")
     # Lista todos los clientes naturales o crea uno nuevo
     # no olvidar lo de los permisos
     authentication_classes = (OAuth2Authentication,)
@@ -70,15 +71,9 @@ class ClientListView(ListCreateAPIView):
     # Metodo post redefinido
     def post(self, request):
         """Redefinido metodo para crear clientes."""
-        data = request.data
-        required = _("required")
-        # codigo de usuario se crea con su prefijo de cliente y su numero de documento
-        if "document_number" not in data:
-            raise serializers.ValidationError("document_number {}".format(required))
-        data['code'] = PREFIX_CODE_CLIENT + str(request.data.get('document_number'))
-        data['role'] = ROLE_CLIENT
+        data = self.assign_code(data=request.data)
         if 'type_client' not in data or not data['type_client']:
-            raise serializers.ValidationError("document_number {}".format(required))
+            raise serializers.ValidationError("document_number {}".format(self.required))
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
         elif data['type_client'] == 'b':
@@ -94,6 +89,20 @@ class ClientListView(ListCreateAPIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+    def assign_code(self, data):
+        """Asignar codigo de cliente."""
+        # validaciones
+        if "document_number" not in data:
+            raise serializers.ValidationError("document_number {}".format(self.required))
+        if "residence_country" not in data:
+            raise serializers.ValidationError("residence_country {}".format(self.required))
+        # Creo el Code con el numero de documento y prefijo de pais residente
+        if data["residence_country"] != Countries.objects.get(name="Peru"):
+            prefix_country = Countries.objects.get(pk=data["residence_country"]).iso_code
+            data['code'] = prefix_country + PREFIX_CODE_CLIENT + str(data.get('document_number'))
+        else:
+            data['code'] = PREFIX_CODE_CLIENT + str(data.get('document_number'))
+        return data
 
 # Vista para Detalle del Cliente
 class ClientDetailView(APIView):
