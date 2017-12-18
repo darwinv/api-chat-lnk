@@ -1,5 +1,6 @@
+"""Vista de Autorizaciones."""
 from rest_framework import serializers
-from api.models import Client, User
+from api.models import User
 from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
 
@@ -12,12 +13,12 @@ class ClientAuthorization(serializers.ModelSerializer):
     document_type = serializers.CharField()
     document_type_name = serializers.SerializerMethodField()
     status = serializers.CharField()
+    date_join = serializers.CharField()
 
     class Meta:
         """Modelo del especialista y sus campos."""
         model = User
-        fields = ('code_seller','name','document','document_type','status','document_type_name')
-
+        fields = ('code_seller', 'name', 'document', 'document_type', 'status', 'document_type_name', 'date_join','id')
 
     def get_document_type_name(self, obj):
         """Devuelve Ocupación."""
@@ -31,6 +32,6 @@ class UserStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Meta de Modelos."""
-    
+
         model = User
         fields = ('id', 'status')

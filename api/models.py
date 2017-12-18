@@ -89,6 +89,8 @@ class User(AbstractUser):
     email_exact = models.CharField(max_length=150, unique=True)
     telephone = models.CharField(max_length=14, blank=True, null=True)
     cellphone = models.CharField(max_length=14, blank=True, null=True)
+    code_telephone = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="prefix_telephone")
+    code_cellphone = models.ForeignKey(Countries, on_delete=models.PROTECT, null=True, related_name="prefix_cellphone")
     photo = models.CharField(max_length=250, null=True)
     document_type = models.CharField(max_length=1, choices=Ch.user_document_type)
     document_number = models.CharField(max_length=45, unique=True)

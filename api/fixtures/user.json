@@ -30,7 +30,6 @@
 		"residence_country": null,
 		"foreign_address": "",
 		"key": null,
-		"status": "",
 		"groups": [],
 		"user_permissions": [],
 		"status": 0
@@ -67,7 +66,6 @@
 		"residence_country": null,
 		"foreign_address": "",
 		"key": null,
-		"status": "",
 		"groups": [],
 		"user_permissions": [],
 		"status": 0
@@ -104,7 +102,6 @@
 		"residence_country": null,
 		"foreign_address": "",
 		"key": null,
-		"status": "",
 		"groups": [],
 		"user_permissions": [],
 		"status": 0
@@ -131,8 +128,8 @@
 		"document_type": "0",
 		"document_number": "3435436",
 		"img_document_number": null,
-		"ruc": null,
-		"code": "c3435436",
+		"ruc": "34354367",
+		"code": "c34354367",
 		"anonymous": true,
 		"updated_at": "2017-11-13T17:34:29.234Z",
 		"nationality": 1,
@@ -141,7 +138,6 @@
 		"residence_country": null,
 		"foreign_address": "",
 		"key": null,
-		"status": "",
 		"groups": [],
 		"user_permissions": [],
 		"status": 0
@@ -178,7 +174,6 @@
 		"residence_country": null,
 		"foreign_address": "",
 		"key": null,
-		"status": "",
 		"groups": [],
 		"user_permissions": [],
 		"status": 0
@@ -215,7 +210,6 @@
 		"residence_country": null,
 		"foreign_address": "",
 		"key": null,
-		"status": "",
 		"groups": [],
 		"user_permissions": [],
 		"status": 0
@@ -252,7 +246,6 @@
 		"residence_country": null,
 		"foreign_address": "",
 		"key": null,
-		"status": "",
 		"groups": [],
 		"user_permissions": [],
 		"status": 0
@@ -289,7 +282,6 @@
 		"residence_country": null,
 		"foreign_address": "",
 		"key": null,
-		"status": "",
 		"groups": [],
 		"user_permissions": [],
 		"status": 0
@@ -326,7 +318,6 @@
 		"residence_country": null,
 		"foreign_address": "",
 		"key": null,
-		"status": "",
 		"groups": [],
 		"user_permissions": [],
 		"status": 0
@@ -363,7 +354,6 @@
 		"residence_country": null,
 		"foreign_address": "",
 		"key": null,
-		"status": "",
 		"groups": [],
 		"user_permissions": [],
 		"status": 0

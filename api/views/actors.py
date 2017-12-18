@@ -2,7 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
-from api.models import SellerContactNoEfective
+from api.models import SellerContactNoEfective, Countries
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
@@ -25,7 +25,7 @@ import boto3
 # Create your views here.
 
 # Constantes
-PREFIX_CODE_CLIENT = 'c'
+PREFIX_CODE_CLIENT = 'C'
 ROLE_CLIENT = 2
 ROLE_SPECIALIST = 3
 ROLE_SELLER = 4
@@ -51,6 +51,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class ClientListView(ListCreateAPIView):
     """Vista Cliente."""
 
+    required = _("required")
     # Lista todos los clientes naturales o crea uno nuevo
     # no olvidar lo de los permisos
     authentication_classes = (OAuth2Authentication,)
@@ -71,14 +72,8 @@ class ClientListView(ListCreateAPIView):
     def post(self, request):
         """Redefinido metodo para crear clientes."""
         data = request.data
-        required = _("required")
-        # codigo de usuario se crea con su prefijo de cliente y su numero de documento
-        if "document_number" not in data:
-            raise serializers.ValidationError("document_number {}".format(required))
-        data['code'] = PREFIX_CODE_CLIENT + str(request.data.get('document_number'))
-        data['role'] = ROLE_CLIENT
         if 'type_client' not in data or not data['type_client']:
-            raise serializers.ValidationError("document_number {}".format(required))
+            raise serializers.ValidationError("document_number {}".format(self.required))
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
         elif data['type_client'] == 'b':
@@ -88,12 +83,12 @@ class ClientListView(ListCreateAPIView):
             data['level_instruction'] = ''
             data['profession'] = ''
             data['ocupation'] = ''
+        data['role'] = ROLE_CLIENT
         serializer = ClientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
 
 # Vista para Detalle del Cliente
 class ClientDetailView(APIView):
