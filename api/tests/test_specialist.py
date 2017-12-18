@@ -397,7 +397,7 @@ class GetSpecialists(APITestCase):
             "last_name": "garzon",
             "type_specialist": "m",
             "address": {
-                "street": "camere 209",
+                "street": "jupiter 209",
                 "department": 1,
                 "province": 1,
                 "district": 1
@@ -411,7 +411,9 @@ class GetSpecialists(APITestCase):
             "ruc": "2009918312",
             "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": 1
+            "category": 1,
+            "nationality": 1,
+            "residence_country": 1
         }
 
 
@@ -512,14 +514,14 @@ class DeleteSpecialist(APITestCase):
 
     def setUp(self):
         self.valid_payload = {
-            'username': 'maria',
+            'username': 'julia',
             'nick': 'julia',
             'password': 'intel12345',
             "first_name": "juliana",
             "last_name": "garzon",
             "type_specialist": "m",
             "address": {
-                "street": "camere 209",
+                "street": "jupiter 209",
                 "department": 1,
                 "province": 1,
                 "district": 1
@@ -533,7 +535,9 @@ class DeleteSpecialist(APITestCase):
             "ruc": "2009918312",
             "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": 1
+            "category": 1,
+            "nationality": 1,
+            "residence_country": 1
         }
 
     def test_delete_specialist(self):

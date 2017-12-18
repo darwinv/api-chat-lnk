@@ -158,7 +158,7 @@ class GetClientsToAuthorization(APITestCase):
         }
 
         # get API response
-        response = client.get(reverse('authorizations-clients'))
+        response = client.get(reverse('auth-list-clients'))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data[0], result_expected)
