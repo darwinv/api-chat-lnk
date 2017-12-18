@@ -28,12 +28,13 @@ class ClientListView(ListCreateAPIView):
         condition_date = ''
         if "status" in request.query_params:
             status = request.query_params["status"]
-            condition_status = " AND api_status = {}".format(status)
-        if "date" in request.query_params:
-            date = request.query_params["date_joined"]
-            condition_date = " AND api_date_joined = {}".format(date)
+            condition_status = " AND api_user.status = {}".format(status)
+        if "date_start" in request.query_params and "date_end" in request.query_params:
+            date_start = request.query_params["date_start"]
+            date_end = request.query_params["date_end"]
+            condition_date = " AND api_user.date_joined BETWEEN {} AND {}".format(date_start, date_end)
 
-        condition = "{}{}".format(condition_status, condition_date)
+        condition = "{} {}".format(condition_status, condition_date)
         query_raw = """SELECT
                         seller.`code` AS code_seller,
                     IF (
@@ -64,15 +65,14 @@ class ClientListView(ListCreateAPIView):
                     INNER JOIN api_client ON api_client.user_ptr_id = api_user.id
                     LEFT JOIN api_user AS seller ON api_client.seller_asigned_id = seller.id
                     WHERE
-                        api_user.role_id = 2
-                        %(condition)s
+                        api_user.role_id = 2 {condition}
                     ORDER BY
                         api_user.`status` ASC,
-                        api_user.updated_at ASC"""
+                        api_user.updated_at ASC""".format(condition=condition)
 
         print(query_raw) # %(condition)s
-        import pdb; pdb.set_trace()
-        queryset = User.objects.raw(query_raw, params={'condition': condition}) #
+        # import pdb; pdb.set_trace()
+        queryset = User.objects.raw(query_raw) # params={'condition': condition}
         serializer = ClientAuthorization(queryset, many=True)
 
         # pagination
