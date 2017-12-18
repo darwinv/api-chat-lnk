@@ -17,16 +17,16 @@ class ChoicesAPI:
         ('2', _('Foreign Card')),
     )
     user_status = (
-        ('0', _('pending')),
-        ('1', _('activated')),
-        ('2', _('rejected')),
-        ('3', _('deactivated')),
+        ('0', _('Pending')),
+        ('1', _('Activate')),
+        ('2', _('Reject')),
+        ('3', _('Deactivated')),
     )
 
     # Client Model
     client_type_client = (
         ('n', _('Natural')),
-        ('b', _('Bussiness')),
+        ('b', _('Business')),
     )
 
     client_sex = (

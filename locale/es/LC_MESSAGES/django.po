@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-13 12:50-0500\n"
+"POT-Creation-Date: 2017-12-18 15:53-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,34 +30,29 @@ msgstr "Pasaporte"
 msgid "Foreign Card"
 msgstr "Tarjeta extranjera"
 
-#: .\api\api_choices_models.py:20
-#, fuzzy
-#| msgid "Pending"
-msgid "pending"
+#: .\api\api_choices_models.py:20 .\api\api_choices_models.py:76
+#: .\api\api_choices_models.py:82
+msgid "Pending"
 msgstr "Pendiente"
 
 #: .\api\api_choices_models.py:21
-msgid "activated"
-msgstr ""
+msgid "Activate"
+msgstr "Activar"
 
 #: .\api\api_choices_models.py:22
-msgid "rejected"
-msgstr ""
+msgid "Reject"
+msgstr "Rechazar"
 
 #: .\api\api_choices_models.py:23
-#, fuzzy
-#| msgid "separated"
-msgid "deactivated"
-msgstr "apartado"
+msgid "Deactivated"
+msgstr "Desactivado"
 
 #: .\api\api_choices_models.py:28
 msgid "Natural"
 msgstr "Natural"
 
 #: .\api\api_choices_models.py:29
-#, fuzzy
-#| msgid "Business"
-msgid "Bussiness"
+msgid "Business"
 msgstr "Juridico"
 
 #: .\api\api_choices_models.py:33
@@ -148,10 +143,6 @@ msgstr "Porcentaje"
 msgid "Number"
 msgstr "Número"
 
-#: .\api\api_choices_models.py:76 .\api\api_choices_models.py:82
-msgid "Pending"
-msgstr "Pendiente"
-
 #: .\api\api_choices_models.py:77 .\api\api_choices_models.py:83
 #: .\api\api_choices_models.py:91
 msgid "Paid"
@@ -233,28 +224,26 @@ msgstr "Moderar"
 msgid "Positive"
 msgstr "Positivo"
 
-#: .\api\serializers\actors.py:176 .\api\serializers\actors.py:206
-#: .\api\serializers\actors.py:424 .\api\serializers\actors.py:483
-#: .\api\views\actors.py:74 .\api\views\actors.py:176 .\api\views\actors.py:321
-#: .\api\views\actors.py:391
+#: .\api\serializers\actors.py:177 .\api\serializers\actors.py:207
+#: .\api\serializers\actors.py:430 .\api\serializers\actors.py:489
+#: .\api\views\actors.py:54 .\api\views\actors.py:175 .\api\views\actors.py:320
+#: .\api\views\actors.py:390
 msgid "required"
 msgstr "requerido"
 
-#: .\api\serializers\actors.py:207
-msgid "registro de información tributaria "
-msgstr ""
+#: .\api\serializers\actors.py:208
+msgid "registration of tax information"
+msgstr "registro de información tributaria"
 
-#: .\api\serializers\actors.py:325 .\api\serializers\actors.py:365
+#: .\api\serializers\actors.py:331 .\api\serializers\actors.py:371
 msgid "Main Specialist already exists for this speciality"
 msgstr "Especialista Principal ya existe para esta especialidad"
 
-#: .\api\serializers\actors.py:354
+#: .\api\serializers\actors.py:360
 msgid "send credencials"
 msgstr "enviar credenciales"
 
 #: .\api\templates\base.html:27 .\api\templates\send_credentials.html:27
-#, fuzzy
-#| msgid "title"
 msgid "Title"
 msgstr "titulo"
 
@@ -270,9 +259,9 @@ msgstr "usuario"
 msgid "password"
 msgstr "contraseña"
 
-#: .\api\views\actors.py:392
+#: .\api\views\actors.py:391
 msgid "not valid"
-msgstr ""
+msgstr "no valido"
 
 #: .\linkupapi\settings.py:121
 msgid "Spanish"
@@ -282,17 +271,3 @@ msgstr "Español"
 msgid "English"
 msgstr "Ingles"
 
-#~ msgid "can not be a legal person and reside in a foreign country"
-#~ msgstr "No puede ser persona juridica y residir en un pais extranjero"
-
-#~ msgid "must no be empty"
-#~ msgstr "No debe estar vacio"
-
-#~ msgid "Specialist"
-#~ msgstr "Especialista"
-
-#~ msgid "already"
-#~ msgstr "ya"
-
-#~ msgid "exists"
-#~ msgstr "existe"
