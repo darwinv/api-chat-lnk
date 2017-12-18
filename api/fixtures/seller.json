@@ -1,7 +1,7 @@
 [
 {
   "model": "api.seller",
-  "pk": 117,
+  "pk": 8,
   "fields": {
       "password": "pbkdf2_sha256$36000$uLuv9zPPtvKi$V/UegfKnF1PWkZQugmM4jy8CTg1R1X1d4BtyreNHb/4=",
       "last_login": null,
@@ -41,7 +41,7 @@
 },
 {
   "model": "api.seller",
-  "pk": 118,
+  "pk": 9,
   "fields": {
       "password": "pbkdf2_sha256$36000$i9roYuOJc1c0$Y/tv0pcS1gY4lmUEoSgS2KMWCC7Lko2zBg4V67NtONE=",
       "last_login": null,

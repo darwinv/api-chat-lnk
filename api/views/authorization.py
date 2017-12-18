@@ -53,7 +53,7 @@ class ClientListView(ListCreateAPIView):
                     ) AS document,
                     IF (
                         api_client.type_client = 'b',
-                        'ruc',
+                        'RUC',
                         api_user.document_type
                     ) AS document_type,
                      api_user.`status`,
@@ -68,7 +68,7 @@ class ClientListView(ListCreateAPIView):
                         api_user.role_id = 2 {condition}
                     ORDER BY
                         api_user.`status` ASC,
-                        api_user.updated_at ASC""".format(condition=condition)
+                        api_user.updated_at DESC""".format(condition=condition)
 
         queryset = User.objects.raw(query_raw) # params={'condition': condition}
         serializer = ClientAuthorization(queryset, many=True)

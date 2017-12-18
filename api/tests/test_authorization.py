@@ -123,7 +123,7 @@ class ChangeStatusClient(APITestCase):
 
 class GetClientsToAuthorization(APITestCase):
     """Test creado para probar los listados y autorizaciones de procesos"""
-    fixtures = ['data','data2','data3','address','user','client','seller']
+    fixtures = ['data','data2','data3','test_authorization']
     def setUp(self):
         self.valid_payload = {
             'name': 'julia',
@@ -148,15 +148,17 @@ class GetClientsToAuthorization(APITestCase):
         """Trae listado de clientes ordenados por estatus de autorizacion y compara con el primer registro traido"""
         result_expected = {
             "code_seller": None,
-            "name":"Oscar Lopez",
-            "document":"93923929329",
-            "document_type":"2",
+            "name":"Don Venus",
+            "document":"34354367",
+            "document_type":"RUC",
             "status":"0",
-            "document_type_name":"Tarjeta extranjera"
+            "document_type_name":"RUC",
+            "date_join": "2017-11-13",
+            "id": 4
         }
 
         # get API response
-        response = client.get(reverse('auth-list-clients'))
+        response = client.get(reverse('authorizations-clients'))
 
-		self.assertEqual(response.status_code, status.HTTP_200_OK)
-		self.assertEqual(response.data[0], result_expected)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data[0], result_expected)
