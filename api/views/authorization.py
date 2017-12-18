@@ -29,11 +29,11 @@ class ClientListView(ListCreateAPIView):
         if "status" in request.query_params:
             status = request.query_params["status"]
             condition_status = " AND api_user.status = {}".format(status)
-        if "date_start" in request.query_params and "date_end" in request.query_params:
-            date_start = request.query_params["date_start"]
-            date_end = request.query_params["date_end"]
-            condition_date = " AND api_user.date_joined BETWEEN {} AND {}".format(date_start, date_end)
-
+        if "from_date" in request.query_params and "until_date" in request.query_params:
+            from_date = request.query_params["from_date"]
+            until_date = request.query_params["until_date"]
+            condition_date = " AND api_user.date_joined BETWEEN {} AND {}".format(from_date, until_date)
+            
         condition = "{} {}".format(condition_status, condition_date)
         query_raw = """SELECT
                         seller.`code` AS code_seller,
