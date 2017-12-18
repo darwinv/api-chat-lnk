@@ -46,8 +46,10 @@ urlpatterns = [
     # email
     url(r'^mail/$', email.mail, name='mails'),
 
-    # Autorizaciones
-    url(r'^authorizations/clients/$', authorization.ClientListView.as_view(), name='authorizations-clients'),
+
+    # autorizacion para cliente
+    url(r'^authorizations/clients/$', authorization.ClientListView.as_view(),
+        name='auth-list-clients'),
     url(r'^authorizations/clients/(?P<pk>[0-9]+)/$', authorization.ChangeStatusClientView.as_view(),
         name='auth-clients'),
 

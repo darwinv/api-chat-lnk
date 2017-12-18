@@ -9,9 +9,11 @@ from rest_framework.response import Response
 from django.http import Http404
 from api.serializers.actors import ClientSerializer
 
+
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):
-    # Lista todos los clientes para listado de autorizacion
+    """Lista todos los clientes para listado de autorizacion."""
+
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAdminUser,)
     serializer_class = ClientAuthorization
@@ -19,9 +21,19 @@ class ClientListView(ListCreateAPIView):
     # Funcion personalizada para
     # devolver los clientes/usuarios para listado de autorizacion
     def list(self, request):
+        """Lista de Clientes por autorizar."""
         # en dado caso que exista el parametro "main_specialist", se devuelve
         # el listado de especialistas asociados, caso contrario devuelve todos
+        condition_status = ''
+        condition_date = ''
+        if "status" in request.query_params:
+            status = request.query_params["status"]
+            condition_status = " AND api_user.status = {}".format(status)
+        if "date" in request.query_params:
+            date = request.query_params["date_joined"]
+            condition_date = " AND api_user.date_joined = {}".format(date)
 
+        condition = "{}{}".format(condition_status, condition_date)
         query_raw = """SELECT
                         seller.`code` AS code_seller,
                     IF (
@@ -53,12 +65,12 @@ class ClientListView(ListCreateAPIView):
                     LEFT JOIN api_user AS seller ON api_client.seller_asigned_id = seller.id
                     WHERE
                         api_user.role_id = 2
+                        %(condition)s
                     ORDER BY
                         api_user.`status` ASC,
                         api_user.updated_at DESC"""
 
-        queryset = User.objects.raw(query_raw)
-
+        queryset = User.objects.raw(query_raw, params={'condition': condition}) #
         serializer = ClientAuthorization(queryset, many=True)
 
         # pagination

@@ -153,13 +153,12 @@ class GetClientsToAuthorization(APITestCase):
             "document_type":"RUC",
             "status":"0",
             "document_type_name":"RUC",
-            "date_join": "2017-11-13", 
+            "date_join": "2017-11-13",
             "id": 4
         }
 
         # get API response
         response = client.get(reverse('authorizations-clients'))
-        import pdb
-        pdb.set_trace()
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data[0], result_expected)
