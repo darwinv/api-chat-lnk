@@ -70,8 +70,6 @@ class ClientListView(ListCreateAPIView):
                         api_user.`status` ASC,
                         api_user.updated_at ASC""".format(condition=condition)
 
-        print(query_raw) # %(condition)s
-        # import pdb; pdb.set_trace()
         queryset = User.objects.raw(query_raw) # params={'condition': condition}
         serializer = ClientAuthorization(queryset, many=True)
 
