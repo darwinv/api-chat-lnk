@@ -521,7 +521,7 @@ class CreateBussinessContact(APITestCase):
             "agent_firstname": "Daniel",
             "agent_lastname": "Molina",
             'position': 'manager',
-            'ciiu': '1240',
+            'ciiu': 1,
             'nationality': 1,
             'objection': 1
         }

@@ -55,7 +55,7 @@ class CreateNaturalClient(APITestCase):
             'profession': "Administrador",
             'ocupation': '0',
             'about': 'iptsum aabout',
-            'ciiu': '1440',
+            'ciiu': 2,
             'nationality': 1,
             'residence_country': 1
         }
@@ -556,7 +556,7 @@ class CreateBussinessClient(APITestCase):
             'position': 'manager',
             'about': 'iptsum aabout',
             'economic_sector': 1,
-            'ciiu': '1240',
+            'ciiu': 1,
             'nationality': 1,
             'residence_country': 1
         }
@@ -749,6 +749,17 @@ class CreateBussinessClient(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_invalid_ciiu(self):
+        """Solicitud invalida por no enviar el ciiu."""
+        data = self.valid_payload
+        data['ciiu'] = 9000
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_no_agent_lastname(self):
         """Solicitud invalida por no enviar el apellido del representante."""
         data = self.valid_payload
@@ -923,7 +934,7 @@ class GetDetailClient(APITestCase):
                 'profession': "Administrador",
                 'ocupation': '0',
                 'about': 'iptsum aabout',
-                'ciiu': '1440',
+                'ciiu': 2,
                 'nationality': 1,
                 'residence_country': 1
         }
