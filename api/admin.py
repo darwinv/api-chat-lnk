@@ -30,7 +30,7 @@ class ClientBase(admin.ModelAdmin):
     fields = ('username','nick','password','photo',
      'document_type','nationality','ruc',
      'document_number','email_exact','code','telephone', 'cellphone','ciiu',
-     'activity_description','about','anonymous','role','type_client','status'
+     'activity_description','about','anonymous','role','type_client','status',
      'first_name', 'last_name',
      'sex', 'civil_state','birthdate',
      'level_instruction', 'institute','profession',
@@ -73,7 +73,7 @@ class PurchaseAdmin(admin.ModelAdmin):
         'is_promotional','last_number_fee_paid','status','expiration_date','promotion','code','product','query_amount')
 
 
-admin.site.register(Client, ClientNaturalAdmin)
+admin.site.register(Client, ClientBase)
 # admin.site.register(Client,ClientBussinessAdmin)
 admin.site.register(Category)
 admin.site.register(Specialist, SpecialistAdmin)
