@@ -286,7 +286,6 @@ class DetailSpecialist(APITestCase):
         response = client.get(reverse('specialist-detail',
                               kwargs={'pk': self.specialist}), format='json')
 
-        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
