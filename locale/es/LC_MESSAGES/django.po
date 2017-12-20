@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-18 15:53-0500\n"
+"POT-Creation-Date: 2017-12-20 12:01-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -224,6 +224,70 @@ msgstr "Moderar"
 msgid "Positive"
 msgstr "Positivo"
 
+#: .\api\models.py:87
+msgid "nick"
+msgstr ""
+
+#: .\api\models.py:88
+msgid "email"
+msgstr "correo"
+
+#: .\api\models.py:89
+msgid "phone"
+msgstr "telefono"
+
+#: .\api\models.py:90
+msgid "cellphone"
+msgstr "celular"
+
+#: .\api\models.py:93
+msgid "photo"
+msgstr "foto"
+
+#: .\api\models.py:94
+msgid "type document"
+msgstr "tipo de documento"
+
+#: .\api\models.py:95
+msgid "document number"
+msgstr "numero de documento"
+
+#: .\api\models.py:96
+msgid "upload document"
+msgstr "subir documento"
+
+#: .\api\models.py:98
+msgid "code"
+msgstr "codigo"
+
+#: .\api\models.py:99
+msgid "anonymous"
+msgstr "anonimo"
+
+#: .\api\models.py:100
+msgid "updated at"
+msgstr "actualizado en"
+
+#: .\api\models.py:101
+msgid "nationality"
+msgstr "nacionalidad"
+
+#: .\api\models.py:102
+msgid "role"
+msgstr "rol"
+
+#: .\api\models.py:103
+msgid "address"
+msgstr "direccion"
+
+#: .\api\models.py:105
+msgid "residence country"
+msgstr "pais de residencia"
+
+#: .\api\models.py:106
+msgid "foreign address"
+msgstr "direccion extranjera"
+
 #: .\api\serializers\actors.py:177 .\api\serializers\actors.py:207
 #: .\api\serializers\actors.py:430 .\api\serializers\actors.py:489
 #: .\api\views\actors.py:54 .\api\views\actors.py:175 .\api\views\actors.py:320
@@ -232,8 +296,8 @@ msgid "required"
 msgstr "requerido"
 
 #: .\api\serializers\actors.py:208
-msgid "registration of tax information"
-msgstr "registro de información tributaria"
+msgid "registro de información tributaria "
+msgstr ""
 
 #: .\api\serializers\actors.py:331 .\api\serializers\actors.py:371
 msgid "Main Specialist already exists for this speciality"
@@ -271,3 +335,5 @@ msgstr "Español"
 msgid "English"
 msgstr "Ingles"
 
+#~ msgid "registration of tax information"
+#~ msgstr "registro de información tributaria"

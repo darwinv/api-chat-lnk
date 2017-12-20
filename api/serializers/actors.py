@@ -456,7 +456,8 @@ class SellerSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     nick = serializers.CharField(required=True)
-    ruc = serializers.CharField(allow_blank=True, allow_null=True, required=False)
+    ruc = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())], allow_blank=True,
+                                allow_null=True, required=False)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
