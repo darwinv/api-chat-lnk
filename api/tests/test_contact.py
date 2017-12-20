@@ -521,7 +521,7 @@ class CreateBussinessContact(APITestCase):
             "agent_firstname": "Daniel",
             "agent_lastname": "Molina",
             'position': 'manager',
-            'ciiu': '1240',
+            'ciiu': 2,
             'nationality': 1,
             'objection': 1
         }
@@ -809,12 +809,11 @@ class CreateBussinessContact(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_create_bussines_client(self):
+    def test_create_busines_client(self):
         """Crea cliente juridico de manera exitosa."""
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

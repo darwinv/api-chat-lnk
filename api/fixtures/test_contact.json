@@ -48,7 +48,7 @@
   "fields": {
     "cv": null,
     "zone": null,
-    "ciiu": null,
+    "ciiu": 1,
     "groups": [],
     "user_permissions": []
   }

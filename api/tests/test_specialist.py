@@ -261,7 +261,7 @@ class CreateSpecialist(APITestCase):
         self.test_create_specialist_foreign()  # Llamado a crear especialista extranjero
 
         data['foreign_address'] = ""
-        
+
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = self.client.post(
             reverse('specialists'),
@@ -272,15 +272,21 @@ class CreateSpecialist(APITestCase):
 
 
 class DetailSpecialist(APITestCase):
-    fixtures = ['data','data2','data3','test_query','test_address']
+    """Detalle de Especialista."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_address', 'test_specialist']
+
     def setUp(self):
-        self.specialist = 6
+        """Setup."""
+        self.specialist = 3
 
     def test_get_detail(self):
+        """Obtener detalle de manera exitosa."""
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = client.get(reverse('specialist-detail',
-                         kwargs={'pk': self.specialist}),format='json')
+                              kwargs={'pk': self.specialist}), format='json')
 
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -500,7 +506,7 @@ class GetSpecialists(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        
+
         #import pdb; pdb.set_trace()
         url = "{}?main_specialist={}".format(reverse('specialists'),send.data["id"])
         response = client.get(url)
@@ -555,4 +561,3 @@ class DeleteSpecialist(APITestCase):
             None, format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-

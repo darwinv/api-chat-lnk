@@ -35,7 +35,7 @@ class CreateSeller(APITestCase):
             'email_exact': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
             'cellphone': '921471559',
-            'ciiu': '1440',
+            'ciiu': 1,
             'ruc': '144023123',
             'nationality': 1,
             'residence_country': 1

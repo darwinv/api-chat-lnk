@@ -44,7 +44,7 @@ class ChangeStatusClient(APITestCase):
             'profession': "Administrador",
             'ocupation': '0',
             'about': 'iptsum aabout',
-            'ciiu': '1440',
+            'ciiu': 1,
             'nationality': 1,
             'residence_country': 1
         }

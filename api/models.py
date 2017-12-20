@@ -115,7 +115,7 @@ class Seller(User):
 
     cv = models.CharField(max_length=100, null=True, blank=True)
     zone = models.ForeignKey(Zone, on_delete=models.PROTECT, null=True)
-    ciiu = models.CharField(max_length=4, null=True)
+    ciiu = models.ForeignKey(Ciiu, null=True)
 
     class Meta:
         """Meta."""
@@ -160,7 +160,7 @@ class SellerContactNoEfective(models.Model):
     civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
-    ciiu = models.CharField(max_length=4, blank=True)
+    ciiu = models.ForeignKey(Ciiu, null=True)
     activity_description = models.CharField(max_length=255, null=True, blank=True)
     photo = models.CharField(max_length=250, null=True)
     about = models.CharField(max_length=255, null=True, blank=True)
@@ -189,6 +189,7 @@ class SellerContactNoEfective(models.Model):
         """Nombre del Contacto."""
         return self.first_name
 
+
 class Client(User):
     """Modelo de Cliente (herede de usuario)."""
 
@@ -197,7 +198,8 @@ class Client(User):
     commercial_reason = models.CharField(max_length=45, null=True)
     civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
-    ciiu = models.CharField(max_length=4, blank=True)
+    # ciiu = models.CharField(max_length=4, blank=True)
+    ciiu = models.ForeignKey(Ciiu, null=True)
     activity_description = models.CharField(max_length=255, null=True, blank=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
     ocupation = models.CharField(max_length=1, choices=Ch.client_ocupation)
