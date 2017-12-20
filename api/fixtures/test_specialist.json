@@ -1,0 +1,55 @@
+[
+    {
+      "model": "api.user",
+      "pk": 3,
+      "fields": {
+        "password": "pbkdf2_sha256$36000$14YfOVmemcYB$tnxgkqzPH9rlaL+5U0rQuTtMFTA5d4+bczB34X51Fis=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "teresa",
+        "last_name": "garcia",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2017-12-20T15:09:27.646Z",
+        "first_name": "teresa",
+        "nick": "tere",
+        "email_exact": "teresaq@tesla.com",
+        "telephone": "00023123",
+        "cellphone": "0001231",
+        "code_telephone": null,
+        "code_cellphone": null,
+        "photo": null,
+        "document_type": "1",
+        "document_number": "555",
+        "img_document_number": null,
+        "ruc": "31667444",
+        "code": "E555",
+        "anonymous": true,
+        "updated_at": "2017-12-20T15:09:27.750Z",
+        "nationality": 1,
+        "role": 1,
+        "address": 2,
+        "residence_country": 1,
+        "foreign_address": null,
+        "key": "B3PBOKFELA",
+        "status": "0",
+        "groups": [],
+        "user_permissions": []
+      }
+  },
+{
+  "model": "api.specialist",
+  "pk": 3,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "m",
+    "star_rating": null,
+    "cv": null,
+    "payment_per_answer": 3.2,
+    "category": 22,
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

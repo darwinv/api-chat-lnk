@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from api.models import User, Client, Countries, SellerContactNoEfective
 from api.models import Address, Department, Objection, EconomicSector
-from api.models import Province, District, Specialist
+from api.models import Province, District, Specialist, Ciiu
 from api.models import Seller, Quota, Purchase, Fee, LevelInstruction
 from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
@@ -724,7 +724,7 @@ class SellerContactBusinessSerializer(serializers.ModelSerializer):
     type_contact_name = serializers.SerializerMethodField()
     document_type = serializers.ChoiceField(choices=c.user_document_type)
     document_type_name = serializers.SerializerMethodField()
-    ciiu = serializers.CharField(max_length=4, allow_blank=False, allow_null=False)
+    ciiu = serializers.PrimaryKeyRelatedField(queryset=Ciiu.objects.all(), required=True, allow_null=False)
     photo = serializers.CharField(read_only=True)
     agent_firstname = serializers.CharField(max_length=45, allow_blank=False, allow_null=False)
     agent_lastname = serializers.CharField(max_length=45, allow_blank=False, allow_null=False)
