@@ -488,13 +488,14 @@ class SellerSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Redefinido metodo de validación."""
         required = _('required')
+        address = _('address')
         # si la residencia es peru, es obligatoria la dirección
         if data["residence_country"] == Countries.objects.get(name="Peru"):
             if 'address' not in data:
-                raise serializers.ValidationError("address {}".format(required))
+                raise serializers.ValidationError("{} {}".format(address, required))
         else:
             if "foreign_address" not in data or not data["foreign_address"]:
-                raise serializers.ValidationError("foreign_address {}".format(required))
+                raise serializers.ValidationError("{} {}".format(address, required))
         return data
 
     def create(self, validated_data):
