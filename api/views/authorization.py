@@ -71,10 +71,8 @@ class ClientListView(ListCreateAPIView):
                     ORDER BY
                         api_user.`status` ASC,
                         api_user.updated_at DESC""".format(condition=condition)
-
         queryset = User.objects.raw(query_raw) # params={'condition': condition}
         serializer = ClientAuthorization(queryset, many=True)
-
         # pagination
         # page = self.paginate_queryset(queryset)
         # if page is not None:

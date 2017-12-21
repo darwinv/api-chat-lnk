@@ -133,7 +133,7 @@ class ClientSerializer(serializers.ModelSerializer):
             'economic_sector', 'economic_sector_name', 'institute', 'profession',
             'ocupation', 'ocupation_name', 'about', 'nationality', 'nationality_name',
             "residence_country", "commercial_reason", "foreign_address", "residence_country_name",
-            "status", "code_cellphone", "code_telephone")
+            "status", "code_cellphone", "code_telephone", "role")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
