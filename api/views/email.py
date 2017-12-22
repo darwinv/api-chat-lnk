@@ -2,6 +2,8 @@ from rest_framework.decorators import api_view
 from api.emails import BasicEmailAmazon
 from rest_framework.response import Response
 
+
+# metodo para enviar el mail
 @api_view(['POST'])
 def mail(request):
     if request.method == 'POST':

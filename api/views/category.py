@@ -8,15 +8,16 @@ from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 import pdb
 
+# Devuelve las especialidaddes que solo tienen especialista principal
 class CategoryListView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
         # Category.objects.all()
-        # devuelve solo las especialidades con especialista principal
         specialities = Category.objects.filter(specialist__type_specialist='m')
         serializer = CategorySerializer(specialities, many=True)
         return Response(serializer.data)
 
+# detalle de la especialidad
 class CategoryDetailView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get_object(self, pk):

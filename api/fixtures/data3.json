@@ -1,0 +1,31 @@
+[
+  {
+    "model": "oauth2_provider.application",
+    "pk": 1,
+    "fields": {
+      "client_id": "FUN5EkBDdiQo8SixJYslF41ZkrjAhQtWKkV7BEE2",
+      "user": null,
+      "redirect_uris": "",
+      "client_type": "public",
+      "authorization_grant_type": "password",
+      "client_secret": "P7pj3QcE6GyhlS0QUzJOJ8SRLlTGHYSMESGr7QzlyKnuMsc4osaaStB6wSiGGxAelKjXv6xJ7p9Go8R5el2KaVlcM4P50IeplkY2CWHxaOc9NI1fLKS9DoWxD9UbG4TN",
+      "name": "",
+      "skip_authorization": false,
+      "created": "2017-10-02T21:19:16.205Z",
+      "updated": "2017-10-02T21:19:16.205Z"
+    }
+  },
+  {
+    "model": "oauth2_provider.accesstoken",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "token": "EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz",
+      "application": 1,
+      "expires": "9999-12-31T23:59:59Z",
+      "scope": "",
+      "created": "2016-12-31T23:59:59Z",
+      "updated": "2017-10-02T22:27:09.173Z"
+    }
+  }
+]
