@@ -27,7 +27,7 @@ class BasicEmailAmazon(object):
     def sendmail(self, args):
         """Metodo para enviar correos por Amazon."""
         return True
-        # # Create a new SES resource and specify a region.
+        # Create a new SES resource and specify a region.
         # client = boto3.client('ses', region_name=self.region)
         # d = (args)
         # #
@@ -35,7 +35,7 @@ class BasicEmailAmazon(object):
         # txt = get_template(self.template_txt)
         # html_content = html.render(d)
         # txt_content = txt.render(d)
-        #     # Try to send the email.
+        # # Try to send the email.
         # try:
         #     response = client.send_email(
         #             Destination={

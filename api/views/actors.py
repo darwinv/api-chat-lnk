@@ -2,7 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Product, Purchase
-from api.models import SellerContactNoEfective, Countries
+from api.models import SellerContactNoEfective
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
@@ -10,7 +10,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHa
 from django.db.models import Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
-from api.serializers.actors import ClientSerializer, UserPhotoSerializer
+from api.serializers.actors import ClientSerializer, UserPhotoSerializer, KeySerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
 from api.serializers.actors import SellerAccountSerializer, MediaSerializer
@@ -34,6 +34,27 @@ PREFIX_CODE_SELLER = 'V'
 DATE_FAKE = '1900-01-01'
 # Fin de constates
 
+
+class ViewKey(APIView):
+    """Devuelve la contraseña sin encriptar (uso exclusivo para dev)."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.AllowAny]
+
+    def get_object(self, pk):
+        """Obtener objeto."""
+        try:
+            obj = User.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        """Detalle."""
+        user = self.get_object(pk)
+        serializer = KeySerializer(user)
+        return Response(serializer.data)
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """Vista para traer datos de usuarios (Logueo en la web)."""
@@ -90,6 +111,7 @@ class ClientListView(ListCreateAPIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+
 # Vista para Detalle del Cliente
 class ClientDetailView(APIView):
     """Detalle del Cliente, GET/PUT/Delete."""
@@ -134,6 +156,27 @@ class ClientDetailByUsername(APIView):
 # Fin de Clientes
 
 # ---------- ------ Inicio de Especialistas ------------------------------
+
+# Vista para detalle del cliente segun su username
+# se hizo con la finalidad de instanciar una vez logueado
+class SpecialistDetailByUsername(APIView):
+    """Detalle de Especialista por Nombre de Usuario."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self, username):
+        """Obtener Objeto."""
+        try:
+            return Specialist.objects.get(username=username)
+        except Specialist.DoesNotExist:
+            raise Http404
+
+    def get(self, request, username):
+        """Obtener Especialista."""
+        specialist = self.get_object(username)
+        serializer = SpecialistSerializer(specialist)
+        return Response(serializer.data)
 
 class SpecialistListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
@@ -223,22 +266,6 @@ class SpecialistDetailView(APIView):
         specialist = self.get_object(pk)
         specialist.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-# Vista para detalle del cliente segun su username
-# se hizo con la finalidad de instanciar una vez logueado
-class SpecialistDetailByUsername(APIView):
-    authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated,)
-    def get_object(self, username):
-        try:
-            return Specialist.objects.get(username=username)
-        except Specialist.DoesNotExist:
-            raise Http404
-
-    def get(self, request, username):
-        specialist = self.get_object(username)
-        serializer = SpecialistSerializer(client)
-        return Response(serializer.data)
 
 
 # Vista para estado de cuenta de especialista

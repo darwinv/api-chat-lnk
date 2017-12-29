@@ -784,6 +784,16 @@ class MediaSerializer(serializers.Serializer):
         allow_empty_file=False)
 
 
+class KeySerializer(serializers.ModelSerializer):
+    """Serializer devuelve clave."""
+
+    class Meta:
+        """Meta."""
+
+        model = User
+        fields = ("id", "username", "key")
+        read_only_fields = fields
+
     # class Meta:
     #     #model = Specialist
     #     fields = (

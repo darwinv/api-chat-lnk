@@ -13,9 +13,12 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     # Clientes
     url(r'^clients/$', actors.ClientListView.as_view(), name='clients'),
-    # Servicio para logueo
+    # Servicio para logueo de clientes
     url(r'^clients-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$', actors.ClientDetailByUsername.as_view(),
         name='client-detail-username'),
+
+    url(r'^specialists-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$', actors.SpecialistDetailByUsername.as_view(),
+        name='specialist-detail-username'),
     # detalle de cliente
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(), name='client-detail'),
     # Especialidades
@@ -45,7 +48,8 @@ urlpatterns = [
 
     # email
     url(r'^mail/$', email.mail, name='mails'),
-
+    # servicio exclusivo para devolver key, solo para equipo de desarrollo
+    url(r'^key/(?P<pk>[0-9]+)/$', actors.ViewKey.as_view(), name='get-key'),
 
     # autorizacion para cliente
     url(r'^authorizations/clients/$', authorization.ClientListView.as_view(),
