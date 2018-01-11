@@ -19,6 +19,9 @@ urlpatterns = [
 
     url(r'^specialists-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$', actors.SpecialistDetailByUsername.as_view(),
         name='specialist-detail-username'),
+
+    url(r'^sellers-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$', actors.SellerDetailByUsername.as_view(),
+        name='seller-detail-username'),
     # detalle de cliente
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(), name='client-detail'),
     # Especialidades
