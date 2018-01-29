@@ -4,7 +4,7 @@ from rest_framework.validators import UniqueValidator
 from api.models import User, Client, Countries, SellerContactNoEfective
 from api.models import Address, Department, Objection, EconomicSector
 from api.models import Province, District, Specialist, Ciiu
-from api.models import Seller, Quota, Purchase, Fee, LevelInstruction
+from api.models import Seller, LevelInstruction
 from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
 import datetime, string, random
@@ -12,6 +12,7 @@ from django.db.models import Sum
 from api.emails import BasicEmailAmazon
 from rest_framework.response import Response
 from api.tools import capitalize as cap
+
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -562,70 +563,70 @@ class SellerSerializer(serializers.ModelSerializer):
 
 
 # Serializer para consultar estado de cuenta del Vendedor.
-class SellerAccountSerializer(serializers.ModelSerializer):
-    amount_accumulated = serializers.SerializerMethodField()
-    fee_accumulated = serializers.SerializerMethodField()
-    is_billable = serializers.SerializerMethodField()
-    count_products = serializers.SerializerMethodField()
-    # A continuacion se definen los campos enviados desde
-    # el querySet para que el serializador los reconozca
-    purchase__total_amount = serializers.CharField()
-    purchase__id = serializers.CharField()
-    purchase__code = serializers.CharField()
-    purchase__query_amount = serializers.CharField()
-    purchase__product__is_billable = serializers.CharField()
-    purchase__product__expiration_number = serializers.CharField()
-    purchase__product__name = serializers.CharField()
-    purchase__client__code = serializers.CharField()
-    purchase__client__nick = serializers.CharField()
-    purchase__fee__date = serializers.CharField()
-    purchase__fee__fee_amount = serializers.CharField()
-    purchase__fee__status = serializers.CharField()
-    purchase__fee__payment_type__name = serializers.CharField()
-    purchase__fee__reference_number = serializers.CharField()
-    purchase__fee_number = serializers.CharField()
-    purchase__fee__id = serializers.CharField()
-    purchase__fee__fee_order_number = serializers.CharField()
-
-    class Meta:
-        model = Seller
-        fields = ('amount_accumulated', 'fee_accumulated', 'is_billable', 'count_products',
-                  # Los campos a continuacion son enviados en el querySet pero han sido
-                  # redeclarados para que el serializer los reconozca
-                  'purchase__total_amount', 'purchase__id', 'purchase__code', 'purchase__query_amount',
-                  'purchase__product__is_billable', 'purchase__product__expiration_number', 'purchase__product__name',
-                  'purchase__client__code', 'purchase__client__nick', 'purchase__fee__date',
-                  'purchase__fee__fee_amount', 'purchase__fee__id', 'purchase__fee__status',
-                  'purchase__fee__payment_type__name', 'purchase__fee__reference_number', 'purchase__fee_number',
-                  'purchase__fee__fee_order_number')
-
-    def get_amount_accumulated(self, obj):
-        # Esta funcion calcula la sumatoria de los pagos  efectuados en cada cuota,
-        # respecto a una venta y fecha especificada
-        result = Fee.objects.filter(purchase_id=obj['purchase__id'], date__lte=obj['purchase__fee__date'],
-                                    status=obj['purchase__fee__status']).aggregate(Sum('fee_amount'))
-
-        return result['fee_amount__sum']
-
-    def get_fee_accumulated(self, obj):
-        # Esta funcion calcula la cantidad de los pagos  efectuados en cada cuota,
-        # respecto a una venta y fecha especificada
-        result = Fee.objects.filter(purchase_id=obj['purchase__id'], date__lte=obj['purchase__fee__date'],
-                                    status=obj['purchase__fee__status']).count()
-        return result
-
-    def get_is_billable(self, obj):
-        # Retorna si es facturable o no, formato texto
-        if obj['purchase__product__is_billable']:
-            result = "FAC"
-        else:
-            result = "NO FAC"
-
-        return result
-
-    def get_count_products(self, obj):
-        # Retorna cantidad de productos (de momento se compra ssiemrpe un solo producto)
-        return 1
+# class SellerAccountSerializer(serializers.ModelSerializer):
+#     amount_accumulated = serializers.SerializerMethodField()
+#     fee_accumulated = serializers.SerializerMethodField()
+#     is_billable = serializers.SerializerMethodField()
+#     count_products = serializers.SerializerMethodField()
+#     # A continuacion se definen los campos enviados desde
+#     # el querySet para que el serializador los reconozca
+#     purchase__total_amount = serializers.CharField()
+#     purchase__id = serializers.CharField()
+#     purchase__code = serializers.CharField()
+#     purchase__query_amount = serializers.CharField()
+#     purchase__product__is_billable = serializers.CharField()
+#     purchase__product__expiration_number = serializers.CharField()
+#     purchase__product__name = serializers.CharField()
+#     purchase__client__code = serializers.CharField()
+#     purchase__client__nick = serializers.CharField()
+#     purchase__fee__date = serializers.CharField()
+#     purchase__fee__fee_amount = serializers.CharField()
+#     purchase__fee__status = serializers.CharField()
+#     purchase__fee__payment_type__name = serializers.CharField()
+#     purchase__fee__reference_number = serializers.CharField()
+#     purchase__fee_number = serializers.CharField()
+#     purchase__fee__id = serializers.CharField()
+#     purchase__fee__fee_order_number = serializers.CharField()
+#
+#     class Meta:
+#         model = Seller
+#         fields = ('amount_accumulated', 'fee_accumulated', 'is_billable', 'count_products',
+#                   # Los campos a continuacion son enviados en el querySet pero han sido
+#                   # redeclarados para que el serializer los reconozca
+#                   'purchase__total_amount', 'purchase__id', 'purchase__code', 'purchase__query_amount',
+#                   'purchase__product__is_billable', 'purchase__product__expiration_number', 'purchase__product__name',
+#                   'purchase__client__code', 'purchase__client__nick', 'purchase__fee__date',
+#                   'purchase__fee__fee_amount', 'purchase__fee__id', 'purchase__fee__status',
+#                   'purchase__fee__payment_type__name', 'purchase__fee__reference_number', 'purchase__fee_number',
+#                   'purchase__fee__fee_order_number')
+#
+#     def get_amount_accumulated(self, obj):
+#         # Esta funcion calcula la sumatoria de los pagos  efectuados en cada cuota,
+#         # respecto a una venta y fecha especificada
+#         result = Fee.objects.filter(purchase_id=obj['purchase__id'], date__lte=obj['purchase__fee__date'],
+#                                     status=obj['purchase__fee__status']).aggregate(Sum('fee_amount'))
+#
+#         return result['fee_amount__sum']
+#
+#     def get_fee_accumulated(self, obj):
+#         # Esta funcion calcula la cantidad de los pagos  efectuados en cada cuota,
+#         # respecto a una venta y fecha especificada
+#         result = Fee.objects.filter(purchase_id=obj['purchase__id'], date__lte=obj['purchase__fee__date'],
+#                                     status=obj['purchase__fee__status']).count()
+#         return result
+#
+#     def get_is_billable(self, obj):
+#         # Retorna si es facturable o no, formato texto
+#         if obj['purchase__product__is_billable']:
+#             result = "FAC"
+#         else:
+#             result = "NO FAC"
+#
+#         return result
+#
+#     def get_count_products(self, obj):
+#         # Retorna cantidad de productos (de momento se compra ssiemrpe un solo producto)
+#         return 1
 
 
 class SellerContactNaturalSerializer(serializers.ModelSerializer):

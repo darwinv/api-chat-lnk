@@ -83,6 +83,12 @@ class ChoicesAPI:
         ('2', _('Paid')),
     )
 
+    # Sale Model
+    sale_status = (
+        ('0', _('Pending')),
+        ('1', _('Paid')),
+    )
+
     # CulqiPayment Model
     culqipayment_status = (
         ('w', _('Wait')),
@@ -91,6 +97,12 @@ class ChoicesAPI:
         ('p', _('Paid')),
     )
 
+    # payment model
+    payment_status = (
+        ('0', _('Pending')),
+        ('1', _('Accepted')),
+        ('2', _('Declined')),
+    )
     # Query Model
     query_status = (
         ('0', _('Requested')),  # Preguntada, pendiente de derivar o responder
@@ -101,6 +113,13 @@ class ChoicesAPI:
         ('5', _('Answered')),  # respondida por asociado
         ('6', _('Absolved Main')),  # resuelta por principal
         ('7', _('Absolved')),  # resuelta por asociado
+    )
+
+    # MatchAcquired model
+    match_acquired_status = (
+        ('0', _('Requested')),
+        ('1', _('Accepted')),
+        ('2', _('Declined')),
     )
 
     # Message Model

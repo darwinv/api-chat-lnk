@@ -5,40 +5,55 @@ from django.contrib.auth.models import AbstractUser
 from api.api_choices_models import ChoicesAPI as Ch
 from django.utils.translation import ugettext_lazy as _
 
+
 class Countries(models.Model):
+    """Paises."""
+
     name = models.CharField(max_length=90, unique=True)
     code_phone = models.CharField(max_length=4)
     iso_code = models.CharField(max_length=4, unique=True)
 
     def __str__(self):
+        """nombre."""
         return self.name
 
 
 class Ciiu(models.Model):
+    """Codigo CIIU."""
+
     code = models.CharField(max_length=4, unique=True)
     description = models.CharField(max_length=255)
 
 
 class Department(models.Model):
+    """Departamento."""
+
     name = models.CharField(max_length=55)
 
     def __str__(self):
+        """nombre."""
         return self.name
 
 
 class Province(models.Model):
+    """Provincia."""
+
     name = models.CharField(max_length=55)
     department = models.ForeignKey(Department, on_delete=models.PROTECT)
 
     def __str__(self):
+        """Nombre."""
         return self.name
 
 
 class District(models.Model):
+    """Distrito."""
+
     name = models.CharField(max_length=55)
     province = models.ForeignKey(Province, on_delete=models.PROTECT)
 
     def __str__(self):
+        """Nombre."""
         return self.name
 
 
@@ -52,14 +67,19 @@ class Address(models.Model):
 
 
 class Zone(models.Model):
+    """Zona."""
+
     name = models.CharField(max_length=45)
     districts = models.ManyToManyField(District, db_table='zones_districts')
 
     def __str__(self):
+        """Nombre."""
         return self.name
 
 
 class Permmission(models.Model):
+    """Permisos."""
+
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=220)
     code = models.CharField(max_length=12)
@@ -69,11 +89,14 @@ class Permmission(models.Model):
 # por eso creamos un modelo nuevo
 
 class Role(models.Model):
+    """Rol."""
+
     name = models.CharField(max_length=50, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     permissions = models.ManyToManyField(Permmission, db_table='role_permission')
 
     def __str__(self):
+        """Nombre del Rol."""
         return self.name
 
 
@@ -125,16 +148,22 @@ class Seller(User):
 
 
 class Objection(models.Model):
+    """Objecion."""
+
     name = models.CharField(max_length=65)
 
     def __str__(self):
+        """Nombre."""
         return self.name
 
 
 class EconomicSector(models.Model):
+    """Sector Economico."""
+
     name = models.CharField(max_length=45)
 
     def __str__(self):
+        """Nombre."""
         return self.name
 
 
@@ -220,13 +249,48 @@ class Client(User):
         verbose_name_plural = 'Clients'
 
 
+class ContractType(models.Model):
+    """Contratos Categorias."""
+
+    name = models.CharField(max_length=50)
+    descripcion = models.CharField(max_length=200)
+
+
+class Contract(models.Model):
+    """Contratos Historico."""
+
+    url_file = models.CharField(max_length=255)
+    created_at = models.DateField(auto_now_add=True)
+    active = models.BooleanField(default=False)
+    validity_months = models.PositiveIntegerField()
+    expiration_date = models.DateField()
+    type_contract = models.ForeignKey(ContractType, on_delete=models.PROTECT)
+
+
 class Category(models.Model):
+    """Especialidad."""
+
     name = models.CharField(max_length=45, unique=True)
     image = models.CharField(max_length=169)
     description = models.CharField(max_length=255)
-    payment_per_answer = models.FloatField()
+    # payment_per_answer = models.DecimalField(max_digits=10, decimal_places=2)
+    fixed_commission = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    variable_commission = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    contract = models.ForeignKey(Contract, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
+        """Repr."""
+        return self.name
+
+
+class Bank(models.Model):
+    """Bancos del Peru."""
+
+    name = models.CharField(_('Bank'), max_length=200)
+    code = models.CharField(max_length=10)
+
+    def __str__(self):
+        """Representacion String."""
         return self.name
 
 
@@ -237,7 +301,7 @@ class Specialist(User):
     type_specialist = models.CharField(max_length=1, choices=Ch.specialist_type_specialist)
     star_rating = models.IntegerField(null=True)
     cv = models.CharField(max_length=150, null=True)
-    payment_per_answer = models.FloatField()
+    payment_per_answer = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
 
     class Meta:
@@ -247,134 +311,191 @@ class Specialist(User):
         verbose_name_plural = 'Specialists'
 
 
-class SpecialistContract(models.Model):
-    name_case = models.CharField(max_length=100)
+class Clasification(models.Model):
+    """Clasificacion para planes de consulta."""
 
-    state = models.CharField(max_length=1, choices=Ch.specialistcontract_state)
-    declined_motive = models.CharField(max_length=255, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    client = models.ForeignKey(Client, on_delete=models.PROTECT)
-    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
-
-    def __str__(self):
-        return self.name_case
-
-
-class ContractCategory(models.Model):
-    url_file = models.CharField(max_length=50)
-    created_at = models.DateField(auto_now_add=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.category
-
-
-class Promotion(models.Model):
-    code = models.CharField(max_length=45)
-    discount = models.FloatField()
-    start_date = models.DateField()
-    end_date = models.DateField()
-
-    type_discount = models.CharField(max_length=1, choices=Ch.promotions_type)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.code
-
-
-class Plan(models.Model):
     name = models.CharField(max_length=45)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        """String."""
         return self.name
 
 
-class Product(models.Model):
-    name = models.CharField(max_length=45)
-    query_amount = models.IntegerField()
-    expiration_number = models.PositiveIntegerField()
-    price = models.FloatField()
-    is_active = models.BooleanField()
-    is_billable = models.BooleanField()
-    created_at = models.DateTimeField()
-    plan = models.ForeignKey(Plan, on_delete=models.PROTECT)
-    seller = models.ManyToManyField(Seller, through='ProductsSellerNoBillable')
+class ProductType(models.Model):
+    """Tipo de Producto."""
 
-    def __str__(self):
-        return self.name
-
-
-class Purchase(models.Model):
-    code = models.PositiveIntegerField()
-    total_amount = models.FloatField()
-    reference_number = models.CharField(max_length=30)
-    fee_number = models.PositiveIntegerField()
-    latitude = models.CharField(max_length=45, null=True)
-    longitude = models.CharField(max_length=45, null=True)
-    query_amount = models.PositiveIntegerField()
-    query_available = models.PositiveIntegerField()
-    is_promotional = models.BooleanField()
-    last_number_fee_paid = models.PositiveIntegerField()
-
-    status = models.CharField(max_length=1, choices=Ch.purchase_status)
-    expiration_date = models.DateField()
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
-    promotion = models.ForeignKey(Promotion, on_delete=models.PROTECT, null=True, blank=True)
-    seller = models.ForeignKey(Seller, on_delete=models.PROTECT, null=True)
-    client = models.ForeignKey(Client, on_delete=models.PROTECT)
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.reference_number
+        """String."""
+        return self.name
 
 
-class ProductsSellerNoBillable(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+class QueryPlans(models.Model):
+    """Planes de Consultas (Producto)."""
+
+    name = models.CharField(max_length=50)
+    query_quantity = models.IntegerField()
+    validity_months = models.PositiveIntegerField()
+    maximum_response_time = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=4)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+    product_type = models.ForeignKey(ProductType, on_delete=models.PROTECT)
+    clasification = models.ForeignKey(Clasification, on_delete=models.PROTECT)
+    non_billable = models.ManyToManyField(Seller, through='SellerNonBillablePlans')
+
+
+class SellerNonBillablePlans(models.Model):
+    """Planes no Facturables Asignados a Vendedores."""
+
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
-    query_amount_no_billable = models.IntegerField()
-    query_amount_no_billable_available = models.IntegerField()
-    date = models.DateField(unique=True)
+    query_plans = models.ForeignKey(QueryPlans, on_delete=models.PROTECT)
+    quantity = models.PositiveIntegerField()
+    number_month = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Match(models.Model):
+    """Contratacion de Especialista (Producto)."""
+
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    product_type = models.ForeignKey(ProductType, on_delete=models.PROTECT)
+    speciality = models.ForeignKey(Category, on_delete=models.PROTECT)
+
+
+class Sale(models.Model):
+    """Venta."""
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    place = models.CharField(max_length=100)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    reference_number = models.CharField(max_length=20)
+    description = models.TextField()
+    is_fee = models.BooleanField(default=False)
+    client = models.ForeignKey(Client, on_delete=models.PROTECT)
+    seller = models.ForeignKey(Seller, null=True, on_delete=models.PROTECT)
+    # status = models.IntegerField()
+
+
+class SaleDetail(models.Model):
+    """Detalle de Venta."""
+
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField()
+    discount = models.DecimalField(max_digits=10, decimal_places=2)
+    pin_code = models.CharField(max_length=50)
+    is_billable = models.BooleanField(default=True)
+    contract = models.ForeignKey(Contract, on_delete=models.PROTECT, null=True)
+    product_type = models.ForeignKey(ProductType, on_delete=models.PROTECT)
+    sale = models.ForeignKey(Sale, on_delete=models.PROTECT)
+
+
+class QueryPlansAcquired(models.Model):
+    """Planes de Consultas (Adquirido)."""
+
+    expiration_date = models.DateField()
+    validity_months = models.PositiveIntegerField()
+    available_queries = models.PositiveIntegerField()
+    activation_date = models.DateField()
+    is_active = models.BooleanField(default=False)
+    available_requeries = models.PositiveIntegerField()
+    maximum_response_time = models.PositiveIntegerField()  # En Horas
+    acquired_at = models.DateTimeField(auto_now_add=True)
+    cliente = models.ForeignKey(Client, on_delete=models.PROTECT)
+    query_plans = models.ForeignKey(QueryPlans, on_delete=models.PROTECT)
+    sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
 
 
 class PaymentType(models.Model):
+    """Tipos de Pago."""
+
     name = models.CharField(max_length=45)
+    description = models.CharField(max_length=200, null=True)
+    status = models.BooleanField(default=True)
 
     def __str__(self):
+        """Representacion String."""
         return self.name
 
 
-class Fee(models.Model):
-    reference_number = models.CharField(max_length=20)
-    fee_order_number = models.PositiveIntegerField()  # El numero de cuota que se esta pagando
-    fee_amount = models.FloatField()  # total pagado para esta cuota
-    transaction_code = models.CharField(max_length=45)
+class Payment(models.Model):
+    """Pagos."""
 
-    purchase = models.ForeignKey(Purchase, on_delete=models.PROTECT)
+    amount = models.FloatField()
+    operation_number = models.CharField(max_length=12)
+    agency_code = models.CharField(max_length=10)
+    account_number_drawer = models.CharField(max_length=50)
+    check_number = models.CharField(max_length=50)
+    credit_cart_number = models.CharField(max_length=30)
+    credit_card_cvc = models.CharField(max_length=3)
+    credit_card_exp_date = models.DateField()
+    authorized_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    authorization_date = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=1, choices=Ch.payment_status)
+    observations = models.CharField(max_length=255)
+    bank = models.ForeignKey(Bank, on_delete=models.PROTECT)
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
-    api_client = models.TextField(null=True)
-    tablename = models.CharField(max_length=17, null=True)
-
-    status = models.CharField(max_length=1, choices=Ch.fee_status)
-    date = models.DateField()
-    datetime_payment = models.DateTimeField(null=True)
-
-    def __str__(self):
-        return self.reference_number
 
 
-class CreditCard(models.Model):
-    number_card = models.CharField(max_length=16)
-    cvc = models.CharField(max_length=4)
-    expiration_date = models.DateField()
+class MatchAcquired(models.Model):
+    """Match Adquirido."""
+
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    cause = models.TextField()
+    status = models.CharField(max_length=1, choices=Ch.match_acquired_status)
+    paid_by_specialist = models.BooleanField(default=False)
+    paid_by_client = models.BooleanField(default=True)
+    paid_by_specialist = models.BooleanField(default=False)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
+    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
+    sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
 
 
-class CulqiPayment(models.Model):
-    culqi_code = models.CharField(max_length=40)
+class MatchAcquiredFiles(models.Model):
+    """Archivos Adjuntos del Match."""
 
-    status = models.CharField(max_length=1, choices=Ch.culqipayment_status)
-    credit_cartd = models.ForeignKey(CreditCard, on_delete=models.PROTECT)
+    file_url = models.CharField(max_length=100)
+    type_file = models.CharField(max_length=1, choices=Ch.messagefile_type_file)
+    match_acquired = models.ForeignKey(MatchAcquired)
+
+
+class MatchAcquiredLog(models.Model):
+    """Log Match Adquirido."""
+
+    changed_on = models.DateTimeField(auto_now_add=True)
+    action = models.CharField(max_length=50)
+    status = models.CharField(max_length=1, choices=Ch.match_acquired_status)
+    declined = models.NullBooleanField()
+    declined_motive = models.CharField(max_length=255, null=True)
+    match_acquired = models.ForeignKey(MatchAcquired, on_delete=models.PROTECT)
+
+
+class MonthlyFee(models.Model):
+    """Cuota Mensual."""
+
+    fee_amount = models.DecimalField(max_digits=10, decimal_places=2)  # total pagado para esta cuota
+    fee_order_number = models.PositiveIntegerField()  # El numero de cuota que se esta pagando
+    fee_quantity = models.PositiveIntegerField()  # numero total de cuotas
+    reference_number = models.CharField(max_length=20)
+    sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
+    pay_before = models.DateField()
+    status = models.CharField(max_length=1, choices=Ch.fee_status)
+    payment = models.ForeignKey(Payment, null=True)
+
+
+class LogPaymentsCreditCard(models.Model):
+    """Log Pagos Pasarela."""
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    successful = models.BooleanField()
+    description = models.CharField(max_length=50)
+    code_api = models.CharField(max_length=100)
+    # culqi
 
 
 # Cuando se reconsulta pasa a Requested Derived y se asigna
@@ -382,8 +503,8 @@ class CulqiPayment(models.Model):
 # la reconsulta tiene precedente y no se descuenta del plan
 
 class Query(models.Model):
-    title = models.CharField(max_length=50)
-
+    """Consultas."""
+    title = models.CharField(max_length=100)
     status = models.CharField(max_length=1, choices=Ch.query_status)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
@@ -391,83 +512,74 @@ class Query(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
+    acquired_plan = models.ForeignKey(QueryPlansAcquired, on_delete=models.PROTECT)
 
     def __str__(self):
+        """Titulo."""
         return self.title
 
 
-# Motivos de declinar la consulta
-class DeclinedMotive(models.Model):
-    motive = models.CharField(max_length=255)
-    query_id = models.ForeignKey(Query, on_delete=models.PROTECT)
-    specialist_id = models.ForeignKey(Specialist, on_delete=models.PROTECT)
+class QueryLogs(models.Model):
+    """Historico de Consultas."""
 
-
-class QueryLog(Query):
-    actions = models.CharField(max_length=10)
+    action = models.CharField(max_length=10)
+    description = models.CharField(max_length=200, null=True)
     changed_on = models.DateTimeField()
+    status_log = models.CharField(max_length=1, choices=Ch.query_status)
+    derived = models.NullBooleanField()
+    declined = models.NullBooleanField()
+    declined_motive = models.TextField(null=True)
+    to_specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True, related_name="del_especialista")
+    from_specialist = models.ForeignKey(Specialist, related_name="al_especialista", on_delete=models.PROTECT, null=True)
+    query = models.ForeignKey(Query, on_delete=models.PROTECT)
 
 
+# Para traerse el historico de mensajes de consultas de un especialista que ya ha respondido
+# se hace la consulta de traerse todos los mensajes anteriories pertenecientes a una consulta donde ya he
+# respondido
 class Message(models.Model):
-    message = models.TextField()
+    """Mensaje."""
 
+    message = models.TextField()
     msg_type = models.CharField(max_length=1, choices=Ch.message_msg_type)
     created_at = models.DateTimeField(auto_now_add=True)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
+    viewed = models.BooleanField(default=False)
 
     def __str__(self):
+        """Str."""
         return self.message
 
 
 class MessageFile(models.Model):
-    url = models.CharField(max_length=100)
+    """Archivos de Mensajes."""
 
+    url_file = models.CharField(max_length=100)
     type_file = models.CharField(max_length=1, choices=Ch.messagefile_type_file)
     message = models.ForeignKey(Message, on_delete=models.PROTECT)
 
 
-class Interval(models.Model):
-    interval = models.IntegerField()
+class FeeMonthSeller(models.Model):
+    """Cuotas Mensuales del Vendedor."""
 
-    def __str__(self):
-        return str(self.interval)
-
-
-class AlertCategory(models.Model):
-    name = models.CharField(max_length=1, choices=Ch.alertcategory_name)
-    interval = models.ForeignKey(Interval, on_delete=models.PROTECT)
-
-    def __str__(self):
-        return self.name
-
-
-class Alert(models.Model):
-    title = models.CharField(max_length=100)
-    message = models.CharField(max_length=255)
-    category = models.ForeignKey(AlertCategory, on_delete=models.PROTECT)
-    role = models.ManyToManyField(Role, db_table='role_alert')
-
-    def __str__(self):
-        return self.title
-
-
-class FeeNextMonthSeller(models.Model):
-    fee_promotion = models.PositiveIntegerField()
+    start_month = models.DateField()  # mes de inicio de la cuota
+    fee_plans = models.PositiveIntegerField()
     fee_contacts = models.PositiveIntegerField()
-    fee_products = models.PositiveIntegerField()
+    complete_fee_products = models.PositiveIntegerField()
+    complete_fee_contacts = models.PositiveIntegerField
+    created_at = models.DateTimeField(auto_now_add=True)
+    seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
 
 
-class TransactionCode(models.Model):
-    code = models.CharField(max_length=50)
-    short_description = models.CharField(max_length=25)
-    long_description = models.CharField(max_length=250)
+class NotificationsBack(models.Model):
+    """Notificaciones del Dashboard Administrativo."""
 
-
-class Quota(models.Model):
-    value = models.PositiveIntegerField()
-    count_contacts = models.PositiveIntegerField(null=True)
-    date = models.DateField(unique=True)
+    message = models.CharField(_('message'), max_length=255)
+    viewed = models.BooleanField(_('viewed'), default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    code = models.CharField(max_length=200)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
 
 
 # Ingresar en parametros number_requery
@@ -477,9 +589,16 @@ class Quota(models.Model):
 # time_delay_response
 # seller_available_promotional
 # time_to_answer
+# available_requeries
+# medium_payment
+# place_payment
+
 class Parameter(models.Model):
+    """Parametros Generales."""
+
     parameter = models.CharField(max_length=45)
     value = models.CharField(max_length=50)
 
     def __str__(self):
+        """Nombre."""
         return "Parametro: " + self.parameter
