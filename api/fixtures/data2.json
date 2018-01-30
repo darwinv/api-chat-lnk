@@ -189,8 +189,7 @@
     "fields": {
       "name": "Taxes",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-02.png",
-      "description": "actividad economica que comprende la produccion industrializacion y comercialización de productos agropecuarios forestales y otros recursos naturales biológicos.",
-      "payment_per_answer": 1
+      "description": "actividad economica que comprende la produccion industrializacion y comercialización de productos agropecuarios forestales y otros recursos naturales biológicos."
     }
   },
   {
@@ -199,8 +198,7 @@
     "fields": {
       "name": "Accounting",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-03.png",
-      "description": "es la parte de la industria que se encarga de todos los procesos relacionados con la cadena alimentaria. ",
-      "payment_per_answer": 1
+      "description": "es la parte de la industria que se encarga de todos los procesos relacionados con la cadena alimentaria. "
     }
   },
   {
@@ -209,8 +207,7 @@
     "fields": {
       "name": "Tax Law",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Sin-título-1-17.png",
-      "description": "uso de sistemas o elementos computarizadosy electromecánicos para controlar maquinarias o procesos industriales",
-      "payment_per_answer": 1
+      "description": "uso de sistemas o elementos computarizadosy electromecánicos para controlar maquinarias o procesos industriales"
     }
   },
   {
@@ -219,8 +216,7 @@
     "fields": {
       "name": "Finance",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-04.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -229,8 +225,7 @@
     "fields": {
       "name": "Insurance",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-05.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur"
     }
   },
   {
@@ -239,8 +234,7 @@
     "fields": {
       "name": "Corporate Law",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-10.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur"
     }
   },
   {
@@ -249,8 +243,7 @@
     "fields": {
       "name": "Foreign trade",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-06.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur"
     }
   },
   {
@@ -259,8 +252,7 @@
     "fields": {
       "name": "Information Technology",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-08.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -269,8 +261,7 @@
     "fields": {
       "name": "Intellectual property",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-17-2.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -279,8 +270,7 @@
     "fields": {
       "name": "Advertising",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-07.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur adipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur adipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -289,8 +279,7 @@
     "fields": {
       "name": "Organizational psychology",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-09.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -299,8 +288,7 @@
     "fields": {
       "name": "Contracting with the State",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-24.png",
-      "description": "Lorem ipsum dolor sit amet, consete sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consete sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -309,8 +297,7 @@
     "fields": {
       "name": "Marketing",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-29-1.png",
-      "description": "Lorem ipsum dolor sit amet, consetetut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -319,8 +306,7 @@
     "fields": {
       "name": "Mechanics",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-24-1.png",
-      "description": "Lorem ipsum dolor sit amet, conseteturidunt ptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, conseteturidunt ptuas"
     }
   },
   {
@@ -329,8 +315,7 @@
     "fields": {
       "name": "Notary and Registry Law",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-16.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunttuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunttuas"
     }
   },
   {
@@ -339,8 +324,7 @@
     "fields": {
       "name": "Project management",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-30-1.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -349,8 +333,7 @@
     "fields": {
       "name": "Electricity",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-20-1.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur nt tuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur nt tuas"
     }
   },
   {
@@ -359,8 +342,7 @@
     "fields": {
       "name": "Civil Procedural Law",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-12.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -369,8 +351,7 @@
     "fields": {
       "name": "Agroindustry",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-21-3.png",
-      "description": "Lorem ipsum dolor sit amet, conseteturnt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, conseteturnt ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -379,8 +360,7 @@
     "fields": {
       "name": "electronics",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-22-1.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidutuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidutuas"
     }
   },
   {
@@ -389,8 +369,7 @@
     "fields": {
       "name": "Criminal law",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-14.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunptuas"
     }
   },
   {
@@ -399,8 +378,7 @@
     "fields": {
       "name": "Food",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-27.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -409,8 +387,7 @@
     "fields": {
       "name": "Automation",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-23-2.png",
-      "description": "Lorem ipsum dolor sit amet, conseteturnt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, conseteturnt ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -419,8 +396,7 @@
     "fields": {
       "name": "Labor Law",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Sin-título-1-11.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -429,8 +405,7 @@
     "fields": {
       "name": "Gastronomy",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-28-2.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor inviduntut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor inviduntut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {
@@ -439,8 +414,7 @@
     "fields": {
       "name": "Plastics",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-26.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunttuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunttuas"
     }
   },
   {
@@ -449,8 +423,7 @@
     "fields": {
       "name": "Mining Law",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Sin-título-1-15.png",
-      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
-      "payment_per_answer": 1
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
   },
   {

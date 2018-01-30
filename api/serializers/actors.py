@@ -449,8 +449,8 @@ class SellerSerializer(serializers.ModelSerializer):
 
     nationality_name = serializers.SerializerMethodField()
     quota = serializers.SerializerMethodField()
-    count_plans_seller = serializers.SerializerMethodField()
-    count_queries = serializers.SerializerMethodField()
+    # count_plans_seller = serializers.SerializerMethodField()
+    # count_queries = serializers.SerializerMethodField()
     address = AddressSerializer(required=False)
     document_type = serializers.ChoiceField(choices=c.user_document_type)
     document_type_name = serializers.SerializerMethodField()
@@ -469,8 +469,8 @@ class SellerSerializer(serializers.ModelSerializer):
 
         model = Seller
         fields = (
-            'id', 'address', 'count_plans_seller', 'count_queries', 'quota', 'zone', 'username', 'nick',
-            'first_name', 'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'document_type_name',
+            'id', 'address', 'quota', 'zone', 'username', 'nick', 'first_name',
+            'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'document_type_name',
             'code', 'document_number', 'ruc', 'nationality', 'nationality_name', 'residence_country',
             'residence_country_name', "foreign_address")
 
@@ -543,23 +543,23 @@ class SellerSerializer(serializers.ModelSerializer):
             print(e.args)
         return value
 
-    def get_count_plans_seller(self, obj):
-        """
-        :param obj:
-        :return: cantidad de planes/ventas realizadas por el vendedor
-        """
-        result = Purchase.objects.filter(seller=obj.id).count()
+    # def get_count_plans_seller(self, obj):
+    #     """
+    #     :param obj:
+    #     :return: cantidad de planes/ventas realizadas por el vendedor
+    #     """
+    #     result = Purchase.objects.filter(seller=obj.id).count()
+    #
+    #     return result
 
-        return result
-
-    def get_count_queries(self, obj):
-        """
-        :param obj:
-        :return: cantidad de consultas de los productos que ha vendido el usuario vendedor
-        """
-        result = Purchase.objects.filter(seller__isnull=False, seller=obj.id).aggregate(Sum('query_amount'))
-
-        return result['query_amount__sum']
+    # def get_count_queries(self, obj):
+    #     """
+    #     :param obj:
+    #     :return: cantidad de consultas de los productos que ha vendido el usuario vendedor
+    #     """
+    #     result = Purchase.objects.filter(seller__isnull=False, seller=obj.id).aggregate(Sum('query_amount'))
+    #
+    #     return result['query_amount__sum']
 
 
 # Serializer para consultar estado de cuenta del Vendedor.
