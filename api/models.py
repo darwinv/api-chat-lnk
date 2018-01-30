@@ -189,7 +189,7 @@ class SellerContactNoEfective(models.Model):
     civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
-    ciiu = models.ForeignKey(Ciiu, null=True)
+    ciiu = models.CharField(max_length=4, blank=True)
     activity_description = models.CharField(max_length=255, null=True, blank=True)
     photo = models.CharField(max_length=250, null=True)
     about = models.CharField(max_length=255, null=True, blank=True)
