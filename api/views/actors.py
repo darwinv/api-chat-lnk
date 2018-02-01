@@ -13,7 +13,7 @@ from rest_framework import filters as searchfilters
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer, KeySerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
-from api.serializers.actors import MediaSerializer
+from api.serializers.actors import MediaSerializer, ChangePasswordSerializer
 from django.http import Http404
 from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
@@ -33,6 +33,31 @@ PREFIX_CODE_SPECIALIST = 'E'
 PREFIX_CODE_SELLER = 'V'
 DATE_FAKE = '1900-01-01'
 # Fin de constates
+
+
+class UpdatePasswordView(APIView):
+    """Actualizar Contraseña de Usuario (uso para dev)."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.AllowAny]
+
+    def get_object(self, pk):
+        try:
+            obj = User.objects.get(pk=pk)
+            return obj
+        except User.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+
+        data = request.data
+        user = self.get_object(pk)
+        serializer = ChangePasswordSerializer(user, data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ViewKey(APIView):

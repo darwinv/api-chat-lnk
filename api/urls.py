@@ -58,6 +58,9 @@ urlpatterns = [
     # servicio exclusivo para devolver key, solo para equipo de desarrollo
     url(r'^key/(?P<pk>[0-9]+)/$', actors.ViewKey.as_view(), name='get-key'),
 
+    # servicio exclusivo para cambiar clave, solo para equipo de desarrollo
+    url(r'^password/(?P<pk>[0-9]+)/$', actors.UpdatePasswordView.as_view(), name='update-pass'),
+
     # autorizacion para cliente
     url(r'^authorizations/clients/$', authorization.ClientListView.as_view(),
         name='auth-list-clients'),

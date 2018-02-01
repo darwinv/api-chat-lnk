@@ -795,9 +795,24 @@ class KeySerializer(serializers.ModelSerializer):
         fields = ("id", "username", "key")
         read_only_fields = fields
 
-    # class Meta:
-    #     #model = Specialist
-    #     fields = (
-    #         'photo',
-    #         'filename'
-    #     )
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    """Cambiar clave de usuario."""
+
+    class Meta:
+        """Meta."""
+
+        model = User
+        fields = ("id", "password", 'key')
+        extra_kwargs = {
+                'password': {'write_only': True}
+        }
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        password = validated_data.pop('password', None)
+        instance.key = password
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
