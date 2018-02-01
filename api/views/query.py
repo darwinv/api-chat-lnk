@@ -1,73 +1,101 @@
+"""Vistas de Consultas."""
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import Query, Specialist, Message
+from api.models import Query, Specialist, Message, Category, Role
 from django.db.models import Q
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 import django_filters.rest_framework
 from rest_framework import filters
-from api.serializers.query import QuerySerializer, QueryListSerializer, MessageSerializer
+from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
-from api.permissions import IsAdminOnList, IsAdminOrOwner, IsOwner
+from api.permissions import IsAdminOnList, IsAdminOrOwner, IsOwner, IsClient
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
-# import pdb
+
 
 # Para Crear y Listado de consultas
-class QueryListView(ListCreateAPIView):
+class QueryListClientView(ListCreateAPIView):
+    """Vista Consulta."""
+
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [IsOwner]
-    queryset = Query.objects.all()
-    serializer_class = QueryListSerializer
-# listado de las consultas
+    permission_classes = [IsClient]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # Devolveremos las categorias para luego filtrar por usuario
+    queryset = Category.objects.all()
+    serializer_class = QueryListClientSerializer
+
     def list(self, request):
-        status = request.query_params.get('status', None)
-        try:
-            queryset = Query.objects.filter(client_id=request.query_params["client"])
-            # si se envia la categoria se filtra por la misma, en caso contrario
-            # devuelve todas
-            if status is not None:
-                if status == 'absolved':
-                    queryset = Query.objects.filter(Q(status=6) | Q(status=7),
-                                                client_id=request.query_params["client"])
-                elif status == 'pending':
-                    queryset = Query.objects.filter(status__lte=5,
-                                                    client_id=request.query_params["client"])
-                else:
-                    raise serializers.ValidationError(detail="Invalid status")
+        """List."""
+        queryset = self.get_queryset()
+        serializer = QueryListClientSerializer(queryset, context={'user': self.request.user}, many=True)
+        return Response(serializer.data)
+    # def get_queryset(self):
+    #     """Traer Listado de Especialidades con consultas pendientes."""
+    #     user = self.request.user
+    #     # import pdb; pdb.set_trace()
+    #     if user.role == Role.objects.get(name='client'):
+    #         # import pdb; pdb.set_trace()
+    #         Category.objects.all()
+    #         return Category.objects.all()
+    #     else:
+    #         pass
+        # c.query.filter(client_id=user.id)
+        # Query.objects.filter(client_id=user.id)
+        # val = Category.objects.filter()
 
-            if 'category' in request.query_params:
-                queryset = Query.objects.filter(client_id=request.query_params["client"],
-                                                category_id=request.query_params["category"])
-                if status is not None:
-                    if status == 'absolved':
-                        queryset = Query.objects.filter(Q(status=6) | Q(status=7),
-                                                    client_id=request.query_params["client"],
-                                                    category_id=request.query_params["category"])
-                    elif status == 'pending':
-                        queryset = Query.objects.filter(status__lte=5,
-                                                        client_id=request.query_params["client"],
-                                                        category_id=request.query_params["category"])
-                    else:
-                        queryset = Query.objects.filter(client_id=request.query_params["client"],
-                                                        category_id=request.query_params["category"])
-            if 'order' in request.query_params:
-                # se concatena el order en caso de enviarse
-                if request.query_params["order"] == 'desc':
-                    queryset = queryset.order_by('-created_at')
 
-            serializer = QueryListSerializer(queryset, many=True)
-            # pagination
-            page = self.paginate_queryset(queryset)
-            if page is not None:
-                serializer = self.get_serializer(page, many=True)
-                return self.get_paginated_response(serializer.data)
-            return Response(serializer.data)
-        except Exception as e:
-            string_error = u"Exception " + str(e)
-            raise serializers.ValidationError(detail=string_error)
+
+# listado de las consultas
+    # def list(self, request):
+            # import pdb; pdb.set_trace()
+        # status = request.query_params.get('status', None)
+        # try:
+        #     queryset = Query.objects.filter(client_id=request.query_params["client"])
+        #     # si se envia la categoria se filtra por la misma, en caso contrario
+        #     # devuelve todas
+        #     if status is not None:
+        #         if status == 'absolved':
+        #             queryset = Query.objects.filter(Q(status=6) | Q(status=7),
+        #                                         client_id=request.query_params["client"])
+        #         elif status == 'pending':
+        #             queryset = Query.objects.filter(status__lte=5,
+        #                                             client_id=request.query_params["client"])
+        #         else:
+        #             raise serializers.ValidationError(detail="Invalid status")
+        #
+        #     if 'category' in request.query_params:
+        #         queryset = Query.objects.filter(client_id=request.query_params["client"],
+        #                                         category_id=request.query_params["category"])
+        #         if status is not None:
+        #             if status == 'absolved':
+        #                 queryset = Query.objects.filter(Q(status=6) | Q(status=7),
+        #                                             client_id=request.query_params["client"],
+        #                                             category_id=request.query_params["category"])
+        #             elif status == 'pending':
+        #                 queryset = Query.objects.filter(status__lte=5,
+        #                                                 client_id=request.query_params["client"],
+        #                                                 category_id=request.query_params["category"])
+        #             else:
+        #                 queryset = Query.objects.filter(client_id=request.query_params["client"],
+        #                                                 category_id=request.query_params["category"])
+        #     if 'order' in request.query_params:
+        #         # se concatena el order en caso de enviarse
+        #         if request.query_params["order"] == 'desc':
+        #             queryset = queryset.order_by('-created_at')
+        #
+        #     serializer = QueryListSerializer(queryset, many=True)
+        #     # pagination
+        #     page = self.paginate_queryset(queryset)
+        #     if page is not None:
+        #         serializer = self.get_serializer(page, many=True)
+        #         return self.get_paginated_response(serializer.data)
+        #     return Response(serializer.data)
+        # except Exception as e:
+        #     string_error = u"Exception " + str(e)
+        #     raise serializers.ValidationError(detail=string_error)
 
 #   Crear Consulta
     def post(self, request):

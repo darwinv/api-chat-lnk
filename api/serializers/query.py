@@ -1,6 +1,6 @@
 """Consultas."""
 from rest_framework import serializers
-from api.models import Specialist, Query, Message
+from api.models import Specialist, Query, Message, Category
 from api.models import MessageFile
 from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
@@ -248,8 +248,39 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
         return {"calification": obj.calification, "status": obj.status}
 
 
-class QueryListSerializer(serializers.ModelSerializer):
-    """Serializer para listar consultas."""
+class QueryListClientSerializer(serializers.ModelSerializer):
+    """Serializer para listar consultas (Cliente)."""
+
+    name = serializers.SerializerMethodField()
+    status_message = serializers.SerializerMethodField()
+
+    class Meta:
+        """Meta."""
+
+        model = Category
+        fields = ('name', 'image', 'status_message')
+
+    def get_name(self, obj):
+        """Devuelve el nombre de la especialidad."""
+        return _(obj.name)
+
+    def get_status_message(self, obj):
+        """Devuelve si fue visto el ultimo mensaje."""
+        user = self.context['user']
+        # print(self.context)
+        # import pdb; pdb.set_trace()
+        try:
+            status = Query.objects.filter(category_id=obj.id, client_id=user.id)\
+                   .values('message__viewed').latest('message__created_at')
+            return status['message__viewed']
+        except Query.DoesNotExist:
+            return None
+
+
+
+
+class QueryListSpecialistSerializer(serializers.ModelSerializer):
+    """Serializer para listar consultas (Especialista)."""
 
     status = serializers.ChoiceField(choices=c.query_status, read_only=True)
     last_modified = serializers.SerializerMethodField()

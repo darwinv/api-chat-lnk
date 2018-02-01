@@ -401,24 +401,24 @@ class SellerAccountView(ListCreateAPIView):
             raise Http404
 
     # def get(self, request, pk):
-        # creacion de QuerySet para listadaos
-        # queryset = Seller.objects.filter(id=pk,purchase__fee__status=1)\
-        #     .values('id','purchase__total_amount',
-        #                           'purchase__id','purchase__code','purchase__query_amount','purchase__fee_number',
-        #                           'purchase__product__is_billable','purchase__product__expiration_number','purchase__product__name',
-        #                           'purchase__client__code','purchase__client__nick', 'purchase__fee__date', 'purchase__fee__id',
-        #                           'purchase__fee__fee_amount','purchase__fee__status','purchase__fee__payment_type__name',
-        #                           'purchase__fee__reference_number','purchase__fee__fee_order_number',
-        #                           )\
-        #     .order_by('purchase__fee__date')
-        #
-        # serializer = SellerAccountSerializer(queryset, many=True)
-        # # pagination
-        # page = self.paginate_queryset(queryset)
-        # if page is not None:
-        #     serializer = self.get_serializer(page, many=True)
-        #     return self.get_paginated_response(serializer.data)
-        # return Response(serializer.data)
+    #     creacion de QuerySet para listadaos
+    #     queryset = Seller.objects.filter(id=pk,purchase__fee__status=1)\
+    #         .values('id','purchase__total_amount',
+    #                               'purchase__id','purchase__code','purchase__query_amount','purchase__fee_number',
+    #                               'purchase__product__is_billable','purchase__product__expiration_number','purchase__product__name',
+    #                               'purchase__client__code','purchase__client__nick', 'purchase__fee__date', 'purchase__fee__id',
+    #                               'purchase__fee__fee_amount','purchase__fee__status','purchase__fee__payment_type__name',
+    #                               'purchase__fee__reference_number','purchase__fee__fee_order_number',
+    #                               )\
+    #         .order_by('purchase__fee__date')
+    #
+    #     serializer = SellerAccountSerializer(queryset, many=True)
+    #     # pagination
+    #     page = self.paginate_queryset(queryset)
+    #     if page is not None:
+    #         serializer = self.get_serializer(page, many=True)
+    #         return self.get_paginated_response(serializer.data)
+    #     return Response(serializer.data)
 
 
 class ContactListView(ListCreateAPIView):

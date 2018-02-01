@@ -24,6 +24,7 @@ class IsOwner(permissions.BasePermission):
     def has_permission(self, request, view):
         """Redefinido has permision."""
         if request.method in permissions.SAFE_METHODS:
+            # import pdb; pdb.set_trace()
             try:
                 client = int(request.query_params['client'])
                 return request.user.id == client
@@ -41,6 +42,16 @@ class IsAdminOrOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         """Metodo redefinido."""
         return (request.user and request.user.is_staff) or request.user.id == obj.id
+
+
+class IsClient(permissions.BasePermission):
+    """Permiso solo para el rol cliente."""
+
+    def has_permission(self, request, view):
+        """Solo el vendedor puede crear."""
+        if request.method in permissions.SAFE_METHODS:
+            return request.user and request.user.role_id == 2
+        return True
 
 
 class IsSeller(permissions.BasePermission):

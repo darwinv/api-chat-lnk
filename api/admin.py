@@ -1,7 +1,7 @@
 """Se registran los modelos para facilitar pruebas y visualziacion directa."""
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Role, User, Seller, Client, Category, Specialist, Query,Seller,Zone
+from .models import Role, User, Seller, Client, Category, Specialist, Query, Zone
 from .models import Department, Province, District, Message, MessageFile
 from .models import PaymentType, Objection
 # Register your models here.
@@ -44,21 +44,34 @@ class SpecialistAdmin(admin.ModelAdmin):
     'cellphone','document_type', 'document_number',
     'ruc','code','payment_per_answer','anonymous','role','category','status')
 
+
 class MessageFileInline(admin.TabularInline):
+    """Archivos del Mensaje en Linea."""
+
     model = MessageFile
     extra = 1
 
+
 class MessageInline(admin.TabularInline):
+    """Mensaje en Linea."""
+
     model = Message
     extra = 1
 
+
 class MessageAdmin(admin.ModelAdmin):
+    """Registro en el admin de Mensaje."""
+
     inlines = [MessageFileInline]
-    list_display = ('message','msg_type','created_at')
+    list_display = ('message', 'msg_type', 'created_at')
+
 
 class QueryAdmin(admin.ModelAdmin):
+    """Consulta en el admin."""
+
     inlines = [MessageInline]
     readonly_fields = ('calification',)
+    exclude = ('acquired_plan',)
 
 class SellerAdmin(admin.ModelAdmin):
     fields = ('zone','username', 'nick','password','first_name', 'last_name',

@@ -504,6 +504,7 @@ class LogPaymentsCreditCard(models.Model):
 
 class Query(models.Model):
     """Consultas."""
+
     title = models.CharField(max_length=100)
     status = models.CharField(max_length=1, choices=Ch.query_status)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -512,7 +513,7 @@ class Query(models.Model):
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
-    acquired_plan = models.ForeignKey(QueryPlansAcquired, on_delete=models.PROTECT)
+    acquired_plan = models.ForeignKey(QueryPlansAcquired, on_delete=models.PROTECT, null=True)  # El blank es Temporal
 
     def __str__(self):
         """Titulo."""
