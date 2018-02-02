@@ -1,0 +1,244 @@
+[{
+	"model": "api.address",
+	"pk": 1,
+	"fields": {
+		"street": "esteban camere",
+		"department": 1,
+		"province": 1,
+		"district": 1
+	}
+},
+
+{
+"model": "api.user",
+"pk": 3,
+"fields": {
+    "password": "pbkdf2_sha256$36000$zYNuNmVAEdJB$/YzAG8AR4SFu5puGwV2+pSOddhqPU2FRk9c/EDIz7dc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "nataly@gmail.com",
+    "first_name": "nataly",
+    "last_name": "Zomi",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-10-23T15:20:08.687Z",
+    "nick": "sky",
+    "email_exact": "nataly@gmail.com",
+    "telephone": "1234567",
+    "cellphone": "123456789",
+    "photo": "preview.png",
+    "document_type": "0",
+    "document_number": "48464954",
+    "ruc": null,
+    "code": "c48464954",
+    "anonymous": true,
+    "updated_at": "2017-10-23T15:20:08.801Z",
+    "nationality": 1,
+    "residence_country": 1,
+    "role": 2,
+    "address": 1,
+    "groups": [],
+    "user_permissions": []
+}
+},
+{
+  "model": "api.client",
+  "pk": 3,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "token": "HhaMCycvJ5SCLXSpEo7KerIXcNgBSt",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "",
+    "created": "2016-12-31T23:59:59Z",
+    "updated": "2017-10-02T22:27:09.173Z"
+  }
+},
+{
+  "model": "api.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$fKQPSAplgdjU$1mDngv1Za0TYdBpztYVreLgH6HslyrElX2/A0HvN9WY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teresa",
+    "first_name": "teresa",
+    "last_name": "garcia",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-12-20T15:09:27.646Z",
+    "nick": "tere",
+    "email_exact": "teresaq@tesla.com",
+    "telephone": "00023123",
+    "cellphone": "0001231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "1",
+    "document_number": "555",
+    "img_document_number": null,
+    "ruc": "31667444",
+    "code": "E555",
+    "anonymous": true,
+    "updated_at": "2017-12-20T15:09:27.750Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 1,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": "54321",
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$8rxQEP7sfzI7$hRU8ubxkNt6kmGiffE6GMOlxf/aLag7yQj8mdCeRjsk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "paula@gmail.com",
+    "first_name": "paula",
+    "last_name": "garcia",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-12-29T17:34:23.500Z",
+    "nick": "paula",
+    "email_exact": "paula@tesla.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "jjjj",
+    "document_type": "1",
+    "document_number": "55995",
+    "img_document_number": null,
+    "ruc": "316674344",
+    "code": "E55995",
+    "anonymous": true,
+    "updated_at": "2017-12-29T17:34:23.532Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 1,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": "HTHHBLN54O",
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 4,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "m",
+    "star_rating": null,
+    "cv": null,
+    "payment_per_answer": "3.20",
+    "category": 22,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 5,
+  "fields": {
+    "business_name": "paula elsectronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": null,
+    "payment_per_answer": "3.20",
+    "category": 21,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.query",
+  "pk": 1,
+  "fields": {
+    "title": "precios de transferencia",
+    "status": "0",
+    "created_at": "2018-01-30T22:09:08.196Z",
+    "last_modified": "2018-01-30T22:09:08.196Z",
+    "calification": null,
+    "category": 21,
+    "client": 3,
+    "specialist": 5,
+    "acquired_plan": null
+  }
+},
+{
+  "model": "api.query",
+  "pk": 2,
+  "fields": {
+    "title": "otra consulta",
+    "status": "0",
+    "created_at": "2018-02-01T20:21:11.968Z",
+    "last_modified": "2018-02-02T16:59:15.882Z",
+    "calification": null,
+    "category": 22,
+    "client": 3,
+    "specialist": 4,
+    "acquired_plan": null
+  }
+},
+{
+  "model": "api.message",
+  "pk": 1,
+  "fields": {
+    "message": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. |",
+    "msg_type": "q",
+    "created_at": "2018-01-30T22:09:08.205Z",
+    "specialist": 4,
+    "query": 1,
+    "viewed": false
+  }
+},
+{
+  "model": "api.message",
+  "pk": 2,
+  "fields": {
+    "message": "otra consulta",
+    "msg_type": "q",
+    "created_at": "2018-02-01T20:21:12.022Z",
+    "specialist": 5,
+    "query": 2,
+    "viewed": false
+  }
+}
+]

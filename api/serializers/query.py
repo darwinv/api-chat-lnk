@@ -258,7 +258,7 @@ class QueryListClientSerializer(serializers.ModelSerializer):
         """Meta."""
 
         model = Category
-        fields = ('name', 'image', 'status_message')
+        fields = ('name', 'image', 'description', 'status_message')
 
     def get_name(self, obj):
         """Devuelve el nombre de la especialidad."""
