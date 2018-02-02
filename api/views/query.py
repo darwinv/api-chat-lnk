@@ -2,7 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import Query, Specialist, Message, Category, Role
-from django.db.models import Q
+from django.db.models import OuterRef, Subquery, F
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 import django_filters.rest_framework
@@ -29,8 +29,18 @@ class QueryListClientView(ListCreateAPIView):
 
     def list(self, request):
         """List."""
-        queryset = self.get_queryset()
-        serializer = QueryListClientSerializer(queryset, context={'user': self.request.user}, many=True)
+        user_id = request.user.id
+        # Se hace un subquery para traer los ultimos msjs.
+        q_query = Query.objects.values('message__created_at')\
+                               .filter(client_id=user_id, message__msg_type='q')\
+                               .order_by('-message__created_at')
+
+        # Se realiza la consulta tomando como subconsulta la consulta anterior
+        queryset = Category.objects.annotate(fecha=Subquery(q_query.values('message__created_at')
+                                                                   .filter(category_id=OuterRef('pk'))[:1]))\
+                                   .order_by(F('fecha').desc())
+
+        serializer = QueryListClientSerializer(queryset, context={'user': request.user}, many=True)
         return Response(serializer.data)
     # def get_queryset(self):
     #     """Traer Listado de Especialidades con consultas pendientes."""

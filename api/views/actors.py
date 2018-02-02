@@ -42,6 +42,7 @@ class UpdatePasswordView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get_object(self, pk):
+        """Devolver objeto."""
         try:
             obj = User.objects.get(pk=pk)
             return obj
@@ -49,7 +50,7 @@ class UpdatePasswordView(APIView):
             raise Http404
 
     def put(self, request, pk):
-
+        """Funcion put."""
         data = request.data
         user = self.get_object(pk)
         serializer = ChangePasswordSerializer(user, data, partial=True)
