@@ -4,6 +4,7 @@ from api.models import Specialist, Query, Message, Category
 from api.models import MessageFile
 from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
+from datetime import datetime, date, time, timedelta
 
 
 class MessageFileSerializer(serializers.ModelSerializer):
@@ -253,12 +254,13 @@ class QueryListClientSerializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField()
     status_message = serializers.SerializerMethodField()
+    time_message = serializers.SerializerMethodField()
 
     class Meta:
         """Meta."""
 
         model = Category
-        fields = ('name', 'image', 'description', 'status_message')
+        fields = ('name', 'image', 'description', 'status_message', 'time_message')
 
     def get_name(self, obj):
         """Devuelve el nombre de la especialidad."""
@@ -267,8 +269,6 @@ class QueryListClientSerializer(serializers.ModelSerializer):
     def get_status_message(self, obj):
         """Devuelve si fue visto el ultimo mensaje."""
         user = self.context['user']
-        # print(self.context)
-        # import pdb; pdb.set_trace()
         try:
             status = Query.objects.filter(category_id=obj.id, client_id=user.id)\
                    .values('message__viewed').latest('message__created_at')
@@ -276,7 +276,36 @@ class QueryListClientSerializer(serializers.ModelSerializer):
         except Query.DoesNotExist:
             return None
 
-
+    # def to_representation(self, obj):
+    #     """Redefinido metodo de representación."""
+    #     user = self.context['user']
+    #     try:
+    #         q = Query.objects.filter(category_id=obj.id, client_id=user.id)\
+    #                 .values('message__viewed',
+    #                         'message__created_at').latest('message__created_at')
+    #         status_msg = q[]
+    #     except Query.DoesNotExist:
+    #         return None
+    #
+    #     return {"status_message": obj.calification, "status": obj.status}
+    #
+    def get_time_message(self, obj):
+        """Devuelve el tiempo del mensaje."""
+        user = self.context['user']
+        try:
+            query = Query.objects.filter(category_id=obj.id, client_id=user.id)\
+                             .values('message__created_at').latest('message__created_at')
+            date_message = query['message__created_at'].date()
+            date_time_message = query['message__created_at']
+            if date_message == date.today():
+                tiempo = time(date_time_message.hour, date_time_message.minute)
+                return tiempo
+            elif date_message == date.today() - timedelta(days=1):
+                return str(_('yesterday'))
+            else:
+                return datetime.strftime(date_message, '%d/%m')
+        except Query.DoesNotExist:
+            return None
 
 
 class QueryListSpecialistSerializer(serializers.ModelSerializer):

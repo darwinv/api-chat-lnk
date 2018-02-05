@@ -2,10 +2,7 @@
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
-import json
-from ..models import Client as Cliente
 from rest_framework import status
-from api.serializers.actors import ClientSerializer
 # Create your tests here.
 
 client = APIClient()
