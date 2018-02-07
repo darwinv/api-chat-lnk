@@ -260,7 +260,7 @@ class QueryListClientSerializer(serializers.ModelSerializer):
         """Meta."""
 
         model = Category
-        fields = ('name', 'image', 'description', 'status_message', 'time_message')
+        fields = ('id', 'name', 'image', 'description', 'status_message', 'time_message')
 
     def get_name(self, obj):
         """Devuelve el nombre de la especialidad."""
@@ -276,19 +276,6 @@ class QueryListClientSerializer(serializers.ModelSerializer):
         except Query.DoesNotExist:
             return None
 
-    # def to_representation(self, obj):
-    #     """Redefinido metodo de representación."""
-    #     user = self.context['user']
-    #     try:
-    #         q = Query.objects.filter(category_id=obj.id, client_id=user.id)\
-    #                 .values('message__viewed',
-    #                         'message__created_at').latest('message__created_at')
-    #         status_msg = q[]
-    #     except Query.DoesNotExist:
-    #         return None
-    #
-    #     return {"status_message": obj.calification, "status": obj.status}
-    #
     def get_time_message(self, obj):
         """Devuelve el tiempo del mensaje."""
         user = self.context['user']
