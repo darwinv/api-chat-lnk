@@ -515,7 +515,7 @@ class Query(models.Model):
     calification = models.PositiveSmallIntegerField(null=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
-    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
+    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
     acquired_plan = models.ForeignKey(QueryPlansAcquired, on_delete=models.PROTECT, null=True)  # El blank es Temporal
 
     def __str__(self):

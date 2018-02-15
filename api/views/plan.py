@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
 from api.models import QueryPlansAcquired
 from django.db.models import F
+from rest_framework import status
 
 class ActivationPlanView(APIView):
     authentication_classes = (OAuth2Authentication,)
@@ -31,13 +32,18 @@ class ActivationPlanView(APIView):
 
     def put(self, request, code):
         """Activar producto, via codigo PIN."""
-        data = request.data
+        data = request.data        
         client = request.user.id
-        plan_acquired = self.get_detail_plan(code, client)
 
+        if self.get_some_chosen_plan(client):
+            is_chosen = False
+        else:
+            is_chosen = True
+
+        plan_acquired = self.get_detail_plan(code, client)
         query_set = self.get_object(plan_acquired['id'])
 
-        serializer = ActivePlanSerializer(query_set, data, partial=True)
+        serializer = ActivePlanSerializer(query_set, data, context={'is_chosen': is_chosen}, partial=True)
         # import pdb
         # pdb.set_trace()
         if serializer.is_valid():
@@ -51,11 +57,63 @@ class ActivationPlanView(APIView):
         try:
             # EL SIGUIENTE QUERY DEBE SER OPTIMIZADO Y REUTILIZADO PARA DIFERENTES SERVICIOS
             # Query para traer el detalle de un plan por el codigo PIN
-            return QueryPlansAcquired.objects.values('id', 'is_active', 'plan_name',
-                                              'query_quantity', 'available_queries',
-                                              'validity_months','expiration_date','sale_detail__price')\
-            .annotate(price=F('sale_detail__price'))\
-            .filter(sale_detail__sale__client= client, sale_detail__pin_code=code, is_active = False)[:1].get()
+            plan = get_query_set_plan()
+
+            return plan.filter(sale_detail__sale__client= client, sale_detail__pin_code=code, is_active = False)[:1].get()
             
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
+
+    def get_some_chosen_plan(self, client):
+        """
+            retorna True si el cliente ya tiene plan seleccionado
+            retorna False si el cliente no tiene plan seleccionado
+        """
+        try:
+            QueryPlansAcquired.objects.values('is_chosen')\
+                .filter(sale_detail__sale__client= client, is_active = True, is_chosen = True)[:1].get()
+            return True
+        except QueryPlansAcquired.DoesNotExist:
+            return False
+
+class ChosemPlanView(APIView):
+    """
+        Vista para devolver plan principal del cliente que envia el token
+    """
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        client = request.user.id
+
+        data = self.get_detail_plan(client)
+        
+        try:
+            serializer = PlanDetailSerializer(data)
+            return Response(serializer.data)
+        except Exception as e:
+            print(e)
+            raise Http404
+
+    def get_detail_plan(self, client):
+        """
+        Funcion buscar el plan activo del cliente
+        :param client: id del cliente
+        :return: diccionario con informacion del plan
+        """
+        try:
+            plan_chosen = get_query_set_plan()
+            return plan_chosen.filter(sale_detail__sale__client= client, is_active = True, is_chosen = True)[:1].get()
+
+        except QueryPlansAcquired.DoesNotExist:
+            raise Http404
+
+def get_query_set_plan():
+    """
+    Funcion creada para instancia base de los planes de un cliente
+    :return: QuerySet
+    """
+    return QueryPlansAcquired.objects.values('id', 'is_chosen', 'is_active', 'plan_name',
+                                              'query_quantity', 'available_queries',
+                                              'validity_months','expiration_date','sale_detail__price')\
+            .annotate(price=F('sale_detail__price'))
