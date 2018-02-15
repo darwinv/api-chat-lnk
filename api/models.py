@@ -547,7 +547,7 @@ class Message(models.Model):
     message = models.TextField()
     msg_type = models.CharField(max_length=1, choices=Ch.message_msg_type)
     created_at = models.DateTimeField(auto_now_add=True)
-    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
+    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
     viewed = models.BooleanField(default=False)
 
