@@ -397,14 +397,17 @@ class SaleDetail(models.Model):
 class QueryPlansAcquired(models.Model):
     """Planes de Consultas (Adquirido)."""
 
-    expiration_date = models.DateField()
+    expiration_date = models.DateField(null=True)
     validity_months = models.PositiveIntegerField()
     available_queries = models.PositiveIntegerField()
-    activation_date = models.DateField()
+    query_quantity = models.PositiveIntegerField()
+    activation_date = models.DateField(null=True)
     is_active = models.BooleanField(default=False)
+    is_chosen = models.BooleanField(default=False)
     available_requeries = models.PositiveIntegerField()
     maximum_response_time = models.PositiveIntegerField()  # En Horas
     acquired_at = models.DateTimeField(auto_now_add=True)
+    plan_name = models.CharField(max_length=50)
     cliente = models.ForeignKey(Client, on_delete=models.PROTECT)
     query_plans = models.ForeignKey(QueryPlans, on_delete=models.PROTECT)
     sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
@@ -512,7 +515,7 @@ class Query(models.Model):
     calification = models.PositiveSmallIntegerField(null=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
-    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
+    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
     acquired_plan = models.ForeignKey(QueryPlansAcquired, on_delete=models.PROTECT, null=True)  # El blank es Temporal
 
     def __str__(self):
@@ -544,7 +547,7 @@ class Message(models.Model):
     message = models.TextField()
     msg_type = models.CharField(max_length=1, choices=Ch.message_msg_type)
     created_at = models.DateTimeField(auto_now_add=True)
-    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
+    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
     viewed = models.BooleanField(default=False)
 

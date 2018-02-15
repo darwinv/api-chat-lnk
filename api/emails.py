@@ -9,7 +9,7 @@ class BasicEmailAmazon(object):
 
     # Replace sender@example.com with your "From" address.
     # This address must be verified with Amazon SES.
-    sender = "amunoz@pympack.com.pe"
+    sender = "olopezdeveloper@pympack.com.pe"
 
     # The character encoding for the email.
 
