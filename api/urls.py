@@ -1,7 +1,7 @@
 """Urls de API Rest."""
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import actors, query, category, email, authorization
+from api.views import actors, query, category, email, authorization, chat
 
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
@@ -53,6 +53,8 @@ urlpatterns = [
 
     # url(r'^upload_archivo/(?P<filename>[^/]+)$', actors.AllFileUploadView.as_view())
 
+    # chat (prueba con channels)
+    url(r'^chat/$', chat.chat, name='chat'),
     # email
     url(r'^mail/$', email.mail, name='mails'),
     # servicio exclusivo para devolver key, solo para equipo de desarrollo
