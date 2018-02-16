@@ -28,7 +28,8 @@ class GetPlanByPIN(APITestCase):
             "validity_months": 3,
             "expiration_date": "2018-05-14",
             "price": "700.00",
-            "is_active": False
+            "is_active": False,
+            'is_chosen': False
         }
 
         # get API response        
@@ -40,7 +41,7 @@ class GetPlanByPIN(APITestCase):
     def test_get_plan_active(self):
         """Traer plan activo para activacion, FALSO
         no se pueden activar un plan activado"""
-        """Setup."""
+        
         self.valid_payload = {
             "plan_name": "Minipack",
             "query_quantity": 6,
@@ -48,7 +49,8 @@ class GetPlanByPIN(APITestCase):
             "validity_months": 3,
             "expiration_date": "2018-05-14",
             "price": "700.00",
-            "is_active": True
+            "is_active": True,
+            'is_chosen': False
         }
 
         # get API response        
@@ -66,9 +68,9 @@ class UpdatePlanActiveByAPI(APITestCase):
         # Token de un cliente con plan activo
         client.credentials(HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
 
-    def test_get_plan_by_pin(self):
+    def test_update_plan_by_pin(self):
 
-        """Setup."""
+        """Update Plan By PIN. Activacion de plan"""
         code = 'INTEL12345'
 
         plan_adquired = QueryPlansAcquired.objects.values('validity_months')\
@@ -78,12 +80,12 @@ class UpdatePlanActiveByAPI(APITestCase):
 
         self.valid_payload = {
             "expiration_date": expiration_date.strftime('%Y-%m-%d'),
-            "is_active": True
+            'is_active': True
         }
 
         # get API response
         response = client.put(reverse('activation-plan', args=(code,)))
-        
+
         self.assertEqual(response.data, self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
