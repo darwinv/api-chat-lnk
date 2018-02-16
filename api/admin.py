@@ -4,6 +4,9 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Role, User, Seller, Client, Category, Specialist, Query, Zone
 from .models import Department, Province, District, Message, MessageFile
 from .models import PaymentType, Objection
+from .models import QueryPlans, QueryPlansAcquired, Clasification
+from .models import SaleDetail, Sale
+from .models import ContractType, Contract
 # Register your models here.
 
 
@@ -71,7 +74,7 @@ class QueryAdmin(admin.ModelAdmin):
 
     inlines = [MessageInline]
     readonly_fields = ('calification',)
-    exclude = ('acquired_plan',)
+    exclude = ('acq3uired_plan',)
 
 class SellerAdmin(admin.ModelAdmin):
     fields = ('zone','username', 'nick','password','first_name', 'last_name',
@@ -92,3 +95,10 @@ admin.site.register(Zone)
 admin.site.register(Objection)
 admin.site.register(Seller, SellerAdmin)
 admin.site.register(PaymentType)
+admin.site.register(QueryPlans)
+admin.site.register(QueryPlansAcquired)
+admin.site.register(Clasification)
+admin.site.register(SaleDetail)
+admin.site.register(Sale)
+admin.site.register(ContractType)
+admin.site.register(Contract)

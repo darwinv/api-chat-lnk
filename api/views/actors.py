@@ -1,7 +1,7 @@
 """Vista de todos los Actores."""
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import User, Client, Specialist, Seller
+from api.models import User, Client, Specialist, Seller, QueryPlansAcquired
 from api.models import SellerContactNoEfective
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
@@ -136,7 +136,6 @@ class ClientListView(ListCreateAPIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
 
 # Vista para Detalle del Cliente
 class ClientDetailView(APIView):

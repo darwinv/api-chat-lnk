@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from api.tools import capitalize as cap
 
 
+
 class UserSerializer(serializers.ModelSerializer):
     """
 
@@ -88,7 +89,6 @@ class AddressSerializer(serializers.ModelSerializer):
     def get_district_name(self, obj):
         """Devuelve distrito."""
         return str(obj.district)
-
 
 class ClientSerializer(serializers.ModelSerializer):
     """Serializer del cliente."""

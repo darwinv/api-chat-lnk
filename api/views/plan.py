@@ -5,10 +5,39 @@ from rest_framework import permissions
 from api.models import Client
 from django.http import Http404
 from rest_framework.response import Response
-from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
+from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer, QueryPlansAcquiredSerializer 
 from api.models import QueryPlansAcquired
 from django.db.models import F
 from rest_framework import status
+from api.permissions import IsAdminOnList, IsAdminOrOwner
+from rest_framework.generics import ListCreateAPIView
+
+class ClientPlansView(ListCreateAPIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (IsAdminOrOwner,)
+
+    def get_object(self, pk):
+        """Obtener objeto."""
+        try:
+            obj = QueryPlansAcquired.objects.filter(cliente=2)
+            #obj = QueryPlansAcquired.objects.all()
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except QueryPlansAcquired.DoesNotExist:
+            raise Http404
+
+    def get(self, request):
+
+        id = request.user.id
+        client = self.get_object(id)
+        serializer = QueryPlansAcquiredSerializer(client, many=True)
+
+        page = self.paginate_queryset(client)
+        if page is not None:            
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        return Response(serializer.data)
 
 class ActivationPlanView(APIView):
     authentication_classes = (OAuth2Authentication,)
@@ -63,6 +92,7 @@ class ActivationPlanView(APIView):
             
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
+
 
     def get_some_chosen_plan(self, client):
         """

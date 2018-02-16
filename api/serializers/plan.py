@@ -33,3 +33,33 @@ class ActivePlanSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
+#    expiration_date = models.DateField(null=True)
+#    validity_months = models.PositiveIntegerField()
+#    available_queries = models.PositiveIntegerField()
+#    query_quantity = models.PositiveIntegerField()
+#    activation_date = models.DateField(null=True)
+#    is_active = models.BooleanField(default=False)
+#    is_chosen = models.BooleanField(default=False)
+#    available_requeries = models.PositiveIntegerField()
+#    maximum_response_time = models.PositiveIntegerField()  # En Horas
+#    acquired_at = models.DateTimeField(auto_now_add=True)
+    plan_name = serializers.CharField(required=True)
+    cliente = serializers.CharField(required=True)
+    is_chosen = serializers.BooleanField(required=True)
+    is_active = serializers.BooleanField(required=True)
+    query_quantity = serializers.IntegerField(required=True)
+    available_queries = serializers.IntegerField(required=True)
+    validity_months = serializers.IntegerField(required=True)
+    expiration_date = serializers.CharField(required=True)
+
+#    cliente = models.ForeignKey(Client, on_delete=models.PROTECT)
+#    query_plans = models.ForeignKey(QueryPlans, on_delete=models.PROTECT)
+#    sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
+
+    class Meta:
+        """declaracion del modelo y sus campos."""
+        model = QueryPlansAcquired
+        fields = ('id', 'plan_name','cliente','is_chosen','is_active','query_quantity',
+                    'available_queries','validity_months','expiration_date')
