@@ -1,7 +1,7 @@
 """Vista de todos los Actores."""
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import User, Client, Specialist, Seller
+from api.models import User, Client, Specialist, Seller, QueryPlansAcquired
 from api.models import SellerContactNoEfective
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
@@ -136,7 +136,6 @@ class ClientListView(ListCreateAPIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
 
 # Vista para Detalle del Cliente
 class ClientDetailView(APIView):
@@ -315,44 +314,39 @@ class SpecialistAccountView(APIView):
 
 #---------- ------ Inicio de Vendedores ------------------------------
 
-# class SellerFilter(filters.FilterSet):
-#     count_plans_seller = filters.NumberFilter(name='count_plans_seller', method='filter_count_plans')
-#     count_queries_seller = filters.NumberFilter(name='count_queries_seller', method='filter_count_queries')
-#
-#     def filter_count_plans(self, qs, name, value):
-#         #todos los id de vendedores que han vendido mas que value
-#         sellers_ids = []
-#         for seller in Seller.objects.all():
-#             #calcular cantidad vendida
-#             count = Purchase.objects.filter(seller=seller.id).count()
-#
-#             #si la cantidad vendida es mayor que el parametro
-#             #agregar a la lista
-#             if count > value:
-#                 sellers_ids.append(seller.id)
-#         return qs.filter(id__in= sellers_ids)
-#
-#     def filter_count_queries(self, qs, name, value):
-#         #todos los id de vendedores que han vendido mas que value
-#         sellers_ids = []
-#         for seller in Seller.objects.all():
-#             #calcular cantidad vendida
-#             count_result = Product.objects.filter(purchase__seller__isnull=False, purchase__seller=seller.id).aggregate(Sum('query_amount'))
-#             count = count_result['query_amount__sum']
-#             #si la cantidad vendida es mayor que el parametro
-#             #agregar a la lista
-#             if count and count > value:
-#                 sellers_ids.append(seller.id)
-#         return qs.filter(id__in= sellers_ids)
-#
-#     first_name = filters.CharFilter(name='first_name', lookup_expr='icontains')
-#     last_name = filters.CharFilter(name='last_name', lookup_expr='icontains')
-#     ruc = filters.CharFilter(name='ruc', lookup_expr='icontains')
-#     email_exact = filters.CharFilter(name='email_exact', lookup_expr='icontains')
-#
-#     class Meta:
-#         model = Seller
-#         fields = ['first_name', 'last_name', 'ruc', 'email_exact']
+class SellerFilter(filters.FilterSet):
+    count_plans_seller = filters.NumberFilter(name='count_plans_seller', method='filter_count_plans')
+    count_queries_seller = filters.NumberFilter(name='count_queries_seller', method='filter_count_queries')
+    def filter_count_plans(self, qs, name, value):
+        #todos los id de vendedores que han vendido mas que value
+        sellers_ids = []
+        for seller in Seller.objects.all():
+            #calcular cantidad vendida
+            count = Purchase.objects.filter(seller=seller.id).count()
+            #si la cantidad vendida es mayor que el parametro
+            #agregar a la lista
+            if count > value:
+                sellers_ids.append(seller.id)
+        return qs.filter(id__in= sellers_ids)
+    def filter_count_queries(self, qs, name, value):
+        #todos los id de vendedores que han vendido mas que value
+        sellers_ids = []
+        for seller in Seller.objects.all():
+            #calcular cantidad vendida
+            count_result = Product.objects.filter(purchase__seller__isnull=False, purchase__seller=seller.id).aggregate(Sum('query_amount'))
+            count = count_result['query_amount__sum']
+            #si la cantidad vendida es mayor que el parametro
+            #agregar a la lista
+            if count and count > value:
+                sellers_ids.append(seller.id)
+        return qs.filter(id__in= sellers_ids)
+    first_name = filters.CharFilter(name='first_name', lookup_expr='icontains')
+    last_name = filters.CharFilter(name='last_name', lookup_expr='icontains')
+    ruc = filters.CharFilter(name='ruc', lookup_expr='icontains')
+    email_exact = filters.CharFilter(name='email_exact', lookup_expr='icontains')
+    class Meta:
+        model = Seller
+        fields = ['first_name', 'last_name', 'ruc', 'email_exact']
 
 
 class SellerListView(ListCreateAPIView, UpdateAPIView):
@@ -365,7 +359,7 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
     serializer_class = SellerSerializer
 
     filter_backends = (filters.DjangoFilterBackend,)
-    # filter_class = SellerFilter
+    filter_class = SellerFilter
 
     # Funcion para crear un especialista
     def post(self, request):
@@ -385,6 +379,7 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
 
 
 class SellerDetailView(APIView):
+    authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get_object(self, pk):
         try:
@@ -397,7 +392,44 @@ class SellerDetailView(APIView):
         serializer = SellerSerializer(seller)
         return Response(serializer.data)
 
+    def put(self, request, pk):
+        data = request.data
+        print(data)
+        seller = self.get_object(pk)
+        # codigo de usuario se crea con su prefijo de especialista y su numero de documento
+        data['code'] = PREFIX_CODE_SELLER + request.data.get('document_number',seller.document_number)
+        data['photo'] = request.data.get('photo',seller.photo)
+        data['username'] = seller.username
+        data['role'] = ROLE_SELLER
+
+        serializer = SellerSerializer(seller, data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class SellerDetailByUsername(APIView):
+    """Detalle de Vendedor por Nombre de Usuario."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self, username):
+        """Obtener Objeto."""
+        try:
+            return Seller.objects.get(username=username)
+        except Seller.DoesNotExist:
+            raise Http404
+
+    def get(self, request, username):
+        """Obtener Vendedor."""
+        seller = self.get_object(username)
+        serializer = SellerSerializer(seller)
+        return Response(serializer.data)
+
+class SellerDetailByUsername2(APIView):
     """Detalle de Vendedor por Nombre de Usuario."""
 
     authentication_classes = (OAuth2Authentication,)

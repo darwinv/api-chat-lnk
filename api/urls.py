@@ -1,7 +1,7 @@
 """Urls de API Rest."""
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import actors, query, category, email, authorization, chat
+from api.views import actors, query, category, email, authorization, plan, chat
 
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
@@ -16,6 +16,9 @@ urlpatterns = [
     # Servicio para logueo de clientes
     url(r'^clients-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$', actors.ClientDetailByUsername.as_view(),
         name='client-detail-username'),
+
+    #todos los planes activos de un cliente
+    url(r'^clients/plans/$', plan.ClientPlansView.as_view(), name='client-plans'),
 
     url(r'^specialists-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$', actors.SpecialistDetailByUsername.as_view(),
         name='specialist-detail-username'),
@@ -44,6 +47,9 @@ urlpatterns = [
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(), name='seller-detail'),
     url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(), name='seller-account-status'),
+
+
+
     # Contacto no efectivo
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
     # url para subir imagen
@@ -68,5 +74,11 @@ urlpatterns = [
         name='auth-list-clients'),
     url(r'^authorizations/clients/(?P<pk>[0-9]+)/$', authorization.ChangeStatusClientView.as_view(),
         name='auth-clients'),
+
+    # Activacion de planes
+    url(r'^activations/plans/(?P<code>[0-9a-zA-Z]+)/$', plan.ActivationPlanView.as_view(), name='activation-plan'),
+
+    # Plan Principal Elegido
+    url(r'^chosens-plans/$', plan.ChosemPlanView.as_view(), name='chosen-plan'),
 
 ]
