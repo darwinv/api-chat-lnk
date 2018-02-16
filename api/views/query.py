@@ -27,6 +27,32 @@ class QueryListClientView(ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = QueryListClientSerializer
 
+
+    def list(self, request):
+        """
+            Listado de queries y sus respectivos mensajes para un cliente
+        """
+        if not 'category' in request.query_params:
+            raise Http404
+
+        category = request.query_params['category']
+
+        query_set = Query.objects.values('message__created_at')\
+                               .filter(client_id=user_id, message__msg_type='q')\
+                               .order_by('-message__created_at')
+
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
+
+
+
+
+
+
     def list(self, request):
         """List."""
         user_id = request.user.id

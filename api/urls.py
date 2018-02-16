@@ -73,4 +73,7 @@ urlpatterns = [
     # Plan Principal Elegido
     url(r'^chosens-plans/$', plan.ChosemPlanView.as_view(), name='chosen-plan'),
 
+    # Queries de cliente por categoria
+    url(r'^queries/categories/$', queries.QueryListClientView.as_view(), name='query-client-by-category'),
+
 ]
