@@ -705,7 +705,6 @@ class CreateBussinessContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-
     def test_no_ciiu(self):
         """Solicitud invalida por no enviar el ciiu."""
         data = self.valid_payload
@@ -721,6 +720,7 @@ class CreateBussinessContact(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
+        import pdb; pdb.set_trace()
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

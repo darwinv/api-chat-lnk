@@ -781,7 +781,7 @@ class SellerContactBusinessSerializer(serializers.ModelSerializer):
     type_contact_name = serializers.SerializerMethodField()
     document_type = serializers.ChoiceField(choices=c.user_document_type)
     document_type_name = serializers.SerializerMethodField()
-    ciiu = c
+    ciiu = serializers.PrimaryKeyRelatedField(queryset=Ciiu.objects.all(), required=True)
     photo = serializers.CharField(read_only=True)
     agent_firstname = serializers.CharField(max_length=45, allow_blank=False, allow_null=False)
     agent_lastname = serializers.CharField(max_length=45, allow_blank=False, allow_null=False)
