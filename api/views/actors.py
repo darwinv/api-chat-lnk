@@ -394,7 +394,6 @@ class SellerDetailView(APIView):
 
     def put(self, request, pk):
         data = request.data
-        print(data)
         seller = self.get_object(pk)
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         data['code'] = PREFIX_CODE_SELLER + request.data.get('document_number',seller.document_number)

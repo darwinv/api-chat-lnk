@@ -17,10 +17,9 @@ class ClientPlansView(ListCreateAPIView):
     permission_classes = (IsAdminOrOwner,)
 
     def get_object(self, pk):
-        """Obtener objeto."""
+        """Obtener lista de planes."""
         try:
             obj = QueryPlansAcquired.objects.filter(cliente=2)
-            #obj = QueryPlansAcquired.objects.all()
             self.check_object_permissions(self.request, obj)
             return obj
         except QueryPlansAcquired.DoesNotExist:
@@ -34,7 +33,7 @@ class ClientPlansView(ListCreateAPIView):
 
         page = self.paginate_queryset(client)
         if page is not None:            
-            serializer = self.get_serializer(page, many=True)
+            serializer = QueryPlansAcquiredSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
         return Response(serializer.data)
