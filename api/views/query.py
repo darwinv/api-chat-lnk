@@ -24,7 +24,7 @@ class QueryListClientView(ListCreateAPIView):
     permission_classes = [IsClient]
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # Devolveremos las categorias para luego filtrar por usuario
-    queryset = Category.objects.all()
+    # queryset = Category.objects.all()
     serializer_class = QueryListClientSerializer
 
 
@@ -36,13 +36,22 @@ class QueryListClientView(ListCreateAPIView):
             raise Http404
 
         category = request.query_params['category']
+        client = request.user.id
 
-        query_set = Query.objects.values('message__created_at')\
-                               .filter(client_id=user_id, message__msg_type='q')\
-                               .order_by('-message__created_at')
+        query_set = Message.objects.values('nick', 'code', 'message', 'created_at', 'msg_type', 
+'viewed')\
+                               .annotate(title=F('query__title',),status=F('query__status',),\
+                               id=F('query__id',),calification=F('query__calification',),\
+                               category_id=F('query__category_id',))\
+                               .filter(query__client_id=client, query__category_id=category)\
+                               .order_by('-created_at')
+        import pdb
+        pdb.set_trace()
+        # serializer = QueryListClientSerializer(queryset, context={'user': request.user}, many=True)
+        serializer = None
 
         # pagination
-        page = self.paginate_queryset(queryset)
+        page = self.paginate_queryset(query_set)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
@@ -53,21 +62,21 @@ class QueryListClientView(ListCreateAPIView):
 
 
 
-    def list(self, request):
-        """List."""
-        user_id = request.user.id
-        # Se hace un subquery para traer los ultimos msjs.
-        q_query = Query.objects.values('message__created_at')\
-                               .filter(client_id=user_id, message__msg_type='q')\
-                               .order_by('-message__created_at')
+    # def list(self, request):
+    #     """List."""
+    #     user_id = request.user.id
+    #     # Se hace un subquery para traer los ultimos msjs.
+    #     q_query = Query.objects.values('message__created_at')\
+    #                            .filter(client_id=user_id, message__msg_type='q')\
+    #                            .order_by('-message__created_at')
 
-        # Se realiza la consulta tomando como subconsulta la consulta anterior
-        queryset = Category.objects.annotate(fecha=Subquery(q_query.values('message__created_at')
-                                                                   .filter(category_id=OuterRef('pk'))[:1]))\
-                                   .order_by(F('fecha').desc())
+    #     # Se realiza la consulta tomando como subconsulta la consulta anterior
+    #     queryset = Category.objects.annotate(fecha=Subquery(q_query.values('message__created_at')
+    #                                                                .filter(category_id=OuterRef('pk'))[:1]))\
+    #                                .order_by(F('fecha').desc())
 
-        serializer = QueryListClientSerializer(queryset, context={'user': request.user}, many=True)
-        return Response(serializer.data)
+    #     serializer = QueryListClientSerializer(queryset, context={'user': request.user}, many=True)
+    #     return Response(serializer.data)
     # def get_queryset(self):
     #     """Traer Listado de Especialidades con consultas pendientes."""
     #     user = self.request.user
@@ -132,6 +141,11 @@ class QueryListClientView(ListCreateAPIView):
         # except Exception as e:
         #     string_error = u"Exception " + str(e)
         #     raise serializers.ValidationError(detail=string_error)
+
+
+
+
+
 
 #   Crear Consulta
     def post(self, request):

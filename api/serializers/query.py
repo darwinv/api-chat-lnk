@@ -248,6 +248,24 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
         """Redefinido metodo de representación."""
         return {"calification": obj.calification, "status": obj.status}
 
+class MessageSerializer(serializers.ModelSerializer):
+    """
+    Direccion del Serializer.
+    el servicio que devuelve el ubigeo correspondiente.
+    """
+
+    # department_name = serializers.SerializerMethodField()
+
+    class Meta:
+        """declaracion del modelo y sus campos."""
+
+        model = Message
+        fields = ('nick', 'code', 'message', 'created_at', 'msg_type', 'viewed')
+
+    # def get_department_name(self, obj):
+    #     """Devuelve departamento."""
+    #     return str(obj.department)
+
 
 class QueryListClientSerializer(serializers.ModelSerializer):
     """Serializer para listar consultas (Cliente)."""
@@ -255,11 +273,12 @@ class QueryListClientSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     status_message = serializers.SerializerMethodField()
     time_message = serializers.SerializerMethodField()
+    message = MessageSerializer()
 
     class Meta:
         """Meta."""
 
-        model = Category
+        model = Query
         fields = ('id', 'name', 'image', 'description', 'status_message', 'time_message')
 
     def get_name(self, obj):
@@ -293,6 +312,52 @@ class QueryListClientSerializer(serializers.ModelSerializer):
                 return datetime.strftime(date_message, '%d/%m')
         except Query.DoesNotExist:
             return None
+
+
+# class QueryListClientSerializer(serializers.ModelSerializer):
+#     """Serializer para listar consultas (Cliente)."""
+
+#     name = serializers.SerializerMethodField()
+#     status_message = serializers.SerializerMethodField()
+#     time_message = serializers.SerializerMethodField()
+
+#     class Meta:
+#         """Meta."""
+
+#         model = Category
+#         fields = ('id', 'name', 'image', 'description', 'status_message', 'time_message')
+
+#     def get_name(self, obj):
+#         """Devuelve el nombre de la especialidad."""
+#         return _(obj.name)
+
+#     def get_status_message(self, obj):
+#         """Devuelve si fue visto el ultimo mensaje."""
+#         user = self.context['user']
+#         try:
+#             status = Query.objects.filter(category_id=obj.id, client_id=user.id)\
+#                    .values('message__viewed').latest('message__created_at')
+#             return status['message__viewed']
+#         except Query.DoesNotExist:
+#             return None
+
+#     def get_time_message(self, obj):
+#         """Devuelve el tiempo del mensaje."""
+#         user = self.context['user']
+#         try:
+#             query = Query.objects.filter(category_id=obj.id, client_id=user.id)\
+#                              .values('message__created_at').latest('message__created_at')
+#             date_message = query['message__created_at'].date()
+#             date_time_message = query['message__created_at']
+#             if date_message == date.today():
+#                 tiempo = time(date_time_message.hour, date_time_message.minute)
+#                 return tiempo
+#             elif date_message == date.today() - timedelta(days=1):
+#                 return str(_('yesterday'))
+#             else:
+#                 return datetime.strftime(date_message, '%d/%m')
+#         except Query.DoesNotExist:
+#             return None
 
 
 class QueryListSpecialistSerializer(serializers.ModelSerializer):
