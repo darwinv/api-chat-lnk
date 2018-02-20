@@ -43,15 +43,32 @@ class IsAdminOrOwner(permissions.BasePermission):
         """Metodo redefinido."""
         return (request.user and request.user.is_staff) or request.user.id == obj.id
 
+class IsAdmin(permissions.BasePermission):
+    """Solo el administrador."""
+
+    def has_object_permission(self, request, view, obj):
+        """Metodo redefinido."""
+        return request.user and request.user.is_staff
 
 class IsClient(permissions.BasePermission):
     """Permiso solo para el rol cliente."""
 
-    def has_permission(self, request, view):
+    def has_object_permission(self, request, view, obj):
         """Solo el vendedor puede crear."""
         if request.method in permissions.SAFE_METHODS:
             return request.user and request.user.role_id == 2
         return True
+
+class IsAdminOrClient(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        """Solo el vendedor puede crear."""
+        if request.user and request.user.is_staff:
+            return True
+        elif request.user and request.user.role_id == 2:
+            return True
+        return False
+
 
 
 class IsSeller(permissions.BasePermission):

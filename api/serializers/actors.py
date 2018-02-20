@@ -369,8 +369,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Metodo actualizar redefinido."""
-        print("==========update specilist=========")
-        print(validated_data)
         valid_spec = _('Main Specialist already exists for this speciality')
         category = validated_data.get("category", None)
         instance.nick = validated_data.get('nick', instance.nick)
@@ -579,7 +577,7 @@ class SellerSerializer(serializers.ModelSerializer):
         credentials = {}
         credentials["user"] = validated_data["username"]
         credentials["pass"] = password
-        print(Response(mail.sendmail(args=credentials)))
+        #print(Response(mail.sendmail(args=credentials)))
         return instance
 
     def __init__(self, *args, **kwargs):

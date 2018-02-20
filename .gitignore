@@ -11,6 +11,7 @@ db.sqlite3
 media
 settings_secret.py
 
+manage.py
 manage_jb_bkp.py
 api/settings.py
 venv/

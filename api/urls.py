@@ -16,7 +16,6 @@ urlpatterns = [
     # Servicio para logueo de clientes
     url(r'^clients-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$', actors.ClientDetailByUsername.as_view(),
         name='client-detail-username'),
-
     #todos los planes activos de un cliente
     url(r'^clients/plans/$', plan.ClientPlansView.as_view(), name='client-plans'),
 
@@ -79,6 +78,9 @@ urlpatterns = [
     url(r'^activations/plans/(?P<code>[0-9a-zA-Z]+)/$', plan.ActivationPlanView.as_view(), name='activation-plan'),
 
     # Plan Principal Elegido
-    url(r'^chosens-plans/$', plan.ChosemPlanView.as_view(), name='chosen-plan'),
+    # url(r'^chosens-plans/$', plan.ChosemPlanView.as_view(), name='chosen-plan'),
+
+    #editar o detallar plan
+    url(r'^chosen-plan/(?P<pk>[0-9]+)/$', plan.QueryPlansAcquiredDetailView.as_view(), name='chosen-plan-edit'),
 
 ]
