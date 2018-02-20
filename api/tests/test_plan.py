@@ -89,3 +89,48 @@ class UpdatePlanActiveByAPI(APITestCase):
         self.assertEqual(response.data, self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+class ClientPlansList(APITestCase):
+    """Prueba para devolver listado de planes al cliente"""
+    fixtures = ['data', 'data2', 'data3']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+
+    def test_get_list(self):
+        """Obtener resultado 200 de la lista."""
+        response = self.client.get(reverse('client-plans'), format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class PlanSelect(APITestCase):
+    """Prueba para actualizar el plan activo de un cliente"""
+    fixtures = ['data', 'data2', 'data3']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+
+    def test_put_plan_incorrect(self):
+        """Actualizar de manera correscta."""
+
+        data = {'is_chosen': 1,
+                'client_id': 5}
+
+        response = self.client.put(reverse('chosen-plan-edit', kwargs={'pk': 5}),
+                                data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_put_plan_correct(self):
+        """Actualizar el plan activo de manera exitosa."""
+
+        data = {'is_chosen': 1,
+	            'client_id': 5}
+
+        response = self.client.put(reverse('chosen-plan-edit', kwargs={'pk': 2}),
+                                data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
