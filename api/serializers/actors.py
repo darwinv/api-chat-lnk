@@ -369,8 +369,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Metodo actualizar redefinido."""
-        print("==========update specilist=========")
-        print(validated_data)
         valid_spec = _('Main Specialist already exists for this speciality')
         category = validated_data.get("category", None)
         instance.nick = validated_data.get('nick', instance.nick)
@@ -465,9 +463,51 @@ class SellerSerializer(serializers.ModelSerializer):
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
-    ciiu = serializers.PrimaryKeyRelatedField(queryset=Ciiu.objects.all(), required=True)
+    # ciiu = serializers.PrimaryKeyRelatedField(queryset=Ciiu.objects.all(), allow_null=True)
     ciiu_name = serializers.SerializerMethodField()
     photo = serializers.CharField(read_only=True)
+
+    class Meta:
+        """Meta de Vendedor."""
+
+        model = Seller
+        fields = (
+            'id', 'address', 'quota', 'zone', 'username', 'nick', 'first_name',
+            'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'document_type_name',
+            'code', 'document_number', 'ruc', 'nationality', 'nationality_name', 'residence_country',
+            'residence_country_name', "foreign_address","ciiu","ciiu_name","photo")
+
+    def get_nationality_name(self, obj):
+        """Devuelvo la nacionalidad del especialista."""
+        return _(str(obj.nationality))
+
+    def get_ciiu_name(self, obj):
+        """Devuelvo la nacionalidad del especialista."""
+        try:
+            return _(str(obj.ciiu.description))
+        except Exception as e:
+            return None
+
+    def get_residence_country_name(self, obj):
+        """Devuelve resiencia del cliente."""
+        return _(str(obj.residence_country))
+
+    def get_document_type_name(self, obj):
+        """Devuelve el tipo de documento de identidad del especialista."""
+        return _(obj.get_document_type_display())
+
+    def validate(self, data):
+        """Redefinido metodo de validación."""
+        required = _('required')
+        address = _('address')
+        # si la residencia es peru, es obligatoria la dirección
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if 'address' not in data:
+                raise serializers.ValidationError("{} {}".format(address, required))
+        else:
+            if "foreign_address" not in data or not data["foreign_address"]:
+                raise serializers.ValidationError("{} {}".format(address, required))
+        return data
 
 
     def update(self, instance, validated_data):
@@ -481,7 +521,7 @@ class SellerSerializer(serializers.ModelSerializer):
         instance.document_number = validated_data.get('document_number', instance.document_number)
         instance.ciiu = validated_data.get('ciiu', instance.ciiu)
         instance.email_exact = validated_data.get('email_exact', instance.email_exact)
-        instance.cellphone = validated_data.get('cellphone', instance.cellphone)        
+        instance.cellphone = validated_data.get('cellphone', instance.cellphone)
         instance.last_name = validated_data.get('last_name', instance.last_name)
 
         if "residence_country" in validated_data and validated_data["residence_country"] == Countries.objects.get(name="Peru"):
@@ -511,46 +551,6 @@ class SellerSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
-    class Meta:
-        """Meta de Vendedor."""
-
-        model = Seller
-        fields = (
-            'id', 'address', 'quota', 'zone', 'username', 'nick', 'first_name',
-            'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'document_type_name',
-            'code', 'document_number', 'ruc', 'nationality', 'nationality_name', 'residence_country',
-            'residence_country_name', "foreign_address","ciiu","ciiu_name","photo")
-
-    def get_nationality_name(self, obj):
-        """Devuelvo la nacionalidad del especialista."""
-        return _(str(obj.nationality))
-
-    def get_ciiu_name(self, obj):
-        """Devuelvo la nacionalidad del especialista."""
-        return _(str(obj.ciiu.description))
-
-    def get_residence_country_name(self, obj):
-        """Devuelve resiencia del cliente."""
-        return _(str(obj.residence_country))
-
-    def get_document_type_name(self, obj):
-        """Devuelve el tipo de documento de identidad del especialista."""
-        return _(obj.get_document_type_display())
-
-    def validate(self, data):
-        """Redefinido metodo de validación."""
-        required = _('required')
-        address = _('address')
-        # si la residencia es peru, es obligatoria la dirección
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
-            if 'address' not in data:
-                raise serializers.ValidationError("{} {}".format(address, required))
-        else:
-            if "foreign_address" not in data or not data["foreign_address"]:
-                raise serializers.ValidationError("{} {}".format(address, required))
-        return data
-
     def create(self, validated_data):
         """Redefinido metodo de crear vendedor."""
         # si la residencia es peru, se crea la instancia de la dirección
@@ -577,7 +577,7 @@ class SellerSerializer(serializers.ModelSerializer):
         credentials = {}
         credentials["user"] = validated_data["username"]
         credentials["pass"] = password
-        print(Response(mail.sendmail(args=credentials)))
+        #print(Response(mail.sendmail(args=credentials)))
         return instance
 
     def __init__(self, *args, **kwargs):
@@ -779,7 +779,7 @@ class SellerContactBusinessSerializer(serializers.ModelSerializer):
     type_contact_name = serializers.SerializerMethodField()
     document_type = serializers.ChoiceField(choices=c.user_document_type)
     document_type_name = serializers.SerializerMethodField()
-    ciiu = c
+    ciiu = serializers.PrimaryKeyRelatedField(queryset=Ciiu.objects.all(), required=True)
     photo = serializers.CharField(read_only=True)
     agent_firstname = serializers.CharField(max_length=45, allow_blank=False, allow_null=False)
     agent_lastname = serializers.CharField(max_length=45, allow_blank=False, allow_null=False)

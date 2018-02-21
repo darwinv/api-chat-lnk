@@ -138,7 +138,7 @@ class Seller(User):
 
     cv = models.CharField(max_length=100, null=True, blank=True)
     zone = models.ForeignKey(Zone, on_delete=models.PROTECT, null=True)
-    ciiu = models.ForeignKey(Ciiu, null=True)
+    ciiu = models.ForeignKey(Ciiu, null=True, blank=True)
 
     class Meta:
         """Meta."""

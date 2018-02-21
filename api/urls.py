@@ -1,7 +1,7 @@
 """Urls de API Rest."""
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import actors, query, category, email, authorization, plan
+from api.views import actors, query, category, email, authorization, plan, chat
 
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
@@ -16,7 +16,6 @@ urlpatterns = [
     # Servicio para logueo de clientes
     url(r'^clients-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$', actors.ClientDetailByUsername.as_view(),
         name='client-detail-username'),
-
     #todos los planes activos de un cliente
     url(r'^clients/plans/$', plan.ClientPlansView.as_view(), name='client-plans'),
 
@@ -48,7 +47,7 @@ urlpatterns = [
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(), name='seller-detail'),
     url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(), name='seller-account-status'),
 
- 
+
 
     # Contacto no efectivo
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
@@ -59,6 +58,8 @@ urlpatterns = [
 
     # url(r'^upload_archivo/(?P<filename>[^/]+)$', actors.AllFileUploadView.as_view())
 
+    # chat (prueba con channels)
+    url(r'^chat/$', chat.chat, name='chat'),
     # email
     url(r'^mail/$', email.mail, name='mails'),
     # servicio exclusivo para devolver key, solo para equipo de desarrollo
@@ -77,7 +78,10 @@ urlpatterns = [
     url(r'^activations/plans/(?P<code>[0-9a-zA-Z]+)/$', plan.ActivationPlanView.as_view(), name='activation-plan'),
 
     # Plan Principal Elegido
-    url(r'^chosens-plans/$', plan.ChosemPlanView.as_view(), name='chosen-plan'),
+    # url(r'^chosens-plans/$', plan.ChosemPlanView.as_view(), name='chosen-plan'),
+
+    #editar o detallar plan
+    url(r'^chosen-plan/(?P<pk>[0-9]+)/$', plan.QueryPlansAcquiredDetailView.as_view(), name='chosen-plan-edit'),
 
     # Queries de cliente por categoria
     url(r'^queries/categories/$', query.QueryChatClientView.as_view(), name='query-chat-client'),
