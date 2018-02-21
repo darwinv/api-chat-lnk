@@ -9,7 +9,7 @@ import django_filters.rest_framework
 from rest_framework import filters
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
-from api.serializers.query import QueryDetailLastMsgSerializer
+from api.serializers.query import QueryDetailLastMsgSerializer, QueryChatClientSerializer
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from api.permissions import IsAdminOnList, IsAdminOrOwner, IsOwner, IsClient
@@ -24,59 +24,24 @@ class QueryListClientView(ListCreateAPIView):
     permission_classes = [IsClient]
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # Devolveremos las categorias para luego filtrar por usuario
-    # queryset = Category.objects.all()
+    queryset = Category.objects.all()
     serializer_class = QueryListClientSerializer
 
-
     def list(self, request):
-        """
-            Listado de queries y sus respectivos mensajes para un cliente
-        """
-        if not 'category' in request.query_params:
-            raise Http404
+        """List."""
+        user_id = request.user.id
+        # Se hace un subquery para traer los ultimos msjs.
+        q_query = Query.objects.values('message__created_at')\
+                               .filter(client_id=user_id, message__msg_type='q')\
+                               .order_by('-message__created_at')
 
-        category = request.query_params['category']
-        client = request.user.id
+        # Se realiza la consulta tomando como subconsulta la consulta anterior
+        queryset = Category.objects.annotate(fecha=Subquery(q_query.values('message__created_at')
+                                                                   .filter(category_id=OuterRef('pk'))[:1]))\
+                                   .order_by(F('fecha').desc())
 
-        query_set = Message.objects.values('nick', 'code', 'message', 'created_at', 'msg_type', 
-'viewed')\
-                               .annotate(title=F('query__title',),status=F('query__status',),\
-                               id=F('query__id',),calification=F('query__calification',),\
-                               category_id=F('query__category_id',))\
-                               .filter(query__client_id=client, query__category_id=category)\
-                               .order_by('-created_at')
-        import pdb
-        pdb.set_trace()
-        # serializer = QueryListClientSerializer(queryset, context={'user': request.user}, many=True)
-        serializer = None
-
-        # pagination
-        page = self.paginate_queryset(query_set)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+        serializer = QueryListClientSerializer(queryset, context={'user': request.user}, many=True)
         return Response(serializer.data)
-
-
-
-
-
-
-    # def list(self, request):
-    #     """List."""
-    #     user_id = request.user.id
-    #     # Se hace un subquery para traer los ultimos msjs.
-    #     q_query = Query.objects.values('message__created_at')\
-    #                            .filter(client_id=user_id, message__msg_type='q')\
-    #                            .order_by('-message__created_at')
-
-    #     # Se realiza la consulta tomando como subconsulta la consulta anterior
-    #     queryset = Category.objects.annotate(fecha=Subquery(q_query.values('message__created_at')
-    #                                                                .filter(category_id=OuterRef('pk'))[:1]))\
-    #                                .order_by(F('fecha').desc())
-
-    #     serializer = QueryListClientSerializer(queryset, context={'user': request.user}, many=True)
-    #     return Response(serializer.data)
     # def get_queryset(self):
     #     """Traer Listado de Especialidades con consultas pendientes."""
     #     user = self.request.user
@@ -141,11 +106,6 @@ class QueryListClientView(ListCreateAPIView):
         # except Exception as e:
         #     string_error = u"Exception " + str(e)
         #     raise serializers.ValidationError(detail=string_error)
-
-
-
-
-
 
 #   Crear Consulta
     def post(self, request):
@@ -224,3 +184,45 @@ class QueryLastView(APIView):
         query = self.get_object(category)
         serializer = QueryDetailLastMsgSerializer(query)
         return Response(serializer.data)
+
+
+# Para Crear y Listado de consultas
+class QueryChatClientView(ListCreateAPIView):
+    """Vista Consulta."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [IsClient]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # Devolveremos las categorias para luego filtrar por usuario
+    # queryset = Category.objects.all()
+    serializer_class = QueryChatClientSerializer
+
+
+    def list(self, request):
+        """
+            Listado de queries y sus respectivos mensajes para un cliente
+        """
+        if not 'category' in request.query_params:
+            raise Http404
+
+        category = request.query_params['category']
+        client = request.user.id
+
+        queryset = Message.objects.values('id','nick', 'code', 'message', 'created_at', 'msg_type', 
+'viewed','query_id')\
+                               .annotate(title=F('query__title',),status=F('query__status',),\
+                               calification=F('query__calification',),\
+                               category_id=F('query__category_id',))\
+                               .filter(query__client_id=client, query__category_id=category)\
+                               .order_by('-created_at')
+        
+        serializer = QueryChatClientSerializer(queryset, many=True)
+        serializer = None
+
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
+
