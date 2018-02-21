@@ -32,7 +32,7 @@ ROLE_SELLER = 4
 PREFIX_CODE_SPECIALIST = 'E'
 PREFIX_CODE_SELLER = 'V'
 DATE_FAKE = '1900-01-01'
-# Fin de constates
+# Fin de constantes
 
 
 class UpdatePasswordView(APIView):
