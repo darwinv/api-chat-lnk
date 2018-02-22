@@ -1,32 +1,17 @@
 """Activacion y modificacion de planes."""
+from rest_framework import permissions, status
 from rest_framework.views import APIView
-from oauth2_provider.contrib.rest_framework import OAuth2Authentication
-from rest_framework import permissions
-from api.models import Client
-from django.http import Http404
-# from rest_framework import serializers
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer, QueryPlansAcquiredSerializer 
 from api.models import QueryPlansAcquired
+from api.permissions import IsAdminOrOwner, IsAdminOrClient
+from api.utils.tools import Operations
 from django.db.models import F
-from rest_framework import status
-from api.permissions import IsAdminOnList, IsAdminOrOwner, IsAdmin, IsClient, IsAdminOrClient
-from rest_framework.generics import ListCreateAPIView
-# from django.utils.translation import ugettext_lazy as _
-from datetime import datetime
+from django.http import Http404
 
-class Operations():
-    def get_id(self, request):
-        data = request.data
-        # validar si es cliente o admin par sacar el id
-        if request.user and request.user.role_id == 1:
-            # si es admin se necesita sacar el id de body
-            return data['client_id']
-        elif request.user and request.user.role_id == 2:
-            # si es cliente sacar el id del token
-            return request.user.id
-        else:
-            raise Http404
+from datetime import datetime
 
 class QueryPlansAcquiredDetailView(APIView):
     authentication_classes = (OAuth2Authentication,)

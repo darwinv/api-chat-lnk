@@ -4,7 +4,6 @@ from api.models import Specialist, Query, Message, Category
 from api.models import MessageFile
 from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
-from datetime import datetime, date, time, timedelta
 from api.utils.tools import get_time_message
 
 

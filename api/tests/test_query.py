@@ -19,14 +19,15 @@ class GetListQueries(APITestCase):
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
 
-    def test_get_list_by_client_wrong_role(self):
-        """Permiso no autorizado."""
-        client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+    def test_get_list_by_client_whitout_id(self):
+        """404 clien_id not found."""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = client.get(reverse('queries-client'))
+        
         # import pdb; pdb.set_trace()
         # clients = Cliente.objects.all()
         # serializer = ClientSerializer(clients, many=True)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_list_by_client(self):
         """Devolver categorias ordenadas por ultimo msj."""
@@ -46,9 +47,28 @@ class GetChatClientListQueries(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
 
     def test_get_list_by_client_chat(self):
-        """Probar si el primer mensaje retornado es False y estatus 200"""
+        """primer mensaje retornado es Viewed False y estatus 200"""
         parameters = {'category': 8}
         response = self.client.get(reverse('query-chat-client'), parameters)
         
         self.assertEqual(response.data['results'][0]['message']['viewed'], False)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_list_by_client_chat_from_admin(self):
+        """Admin prueba si primer mensaje user 15 no ha sido visto"""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        parameters = {'category': 8, 'client_id': 15}
+        response = self.client.get(reverse('query-chat-client'), parameters)
+        
+        self.assertEqual(response.data['results'][0]['message']['viewed'], False)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_bad_client_chat_from_admin(self):
+        """Admin trae mensaje de user 14 (404)"""
+
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        parameters = {'category': 8, 'client_id': 14}
+        response = self.client.get(reverse('query-chat-client'), parameters)
+        
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
