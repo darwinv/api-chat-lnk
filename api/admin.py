@@ -1,12 +1,20 @@
 """Se registran los modelos para facilitar pruebas y visualziacion directa."""
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Role, User, Seller, Client, Category, Specialist, Query, Zone
-from .models import Department, Province, District, Message, MessageFile
-from .models import PaymentType, Objection
-from .models import QueryPlans, QueryPlansAcquired, Clasification
-from .models import SaleDetail, Sale
-from .models import ContractType, Contract
+# from .models import Role, User, Seller, Client, Category, Specialist, Query, Zone
+# from .models import Department, Province, District, Message, MessageFile
+# from .models import PaymentType, Objection
+# from .models import QueryPlans, QueryPlansAcquired, Clasification
+# from .models import SaleDetail, Sale
+# from .models import ContractType, Contract
+from .models import Countries, Ciiu, Department, Province, District, Address, Zone
+from .models import Permmission, Role, User, Seller, Objection, EconomicSector, LevelInstruction
+from .models import SellerContactNoEfective, Client, ContractType, Contract, Category, Bank, Specialist
+from .models import Clasification, ProductType, QueryPlans, SellerNonBillablePlans, Match, Sale
+from .models import SaleDetail, QueryPlansAcquired, PaymentType, Payment, MatchAcquired
+from .models import MatchAcquiredFiles, MatchAcquiredLog, MonthlyFee, LogPaymentsCreditCard
+from .models import Query, QueryLogs, Message, MessageFile, FeeMonthSeller, NotificationsBack
+from .models import Parameter
 # Register your models here.
 
 
@@ -102,3 +110,37 @@ admin.site.register(SaleDetail)
 admin.site.register(Sale)
 admin.site.register(ContractType)
 admin.site.register(Contract)
+
+
+# Modelos para modificacion de pruebas
+admin.site.register(Countries) 
+admin.site.register(Ciiu) 
+admin.site.register(Address) 
+
+admin.site.register(Permmission) 
+admin.site.register(Role) 
+admin.site.register(User)  
+admin.site.register(EconomicSector) 
+admin.site.register(LevelInstruction)
+
+admin.site.register(SellerContactNoEfective) 
+admin.site.register(Bank) 
+
+admin.site.register(ProductType) 
+admin.site.register(SellerNonBillablePlans) 
+admin.site.register(Match) 
+
+admin.site.register(Payment) 
+admin.site.register(MatchAcquired)
+
+admin.site.register(MatchAcquiredFiles) 
+admin.site.register(MatchAcquiredLog) 
+admin.site.register(MonthlyFee) 
+admin.site.register(LogPaymentsCreditCard)
+
+admin.site.register(QueryLogs) 
+admin.site.register(MessageFile) 
+admin.site.register(FeeMonthSeller) 
+admin.site.register(NotificationsBack)
+
+admin.site.register(Parameter)

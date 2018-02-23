@@ -33,6 +33,7 @@ class ChoicesAPI:
         ('m', _('Male')),
         ('f', _('Female')),
     )
+    
     client_civil_state = (
         ('c', _('cohabiting')),
         ('e', _('separated')),

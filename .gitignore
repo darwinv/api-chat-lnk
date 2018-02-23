@@ -87,7 +87,7 @@ fabric.properties
 # Sonarlint plugin
 .idea/sonarlint
 
-# Putty acces gen
+# Putty access gen
 *.ppk
 
 # End of https://www.gitignore.io/api/pycharm
