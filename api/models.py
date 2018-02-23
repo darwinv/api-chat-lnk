@@ -555,7 +555,8 @@ class Message(models.Model):
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
     viewed = models.BooleanField(default=False)
-
+    nick = models.CharField(_('nick'), max_length=45, blank=True)
+    code = models.CharField(_('code'), max_length=45)
     def __str__(self):
         """Str."""
         return self.message

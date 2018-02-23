@@ -33,3 +33,22 @@ class GetListQueries(APITestCase):
         response = self.client.get(reverse('queries-client'))
         self.assertEqual(response.data[0]['status_message'], False)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class GetChatClientListQueries(APITestCase):
+    """Prueba devolver especialidades por consulta hecha del cliente."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chat']
+
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
+
+    def test_get_list_by_client_chat(self):
+        """Probar si el primer mensaje retornado es False y estatus 200"""
+        parameters = {'category': 8}
+        response = self.client.get(reverse('query-chat-client'), parameters)
+        
+        self.assertEqual(response.data['results'][0]['message']['viewed'], False)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
