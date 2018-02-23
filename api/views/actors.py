@@ -1,7 +1,7 @@
 """Vista de todos los Actores."""
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import User, Client, Specialist, Seller, QueryPlansAcquired
+from api.models import User, Client, Specialist, Seller, Query
 from api.models import SellerContactNoEfective
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
@@ -14,16 +14,18 @@ from api.serializers.actors import ClientSerializer, UserPhotoSerializer, KeySer
 from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer
+from api.serializers.query import QuerySerializer, QueryCustomSerializer
 from django.http import Http404
-from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller
+from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrClient, IsAdminOrSpecialist
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 from django.utils.translation import ugettext_lazy as _
 import os
 import uuid
 import boto3
-
-# Create your views here.
-
+from datetime import datetime, date
+from django.utils import timezone
+from api.utils.validations import Operations
+# from rest_framework.renderers import JSONRenderer
 # Constantes
 PREFIX_CODE_CLIENT = 'C'
 ROLE_CLIENT = 2
@@ -202,6 +204,45 @@ class SpecialistDetailByUsername(APIView):
         specialist = self.get_object(username)
         serializer = SpecialistSerializer(specialist)
         return Response(serializer.data)
+
+
+class SpecialistQueryCountView(ListCreateAPIView):
+    authentication_classes = (OAuth2Authentication,)
+    # permission_classes = (permissions.IsAuthenticated,)
+    #usando la nueva validacion de permisos
+    permission_classes = (IsAdminOrSpecialist,)
+
+    def get_count(self, specialist_id, fecha_init, fecha_end, request):
+        """Obtener entero resultado del total de registros encontrados."""
+        try:
+            count = Query.objects.filter(specialist_id = specialist_id, changed_on__range=(fecha_init, fecha_end)).count()
+            self.check_object_permissions(self.request, count)
+            return count
+        except Query.DoesNotExist:
+            raise Http404
+
+    def get(self, request):
+        """Obtener numero de consultas del especialista."""
+        data = {}
+        specialist_id = request.user.id
+        # now2 = datetime.utcnow()
+        #se obtiene el current timestamp utc
+        now = timezone.now()
+        # first_day_month = date(now.year,now.month,1)
+        # first_day_year = date(now.year, 1, 1)
+        #se arma las fechas -> primer dia del mes actual y primer dia del año actual
+        first_day_month = datetime(now.year, now.month, 1, tzinfo=timezone.utc)
+        first_day_year = datetime(now.year, 1, 1, tzinfo=timezone.utc)
+        month_count = self.get_count(specialist_id, first_day_month, now, request)
+        year_count = self.get_count(specialist_id, first_day_year, now, request)
+
+        data['specialist_id'] = specialist_id
+        data['month_count'] = month_count
+        data['year_count'] = year_count
+
+        serializer = QueryCustomSerializer(data)
+        return Response(serializer.data)
+        # return Response(JSONRenderer().render(respuesta), status=200)
 
 class SpecialistListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)

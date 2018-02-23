@@ -408,9 +408,13 @@ class QueryPlansAcquired(models.Model):
     maximum_response_time = models.PositiveIntegerField()  # En Horas
     acquired_at = models.DateTimeField(auto_now_add=True)
     plan_name = models.CharField(max_length=50)
-    cliente = models.ForeignKey(Client, on_delete=models.PROTECT)
+    client = models.ForeignKey(Client, on_delete=models.PROTECT)
     query_plans = models.ForeignKey(QueryPlans, on_delete=models.PROTECT)
     sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
+
+    def __str__(self):
+        """String."""
+        return self.plan_name
 
 
 class PaymentType(models.Model):
@@ -517,6 +521,7 @@ class Query(models.Model):
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
     acquired_plan = models.ForeignKey(QueryPlansAcquired, on_delete=models.PROTECT, null=True)  # El blank es Temporal
+    changed_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         """Titulo."""
