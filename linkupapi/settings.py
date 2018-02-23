@@ -135,7 +135,8 @@ LOCALE_PATHS = (
 # LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
-
+#set timezone lima UTC−05:00
+# TIME_ZONE = 'America/Lima'
 USE_I18N = True
 
 USE_L10N = True
