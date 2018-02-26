@@ -19,8 +19,7 @@ class GetPlanByPIN(APITestCase):
         client.credentials(HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
 
     def test_get_plan_by_pin(self):
-
-        """Setup."""
+        """Traer Plan enviado codigo PIN Correcto."""
         self.valid_payload = {
             "plan_name": "Minipack",
             "query_quantity": 6,
