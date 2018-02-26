@@ -8,7 +8,6 @@ from api.views import actors, query, category, email, authorization, plan, chat
 router = routers.DefaultRouter()
 router.register(r'users', actors.UserViewSet)
 
-
 urlpatterns = [
     url(r'^', include(router.urls)),
     # Clientes

@@ -1,27 +1,24 @@
 """Vistas de Consultas."""
 from rest_framework.views import APIView
-from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import Query, Specialist, Message, Category, Role
-from django.db.models import OuterRef, Subquery, F
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
-from rest_framework import status, permissions, viewsets, serializers
-import django_filters.rest_framework
-from rest_framework import filters
+from rest_framework import status, permissions, serializers
+from api.models import Query, Specialist, Message, Category
+from api.permissions import IsAdminOrClient
+from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer, QueryChatClientSerializer
+from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
-from rest_framework.pagination import PageNumberPagination
-from api.permissions import IsAdminOnList, IsAdminOrOwner, IsOwner, IsClient
-from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
-
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
 # Para Crear y Listado de consultas
 class QueryListClientView(ListCreateAPIView):
     """Vista Consulta."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [IsClient]
+    permission_classes = [IsAdminOrClient]
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # Devolveremos las categorias para luego filtrar por usuario
     queryset = Category.objects.all()
@@ -29,7 +26,11 @@ class QueryListClientView(ListCreateAPIView):
 
     def list(self, request):
         """List."""
-        user_id = request.user.id
+        user_id = Operations.get_id(self, request)
+
+        if not user_id:
+            raise Http404
+
         # Se hace un subquery para traer los ultimos msjs.
         q_query = Query.objects.values('message__created_at')\
                                .filter(client_id=user_id, message__msg_type='q')\
@@ -41,6 +42,7 @@ class QueryListClientView(ListCreateAPIView):
                                    .order_by(F('fecha').desc())
 
         serializer = QueryListClientSerializer(queryset, context={'user': request.user}, many=True)
+
         return Response(serializer.data)
     # def get_queryset(self):
     #     """Traer Listado de Especialidades con consultas pendientes."""
@@ -172,6 +174,7 @@ class QueryDetailView(APIView):
 # Devolver el detalle de una ultima consulta filtrada por categoria
 # servicio pedido para android en notificaciones
 class QueryLastView(APIView):
+
     permission_classes = [permissions.AllowAny]
     def get_object(self,category):
         try:
@@ -191,7 +194,7 @@ class QueryChatClientView(ListCreateAPIView):
     """Vista Consulta."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [IsClient]
+    permission_classes = [IsAdminOrClient]
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # Devolveremos las categorias para luego filtrar por usuario
     # queryset = Category.objects.all()
@@ -206,18 +209,25 @@ class QueryChatClientView(ListCreateAPIView):
             raise Http404
 
         category = request.query_params['category']
-        client = request.user.id
+        client = Operations.get_id(self, request)
+
+        if not client:
+            raise Http404
 
         queryset = Message.objects.values('id','nick', 'code', 'message', 'created_at', 'msg_type', 
 'viewed','query_id')\
-                               .annotate(title=F('query__title',),status=F('query__status',),\
-                               calification=F('query__calification',),\
-                               category_id=F('query__category_id',))\
-                               .filter(query__client_id=client, query__category_id=category)\
-                               .order_by('-created_at')
+                           .annotate(title=F('query__title',),status=F('query__status',),\
+                           calification=F('query__calification',),\
+                           category_id=F('query__category_id',))\
+                           .filter(query__client_id=client, query__category_id=category)\
+                           .order_by('-created_at')
+
+        # Retorno 404 para ahorrar tiempo de ejecucion
+        if not queryset:
+            raise Http404
+
         
         serializer = QueryChatClientSerializer(queryset, many=True)
-        serializer = None
 
         # pagination
         page = self.paginate_queryset(queryset)
@@ -225,4 +235,3 @@ class QueryChatClientView(ListCreateAPIView):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
-
