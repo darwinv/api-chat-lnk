@@ -49,6 +49,12 @@ class GetChatClientListQueries(APITestCase):
         """Probar si el primer mensaje retornado es False y estatus 200"""
         parameters = {'category': 8}
         response = self.client.get(reverse('query-chat-client'), parameters)
-        
+
         self.assertEqual(response.data['results'][0]['message']['viewed'], False)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class CreateQuery(APITestCase):
+    """Prueba para crear consulta."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chat']

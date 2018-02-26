@@ -108,6 +108,7 @@ class QueryListClientView(ListCreateAPIView):
 
 #   Crear Consulta
     def post(self, request):
+        """Metodo para Crear consulta."""
         data = request.data
         # devolver especialista principal segun categoria
         # try:

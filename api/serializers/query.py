@@ -123,13 +123,17 @@ class QueryDetailLastMsgSerializer(serializers.ModelSerializer):
         """Devuelve el nombre de la especialidad."""
         return _(str(obj.category))
 
-class QueryCustomSerializer(serializers.Serializer):
-    #serializador para devolver datos customizados de un diccionario dado
-    fields = ('specialist_id','month_count','year_count')
 
-    #establecemos que datos del diccionario pasado se mostrara en cada campo puesto en la tupla "Fields"
+class QueryCustomSerializer(serializers.Serializer):
+    """serializador para devolver datos customizados de un diccionario dado."""
+
+    fields = ('specialist_id', 'month_count', 'year_count')
+
+    # establecemos que datos del diccionario pasado se mostrara en cada campo puesto en la tupla "Fields"
     def to_representation(self, dic):
-        return {"specialist_id": dic['specialist_id'],"month_count": dic['month_count'],"year_count": dic['year_count']}
+        """Diccionario redefinido."""
+        return {"specialist_id": dic['specialist_id'], "month_count": dic['month_count'], "year_count": dic['year_count']}
+
 
 class QuerySerializer(serializers.ModelSerializer):
     """Serializer para crear consultas."""
@@ -291,7 +295,7 @@ class QueryListClientSerializer(serializers.ModelSerializer):
                              .values('message__created_at').latest('message__created_at')
 
             return get_time_message(query['message__created_at'])
-            
+
         except Query.DoesNotExist:
             return None
 
@@ -378,5 +382,3 @@ class QueryChatClientSerializer(serializers.ModelSerializer):
     def get_message(self, obj):
         message = ChatMessageSerializer(obj)
         return message.data
-
-    
