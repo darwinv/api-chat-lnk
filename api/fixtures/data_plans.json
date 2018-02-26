@@ -80,6 +80,26 @@
   }
 },
 {
+  "model": "api.address",
+  "pk": 9,
+  "fields": {
+    "street": "Lima",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 10,
+  "fields": {
+    "street": "Lima",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
   "model": "api.category",
   "pk": 1,
   "fields": {
@@ -8000,7 +8020,7 @@
   "model": "api.district",
   "pk": 228,
   "fields": {
-    "name": "NEPE&Ntilde;A",
+    "name": "NEPE\u00d1A",
     "province": 25
   }
 },
@@ -8536,7 +8556,7 @@
   "model": "api.district",
   "pk": 295,
   "fields": {
-    "name": "SAN JUAN DE CHAC&Ntilde;A",
+    "name": "SAN JUAN DE CHAC\u00d1A",
     "province": 31
   }
 },
@@ -8544,7 +8564,7 @@
   "model": "api.district",
   "pk": 296,
   "fields": {
-    "name": "SA&Ntilde;AYCA",
+    "name": "SA\u00d1AYCA",
     "province": 31
   }
 },
@@ -8928,7 +8948,7 @@
   "model": "api.district",
   "pk": 344,
   "fields": {
-    "name": "QUEQUE&Ntilde;A",
+    "name": "QUEQUE\u00d1A",
     "province": 35
   }
 },
@@ -9088,7 +9108,7 @@
   "model": "api.district",
   "pk": 364,
   "fields": {
-    "name": "OCO&Ntilde;A",
+    "name": "OCO\u00d1A",
     "province": 36
   }
 },
@@ -9304,7 +9324,7 @@
   "model": "api.district",
   "pk": 391,
   "fields": {
-    "name": "U&Ntilde;ON",
+    "name": "U\u00d1ON",
     "province": 38
   }
 },
@@ -10048,7 +10068,7 @@
   "model": "api.district",
   "pk": 484,
   "fields": {
-    "name": "CHAVI&Ntilde;A",
+    "name": "CHAVI\u00d1A",
     "province": 48
   }
 },
@@ -10104,7 +10124,7 @@
   "model": "api.district",
   "pk": 491,
   "fields": {
-    "name": "OCA&Ntilde;A",
+    "name": "OCA\u00d1A",
     "province": 48
   }
 },
@@ -10200,7 +10220,7 @@
   "model": "api.district",
   "pk": 503,
   "fields": {
-    "name": "CORONEL CASTA&Ntilde;EDA",
+    "name": "CORONEL CASTA\u00d1EDA",
     "province": 49
   }
 },
@@ -10360,7 +10380,7 @@
   "model": "api.district",
   "pk": 523,
   "fields": {
-    "name": "HUACA&Ntilde;A",
+    "name": "HUACA\u00d1A",
     "province": 51
   }
 },
@@ -10897,7 +10917,7 @@
   "pk": 650,
   "fields": {
     "name": "SAN MIGUEL",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10905,7 +10925,7 @@
   "pk": 651,
   "fields": {
     "name": "SAN MIGUEL",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10913,7 +10933,7 @@
   "pk": 652,
   "fields": {
     "name": "BOLIVAR",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10921,7 +10941,7 @@
   "pk": 653,
   "fields": {
     "name": "CALQUIS",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10929,7 +10949,7 @@
   "pk": 654,
   "fields": {
     "name": "CATILLUC",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10937,7 +10957,7 @@
   "pk": 655,
   "fields": {
     "name": "EL PRADO",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10945,7 +10965,7 @@
   "pk": 656,
   "fields": {
     "name": "LA FLORIDA",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10953,7 +10973,7 @@
   "pk": 657,
   "fields": {
     "name": "LLAPA",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10961,7 +10981,7 @@
   "pk": 658,
   "fields": {
     "name": "NANCHOC",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10969,7 +10989,7 @@
   "pk": 659,
   "fields": {
     "name": "NIEPOS",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10977,7 +10997,7 @@
   "pk": 660,
   "fields": {
     "name": "SAN GREGORIO",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10985,7 +11005,7 @@
   "pk": 661,
   "fields": {
     "name": "SAN SILVESTRE DE COCHAN",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -10993,7 +11013,7 @@
   "pk": 662,
   "fields": {
     "name": "TONGOD",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -11001,7 +11021,7 @@
   "pk": 663,
   "fields": {
     "name": "UNION AGUA BLANCA",
-    "province": 64
+    "province": 194
   }
 },
 {
@@ -11009,7 +11029,7 @@
   "pk": 664,
   "fields": {
     "name": "SAN PABLO",
-    "province": 65
+    "province": 64
   }
 },
 {
@@ -11017,7 +11037,7 @@
   "pk": 665,
   "fields": {
     "name": "SAN BERNARDINO",
-    "province": 65
+    "province": 64
   }
 },
 {
@@ -11025,7 +11045,7 @@
   "pk": 666,
   "fields": {
     "name": "SAN LUIS",
-    "province": 65
+    "province": 64
   }
 },
 {
@@ -11033,7 +11053,7 @@
   "pk": 667,
   "fields": {
     "name": "TUMBADEN",
-    "province": 65
+    "province": 64
   }
 },
 {
@@ -11041,7 +11061,7 @@
   "pk": 668,
   "fields": {
     "name": "SANTA CRUZ",
-    "province": 66
+    "province": 65
   }
 },
 {
@@ -11049,7 +11069,7 @@
   "pk": 669,
   "fields": {
     "name": "ANDABAMBA",
-    "province": 66
+    "province": 65
   }
 },
 {
@@ -11057,15 +11077,15 @@
   "pk": 670,
   "fields": {
     "name": "CATACHE",
-    "province": 66
+    "province": 65
   }
 },
 {
   "model": "api.district",
   "pk": 671,
   "fields": {
-    "name": "CHANCAYBA&Ntilde;OS",
-    "province": 66
+    "name": "CHANCAYBA\u00d1OS",
+    "province": 65
   }
 },
 {
@@ -11073,7 +11093,7 @@
   "pk": 672,
   "fields": {
     "name": "LA ESPERANZA",
-    "province": 66
+    "province": 65
   }
 },
 {
@@ -11081,7 +11101,7 @@
   "pk": 673,
   "fields": {
     "name": "NINABAMBA",
-    "province": 66
+    "province": 65
   }
 },
 {
@@ -11089,7 +11109,7 @@
   "pk": 674,
   "fields": {
     "name": "PULAN",
-    "province": 66
+    "province": 65
   }
 },
 {
@@ -11097,7 +11117,7 @@
   "pk": 675,
   "fields": {
     "name": "SAUCEPAMPA",
-    "province": 66
+    "province": 65
   }
 },
 {
@@ -11105,7 +11125,7 @@
   "pk": 676,
   "fields": {
     "name": "SEXI",
-    "province": 66
+    "province": 65
   }
 },
 {
@@ -11113,7 +11133,7 @@
   "pk": 677,
   "fields": {
     "name": "UTICYACU",
-    "province": 66
+    "province": 65
   }
 },
 {
@@ -11121,7 +11141,7 @@
   "pk": 678,
   "fields": {
     "name": "YAUYUCAN",
-    "province": 66
+    "province": 65
   }
 },
 {
@@ -11129,7 +11149,7 @@
   "pk": 679,
   "fields": {
     "name": "CALLAO",
-    "province": 67
+    "province": 66
   }
 },
 {
@@ -11137,7 +11157,7 @@
   "pk": 680,
   "fields": {
     "name": "BELLAVISTA",
-    "province": 67
+    "province": 66
   }
 },
 {
@@ -11145,7 +11165,7 @@
   "pk": 681,
   "fields": {
     "name": "CARMEN DE LA LEGUA REYNOSO",
-    "province": 67
+    "province": 66
   }
 },
 {
@@ -11153,7 +11173,7 @@
   "pk": 682,
   "fields": {
     "name": "LA PERLA",
-    "province": 67
+    "province": 66
   }
 },
 {
@@ -11161,7 +11181,7 @@
   "pk": 683,
   "fields": {
     "name": "LA PUNTA",
-    "province": 67
+    "province": 66
   }
 },
 {
@@ -11169,7 +11189,7 @@
   "pk": 684,
   "fields": {
     "name": "VENTANILLA",
-    "province": 67
+    "province": 66
   }
 },
 {
@@ -11608,7 +11628,7 @@
   "model": "api.district",
   "pk": 739,
   "fields": {
-    "name": "QUI&Ntilde;OTA",
+    "name": "QUI\u00d1OTA",
     "province": 73
   }
 },
@@ -11880,7 +11900,7 @@
   "model": "api.district",
   "pk": 773,
   "fields": {
-    "name": "KOS&Ntilde;IPATA",
+    "name": "KOS\u00d1IPATA",
     "province": 77
   }
 },
@@ -12728,7 +12748,7 @@
   "model": "api.district",
   "pk": 879,
   "fields": {
-    "name": "&Ntilde;AHUIMPUQUIO",
+    "name": "\u00d1AHUIMPUQUIO",
     "province": 86
   }
 },
@@ -13112,7 +13132,7 @@
   "model": "api.district",
   "pk": 927,
   "fields": {
-    "name": "PU&Ntilde;OS",
+    "name": "PU\u00d1OS",
     "province": 91
   }
 },
@@ -13288,7 +13308,7 @@
   "model": "api.district",
   "pk": 949,
   "fields": {
-    "name": "BA&Ntilde;OS",
+    "name": "BA\u00d1OS",
     "province": 96
   }
 },
@@ -13408,7 +13428,7 @@
   "model": "api.district",
   "pk": 964,
   "fields": {
-    "name": "LA TINGUI&Ntilde;A",
+    "name": "LA TINGUI\u00d1A",
     "province": 98
   }
 },
@@ -13928,7 +13948,7 @@
   "model": "api.district",
   "pk": 1029,
   "fields": {
-    "name": "SA&Ntilde;O",
+    "name": "SA\u00d1O",
     "province": 103
   }
 },
@@ -14232,7 +14252,7 @@
   "model": "api.district",
   "pk": 1067,
   "fields": {
-    "name": "LEONOR ORDO&Ntilde;EZ",
+    "name": "LEONOR ORDO\u00d1EZ",
     "province": 106
   }
 },
@@ -15512,7 +15532,7 @@
   "model": "api.district",
   "pk": 1227,
   "fields": {
-    "name": "SA&Ntilde;A",
+    "name": "SA\u00d1A",
     "province": 124
   }
 },
@@ -15560,7 +15580,7 @@
   "model": "api.district",
   "pk": 1233,
   "fields": {
-    "name": "FERRE&Ntilde;AFE",
+    "name": "FERRE\u00d1AFE",
     "province": 125
   }
 },
@@ -15568,7 +15588,7 @@
   "model": "api.district",
   "pk": 1234,
   "fields": {
-    "name": "CA&Ntilde;ARIS",
+    "name": "CA\u00d1ARIS",
     "province": 125
   }
 },
@@ -15736,7 +15756,7 @@
   "model": "api.district",
   "pk": 1255,
   "fields": {
-    "name": "BRE&Ntilde;A",
+    "name": "BRE\u00d1A",
     "province": 127
   }
 },
@@ -16184,7 +16204,7 @@
   "model": "api.district",
   "pk": 1311,
   "fields": {
-    "name": "SAN VICENTE DE CA&Ntilde;ETE",
+    "name": "SAN VICENTE DE CA\u00d1ETE",
     "province": 131
   }
 },
@@ -16304,7 +16324,7 @@
   "model": "api.district",
   "pk": 1326,
   "fields": {
-    "name": "ZU&Ntilde;IGA",
+    "name": "ZU\u00d1IGA",
     "province": 131
   }
 },
@@ -16936,7 +16956,7 @@
   "model": "api.district",
   "pk": 1405,
   "fields": {
-    "name": "HUA&Ntilde;EC",
+    "name": "HUA\u00d1EC",
     "province": 136
   }
 },
@@ -17056,7 +17076,7 @@
   "model": "api.district",
   "pk": 1420,
   "fields": {
-    "name": "VI&Ntilde;AC",
+    "name": "VI\u00d1AC",
     "province": 136
   }
 },
@@ -17528,7 +17548,7 @@
   "model": "api.district",
   "pk": 1479,
   "fields": {
-    "name": "I&Ntilde;APARI",
+    "name": "I\u00d1APARI",
     "province": 145
   }
 },
@@ -17624,7 +17644,7 @@
   "model": "api.district",
   "pk": 1491,
   "fields": {
-    "name": "ICHU&Ntilde;A",
+    "name": "ICHU\u00d1A",
     "province": 147
   }
 },
@@ -18352,7 +18372,7 @@
   "model": "api.district",
   "pk": 1582,
   "fields": {
-    "name": "PARI&Ntilde;AS",
+    "name": "PARI\u00d1AS",
     "province": 158
   }
 },
@@ -18512,7 +18532,7 @@
   "model": "api.district",
   "pk": 1602,
   "fields": {
-    "name": "MA&Ntilde;AZO",
+    "name": "MA\u00d1AZO",
     "province": 160
   }
 },
@@ -18624,7 +18644,7 @@
   "model": "api.district",
   "pk": 1616,
   "fields": {
-    "name": "MU&Ntilde;ANI",
+    "name": "MU\u00d1ANI",
     "province": 161
   }
 },
@@ -19048,7 +19068,7 @@
   "model": "api.district",
   "pk": 1669,
   "fields": {
-    "name": "NU&Ntilde;OA",
+    "name": "NU\u00d1OA",
     "province": 167
   }
 },
@@ -19528,7 +19548,7 @@
   "model": "api.district",
   "pk": 1729,
   "fields": {
-    "name": "CU&Ntilde;UMBUQUI",
+    "name": "CU\u00d1UMBUQUI",
     "province": 177
   }
 },
@@ -20617,80 +20637,80 @@
   "model": "api.province",
   "pk": 10,
   "fields": {
-    "name": "ANTONIO RAYMONDI",
-    "department": 2
+    "name": "TARMA",
+    "department": 12
   }
 },
 {
   "model": "api.province",
   "pk": 11,
   "fields": {
-    "name": "ASUNCION",
-    "department": 2
+    "name": "PATAZ",
+    "department": 13
   }
 },
 {
   "model": "api.province",
   "pk": 12,
   "fields": {
-    "name": "BOLOGNESI",
-    "department": 2
+    "name": "CAJATAMBO",
+    "department": 15
   }
 },
 {
   "model": "api.province",
   "pk": 13,
   "fields": {
-    "name": "CARHUAZ",
-    "department": 2
+    "name": "LORETO",
+    "department": 16
   }
 },
 {
   "model": "api.province",
   "pk": 14,
   "fields": {
-    "name": "CARLOS FERMIN FITZCARRALD",
-    "department": 2
+    "name": "PASCO",
+    "department": 19
   }
 },
 {
   "model": "api.province",
   "pk": 15,
   "fields": {
-    "name": "CASMA",
-    "department": 2
+    "name": "SECHURA",
+    "department": 20
   }
 },
 {
   "model": "api.province",
   "pk": 16,
   "fields": {
-    "name": "CORONGO",
-    "department": 2
+    "name": "SAN ANTONIO DE PUTINA",
+    "department": 21
   }
 },
 {
   "model": "api.province",
   "pk": 17,
   "fields": {
-    "name": "HUARI",
-    "department": 2
+    "name": "PICOTA",
+    "department": 22
   }
 },
 {
   "model": "api.province",
   "pk": 18,
   "fields": {
-    "name": "HUARMEY",
-    "department": 2
+    "name": "ZARUMILLA",
+    "department": 24
   }
 },
 {
   "model": "api.province",
   "pk": 19,
   "fields": {
-    "name": "HUAYLAS",
-    "department": 2
+    "name": "SAN MIGUEL",
+    "department": 6
   }
 },
 {
@@ -21281,7 +21301,7 @@
   "model": "api.province",
   "pk": 93,
   "fields": {
-    "name": "MARA&Ntilde;ON",
+    "name": "MARA\u00d1ON",
     "department": 10
   }
 },
@@ -22086,6 +22106,14 @@
   }
 },
 {
+  "model": "api.province",
+  "pk": 194,
+  "fields": {
+    "name": "SAN MIGUEL",
+    "department": 6
+  }
+},
+{
   "model": "api.queryplans",
   "pk": 1,
   "fields": {
@@ -22164,7 +22192,7 @@
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$36000$ZoKwG4C5uFXR$IDtDvqi2/fH+4Jw4NfiZd0JW13TJ2ARQM4FhAfWZn5g=",
-    "last_login": "2018-02-21T19:20:46.506Z",
+    "last_login": "2018-02-26T15:54:01.109Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "",
@@ -22319,7 +22347,7 @@
   "model": "api.user",
   "pk": 5,
   "fields": {
-    "password": "pbkdf2_sha256$36000$zaE2wKJLcN37$4vuIc9VWFfcVSHkGeWzC4/MQVJb27yuX3dt5vXoXu90=",
+    "password": "pbkdf2_sha256$36000$3UM78PpeY4P5$zTDlcZKWDnDb/GWM6NxvMauMm/tEga+9tlciVCszBEk=",
     "last_login": null,
     "is_superuser": false,
     "username": "darwinjesus22",
@@ -22348,7 +22376,7 @@
     "address": 4,
     "residence_country": 3,
     "foreign_address": null,
-    "key": null,
+    "key": "54321",
     "status": "0",
     "groups": [],
     "user_permissions": []
@@ -22511,6 +22539,84 @@
   }
 },
 {
+  "model": "api.user",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$t0YcSiYMRd0n$sc9IxIMHc48mkiJiqpZ2RF80cgmAYOViOZIK/TzY84s=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "josue",
+    "first_name": "josue",
+    "last_name": "contreras cucchi",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-26T15:13:20.132Z",
+    "nick": "josue",
+    "email_exact": "josue@mail.com",
+    "telephone": "987654321",
+    "cellphone": "987654321",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "44551728",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C44551728",
+    "anonymous": true,
+    "updated_at": "2018-02-26T15:13:20.179Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 9,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": "54321",
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 11,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$TpZVhIhMIYY7$Q1CokH9WoO9i34NfmbWsTMW95qsj094re9z2drZ+uZo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "clientejosue@mail.com",
+    "first_name": "Josue",
+    "last_name": "Contreras",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-26T15:41:41.361Z",
+    "nick": "josuedaniel",
+    "email_exact": "josuecc@mail.com",
+    "telephone": "987654321",
+    "cellphone": "987654321",
+    "code_telephone": 18,
+    "code_cellphone": 1,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "24612582",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C24612582",
+    "anonymous": true,
+    "updated_at": "2018-02-26T15:41:41.415Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 10,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
   "model": "api.specialist",
   "pk": 4,
   "fields": {
@@ -22580,7 +22686,9 @@
     "created_at": "2018-02-20T22:12:36.170Z",
     "specialist": 8,
     "query": 1,
-    "viewed": true
+    "viewed": true,
+    "nick": "",
+    "code": "1"
   }
 },
 {
@@ -22592,7 +22700,9 @@
     "created_at": "2018-02-20T22:14:43.358Z",
     "specialist": 4,
     "query": 2,
-    "viewed": true
+    "viewed": true,
+    "nick": "",
+    "code": "1"
   }
 },
 {
@@ -22604,7 +22714,9 @@
     "created_at": "2018-02-21T19:13:19.673Z",
     "specialist": 4,
     "query": 3,
-    "viewed": true
+    "viewed": true,
+    "nick": "",
+    "code": "1"
   }
 },
 {
@@ -22616,7 +22728,9 @@
     "created_at": "2018-02-21T19:16:12.670Z",
     "specialist": 4,
     "query": 4,
-    "viewed": true
+    "viewed": true,
+    "nick": "",
+    "code": "1"
   }
 },
 {
@@ -22628,7 +22742,9 @@
     "created_at": "2018-02-21T19:21:13.037Z",
     "specialist": 8,
     "query": 5,
-    "viewed": true
+    "viewed": true,
+    "nick": "",
+    "code": "1"
   }
 },
 {
@@ -22640,7 +22756,9 @@
     "created_at": "2018-02-21T19:40:56.114Z",
     "specialist": 8,
     "query": 6,
-    "viewed": true
+    "viewed": true,
+    "nick": "",
+    "code": "1"
   }
 },
 {
@@ -22652,7 +22770,9 @@
     "created_at": "2018-02-22T14:37:15.234Z",
     "specialist": 4,
     "query": 5,
-    "viewed": true
+    "viewed": true,
+    "nick": "",
+    "code": "1"
   }
 },
 {
@@ -22729,6 +22849,58 @@
     "economic_sector": 2,
     "level_instruction": 2,
     "seller_asigned": 3,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 10,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UCV",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Ingeniero",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 11,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "1987-10-18",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UCV",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Vendedor",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
     "groups": [],
     "user_permissions": []
   }
@@ -22833,7 +23005,7 @@
   "model": "api.queryplansacquired",
   "pk": 2,
   "fields": {
-    "expiration_date": "2018-02-24",
+    "expiration_date": "2018-02-28",
     "validity_months": 2,
     "available_queries": 3,
     "query_quantity": 2,
@@ -22844,7 +23016,7 @@
     "maximum_response_time": 23,
     "acquired_at": "2018-02-15T23:09:23.626Z",
     "plan_name": "express",
-    "client": 5,
+    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -22853,7 +23025,7 @@
   "model": "api.queryplansacquired",
   "pk": 3,
   "fields": {
-    "expiration_date": "2018-02-25",
+    "expiration_date": "2018-02-28",
     "validity_months": 1,
     "available_queries": 1,
     "query_quantity": 2,
@@ -22864,7 +23036,7 @@
     "maximum_response_time": 23,
     "acquired_at": "2018-02-16T17:49:14.106Z",
     "plan_name": "minipack",
-    "client": 5,
+    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -22884,6 +23056,26 @@
     "maximum_response_time": 123,
     "acquired_at": "2018-02-19T20:29:12.399Z",
     "plan_name": "test",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 5,
+  "fields": {
+    "expiration_date": "2018-02-26",
+    "validity_months": 2,
+    "available_queries": 1,
+    "query_quantity": 3,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": true,
+    "available_requeries": 23,
+    "maximum_response_time": 32,
+    "acquired_at": "2018-02-26T15:55:55.940Z",
+    "plan_name": "super plan",
     "client": 5,
     "query_plans": 1,
     "sale_detail": 1

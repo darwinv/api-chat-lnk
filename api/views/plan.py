@@ -1,20 +1,17 @@
 """Activacion y modificacion de planes."""
+from rest_framework import permissions, status
 from rest_framework.views import APIView
-from oauth2_provider.contrib.rest_framework import OAuth2Authentication
-from rest_framework import permissions
-from api.models import Client
-from django.http import Http404
-# from rest_framework import serializers
-from rest_framework.response import Response
-from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer, QueryPlansAcquiredSerializer 
-from api.models import QueryPlansAcquired
-from django.db.models import F
-from rest_framework import status
-from api.permissions import IsAdminOnList, IsAdminOrOwner, IsAdmin, IsClient, IsAdminOrClient
 from rest_framework.generics import ListCreateAPIView
-# from django.utils.translation import ugettext_lazy as _
-from datetime import datetime
+from rest_framework.response import Response
+from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer, QueryPlansAcquiredSerializer
+from api.models import QueryPlansAcquired
+from api.permissions import IsAdminOrOwner, IsAdminOrClient
 from api.utils.validations import Operations
+from django.db.models import F
+from django.http import Http404
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
+from datetime import datetime
+
 
 class QueryPlansAcquiredDetailView(APIView):
     authentication_classes = (OAuth2Authentication,)
@@ -38,7 +35,7 @@ class QueryPlansAcquiredDetailView(APIView):
     # actualizacion
     def put(self, request, pk):
         #Activar el plan requrido y desactivar los demas
-        client_id = Operations.get_id_IsAdminOrClient(self, request)
+        client_id = Operations.get_id(self, request)
         data = request.data
 
         plan = self.get_object(pk)
@@ -136,7 +133,7 @@ class ActivationPlanView(APIView):
         """
         try:
             QueryPlansAcquired.objects.values('is_chosen')\
-                .filter(sale_detail__sale__client= client, is_active = True, is_chosen = True)[:1].get()
+                .filter(client= client, is_active = True, is_chosen = True)[:1].get()
             return True
         except QueryPlansAcquired.DoesNotExist:
             return False
@@ -147,7 +144,7 @@ class ActivationPlanView(APIView):
             # Query para traer el detalle de un plan por el codigo PIN
             plan = get_query_set_plan()
 
-            return plan.filter(sale_detail__sale__client= client, sale_detail__pin_code=code, is_active = False)[:1].get()
+            return plan.filter(client= client, sale_detail__pin_code=code, is_active = False)[:1].get()
             
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
@@ -160,7 +157,7 @@ class ActivationPlanView(APIView):
         """
         try:
             QueryPlansAcquired.objects.values('is_chosen')\
-                .filter(sale_detail__sale__client= client, is_active = True, is_chosen = True)[:1].get()
+                .filter(client= client, is_active = True, is_chosen = True)[:1].get()
             return True
         except QueryPlansAcquired.DoesNotExist:
             return False
@@ -192,7 +189,7 @@ class ChosemPlanView(APIView):
         """
         try:
             plan_chosen = get_query_set_plan()
-            return plan_chosen.filter(sale_detail__sale__client= client, is_active = True, is_chosen = True)[:1].get()
+            return plan_chosen.filter(client= client, is_active = True, is_chosen = True)[:1].get()
 
         except QueryPlansAcquired.DoesNotExist:
             raise Http404

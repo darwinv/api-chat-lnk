@@ -92,7 +92,9 @@ class UpdatePlanActiveByAPI(APITestCase):
 class GetClientPlansList(APITestCase):
     """Prueba para devolver listado de planes al cliente"""
     # fixtures = ['data', 'data2', 'data3']
-    fixtures = ['data_plans', 'data_plans_oauth2']
+
+    fixtures = ['data', 'data2', 'data3', 'test_plan']
+
 
     def setUp(self):
         """Setup."""
@@ -106,8 +108,9 @@ class GetClientPlansList(APITestCase):
 
 class UpdatePlanSelect (APITestCase):
     """Prueba para actualizar el plan activo de un cliente"""
-    # fixtures = ['data', 'data2', 'data3']
-    fixtures = ['data_plans', 'data_plans_oauth2']
+
+    fixtures = ['data', 'data2', 'data3', 'test_plan']
+
 
     def setUp(self):
         """Setup."""
@@ -138,9 +141,9 @@ class UpdatePlanSelect (APITestCase):
 
 class GetSpecialistQueryCount(APITestCase):
     """Prueba para devolver los totales de consultas de un especialista """
-    # fixtures = ['data', 'data2', 'data3']
-    fixtures = ['data_plans', 'data_plans_oauth2']
-    # fixtures = ['mk']
+
+    fixtures = ['data', 'data2', 'data3', 'test_plan']
+
     def setUp(self):
         """Setup."""
         pass

@@ -521,7 +521,7 @@ class Query(models.Model):
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
     acquired_plan = models.ForeignKey(QueryPlansAcquired, on_delete=models.PROTECT, null=True)  # El blank es Temporal
-    changed_on = models.DateTimeField(auto_now=True)
+    changed_on = models.DateTimeField(auto_now=True, null=True) # Fecha en la que adjudicada la consulta
 
     def __str__(self):
         """Titulo."""
