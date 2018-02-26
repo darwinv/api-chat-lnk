@@ -208,14 +208,14 @@ class QueryChatClientView(ListCreateAPIView):
         category = request.query_params['category']
         client = request.user.id
 
-        queryset = Message.objects.values('id','nick', 'code', 'message', 'created_at', 'msg_type', 
+        queryset = Message.objects.values('id','nick', 'code', 'message', 'created_at', 'msg_type',
 'viewed','query_id')\
                                .annotate(title=F('query__title',),status=F('query__status',),\
                                calification=F('query__calification',),\
                                category_id=F('query__category_id',))\
                                .filter(query__client_id=client, query__category_id=category)\
                                .order_by('-created_at')
-        
+
         serializer = QueryChatClientSerializer(queryset, many=True)
         serializer = None
 
@@ -225,4 +225,3 @@ class QueryChatClientView(ListCreateAPIView):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
-
