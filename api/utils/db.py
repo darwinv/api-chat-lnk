@@ -39,7 +39,7 @@ import MySQLdb
 db = MySQLdb.connect(host="localhost",    # tu host, usualmente localhost
                      user="root",         # tu usuario
                      passwd="",  # tu password
-                     db="linkup")        # el nombre de la base de datos
+                     db="api_linkup")        # el nombre de la base de datos
 
 # Debes crear un objeto Cursor. Te permitirá
 # ejecutar todos los queries que necesitas

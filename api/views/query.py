@@ -115,11 +115,11 @@ class QueryListClientView(ListCreateAPIView):
         #     data["message"]["specialist"] = Specialist.objects.get(type_specialist="m",
         #                                                     category_id=data["category"])
         #
-        #     serializer = QuerySerializer(data=data)
-        #     if serializer.is_valid():
-        #         serializer.save()
-        #         return Response(serializer.data, status.HTTP_201_CREATED)
-        #     return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        serializer = QuerySerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         # except Exception as e:
         #     string_error = u"Exception: " + str(e) + " required"
         #     raise serializers.ValidationError(detail=string_error)
