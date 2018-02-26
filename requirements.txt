@@ -21,3 +21,4 @@ asgiref==1.1.2
 Twisted==17.9.0
 pypiwin32==219
 haikunator==2.1.0
+pyrebase
