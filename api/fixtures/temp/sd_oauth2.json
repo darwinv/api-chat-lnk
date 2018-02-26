@@ -1,0 +1,172 @@
+[
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "token": "EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "",
+    "created": "2016-12-31T23:59:59Z",
+    "updated": "2017-10-02T22:27:09.173Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 2,
+  "fields": {
+    "user": 5,
+    "token": "kEphPGlavEforKavpDzuZSgK0zpoXS",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "write read groups",
+    "created": "2018-02-09T17:58:03.854Z",
+    "updated": "2018-02-09T17:58:03.854Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 3,
+  "fields": {
+    "user": 1,
+    "token": "9M84R1jUHHx2AZkAGb3C6OF72QM7Xh",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "read write groups",
+    "created": "2018-02-09T21:54:51.308Z",
+    "updated": "2018-02-09T21:54:51.308Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 5,
+  "fields": {
+    "user": 1,
+    "token": "rTR1mT7dgng34DXLIiWMzIGA2bJtgc",
+    "application": 1,
+    "expires": "2018-02-15T00:10:06.136Z",
+    "scope": "write read groups",
+    "created": "2018-02-14T14:10:06.136Z",
+    "updated": "2018-02-14T14:10:06.136Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 7,
+  "fields": {
+    "user": 1,
+    "token": "l6YYuSzMmg58s7UEljiZlhmaGLxVal",
+    "application": 1,
+    "expires": "2018-02-16T00:27:08.530Z",
+    "scope": "read groups write",
+    "created": "2018-02-15T14:27:08.530Z",
+    "updated": "2018-02-15T14:27:08.531Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 8,
+  "fields": {
+    "user": 1,
+    "token": "MS9RkKWU4wtayaXANb0Ho8QOsRxHVG",
+    "application": 1,
+    "expires": "2018-02-17T08:14:47.808Z",
+    "scope": "write read groups",
+    "created": "2018-02-16T22:14:47.808Z",
+    "updated": "2018-02-16T22:14:47.808Z"
+  }
+},
+{
+  "model": "oauth2_provider.application",
+  "pk": 1,
+  "fields": {
+    "client_id": "FUN5EkBDdiQo8SixJYslF41ZkrjAhQtWKkV7BEE2",
+    "user": null,
+    "redirect_uris": "",
+    "client_type": "public",
+    "authorization_grant_type": "password",
+    "client_secret": "P7pj3QcE6GyhlS0QUzJOJ8SRLlTGHYSMESGr7QzlyKnuMsc4osaaStB6wSiGGxAelKjXv6xJ7p9Go8R5el2KaVlcM4P50IeplkY2CWHxaOc9NI1fLKS9DoWxD9UbG4TN",
+    "name": "",
+    "skip_authorization": false,
+    "created": "2017-10-02T21:19:16.205Z",
+    "updated": "2017-10-02T21:19:16.205Z"
+  }
+},
+{
+  "model": "oauth2_provider.application",
+  "pk": 2,
+  "fields": {
+    "client_id": "Aq7s99mrGD1EttlN6PHYA2ImrNfGxPH4WWr9cfm6",
+    "user": null,
+    "redirect_uris": "",
+    "client_type": "public",
+    "authorization_grant_type": "password",
+    "client_secret": "ZkBRpQevvQiThdsOAcvOk2BApRpgnuvNoDJwztTashQBLB3HEGBP5vWcmyXlUeG8TlZfGWIHDsTwms5vUc8zzpEi4VgrJiY7D20rRFlaHPWAn9Rkw3ZwZK5Awwavyi9T",
+    "name": "",
+    "skip_authorization": false,
+    "created": "2018-02-14T14:09:00.488Z",
+    "updated": "2018-02-14T14:09:00.488Z"
+  }
+},
+{
+  "model": "oauth2_provider.refreshtoken",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "token": "R5hQQQA9FQ0m9cwLG8zYXCxNX8q5lS",
+    "application": 1,
+    "access_token": 2,
+    "created": "2018-02-09T17:58:04.135Z",
+    "updated": "2018-02-09T17:58:04.135Z"
+  }
+},
+{
+  "model": "oauth2_provider.refreshtoken",
+  "pk": 2,
+  "fields": {
+    "user": 1,
+    "token": "QABnj4YCpnddMOCh3tUaD6aS9ilcwI",
+    "application": 1,
+    "access_token": 3,
+    "created": "2018-02-09T21:54:51.384Z",
+    "updated": "2018-02-09T21:54:51.384Z"
+  }
+},
+{
+  "model": "oauth2_provider.refreshtoken",
+  "pk": 4,
+  "fields": {
+    "user": 1,
+    "token": "iLEBPrSX4fNSTebJD7CP1nuQJ9icen",
+    "application": 1,
+    "access_token": 5,
+    "created": "2018-02-14T14:10:06.165Z",
+    "updated": "2018-02-14T14:10:06.165Z"
+  }
+},
+{
+  "model": "oauth2_provider.refreshtoken",
+  "pk": 6,
+  "fields": {
+    "user": 1,
+    "token": "HJDbVWXXP9K8pPk9xUQX6swIx6LJq9",
+    "application": 1,
+    "access_token": 7,
+    "created": "2018-02-15T14:27:08.718Z",
+    "updated": "2018-02-15T14:27:08.718Z"
+  }
+},
+{
+  "model": "oauth2_provider.refreshtoken",
+  "pk": 7,
+  "fields": {
+    "user": 1,
+    "token": "rWFiqJVyPjV7ahFAp7cePr0r58oOzd",
+    "application": 1,
+    "access_token": 8,
+    "created": "2018-02-16T22:14:47.848Z",
+    "updated": "2018-02-16T22:14:47.848Z"
+  }
+}
+]

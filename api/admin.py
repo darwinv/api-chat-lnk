@@ -113,34 +113,34 @@ admin.site.register(Contract)
 
 
 # Modelos para modificacion de pruebas
-admin.site.register(Countries) 
-admin.site.register(Ciiu) 
-admin.site.register(Address) 
+admin.site.register(Countries)
+admin.site.register(Ciiu)
+admin.site.register(Address)
 
-admin.site.register(Permmission) 
-admin.site.register(Role) 
-admin.site.register(User)  
-admin.site.register(EconomicSector) 
+admin.site.register(Permmission)
+admin.site.register(Role)
+admin.site.register(User)
+admin.site.register(EconomicSector)
 admin.site.register(LevelInstruction)
 
-admin.site.register(SellerContactNoEfective) 
-admin.site.register(Bank) 
+admin.site.register(SellerContactNoEfective)
+admin.site.register(Bank)
 
-admin.site.register(ProductType) 
-admin.site.register(SellerNonBillablePlans) 
-admin.site.register(Match) 
+admin.site.register(ProductType)
+admin.site.register(SellerNonBillablePlans)
+admin.site.register(Match)
 
-admin.site.register(Payment) 
+admin.site.register(Payment)
 admin.site.register(MatchAcquired)
 
-admin.site.register(MatchAcquiredFiles) 
-admin.site.register(MatchAcquiredLog) 
-admin.site.register(MonthlyFee) 
+admin.site.register(MatchAcquiredFiles)
+admin.site.register(MatchAcquiredLog)
+admin.site.register(MonthlyFee)
 admin.site.register(LogPaymentsCreditCard)
 
-admin.site.register(QueryLogs) 
-admin.site.register(MessageFile) 
-admin.site.register(FeeMonthSeller) 
+admin.site.register(QueryLogs)
+admin.site.register(MessageFile)
+admin.site.register(FeeMonthSeller)
 admin.site.register(NotificationsBack)
 
 admin.site.register(Parameter)

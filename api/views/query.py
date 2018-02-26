@@ -5,14 +5,13 @@ from rest_framework.response import Response
 from rest_framework import status, permissions, serializers
 from api.models import Query, Specialist, Message, Category
 from api.permissions import IsAdminOrClient
-from api.utils.tools import Operations
-from django.db.models import OuterRef, Subquery, F
-from django.http import Http404
+from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer, QueryChatClientSerializer
+from django.db.models import OuterRef, Subquery, F
+from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
-
 
 # Para Crear y Listado de consultas
 class QueryListClientView(ListCreateAPIView):
@@ -175,6 +174,7 @@ class QueryDetailView(APIView):
 # Devolver el detalle de una ultima consulta filtrada por categoria
 # servicio pedido para android en notificaciones
 class QueryLastView(APIView):
+
     permission_classes = [permissions.AllowAny]
     def get_object(self,category):
         try:

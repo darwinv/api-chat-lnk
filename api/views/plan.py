@@ -3,15 +3,15 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
-from oauth2_provider.contrib.rest_framework import OAuth2Authentication
-from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer, QueryPlansAcquiredSerializer 
+from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer, QueryPlansAcquiredSerializer
 from api.models import QueryPlansAcquired
 from api.permissions import IsAdminOrOwner, IsAdminOrClient
-from api.utils.tools import Operations
+from api.utils.validations import Operations
 from django.db.models import F
 from django.http import Http404
-
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from datetime import datetime
+
 
 class QueryPlansAcquiredDetailView(APIView):
     authentication_classes = (OAuth2Authentication,)
@@ -35,19 +35,19 @@ class QueryPlansAcquiredDetailView(APIView):
     # actualizacion
     def put(self, request, pk):
         #Activar el plan requrido y desactivar los demas
-        data = request.data
         client_id = Operations.get_id(self, request)
+        data = request.data
 
         plan = self.get_object(pk)
 
         #valido el plan que se desea activar
-        if plan.is_active == True and plan.cliente_id == client_id and plan.expiration_date >= datetime.now().date():
+        if plan.is_active == True and plan.client_id == client_id and plan.expiration_date >= datetime.now().date():
             serializer = QueryPlansAcquiredSerializer(plan, data, partial=True)
             if serializer.is_valid():
                 serializer.save()
 
             #traigo todos los demas planes
-            plan_list = QueryPlansAcquired.objects.filter(cliente_id=client_id).exclude(pk=pk)
+            plan_list = QueryPlansAcquired.objects.filter(client_id=client_id).exclude(pk=pk)
             # actualizo el campo is_chosen
             if plan_list.count() > 0:
                 plan_list.update(is_chosen=False)
@@ -57,15 +57,15 @@ class QueryPlansAcquiredDetailView(APIView):
 
 
 class ClientPlansView(ListCreateAPIView):
-    #Vista para obetener todo los planes de un cliente
+    #Vista para obetener todos los planes de un cliente
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (IsAdminOrOwner,)
+    permission_classes = (IsAdminOrClient,)
 
     def get_object(self, pk):
         """Obtener lista de planes."""
         try:
-            obj = QueryPlansAcquired.objects.filter(cliente=pk, is_active = True, expiration_date__gte = datetime.now().date())
-            # self.check_object_permissions(self.request, obj)
+            obj = QueryPlansAcquired.objects.filter(client=pk, is_active = True, expiration_date__gte = datetime.now().date())
+            self.check_object_permissions(self.request, obj)
             return obj
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
@@ -74,10 +74,10 @@ class ClientPlansView(ListCreateAPIView):
         #obtener la lista con todos los planes del cliente
 
         id = request.user.id
-        client = self.get_object(id)
-        serializer = QueryPlansAcquiredSerializer(client, many=True)
+        plan = self.get_object(id)
+        serializer = QueryPlansAcquiredSerializer(plan, many=True)
         #paginacion
-        page = self.paginate_queryset(client)
+        page = self.paginate_queryset(plan)
         if page is not None:            
             serializer = QueryPlansAcquiredSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)

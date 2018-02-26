@@ -3,7 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
-from api.utils.tools import get_date_by_time 
+from api.utils.tools import get_date_by_time
 from api.models import QueryPlansAcquired
 
 client = APIClient()
@@ -89,9 +89,10 @@ class UpdatePlanActiveByAPI(APITestCase):
         self.assertEqual(response.data, self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-class ClientPlansList(APITestCase):
+class GetClientPlansList(APITestCase):
     """Prueba para devolver listado de planes al cliente"""
-    fixtures = ['data', 'data2', 'data3']
+    # fixtures = ['data', 'data2', 'data3']
+    fixtures = ['test_data_plans']
 
     def setUp(self):
         """Setup."""
@@ -103,9 +104,10 @@ class ClientPlansList(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-class PlanSelect(APITestCase):
+class UpdatePlanSelect (APITestCase):
     """Prueba para actualizar el plan activo de un cliente"""
-    fixtures = ['data', 'data2', 'data3']
+    # fixtures = ['data', 'data2', 'data3']
+    fixtures = ['test_data_plans']
 
     def setUp(self):
         """Setup."""
@@ -113,11 +115,12 @@ class PlanSelect(APITestCase):
 
     def test_put_plan_incorrect(self):
         """Actualizar de manera correscta."""
+        #se busca un plan cuyo id no existe
 
         data = {'is_chosen': 1,
                 'client_id': 5}
 
-        response = self.client.put(reverse('chosen-plan-edit', kwargs={'pk': 5}),
+        response = self.client.put(reverse('chosen-plan-edit', kwargs={'pk': 50000}),
                                 data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -133,6 +136,34 @@ class PlanSelect(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+class GetSpecialistQueryCount(APITestCase):
+    """Prueba para devolver los totales de consultas de un especialista """
+    # fixtures = ['data', 'data2', 'data3']
+    fixtures = ['test_data_plans']
+    # fixtures = ['mk']
+    def setUp(self):
+        """Setup."""
+        pass
 
+    def test_get_token_client(self):
+        """Obtener resultado 200 de la lista."""
+        # se provee un token de especialista
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
+        response = self.client.get(reverse('specialist-query-count'), format='json')
 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_get_list_token_admin(self):
+        """Obtener resultado 200 de la lista."""
+        #se provee un token de administrador
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.get(reverse('specialist-query-count'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    #se comento por que falta ingresar el usuario con el token al fixture data2
+    def test_get_list_token_caduco(self):
+        """Obtener resultado 200 de la lista."""
+        #se provee un token erroneo
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer l6YYuSzMmg58s7UEljiZlhmaGLxVal')
+        response = self.client.get(reverse('specialist-query-count'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)

@@ -69,6 +69,16 @@ class IsAdminOrClient(permissions.BasePermission):
             return True
         return False
 
+class IsAdminOrSpecialist(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        """Solo el vendedor puede crear."""
+        if request.user and request.user.is_staff:
+            return True
+        elif request.user and request.user.role_id == 3:
+            return True
+        return False
+
 
 
 class IsSeller(permissions.BasePermission):

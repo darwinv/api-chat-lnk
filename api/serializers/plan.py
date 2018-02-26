@@ -36,27 +36,10 @@ class ActivePlanSerializer(serializers.ModelSerializer):
 
 class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
 
-    # plan_name = serializers.CharField(required=True)
-    # cliente = serializers.CharField(required=True)
-    # is_chosen = serializers.BooleanField(required=True)
-    # is_active = serializers.BooleanField(required=True)
-    # query_quantity = serializers.IntegerField(required=True)
-    # available_queries = serializers.IntegerField(required=True)
-    # validity_months = serializers.IntegerField(required=True)
-    # expiration_date = serializers.CharField(required=True)
-    plan_name = serializers.CharField()
-    cliente = serializers.CharField()
-    is_chosen = serializers.BooleanField(required=True)
-    is_active = serializers.BooleanField()
-    query_quantity = serializers.IntegerField()
-    available_queries = serializers.IntegerField()
-    validity_months = serializers.IntegerField()
-    expiration_date = serializers.CharField()
-
     class Meta:
         """declaracion del modelo y sus campos."""
         model = QueryPlansAcquired
-        fields = ('id', 'plan_name','cliente','is_chosen','is_active','query_quantity',
+        fields = ('id', 'plan_name','is_chosen','is_active','query_quantity',
                     'available_queries','validity_months','expiration_date')
 
 
@@ -64,6 +47,5 @@ class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
         """Metodo actualizar redefinido."""
 
         instance.is_chosen = validated_data.get('is_chosen', instance.is_chosen)
-        # instance.is_active = validated_data.get('is_active', instance.is_active)
         instance.save()
         return instance

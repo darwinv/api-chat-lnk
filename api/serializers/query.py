@@ -122,8 +122,14 @@ class QueryDetailLastMsgSerializer(serializers.ModelSerializer):
         """Devuelve el nombre de la especialidad."""
         return _(str(obj.category))
 
+class QueryCustomSerializer(serializers.Serializer):
+    #serializador para devolver datos customizados de un diccionario dado
+    fields = ('specialist_id','month_count','year_count')
 
-# Serializer para crear consulta
+    #establecemos que datos del diccionario pasado se mostrara en cada campo puesto en la tupla "Fields"
+    def to_representation(self, dic):
+        return {"specialist_id": dic['specialist_id'],"month_count": dic['month_count'],"year_count": dic['year_count']}
+
 class QuerySerializer(serializers.ModelSerializer):
     """Serializer para crear consultas."""
 
