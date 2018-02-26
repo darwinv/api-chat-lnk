@@ -16,9 +16,8 @@ from api.permissions import IsAdminOnList, IsAdminOrOwner, IsOwner, IsClient
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
 
 
-# Para Crear y Listado de consultas
 class QueryListClientView(ListCreateAPIView):
-    """Vista Consulta."""
+    """Vista Consulta por parte del cliente."""
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [IsClient]
@@ -111,18 +110,18 @@ class QueryListClientView(ListCreateAPIView):
     def post(self, request):
         data = request.data
         # devolver especialista principal segun categoria
-        try:
-            data["message"]["specialist"] = Specialist.objects.get(type_specialist="m",
-                                                            category_id=data["category"])
-
-            serializer = QuerySerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status.HTTP_201_CREATED)
-            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            string_error = u"Exception: " + str(e) + " required"
-            raise serializers.ValidationError(detail=string_error)
+        # try:
+        #     data["message"]["specialist"] = Specialist.objects.get(type_specialist="m",
+        #                                                     category_id=data["category"])
+        #
+        #     serializer = QuerySerializer(data=data)
+        #     if serializer.is_valid():
+        #         serializer.save()
+        #         return Response(serializer.data, status.HTTP_201_CREATED)
+        #     return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        # except Exception as e:
+        #     string_error = u"Exception: " + str(e) + " required"
+        #     raise serializers.ValidationError(detail=string_error)
 
 # Detall de consulta
 class QueryDetailView(APIView):
