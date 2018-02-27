@@ -211,7 +211,7 @@ class GetChosemPlanClient(APITestCase):
 
     def test_get_chosenplan_token_clientWithPlans2(self):
         """Obtener resultado 200."""
-        
+
         #se provee un token de cliente (id 11 en el fixture) que si posee planes en el fixture
         self.client.credentials(HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
 
