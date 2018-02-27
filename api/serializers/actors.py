@@ -11,7 +11,7 @@ import datetime, string, random
 from django.db.models import Sum
 from api.emails import BasicEmailAmazon
 from rest_framework.response import Response
-from api.tools import capitalize as cap
+from api.utils.tools import capitalize as cap
 
 
 

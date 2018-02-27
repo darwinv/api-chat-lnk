@@ -1,8 +1,20 @@
-## Archivo Tools para crear funciones de sistema generar que seran reutilizadas
-# A lo largo del proyecto Linkup
+"""
+    Archivo creado con la finalidad de crear funciones y clases que permitan trabajar de forma estandar
+    el manejo de variables, ejemplo: capitalizar el primer caracter
+"""
 import datetime
 from datetime import datetime as date_time, date, time, timedelta
 from django.utils.translation import ugettext_lazy as _
+
+def capitalize(line):
+    """
+        Funcion creada como herramienta para capitalizar el primer caracter de una cadena
+        sin modificar el resto de la cadena
+    """
+
+    if len(line) <= 0:
+        return ''
+    return line[0].upper() + line[1:]
 
 def get_date_by_time(validity_months):
     """
@@ -12,7 +24,6 @@ def get_date_by_time(validity_months):
     :return: datetime.date
     """
     return datetime.date.today() + datetime.timedelta(validity_months*365/12)
-
 
 def get_time_message(date_time_message):
     """
