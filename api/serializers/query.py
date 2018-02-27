@@ -1,11 +1,11 @@
 """Consultas."""
 from rest_framework import serializers
-from api.models import Specialist, Query, Message, Category
+from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
 from api.models import MessageFile
 from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
 from api.utils.tools import get_time_message
-
+from api.utils import querysets
 
 class MessageFileSerializer(serializers.ModelSerializer):
     """Serializer para los archivos en los mensajes."""
@@ -148,35 +148,48 @@ class QuerySerializer(serializers.ModelSerializer):
         model = Query
         fields = ('id', 'title', 'message', 'category', 'client')
 
-    def update(self, instance, validated_data):
-        """Redefinido metodo actualizar."""
-        # no se puede agregar msjs de ningun tipo una vez hah sido absuelta
-        if int(instance.status) == 6 or int(instance.status) == 7:
-            raise serializers.ValidationError(u"Query Absolved - can'not add more messages")
-        data_message = validated_data.pop('message')
-        specialist = Specialist.objects.get(pk=instance.specialist_id)
-        data_message["specialist"] = specialist
-        # se compara si el status fue respondida, entonces debemos declarar
-        # que el tipo de mensaje es reconsulta, y que pasa a estatus 1,
-        # (pendiente de declinar o responder por el especialista)
-        if int(instance.status) == 4 or int(instance.status) == 5:
-            data_message["msg_type"] = 'r'
-            instance.status = 1
-        Message.objects.create(query=instance, **data_message)
-        instance.save()
-        return instance
+    def validate(self, data):
+        """Validaciones Generales."""
+        # Valido si posee un plan activo
+        if not querysets.has_active_plan(data["client"]):
+            raise serializers.ValidationError(_("You need to have an active plan"))
+        if not querysets.has_available_queries(data["client"]):
+            raise serializers.ValidationError(_("You don't have available queries"))
+        return data
+
+    # def update(self, instance, validated_data):
+    #     """Redefinido metodo actualizar."""
+    #     # no se puede agregar msjs de ningun tipo una vez hah sido absuelta
+    #     if int(instance.status) == 6 or int(instance.status) == 7:
+    #         raise serializers.ValidationError(u"Query Absolved - can'not add more messages")
+    #     data_message = validated_data.pop('message')
+    #     specialist = Specialist.objects.get(pk=instance.specialist_id)
+    #     data_message["specialist"] = specialist
+    #     # se compara si el status fue respondida, entonces debemos declarar
+    #     # que el tipo de mensaje es reconsulta, y que pasa a estatus 1,
+    #     # (pendiente de declinar o responder por el especialista)
+    #     if int(instance.status) == 4 or int(instance.status) == 5:
+    #         data_message["msg_type"] = 'r'
+    #         instance.status = 1
+    #     Message.objects.create(query=instance, **data_message)
+    #     instance.save()
+    #     return instance
 
     def create(self, validated_data):
         """Redefinido metodo create."""
         specialist = Specialist.objects.get(type_specialist="m",
                                             category_id=validated_data["category"])
         data_message = validated_data.pop('message')
+        acquired_plan = QueryPlansAcquired.objects.get(is_chosen=True, client=validated_data["client"])
         validated_data["specialist"] = specialist
         validated_data["status"] = 0
+        validated_data["acquired_plan"] = acquired_plan
         data_message["msg_type"] = "q"
         data_message["specialist"] = specialist
         query = Query.objects.create(**validated_data)
         Message.objects.create(query=query, **data_message)
+        acquired_plan.available_queries = acquired_plan.available_queries - 1
+        acquired_plan.save()
         return query
 
     # Si se llega a necesitar devolver personalizada la respuesta

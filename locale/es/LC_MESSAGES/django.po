@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-20 12:01-0500\n"
+"POT-Creation-Date: 2018-02-27 15:55-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,8 +30,9 @@ msgstr "Pasaporte"
 msgid "Foreign Card"
 msgstr "Tarjeta extranjera"
 
-#: .\api\api_choices_models.py:20 .\api\api_choices_models.py:76
-#: .\api\api_choices_models.py:82
+#: .\api\api_choices_models.py:20 .\api\api_choices_models.py:77
+#: .\api\api_choices_models.py:83 .\api\api_choices_models.py:89
+#: .\api\api_choices_models.py:103
 msgid "Pending"
 msgstr "Pendiente"
 
@@ -63,247 +64,262 @@ msgstr "Masculino"
 msgid "Female"
 msgstr "Femenino"
 
-#: .\api\api_choices_models.py:37
+#: .\api\api_choices_models.py:38
 msgid "cohabiting"
 msgstr "cohabitando"
 
-#: .\api\api_choices_models.py:38
+#: .\api\api_choices_models.py:39
 msgid "separated"
 msgstr "apartado"
 
-#: .\api\api_choices_models.py:39
+#: .\api\api_choices_models.py:40
 msgid "married"
 msgstr "casado"
 
-#: .\api\api_choices_models.py:40
+#: .\api\api_choices_models.py:41
 msgid "widower"
 msgstr "viudo"
 
-#: .\api\api_choices_models.py:41
+#: .\api\api_choices_models.py:42
 msgid "divorced"
 msgstr "divorciado"
 
-#: .\api\api_choices_models.py:42
+#: .\api\api_choices_models.py:43
 msgid "single"
 msgstr "soltero"
 
-#: .\api\api_choices_models.py:46
+#: .\api\api_choices_models.py:47
 msgid "Employer"
 msgstr "Empleador"
 
-#: .\api\api_choices_models.py:47
+#: .\api\api_choices_models.py:48
 msgid "Independent worker"
 msgstr "Trabajador independiente"
 
-#: .\api\api_choices_models.py:48
+#: .\api\api_choices_models.py:49
 msgid "Employee"
 msgstr "Empleado"
 
-#: .\api\api_choices_models.py:49
+#: .\api\api_choices_models.py:50
 msgid "Worker"
 msgstr "Obrero"
 
-#: .\api\api_choices_models.py:50
+#: .\api\api_choices_models.py:51
 msgid "Worker in a family business"
 msgstr "Trabajador en una empresa familiar"
 
-#: .\api\api_choices_models.py:51
+#: .\api\api_choices_models.py:52
 msgid "Home worker"
 msgstr "Trabajador a domicilio"
 
-#: .\api\api_choices_models.py:52
+#: .\api\api_choices_models.py:53
 msgid "Other"
 msgstr "Otro"
 
-#: .\api\api_choices_models.py:57
+#: .\api\api_choices_models.py:58
 msgid "Main"
 msgstr "Principal"
 
-#: .\api\api_choices_models.py:58
+#: .\api\api_choices_models.py:59
 msgid "Associate"
 msgstr "Asociado"
 
-#: .\api\api_choices_models.py:63 .\api\api_choices_models.py:96
+#: .\api\api_choices_models.py:64 .\api\api_choices_models.py:110
+#: .\api\api_choices_models.py:122
 msgid "Requested"
 msgstr "Preguntada"
 
-#: .\api\api_choices_models.py:64
+#: .\api\api_choices_models.py:65 .\api\api_choices_models.py:104
+#: .\api\api_choices_models.py:123
 msgid "Accepted"
 msgstr "Aceptado"
 
-#: .\api\api_choices_models.py:65
+#: .\api\api_choices_models.py:66 .\api\api_choices_models.py:105
+#: .\api\api_choices_models.py:124
 msgid "Declined"
 msgstr "Rechazado"
 
-#: .\api\api_choices_models.py:70
+#: .\api\api_choices_models.py:71
 msgid "Percentage"
 msgstr "Porcentaje"
 
-#: .\api\api_choices_models.py:71
+#: .\api\api_choices_models.py:72
 msgid "Number"
 msgstr "Número"
 
-#: .\api\api_choices_models.py:77 .\api\api_choices_models.py:83
-#: .\api\api_choices_models.py:91
+#: .\api\api_choices_models.py:78 .\api\api_choices_models.py:84
+#: .\api\api_choices_models.py:90 .\api\api_choices_models.py:98
 msgid "Paid"
 msgstr "Pagado"
 
-#: .\api\api_choices_models.py:88
+#: .\api\api_choices_models.py:95
 msgid "Wait"
 msgstr "Espera"
 
-#: .\api\api_choices_models.py:89
+#: .\api\api_choices_models.py:96
 msgid "Denied"
 msgstr "Negado"
 
-#: .\api\api_choices_models.py:90
+#: .\api\api_choices_models.py:97
 msgid "Exhaled"
 msgstr "Exhalado"
 
-#: .\api\api_choices_models.py:97
+#: .\api\api_choices_models.py:111
 msgid "Requested Derived"
 msgstr "Pregunta derivado"
 
-#: .\api\api_choices_models.py:98
+#: .\api\api_choices_models.py:112
 msgid "Pending Response"
 msgstr "Respuesta pendiente"
 
-#: .\api\api_choices_models.py:99
+#: .\api\api_choices_models.py:113
 msgid "Pending Main Response"
 msgstr "Respuesta principal pendiente"
 
-#: .\api\api_choices_models.py:100
+#: .\api\api_choices_models.py:114
 msgid "Answered Main"
 msgstr "Respondido Principal"
 
-#: .\api\api_choices_models.py:101
+#: .\api\api_choices_models.py:115
 msgid "Answered"
 msgstr "Contestada"
 
-#: .\api\api_choices_models.py:102
+#: .\api\api_choices_models.py:116
 msgid "Absolved Main"
 msgstr "Absuelto Principal"
 
-#: .\api\api_choices_models.py:103
+#: .\api\api_choices_models.py:117
 msgid "Absolved"
 msgstr "Absuelto"
 
-#: .\api\api_choices_models.py:108
+#: .\api\api_choices_models.py:129
 msgid "query"
 msgstr "consulta"
 
-#: .\api\api_choices_models.py:109
+#: .\api\api_choices_models.py:130
 msgid "requery"
 msgstr "reconsulta"
 
-#: .\api\api_choices_models.py:110
+#: .\api\api_choices_models.py:131
 msgid "answer"
 msgstr "responder"
 
-#: .\api\api_choices_models.py:115
+#: .\api\api_choices_models.py:136
 msgid "Image"
 msgstr "Imagen"
 
-#: .\api\api_choices_models.py:116
+#: .\api\api_choices_models.py:137
 msgid "Voice"
 msgstr "Voz"
 
-#: .\api\api_choices_models.py:117
+#: .\api\api_choices_models.py:138
 msgid "Document"
 msgstr "Documento"
 
-#: .\api\api_choices_models.py:122
+#: .\api\api_choices_models.py:143
 msgid "Critic"
 msgstr "Crítico"
 
-#: .\api\api_choices_models.py:123
+#: .\api\api_choices_models.py:144
 msgid "Moderate"
 msgstr "Moderar"
 
-#: .\api\api_choices_models.py:124
+#: .\api\api_choices_models.py:145
 msgid "Positive"
 msgstr "Positivo"
 
-#: .\api\models.py:87
+#: .\api\models.py:110 .\api\models.py:562
 msgid "nick"
 msgstr ""
 
-#: .\api\models.py:88
+#: .\api\models.py:111
 msgid "email"
 msgstr "correo"
 
-#: .\api\models.py:89
+#: .\api\models.py:112
 msgid "phone"
 msgstr "telefono"
 
-#: .\api\models.py:90
+#: .\api\models.py:113
 msgid "cellphone"
 msgstr "celular"
 
-#: .\api\models.py:93
+#: .\api\models.py:116
 msgid "photo"
 msgstr "foto"
 
-#: .\api\models.py:94
+#: .\api\models.py:117
 msgid "type document"
 msgstr "tipo de documento"
 
-#: .\api\models.py:95
+#: .\api\models.py:118
 msgid "document number"
 msgstr "numero de documento"
 
-#: .\api\models.py:96
+#: .\api\models.py:119
 msgid "upload document"
 msgstr "subir documento"
 
-#: .\api\models.py:98
+#: .\api\models.py:121 .\api\models.py:563
 msgid "code"
 msgstr "codigo"
 
-#: .\api\models.py:99
+#: .\api\models.py:122
 msgid "anonymous"
 msgstr "anonimo"
 
-#: .\api\models.py:100
+#: .\api\models.py:123
 msgid "updated at"
 msgstr "actualizado en"
 
-#: .\api\models.py:101
+#: .\api\models.py:124
 msgid "nationality"
 msgstr "nacionalidad"
 
-#: .\api\models.py:102
+#: .\api\models.py:125
 msgid "role"
 msgstr "rol"
 
-#: .\api\models.py:103
+#: .\api\models.py:126 .\api\serializers\actors.py:502
 msgid "address"
 msgstr "direccion"
 
-#: .\api\models.py:105
+#: .\api\models.py:128
 msgid "residence country"
 msgstr "pais de residencia"
 
-#: .\api\models.py:106
+#: .\api\models.py:129
 msgid "foreign address"
 msgstr "direccion extranjera"
 
-#: .\api\serializers\actors.py:177 .\api\serializers\actors.py:207
-#: .\api\serializers\actors.py:430 .\api\serializers\actors.py:489
-#: .\api\views\actors.py:54 .\api\views\actors.py:175 .\api\views\actors.py:320
-#: .\api\views\actors.py:390
+#: .\api\models.py:289
+msgid "Bank"
+msgstr ""
+
+#: .\api\models.py:592
+msgid "message"
+msgstr ""
+
+#: .\api\models.py:593
+msgid "viewed"
+msgstr ""
+
+#: .\api\serializers\actors.py:178 .\api\serializers\actors.py:208
+#: .\api\serializers\actors.py:431 .\api\serializers\actors.py:501
+#: .\api\views\actors.py:103 .\api\views\actors.py:284
+#: .\api\views\actors.py:408 .\api\views\actors.py:534
 msgid "required"
 msgstr "requerido"
 
-#: .\api\serializers\actors.py:208
+#: .\api\serializers\actors.py:209
 msgid "registro de información tributaria "
 msgstr ""
 
-#: .\api\serializers\actors.py:331 .\api\serializers\actors.py:371
+#: .\api\serializers\actors.py:332 .\api\serializers\actors.py:372
 msgid "Main Specialist already exists for this speciality"
 msgstr "Especialista Principal ya existe para esta especialidad"
 
-#: .\api\serializers\actors.py:360
+#: .\api\serializers\actors.py:361
 msgid "send credencials"
 msgstr "enviar credenciales"
 
@@ -323,15 +339,23 @@ msgstr "usuario"
 msgid "password"
 msgstr "contraseña"
 
-#: .\api\views\actors.py:391
+#: .\api\utils\querysets.py:20
+msgid "You need to have an active plan"
+msgstr "Necesitas tener un plan activo"
+
+#: .\api\utils\tools.py:31
+msgid "yesterday"
+msgstr ""
+
+#: .\api\views\actors.py:535
 msgid "not valid"
 msgstr "no valido"
 
-#: .\linkupapi\settings.py:121
+#: .\linkupapi\settings.py:123
 msgid "Spanish"
 msgstr "Español"
 
-#: .\linkupapi\settings.py:122
+#: .\linkupapi\settings.py:124
 msgid "English"
 msgstr "Ingles"
 

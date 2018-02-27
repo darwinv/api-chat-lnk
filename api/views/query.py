@@ -61,6 +61,7 @@ class QueryListClientView(ListCreateAPIView):
 #   Crear Consulta
     def post(self, request):
         """Metodo para Crear consulta."""
+        # Devolvemos el id del usuario
         user_id = Operations.get_id(self, request)
         if not user_id:
             raise Http404
