@@ -1,0 +1,167 @@
+[
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "token": "EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "",
+    "created": "2016-12-31T23:59:59Z",
+    "updated": "2017-10-02T22:27:09.173Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "token": "kEphPGlavEforKavpDzuZSgK0zpoXS",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "write read groups",
+    "created": "2018-02-09T17:58:03.854Z",
+    "updated": "2018-02-09T17:58:03.854Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 3,
+  "fields": {
+    "user": 5,
+    "token": "9M84R1jUHHx2AZkAGb3C6OF72QM7Xh",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "read write groups",
+    "created": "2018-02-09T21:54:51.308Z",
+    "updated": "2018-02-09T21:54:51.308Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 4,
+  "fields": {
+    "user": 4,
+    "token": "rRNQmSvkyHvi80qkYplRvLmckV3DYy",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "groups read write",
+    "created": "2018-02-26T21:10:22Z",
+    "updated": "2018-02-26T21:10:22Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 62,
+  "fields": {
+    "user": 11,
+    "token": "OPwVhxW656ASCPCjjGwgrSTXcjzzUJ",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "groups read write",
+    "created": "2018-02-26T21:10:22.127Z",
+    "updated": "2018-02-26T21:10:22.127Z"
+  }
+},
+{
+  "model": "oauth2_provider.application",
+  "pk": 1,
+  "fields": {
+    "client_id": "FUN5EkBDdiQo8SixJYslF41ZkrjAhQtWKkV7BEE2",
+    "user": null,
+    "redirect_uris": "",
+    "client_type": "public",
+    "authorization_grant_type": "password",
+    "client_secret": "P7pj3QcE6GyhlS0QUzJOJ8SRLlTGHYSMESGr7QzlyKnuMsc4osaaStB6wSiGGxAelKjXv6xJ7p9Go8R5el2KaVlcM4P50IeplkY2CWHxaOc9NI1fLKS9DoWxD9UbG4TN",
+    "name": "",
+    "skip_authorization": false,
+    "created": "2017-10-02T21:19:16.205Z",
+    "updated": "2017-10-02T21:19:16.205Z"
+  }
+},
+{
+  "model": "oauth2_provider.application",
+  "pk": 2,
+  "fields": {
+    "client_id": "Aq7s99mrGD1EttlN6PHYA2ImrNfGxPH4WWr9cfm6",
+    "user": 1,
+    "redirect_uris": "",
+    "client_type": "public",
+    "authorization_grant_type": "password",
+    "client_secret": "ZkBRpQevvQiThdsOAcvOk2BApRpgnuvNoDJwztTashQBLB3HEGBP5vWcmyXlUeG8TlZfGWIHDsTwms5vUc8zzpEi4VgrJiY7D20rRFlaHPWAn9Rkw3ZwZK5Awwavyi9T",
+    "name": "",
+    "skip_authorization": false,
+    "created": "2018-02-14T14:09:00.488Z",
+    "updated": "2018-02-23T21:33:55.947Z"
+  }
+},
+{
+  "model": "oauth2_provider.application",
+  "pk": 3,
+  "fields": {
+    "client_id": "TeP5qn9mPGNaC184REZCURfhuDnAbdyOTFDzRDAs",
+    "user": null,
+    "redirect_uris": "",
+    "client_type": "public",
+    "authorization_grant_type": "password",
+    "client_secret": "aFqGA7Sc0lAQ5t9TlXHPjDhgvZ1aqgyNXRuJPDXi7cpaSnulHH6VFoETA8uZcXF9B6dEfr5dIYPheXxBvTu2dUbObx0G6QDCmgfs02dCAZbH7BGj2c6C5vbaULdoXpc9",
+    "name": "",
+    "skip_authorization": false,
+    "created": "2018-02-23T20:02:28.449Z",
+    "updated": "2018-02-23T20:02:28.449Z"
+  }
+},
+{
+  "model": "oauth2_provider.application",
+  "pk": 4,
+  "fields": {
+    "client_id": "tOHXYfm0nxVzPQaPxLBctqYI3wu3sjw2w3pnvnZ9",
+    "user": 1,
+    "redirect_uris": "",
+    "client_type": "public",
+    "authorization_grant_type": "password",
+    "client_secret": "Rrta3EvYRq24XcKmdd2G7mM3NN4RUwDROZ5hBT3EPLuTGR6L1vXLZdO3hP4Q8DjMdDBuuG7hsW4p23kkvpR2HSqHLzLWnQmB3J6Rq26PjfpsTH8flDKX6eS1yEnrd3cM",
+    "name": "",
+    "skip_authorization": false,
+    "created": "2018-02-23T22:31:25.590Z",
+    "updated": "2018-02-23T22:31:25.591Z"
+  }
+},
+{
+  "model": "oauth2_provider.refreshtoken",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "token": "R5hQQQA9FQ0m9cwLG8zYXCxNX8q5lS",
+    "application": 1,
+    "access_token": 2,
+    "created": "2018-02-09T17:58:04.135Z",
+    "updated": "2018-02-09T17:58:04.135Z"
+  }
+},
+{
+  "model": "oauth2_provider.refreshtoken",
+  "pk": 2,
+  "fields": {
+    "user": 1,
+    "token": "QABnj4YCpnddMOCh3tUaD6aS9ilcwI",
+    "application": 1,
+    "access_token": 3,
+    "created": "2018-02-09T21:54:51.384Z",
+    "updated": "2018-02-09T21:54:51.384Z"
+  }
+},
+{
+  "model": "oauth2_provider.refreshtoken",
+  "pk": 61,
+  "fields": {
+    "user": 11,
+    "token": "Yg42XVqtOUrRGMWbnAelURq6STjy68",
+    "application": 1,
+    "access_token": 62,
+    "created": "2018-02-26T21:10:22.143Z",
+    "updated": "2018-02-26T21:10:22.143Z"
+  }
+}
+]

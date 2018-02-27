@@ -91,7 +91,7 @@ e = ""
 p = [" api." + name for name in list_name]
 f = ''.join(str(e) for e in p)
 check_output(r"python ..\..\manage.py dumpdata {} --indent 2 > ..\fixtures\temp\{}.json".format(f, name_fixture), shell=True).decode()
-check_output(r"python ..\..\manage.py dumpdata {} --indent 2 > ..\fixtures\temp\{}.json".format(fx, name_fixture + "_oauth2"), shell=True).decode()
+check_output(r"python ..\..\manage.py dumpdata {} --indent 2 > ..\fixtures\temp\{}.json".format(fx, "oauth2"), shell=True).decode()
 
 # for name in list_name:
 # 	filenames.append(r"api\fixtures\temp\{}.json".format(name))
