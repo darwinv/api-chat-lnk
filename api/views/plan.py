@@ -133,7 +133,7 @@ class ActivationPlanView(APIView):
         """
         try:
             QueryPlansAcquired.objects.values('is_chosen')\
-                .filter(sale_detail__sale__client= client, is_active = True, is_chosen = True)[:1].get()
+                .filter(client= client, is_active = True, is_chosen = True)[:1].get()
             return True
         except QueryPlansAcquired.DoesNotExist:
             return False
@@ -144,7 +144,7 @@ class ActivationPlanView(APIView):
             # Query para traer el detalle de un plan por el codigo PIN
             plan = get_query_set_plan()
 
-            return plan.filter(sale_detail__sale__client= client, sale_detail__pin_code=code, is_active = False)[:1].get()
+            return plan.filter(client= client, sale_detail__pin_code=code, is_active = False)[:1].get()
             
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
@@ -157,7 +157,7 @@ class ActivationPlanView(APIView):
         """
         try:
             QueryPlansAcquired.objects.values('is_chosen')\
-                .filter(sale_detail__sale__client= client, is_active = True, is_chosen = True)[:1].get()
+                .filter(client= client, is_active = True, is_chosen = True)[:1].get()
             return True
         except QueryPlansAcquired.DoesNotExist:
             return False
@@ -189,7 +189,7 @@ class ChosemPlanView(APIView):
         """
         try:
             plan_chosen = get_query_set_plan()
-            return plan_chosen.filter(sale_detail__sale__client= client, is_active = True, is_chosen = True)[:1].get()
+            return plan_chosen.filter(client= client, is_active = True, is_chosen = True)[:1].get()
 
         except QueryPlansAcquired.DoesNotExist:
             raise Http404

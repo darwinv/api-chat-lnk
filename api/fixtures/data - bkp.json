@@ -2388,8 +2388,7 @@
   "fields": {
     "name": "UCAYALI"
   }
-}
-,
+},
 {
   "model": "api.province",
   "pk": 1,
@@ -2466,80 +2465,80 @@
   "model": "api.province",
   "pk": 10,
   "fields": {
-    "name": "TARMA",
-    "department": 12
+    "name": "ANTONIO RAYMONDI",
+    "department": 2
   }
 },
 {
   "model": "api.province",
   "pk": 11,
   "fields": {
-    "name": "PATAZ",
-    "department": 13
+    "name": "ASUNCION",
+    "department": 2
   }
 },
 {
   "model": "api.province",
   "pk": 12,
   "fields": {
-    "name": "CAJATAMBO",
-    "department": 15
+    "name": "BOLOGNESI",
+    "department": 2
   }
 },
 {
   "model": "api.province",
   "pk": 13,
   "fields": {
-    "name": "LORETO",
-    "department": 16
+    "name": "CARHUAZ",
+    "department": 2
   }
 },
 {
   "model": "api.province",
   "pk": 14,
   "fields": {
-    "name": "PASCO",
-    "department": 19
+    "name": "CARLOS FERMIN FITZCARRALD",
+    "department": 2
   }
 },
 {
   "model": "api.province",
   "pk": 15,
   "fields": {
-    "name": "SECHURA",
-    "department": 20
+    "name": "CASMA",
+    "department": 2
   }
 },
 {
   "model": "api.province",
   "pk": 16,
   "fields": {
-    "name": "SAN ANTONIO DE PUTINA",
-    "department": 21
+    "name": "CORONGO",
+    "department": 2
   }
 },
 {
   "model": "api.province",
   "pk": 17,
   "fields": {
-    "name": "PICOTA",
-    "department": 22
+    "name": "HUARI",
+    "department": 2
   }
 },
 {
   "model": "api.province",
   "pk": 18,
   "fields": {
-    "name": "ZARUMILLA",
-    "department": 24
+    "name": "HUARMEY",
+    "department": 2
   }
 },
 {
   "model": "api.province",
   "pk": 19,
   "fields": {
-    "name": "SAN MIGUEL",
-    "department": 6
+    "name": "HUAYLAS",
+    "department": 2
   }
 },
 {
@@ -3130,7 +3129,7 @@
   "model": "api.province",
   "pk": 93,
   "fields": {
-    "name": "MARA\u00d1ON",
+    "name": "MARA&Ntilde;ON",
     "department": 10
   }
 },
@@ -3934,15 +3933,6 @@
     "department": 25
   }
 },
-{
-  "model": "api.province",
-  "pk": 194,
-  "fields": {
-    "name": "SAN MIGUEL",
-    "department": 6
-  }
-}
-,
 {
   "model": "api.district",
   "pk": 1,
@@ -5763,7 +5753,7 @@
   "model": "api.district",
   "pk": 228,
   "fields": {
-    "name": "NEPE\u00d1A",
+    "name": "NEPE&Ntilde;A",
     "province": 25
   }
 },
@@ -6299,7 +6289,7 @@
   "model": "api.district",
   "pk": 295,
   "fields": {
-    "name": "SAN JUAN DE CHAC\u00d1A",
+    "name": "SAN JUAN DE CHAC&Ntilde;A",
     "province": 31
   }
 },
@@ -6307,7 +6297,7 @@
   "model": "api.district",
   "pk": 296,
   "fields": {
-    "name": "SA\u00d1AYCA",
+    "name": "SA&Ntilde;AYCA",
     "province": 31
   }
 },
@@ -6691,7 +6681,7 @@
   "model": "api.district",
   "pk": 344,
   "fields": {
-    "name": "QUEQUE\u00d1A",
+    "name": "QUEQUE&Ntilde;A",
     "province": 35
   }
 },
@@ -6851,7 +6841,7 @@
   "model": "api.district",
   "pk": 364,
   "fields": {
-    "name": "OCO\u00d1A",
+    "name": "OCO&Ntilde;A",
     "province": 36
   }
 },
@@ -7067,7 +7057,7 @@
   "model": "api.district",
   "pk": 391,
   "fields": {
-    "name": "U\u00d1ON",
+    "name": "U&Ntilde;ON",
     "province": 38
   }
 },
@@ -7811,7 +7801,7 @@
   "model": "api.district",
   "pk": 484,
   "fields": {
-    "name": "CHAVI\u00d1A",
+    "name": "CHAVI&Ntilde;A",
     "province": 48
   }
 },
@@ -7867,7 +7857,7 @@
   "model": "api.district",
   "pk": 491,
   "fields": {
-    "name": "OCA\u00d1A",
+    "name": "OCA&Ntilde;A",
     "province": 48
   }
 },
@@ -7963,7 +7953,7 @@
   "model": "api.district",
   "pk": 503,
   "fields": {
-    "name": "CORONEL CASTA\u00d1EDA",
+    "name": "CORONEL CASTA&Ntilde;EDA",
     "province": 49
   }
 },
@@ -8123,7 +8113,7 @@
   "model": "api.district",
   "pk": 523,
   "fields": {
-    "name": "HUACA\u00d1A",
+    "name": "HUACA&Ntilde;A",
     "province": 51
   }
 },
@@ -8660,7 +8650,7 @@
   "pk": 650,
   "fields": {
     "name": "SAN MIGUEL",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8668,7 +8658,7 @@
   "pk": 651,
   "fields": {
     "name": "SAN MIGUEL",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8676,7 +8666,7 @@
   "pk": 652,
   "fields": {
     "name": "BOLIVAR",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8684,7 +8674,7 @@
   "pk": 653,
   "fields": {
     "name": "CALQUIS",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8692,7 +8682,7 @@
   "pk": 654,
   "fields": {
     "name": "CATILLUC",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8700,7 +8690,7 @@
   "pk": 655,
   "fields": {
     "name": "EL PRADO",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8708,7 +8698,7 @@
   "pk": 656,
   "fields": {
     "name": "LA FLORIDA",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8716,7 +8706,7 @@
   "pk": 657,
   "fields": {
     "name": "LLAPA",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8724,7 +8714,7 @@
   "pk": 658,
   "fields": {
     "name": "NANCHOC",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8732,7 +8722,7 @@
   "pk": 659,
   "fields": {
     "name": "NIEPOS",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8740,7 +8730,7 @@
   "pk": 660,
   "fields": {
     "name": "SAN GREGORIO",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8748,7 +8738,7 @@
   "pk": 661,
   "fields": {
     "name": "SAN SILVESTRE DE COCHAN",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8756,7 +8746,7 @@
   "pk": 662,
   "fields": {
     "name": "TONGOD",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8764,7 +8754,7 @@
   "pk": 663,
   "fields": {
     "name": "UNION AGUA BLANCA",
-    "province": 194
+    "province": 64
   }
 },
 {
@@ -8772,7 +8762,7 @@
   "pk": 664,
   "fields": {
     "name": "SAN PABLO",
-    "province": 64
+    "province": 65
   }
 },
 {
@@ -8780,7 +8770,7 @@
   "pk": 665,
   "fields": {
     "name": "SAN BERNARDINO",
-    "province": 64
+    "province": 65
   }
 },
 {
@@ -8788,7 +8778,7 @@
   "pk": 666,
   "fields": {
     "name": "SAN LUIS",
-    "province": 64
+    "province": 65
   }
 },
 {
@@ -8796,7 +8786,7 @@
   "pk": 667,
   "fields": {
     "name": "TUMBADEN",
-    "province": 64
+    "province": 65
   }
 },
 {
@@ -8804,7 +8794,7 @@
   "pk": 668,
   "fields": {
     "name": "SANTA CRUZ",
-    "province": 65
+    "province": 66
   }
 },
 {
@@ -8812,7 +8802,7 @@
   "pk": 669,
   "fields": {
     "name": "ANDABAMBA",
-    "province": 65
+    "province": 66
   }
 },
 {
@@ -8820,15 +8810,15 @@
   "pk": 670,
   "fields": {
     "name": "CATACHE",
-    "province": 65
+    "province": 66
   }
 },
 {
   "model": "api.district",
   "pk": 671,
   "fields": {
-    "name": "CHANCAYBA\u00d1OS",
-    "province": 65
+    "name": "CHANCAYBA&Ntilde;OS",
+    "province": 66
   }
 },
 {
@@ -8836,7 +8826,7 @@
   "pk": 672,
   "fields": {
     "name": "LA ESPERANZA",
-    "province": 65
+    "province": 66
   }
 },
 {
@@ -8844,7 +8834,7 @@
   "pk": 673,
   "fields": {
     "name": "NINABAMBA",
-    "province": 65
+    "province": 66
   }
 },
 {
@@ -8852,7 +8842,7 @@
   "pk": 674,
   "fields": {
     "name": "PULAN",
-    "province": 65
+    "province": 66
   }
 },
 {
@@ -8860,7 +8850,7 @@
   "pk": 675,
   "fields": {
     "name": "SAUCEPAMPA",
-    "province": 65
+    "province": 66
   }
 },
 {
@@ -8868,7 +8858,7 @@
   "pk": 676,
   "fields": {
     "name": "SEXI",
-    "province": 65
+    "province": 66
   }
 },
 {
@@ -8876,7 +8866,7 @@
   "pk": 677,
   "fields": {
     "name": "UTICYACU",
-    "province": 65
+    "province": 66
   }
 },
 {
@@ -8884,7 +8874,7 @@
   "pk": 678,
   "fields": {
     "name": "YAUYUCAN",
-    "province": 65
+    "province": 66
   }
 },
 {
@@ -8892,7 +8882,7 @@
   "pk": 679,
   "fields": {
     "name": "CALLAO",
-    "province": 66
+    "province": 67
   }
 },
 {
@@ -8900,7 +8890,7 @@
   "pk": 680,
   "fields": {
     "name": "BELLAVISTA",
-    "province": 66
+    "province": 67
   }
 },
 {
@@ -8908,7 +8898,7 @@
   "pk": 681,
   "fields": {
     "name": "CARMEN DE LA LEGUA REYNOSO",
-    "province": 66
+    "province": 67
   }
 },
 {
@@ -8916,7 +8906,7 @@
   "pk": 682,
   "fields": {
     "name": "LA PERLA",
-    "province": 66
+    "province": 67
   }
 },
 {
@@ -8924,7 +8914,7 @@
   "pk": 683,
   "fields": {
     "name": "LA PUNTA",
-    "province": 66
+    "province": 67
   }
 },
 {
@@ -8932,7 +8922,7 @@
   "pk": 684,
   "fields": {
     "name": "VENTANILLA",
-    "province": 66
+    "province": 67
   }
 },
 {
@@ -9371,7 +9361,7 @@
   "model": "api.district",
   "pk": 739,
   "fields": {
-    "name": "QUI\u00d1OTA",
+    "name": "QUI&Ntilde;OTA",
     "province": 73
   }
 },
@@ -9643,7 +9633,7 @@
   "model": "api.district",
   "pk": 773,
   "fields": {
-    "name": "KOS\u00d1IPATA",
+    "name": "KOS&Ntilde;IPATA",
     "province": 77
   }
 },
@@ -10491,7 +10481,7 @@
   "model": "api.district",
   "pk": 879,
   "fields": {
-    "name": "\u00d1AHUIMPUQUIO",
+    "name": "&Ntilde;AHUIMPUQUIO",
     "province": 86
   }
 },
@@ -10875,7 +10865,7 @@
   "model": "api.district",
   "pk": 927,
   "fields": {
-    "name": "PU\u00d1OS",
+    "name": "PU&Ntilde;OS",
     "province": 91
   }
 },
@@ -11051,7 +11041,7 @@
   "model": "api.district",
   "pk": 949,
   "fields": {
-    "name": "BA\u00d1OS",
+    "name": "BA&Ntilde;OS",
     "province": 96
   }
 },
@@ -11171,7 +11161,7 @@
   "model": "api.district",
   "pk": 964,
   "fields": {
-    "name": "LA TINGUI\u00d1A",
+    "name": "LA TINGUI&Ntilde;A",
     "province": 98
   }
 },
@@ -11691,7 +11681,7 @@
   "model": "api.district",
   "pk": 1029,
   "fields": {
-    "name": "SA\u00d1O",
+    "name": "SA&Ntilde;O",
     "province": 103
   }
 },
@@ -11995,7 +11985,7 @@
   "model": "api.district",
   "pk": 1067,
   "fields": {
-    "name": "LEONOR ORDO\u00d1EZ",
+    "name": "LEONOR ORDO&Ntilde;EZ",
     "province": 106
   }
 },
@@ -13275,7 +13265,7 @@
   "model": "api.district",
   "pk": 1227,
   "fields": {
-    "name": "SA\u00d1A",
+    "name": "SA&Ntilde;A",
     "province": 124
   }
 },
@@ -13323,7 +13313,7 @@
   "model": "api.district",
   "pk": 1233,
   "fields": {
-    "name": "FERRE\u00d1AFE",
+    "name": "FERRE&Ntilde;AFE",
     "province": 125
   }
 },
@@ -13331,7 +13321,7 @@
   "model": "api.district",
   "pk": 1234,
   "fields": {
-    "name": "CA\u00d1ARIS",
+    "name": "CA&Ntilde;ARIS",
     "province": 125
   }
 },
@@ -13499,7 +13489,7 @@
   "model": "api.district",
   "pk": 1255,
   "fields": {
-    "name": "BRE\u00d1A",
+    "name": "BRE&Ntilde;A",
     "province": 127
   }
 },
@@ -13947,7 +13937,7 @@
   "model": "api.district",
   "pk": 1311,
   "fields": {
-    "name": "SAN VICENTE DE CA\u00d1ETE",
+    "name": "SAN VICENTE DE CA&Ntilde;ETE",
     "province": 131
   }
 },
@@ -14067,7 +14057,7 @@
   "model": "api.district",
   "pk": 1326,
   "fields": {
-    "name": "ZU\u00d1IGA",
+    "name": "ZU&Ntilde;IGA",
     "province": 131
   }
 },
@@ -14699,7 +14689,7 @@
   "model": "api.district",
   "pk": 1405,
   "fields": {
-    "name": "HUA\u00d1EC",
+    "name": "HUA&Ntilde;EC",
     "province": 136
   }
 },
@@ -14819,7 +14809,7 @@
   "model": "api.district",
   "pk": 1420,
   "fields": {
-    "name": "VI\u00d1AC",
+    "name": "VI&Ntilde;AC",
     "province": 136
   }
 },
@@ -15291,7 +15281,7 @@
   "model": "api.district",
   "pk": 1479,
   "fields": {
-    "name": "I\u00d1APARI",
+    "name": "I&Ntilde;APARI",
     "province": 145
   }
 },
@@ -15387,7 +15377,7 @@
   "model": "api.district",
   "pk": 1491,
   "fields": {
-    "name": "ICHU\u00d1A",
+    "name": "ICHU&Ntilde;A",
     "province": 147
   }
 },
@@ -16115,7 +16105,7 @@
   "model": "api.district",
   "pk": 1582,
   "fields": {
-    "name": "PARI\u00d1AS",
+    "name": "PARI&Ntilde;AS",
     "province": 158
   }
 },
@@ -16275,7 +16265,7 @@
   "model": "api.district",
   "pk": 1602,
   "fields": {
-    "name": "MA\u00d1AZO",
+    "name": "MA&Ntilde;AZO",
     "province": 160
   }
 },
@@ -16387,7 +16377,7 @@
   "model": "api.district",
   "pk": 1616,
   "fields": {
-    "name": "MU\u00d1ANI",
+    "name": "MU&Ntilde;ANI",
     "province": 161
   }
 },
@@ -16811,7 +16801,7 @@
   "model": "api.district",
   "pk": 1669,
   "fields": {
-    "name": "NU\u00d1OA",
+    "name": "NU&Ntilde;OA",
     "province": 167
   }
 },
@@ -17291,7 +17281,7 @@
   "model": "api.district",
   "pk": 1729,
   "fields": {
-    "name": "CU\u00d1UMBUQUI",
+    "name": "CU&Ntilde;UMBUQUI",
     "province": 177
   }
 },
@@ -18110,8 +18100,7 @@
     "name": "PURUS",
     "province": 193
   }
-}
-,
+},
   {
     "model": "api.ciiu",
     "pk": 1,
