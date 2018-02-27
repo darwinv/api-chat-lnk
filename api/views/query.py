@@ -202,6 +202,7 @@ class QueryChatClientView(ListCreateAPIView):
 
 
     def list(self, request):
+        
         """
             Listado de queries y sus respectivos mensajes para un cliente
         """
@@ -210,10 +211,9 @@ class QueryChatClientView(ListCreateAPIView):
 
         category = request.query_params['category']
         client = Operations.get_id(self, request)
-
+        
         if not client:
             raise Http404
-
         queryset = Message.objects.values('id','nick', 'code', 'message', 'created_at', 'msg_type', 
 'viewed','query_id')\
                            .annotate(title=F('query__title',),status=F('query__status',),\
@@ -221,7 +221,7 @@ class QueryChatClientView(ListCreateAPIView):
                            category_id=F('query__category_id',))\
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
-
+        
         # Retorno 404 para ahorrar tiempo de ejecucion
         if not queryset:
             raise Http404
