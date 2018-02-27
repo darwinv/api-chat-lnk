@@ -18,7 +18,7 @@ def get_time_message(date_time_message):
     """
     funcion devuelve el tiempo en string de una fecha pasada
     :param date_time_message: Numero entero en meses
-    :return: string
+    :return: string?
     """
     try:
         date_message = date_time_message.date()
@@ -31,4 +31,5 @@ def get_time_message(date_time_message):
         else:
             return date_time.strftime(date_message, '%d/%m/%y')
     except Exception as e:
-        return None
+        pass
+    return None

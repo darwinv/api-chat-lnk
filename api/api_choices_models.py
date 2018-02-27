@@ -1,6 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
 
-
 class ChoicesAPI:
     """
         Clase Choices para manejo de opciones en los modelos
@@ -136,6 +135,7 @@ class ChoicesAPI:
         ('0', _('Image')),
         ('1', _('Voice')),
         ('2', _('Document')),
+        ('3', _('Video')),
     )
 
     # AlertCategory Model
