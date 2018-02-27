@@ -170,3 +170,56 @@ class GetSpecialistQueryCount(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer 9M84R1jUHHx2AZkAGb3C6OF72QM7Xh')
         response = self.client.get(reverse('specialist-query-count'), format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+class GetChosemPlanClient(APITestCase):
+    """Prueba para devolver el plan activo y elegido de un determinado cliente"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_chosenplan_token_admin(self):
+        """Obtener resultado 404."""
+        #se provee un token de administrador el cuel no tiene planes en el fixture
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.get(reverse('chosen-plan'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_chosenplan_token_clientWithPlans(self):
+        """Obtener resultado 200."""
+        #se provee un token de cliente (id 11 en el fixture) que si posee planes en el fixture
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+        response = self.client.get(reverse('chosen-plan'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_chosenplan_token_clientWithOutPlans(self):
+        """Obtener resultado 404."""
+        #se provee un token de cliente (id 5 en el fixture) que no posee planes en el fixture
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer 9M84R1jUHHx2AZkAGb3C6OF72QM7Xh')
+        response = self.client.get(reverse('chosen-plan'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_chosenplan_token_specialist(self):
+        """Obtener resultado 404."""
+        #se provee un token de especialista (id 4 en el fixture) que no posee planes en el fixture
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        response = self.client.get(reverse('chosen-plan'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_chosenplan_token_clientWithPlans2(self):
+        """Obtener resultado 200."""
+
+        #se provee un token de cliente (id 11 en el fixture) que si posee planes en el fixture
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+
+        self.valid_payload = {
+            "is_active": True,
+            'is_chosen': True
+        }
+        # get API response
+        response = self.client.get(reverse('chosen-plan'), format='json')
+
+        self.assertNotEqual(response.data, self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
