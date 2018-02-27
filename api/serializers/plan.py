@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from api.models import QueryPlansAcquired
 from api.utils.tools import get_date_by_time 
+from datetime import datetime
 
 class PlanDetailSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
@@ -29,6 +30,7 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         
         instance.is_active = True
         instance.is_chosen = is_chosen
+        instance.activation_date = datetime.now().date()
         instance.expiration_date = get_date_by_time(instance.validity_months)
 
         instance.save()

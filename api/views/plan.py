@@ -106,9 +106,10 @@ class ActivationPlanView(APIView):
 
     def put(self, request, code):
         """Activar producto, via codigo PIN."""
-        data = request.data        
+        data = request.data
         client = request.user.id
 
+        activation_date = datetime.now().date()
         if self.get_some_chosen_plan(client):
             is_chosen = False
         else:
