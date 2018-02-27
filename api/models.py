@@ -348,6 +348,10 @@ class QueryPlans(models.Model):
     clasification = models.ForeignKey(Clasification, on_delete=models.PROTECT)
     non_billable = models.ManyToManyField(Seller, through='SellerNonBillablePlans')
 
+    def __str__(self):
+        """String."""
+        return self.name
+
 
 class SellerNonBillablePlans(models.Model):
     """Planes no Facturables Asignados a Vendedores."""

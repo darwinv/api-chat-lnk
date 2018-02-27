@@ -168,11 +168,13 @@ class QuerySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Redefinido metodo create."""
-        validated_data["specialist"] = Specialist.objects.get(type_specialist="m",
-                                                              category_id=validated_data["category"])
+        specialist = Specialist.objects.get(type_specialist="m",
+                                            category_id=validated_data["category"])
         data_message = validated_data.pop('message')
+        validated_data["specialist"] = specialist
         validated_data["status"] = 0
         data_message["msg_type"] = "q"
+        data_message["specialist"] = specialist
         query = Query.objects.create(**validated_data)
         Message.objects.create(query=query, **data_message)
         return query

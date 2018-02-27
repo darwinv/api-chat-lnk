@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 from rest_framework import status
+import json
 # Create your tests here.
 
 client = APIClient()
@@ -47,7 +48,7 @@ class GetChatClientListQueries(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
 
     def test_get_list_by_client_chat(self):
-        """primer mensaje retornado es Viewed False y estatus 200"""
+        """Primer mensaje retornado es Viewed False y estatus 200."""
         parameters = {'category': 8}
         response = self.client.get(reverse('query-chat-client'), parameters)
 
@@ -58,4 +59,28 @@ class GetChatClientListQueries(APITestCase):
 class CreateQuery(APITestCase):
     """Prueba para crear consulta."""
 
-    fixtures = ['data', 'data2', 'data3', 'test_chat']
+    fixtures = ['data', 'data2', 'data3', 'test_query']
+
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        self.valid_payload = {
+            "title": "Pago de Impuestos",
+            "category": 24,
+            "message": {
+                "message": "Lorem ipsum dolor sit amet,anctus e",
+                "msg_type": "q",
+                "media_files": []
+            }
+        }
+
+    def test_create_query(self):
+        """Creacion Exitosa de la consulta."""
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
