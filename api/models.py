@@ -557,6 +557,7 @@ class Message(models.Model):
     viewed = models.BooleanField(default=False)
     nick = models.CharField(_('nick'), max_length=45, blank=True)
     code = models.CharField(_('code'), max_length=45)
+    # reference = models.ForeignKey('self', on_delete=models.PROTECT, related_name="tags",null=True)
     def __str__(self):
         """Str."""
         return self.message

@@ -45,27 +45,27 @@ db = MySQLdb.connect(host="localhost",    # tu host, usualmente localhost
 # ejecutar todos los queries que necesitas
 cur = db.cursor()
 # Usa todas las sentencias SQL que quieras
-cur.execute("SHOW TABLES")
-aux_api = []
-aux_auth = []
-aux_oauth2 = []
-for row in cur.fetchall():
-	if not row[0].find("api_"):
-		aux_api.append(row[0].replace("api_", ""))
-	elif not row[0].find("oauth2_"):
-		aux_oauth2.append(row[0].replace("oauth2_provider_", ""))
-# print(aux_api)
-# print(aux_oauth2)
+cur.execute("SHOW TABLES WHERE Tables_in_linkup REGEXP 'oauth2_provider_accesstoken|api_'")
+# aux_api = []
+# aux_auth = []
+# aux_oauth2 = []
 
-px = [" oauth2_provider." + name for name in aux_oauth2]
-fx = ''.join(str(e) for e in px)
-# print(fx)
-# oauth2_provider.
-list_name = []
-filenames = []
-tables_db = aux_api
+list_tables_db = [row[0].replace("api_", "").replace("oauth2_provider_", "") for row in cur.fetchall()]
 
-# print(tables_db)
+# for row in cur.fetchall():
+# 	if not row[0].find("api_"):
+# 		aux_api.append(row[0].replace("api_", ""))
+# 	elif not row[0].find("oauth2_"):
+# 		aux_oauth2.append(row[0].replace("oauth2_provider_", ""))
+
+# px = [" oauth2_provider." + name for name in aux_oauth2]
+# names_db = ' '.join(str(table) for table in list_tables_db)
+
+tables_db = list_tables_db
+list_names = []
+# filenames = []
+
+
 
 con = 0
 aux = 0
@@ -73,14 +73,16 @@ name_fixture = ""
 while True:
 	print ("Nombre de la tabla: ")
 	table_name = input()
+	if table_name.lower().strip() == "exit":
+		break
 	if table_name.strip() != "":
 		if table_name.strip() == ".":
 			break
 		if table_name.lower().strip() == "all":
-			list_name = tables_db
+			list_names = tables_db
 			break
 		if table_name.lower().strip() in tables_db:
-			list_name.append(table_name)
+			list_names.append(table_name)
 		else:
 			print("La tabla {} no existe".format(table_name))
 
@@ -88,10 +90,11 @@ print("Nombre del fixture: ")
 name_fixture = input()
 
 e = ""
-p = [" api." + name for name in list_name]
+p = [" api.".join(name) for name in list_names if name != "accesstoken"]
 f = ''.join(str(e) for e in p)
+f.join(" oauth2.accesstoken")
 check_output(r"python ..\..\manage.py dumpdata {} --indent 2 > ..\fixtures\temp\{}.json".format(f, name_fixture), shell=True).decode()
-check_output(r"python ..\..\manage.py dumpdata {} --indent 2 > ..\fixtures\temp\{}.json".format(fx, "oauth2"), shell=True).decode()
+# check_output(r"python ..\..\manage.py dumpdata {} --indent 2 > ..\fixtures\temp\{}.json".format(fx, "oauth2"), shell=True).decode()
 
 # for name in list_name:
 # 	filenames.append(r"api\fixtures\temp\{}.json".format(name))
