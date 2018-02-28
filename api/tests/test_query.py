@@ -132,6 +132,16 @@ class CreateQuery(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_not_client_credentials(self):
+        """Token no es de cliente (no autorizado)."""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_create_query(self):
         """Creacion Exitosa de la consulta."""
         q = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)

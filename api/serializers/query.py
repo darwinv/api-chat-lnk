@@ -188,6 +188,7 @@ class QuerySerializer(serializers.ModelSerializer):
         data_message["specialist"] = specialist
         query = Query.objects.create(**validated_data)
         Message.objects.create(query=query, **data_message)
+        # restamos una consulta disponible
         acquired_plan.available_queries = acquired_plan.available_queries - 1
         acquired_plan.save()
         return query

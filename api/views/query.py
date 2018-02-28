@@ -18,8 +18,7 @@ class QueryListClientView(ListCreateAPIView):
     """Vista Consulta por parte del cliente."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [IsAdminOrClient]
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrClient]
     # Devolveremos las categorias para luego filtrar por usuario
     queryset = Category.objects.all()
     serializer_class = QueryListClientSerializer
