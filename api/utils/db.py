@@ -34,12 +34,17 @@ import MySQLdb
 # This is so models get loaded.
 # from django.core.wsgi import get_wsgi_application
 # application = get_wsgi_application()
+import sys, os
+
+BASE_PROYECT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, BASE_PROYECT)  # Nos ubicamos en la raiz del proyecto
+from linkupapi.settings_secret import DATABASES
 
 #subprocess.call(["python ","manage.py","dumpdata","api.Contract","--indent","2",">","Contracts.json"])
-db = MySQLdb.connect(host="localhost",    # tu host, usualmente localhost
-                     user="root",         # tu usuario
-                     passwd="",  # tu password
-                     db="linkup")        # el nombre de la base de datos
+db = MySQLdb.connect(host=DATABASES['default']['HOST'],    # tu host, usualmente localhost
+                     user=DATABASES['default']['USER'],        # tu usuario
+                     passwd=DATABASES['default']['PASSWORD'],  # tu password
+                     db=DATABASES['default']['NAME'])        # el nombre de la base de datos
 
 # Debes crear un objeto Cursor. Te permitirá
 # ejecutar todos los queries que necesitas
