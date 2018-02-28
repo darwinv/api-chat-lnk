@@ -10,15 +10,6 @@
   }
 },
 {
-  "model": "api.producttype",
-  "pk": 1,
-  "fields": {
-    "name": "Consultass",
-    "description": "consultas a especialistass",
-    "created_at": null
-  }
-},
-{
   "model": "api.queryplans",
   "pk": 2,
   "fields": {
