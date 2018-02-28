@@ -153,6 +153,6 @@ class CreateQuery(APITestCase):
         )
         qq = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)
         after_post_queries = qq.available_queries
-        # import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(before_post_queries - 1, after_post_queries)

@@ -12,7 +12,7 @@ from api.serializers.query import QueryDetailLastMsgSerializer, QueryChatClientS
 from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
-
+from api import pyrebase
 
 class QueryListClientView(ListCreateAPIView):
     """Vista Consulta por parte del cliente."""
@@ -43,19 +43,7 @@ class QueryListClientView(ListCreateAPIView):
         serializer = QueryListClientSerializer(queryset, context={'user': request.user}, many=True)
 
         return Response(serializer.data)
-    # def get_queryset(self):
-    #     """Traer Listado de Especialidades con consultas pendientes."""
-    #     user = self.request.user
-    #     # import pdb; pdb.set_trace()
-    #     if user.role == Role.objects.get(name='client'):
-    #         # import pdb; pdb.set_trace()
-    #         Category.objects.all()
-    #         return Category.objects.all()
-    #     else:
-    #         pass
-        # c.query.filter(client_id=user.id)
-        # Query.objects.filter(client_id=user.id)
-        # val = Category.objects.filter()
+
 
 #   Crear Consulta
     def post(self, request):
@@ -65,10 +53,12 @@ class QueryListClientView(ListCreateAPIView):
         if not user_id:
             raise Http404
         data = request.data
+        # tomamos del token el id de usuarios
         data["client"] = user_id
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            pyrebase.chat_firebase_db(data, serializer.data["id"])
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 

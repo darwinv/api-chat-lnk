@@ -137,9 +137,6 @@ class QueryCustomSerializer(serializers.Serializer):
 class QuerySerializer(serializers.ModelSerializer):
     """Serializer para crear consultas."""
 
-    # el message para este serializer
-    # solo se puede escribir ya que drf no soporta la representacion
-    # de writable nested relations,
     message = MessageSerializer(write_only=True)
 
     class Meta:
@@ -177,18 +174,22 @@ class QuerySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Redefinido metodo create."""
+        # Buscamos el especialista principal de la especialidad dada
         specialist = Specialist.objects.get(type_specialist="m",
                                             category_id=validated_data["category"])
         data_message = validated_data.pop('message')
+        # Buscamos el plan activo y elegido
         acquired_plan = QueryPlansAcquired.objects.get(is_chosen=True, client=validated_data["client"])
         validated_data["specialist"] = specialist
         validated_data["status"] = 0
         validated_data["acquired_plan"] = acquired_plan
+        # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
         data_message["msg_type"] = "q"
         data_message["specialist"] = specialist
+        # Creamos la consulta y sus mensajes
         query = Query.objects.create(**validated_data)
         Message.objects.create(query=query, **data_message)
-        # restamos una consulta disponible
+        # restamos una consulta disponible al plan adquirido
         acquired_plan.available_queries = acquired_plan.available_queries - 1
         acquired_plan.save()
         return query
