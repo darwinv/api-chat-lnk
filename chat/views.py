@@ -17,6 +17,7 @@ from rest_framework.decorators import api_view
 def hello_world(request):
     return Response({"message": "Hello, world!"})
 
+
 @api_view()
 def chat_room(request, label):
     """Vista Sala de chat."""

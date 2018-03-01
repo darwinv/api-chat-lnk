@@ -9,8 +9,10 @@ import pyrebase
 
 
 # @channel_session
+# Solo demostracion
 @api_view(['POST'])
 def chat(request):
+    """Solo Demostración."""
     config = { "apiKey": "AIzaSyDXfelS4nVgbWSI8pAR4JMV14QB5WnEL4A",
                "authDomain": "demofirebase-2ae8f.firebaseapp.com",
                "databaseURL": "https://demofirebase-2ae8f.firebaseio.com",

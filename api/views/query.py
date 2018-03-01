@@ -2,8 +2,8 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
-from rest_framework import status, permissions, serializers
-from api.models import Query, Specialist, Message, Category
+from rest_framework import status, permissions
+from api.models import Query, Message, Category
 from api.permissions import IsAdminOrClient
 from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
@@ -13,6 +13,9 @@ from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api import pyrebase
+from channels import Group
+import json
+
 
 class QueryListClientView(ListCreateAPIView):
     """Vista Consulta por parte del cliente."""
@@ -50,6 +53,7 @@ class QueryListClientView(ListCreateAPIView):
         """Metodo para Crear consulta."""
         # Devolvemos el id del usuario
         user_id = Operations.get_id(self, request)
+        label = 1
         if not user_id:
             raise Http404
         data = request.data
@@ -59,7 +63,13 @@ class QueryListClientView(ListCreateAPIView):
         if serializer.is_valid():
             serializer.save()
             pyrebase.chat_firebase_db(data, serializer.data["id"])
+
+            # -- Aca una vez creada la data, cargar el mensaje directo a
+            # -- la sala de chat en channels (usando Groups)
+            envio = dict(handle=serializer.data["code_client"], message=serializer.data['messages'][0]["message"])
+            Group('chat-'+str(label)).send({'text': json.dumps(envio)})
             return Response(serializer.data, status.HTTP_201_CREATED)
+        # import pdb; pdb.set_trace()
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 # Detall de consulta
