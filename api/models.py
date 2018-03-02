@@ -553,25 +553,21 @@ class QueryLogs(models.Model):
 class Message(models.Model):
     """Mensaje."""
 
-    message = models.TextField()
-    msg_type = models.CharField(max_length=1, choices=Ch.message_msg_type)
+    message = models.TextField(blank=True)
+    msg_type = models.CharField(max_length=1, choices=Ch.message_msg_type, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
-    query = models.ForeignKey(Query, on_delete=models.PROTECT)
     viewed = models.BooleanField(default=False)
+    file_type = models.CharField(max_length=1, choices=Ch.messagefile_type_file, blank=True)
+    file_url = models.CharField(max_length=100, blank=True)
     nick = models.CharField(_('nick'), max_length=45, blank=True)
     code = models.CharField(_('code'), max_length=45)
+    room = models.CharField(max_length=200)
+    query = models.ForeignKey(Query, on_delete=models.PROTECT)
+
     def __str__(self):
         """Str."""
         return self.message
-
-
-class MessageFile(models.Model):
-    """Archivos de Mensajes."""
-
-    url_file = models.CharField(max_length=100)
-    type_file = models.CharField(max_length=1, choices=Ch.messagefile_type_file)
-    message = models.ForeignKey(Message, on_delete=models.PROTECT)
 
 
 class FeeMonthSeller(models.Model):

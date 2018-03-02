@@ -1,22 +1,10 @@
 """Consultas."""
 from rest_framework import serializers
 from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
-from api.models import MessageFile
 from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
 from api.utils.tools import get_time_message
 from api.utils import querysets
-
-class MessageFileSerializer(serializers.ModelSerializer):
-    """Serializer para los archivos en los mensajes."""
-
-    type_file = serializers.ChoiceField(choices=c.messagefile_type_file)
-
-    class Meta:
-        """Agrego el modelo y sus campos."""
-
-        model = MessageFile
-        fields = ('url', 'type_file')
 
 
 # Serializer de Mensajes
@@ -40,12 +28,6 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_time(self, obj):
         """Devuelve el tiempo formateado en horas y minutos."""
         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
-
-    # devolver los archivos adjuntos al msj
-    def get_media_files(self, obj):
-        """Devuelve los archivos de ese mensaje."""
-        medias = obj.messagefile_set.all()
-        return MessageFileSerializer(medias, many=True).data
 
     def get_code_specialist(self, obj):
         """Devuelve el codigo del especialista."""
@@ -349,33 +331,33 @@ class QueryListSpecialistSerializer(serializers.ModelSerializer):
         return msg.message
 
 
-class ChatMessageFileSerializer(serializers.ModelSerializer):
-    """
-    Informacion de archivos para el chat de cliente
-    """
-
-    class Meta:
-        """declaracion del modelo y sus campos."""
-        model = MessageFile
-        fields = ('id','url_file', 'type_file')
+# class ChatMessageFileSerializer(serializers.ModelSerializer):
+#     """
+#     Informacion de archivos para el chat de cliente
+#     """
+#
+#     class Meta:
+#         """declaracion del modelo y sus campos."""
+#         model = MessageFile
+#         fields = ('id','url_file', 'type_file')
 
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     """
     Informacion de los mensajes para chat de cliente
     """
-    file = serializers.SerializerMethodField()
+    # file = serializers.SerializerMethodField()
     time_message = serializers.SerializerMethodField()
 
     class Meta:
         """declaracion del modelo y sus campos."""
         model = Message
-        fields = ('id','nick', 'code', 'message', 'time_message', 'msg_type', 'viewed', 'file')
+        fields = ('id','nick', 'code', 'message', 'time_message', 'msg_type', 'viewed')
 
-    def get_file(self, obj):
-        msg = MessageFile.objects.filter(message=obj['id']).all()
-        data = ChatMessageFileSerializer(msg, many=True)
-        return data.data
+    # def get_file(self, obj):
+    #     msg = MessageFile.objects.filter(message=obj['id']).all()
+    #     data = ChatMessageFileSerializer(msg, many=True)
+    #     return data.data
 
     def get_time_message(self, obj):
         """Devuelve el tiempo cuando se realizo el mensaje del mensaje."""

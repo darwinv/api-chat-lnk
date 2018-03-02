@@ -18,7 +18,7 @@ def ws_connect(message):
 
 @channel_session
 def ws_receive(message):
-    """Funcion que recibe data de el socket de cliente"""
+    """Funcion que recibe data de el socket de cliente."""
     # obj_api = api()
     label = message.channel_session['room']
     room = Room.objects.get(label=label)

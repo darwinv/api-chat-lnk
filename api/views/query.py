@@ -63,7 +63,6 @@ class QueryListClientView(ListCreateAPIView):
         if serializer.is_valid():
             serializer.save()
             pyrebase.chat_firebase_db(data, serializer.data["id"])
-
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
             envio = dict(handle=serializer.data["code_client"], message=serializer.data['messages'][0]["message"])
