@@ -13,17 +13,21 @@ class MessageSerializer(serializers.ModelSerializer):
 
     msg_type = serializers.ChoiceField(choices=c.message_msg_type)
     msg_type_name = serializers.SerializerMethodField()
+    content_type = serializers.ChoiceField(choices=c.message_content_type)
+    content_type_name = serializers.SerializerMethodField()
     time = serializers.SerializerMethodField()
-    media_files = serializers.SerializerMethodField()
     code_specialist = serializers.SerializerMethodField()
+    room = serializers.CharField(max_length=100, required=False)
 
     class Meta:
         """Configuro el modelo y sus campos."""
 
         model = Message
-        fields = ('id', 'message', 'msg_type', 'msg_type_name', 'time', 'media_files', 'code_specialist', 'specialist')
+        fields = ('id', 'message', 'msg_type', 'content_type',
+                  'content_type_name', 'msg_type_name', 'time',
+                  'code_specialist', 'specialist', 'file_url', 'room')
 
-        read_only_fields = ('id', 'time', 'media_files', 'code_specialist')
+        read_only_fields = ('id', 'time', 'code_specialist')
 
     def get_time(self, obj):
         """Devuelve el tiempo formateado en horas y minutos."""
@@ -36,6 +40,19 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_msg_type_name(self, obj):
         """Devuelve el tipo de mensaje (answer,query,requery)."""
         return _(obj.get_msg_type_display())
+
+    def get_content_type_name(self, obj):
+        """Devuelve el tipo de contenido del mensaje (text,image,audio)."""
+        return _(obj.get_content_type_display())
+
+    def validate(self, data):
+        """Validacion de Data."""
+        required = _('required')
+        if int(data["content_type"]) > 0 and data["file_url"] == '':
+            raise serializers.ValidationError("file_url {}".format(required))
+        if int(data["content_type"]) == 0 and data["message"] == '':
+            raise serializers.ValidationError("text message {}".format(required))
+        return data
 
 
 # Serializer para detalle de consulta
@@ -168,7 +185,10 @@ class QuerySerializer(serializers.ModelSerializer):
         # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
         data_message["msg_type"] = "q"
         data_message["specialist"] = specialist
+        # armamos la sala para el usuario
+        data_message["room"] = str(validated_data["client"].id) + '-' + str(validated_data["category"].id)
         # Creamos la consulta y sus mensajes
+        # import pdb; pdb.set_trace()
         query = Query.objects.create(**validated_data)
         Message.objects.create(query=query, **data_message)
         # restamos una consulta disponible al plan adquirido
@@ -180,12 +200,14 @@ class QuerySerializer(serializers.ModelSerializer):
     # redefinir este metodo y descomentarlo
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
-        ms = MessageSerializer(obj.message_set.all().order_by('-created_at')[:1], many=True).data
-        # message = MessageSerializer(obj.message_set.all().last()).data
-        return {'id': obj.id, 'title': obj.title, 'status': obj.status, 'messages': ms,
-                'last_modified': obj.last_modified, 'client': obj.client_id, 'code_client': str(obj.client.code),
-                'specialist': obj.specialist_id, 'category': obj.category_id, 'category_name': _(str(obj.category)),
-                'calification': obj.calification}
+        ms = MessageSerializer(obj.message_set.all().last()).data
+        # message = {}
+        # import pdb; pdb.set_trace()
+        return {'room': ms["room"], "messages": ms}
+        # return {'id': obj.id, 'title': obj.title, 'status': obj.status, 'messages': ms,
+        #         'last_modified': obj.last_modified, 'client': obj.client_id, 'code_client': str(obj.client.code),
+        #         'specialist': obj.specialist_id, 'category': obj.category_id, 'category_name': _(str(obj.category)),
+        #         'calification': obj.calification}
 
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta

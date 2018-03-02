@@ -33,7 +33,7 @@ class ChoicesAPI:
         ('m', _('Male')),
         ('f', _('Female')),
     )
-    
+
     client_civil_state = (
         ('c', _('cohabiting')),
         ('e', _('separated')),
@@ -104,7 +104,7 @@ class ChoicesAPI:
         ('1', _('Accepted')),
         ('2', _('Declined')),
     )
-    
+
     # Query Model
     query_status = (
         ('0', _('Requested')),  # Preguntada, pendiente de derivar o responder
@@ -131,11 +131,18 @@ class ChoicesAPI:
         ('a', _('answer')),  # es de tipo respuesta
     )
 
-    # MessageFile Model
-    messagefile_type_file = (
-        ('0', _('Image')),
-        ('1', _('Voice')),
-        ('2', _('Document')),
+    message_content_type = (
+        ('0', _('Text')),
+        ('1', _('Image')),
+        ('2', _('Voice')),
+        ('3', _('Document')),
+    )
+
+    # Match Model
+    match_type_file = (
+        ('1', _('Image')),
+        ('2', _('Voice')),
+        ('3', _('Document')),
     )
 
     # AlertCategory Model

@@ -471,7 +471,7 @@ class MatchAcquiredFiles(models.Model):
     """Archivos Adjuntos del Match."""
 
     file_url = models.CharField(max_length=100)
-    type_file = models.CharField(max_length=1, choices=Ch.messagefile_type_file)
+    type_file = models.CharField(max_length=1, choices=Ch.match_type_file)
     match_acquired = models.ForeignKey(MatchAcquired)
 
 
@@ -556,13 +556,12 @@ class Message(models.Model):
     message = models.TextField(blank=True)
     msg_type = models.CharField(max_length=1, choices=Ch.message_msg_type, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    content_type = models.CharField(max_length=1, choices=Ch.message_content_type)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
     viewed = models.BooleanField(default=False)
-    file_type = models.CharField(max_length=1, choices=Ch.messagefile_type_file, blank=True)
     file_url = models.CharField(max_length=100, blank=True)
-    nick = models.CharField(_('nick'), max_length=45, blank=True)
     code = models.CharField(_('code'), max_length=45)
-    room = models.CharField(max_length=200)
+    room = models.CharField(max_length=200)  # Sala de chat
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
 
     def __str__(self):
