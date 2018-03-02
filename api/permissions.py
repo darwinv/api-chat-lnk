@@ -61,7 +61,7 @@ class IsClient(permissions.BasePermission):
 
 class IsAdminOrClient(permissions.BasePermission):
 
-    def has_object_permission(self, request, view, obj):
+    def has_permission(self, request, view):
         """Solo el vendedor puede crear."""
         if request.user and request.user.is_staff:
             return True
@@ -71,7 +71,7 @@ class IsAdminOrClient(permissions.BasePermission):
 
 class IsAdminOrSpecialist(permissions.BasePermission):
 
-    def has_object_permission(self, request, view, obj):
+    def has_permission(self, request, view):
         """Solo el vendedor puede crear."""
         if request.user and request.user.is_staff:
             return True

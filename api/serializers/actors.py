@@ -12,8 +12,24 @@ from django.db.models import Sum
 from api.emails import BasicEmailAmazon
 from rest_framework.response import Response
 from api.tools import capitalize as cap
+from api.utils import tools
 
+class SpecialistMessageListCustomSerializer(serializers.Serializer):
+    #serializador para devolver datos customizados de un queryset dado
+    fields = ('photo','nick','date','title','total','client','specialist')
 
+    #establecemos que datos del queryset pasado se mostrara en cada campo puesto en la tupla "Fields"
+    def to_representation(self, instance):
+        if isinstance(instance.date, datetime.datetime):
+            aux_time = instance.date.time()
+        else:
+            aux_time = instance.date
+        return {"photo": instance.photo,
+                "nick": instance.nick,
+                "date": aux_time,
+                "title": instance.title,
+                "total": instance.total,
+                "client": instance.client}
 
 class UserSerializer(serializers.ModelSerializer):
     """
