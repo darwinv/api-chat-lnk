@@ -62,6 +62,7 @@ class QueryListClientView(ListCreateAPIView):
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            # room = serializer.data[]
             # pyrebase.chat_firebase_db(data, serializer.data["id"])
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
@@ -159,7 +160,7 @@ class QueryChatClientView(ListCreateAPIView):
         if not client:
             raise Http404
 
-        queryset = Message.objects.values('id','nick', 'code', 'message', 'created_at', 'msg_type',
+        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type',
 'viewed','query_id')\
                            .annotate(title=F('query__title',),status=F('query__status',),\
                            calification=F('query__calification',),\

@@ -15,5 +15,5 @@ def chat_firebase_db(data, key):
     """Enviar data a firebase en chat."""
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
-    res = db.child("chat").child(key).set(data)
+    res = db.child("chatNew").child(key).set(data)
     return res

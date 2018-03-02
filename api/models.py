@@ -560,7 +560,6 @@ class Message(models.Model):
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
     viewed = models.BooleanField(default=False)
     file_url = models.CharField(max_length=100, blank=True)
-    nick = models.CharField(_('nick'), max_length=45, blank=True)
     code = models.CharField(_('code'), max_length=45)
     room = models.CharField(max_length=200)  # Sala de chat
     query = models.ForeignKey(Query, on_delete=models.PROTECT)

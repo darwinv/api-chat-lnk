@@ -186,8 +186,9 @@ class QuerySerializer(serializers.ModelSerializer):
         data_message["msg_type"] = "q"
         data_message["specialist"] = specialist
         # armamos la sala para el usuario
-        data_message["room"] = str(validated_data["client"]) + '-' + str(validated_data["category"])
+        data_message["room"] = str(validated_data["client"].id) + '-' + str(validated_data["category"].id)
         # Creamos la consulta y sus mensajes
+        # import pdb; pdb.set_trace()
         query = Query.objects.create(**validated_data)
         Message.objects.create(query=query, **data_message)
         # restamos una consulta disponible al plan adquirido
@@ -199,12 +200,14 @@ class QuerySerializer(serializers.ModelSerializer):
     # redefinir este metodo y descomentarlo
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
-        ms = MessageSerializer(obj.message_set.all().order_by('-created_at')[:1], many=True).data
-        # message = MessageSerializer(obj.message_set.all().last()).data
-        return {'id': obj.id, 'title': obj.title, 'status': obj.status, 'messages': ms,
-                'last_modified': obj.last_modified, 'client': obj.client_id, 'code_client': str(obj.client.code),
-                'specialist': obj.specialist_id, 'category': obj.category_id, 'category_name': _(str(obj.category)),
-                'calification': obj.calification}
+        ms = MessageSerializer(obj.message_set.all().last()).data
+        # message = {}
+        # import pdb; pdb.set_trace()
+        return {'room': ms["room"], "messages": ms}
+        # return {'id': obj.id, 'title': obj.title, 'status': obj.status, 'messages': ms,
+        #         'last_modified': obj.last_modified, 'client': obj.client_id, 'code_client': str(obj.client.code),
+        #         'specialist': obj.specialist_id, 'category': obj.category_id, 'category_name': _(str(obj.category)),
+        #         'calification': obj.calification}
 
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
