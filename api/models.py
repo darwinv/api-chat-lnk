@@ -557,9 +557,26 @@ class Message(models.Model):
     viewed = models.BooleanField(default=False)
     nick = models.CharField(_('nick'), max_length=45, blank=True)
     code = models.CharField(_('code'), max_length=45)
+    message_reference = models.ForeignKey('self', on_delete=models.PROTECT, related_name="ref",null=True)
     def __str__(self):
         """Str."""
         return self.message
+
+
+class SpecialistMessageList(models.Model):
+
+    id = models.IntegerField(primary_key=True)
+    photo = models.CharField(max_length=240, blank=True)
+    nick = models.CharField(max_length=40, blank=True)
+    date = models.DateField(blank=True)
+    title = models.CharField(max_length=240, blank=True)
+    total = models.IntegerField(blank=True)
+    client = models.IntegerField(blank=True)
+    specialist = models.IntegerField(blank=True)
+
+    class Meta:
+        db_table = u'specialist_message_list'
+        managed = False
 
 
 class MessageFile(models.Model):

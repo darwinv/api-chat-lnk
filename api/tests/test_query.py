@@ -3,6 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 from rest_framework import status
+from api.models import SpecialistMessageList
 # Create your tests here.
 
 client = APIClient()
@@ -72,3 +73,19 @@ class GetChatClientListQueries(APITestCase):
         
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+
+class GetSpecialistMessages(APITestCase):
+    """Prueba para devolver el plan activo y elegido de un determinado cliente"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_getspecialistmessages']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_list_messages_token_specialist(self):
+        """Obtener resultado 200."""
+        #se provee un token de especialista el cuel tiene   mensajes pendientes de responders
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        response = self.client.get(reverse('specialists-list-messages'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

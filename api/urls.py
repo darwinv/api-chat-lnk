@@ -30,6 +30,9 @@ urlpatterns = [
     url(r'^categories/(?P<pk>[0-9]+)/$', category.CategoryDetailView.as_view(), name='category-detail'),
     # Especialistas
     url(r'^specialists/$', actors.SpecialistListView.as_view(), name='specialists'),
+    # Especialistas mensajes
+    url(r'^specialists/list-messages/$', actors.SpecialistMessagesListView.as_view(), name='specialists-list-messages'),
+
     url(r'^specialists/(?P<pk>[0-9]+)/$', actors.SpecialistDetailView.as_view(), name='specialist-detail'),
     #numero de consultas mensual y anual de un especialista
     url(r'^specialists/query-count/$', actors.SpecialistQueryCountView.as_view(), name='specialist-query-count'),
@@ -85,5 +88,4 @@ urlpatterns = [
 
     # Queries de cliente por categoria
     url(r'^queries/categories/$', query.QueryChatClientView.as_view(), name='query-chat-client'),
-
 ]
