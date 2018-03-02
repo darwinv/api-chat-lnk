@@ -16,7 +16,6 @@ class MessageSerializer(serializers.ModelSerializer):
     content_type = serializers.ChoiceField(choices=c.message_content_type)
     content_type_name = serializers.SerializerMethodField()
     time = serializers.SerializerMethodField()
-    code_specialist = serializers.SerializerMethodField()
     room = serializers.CharField(max_length=100, required=False)
 
     class Meta:
@@ -25,17 +24,13 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
         fields = ('id', 'message', 'msg_type', 'content_type',
                   'content_type_name', 'msg_type_name', 'time',
-                  'code_specialist', 'specialist', 'file_url', 'room')
+                  'code', 'specialist', 'file_url', 'room')
 
-        read_only_fields = ('id', 'time', 'code_specialist')
+        read_only_fields = ('id', 'time', 'code')
 
     def get_time(self, obj):
         """Devuelve el tiempo formateado en horas y minutos."""
         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
-
-    def get_code_specialist(self, obj):
-        """Devuelve el codigo del especialista."""
-        return str(obj.specialist.code)
 
     def get_msg_type_name(self, obj):
         """Devuelve el tipo de mensaje (answer,query,requery)."""
@@ -187,8 +182,9 @@ class QuerySerializer(serializers.ModelSerializer):
         data_message["specialist"] = specialist
         # armamos la sala para el usuario
         data_message["room"] = str(validated_data["client"].id) + '-' + str(validated_data["category"].id)
+        data_message["code"] = validated_data["client"].code
         # Creamos la consulta y sus mensajes
-        # import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
         query = Query.objects.create(**validated_data)
         Message.objects.create(query=query, **data_message)
         # restamos una consulta disponible al plan adquirido
