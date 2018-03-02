@@ -53,7 +53,7 @@ class QueryListClientView(ListCreateAPIView):
         """Metodo para Crear consulta."""
         # Devolvemos el id del usuario
         user_id = Operations.get_id(self, request)
-        label = 1
+        # label = 1
         if not user_id:
             raise Http404
         data = request.data
@@ -62,11 +62,11 @@ class QueryListClientView(ListCreateAPIView):
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            pyrebase.chat_firebase_db(data, serializer.data["id"])
+            # pyrebase.chat_firebase_db(data, serializer.data["id"])
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
-            envio = dict(handle=serializer.data["code_client"], message=serializer.data['messages'][0]["message"])
-            Group('chat-'+str(label)).send({'text': json.dumps(envio)})
+            # envio = dict(handle=serializer.data["code_client"], message=serializer.data['messages'][0]["message"])
+            # Group('chat-'+str(label)).send({'text': json.dumps(envio)})
             return Response(serializer.data, status.HTTP_201_CREATED)
         # import pdb; pdb.set_trace()
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

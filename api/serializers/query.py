@@ -13,17 +13,21 @@ class MessageSerializer(serializers.ModelSerializer):
 
     msg_type = serializers.ChoiceField(choices=c.message_msg_type)
     msg_type_name = serializers.SerializerMethodField()
+    content_type = serializers.ChoiceField(choices=c.message_content_type)
+    content_type_name = serializers.SerializerMethodField()
     time = serializers.SerializerMethodField()
-    media_files = serializers.SerializerMethodField()
     code_specialist = serializers.SerializerMethodField()
+    room = serializers.CharField(max_length=100, required=False)
 
     class Meta:
         """Configuro el modelo y sus campos."""
 
         model = Message
-        fields = ('id', 'message', 'msg_type', 'msg_type_name', 'time', 'media_files', 'code_specialist', 'specialist')
+        fields = ('id', 'message', 'msg_type', 'content_type',
+                  'content_type_name', 'msg_type_name', 'time',
+                  'code_specialist', 'specialist', 'file_url', 'room')
 
-        read_only_fields = ('id', 'time', 'media_files', 'code_specialist')
+        read_only_fields = ('id', 'time', 'code_specialist')
 
     def get_time(self, obj):
         """Devuelve el tiempo formateado en horas y minutos."""
@@ -36,6 +40,19 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_msg_type_name(self, obj):
         """Devuelve el tipo de mensaje (answer,query,requery)."""
         return _(obj.get_msg_type_display())
+
+    def get_content_type_name(self, obj):
+        """Devuelve el tipo de contenido del mensaje (text,image,audio)."""
+        return _(obj.get_content_type_display())
+
+    def validate(self, data):
+        """Validacion de Data."""
+        required = _('required')
+        if int(data["content_type"]) > 0 and data["file_url"] == '':
+            raise serializers.ValidationError("file_url {}".format(required))
+        if int(data["content_type"]) == 0 and data["message"] == '':
+            raise serializers.ValidationError("text message {}".format(required))
+        return data
 
 
 # Serializer para detalle de consulta
@@ -168,6 +185,8 @@ class QuerySerializer(serializers.ModelSerializer):
         # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
         data_message["msg_type"] = "q"
         data_message["specialist"] = specialist
+        # armamos la sala para el usuario
+        data_message["room"] = str(validated_data["client"]) + '-' + str(validated_data["category"])
         # Creamos la consulta y sus mensajes
         query = Query.objects.create(**validated_data)
         Message.objects.create(query=query, **data_message)
