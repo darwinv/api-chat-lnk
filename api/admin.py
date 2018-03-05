@@ -13,7 +13,7 @@ from .models import SellerContactNoEfective, Client, ContractType, Contract, Cat
 from .models import Clasification, ProductType, QueryPlans, SellerNonBillablePlans, Match, Sale
 from .models import SaleDetail, QueryPlansAcquired, PaymentType, Payment, MatchAcquired
 from .models import MatchAcquiredFiles, MatchAcquiredLog, MonthlyFee, LogPaymentsCreditCard
-from .models import Query, QueryLogs, Message, MessageFile, FeeMonthSeller, NotificationsBack
+from .models import Query, QueryLogs, Message, FeeMonthSeller, NotificationsBack
 from .models import Parameter
 # Register your models here.
 
@@ -56,13 +56,6 @@ class SpecialistAdmin(admin.ModelAdmin):
     'ruc','code','payment_per_answer','anonymous','role','category','status')
 
 
-class MessageFileInline(admin.TabularInline):
-    """Archivos del Mensaje en Linea."""
-
-    model = MessageFile
-    extra = 1
-
-
 class MessageInline(admin.TabularInline):
     """Mensaje en Linea."""
 
@@ -73,7 +66,6 @@ class MessageInline(admin.TabularInline):
 class MessageAdmin(admin.ModelAdmin):
     """Registro en el admin de Mensaje."""
 
-    inlines = [MessageFileInline]
     list_display = ('message', 'msg_type', 'created_at')
 
 
@@ -139,7 +131,6 @@ admin.site.register(MonthlyFee)
 admin.site.register(LogPaymentsCreditCard)
 
 admin.site.register(QueryLogs)
-admin.site.register(MessageFile)
 admin.site.register(FeeMonthSeller)
 admin.site.register(NotificationsBack)
 

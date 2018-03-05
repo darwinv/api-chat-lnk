@@ -54,20 +54,31 @@ class IsClient(permissions.BasePermission):
     """Permiso solo para el rol cliente."""
 
     def has_object_permission(self, request, view, obj):
-        """Solo el vendedor puede crear."""
+        """Permiso a nivel de objeto."""
         if request.method in permissions.SAFE_METHODS:
             return request.user and request.user.role_id == 2
         return True
 
+
 class IsAdminOrClient(permissions.BasePermission):
+    """Solo Administradores o Clientes."""
 
     def has_permission(self, request, view):
-        """Solo el vendedor puede crear."""
+        """Permiso General."""
         if request.user and request.user.is_staff:
             return True
         elif request.user and request.user.role_id == 2:
             return True
         return False
+
+    def has_object_permission(self, request, view, obj):
+        """Permiso a nivel de objeto."""
+        if request.user and request.user.is_staff:
+            return True
+        elif request.user and request.user.role_id == 2:
+            return True
+        return False
+
 
 class IsAdminOrSpecialist(permissions.BasePermission):
 

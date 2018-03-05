@@ -1,5 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 
+
 class ChoicesAPI:
     """
         Clase Choices para manejo de opciones en los modelos
@@ -26,10 +27,6 @@ class ChoicesAPI:
     client_type_client = (
         ('n', _('Natural')),
         ('b', _('Business')),
-    )
-    client_full_type_client = (
-        ('n', _('Natural Person')),
-        ('b', _('Business Person')),
     )
 
     client_sex = (
@@ -134,12 +131,18 @@ class ChoicesAPI:
         ('a', _('answer')),  # es de tipo respuesta
     )
 
-    # MessageFile Model
-    messagefile_type_file = (
-        ('0', _('Image')),
-        ('1', _('Voice')),
-        ('2', _('Document')),
-        ('3', _('Video')),
+    message_content_type = (
+        ('0', _('Text')),
+        ('1', _('Image')),
+        ('2', _('Voice')),
+        ('3', _('Document')),
+    )
+
+    # Match Model
+    match_type_file = (
+        ('1', _('Image')),
+        ('2', _('Voice')),
+        ('3', _('Document')),
     )
 
     # AlertCategory Model
