@@ -140,7 +140,7 @@ class QueryChatClientView(ListCreateAPIView):
     """Vista Consulta."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [IsAdminOrClient]
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # Devolveremos las categorias para luego filtrar por usuario
     # queryset = Category.objects.all()
