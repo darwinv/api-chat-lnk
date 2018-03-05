@@ -370,20 +370,33 @@ class ChatMessageSerializer(serializers.ModelSerializer):
     """
     # file = serializers.SerializerMethodField()
     time_message = serializers.SerializerMethodField()
+    query = serializers.SerializerMethodField()    
+    message_reference = serializers.SerializerMethodField()
 
     class Meta:
         """declaracion del modelo y sus campos."""
         model = Message
-        fields = ('id', 'code', 'message', 'time_message', 'msg_type', 'viewed')
-
-    # def get_file(self, obj):
-    #     msg = MessageFile.objects.filter(message=obj['id']).all()
-    #     data = ChatMessageFileSerializer(msg, many=True)
-    #     return data.data
+        fields = ('id', 'code', 'message', 'time_message', 'msg_type', 'viewed', 'content_type', 'file_url',
+                 'query', 'message_reference')
 
     def get_time_message(self, obj):
         """Devuelve el tiempo cuando se realizo el mensaje del mensaje."""
         return get_time_message(obj['created_at'])
+
+    def get_query(self, obj):
+        """Objeto Query"""
+        query = QueryChatClientSerializer(obj)
+        return query.data
+
+
+    def get_message_reference(self, obj):
+        if obj['message_reference']:
+            ref = Message.objects.get(pk = obj['message_reference'])
+            message = ChatMessageReferenceSerializer(ref)
+            return message.data
+
+        return None
+
 
 class ChatMessageReferenceSerializer(serializers.ModelSerializer):
     """
@@ -396,28 +409,13 @@ class ChatMessageReferenceSerializer(serializers.ModelSerializer):
 
 class QueryChatClientSerializer(serializers.ModelSerializer):
     """Serializer para listar consultas (Cliente)."""
-    message = serializers.SerializerMethodField()
-    message_reference = serializers.SerializerMethodField()
     query_id = serializers.SerializerMethodField()
 
     class Meta:
         """Meta."""
         model = Query
-        fields = ('title', 'category_id', 'calification', 'status', 'message', 'message_reference', 'query_id')
+        fields = ('title', 'category_id', 'calification', 'status', 'query_id')
 
 
     def get_query_id(self, obj):
         return obj['query_id']
-
-
-    def get_message(self, obj):
-        message = ChatMessageSerializer(obj)
-        return message.data
-
-    def get_message_reference(self, obj):
-        if obj['message_reference']:
-            ref = Message.objects.get(pk = obj['message_reference'])
-            message = ChatMessageReferenceSerializer(ref)
-            return message.data
-
-        return None
