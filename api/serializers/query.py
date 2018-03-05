@@ -374,7 +374,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
     class Meta:
         """declaracion del modelo y sus campos."""
         model = Message
-        fields = ('id','nick', 'code', 'message', 'time_message', 'msg_type', 'viewed')
+        fields = ('id', 'code', 'message', 'time_message', 'msg_type', 'viewed')
 
     # def get_file(self, obj):
     #     msg = MessageFile.objects.filter(message=obj['id']).all()
@@ -396,23 +396,28 @@ class ChatMessageReferenceSerializer(serializers.ModelSerializer):
 
 class QueryChatClientSerializer(serializers.ModelSerializer):
     """Serializer para listar consultas (Cliente)."""
-    id = serializers.SerializerMethodField()
     message = serializers.SerializerMethodField()
     message_reference = serializers.SerializerMethodField()
+    query_id = serializers.SerializerMethodField()
 
     class Meta:
         """Meta."""
         model = Query
-        fields = ('title', 'category_id', 'calification', 'status', 'message', 'id', 'message_reference')
+        fields = ('title', 'category_id', 'calification', 'status', 'message', 'message_reference', 'query_id')
 
-    def get_id(self, obj):
+
+    def get_query_id(self, obj):
         return obj['query_id']
+
 
     def get_message(self, obj):
         message = ChatMessageSerializer(obj)
         return message.data
 
     def get_message_reference(self, obj):
-        ref = Message.objects.filter(pk = obj['message_reference'])
-        message = ChatMessageReferenceSerializer(ref, many=True)
-        return message.data
+        if obj['message_reference']:
+            ref = Message.objects.get(pk = obj['message_reference'])
+            message = ChatMessageReferenceSerializer(ref)
+            return message.data
+
+        return None

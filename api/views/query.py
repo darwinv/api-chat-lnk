@@ -140,10 +140,7 @@ class QueryChatClientView(ListCreateAPIView):
     """Vista Consulta."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [IsAdminOrClient]
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    # Devolveremos las categorias para luego filtrar por usuario
-    # queryset = Category.objects.all()
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     serializer_class = QueryChatClientSerializer
 
 
@@ -160,7 +157,8 @@ class QueryChatClientView(ListCreateAPIView):
 
         if not client:
             raise Http404
-        queryset = Message.objects.values('id','nick', 'code', 'message', 'created_at', 'msg_type', 'viewed', 'query_id', 'message_reference')\
+        
+        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed', 'query_id', 'message_reference')\
                            .annotate(title=F('query__title',),status=F('query__status',),\
                            calification=F('query__calification',),\
                            category_id=F('query__category_id',))\
