@@ -1,19 +1,19 @@
 """Vista de todos los Actores."""
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import User, Client, Specialist, Seller, Query
+from api.models import User, Client, Specialist, Seller, Query, Message, SpecialistMessageList
 from api.models import SellerContactNoEfective
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
-from django.db.models import Sum
+from django.db.models import Sum, Manager
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer, KeySerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
-from api.serializers.actors import MediaSerializer, ChangePasswordSerializer
+from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
 from api.serializers.query import QuerySerializer, QueryCustomSerializer
 from django.http import Http404
 from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrClient, IsAdminOrSpecialist
@@ -24,8 +24,9 @@ import uuid
 import boto3
 from datetime import datetime, date
 from django.utils import timezone
+from django.db.models import Max, Count
 from api.utils.validations import Operations
-# from rest_framework.renderers import JSONRenderer
+
 # Constantes
 PREFIX_CODE_CLIENT = 'C'
 ROLE_CLIENT = 2
@@ -293,6 +294,34 @@ class SpecialistListView(ListCreateAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SpecialistMessagesListView(ListCreateAPIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (IsAdminOrSpecialist,)
+
+    def get_object(self, pk):
+        try:
+            # r = Manager.raw()
+            obj = SpecialistMessageList.objects.filter(specialist=pk)
+            # obj = Message.objects.filter(specialist_id = 4, msg_type = 'q').values('query__client').annotate(date = Max('created_at'),cont = Count('*')).order_by('date','id')
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except SpecialistMessageList.DoesNotExist:
+            raise Http404
+
+    # listado
+    def list(self, request):
+        #obtengo el pk del especialista
+        pk = Operations.get_id(self, request)
+        list = self.get_object(pk)
+        serializer = SpecialistMessageListCustomSerializer(list, many=True)
+
+        page = self.paginate_queryset(list)
+        if page is not None:
+            serializer = SpecialistMessageListCustomSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
 
 # Vista para el detalle del especialista, actualizacion y borrado
 class SpecialistDetailView(APIView):

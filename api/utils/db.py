@@ -1,119 +1,62 @@
-# import os, sys
-#import subprocess
+import os, sys
 from subprocess import check_output
 import MySQLdb
-# from django.conf import settings
-# from api.config import
-# import sys
-# sys.path.append("../linkup/")
-# # import setting_secret
-#
-# lib_path = os.path.abspath(os.path.join('..', 'linkup'))
-# sys.path.append(lib_path)
-#
-# print()
-# settings.configure(DEBUG=True)
-# ENVIRONMENT_VARIABLE = "DJANGO_SETTINGS_MODULE"
-# pl = settings.DATABASES
-# print(pl)
-# DATABASES = getattr(settings, "DATABASES", None)
-# for i in DATABASES:
-# 	print(i)
-# print (getattr(settings, "DATABASES", None))
-#import re
-#proj_path =r"C:\Users\marko\PycharmProjects\linkupapi"
-# proj_path ="."
-# This is so Django knows where to find stuff.
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "linkupapi.settings")
 
-# sys.path.append(proj_path)
+BASE_PROYECT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, BASE_PROYECT)  # Nos ubicamos en la raiz del proyecto
+from linkupapi.settings_secret import DATABASES
 
-# This is so my local_settings.py gets loaded.
-# os.chdir(proj_path)
+db = MySQLdb.connect(host=DATABASES['default']['HOST'],  # tu host, usualmente localhost
+                     user=DATABASES['default']['USER'],  # tu usuario
+                     passwd=DATABASES['default']['PASSWORD'],  # tu password
+                     db=DATABASES['default']['NAME'])  # el nombre de la base de datos
 
-# This is so models get loaded.
-# from django.core.wsgi import get_wsgi_application
-# application = get_wsgi_application()
-
-#subprocess.call(["python ","manage.py","dumpdata","api.Contract","--indent","2",">","Contracts.json"])
-db = MySQLdb.connect(host="localhost",    # tu host, usualmente localhost
-                     user="root",         # tu usuario
-                     passwd="",  # tu password
-                     db="api_linkup")        # el nombre de la base de datos
-
-# Debes crear un objeto Cursor. Te permitirá
-# ejecutar todos los queries que necesitas
 cur = db.cursor()
-# Usa todas las sentencias SQL que quieras
-cur.execute("SHOW TABLES")
-aux_api = []
-aux_auth = []
-aux_oauth2 = []
-for row in cur.fetchall():
-	if not row[0].find("api_"):
-		aux_api.append(row[0].replace("api_", ""))
-	elif not row[0].find("oauth2_"):
-		aux_oauth2.append(row[0].replace("oauth2_provider_", ""))
-# print(aux_api)
-# print(aux_oauth2)
+cur.execute("SHOW TABLES WHERE Tables_in_linkup REGEXP 'oauth2_provider_accesstoken|api_'")
 
-px = [" oauth2_provider." + name for name in aux_oauth2]
-fx = ''.join(str(e) for e in px)
-# print(fx)
-# oauth2_provider.
-list_name = []
-filenames = []
-tables_db = aux_api
+path = path2 = ""
+list_names = []
+exit = True
+if 'api' in os.listdir("."):
+    path2 = "api\\fixtures\\temp\\"
+elif 'db.py' in os.listdir("."):
+    path = "..\\..\\"
+    path2 = "..\\fixtures\\temp\\"
 
-# print(tables_db)
-
-con = 0
-aux = 0
-name_fixture = ""
+tables_db = [row[0].replace("api_", "").replace("oauth2_provider_", "") for row in cur.fetchall()]
 while True:
-	print ("Nombre de la tabla: ")
-	table_name = input()
-	if table_name.strip() != "":
-		if table_name.strip() == ".":
-			break
-		if table_name.lower().strip() == "all":
-			list_name = tables_db
-			break
-		if table_name.lower().strip() in tables_db:
-			list_name.append(table_name)
-		else:
-			print("La tabla {} no existe".format(table_name))
+    print("Nombre de la tabla: ")
+    table_name = input()
+    if table_name.lower().strip() == "exit":
+        exit = False
+        break
+    if table_name.strip() != "":
+        if table_name.strip() == ".":
+            break
+        if table_name.lower().strip() == "all":
+            list_names = tables_db
+            break
+        if "," in table_name:
+            list_names = [x.strip() for x in table_name.split(',') if x.strip() != ""]
+            z = list(set(list_names) - set(tables_db))
+            if len(z) > 0:
+                print("Las siguientes tablas no existen en la base de datos: {}".format(z))
+                continue
+            else:
+                break
+        if table_name.lower().strip() in tables_db:
+            list_names.append(table_name)
+        else:
+            print("La tabla {} no existe".format(table_name))
 
-print("Nombre del fixture: ")
-name_fixture = input()
-
-e = ""
-p = [" api." + name for name in list_name]
-f = ''.join(str(e) for e in p)
-check_output(r"python ..\..\manage.py dumpdata {} --indent 2 > ..\fixtures\temp\{}.json".format(f, name_fixture), shell=True).decode()
-check_output(r"python ..\..\manage.py dumpdata {} --indent 2 > ..\fixtures\temp\{}.json".format(fx, name_fixture + "_oauth2"), shell=True).decode()
-
-# for name in list_name:
-# 	filenames.append(r"api\fixtures\temp\{}.json".format(name))
-# 	check_output(r"python manage.py dumpdata api.{} --indent 2 > api\fixtures\temp\{}.json".format(name, name), shell=True).decode()
-#
-# with open(r"api\fixtures\temp\{}.json".format(name_fixture), 'w') as outfile:
-# 	outfile.write('[\n')
-# 	for fname in filenames:
-# 		with open(fname) as infile:
-# 			aux = 0
-# 			for line in infile:
-# 				outfile.write(line.replace("[","").replace("]",""))
-# 			con += 1
-# 			if con < len(filenames):
-# 				outfile.write(',\n')
-# 	outfile.write(']\n')
-#
-# with open(r"api\fixtures\temp\{}.json".format(name_fixture)) as input_file, open(r"api\fixtures\temp\_.json", 'w') as output_file:
-# 	for line in input_file:
-# 		if line == ',\n':
-# 			output_file.write('\n')
-# 		else:
-# 			output_file.write(line)
+if exit:
+    print("Nombre del fixture: ")
+    name_fixture = input()
+    list_prefix = [" api." + name for name in list_names if name != "accesstoken"]
+    result = ''.join(str(e) for e in list_prefix)
+    # se agregan dos tablas necesarias
+    result += " oauth2_provider.accesstoken oauth2_provider.application"
+    check_output(r"python {}manage.py dumpdata {} --indent 2 > {}{}.json".format(path, result, path2, name_fixture),
+                 shell=True).decode()
 cur.close()
 db.close()

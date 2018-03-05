@@ -19,8 +19,7 @@ class GetPlanByPIN(APITestCase):
         client.credentials(HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
 
     def test_get_plan_by_pin(self):
-
-        """Setup."""
+        """Traer Plan enviado codigo PIN Correcto."""
         self.valid_payload = {
             "plan_name": "Minipack",
             "query_quantity": 6,
@@ -93,7 +92,7 @@ class GetClientPlansList(APITestCase):
     """Prueba para devolver listado de planes al cliente"""
     # fixtures = ['data', 'data2', 'data3']
 
-    fixtures = ['data', 'data2', 'data3', 'test_plan']
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
 
 
     def setUp(self):
@@ -109,12 +108,12 @@ class GetClientPlansList(APITestCase):
 class UpdatePlanSelect (APITestCase):
     """Prueba para actualizar el plan activo de un cliente"""
 
-    fixtures = ['data', 'data2', 'data3', 'test_plan']
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
 
 
     def setUp(self):
         """Setup."""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
 
     def test_put_plan_incorrect(self):
         """Actualizar de manera correscta."""
@@ -132,7 +131,7 @@ class UpdatePlanSelect (APITestCase):
         """Actualizar el plan activo de manera exitosa."""
 
         data = {'is_chosen': 1,
-	            'client_id': 5}
+	            'client_id': 11}
 
         response = self.client.put(reverse('chosen-plan-edit', kwargs={'pk': 2}),
                                 data, format='json')
@@ -142,7 +141,8 @@ class UpdatePlanSelect (APITestCase):
 class GetSpecialistQueryCount(APITestCase):
     """Prueba para devolver los totales de consultas de un especialista """
 
-    fixtures = ['data', 'data2', 'data3', 'test_plan']
+    # fixtures = ['data', 'data2', 'data3', 'test_plan', 'oauth2']
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
 
     def setUp(self):
         """Setup."""
@@ -151,7 +151,7 @@ class GetSpecialistQueryCount(APITestCase):
     def test_get_token_client(self):
         """Obtener resultado 200 de la lista."""
         # se provee un token de especialista
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
         response = self.client.get(reverse('specialist-query-count'), format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -163,10 +163,63 @@ class GetSpecialistQueryCount(APITestCase):
         response = self.client.get(reverse('specialist-query-count'), format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    #se comento por que falta ingresar el usuario con el token al fixture data2
-    def test_get_list_token_caduco(self):
+    # se comento por que falta ingresar el usuario con el token al fixture data2
+    def test_get_list_token_client(self):
         """Obtener resultado 200 de la lista."""
         #se provee un token erroneo
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer l6YYuSzMmg58s7UEljiZlhmaGLxVal')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer 9M84R1jUHHx2AZkAGb3C6OF72QM7Xh')
         response = self.client.get(reverse('specialist-query-count'), format='json')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+class GetChosemPlanClient(APITestCase):
+    """Prueba para devolver el plan activo y elegido de un determinado cliente"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_chosenplan_token_admin(self):
+        """Obtener resultado 404."""
+        #se provee un token de administrador el cuel no tiene planes en el fixture
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.get(reverse('chosen-plan'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_chosenplan_token_clientWithPlans(self):
+        """Obtener resultado 200."""
+        #se provee un token de cliente (id 11 en el fixture) que si posee planes en el fixture
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+        response = self.client.get(reverse('chosen-plan'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_chosenplan_token_clientWithOutPlans(self):
+        """Obtener resultado 404."""
+        #se provee un token de cliente (id 5 en el fixture) que no posee planes en el fixture
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer 9M84R1jUHHx2AZkAGb3C6OF72QM7Xh')
+        response = self.client.get(reverse('chosen-plan'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_chosenplan_token_specialist(self):
+        """Obtener resultado 404."""
+        #se provee un token de especialista (id 4 en el fixture) que no posee planes en el fixture
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        response = self.client.get(reverse('chosen-plan'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_chosenplan_token_clientWithPlans2(self):
+        """Obtener resultado 200."""
+
+        #se provee un token de cliente (id 11 en el fixture) que si posee planes en el fixture
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+
+        self.valid_payload = {
+            "is_active": True,
+            'is_chosen': True
+        }
+        # get API response
+        response = self.client.get(reverse('chosen-plan'), format='json')
+
+        self.assertNotEqual(response.data, self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

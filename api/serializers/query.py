@@ -385,20 +385,34 @@ class ChatMessageSerializer(serializers.ModelSerializer):
         """Devuelve el tiempo cuando se realizo el mensaje del mensaje."""
         return get_time_message(obj['created_at'])
 
+class ChatMessageReferenceSerializer(serializers.ModelSerializer):
+    """
+    Informacion de los mensajes para chat de cliente
+    """
+    class Meta:
+        """declaracion del modelo y sus campos."""
+        model = Message
+        fields = ('id', 'message')
 
 class QueryChatClientSerializer(serializers.ModelSerializer):
     """Serializer para listar consultas (Cliente)."""
     id = serializers.SerializerMethodField()
     message = serializers.SerializerMethodField()
+    message_reference = serializers.SerializerMethodField()
 
     class Meta:
         """Meta."""
         model = Query
-        fields = ('title', 'category_id', 'calification', 'status', 'message','id')
+        fields = ('title', 'category_id', 'calification', 'status', 'message', 'id', 'message_reference')
 
     def get_id(self, obj):
         return obj['query_id']
 
     def get_message(self, obj):
         message = ChatMessageSerializer(obj)
+        return message.data
+
+    def get_message_reference(self, obj):
+        ref = Message.objects.filter(pk = obj['message_reference'])
+        message = ChatMessageReferenceSerializer(ref, many=True)
         return message.data

@@ -4,6 +4,7 @@ from rest_framework.test import APITestCase
 from django.urls import reverse
 from rest_framework import status
 import json
+from api.models import SpecialistMessageList
 from api.models import QueryPlansAcquired
 # Create your tests here.
 
@@ -25,7 +26,7 @@ class GetListQueries(APITestCase):
         """404 clien_id not found."""
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = client.get(reverse('queries-client'))
-
+        
         # import pdb; pdb.set_trace()
         # clients = Cliente.objects.all()
         # serializer = ClientSerializer(clients, many=True)
@@ -181,3 +182,19 @@ class CreateQuery(APITestCase):
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(before_post_queries - 1, after_post_queries)
+
+class GetSpecialistMessages(APITestCase):
+    """Prueba para devolver el plan activo y elegido de un determinado cliente"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_getspecialistmessages']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_list_messages_token_specialist(self):
+        """Obtener resultado 200."""
+        #se provee un token de especialista el cuel tiene   mensajes pendientes de responders
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        response = self.client.get(reverse('specialists-list-messages'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

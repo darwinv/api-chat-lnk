@@ -33,7 +33,7 @@ class ChoicesAPI:
         ('m', _('Male')),
         ('f', _('Female')),
     )
-
+    
     client_civil_state = (
         ('c', _('cohabiting')),
         ('e', _('separated')),
@@ -104,7 +104,7 @@ class ChoicesAPI:
         ('1', _('Accepted')),
         ('2', _('Declined')),
     )
-
+    
     # Query Model
     query_status = (
         ('0', _('Requested')),  # Preguntada, pendiente de derivar o responder
