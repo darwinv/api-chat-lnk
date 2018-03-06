@@ -60,8 +60,12 @@ class ListMessageSerializer(serializers.ModelSerializer):
                   'time', 'code', 'specialist', 'file_url', 'room')
 
     def to_representation(self, obj):
-        pass
-        # return {}
+        """Redefinido nombres (claves) para firebase."""
+        time = str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+        return {"id": obj.id, "room": obj.room, "codeUser": obj.code, "fileType": obj.content_type,
+                "fileUrl": obj.file_url, "message": obj.message, "messageType": obj.msg_type,
+                "timeMessage": time, "read": obj.viewed}
+
 # Serializer para detalle de consulta
 class QueryDetailSerializer(serializers.ModelSerializer):
     """Serializer para el detalle de consulta."""
@@ -211,7 +215,7 @@ class QuerySerializer(serializers.ModelSerializer):
     # redefinir este metodo y descomentarlo
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
-        ms = MessageSerializer(obj.message_set.all(), many=True).data
+        ms = ListMessageSerializer(obj.message_set.all(), many=True).data
         chat = {}
 
         for message in ms:
@@ -219,16 +223,8 @@ class QuerySerializer(serializers.ModelSerializer):
                                 "calification": obj.calification}
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
-            # chat[message['m'+str(message["id"])]] = dict(message)
-        # import pdb; pdb.set_trace()
-        # ms["query"] = {"id": obj.id, "title": obj.title, "status": obj.status, "calification": obj.calification}
-        # message_id = 'm'+ms[0]["id"]
 
         return {'room': ms[0]["room"], "message": chat}
-        # return {'id': obj.id, 'title': obj.title, 'status': obj.status, 'messages': ms,
-        #         'last_modified': obj.last_modified, 'client': obj.client_id, 'code_client': str(obj.client.code),
-        #         'specialist': obj.specialist_id, 'category': obj.category_id, 'category_name': _(str(obj.category)),
-        #         'calification': obj.calification}
 
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
@@ -391,7 +387,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
     """
     # file = serializers.SerializerMethodField()
     time_message = serializers.SerializerMethodField()
-    query = serializers.SerializerMethodField()    
+    query = serializers.SerializerMethodField()
     message_reference = serializers.SerializerMethodField()
 
     class Meta:
