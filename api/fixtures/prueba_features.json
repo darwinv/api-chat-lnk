@@ -9,6 +9,36 @@
     "district": 669
   }
 },
+{
+  "model": "api.address",
+  "pk": 7,
+  "fields": {
+    "street": "na",
+    "department": 7,
+    "province": 66,
+    "district": 669
+  }
+},
+{
+  "model": "api.address",
+  "pk": 8,
+  "fields": {
+    "street": "na",
+    "department": 7,
+    "province": 66,
+    "district": 669
+  }
+},
+{
+  "model": "api.address",
+  "pk": 9,
+  "fields": {
+    "street": "na",
+    "department": 7,
+    "province": 66,
+    "district": 669
+  }
+},
 {"model": "api.clasification", "pk": 1, "fields": {"name": "Popular", "created_at": "2018-02-08T14:39:12Z"}},
 {
   "model": "api.queryplans",
