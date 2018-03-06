@@ -49,6 +49,19 @@ class MessageSerializer(serializers.ModelSerializer):
         return data
 
 
+class ListMessageSerializer(serializers.ModelSerializer):
+    """Serializer para la representacion del mensaje."""
+
+    class Meta:
+        """Configuro el modelo y sus campos."""
+
+        model = Message
+        fields = ('id', 'message', 'msg_type', 'content_type',
+                  'time', 'code', 'specialist', 'file_url', 'room')
+
+    def to_representation(self, obj):
+        pass
+        # return {}
 # Serializer para detalle de consulta
 class QueryDetailSerializer(serializers.ModelSerializer):
     """Serializer para el detalle de consulta."""
