@@ -22,5 +22,13 @@ def chat_firebase_db(data, room):
     """Enviar data a firebase en chat."""
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
-    res = db.child("chats").child(room).set(data)
+    if exist_room(db, room):
+        res = db.child("chats").child(room).update(data)
+    else:
+        res = db.child("chats").child(room).set(data)
     return res
+
+
+def exist_room(db, room):
+    """Chequear si el nodo de sala existe."""
+    return db.child("chats").child(room).get() is not None
