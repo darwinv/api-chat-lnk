@@ -15,7 +15,7 @@ from datetime import datetime
 
 class QueryPlansAcquiredDetailView(APIView):
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (IsAdminOrClient,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
 
     def get_object(self, pk):
 
@@ -59,7 +59,7 @@ class QueryPlansAcquiredDetailView(APIView):
 class ClientPlansView(ListCreateAPIView):
     #Vista para obetener todos los planes de un cliente
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (IsAdminOrClient,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
 
     def get_object(self, pk):
         """Obtener lista de planes."""
@@ -106,9 +106,10 @@ class ActivationPlanView(APIView):
 
     def put(self, request, code):
         """Activar producto, via codigo PIN."""
-        data = request.data        
+        data = request.data
         client = request.user.id
 
+        activation_date = datetime.now().date()
         if self.get_some_chosen_plan(client):
             is_chosen = False
         else:

@@ -1,0 +1,3030 @@
+[
+{
+  "model": "api.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$ZoKwG4C5uFXR$IDtDvqi2/fH+4Jw4NfiZd0JW13TJ2ARQM4FhAfWZn5g=",
+    "last_login": "2018-02-27T22:47:56.106Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2017-10-02T21:17:37.995Z",
+    "nick": "",
+    "email_exact": "admin@email",
+    "telephone": "",
+    "cellphone": "",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "preview.png",
+    "document_type": "",
+    "document_number": "00",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "00",
+    "anonymous": true,
+    "updated_at": "2017-10-02T21:17:38.226Z",
+    "nationality": 1,
+    "role": 1,
+    "address": null,
+    "residence_country": null,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$KMMGL3BbRIL4$Gp0o5Ls1ov2lVRfW985SuB/fdiJcZX6RMs+LgvaYP2s=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "pablo",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-09T19:20:32.328Z",
+    "nick": "uuu",
+    "email_exact": "pablolopez@gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://s3.amazonaws.com/linkup-photos/cbfecd05-2e3f-4f4d-a98a-6f656864897f.png",
+    "document_type": "2",
+    "document_number": "44544545",
+    "img_document_number": null,
+    "ruc": "4444",
+    "code": "V144189921",
+    "anonymous": true,
+    "updated_at": "2018-02-09T19:20:32.363Z",
+    "nationality": 2,
+    "role": 4,
+    "address": null,
+    "residence_country": 2,
+    "foreign_address": "cscsc",
+    "key": "JYYMST73V1",
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$VOeT7PriDQ3N$u+QeTUC3lfrWf1E2RVXniMLrjF+rjhXGFwJMA11vIOU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teresa",
+    "first_name": "tere",
+    "last_name": "garcia",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-09T19:21:10.101Z",
+    "nick": "teresas",
+    "email_exact": "teresaqr@tesla.com",
+    "telephone": "00023123",
+    "cellphone": "0001231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://s3.amazonaws.com/linkup-photos/5b645dfa-e2ea-4319-a706-3374e5f65561.png",
+    "document_type": "1",
+    "document_number": "555",
+    "img_document_number": null,
+    "ruc": "33333",
+    "code": "E555",
+    "anonymous": true,
+    "updated_at": "2018-02-09T19:21:10.179Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 7,
+    "residence_country": 1,
+    "foreign_address": "fefwefwef",
+    "key": "MYR7U146MN",
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$3UM78PpeY4P5$zTDlcZKWDnDb/GWM6NxvMauMm/tEga+9tlciVCszBEk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesus22",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-09T20:24:37.425Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz22@gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "2012298422",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C2012298422",
+    "anonymous": true,
+    "updated_at": "2018-02-09T20:24:37.493Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 4,
+    "residence_country": 3,
+    "foreign_address": null,
+    "key": "54321",
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 11,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$TpZVhIhMIYY7$Q1CokH9WoO9i34NfmbWsTMW95qsj094re9z2drZ+uZo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "clientejosue@mail.com",
+    "first_name": "Josue",
+    "last_name": "Contreras",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-26T15:41:41.361Z",
+    "nick": "josuedaniel",
+    "email_exact": "josuecc@mail.com",
+    "telephone": "987654321",
+    "cellphone": "987654321",
+    "code_telephone": 18,
+    "code_cellphone": 1,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "24612582",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C24612582",
+    "anonymous": true,
+    "updated_at": "2018-02-26T15:41:41.415Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 10,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 12,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$MjNIiADNTANl$Ay4tT8qsRx0C38nmHHNCklnwH450lUoApUNB70nEcGg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesus",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T22:14:53.046Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "20122984",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C20122984",
+    "anonymous": true,
+    "updated_at": "2018-02-28T22:14:53.109Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 11,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 13,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$iDzL0dOOQAzN$GI7sE2U+4OyFFLGqKoqTloOGvKZB3REFuuk7tXWmOCM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "m@m.com",
+    "first_name": "marko",
+    "last_name": "trejo",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T22:17:24.944Z",
+    "nick": "mark",
+    "email_exact": "m@m.com",
+    "telephone": "123123",
+    "cellphone": "23423423",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "0",
+    "document_number": "231232",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C231232",
+    "anonymous": true,
+    "updated_at": "2018-02-28T22:17:24.997Z",
+    "nationality": 15,
+    "role": 2,
+    "address": 12,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 14,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$3IepramVQFav$3U0NauuhLYxUHYAIBATDBJ5UEw/WFhaNnrdHccVIDFg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesus2",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:16:02.849Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@2gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "201229841",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C201229841",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:16:02.945Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 13,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 15,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$ktpJ4sAHjzMi$NzLRE/NmfdRNeqPi7o8S2eTcxRfmeY7rjZLYo2gxeco=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesus221",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:16:24.176Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@22gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "2012298412",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C2012298412",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:16:24.220Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 14,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 16,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$IhyyxqUMBco7$ix1yp5bpveN7ATspFUEukDPrAhM6rqd+GzMpax59S6k=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesus3",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:16:40.329Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@23gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "2133",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C2133",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:16:40.373Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 15,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 17,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$XDmkyheeDffv$pD6emntizyAR2m6a7cXaVm8WK+4sF6rh7eoQddBnq1M=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesus4",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:16:52.581Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@4gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "213443",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C213443",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:16:52.614Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 16,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 18,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$K7ya0P2i38pj$BXs4tnLWXuTe/a/asV1x8MQgL0Td/B+Chc3rrW6VYfA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesus5",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:17:04.288Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@5gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "2134435",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C2134435",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:17:04.336Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 17,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 19,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$sXVawnF0Bycv$U+N9/azluY83ocAMK1KKFV4KSK7i1/Wib3Q5ulXMj5Q=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesus6",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:17:15.612Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@6gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "21344355",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C21344355",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:17:15.669Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 18,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 20,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$VEWdRMaEsFh6$XP+o7JfjfyrBD1FE2WTnPcNdbSsXhCW5c6ZjaBBT9QE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesus43",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:17:25.669Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@26gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "2134435523",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C2134435523",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:17:25.733Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 19,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 21,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$UWmsO3IABE6P$V6MwF2gxWa1S5rUn3fC0wJxzCOTQeJ18EqIrCh4QlPs=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesus35",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:17:52.502Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@232gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "21344355235",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C21344355235",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:17:52.554Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 20,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 22,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$0sNK9EILoGbg$yQzQHmLh0Jxu+G+QZQZEMomH/sKSd1aKEnks1xrjfKM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesusr",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:18:03.166Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@r2gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "21365",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C21365",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:18:03.222Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 21,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 23,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$mqJFi32LYLM9$OLJX2zmmRVYgp8e3w32Qkn0xLY/I8LtEBMT8dSoOmkk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesusr2",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:18:18.905Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@r23gmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "213625",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C213625",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:18:18.961Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 22,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 24,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$FdCSBh217uSg$rQZ208VHAXv2jw63wCwKxtW5ggnGU+d+KZvJs24kDBc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesusg",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:19:01.586Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@ggmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "243625",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C243625",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:19:01.656Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 23,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 25,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$b94vjAE0zfcx$F2ym0JxRnyi97QaN4s0Q+f4tqtoAE/cxSoE6BsrOiQE=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesusf",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:19:11.599Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@fmail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "2423625",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C2423625",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:19:11.647Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 24,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 26,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$8X9ORRiYdTgr$f7rSeFCKuzb3EbtUQVwN3n3HSl2E3RRO8PqTKe56jGk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesf",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:19:21.995Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@4il.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "24236425",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C24236425",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:19:22.051Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 25,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 27,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$1Xhq9xQXdDfG$yyrP5WfEi//hHR6HmroLu/J53+z7dpiWzbMoIhNJtsY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjesf4",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:19:32.479Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@8il.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "242387425",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C242387425",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:19:32.559Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 26,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 28,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DvSfypadcXBz$4MLX4db3S+p/yz9x9QZmovx/Gs60TKI0WE2WrwpmzyQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinjet4",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:19:44.387Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@8gil.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "24238742534",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C24238742534",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:19:44.431Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 27,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 29,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$FlFaB5ptzCux$t6vWzWRPs7wAb0ZX9q8oQ355SFCqRNUo1AA/2fPD3+Q=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwing4",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:20:14.613Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@re8gil.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "2433342534",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C2433342534",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:20:14.661Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 28,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 30,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$JWqlF4LRTXE1$1DZflGjERJ40OMJzCZkwmUKaRhnoKpxXDb/wXYWh2ps=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "darwinge4",
+    "first_name": "darwin",
+    "last_name": "vasquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-28T23:20:27.969Z",
+    "nick": "dar",
+    "email_exact": "darwinio_vasqz@re8egil.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "2411534",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C2411534",
+    "anonymous": true,
+    "updated_at": "2018-02-28T23:20:28.013Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 29,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 4,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "m",
+    "star_rating": null,
+    "cv": null,
+    "payment_per_answer": "3.20",
+    "category": 22,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.message",
+  "pk": 2,
+  "fields": {
+    "message": "no me quieres responder",
+    "msg_type": "q",
+    "created_at": "2018-02-20T22:14:43.358Z",
+    "specialist": 4,
+    "query": 2,
+    "viewed": false,
+    "nick": "",
+    "code": "1",
+    "message_reference": null
+  }
+},
+{
+  "model": "api.message",
+  "pk": 3,
+  "fields": {
+    "message": "mensaje de prueba timezone UTC",
+    "msg_type": "q",
+    "created_at": "2018-02-21T19:13:19.673Z",
+    "specialist": 4,
+    "query": 3,
+    "viewed": false,
+    "nick": "",
+    "code": "1",
+    "message_reference": null
+  }
+},
+{
+  "model": "api.message",
+  "pk": 4,
+  "fields": {
+    "message": "mensaje de prueba con el timezone utc -5",
+    "msg_type": "q",
+    "created_at": "2018-02-21T19:16:12.670Z",
+    "specialist": 4,
+    "query": 4,
+    "viewed": false,
+    "nick": "",
+    "code": "1",
+    "message_reference": 4
+  }
+},
+{
+  "model": "api.message",
+  "pk": 7,
+  "fields": {
+    "message": "mensaje de prueba 2",
+    "msg_type": "q",
+    "created_at": "2018-02-22T14:37:15.234Z",
+    "specialist": 4,
+    "query": 5,
+    "viewed": false,
+    "nick": "",
+    "code": "1",
+    "message_reference": 7
+  }
+},
+{
+  "model": "api.category",
+  "pk": 1,
+  "fields": {
+    "name": "Taxes",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-02.png",
+    "description": "actividad economica que comprende la produccion industrializacion y comercializaci\u00f3n de productos agropecuarios forestales y otros recursos naturales biol\u00f3gicos.",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 2,
+  "fields": {
+    "name": "Accounting",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-03.png",
+    "description": "es la parte de la industria que se encarga de todos los procesos relacionados con la cadena alimentaria. ",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 3,
+  "fields": {
+    "name": "Tax Law",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Sin-t\u00edtulo-1-17.png",
+    "description": "uso de sistemas o elementos computarizadosy electromec\u00e1nicos para controlar maquinarias o procesos industriales",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 4,
+  "fields": {
+    "name": "Finance",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-04.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 5,
+  "fields": {
+    "name": "Insurance",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-05.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 6,
+  "fields": {
+    "name": "Corporate Law",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-10.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 7,
+  "fields": {
+    "name": "Foreign trade",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-06.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 8,
+  "fields": {
+    "name": "Information Technology",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-08.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 9,
+  "fields": {
+    "name": "Intellectual property",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-17-2.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 10,
+  "fields": {
+    "name": "Advertising",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-07.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur adipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 11,
+  "fields": {
+    "name": "Organizational psychology",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-09.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 12,
+  "fields": {
+    "name": "Contracting with the State",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-24.png",
+    "description": "Lorem ipsum dolor sit amet, consete sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 13,
+  "fields": {
+    "name": "Marketing",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-29-1.png",
+    "description": "Lorem ipsum dolor sit amet, consetetut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 14,
+  "fields": {
+    "name": "Mechanics",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-24-1.png",
+    "description": "Lorem ipsum dolor sit amet, conseteturidunt ptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 15,
+  "fields": {
+    "name": "Notary and Registry Law",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-16.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunttuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 16,
+  "fields": {
+    "name": "Project management",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-30-1.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 17,
+  "fields": {
+    "name": "Electricity",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-20-1.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur nt tuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 18,
+  "fields": {
+    "name": "Civil Procedural Law",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-12.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 19,
+  "fields": {
+    "name": "Agroindustry",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-21-3.png",
+    "description": "Lorem ipsum dolor sit amet, conseteturnt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 20,
+  "fields": {
+    "name": "electronics",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-22-1.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidutuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 21,
+  "fields": {
+    "name": "Criminal law",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-14.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 22,
+  "fields": {
+    "name": "Food",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-27.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 23,
+  "fields": {
+    "name": "Automation",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-23-2.png",
+    "description": "Lorem ipsum dolor sit amet, conseteturnt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 24,
+  "fields": {
+    "name": "Labor Law",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Sin-t\u00edtulo-1-11.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 25,
+  "fields": {
+    "name": "Gastronomy",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-28-2.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor inviduntut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 26,
+  "fields": {
+    "name": "Plastics",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-t\u00edtulo-1-26.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunttuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.category",
+  "pk": 27,
+  "fields": {
+    "name": "Mining Law",
+    "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Sin-t\u00edtulo-1-15.png",
+    "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptuas",
+    "fixed_commission": null,
+    "variable_commission": null,
+    "contract": null
+  }
+},
+{
+  "model": "api.queryplans",
+  "pk": 1,
+  "fields": {
+    "name": "plan1",
+    "query_quantity": 1,
+    "validity_months": 2,
+    "maximum_response_time": 2,
+    "price": "45.0000",
+    "created_at": "2018-02-15T23:03:29.725Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 1,
+  "fields": {
+    "price": "213.00",
+    "description": "descripcion detalle venta",
+    "discount": "2313.00",
+    "pin_code": "INTEL12345",
+    "is_billable": true,
+    "contract": 1,
+    "product_type": 1,
+    "sale": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 2,
+  "fields": {
+    "price": "1212.00",
+    "description": "venta descripcion2",
+    "discount": "21212.00",
+    "pin_code": "INTEL12345",
+    "is_billable": true,
+    "contract": 1,
+    "product_type": 1,
+    "sale": 2
+  }
+},
+{
+  "model": "api.contract",
+  "pk": 1,
+  "fields": {
+    "url_file": "http://www.contrato.com.pe",
+    "created_at": "2018-02-15",
+    "active": true,
+    "validity_months": 21,
+    "expiration_date": "2018-02-28",
+    "type_contract": 1
+  }
+},
+{
+  "model": "api.seller",
+  "pk": 3,
+  "fields": {
+    "cv": null,
+    "zone": null,
+    "ciiu": 260,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.clasification",
+  "pk": 1,
+  "fields": {
+    "name": "clasificacion1",
+    "created_at": "2018-02-15T22:50:36Z"
+  }
+},
+{
+  "model": "api.clasification",
+  "pk": 2,
+  "fields": {
+    "name": "clasificacion2",
+    "created_at": "2018-02-15T22:58:51.751Z"
+  }
+},
+{
+  "model": "api.address",
+  "pk": 1,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 2,
+  "fields": {
+    "street": "yuyuyuu",
+    "department": 15,
+    "province": 134,
+    "district": 1381
+  }
+},
+{
+  "model": "api.address",
+  "pk": 3,
+  "fields": {
+    "street": "jupiter 209",
+    "department": 2,
+    "province": 24,
+    "district": 221
+  }
+},
+{
+  "model": "api.address",
+  "pk": 4,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 5,
+  "fields": {
+    "street": "dwdas",
+    "department": 18,
+    "province": 146,
+    "district": 1482
+  }
+},
+{
+  "model": "api.address",
+  "pk": 6,
+  "fields": {
+    "street": "wrrwrg",
+    "department": 10,
+    "province": 93,
+    "district": 937
+  }
+},
+{
+  "model": "api.address",
+  "pk": 7,
+  "fields": {
+    "street": "saascad",
+    "department": 17,
+    "province": 145,
+    "district": 1480
+  }
+},
+{
+  "model": "api.address",
+  "pk": 8,
+  "fields": {
+    "street": "fwef",
+    "department": 15,
+    "province": 135,
+    "district": 1387
+  }
+},
+{
+  "model": "api.address",
+  "pk": 9,
+  "fields": {
+    "street": "Lima",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 10,
+  "fields": {
+    "street": "Lima",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 11,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 12,
+  "fields": {
+    "street": "regergerg",
+    "department": 1,
+    "province": 1,
+    "district": 2
+  }
+},
+{
+  "model": "api.address",
+  "pk": 13,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 14,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 15,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 16,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 17,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 18,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 19,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 20,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 21,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 22,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 23,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 24,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 25,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 26,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 27,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 28,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.address",
+  "pk": 29,
+  "fields": {
+    "street": "esteban camere",
+    "department": 1,
+    "province": 1,
+    "district": 1
+  }
+},
+{
+  "model": "api.contracttype",
+  "pk": 1,
+  "fields": {
+    "name": "tipo contrato1",
+    "descripcion": "descripcion tipo contrato"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "token": "EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "",
+    "created": "2016-12-31T23:59:59Z",
+    "updated": "2017-10-02T22:27:09.173Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "token": "kEphPGlavEforKavpDzuZSgK0zpoXS",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "write read groups",
+    "created": "2018-02-09T17:58:03.854Z",
+    "updated": "2018-02-09T17:58:03.854Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 3,
+  "fields": {
+    "user": 5,
+    "token": "9M84R1jUHHx2AZkAGb3C6OF72QM7Xh",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "read write groups",
+    "created": "2018-02-09T21:54:51.308Z",
+    "updated": "2018-02-09T21:54:51.308Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 4,
+  "fields": {
+    "user": 4,
+    "token": "rRNQmSvkyHvi80qkYplRvLmckV3DYy",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "groups read write",
+    "created": "2018-02-26T21:10:22Z",
+    "updated": "2018-02-26T21:10:22Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 62,
+  "fields": {
+    "user": 11,
+    "token": "OPwVhxW656ASCPCjjGwgrSTXcjzzUJ",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "groups read write",
+    "created": "2018-02-26T21:10:22.127Z",
+    "updated": "2018-02-26T21:10:22.127Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 63,
+  "fields": {
+    "user": 1,
+    "token": "Bfb1DeDYaVOGs8hddNMWM7lvVvB2wr",
+    "application": 4,
+    "expires": "2018-02-28T02:44:30.857Z",
+    "scope": "write read groups",
+    "created": "2018-02-27T16:44:30.857Z",
+    "updated": "2018-02-27T16:44:30.857Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 64,
+  "fields": {
+    "user": 1,
+    "token": "X303dBCllvFk1pUAgdqSt0v1HFHGDQ",
+    "application": 4,
+    "expires": "2018-02-28T06:15:54.122Z",
+    "scope": "groups write read",
+    "created": "2018-02-27T20:15:54.125Z",
+    "updated": "2018-02-27T20:15:54.125Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 66,
+  "fields": {
+    "user": 11,
+    "token": "WIhPrr4O1JvisDOkrLyFwHsz5E6GfC",
+    "application": 1,
+    "expires": "2018-02-28T23:50:58.515Z",
+    "scope": "write groups read",
+    "created": "2018-02-28T13:50:58.515Z",
+    "updated": "2018-02-28T13:50:58.515Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 69,
+  "fields": {
+    "user": 1,
+    "token": "NUSnwHvR947ES5xznHWEKmq5Mz4Pex",
+    "application": 4,
+    "expires": "2018-03-01T02:33:16.601Z",
+    "scope": "write read groups",
+    "created": "2018-02-28T16:33:16.602Z",
+    "updated": "2018-02-28T16:33:16.602Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 71,
+  "fields": {
+    "user": 11,
+    "token": "0kmB2sxZydrSRWvRyik9tqwAkV8Pj2",
+    "application": 1,
+    "expires": "2018-03-01T02:34:02.452Z",
+    "scope": "write groups read",
+    "created": "2018-02-28T16:34:02.452Z",
+    "updated": "2018-02-28T16:34:02.452Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 72,
+  "fields": {
+    "user": 11,
+    "token": "eBmYy407nIYvIyfVzNLfmeZeFTTpSu",
+    "application": 1,
+    "expires": "2018-03-01T03:54:50.233Z",
+    "scope": "write read groups",
+    "created": "2018-02-28T17:54:50.233Z",
+    "updated": "2018-02-28T17:54:50.233Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 76,
+  "fields": {
+    "user": 1,
+    "token": "0cxt3gyN0h7kREdR3Dfj3wjbKKSM1v",
+    "application": 4,
+    "expires": "2018-03-02T00:26:24.478Z",
+    "scope": "groups write read",
+    "created": "2018-03-01T14:26:24.478Z",
+    "updated": "2018-03-01T14:26:24.478Z"
+  }
+},
+{
+  "model": "oauth2_provider.application",
+  "pk": 1,
+  "fields": {
+    "client_id": "FUN5EkBDdiQo8SixJYslF41ZkrjAhQtWKkV7BEE2",
+    "user": null,
+    "redirect_uris": "",
+    "client_type": "public",
+    "authorization_grant_type": "password",
+    "client_secret": "P7pj3QcE6GyhlS0QUzJOJ8SRLlTGHYSMESGr7QzlyKnuMsc4osaaStB6wSiGGxAelKjXv6xJ7p9Go8R5el2KaVlcM4P50IeplkY2CWHxaOc9NI1fLKS9DoWxD9UbG4TN",
+    "name": "",
+    "skip_authorization": false,
+    "created": "2017-10-02T21:19:16.205Z",
+    "updated": "2017-10-02T21:19:16.205Z"
+  }
+},
+{
+  "model": "oauth2_provider.application",
+  "pk": 2,
+  "fields": {
+    "client_id": "Aq7s99mrGD1EttlN6PHYA2ImrNfGxPH4WWr9cfm6",
+    "user": 1,
+    "redirect_uris": "",
+    "client_type": "public",
+    "authorization_grant_type": "password",
+    "client_secret": "ZkBRpQevvQiThdsOAcvOk2BApRpgnuvNoDJwztTashQBLB3HEGBP5vWcmyXlUeG8TlZfGWIHDsTwms5vUc8zzpEi4VgrJiY7D20rRFlaHPWAn9Rkw3ZwZK5Awwavyi9T",
+    "name": "",
+    "skip_authorization": false,
+    "created": "2018-02-14T14:09:00.488Z",
+    "updated": "2018-02-23T21:33:55.947Z"
+  }
+},
+{
+  "model": "oauth2_provider.application",
+  "pk": 3,
+  "fields": {
+    "client_id": "TeP5qn9mPGNaC184REZCURfhuDnAbdyOTFDzRDAs",
+    "user": null,
+    "redirect_uris": "",
+    "client_type": "public",
+    "authorization_grant_type": "password",
+    "client_secret": "aFqGA7Sc0lAQ5t9TlXHPjDhgvZ1aqgyNXRuJPDXi7cpaSnulHH6VFoETA8uZcXF9B6dEfr5dIYPheXxBvTu2dUbObx0G6QDCmgfs02dCAZbH7BGj2c6C5vbaULdoXpc9",
+    "name": "",
+    "skip_authorization": false,
+    "created": "2018-02-23T20:02:28.449Z",
+    "updated": "2018-02-23T20:02:28.449Z"
+  }
+},
+{
+  "model": "oauth2_provider.application",
+  "pk": 4,
+  "fields": {
+    "client_id": "tOHXYfm0nxVzPQaPxLBctqYI3wu3sjw2w3pnvnZ9",
+    "user": 1,
+    "redirect_uris": "",
+    "client_type": "public",
+    "authorization_grant_type": "password",
+    "client_secret": "Rrta3EvYRq24XcKmdd2G7mM3NN4RUwDROZ5hBT3EPLuTGR6L1vXLZdO3hP4Q8DjMdDBuuG7hsW4p23kkvpR2HSqHLzLWnQmB3J6Rq26PjfpsTH8flDKX6eS1yEnrd3cM",
+    "name": "",
+    "skip_authorization": false,
+    "created": "2018-02-23T22:31:25.590Z",
+    "updated": "2018-02-23T22:31:25.591Z"
+  }
+},
+{
+  "model": "api.client",
+  "pk": 5,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": "efwfwe",
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": "wwww",
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 11,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": "23",
+    "civil_state": "s",
+    "birthdate": "1987-10-18",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "U CHILE",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Vendedor",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 12,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": "t",
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 13,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "c",
+    "birthdate": "2018-02-22",
+    "ciiu": null,
+    "activity_description": "gegr",
+    "institute": "burros",
+    "ocupation": "0",
+    "about": "gergerg",
+    "business_name": "uuuu",
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "estudiante",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 14,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 15,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 16,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 17,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 18,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 19,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 20,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 21,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 22,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 23,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 24,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 25,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 26,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 27,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 28,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 29,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 30,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "2017-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.query",
+  "pk": 1,
+  "fields": {
+    "title": "consulta 6",
+    "status": "2",
+    "created_at": "2018-02-20T22:12:36.131Z",
+    "last_modified": "2018-02-22T14:38:30.934Z",
+    "calification": null,
+    "category": 8,
+    "client": 5,
+    "specialist": 4,
+    "acquired_plan": 2,
+    "changed_on": "2018-02-22T14:38:30.934Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 2,
+  "fields": {
+    "title": "consulta 5",
+    "status": "1",
+    "created_at": "2018-02-20T22:14:43.332Z",
+    "last_modified": "2018-02-22T14:38:13.654Z",
+    "calification": null,
+    "category": 8,
+    "client": 5,
+    "specialist": 4,
+    "acquired_plan": 2,
+    "changed_on": "2018-02-22T14:38:13.654Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 3,
+  "fields": {
+    "title": "consulta 4",
+    "status": "1",
+    "created_at": "2018-02-20T22:14:43Z",
+    "last_modified": "2018-02-22T14:37:58.492Z",
+    "calification": null,
+    "category": 8,
+    "client": 5,
+    "specialist": 4,
+    "acquired_plan": 3,
+    "changed_on": "2018-02-22T14:37:58.492Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 4,
+  "fields": {
+    "title": "consulta 3",
+    "status": "2",
+    "created_at": "2018-02-21T19:16:12.640Z",
+    "last_modified": "2018-02-22T14:37:49.568Z",
+    "calification": null,
+    "category": 8,
+    "client": 5,
+    "specialist": 4,
+    "acquired_plan": 2,
+    "changed_on": "2018-02-22T14:37:49.568Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 5,
+  "fields": {
+    "title": "consulta 2",
+    "status": "2",
+    "created_at": "2018-02-21T19:21:12.977Z",
+    "last_modified": "2018-02-22T14:37:15.182Z",
+    "calification": null,
+    "category": 8,
+    "client": 11,
+    "specialist": 4,
+    "acquired_plan": 2,
+    "changed_on": "2018-02-22T14:37:15.182Z"
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 2,
+  "fields": {
+    "expiration_date": "2018-04-28",
+    "validity_months": 2,
+    "available_queries": 3,
+    "query_quantity": 2,
+    "activation_date": "2018-02-27",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 23,
+    "maximum_response_time": 23,
+    "acquired_at": "2018-02-15T23:09:23.626Z",
+    "plan_name": "express",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 3,
+  "fields": {
+    "expiration_date": "2018-03-29",
+    "validity_months": 1,
+    "available_queries": 1,
+    "query_quantity": 2,
+    "activation_date": "2018-02-27",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 23,
+    "maximum_response_time": 23,
+    "acquired_at": "2018-02-16T17:49:14.106Z",
+    "plan_name": "minipack",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 4,
+  "fields": {
+    "expiration_date": "2018-02-28",
+    "validity_months": 21,
+    "available_queries": 6,
+    "query_quantity": 4,
+    "activation_date": "2018-02-19",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 123,
+    "maximum_response_time": 123,
+    "acquired_at": "2018-02-19T20:29:12.399Z",
+    "plan_name": "megaplan",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 5,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 2,
+    "available_queries": 1,
+    "query_quantity": 3,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 23,
+    "maximum_response_time": 32,
+    "acquired_at": "2018-02-26T15:55:55.940Z",
+    "plan_name": "super plan",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 6,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 4,
+    "available_queries": 5,
+    "query_quantity": 5,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 34,
+    "maximum_response_time": 435,
+    "acquired_at": "2018-02-26T21:58:39.709Z",
+    "plan_name": "test1",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 7,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 3,
+    "available_queries": 3,
+    "query_quantity": 2,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 2,
+    "maximum_response_time": 2,
+    "acquired_at": "2018-02-26T21:59:03.628Z",
+    "plan_name": "test2",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 8,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 3,
+    "available_queries": 2,
+    "query_quantity": 1,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 2,
+    "maximum_response_time": 1,
+    "acquired_at": "2018-02-26T21:59:24.673Z",
+    "plan_name": "test3",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 9,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 1,
+    "available_queries": 1,
+    "query_quantity": 1,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 1,
+    "maximum_response_time": 1,
+    "acquired_at": "2018-02-26T21:59:41.322Z",
+    "plan_name": "test5",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 10,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 2,
+    "maximum_response_time": 2,
+    "acquired_at": "2018-02-26T22:00:15.227Z",
+    "plan_name": "test4",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 11,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 2,
+    "maximum_response_time": 3,
+    "acquired_at": "2018-02-26T22:00:57.006Z",
+    "plan_name": "test6",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 12,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 3,
+    "available_queries": 4,
+    "query_quantity": 5,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 4,
+    "maximum_response_time": 5,
+    "acquired_at": "2018-02-26T22:01:17.499Z",
+    "plan_name": "test7",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 13,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 1,
+    "available_queries": 2,
+    "query_quantity": 3,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 4,
+    "maximum_response_time": 2,
+    "acquired_at": "2018-02-26T22:01:35.056Z",
+    "plan_name": "test8",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 14,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 3,
+    "available_queries": 2,
+    "query_quantity": 4,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 3,
+    "maximum_response_time": 2,
+    "acquired_at": "2018-02-26T22:01:53.756Z",
+    "plan_name": "test9",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 15,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 2,
+    "available_queries": 1,
+    "query_quantity": 3,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 3,
+    "maximum_response_time": 4,
+    "acquired_at": "2018-02-26T22:02:11.042Z",
+    "plan_name": "test10",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 16,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 3,
+    "available_queries": 2,
+    "query_quantity": 4,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 7,
+    "maximum_response_time": 8,
+    "acquired_at": "2018-02-26T22:08:04.971Z",
+    "plan_name": "test 11",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 17,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 3,
+    "available_queries": 3,
+    "query_quantity": 4,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 4,
+    "maximum_response_time": 3,
+    "acquired_at": "2018-02-26T22:10:48.155Z",
+    "plan_name": "test 12",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 18,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 3,
+    "available_queries": 3,
+    "query_quantity": 4,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 3,
+    "maximum_response_time": 3,
+    "acquired_at": "2018-02-26T22:14:17.141Z",
+    "plan_name": "test 13",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 19,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 6,
+    "available_queries": 4,
+    "query_quantity": 5,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 10,
+    "maximum_response_time": 11,
+    "acquired_at": "2018-02-26T22:14:48.116Z",
+    "plan_name": "test 14",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 20,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 5,
+    "available_queries": 12,
+    "query_quantity": 4,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 4,
+    "maximum_response_time": 4,
+    "acquired_at": "2018-02-26T22:15:18.376Z",
+    "plan_name": "test 15",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 21,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 7,
+    "available_queries": 7,
+    "query_quantity": 5,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 5,
+    "maximum_response_time": 8,
+    "acquired_at": "2018-02-26T22:16:33.238Z",
+    "plan_name": "test 16",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 22,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 10,
+    "available_queries": 6,
+    "query_quantity": 7,
+    "activation_date": "2018-02-26",
+    "is_active": true,
+    "is_chosen": false,
+    "available_requeries": 8,
+    "maximum_response_time": 6,
+    "acquired_at": "2018-02-26T22:17:05.963Z",
+    "plan_name": "test 17",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 2
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 23,
+  "fields": {
+    "expiration_date": "2018-07-14",
+    "validity_months": 15,
+    "available_queries": 6,
+    "query_quantity": 10,
+    "activation_date": "2018-02-27",
+    "is_active": true,
+    "is_chosen": true,
+    "available_requeries": 7,
+    "maximum_response_time": 10,
+    "acquired_at": "2018-02-27T21:48:12.679Z",
+    "plan_name": "test 20",
+    "client": 11,
+    "query_plans": 1,
+    "sale_detail": 2
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 1,
+  "fields": {
+    "created_at": "2018-02-15T23:06:21.984Z",
+    "place": "surco",
+    "total_amount": "321.00",
+    "reference_number": "12312312",
+    "description": "descripcion venta",
+    "is_fee": false,
+    "client": 11,
+    "seller": 3
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 2,
+  "fields": {
+    "created_at": "2018-02-27T15:59:20.410Z",
+    "place": "venta2",
+    "total_amount": "12.00",
+    "reference_number": "23123",
+    "description": "test venta",
+    "is_fee": false,
+    "client": 11,
+    "seller": 3
+  }
+}
+]

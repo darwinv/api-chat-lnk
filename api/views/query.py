@@ -8,7 +8,7 @@ from api.permissions import IsAdminOrClient
 from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
-from api.serializers.query import QueryDetailLastMsgSerializer, QueryChatClientSerializer
+from api.serializers.query import QueryDetailLastMsgSerializer, ChatMessageSerializer
 from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
@@ -140,14 +140,12 @@ class QueryChatClientView(ListCreateAPIView):
     """Vista Consulta."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [IsAdminOrClient]
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    # Devolveremos las categorias para luego filtrar por usuario
-    # queryset = Category.objects.all()
-    serializer_class = QueryChatClientSerializer
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
+    serializer_class = ChatMessageSerializer
 
 
     def list(self, request):
+
         """
             Listado de queries y sus respectivos mensajes para un cliente
         """
@@ -159,9 +157,9 @@ class QueryChatClientView(ListCreateAPIView):
 
         if not client:
             raise Http404
-
-        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type',
-'viewed','query_id')\
+        
+        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
+                            'query_id', 'message_reference', 'content_type', 'file_url')\
                            .annotate(title=F('query__title',),status=F('query__status',),\
                            calification=F('query__calification',),\
                            category_id=F('query__category_id',))\
@@ -173,7 +171,7 @@ class QueryChatClientView(ListCreateAPIView):
             raise Http404
 
 
-        serializer = QueryChatClientSerializer(queryset, many=True)
+        serializer = ChatMessageSerializer(queryset, many=True)
 
         # pagination
         page = self.paginate_queryset(queryset)
