@@ -3,6 +3,9 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 from rest_framework import status
+import json
+from api.models import SpecialistMessageList
+from api.models import QueryPlansAcquired
 # Create your tests here.
 
 client = APIClient()
@@ -47,28 +50,151 @@ class GetChatClientListQueries(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
 
     def test_get_list_by_client_chat(self):
-        """primer mensaje retornado es Viewed False y estatus 200"""
+        """Primer mensaje retornado es Viewed False y estatus 200."""
         parameters = {'category': 8}
         response = self.client.get(reverse('query-chat-client'), parameters)
-        
+
         self.assertEqual(response.data['results'][0]['message']['viewed'], False)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_get_list_by_client_chat_from_admin(self):
-        """Admin prueba si primer mensaje user 15 no ha sido visto"""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
-        parameters = {'category': 8, 'client_id': 15}
-        response = self.client.get(reverse('query-chat-client'), parameters)
-        
-        self.assertEqual(response.data['results'][0]['message']['viewed'], False)
+
+# redefinir
+class CreateQuery(APITestCase):
+    """Prueba para crear consulta."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_query']
+
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        self.valid_payload = {
+            "title": "Pago de Impuestos",
+            "category": 24,
+            "message": {
+                "message": "Lorem ipsum dolor sit amet,anctus e",
+                "msg_type": "q",
+                "content_type": '0',
+                "file_url": ""
+            }
+        }
+
+    def test_no_title(self):
+        """Solicitud invalida por no enviar el titulo."""
+        data = self.valid_payload
+        del data["title"]
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_category(self):
+        """Solicitud invalida por no enviar la especialidad."""
+        data = self.valid_payload
+        del data["category"]
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_message(self):
+        """Solicitud invalida por no enviar un mensaje a la consulta."""
+        data = self.valid_payload
+        del data["message"]
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_activeplan(self):
+        """No posee plan activo."""
+        QueryPlansAcquired.objects.filter(client_id=5).update(is_active=False)
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_availablequeries(self):
+        """Solicitud Invalida, no posee consultas."""
+        QueryPlansAcquired.objects.filter(client_id=5).update(available_queries=0)
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_not_client_credentials(self):
+        """Token no es de cliente (no autorizado)."""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_contentype_file(self):
+        """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
+        self.valid_payload["message"]["content_type"] = '1'
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # al enviar un mensaje de tipo archivo, la url no puede estar vacia
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_contentype_message(self):
+        """Verificar que el mensaje a guardar corresponde al tipo de contenido de mensaje."""
+        self.valid_payload["message"]["message"] = ""
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # al enviar un mensaje no puede estar vacio, mientras la el content_type
+        # sea 1
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_query(self):
+        """Creacion Exitosa de la consulta."""
+        q = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)
+        before_post_queries = q.available_queries
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        qq = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)
+        after_post_queries = qq.available_queries
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(before_post_queries - 1, after_post_queries)
+
+class GetSpecialistMessages(APITestCase):
+    """Prueba para devolver el plan activo y elegido de un determinado cliente"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_getspecialistmessages']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_list_messages_token_specialist(self):
+        """Obtener resultado 200."""
+        #se provee un token de especialista el cuel tiene   mensajes pendientes de responders
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        response = self.client.get(reverse('specialists-list-messages'), format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_get_bad_client_chat_from_admin(self):
-        """Admin trae mensaje de user 14 (404)"""
-
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
-        parameters = {'category': 8, 'client_id': 14}
-        response = self.client.get(reverse('query-chat-client'), parameters)
-        
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-

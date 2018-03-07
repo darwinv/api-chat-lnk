@@ -2,8 +2,8 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
-from rest_framework import status, permissions, serializers
-from api.models import Query, Specialist, Message, Category
+from rest_framework import status, permissions
+from api.models import Query, Message, Category
 from api.permissions import IsAdminOrClient
 from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
@@ -12,14 +12,16 @@ from api.serializers.query import QueryDetailLastMsgSerializer, QueryChatClientS
 from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
+from api import pyrebase
+from channels import Group
+import json
 
-# Para Crear y Listado de consultas
+
 class QueryListClientView(ListCreateAPIView):
-    """Vista Consulta."""
+    """Vista Consulta por parte del cliente."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [IsAdminOrClient]
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrClient]
     # Devolveremos las categorias para luego filtrar por usuario
     queryset = Category.objects.all()
     serializer_class = QueryListClientSerializer
@@ -44,87 +46,31 @@ class QueryListClientView(ListCreateAPIView):
         serializer = QueryListClientSerializer(queryset, context={'user': request.user}, many=True)
 
         return Response(serializer.data)
-    # def get_queryset(self):
-    #     """Traer Listado de Especialidades con consultas pendientes."""
-    #     user = self.request.user
-    #     # import pdb; pdb.set_trace()
-    #     if user.role == Role.objects.get(name='client'):
-    #         # import pdb; pdb.set_trace()
-    #         Category.objects.all()
-    #         return Category.objects.all()
-    #     else:
-    #         pass
-        # c.query.filter(client_id=user.id)
-        # Query.objects.filter(client_id=user.id)
-        # val = Category.objects.filter()
 
-
-
-# listado de las consultas
-    # def list(self, request):
-            # import pdb; pdb.set_trace()
-        # status = request.query_params.get('status', None)
-        # try:
-        #     queryset = Query.objects.filter(client_id=request.query_params["client"])
-        #     # si se envia la categoria se filtra por la misma, en caso contrario
-        #     # devuelve todas
-        #     if status is not None:
-        #         if status == 'absolved':
-        #             queryset = Query.objects.filter(Q(status=6) | Q(status=7),
-        #                                         client_id=request.query_params["client"])
-        #         elif status == 'pending':
-        #             queryset = Query.objects.filter(status__lte=5,
-        #                                             client_id=request.query_params["client"])
-        #         else:
-        #             raise serializers.ValidationError(detail="Invalid status")
-        #
-        #     if 'category' in request.query_params:
-        #         queryset = Query.objects.filter(client_id=request.query_params["client"],
-        #                                         category_id=request.query_params["category"])
-        #         if status is not None:
-        #             if status == 'absolved':
-        #                 queryset = Query.objects.filter(Q(status=6) | Q(status=7),
-        #                                             client_id=request.query_params["client"],
-        #                                             category_id=request.query_params["category"])
-        #             elif status == 'pending':
-        #                 queryset = Query.objects.filter(status__lte=5,
-        #                                                 client_id=request.query_params["client"],
-        #                                                 category_id=request.query_params["category"])
-        #             else:
-        #                 queryset = Query.objects.filter(client_id=request.query_params["client"],
-        #                                                 category_id=request.query_params["category"])
-        #     if 'order' in request.query_params:
-        #         # se concatena el order en caso de enviarse
-        #         if request.query_params["order"] == 'desc':
-        #             queryset = queryset.order_by('-created_at')
-        #
-        #     serializer = QueryListSerializer(queryset, many=True)
-        #     # pagination
-        #     page = self.paginate_queryset(queryset)
-        #     if page is not None:
-        #         serializer = self.get_serializer(page, many=True)
-        #         return self.get_paginated_response(serializer.data)
-        #     return Response(serializer.data)
-        # except Exception as e:
-        #     string_error = u"Exception " + str(e)
-        #     raise serializers.ValidationError(detail=string_error)
 
 #   Crear Consulta
     def post(self, request):
+        """Metodo para Crear consulta."""
+        # Devolvemos el id del usuario
+        user_id = Operations.get_id(self, request)
+        # label = 1
+        if not user_id:
+            raise Http404
         data = request.data
-        # devolver especialista principal segun categoria
-        try:
-            data["message"]["specialist"] = Specialist.objects.get(type_specialist="m",
-                                                            category_id=data["category"])
-
-            serializer = QuerySerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status.HTTP_201_CREATED)
-            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            string_error = u"Exception: " + str(e) + " required"
-            raise serializers.ValidationError(detail=string_error)
+        # tomamos del token el id de usuarios
+        data["client"] = user_id
+        serializer = QuerySerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            # room = serializer.data[]
+            # pyrebase.chat_firebase_db(data, serializer.data["id"])
+            # -- Aca una vez creada la data, cargar el mensaje directo a
+            # -- la sala de chat en channels (usando Groups)
+            # envio = dict(handle=serializer.data["code_client"], message=serializer.data['messages'][0]["message"])
+            # Group('chat-'+str(label)).send({'text': json.dumps(envio)})
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        # import pdb; pdb.set_trace()
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 # Detall de consulta
 class QueryDetailView(APIView):
@@ -194,15 +140,12 @@ class QueryChatClientView(ListCreateAPIView):
     """Vista Consulta."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [IsAdminOrClient]
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    # Devolveremos las categorias para luego filtrar por usuario
-    # queryset = Category.objects.all()
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     serializer_class = QueryChatClientSerializer
 
 
     def list(self, request):
-        
+
         """
             Listado de queries y sus respectivos mensajes para un cliente
         """
@@ -211,22 +154,22 @@ class QueryChatClientView(ListCreateAPIView):
 
         category = request.query_params['category']
         client = Operations.get_id(self, request)
-        
+
         if not client:
             raise Http404
-        queryset = Message.objects.values('id','nick', 'code', 'message', 'created_at', 'msg_type', 
-'viewed','query_id')\
+        
+        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed', 'query_id', 'message_reference')\
                            .annotate(title=F('query__title',),status=F('query__status',),\
                            calification=F('query__calification',),\
                            category_id=F('query__category_id',))\
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
-        
+
         # Retorno 404 para ahorrar tiempo de ejecucion
         if not queryset:
             raise Http404
 
-        
+
         serializer = QueryChatClientSerializer(queryset, many=True)
 
         # pagination

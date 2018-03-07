@@ -1,22 +1,10 @@
 """Consultas."""
 from rest_framework import serializers
-from api.models import Specialist, Query, Message, Category
-from api.models import MessageFile
+from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
 from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
 from api.utils.tools import get_time_message
-
-
-class MessageFileSerializer(serializers.ModelSerializer):
-    """Serializer para los archivos en los mensajes."""
-
-    type_file = serializers.ChoiceField(choices=c.messagefile_type_file)
-
-    class Meta:
-        """Agrego el modelo y sus campos."""
-
-        model = MessageFile
-        fields = ('url', 'type_file')
+from api.utils import querysets
 
 
 # Serializer de Mensajes
@@ -25,27 +13,25 @@ class MessageSerializer(serializers.ModelSerializer):
 
     msg_type = serializers.ChoiceField(choices=c.message_msg_type)
     msg_type_name = serializers.SerializerMethodField()
+    content_type = serializers.ChoiceField(choices=c.message_content_type)
+    content_type_name = serializers.SerializerMethodField()
     time = serializers.SerializerMethodField()
-    media_files = serializers.SerializerMethodField()
     code_specialist = serializers.SerializerMethodField()
+    room = serializers.CharField(max_length=100, required=False)
 
     class Meta:
         """Configuro el modelo y sus campos."""
 
         model = Message
-        fields = ('id', 'message', 'msg_type', 'msg_type_name', 'time', 'media_files', 'code_specialist', 'specialist')
+        fields = ('id', 'message', 'msg_type', 'content_type',
+                  'content_type_name', 'msg_type_name', 'time',
+                  'code_specialist', 'specialist', 'file_url', 'room')
 
-        read_only_fields = ('id', 'time', 'media_files', 'code_specialist')
+        read_only_fields = ('id', 'time', 'code_specialist')
 
     def get_time(self, obj):
         """Devuelve el tiempo formateado en horas y minutos."""
         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
-
-    # devolver los archivos adjuntos al msj
-    def get_media_files(self, obj):
-        """Devuelve los archivos de ese mensaje."""
-        medias = obj.messagefile_set.all()
-        return MessageFileSerializer(medias, many=True).data
 
     def get_code_specialist(self, obj):
         """Devuelve el codigo del especialista."""
@@ -54,6 +40,19 @@ class MessageSerializer(serializers.ModelSerializer):
     def get_msg_type_name(self, obj):
         """Devuelve el tipo de mensaje (answer,query,requery)."""
         return _(obj.get_msg_type_display())
+
+    def get_content_type_name(self, obj):
+        """Devuelve el tipo de contenido del mensaje (text,image,audio)."""
+        return _(obj.get_content_type_display())
+
+    def validate(self, data):
+        """Validacion de Data."""
+        required = _('required')
+        if int(data["content_type"]) > 0 and data["file_url"] == '':
+            raise serializers.ValidationError("file_url {}".format(required))
+        if int(data["content_type"]) == 0 and data["message"] == '':
+            raise serializers.ValidationError("text message {}".format(required))
+        return data
 
 
 # Serializer para detalle de consulta
@@ -122,20 +121,21 @@ class QueryDetailLastMsgSerializer(serializers.ModelSerializer):
         """Devuelve el nombre de la especialidad."""
         return _(str(obj.category))
 
-class QueryCustomSerializer(serializers.Serializer):
-    #serializador para devolver datos customizados de un diccionario dado
-    fields = ('specialist_id','month_count','year_count')
 
-    #establecemos que datos del diccionario pasado se mostrara en cada campo puesto en la tupla "Fields"
+class QueryCustomSerializer(serializers.Serializer):
+    """serializador para devolver datos customizados de un diccionario dado."""
+
+    fields = ('specialist_id', 'month_count', 'year_count')
+
+    # establecemos que datos del diccionario pasado se mostrara en cada campo puesto en la tupla "Fields"
     def to_representation(self, dic):
-        return {"specialist_id": dic['specialist_id'],"month_count": dic['month_count'],"year_count": dic['year_count']}
+        """Diccionario redefinido."""
+        return {"specialist_id": dic['specialist_id'], "month_count": dic['month_count'], "year_count": dic['year_count']}
+
 
 class QuerySerializer(serializers.ModelSerializer):
     """Serializer para crear consultas."""
 
-    # el message para este serializer
-    # solo se puede escribir ya que drf no soporta la representacion
-    # de writable nested relations,
     message = MessageSerializer(write_only=True)
 
     class Meta:
@@ -144,45 +144,70 @@ class QuerySerializer(serializers.ModelSerializer):
         model = Query
         fields = ('id', 'title', 'message', 'category', 'client')
 
-    def update(self, instance, validated_data):
-        """Redefinido metodo actualizar."""
-        # no se puede agregar msjs de ningun tipo una vez hah sido absuelta
-        if int(instance.status) == 6 or int(instance.status) == 7:
-            raise serializers.ValidationError(u"Query Absolved - can'not add more messages")
-        data_message = validated_data.pop('message')
-        specialist = Specialist.objects.get(pk=instance.specialist_id)
-        data_message["specialist"] = specialist
-        # se compara si el status fue respondida, entonces debemos declarar
-        # que el tipo de mensaje es reconsulta, y que pasa a estatus 1,
-        # (pendiente de declinar o responder por el especialista)
-        if int(instance.status) == 4 or int(instance.status) == 5:
-            data_message["msg_type"] = 'r'
-            instance.status = 1
-        Message.objects.create(query=instance, **data_message)
-        instance.save()
-        return instance
+    def validate(self, data):
+        """Validaciones Generales."""
+        # Valido si posee un plan activo
+        if not querysets.has_active_plan(data["client"]):
+            raise serializers.ValidationError(_("You need to have an active plan"))
+        if not querysets.has_available_queries(data["client"]):
+            raise serializers.ValidationError(_("You don't have available queries"))
+        return data
+
+    # def update(self, instance, validated_data):
+    #     """Redefinido metodo actualizar."""
+    #     # no se puede agregar msjs de ningun tipo una vez hah sido absuelta
+    #     if int(instance.status) == 6 or int(instance.status) == 7:
+    #         raise serializers.ValidationError(u"Query Absolved - can'not add more messages")
+    #     data_message = validated_data.pop('message')
+    #     specialist = Specialist.objects.get(pk=instance.specialist_id)
+    #     data_message["specialist"] = specialist
+    #     # se compara si el status fue respondida, entonces debemos declarar
+    #     # que el tipo de mensaje es reconsulta, y que pasa a estatus 1,
+    #     # (pendiente de declinar o responder por el especialista)
+    #     if int(instance.status) == 4 or int(instance.status) == 5:
+    #         data_message["msg_type"] = 'r'
+    #         instance.status = 1
+    #     Message.objects.create(query=instance, **data_message)
+    #     instance.save()
+    #     return instance
 
     def create(self, validated_data):
         """Redefinido metodo create."""
-        validated_data["specialist"] = Specialist.objects.get(type_specialist="m",
-                                                              category_id=validated_data["category"])
+        # Buscamos el especialista principal de la especialidad dada
+        specialist = Specialist.objects.get(type_specialist="m",
+                                            category_id=validated_data["category"])
         data_message = validated_data.pop('message')
+        # Buscamos el plan activo y elegido
+        acquired_plan = QueryPlansAcquired.objects.get(is_chosen=True, client=validated_data["client"])
+        validated_data["specialist"] = specialist
         validated_data["status"] = 0
+        validated_data["acquired_plan"] = acquired_plan
+        # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
         data_message["msg_type"] = "q"
+        data_message["specialist"] = specialist
+        # armamos la sala para el usuario
+        data_message["room"] = str(validated_data["client"].id) + '-' + str(validated_data["category"].id)
+        # Creamos la consulta y sus mensajes
+        # import pdb; pdb.set_trace()
         query = Query.objects.create(**validated_data)
         Message.objects.create(query=query, **data_message)
+        # restamos una consulta disponible al plan adquirido
+        acquired_plan.available_queries = acquired_plan.available_queries - 1
+        acquired_plan.save()
         return query
 
     # Si se llega a necesitar devolver personalizada la respuesta
     # redefinir este metodo y descomentarlo
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
-        ms = MessageSerializer(obj.message_set.all().order_by('-created_at')[:1], many=True).data
-        # message = MessageSerializer(obj.message_set.all().last()).data
-        return {'id': obj.id, 'title': obj.title, 'status': obj.status, 'messages': ms,
-                'last_modified': obj.last_modified, 'client': obj.client_id, 'code_client': str(obj.client.code),
-                'specialist': obj.specialist_id, 'category': obj.category_id, 'category_name': _(str(obj.category)),
-                'calification': obj.calification}
+        ms = MessageSerializer(obj.message_set.all().last()).data
+        # message = {}
+        # import pdb; pdb.set_trace()
+        return {'room': ms["room"], "messages": ms}
+        # return {'id': obj.id, 'title': obj.title, 'status': obj.status, 'messages': ms,
+        #         'last_modified': obj.last_modified, 'client': obj.client_id, 'code_client': str(obj.client.code),
+        #         'specialist': obj.specialist_id, 'category': obj.category_id, 'category_name': _(str(obj.category)),
+        #         'calification': obj.calification}
 
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
@@ -290,7 +315,7 @@ class QueryListClientSerializer(serializers.ModelSerializer):
                              .values('message__created_at').latest('message__created_at')
 
             return get_time_message(query['message__created_at'])
-            
+
         except Query.DoesNotExist:
             return None
 
@@ -328,54 +353,71 @@ class QueryListSpecialistSerializer(serializers.ModelSerializer):
         return msg.message
 
 
-class ChatMessageFileSerializer(serializers.ModelSerializer):
-    """
-    Informacion de archivos para el chat de cliente
-    """
-
-    class Meta:
-        """declaracion del modelo y sus campos."""
-        model = MessageFile
-        fields = ('id','url_file', 'type_file')
+# class ChatMessageFileSerializer(serializers.ModelSerializer):
+#     """
+#     Informacion de archivos para el chat de cliente
+#     """
+#
+#     class Meta:
+#         """declaracion del modelo y sus campos."""
+#         model = MessageFile
+#         fields = ('id','url_file', 'type_file')
 
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     """
     Informacion de los mensajes para chat de cliente
     """
-    file = serializers.SerializerMethodField()
+    # file = serializers.SerializerMethodField()
     time_message = serializers.SerializerMethodField()
 
     class Meta:
         """declaracion del modelo y sus campos."""
         model = Message
-        fields = ('id','nick', 'code', 'message', 'time_message', 'msg_type', 'viewed', 'file')
+        fields = ('id', 'code', 'message', 'time_message', 'msg_type', 'viewed')
 
-    def get_file(self, obj):
-        msg = MessageFile.objects.filter(message=obj['id']).all()
-        data = ChatMessageFileSerializer(msg, many=True)
-        return data.data
+    # def get_file(self, obj):
+    #     msg = MessageFile.objects.filter(message=obj['id']).all()
+    #     data = ChatMessageFileSerializer(msg, many=True)
+    #     return data.data
 
     def get_time_message(self, obj):
         """Devuelve el tiempo cuando se realizo el mensaje del mensaje."""
         return get_time_message(obj['created_at'])
 
+class ChatMessageReferenceSerializer(serializers.ModelSerializer):
+    """
+    Informacion de los mensajes para chat de cliente
+    """
+    class Meta:
+        """declaracion del modelo y sus campos."""
+        model = Message
+        fields = ('id', 'message')
 
 class QueryChatClientSerializer(serializers.ModelSerializer):
     """Serializer para listar consultas (Cliente)."""
-    id = serializers.SerializerMethodField()
     message = serializers.SerializerMethodField()
+    message_reference = serializers.SerializerMethodField()
+    query_id = serializers.SerializerMethodField()
 
     class Meta:
         """Meta."""
         model = Query
-        fields = ('title', 'category_id', 'calification', 'status', 'message','id')
+        fields = ('title', 'category_id', 'calification', 'status', 'message', 'message_reference', 'query_id')
 
-    def get_id(self, obj):
+
+    def get_query_id(self, obj):
         return obj['query_id']
+
 
     def get_message(self, obj):
         message = ChatMessageSerializer(obj)
         return message.data
 
-    
+    def get_message_reference(self, obj):
+        if obj['message_reference']:
+            ref = Message.objects.get(pk = obj['message_reference'])
+            message = ChatMessageReferenceSerializer(ref)
+            return message.data
+
+        return None
