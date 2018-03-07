@@ -3,8 +3,6 @@ from django.shortcuts import render, redirect
 from chat.models import Room
 from chat.serializers import MessageSerializer
 from django.db import transaction
-import haikunator
-from haikunator import Haikunator
 import random
 import string
 from rest_framework.views import APIView
