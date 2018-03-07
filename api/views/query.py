@@ -101,6 +101,7 @@ class QueryDetailSpecialistView(APIView):
         serializer = QueryResponseSerializer(query, data, partial=True, context={'specialist': spec})
         if serializer.is_valid():
             serializer.save()
+            pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 

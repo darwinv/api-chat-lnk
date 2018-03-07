@@ -223,7 +223,7 @@ class ResponseSpecialistQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

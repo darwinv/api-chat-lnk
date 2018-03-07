@@ -44,7 +44,7 @@ urlpatterns = [
     # url(r'^specialist-queries/$', query.QueryListSpecialistView.as_view(), name='queries-specialist'),
 
     # Listado de Consulta y Creación de consultas por cliente
-    url(r'^client-queries/$', query.QueryListClientView.as_view(), name='queries-client'),
+    url(r'^client/queries/$', query.QueryListClientView.as_view(), name='queries-client'),
     url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'),
     url(r'^query-last/(?P<category>[0-9]+)/$', query.QueryLastView.as_view(), name='last-query-bycategory'),
     # Vendedores
