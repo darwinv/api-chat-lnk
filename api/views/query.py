@@ -3,12 +3,12 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from api.models import Query, Message, Category
-from api.permissions import IsAdminOrClient
+from api.models import Query, Message, Category, Specialist
+from api.permissions import IsAdminOrClient, IsAdminReadOrSpecialistOwner
 from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
-from api.serializers.query import QueryDetailLastMsgSerializer, ChatMessageSerializer
+from api.serializers.query import QueryDetailLastMsgSerializer, ChatMessageSerializer, QueryResponseSerializer
 from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
@@ -57,7 +57,7 @@ class QueryListClientView(ListCreateAPIView):
         if not user_id:
             raise Http404
         data = request.data
-        # tomamos del token el id de usuarios
+        # tomamos del token el id de usuario (cliente en este caso)
         data["client"] = user_id
         serializer = QuerySerializer(data=data, context={'messages_data': None})
         if serializer.is_valid():
@@ -69,8 +69,42 @@ class QueryListClientView(ListCreateAPIView):
             # envio = dict(handle=serializer.data["code_client"], message=serializer.data['messages'][0]["message"])
             # Group('chat-'+str(label)).send({'text': json.dumps(envio)})
             return Response(serializer.data, status.HTTP_201_CREATED)
-        # import pdb; pdb.set_trace()
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class QueryDetailSpecialistView(APIView):
+    """Vista para que el especialista responda la consulta."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsAdminReadOrSpecialistOwner]
+
+    def get_object(self, pk):
+        """Obtener objeto."""
+        try:
+            obj = Query.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj.specialist)
+            return obj
+        except Query.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Actualiza la consulta."""
+        query = self.get_object(pk)
+        user_id = Operations.get_id(self, request)
+        # label = 1
+        if not user_id:
+            raise Http404
+        data = request.data
+        # tomamos del token el id de usuario (especialista en este caso)
+        spec = Specialist.objects.get(pk=user_id)
+        # Verificar si el serializer sirve
+        serializer = QueryResponseSerializer(query, data, partial=True, context={'specialist': spec})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
 
 # Detall de consulta
 class QueryDetailView(APIView):
@@ -157,7 +191,7 @@ class QueryChatClientView(ListCreateAPIView):
 
         if not client:
             raise Http404
-        
+
         queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
                             'query_id', 'message_reference', 'content_type', 'file_url')\
                            .annotate(title=F('query__title',),status=F('query__status',),\

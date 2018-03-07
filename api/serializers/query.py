@@ -202,7 +202,7 @@ class QuerySerializer(serializers.ModelSerializer):
             data_message["msg_type"] = "q"
             data_message["specialist"] = specialist
             # armamos la sala para el usuario
-            data_message["room"] = 'u'+str(validated_data["client"].id)+'-'+'s'+str(validated_data["category"].id)
+            data_message["room"] = 'u'+str(validated_data["client"].id)+'-'+'c'+str(validated_data["category"].id)
             data_message["code"] = validated_data["client"].code
             self.context['messages_data'] = data_message
             Message.objects.create(query=query, **data_message)
@@ -211,8 +211,6 @@ class QuerySerializer(serializers.ModelSerializer):
         acquired_plan.save()
         return query
 
-    # Si se llega a necesitar devolver personalizada la respuesta
-    # redefinir este metodo y descomentarlo
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
         ms = ListMessageSerializer(obj.message_set.all(), many=True).data
@@ -226,6 +224,52 @@ class QuerySerializer(serializers.ModelSerializer):
 
         return {'room': ms[0]["room"], "message": chat}
 
+
+class QueryResponseSerializer(serializers.ModelSerializer):
+    """Para respuesta de especialista."""
+
+    message = MessageSerializer(write_only=True, many=True)
+
+    class Meta:
+        """Meta."""
+
+        model = Query
+        fields = ('id', 'message')
+
+    def update(self, instance, validated_data):
+        """Actualizar la consulta."""
+        data_messages = validated_data.pop('message')
+        self.context["size_msgs"] = len(data_messages)
+        if instance.specialist.type_specialist == 'm':
+            instance.status = 4
+        else:
+            instance.status = 5
+        # Recorremos los mensajes para crearlos todos
+        for data_message in data_messages:
+            # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
+            data_message["msg_type"] = "a"
+            data_message["specialist"] = self.context['specialist']
+            # armamos la sala para el usuario
+            data_message["room"] = 'u'+str(instance.client.id)+'-'+'c'+str(instance.category.id)
+            # import pdb; pdb.set_trace()
+            data_message["code"] = self.context['specialist'].code
+            Message.objects.create(query=instance, **data_message)
+        instance.save()
+        return instance
+
+    def to_representation(self, obj):
+        """Redefinido metodo de representación del serializer."""
+        size = self.context["size_msgs"]
+        ms = ListMessageSerializer(obj.message_set.order_by('-created_at')[:size], many=True).data
+        chat = {}
+
+        for message in ms:
+            message["query"] = {"id": obj.id, "title": obj.title, "status": obj.status,
+                                "calification": obj.calification}
+            key_message = 'm'+str(message["id"])
+            chat.update({key_message: dict(message)})
+
+        return {'room': ms[0]["room"], "message": chat}
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
 # class QueryUpdateSerializer(serializers.ModelSerializer):
