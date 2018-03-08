@@ -44,8 +44,7 @@ urlpatterns = [
     # url(r'^specialist-queries/$', query.QueryListSpecialistView.as_view(), name='queries-specialist'),
 
     # Listado de Consulta y Creación de consultas por cliente
-    url(r'^client-queries/$', query.QueryListClientView.as_view(), name='queries-client'),
-
+    url(r'^client/queries/$', query.QueryListClientView.as_view(), name='queries-client'),
     url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'),
     url(r'^query-last/(?P<category>[0-9]+)/$', query.QueryLastView.as_view(), name='last-query-bycategory'),
     # Vendedores
@@ -53,6 +52,8 @@ urlpatterns = [
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(), name='seller-detail'),
     url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(), name='seller-account-status'),
 
+    # Listado de Consultas segun especialista
+    url(r'^specialist/queries/(?P<pk>[0-9]+)/$', query.QueryDetailSpecialistView.as_view(), name='query-specialist'),
     # Contacto no efectivo
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
     # url para subir imagen
