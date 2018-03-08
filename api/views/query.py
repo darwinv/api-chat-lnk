@@ -171,7 +171,7 @@ class QueryLastView(APIView):
 
 
 # Para Crear y Listado de consultas
-class QueryChatClientView(APIView):
+class QueryChatClientView(ListCreateAPIView):
     """Vista Consulta."""
 
     authentication_classes = (OAuth2Authentication,)
@@ -186,12 +186,8 @@ class QueryChatClientView(APIView):
         except Category.DoesNotExist:
             raise Http404
 
-    def list(self, request, pk):
-
-        """
-            Listado de queries y sus respectivos mensajes para un cliente
-        """
-
+    def get(self, request, pk):
+        """Listado de queries y sus respectivos mensajes para un cliente."""
         category = self.get_object(pk)
         client = Operations.get_id(self, request)
 
