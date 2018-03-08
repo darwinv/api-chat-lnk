@@ -80,7 +80,25 @@ class IsAdminOrClient(permissions.BasePermission):
         return False
 
 
+class IsAdminReadOrSpecialistOwner(permissions.BasePermission):
+    """Solo Administradores o Especialistas."""
+
+    def has_permission(self, request, view):
+        """Permiso General."""
+        if request.user and request.user.is_staff:
+            return True
+        elif request.user and request.user.role_id == 3:
+            return True
+        return False
+
+    def has_object_permission(self, request, view, obj):
+        """Permiso a nivel de objeto."""
+        if request.method == "POST" or request.method == "PUT":
+            return (request.user and request.user.role_id == 3) and request.user.id == obj.id
+
+
 class IsAdminOrSpecialist(permissions.BasePermission):
+    """Es administrador o especialista."""
 
     def has_permission(self, request, view):
         """Solo el vendedor puede crear."""
@@ -89,7 +107,6 @@ class IsAdminOrSpecialist(permissions.BasePermission):
         elif request.user and request.user.role_id == 3:
             return True
         return False
-
 
 
 class IsSeller(permissions.BasePermission):

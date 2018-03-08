@@ -12,7 +12,7 @@ db = MySQLdb.connect(host=DATABASES['default']['HOST'],  # tu host, usualmente l
                      db=DATABASES['default']['NAME'])  # el nombre de la base de datos
 
 cur = db.cursor()
-cur.execute("SHOW TABLES WHERE Tables_in_linkup REGEXP 'oauth2_provider_accesstoken|api_'")
+cur.execute("SHOW TABLES WHERE Tables_in_{} REGEXP 'oauth2_provider_accesstoken|api_'".format(DATABASES['default']['NAME']))
 
 path = path2 = ""
 list_names = []

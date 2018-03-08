@@ -26,7 +26,7 @@ class GetListQueries(APITestCase):
         """404 clien_id not found."""
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = client.get(reverse('queries-client'))
-        
+
         # import pdb; pdb.set_trace()
         # clients = Cliente.objects.all()
         # serializer = ClientSerializer(clients, many=True)
@@ -71,12 +71,19 @@ class CreateQuery(APITestCase):
         self.valid_payload = {
             "title": "Pago de Impuestos",
             "category": 24,
-            "message": {
-                "message": "Lorem ipsum dolor sit amet,anctus e",
+            "message": [{
+                "message": "primera consulta",
                 "msg_type": "q",
-                "content_type": '0',
+                "content_type": "0",
                 "file_url": ""
-            }
+                },
+                {
+                "message": "",
+                "msg_type": "q",
+                "content_type": "1",
+                "file_url": "img.png"
+                }
+            ],
         }
 
     def test_no_title(self):
@@ -179,9 +186,48 @@ class CreateQuery(APITestCase):
         )
         qq = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)
         after_post_queries = qq.available_queries
-        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(before_post_queries - 1, after_post_queries)
+
+
+class ResponseSpecialistQuery(APITestCase):
+    """Respuesta del especialista a la consulta."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_query']
+
+    # put a query
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        self.valid_payload = {
+            "message": [{
+                "message": "respuesta a consulta",
+                "msg_type": "a",
+                "content_type": "0",
+                "file_url": ""
+                },
+                {
+                "message": "",
+                "msg_type": "a",
+                "content_type": "1",
+                "file_url": "img.png"
+                }
+            ],
+        }
+
+    def test_response_query(self):
+        """Respuesta exitosa del especialista."""
+        response = self.client.put(
+            reverse('query-specialist', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+
 
 class GetSpecialistMessages(APITestCase):
     """Prueba para devolver el plan activo y elegido de un determinado cliente"""
