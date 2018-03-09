@@ -171,23 +171,28 @@ class QueryLastView(APIView):
 
 
 # Para Crear y Listado de consultas
-class QueryChatClientView(ListCreateAPIView):
+class QueryChatClientView(APIView):
     """Vista Consulta."""
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     serializer_class = ChatMessageSerializer
 
+    def get_object(self, pk):
+        """Obtener Categoria."""
+        try:
+            # import pdb; pdb.set_trace()
+            return Category.objects.get(pk=pk)
+        except Category.DoesNotExist:
+            raise Http404
 
-    def list(self, request):
+    def list(self, request, pk):
 
         """
             Listado de queries y sus respectivos mensajes para un cliente
         """
-        if not 'category' in request.query_params:
-            raise Http404
 
-        category = request.query_params['category']
+        category = self.get_object(pk)
         client = Operations.get_id(self, request)
 
         if not client:

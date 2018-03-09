@@ -89,5 +89,5 @@ urlpatterns = [
     url(r'^chosens-plans/(?P<pk>[0-9]+)/$', plan.QueryPlansAcquiredDetailView.as_view(), name='chosen-plan-edit'),
 
     # Queries de cliente por categoria
-    url(r'^queries/categories/$', query.QueryChatClientView.as_view(), name='query-chat-client'),
+    url(r'^queries/categories/(?P<pk>[0-9]+)/$', query.QueryChatClientView.as_view(), name='query-chat-client'),
 ]
