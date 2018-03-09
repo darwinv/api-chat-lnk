@@ -1,7 +1,7 @@
 """Conexiones a Channels."""
 from channels import Group
 from channels.sessions import channel_session
-# from .models import Room
+from .models import Room
 import json
 import requests
 # from django.urls import reverse
@@ -12,14 +12,10 @@ def ws_connect(message):
     """Conexion a WebSocket."""
     message.reply_channel.send({"accept": True})  # Se Acepta la conexion
     # import pdb; pdb.set_trace()
-    # print(message['path'])
-    # prefix, nothing, label = message['path'].strip('/').split('/')
-    # room = Room.objects.get(label=label)
-
-    # La sala se configura con el id del cliente y el id de la categoria
-    room = 'u2-c1'
-    Group('chat-' + room).add(message.reply_channel)
-    message.channel_session['room'] = room
+    prefix, label = message['path'].strip('/').split('/')
+    room = Room.objects.get(label=label)
+    Group('chat-' + label).add(message.reply_channel)
+    message.channel_session['room'] = room.label
 
 
 @channel_session

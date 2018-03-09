@@ -26,6 +26,7 @@ from datetime import datetime, date
 from django.utils import timezone
 from django.db.models import Max, Count
 from api.utils.validations import Operations
+from api import pyrebase
 
 # Constantes
 PREFIX_CODE_CLIENT = 'C'
@@ -137,6 +138,8 @@ class ClientListView(ListCreateAPIView):
         serializer = ClientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            #se le crea la lista de todas las categorias al cliente en firebase
+            pyrebase.createCategoriesLisClients(serializer.data['id'])
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 

@@ -64,13 +64,13 @@ class QueryListClientView(ListCreateAPIView):
             serializer.save()
             # import pdb; pdb.set_trace()
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
+            pyrebase.categories_db(user_id, data["category"])
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
             # envio = dict(handle=serializer.data["code_client"], message=serializer.data['messages'][0]["message"])
             # Group('chat-'+str(label)).send({'text': json.dumps(envio)})
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
 
 class QueryDetailSpecialistView(APIView):
     """Vista para que el especialista responda la consulta."""
@@ -102,9 +102,9 @@ class QueryDetailSpecialistView(APIView):
         if serializer.is_valid():
             serializer.save()
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
+            pyrebase.categories_db(user_id, data["category"])
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
 
 
 # Detall de consulta

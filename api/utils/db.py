@@ -1,5 +1,5 @@
 import os, sys
-from subprocess import check_output
+import subprocess
 import MySQLdb
 
 BASE_PROYECT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -17,15 +17,15 @@ cur.execute("SHOW TABLES WHERE Tables_in_{} REGEXP 'oauth2_provider_accesstoken|
 path = path2 = ""
 list_names = []
 exit = True
-if 'api' in os.listdir("."):
-    path2 = "api\\fixtures\\temp\\"
-elif 'db.py' in os.listdir("."):
-    path = "..\\..\\"
-    path2 = "..\\fixtures\\temp\\"
+# if 'api' in os.listdir("."):
+#     path2 = "api\\fixtures\\temp\\"
+# elif 'db.py' in os.listdir("."):
+#     path = "..\\..\\"
+#     path2 = "..\\fixtures\\temp\\"
 
 tables_db = [row[0].replace("api_", "").replace("oauth2_provider_", "") for row in cur.fetchall()]
 while True:
-    print("Nombre de la tabla: ")
+    print("Nombre de la(s) tabla(s): ")
     table_name = input()
     if table_name.lower().strip() == "exit":
         exit = False
@@ -41,6 +41,7 @@ while True:
             z = list(set(list_names) - set(tables_db))
             if len(z) > 0:
                 print("Las siguientes tablas no existen en la base de datos: {}".format(z))
+                print ("vuelve a ingresar la lista:")
                 continue
             else:
                 break
@@ -56,7 +57,11 @@ if exit:
     result = ''.join(str(e) for e in list_prefix)
     # se agregan dos tablas necesarias
     result += " oauth2_provider.accesstoken oauth2_provider.application"
-    check_output(r"python {}manage.py dumpdata {} --indent 2 > {}{}.json".format(path, result, path2, name_fixture),
-                 shell=True).decode()
+    # check_output(u"python {}manage.py dumpdata{} --indent 2 > {}{}.json".format(path, result, path2, name_fixture), shell=True).decode()
+    try:
+        subprocess.check_output(r"python ..\..\manage.py dumpdata{} --indent 2 > ..\fixtures\temp\{}.json".format(result, name_fixture),
+                 shell=True).decode('UTF-8')
+    except subprocess.CalledProcessError as e:
+        print(e)
 cur.close()
 db.close()
