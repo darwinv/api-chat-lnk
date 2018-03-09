@@ -195,8 +195,8 @@ class QueryChatClientView(ListCreateAPIView):
             raise Http404
 
         queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
-                            'query_id', 'message_reference', 'content_type', 'file_url')\
-                           .annotate(title=F('query__title',),status=F('query__status',),\
+                                          'query_id', 'query__client_id', 'message_reference', 'specialist_id', 'content_type', 'file_url')\
+                          .annotate(title=F('query__title',),status=F('query__status',),\
                            calification=F('query__calification',),\
                            category_id=F('query__category_id',))\
                            .filter(query__client_id=client, query__category_id=category)\
