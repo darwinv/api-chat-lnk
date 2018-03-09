@@ -10,7 +10,7 @@ def ws_connect(message):
     message.reply_channel.send({"accept": True})
     # import pdb; pdb.set_trace()
     print(message['path'])
-    prefix, nothing, label = message['path'].strip('/').split('/')
+    prefix, label = message['path'].strip('/').split('/')
     room = Room.objects.get(label=label)
     Group('chat-' + label).add(message.reply_channel)
     message.channel_session['room'] = room.label
