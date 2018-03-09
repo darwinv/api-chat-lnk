@@ -97,6 +97,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = ('username',)
 
 
+
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):
     """Vista Cliente."""
@@ -171,7 +172,7 @@ class ClientDetailByUsername(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     def get_object(self, username):
         try:
-            return Client.objects.get(username=username)
+            client = Client.objects.get(username=username, )
         except Client.DoesNotExist:
             raise Http404
 
