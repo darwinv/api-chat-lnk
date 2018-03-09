@@ -488,7 +488,7 @@ class SellerSerializer(serializers.ModelSerializer):
             'id', 'address', 'quota', 'zone', 'username', 'nick', 'first_name',
             'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'document_type_name',
             'code', 'document_number', 'ruc', 'nationality', 'nationality_name', 'residence_country',
-            'residence_country_name', "foreign_address", "ciiu", "ciiu_name", "photo")
+            'residence_country_name', "foreign_address", "ciiu", "ciiu_name", "photo", "role")
 
     def get_nationality_name(self, obj):
         """Devuelvo la nacionalidad del especialista."""
