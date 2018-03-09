@@ -41,8 +41,5 @@ class Migration(migrations.Migration):
             model_name='message',
             name='msg_type',
             field=models.CharField(blank=True, choices=[('q', 'query'), ('r', 'requery'), ('a', 'answer')], max_length=1),
-        ),
-        migrations.DeleteModel(
-            name='MessageFile',
-        ),
+        )
     ]

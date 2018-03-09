@@ -12,11 +12,10 @@ class MessageSerializer(serializers.ModelSerializer):
     """Serializer para el mensaje."""
 
     msg_type = serializers.ChoiceField(choices=c.message_msg_type)
-    msg_type_name = serializers.SerializerMethodField()
+    # msg_type_name = serializers.SerializerMethodField()
     content_type = serializers.ChoiceField(choices=c.message_content_type)
-    content_type_name = serializers.SerializerMethodField()
+    # content_type_name = serializers.SerializerMethodField()
     time = serializers.SerializerMethodField()
-    code_specialist = serializers.SerializerMethodField()
     room = serializers.CharField(max_length=100, required=False)
 
     class Meta:
@@ -24,18 +23,13 @@ class MessageSerializer(serializers.ModelSerializer):
 
         model = Message
         fields = ('id', 'message', 'msg_type', 'content_type',
-                  'content_type_name', 'msg_type_name', 'time',
-                  'code_specialist', 'specialist', 'file_url', 'room')
+                  'time', 'code', 'specialist', 'file_url', 'room')
 
-        read_only_fields = ('id', 'time', 'code_specialist')
+        read_only_fields = ('id', 'time', 'code')
 
     def get_time(self, obj):
         """Devuelve el tiempo formateado en horas y minutos."""
         return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
-
-    def get_code_specialist(self, obj):
-        """Devuelve el codigo del especialista."""
-        return str(obj.specialist.code)
 
     def get_msg_type_name(self, obj):
         """Devuelve el tipo de mensaje (answer,query,requery)."""
@@ -54,6 +48,23 @@ class MessageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("text message {}".format(required))
         return data
 
+
+class ListMessageSerializer(serializers.ModelSerializer):
+    """Serializer para la representacion del mensaje."""
+
+    class Meta:
+        """Configuro el modelo y sus campos."""
+
+        model = Message
+        fields = ('id', 'message', 'msg_type', 'content_type',
+                  'time', 'code', 'specialist', 'file_url', 'room')
+
+    def to_representation(self, obj):
+        """Redefinido nombres (claves) para firebase."""
+        time = str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+        return {"id": obj.id, "room": obj.room, "codeUser": obj.code, "fileType": obj.content_type,
+                "fileUrl": obj.file_url, "message": obj.message, "messageType": obj.msg_type,
+                "timeMessage": time, "read": obj.viewed}
 
 # Serializer para detalle de consulta
 class QueryDetailSerializer(serializers.ModelSerializer):
@@ -130,13 +141,14 @@ class QueryCustomSerializer(serializers.Serializer):
     # establecemos que datos del diccionario pasado se mostrara en cada campo puesto en la tupla "Fields"
     def to_representation(self, dic):
         """Diccionario redefinido."""
-        return {"specialist_id": dic['specialist_id'], "month_count": dic['month_count'], "year_count": dic['year_count']}
+        return {"specialist_id": dic['specialist_id'],
+                "month_count": dic['month_count'], "year_count": dic['year_count']}
 
 
 class QuerySerializer(serializers.ModelSerializer):
     """Serializer para crear consultas."""
 
-    message = MessageSerializer(write_only=True)
+    message = MessageSerializer(many=True)
 
     class Meta:
         """Meta."""
@@ -176,39 +188,88 @@ class QuerySerializer(serializers.ModelSerializer):
         # Buscamos el especialista principal de la especialidad dada
         specialist = Specialist.objects.get(type_specialist="m",
                                             category_id=validated_data["category"])
-        data_message = validated_data.pop('message')
+        data_messages = validated_data.pop('message')
         # Buscamos el plan activo y elegido
         acquired_plan = QueryPlansAcquired.objects.get(is_chosen=True, client=validated_data["client"])
         validated_data["specialist"] = specialist
         validated_data["status"] = 0
         validated_data["acquired_plan"] = acquired_plan
-        # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
-        data_message["msg_type"] = "q"
-        data_message["specialist"] = specialist
-        # armamos la sala para el usuario
-        data_message["room"] = str(validated_data["client"].id) + '-' + str(validated_data["category"].id)
         # Creamos la consulta y sus mensajes
-        # import pdb; pdb.set_trace()
         query = Query.objects.create(**validated_data)
-        Message.objects.create(query=query, **data_message)
+        # Recorremos los mensajes para crearlos todos
+        for data_message in data_messages:
+            # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
+            data_message["msg_type"] = "q"
+            data_message["specialist"] = specialist
+            # armamos la sala para el usuario
+            data_message["room"] = 'u'+str(validated_data["client"].id)+'-'+'c'+str(validated_data["category"].id)
+            data_message["code"] = validated_data["client"].code
+            self.context['messages_data'] = data_message
+            Message.objects.create(query=query, **data_message)
         # restamos una consulta disponible al plan adquirido
         acquired_plan.available_queries = acquired_plan.available_queries - 1
         acquired_plan.save()
         return query
 
-    # Si se llega a necesitar devolver personalizada la respuesta
-    # redefinir este metodo y descomentarlo
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
-        ms = MessageSerializer(obj.message_set.all().last()).data
-        # message = {}
-        # import pdb; pdb.set_trace()
-        return {'room': ms["room"], "messages": ms}
-        # return {'id': obj.id, 'title': obj.title, 'status': obj.status, 'messages': ms,
-        #         'last_modified': obj.last_modified, 'client': obj.client_id, 'code_client': str(obj.client.code),
-        #         'specialist': obj.specialist_id, 'category': obj.category_id, 'category_name': _(str(obj.category)),
-        #         'calification': obj.calification}
+        ms = ListMessageSerializer(obj.message_set.all(), many=True).data
+        chat = {}
 
+        for message in ms:
+            message["query"] = {"id": obj.id, "title": obj.title, "status": obj.status,
+                                "calification": obj.calification}
+            key_message = 'm'+str(message["id"])
+            chat.update({key_message: dict(message)})
+
+        return {'room': ms[0]["room"], "message": chat}
+
+
+class QueryResponseSerializer(serializers.ModelSerializer):
+    """Para respuesta de especialista."""
+
+    message = MessageSerializer(write_only=True, many=True)
+
+    class Meta:
+        """Meta."""
+
+        model = Query
+        fields = ('id', 'message')
+
+    def update(self, instance, validated_data):
+        """Actualizar la consulta."""
+        data_messages = validated_data.pop('message')
+        self.context["size_msgs"] = len(data_messages)
+        if instance.specialist.type_specialist == 'm':
+            instance.status = 4
+        else:
+            instance.status = 5
+        # Recorremos los mensajes para crearlos todos
+        for data_message in data_messages:
+            # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
+            data_message["msg_type"] = "a"
+            data_message["specialist"] = self.context['specialist']
+            # armamos la sala para el usuario
+            data_message["room"] = 'u'+str(instance.client.id)+'-'+'c'+str(instance.category.id)
+            # import pdb; pdb.set_trace()
+            data_message["code"] = self.context['specialist'].code
+            Message.objects.create(query=instance, **data_message)
+        instance.save()
+        return instance
+
+    def to_representation(self, obj):
+        """Redefinido metodo de representación del serializer."""
+        size = self.context["size_msgs"]
+        ms = ListMessageSerializer(obj.message_set.order_by('-created_at')[:size], many=True).data
+        chat = {}
+
+        for message in ms:
+            message["query"] = {"id": obj.id, "title": obj.title, "status": obj.status,
+                                "calification": obj.calification}
+            key_message = 'm'+str(message["id"])
+            chat.update({key_message: dict(message)})
+
+        return {'room': ms[0]["room"], "message": chat}
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
 # class QueryUpdateSerializer(serializers.ModelSerializer):
@@ -370,20 +431,33 @@ class ChatMessageSerializer(serializers.ModelSerializer):
     """
     # file = serializers.SerializerMethodField()
     time_message = serializers.SerializerMethodField()
+    query = serializers.SerializerMethodField()
+    message_reference = serializers.SerializerMethodField()
 
     class Meta:
         """declaracion del modelo y sus campos."""
         model = Message
-        fields = ('id', 'code', 'message', 'time_message', 'msg_type', 'viewed')
-
-    # def get_file(self, obj):
-    #     msg = MessageFile.objects.filter(message=obj['id']).all()
-    #     data = ChatMessageFileSerializer(msg, many=True)
-    #     return data.data
+        fields = ('id', 'code', 'message', 'time_message', 'msg_type', 'viewed', 'content_type', 'file_url',
+                 'query', 'message_reference')
 
     def get_time_message(self, obj):
         """Devuelve el tiempo cuando se realizo el mensaje del mensaje."""
         return get_time_message(obj['created_at'])
+
+    def get_query(self, obj):
+        """Objeto Query"""
+        query = QueryChatClientSerializer(obj)
+        return query.data
+
+
+    def get_message_reference(self, obj):
+        if obj['message_reference']:
+            ref = Message.objects.get(pk = obj['message_reference'])
+            message = ChatMessageReferenceSerializer(ref)
+            return message.data
+
+        return None
+
 
 class ChatMessageReferenceSerializer(serializers.ModelSerializer):
     """
@@ -396,28 +470,13 @@ class ChatMessageReferenceSerializer(serializers.ModelSerializer):
 
 class QueryChatClientSerializer(serializers.ModelSerializer):
     """Serializer para listar consultas (Cliente)."""
-    message = serializers.SerializerMethodField()
-    message_reference = serializers.SerializerMethodField()
     query_id = serializers.SerializerMethodField()
 
     class Meta:
         """Meta."""
         model = Query
-        fields = ('title', 'category_id', 'calification', 'status', 'message', 'message_reference', 'query_id')
+        fields = ('title', 'category_id', 'calification', 'status', 'query_id')
 
 
     def get_query_id(self, obj):
         return obj['query_id']
-
-
-    def get_message(self, obj):
-        message = ChatMessageSerializer(obj)
-        return message.data
-
-    def get_message_reference(self, obj):
-        if obj['message_reference']:
-            ref = Message.objects.get(pk = obj['message_reference'])
-            message = ChatMessageReferenceSerializer(ref)
-            return message.data
-
-        return None
