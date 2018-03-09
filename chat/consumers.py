@@ -12,7 +12,6 @@ def ws_connect(message):
     """Conexion a WebSocket."""
     message.reply_channel.send({"accept": True})  # Se Acepta la conexion
     # import pdb; pdb.set_trace()
-    print(message['path'])
     prefix, label = message['path'].strip('/').split('/')
     room = Room.objects.get(label=label)
     Group('chat-' + label).add(message.reply_channel)
