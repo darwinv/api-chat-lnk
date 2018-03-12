@@ -200,7 +200,7 @@ class QuerySerializer(serializers.ModelSerializer):
         for data_message in data_messages:
             # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
             data_message["msg_type"] = "q"
-            data_message["specialist"] = specialist
+            # data_message["specialist"] = specialist
             # armamos la sala para el usuario
             data_message["room"] = 'u'+str(validated_data["client"].id)+'-'+'c'+str(validated_data["category"].id)
             data_message["code"] = validated_data["client"].code
@@ -426,19 +426,19 @@ class QueryListSpecialistSerializer(serializers.ModelSerializer):
 
 
 class ChatMessageSerializer(serializers.ModelSerializer):
-    """
-    Informacion de los mensajes para chat de cliente
-    """
+    """Informacion de los mensajes para chat de cliente."""
     # file = serializers.SerializerMethodField()
     time_message = serializers.SerializerMethodField()
     query = serializers.SerializerMethodField()
     message_reference = serializers.SerializerMethodField()
+    user_id = serializers.SerializerMethodField()
 
     class Meta:
         """declaracion del modelo y sus campos."""
+
         model = Message
         fields = ('id', 'code', 'message', 'time_message', 'msg_type', 'viewed', 'content_type', 'file_url',
-                 'query', 'message_reference')
+                  'query', 'message_reference', 'user_id')
 
     def get_time_message(self, obj):
         """Devuelve el tiempo cuando se realizo el mensaje del mensaje."""
@@ -449,6 +449,12 @@ class ChatMessageSerializer(serializers.ModelSerializer):
         query = QueryChatClientSerializer(obj)
         return query.data
 
+    def get_user_id(self, obj):
+        """Devolver id del usuario que lo envia."""
+        # import pdb; pdb.set_trace()
+        if obj["specialist_id"]:
+            return obj["specialist_id"]
+        return obj["query__client_id"]
 
     def get_message_reference(self, obj):
         if obj['message_reference']:
