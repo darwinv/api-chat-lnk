@@ -11,11 +11,12 @@ import requests
 def ws_connect(message):
     """Conexion a WebSocket."""
     message.reply_channel.send({"accept": True})  # Se Acepta la conexion
-    # import pdb; pdb.set_trace()
-    prefix, label = message['path'].strip('/').split('/')
-    room = Room.objects.get(label=label)
-    Group('chat-' + label).add(message.reply_channel)
-    message.channel_session['room'] = room.label
+    # Creamos la sala, (id de usuario - id especialidad)
+    sala = message['path'].strip('/').split('/')[0]
+    # Lo agregamos a un grupo
+    Group('chat-' + sala).add(message.reply_channel)
+    # lo agregamos a la sesion de channels
+    message.channel_session['room'] = sala
 
 
 @channel_session
