@@ -72,6 +72,7 @@ class QueryListClientView(ListCreateAPIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+
 class QueryDetailSpecialistView(APIView):
     """Vista para que el especialista responda la consulta."""
 

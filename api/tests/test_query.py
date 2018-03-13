@@ -150,7 +150,7 @@ class CreateQuery(APITestCase):
 
     def test_contentype_file(self):
         """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
-        self.valid_payload["message"]["content_type"] = '1'
+        self.valid_payload["message"][0]["content_type"] = '1'
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
@@ -161,7 +161,7 @@ class CreateQuery(APITestCase):
 
     def test_contentype_message(self):
         """Verificar que el mensaje a guardar corresponde al tipo de contenido de mensaje."""
-        self.valid_payload["message"]["message"] = ""
+        self.valid_payload["message"][0]["message"] = ""
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
