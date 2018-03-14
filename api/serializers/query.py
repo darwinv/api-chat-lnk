@@ -226,13 +226,13 @@ class QuerySerializer(serializers.ModelSerializer):
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
 
-        return {'room': ms[0]["room"], "message": chat}
+        return {'room': ms[0]["room"], "message": chat, "category": obj.category.id}
 
 
 class QueryResponseSerializer(serializers.ModelSerializer):
     """Para respuesta de especialista."""
 
-    message = MessageSerializer(write_only=True, many=True)
+    message = MessageSerializer(many=True)
 
     class Meta:
         """Meta."""
@@ -273,7 +273,7 @@ class QueryResponseSerializer(serializers.ModelSerializer):
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
 
-        return {'room': ms[0]["room"], "message": chat}
+        return {'room': ms[0]["room"], "message": chat, "category": obj.category.id}
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
 # class QueryUpdateSerializer(serializers.ModelSerializer):

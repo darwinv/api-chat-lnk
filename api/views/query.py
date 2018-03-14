@@ -62,8 +62,10 @@ class QueryListClientView(ListCreateAPIView):
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            # Se actualiza la base de datos de firebase para el mensaje
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
-            pyrebase.categories_db(user_id, data["category"])
+            # Se actualiza la base de datos de firebase listado de sus especialidades
+            pyrebase.categories_db(user_id, serializer.data["category"])
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
             lista = list(serializer.data['message'].values())
@@ -88,6 +90,7 @@ class QueryDetailSpecialistView(APIView):
         except Query.DoesNotExist:
             raise Http404
 
+    # Actualizar Consulta
     def put(self, request, pk):
         """Actualiza la consulta."""
         query = self.get_object(pk)
@@ -98,12 +101,14 @@ class QueryDetailSpecialistView(APIView):
         data = request.data
         # tomamos del token el id de usuario (especialista en este caso)
         spec = Specialist.objects.get(pk=user_id)
-        # Verificar si el serializer sirve
-        serializer = QueryResponseSerializer(query, data, partial=True, context={'specialist': spec})
+        # No utilizamos partial=True, ya que solo actualizamos mensaje
+        serializer = QueryResponseSerializer(query, data, context={'specialist': spec})
         if serializer.is_valid():
             serializer.save()
+            # Actualizamos el nodo de mensajes segun su sala
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
-            pyrebase.categories_db(user_id, data["category"])
+            # Actualizamos el listado de especialidades en Firebase
+            pyrebase.categories_db(user_id, serializer.data["category"])
             # import pdb; pdb.set_trace()
             # lista = list(serializer.data['message'].values())
             # sala = str(user_id) + '-' + str(data["category"])
