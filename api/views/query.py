@@ -59,17 +59,14 @@ class QueryListClientView(ListCreateAPIView):
         data = request.data
         # tomamos del token el id de usuario (cliente en este caso)
         data["client"] = user_id
-        serializer = QuerySerializer(data=data, context={'messages_data': None})
+        serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            # pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
-            # pyrebase.categories_db(user_id, data["category"])
-
+            pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
+            pyrebase.categories_db(user_id, data["category"])
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
             lista = list(serializer.data['message'].values())
-            # import pdb; pdb.set_trace()
-            # resultado = [item for item in lista]
             sala = str(user_id) + '-' + str(data["category"])
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             return Response(serializer.data, status.HTTP_201_CREATED)
@@ -107,6 +104,10 @@ class QueryDetailSpecialistView(APIView):
             serializer.save()
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
             pyrebase.categories_db(user_id, data["category"])
+            # import pdb; pdb.set_trace()
+            # lista = list(serializer.data['message'].values())
+            # sala = str(user_id) + '-' + str(data["category"])
+            # Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
