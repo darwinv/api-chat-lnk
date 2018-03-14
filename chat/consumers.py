@@ -23,24 +23,15 @@ def ws_connect(message):
 def ws_receive(message):
     """Funcion que recibe data de el socket de cliente."""
     # obj_api = api()
-    sala = message.channel_session['room']
+    # sala = message.channel_session['room']
 
     # room = Room.objects.get(label=label)
     # -- aca se podria enviar el request para la api --
     data = json.loads(message['text'])
-    payload = {
-        "title": data['handle'],
-        "category": data['category'],
-        "message": [{
-            "message": data['message'],
-            "msg_type": "q",
-            "content_type": "0",
-            "file_url": ""
-            }]
-    }
+    # import pdb; pdb.set_trace()
     # m = room.messages.create(handle=data['handle'], message=data['message'])
     # data["text"] = data['message']
-    send_api(token=data['token'], arg=payload)
+    send_api(token=data['token'], arg=data)
 
 
 @channel_session
