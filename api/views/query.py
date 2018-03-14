@@ -181,7 +181,7 @@ class QueryLastView(APIView):
 
 
 # Para Crear y Listado de consultas
-class QueryChatClientView(APIView):
+class QueryChatClientView(ListCreateAPIView):
     """Vista Consulta."""
 
     authentication_classes = (OAuth2Authentication,)
@@ -196,12 +196,8 @@ class QueryChatClientView(APIView):
         except Category.DoesNotExist:
             raise Http404
 
-    def list(self, request, pk):
-
-        """
-            Listado de queries y sus respectivos mensajes para un cliente
-        """
-
+    def get(self, request, pk):
+        """Listado de queries y sus respectivos mensajes para un cliente."""
         category = self.get_object(pk)
         client = Operations.get_id(self, request)
 
@@ -209,16 +205,16 @@ class QueryChatClientView(APIView):
             raise Http404
 
         queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
-                            'query_id', 'message_reference', 'content_type', 'file_url')\
-                           .annotate(title=F('query__title',),status=F('query__status',),\
+                                          'query_id', 'query__client_id', 'message_reference', 'specialist_id', 'content_type', 'file_url')\
+                          .annotate(title=F('query__title',),status=F('query__status',),\
                            calification=F('query__calification',),\
                            category_id=F('query__category_id',))\
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
-
+        # import pdb; pdb.set_trace()
         # Retorno 404 para ahorrar tiempo de ejecucion
-        if not queryset:
-            raise Http404
+        # if not queryset:
+        #     raise Http404
 
 
         serializer = ChatMessageSerializer(queryset, many=True)

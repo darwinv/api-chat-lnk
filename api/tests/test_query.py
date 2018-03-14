@@ -12,7 +12,7 @@ client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')  # Api Admin
 
 
-class GetListQueries(APITestCase):
+class ListCategoriesClient(APITestCase):
     """Prueba devolver especialidades por consulta hecha del cliente."""
 
     fixtures = ['data', 'data2', 'data3', 'test_query']
@@ -26,10 +26,6 @@ class GetListQueries(APITestCase):
         """404 clien_id not found."""
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
         response = client.get(reverse('queries-client'))
-
-        # import pdb; pdb.set_trace()
-        # clients = Cliente.objects.all()
-        # serializer = ClientSerializer(clients, many=True)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_list_by_client(self):
@@ -39,8 +35,8 @@ class GetListQueries(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class GetChatClientListQueries(APITestCase):
-    """Prueba devolver especialidades por consulta hecha del cliente."""
+class ListQueryMessagesByCategory(APITestCase):
+    """Devolver Mensajes y Consultas del cliente por especialidad."""
 
     fixtures = ['data', 'data2', 'data3', 'test_chat']
 
@@ -50,11 +46,11 @@ class GetChatClientListQueries(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
 
     def test_get_list_by_client_chat(self):
-        """Primer mensaje retornado es Viewed False y estatus 200."""
-        parameters = {'category': 8}
-        response = self.client.get(reverse('query-chat-client'), parameters)
-
-        self.assertEqual(response.data['results'][0]['message']['viewed'], False)
+        """Estatus 200."""
+        category = 8
+        response = self.client.get(reverse('query-chat-client', kwargs={'pk': category}))
+        # import pdb; pdb.set_trace()
+        # self.assertEqual(response.data['results'][0]['message']['viewed'], False)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
