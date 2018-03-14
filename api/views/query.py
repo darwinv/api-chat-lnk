@@ -13,7 +13,9 @@ from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api import pyrebase
+from api.views.actors import PutSpecialistMessages
 from channels import Group
+from django.urls import reverse
 import json
 
 
@@ -65,6 +67,10 @@ class QueryListClientView(ListCreateAPIView):
             # import pdb; pdb.set_trace()
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
             pyrebase.categories_db(user_id, data["category"])
+
+            queryset = PutSpecialistMessages.get(self, user_id)
+            pyrebase.createListMessageClients(queryset, user_id)
+
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
             # envio = dict(handle=serializer.data["code_client"], message=serializer.data['messages'][0]["message"])
@@ -103,6 +109,10 @@ class QueryDetailSpecialistView(APIView):
             serializer.save()
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
             pyrebase.categories_db(user_id, data["category"])
+
+            # queryset = PutSpecialistMessages.get(self, user_id)
+            # pyrebase.createListMessageClients(queryset, user_id)
+
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 

@@ -29,7 +29,8 @@ class SpecialistMessageListCustomSerializer(serializers.Serializer):
                 "date": aux_time,
                 "title": instance.title,
                 "total": instance.total,
-                "client": instance.client}
+                "client": instance.client,
+                "specialist": instance.specialist}
 
 class UserSerializer(serializers.ModelSerializer):
     """
