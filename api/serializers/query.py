@@ -62,9 +62,12 @@ class ListMessageSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """Redefinido nombres (claves) para firebase."""
         time = str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+        user_id = obj.query.client.id
+        if obj.specialist:
+            user_id = obj.specialist.id
         return {"id": obj.id, "room": obj.room, "codeUser": obj.code, "fileType": obj.content_type,
                 "fileUrl": obj.file_url, "message": obj.message, "messageType": obj.msg_type,
-                "timeMessage": time, "read": obj.viewed}
+                "timeMessage": time, "read": obj.viewed, "user_id": user_id}
 
 # Serializer para detalle de consulta
 class QueryDetailSerializer(serializers.ModelSerializer):
@@ -145,6 +148,7 @@ class QueryCustomSerializer(serializers.Serializer):
                 "month_count": dic['month_count'], "year_count": dic['year_count']}
 
 
+# Serializer solo para crear.
 class QuerySerializer(serializers.ModelSerializer):
     """Serializer para crear consultas."""
 
@@ -204,7 +208,7 @@ class QuerySerializer(serializers.ModelSerializer):
             # armamos la sala para el usuario
             data_message["room"] = 'u'+str(validated_data["client"].id)+'-'+'c'+str(validated_data["category"].id)
             data_message["code"] = validated_data["client"].code
-            self.context['messages_data'] = data_message
+            # self.context["user_id"] = validated_data["client"].id
             Message.objects.create(query=query, **data_message)
         # restamos una consulta disponible al plan adquirido
         acquired_plan.available_queries = acquired_plan.available_queries - 1
@@ -427,7 +431,7 @@ class QueryListSpecialistSerializer(serializers.ModelSerializer):
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     """Informacion de los mensajes para chat de cliente."""
-    # file = serializers.SerializerMethodField()
+
     time_message = serializers.SerializerMethodField()
     query = serializers.SerializerMethodField()
     message_reference = serializers.SerializerMethodField()
@@ -445,7 +449,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
         return get_time_message(obj['created_at'])
 
     def get_query(self, obj):
-        """Objeto Query"""
+        """Objeto Query."""
         query = QueryChatClientSerializer(obj)
         return query.data
 
