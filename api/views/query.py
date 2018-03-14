@@ -106,9 +106,9 @@ class QueryDetailSpecialistView(APIView):
         if serializer.is_valid():
             serializer.save()
             # Actualizamos el nodo de mensajes segun su sala
-            # pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
+            pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
             # Actualizamos el listado de especialidades en Firebase
-            # pyrebase.categories_db(user_id, serializer.data["category"])
+            pyrebase.categories_db(user_id, serializer.data["category"])
             lista = list(serializer.data['message'].values())
             # sala es el cliente_id y su la categoria del especialista
             sala = str(query.client.id) + '-' + str(serializer.data["category"])
