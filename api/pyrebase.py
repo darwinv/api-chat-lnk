@@ -67,10 +67,10 @@ def createListMessageClients(lista, client_id):
     #funsion para insertar o actualizar los mensajes de los clientes del especialista
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
-    node_specialist = Params.PREFIX['specialist'] + str(lista[0]['specialist'])
-    dic_data = lista[0]
-    dic_data['date'] = str(dic_data['date'])
-    del (dic_data['specialist'])
+    data_obj = lista[0]
+    node_specialist = Params.PREFIX['specialist'] + str(data_obj['specialist'])
+    data_obj['date'] = str(data_obj['date'])
+    del (data_obj['specialist'])
     payload = {}
     position = -1
     cont = 0
@@ -85,8 +85,10 @@ def createListMessageClients(lista, client_id):
                 position = cont
             cont += 1
         if position > -1:
+            # list_msgs[position] = t
             list_msgs[position] = lista[0]
         else:
+            # list_msgs.append(t)
             list_msgs.append(lista[0])
         payload[node_specialist] = list_msgs
     else:

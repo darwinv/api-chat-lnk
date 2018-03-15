@@ -1,7 +1,7 @@
 """Vista de todos los Actores."""
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import User, Client, Specialist, Seller, Query, Message, SpecialistMessageList
+from api.models import User, Client, Specialist, Seller, Query, Message, SpecialistMessageList, SpecialistMessageList_sp
 from api.models import SellerContactNoEfective
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
@@ -16,7 +16,7 @@ from api.serializers.actors import SellerSerializer, SellerContactBusinessSerial
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
 from api.serializers.query import QuerySerializer, QueryCustomSerializer
 from django.http import Http404
-from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrClient, IsAdminOrSpecialist
+from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrSpecialist
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 from django.utils.translation import ugettext_lazy as _
 import os
@@ -36,6 +36,8 @@ ROLE_SELLER = 4
 PREFIX_CODE_SPECIALIST = 'E'
 PREFIX_CODE_SELLER = 'V'
 DATE_FAKE = '1900-01-01'
+
+
 # Fin de constantes
 
 
@@ -86,6 +88,7 @@ class ViewKey(APIView):
         serializer = KeySerializer(user)
         return Response(serializer.data)
 
+
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """Vista para traer datos de usuarios (Logueo en la web)."""
 
@@ -96,7 +99,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('username',)
-
 
 
 # Vista para Listar y Crear Clientes
@@ -139,10 +141,11 @@ class ClientListView(ListCreateAPIView):
         serializer = ClientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            #se le crea la lista de todas las categorias al cliente en firebase
+            # se le crea la lista de todas las categorias al cliente en firebase
             pyrebase.createCategoriesLisClients(serializer.data['id'])
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 # Vista para Detalle del Cliente
 class ClientDetailView(APIView):
@@ -150,6 +153,7 @@ class ClientDetailView(APIView):
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (IsAdminOrOwner,)
+
     # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
 
     def get_object(self, pk):
@@ -173,6 +177,7 @@ class ClientDetailView(APIView):
 class ClientDetailByUsername(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated,)
+
     def get_object(self, username):
         try:
             client = Client.objects.get(username=username, )
@@ -214,13 +219,13 @@ class SpecialistDetailByUsername(APIView):
 class SpecialistQueryCountView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
     # permission_classes = (permissions.IsAuthenticated,)
-    #usando la nueva validacion de permisos
+    # usando la nueva validacion de permisos
     permission_classes = (IsAdminOrSpecialist,)
 
     def get_count(self, specialist_id, fecha_init, fecha_end, request):
         """Obtener entero resultado del total de registros encontrados."""
         try:
-            count = Query.objects.filter(specialist_id = specialist_id, changed_on__range=(fecha_init, fecha_end)).count()
+            count = Query.objects.filter(specialist_id=specialist_id, changed_on__range=(fecha_init, fecha_end)).count()
             self.check_object_permissions(self.request, count)
             return count
         except Query.DoesNotExist:
@@ -231,11 +236,11 @@ class SpecialistQueryCountView(ListCreateAPIView):
         data = {}
         specialist_id = request.user.id
         # now2 = datetime.utcnow()
-        #se obtiene el current timestamp utc
+        # se obtiene el current timestamp utc
         now = timezone.now()
         # first_day_month = date(now.year,now.month,1)
         # first_day_year = date(now.year, 1, 1)
-        #se arma las fechas -> primer dia del mes actual y primer dia del año actual
+        # se arma las fechas -> primer dia del mes actual y primer dia del año actual
         first_day_month = datetime(now.year, now.month, 1, tzinfo=timezone.utc)
         first_day_year = datetime(now.year, 1, 1, tzinfo=timezone.utc)
         month_count = self.get_count(specialist_id, first_day_month, now, request)
@@ -248,6 +253,7 @@ class SpecialistQueryCountView(ListCreateAPIView):
         serializer = QueryCustomSerializer(data)
         return Response(serializer.data)
         # return Response(JSONRenderer().render(respuesta), status=200)
+
 
 class SpecialistListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
@@ -299,11 +305,13 @@ class SpecialistListView(ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class PutSpecialistMessages():
     def get(self, pk):
         obj = SpecialistMessageList.objects.filter(client=pk)
         serializer = SpecialistMessageListCustomSerializer(obj, many=True)
         return serializer.data
+
 
 class SpecialistMessagesListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
@@ -311,9 +319,8 @@ class SpecialistMessagesListView(ListCreateAPIView):
 
     def get_object(self, pk):
         try:
-            # r = Manager.raw()
-            obj = SpecialistMessageList.objects.filter(specialist=pk)
-            # obj = Message.objects.filter(specialist_id = 4, msg_type = 'q').values('query__client').annotate(date = Max('created_at'),cont = Count('*')).order_by('date','id')
+            #se le manda 1 en el primer parametro para que el SP realice el filtro por especialista
+            obj = SpecialistMessageList_sp.search(1, 0, pk)
             self.check_object_permissions(self.request, obj)
             return obj
         except SpecialistMessageList.DoesNotExist:
@@ -321,7 +328,7 @@ class SpecialistMessagesListView(ListCreateAPIView):
 
     # listado
     def list(self, request):
-        #obtengo el pk del especialista
+        # obtengo el pk del especialista
         pk = Operations.get_id(self, request)
         list = self.get_object(pk)
         serializer = SpecialistMessageListCustomSerializer(list, many=True)
@@ -332,10 +339,12 @@ class SpecialistMessagesListView(ListCreateAPIView):
             return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
 
+
 # Vista para el detalle del especialista, actualizacion y borrado
 class SpecialistDetailView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (IsAdminOrOwner,)
+
     def get_object(self, pk):
         try:
             obj = Specialist.objects.get(pk=pk)
@@ -343,18 +352,20 @@ class SpecialistDetailView(APIView):
             return obj
         except Specialist.DoesNotExist:
             raise Http404
+
     # detalle
     def get(self, request, pk):
         specialist = self.get_object(pk)
         serializer = SpecialistSerializer(specialist)
         return Response(serializer.data)
+
     # actualizacion
     def put(self, request, pk):
         data = request.data
         specialist = self.get_object(pk)
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
-        data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number',specialist.document_number)
-        data['photo'] = request.data.get('photo',specialist.photo)
+        data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number', specialist.document_number)
+        data['photo'] = request.data.get('photo', specialist.photo)
         data['username'] = specialist.username
         data['role'] = ROLE_SPECIALIST
 
@@ -365,8 +376,9 @@ class SpecialistDetailView(APIView):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     # borrado
-    def delete(self,request,pk):
+    def delete(self, request, pk):
         specialist = self.get_object(pk)
         specialist.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -375,6 +387,7 @@ class SpecialistDetailView(APIView):
 # Vista para estado de cuenta de especialista
 class SpecialistAccountView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
     def get_object(self, pk):
         try:
             return Specialist.objects.get(pk=pk)
@@ -387,42 +400,46 @@ class SpecialistAccountView(APIView):
         return Response(serializer.data)
 
 
-
 # ------------ Fin de Especialistas -----------------
 
 
-#---------- ------ Inicio de Vendedores ------------------------------
+# ---------- ------ Inicio de Vendedores ------------------------------
 
 class SellerFilter(filters.FilterSet):
     count_plans_seller = filters.NumberFilter(name='count_plans_seller', method='filter_count_plans')
     count_queries_seller = filters.NumberFilter(name='count_queries_seller', method='filter_count_queries')
+
     def filter_count_plans(self, qs, name, value):
-        #todos los id de vendedores que han vendido mas que value
+        # todos los id de vendedores que han vendido mas que value
         sellers_ids = []
         for seller in Seller.objects.all():
-            #calcular cantidad vendida
+            # calcular cantidad vendida
             count = Purchase.objects.filter(seller=seller.id).count()
-            #si la cantidad vendida es mayor que el parametro
-            #agregar a la lista
+            # si la cantidad vendida es mayor que el parametro
+            # agregar a la lista
             if count > value:
                 sellers_ids.append(seller.id)
-        return qs.filter(id__in= sellers_ids)
+        return qs.filter(id__in=sellers_ids)
+
     def filter_count_queries(self, qs, name, value):
-        #todos los id de vendedores que han vendido mas que value
+        # todos los id de vendedores que han vendido mas que value
         sellers_ids = []
         for seller in Seller.objects.all():
-            #calcular cantidad vendida
-            count_result = Product.objects.filter(purchase__seller__isnull=False, purchase__seller=seller.id).aggregate(Sum('query_amount'))
+            # calcular cantidad vendida
+            count_result = Product.objects.filter(purchase__seller__isnull=False, purchase__seller=seller.id).aggregate(
+                Sum('query_amount'))
             count = count_result['query_amount__sum']
-            #si la cantidad vendida es mayor que el parametro
-            #agregar a la lista
+            # si la cantidad vendida es mayor que el parametro
+            # agregar a la lista
             if count and count > value:
                 sellers_ids.append(seller.id)
-        return qs.filter(id__in= sellers_ids)
+        return qs.filter(id__in=sellers_ids)
+
     first_name = filters.CharFilter(name='first_name', lookup_expr='icontains')
     last_name = filters.CharFilter(name='last_name', lookup_expr='icontains')
     ruc = filters.CharFilter(name='ruc', lookup_expr='icontains')
     email_exact = filters.CharFilter(name='email_exact', lookup_expr='icontains')
+
     class Meta:
         model = Seller
         fields = ['first_name', 'last_name', 'ruc', 'email_exact']
@@ -460,6 +477,7 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
 class SellerDetailView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
     def get_object(self, pk):
         try:
             return Seller.objects.get(pk=pk)
@@ -476,8 +494,8 @@ class SellerDetailView(APIView):
 
         seller = self.get_object(pk)
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
-        data['code'] = PREFIX_CODE_SELLER + request.data.get('document_number',seller.document_number)
-        data['photo'] = request.data.get('photo',seller.photo)
+        data['code'] = PREFIX_CODE_SELLER + request.data.get('document_number', seller.document_number)
+        data['photo'] = request.data.get('photo', seller.photo)
         data['username'] = seller.username
         data['role'] = ROLE_SELLER
 
@@ -488,6 +506,7 @@ class SellerDetailView(APIView):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class SellerDetailByUsername(APIView):
     """Detalle de Vendedor por Nombre de Usuario."""
@@ -508,6 +527,7 @@ class SellerDetailByUsername(APIView):
         serializer = SellerSerializer(seller)
         return Response(serializer.data)
 
+
 class SellerDetailByUsername2(APIView):
     """Detalle de Vendedor por Nombre de Usuario."""
 
@@ -526,6 +546,7 @@ class SellerDetailByUsername2(APIView):
         seller = self.get_object(username)
         serializer = SellerSerializer(seller)
         return Response(serializer.data)
+
 
 class SellerAccountView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
@@ -612,7 +633,7 @@ class PhotoUploadView(APIView):
         data = request.data
         user = self.get_object(pk)
         media_serializer = MediaSerializer(
-            data = data,
+            data=data,
             partial=True
         )
         # creando nombre de archivo
@@ -627,8 +648,8 @@ class PhotoUploadView(APIView):
             raise serializers.ValidationError(media_serializer.errors)
         # se sube el archivo a amazon
         name_photo = self.upload_photo_s3(filename)
-        os.remove(filename) # se elimina del server local
-        serializer = UserPhotoSerializer(user, data={'photo': name_photo }, partial=True)
+        os.remove(filename)  # se elimina del server local
+        serializer = UserPhotoSerializer(user, data={'photo': name_photo}, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -637,7 +658,7 @@ class PhotoUploadView(APIView):
     # metodo para subir foto a s3
     def upload_photo_s3(self, filename):
 
-        #subir archivo con libreria boto
+        # subir archivo con libreria boto
         s3 = boto3.client('s3')
 
         s3.upload_file(
@@ -646,6 +667,7 @@ class PhotoUploadView(APIView):
         )
         # devolviendo ruta al archivo
         return 'https://s3.amazonaws.com/linkup-photos/' + filename;
+
 
 # --------------------------------------------------
 
@@ -659,7 +681,7 @@ class FileUploadView(ListCreateAPIView, UpdateAPIView):
         data = request.data
 
         serializer = MediaSerializer(
-            data = data,
+            data=data,
             partial=True
         )
 
@@ -668,7 +690,7 @@ class FileUploadView(ListCreateAPIView, UpdateAPIView):
         filename = filename + '.png';
 
         if serializer.is_valid():
-            #serializer.save()
+            # serializer.save()
 
             destination = open(filename, 'wb+')
             for chunk in data['photo'].chunks():
@@ -676,17 +698,17 @@ class FileUploadView(ListCreateAPIView, UpdateAPIView):
 
             destination.close()
 
-        name=self.uploadImageToS3(filename)
+        name = self.uploadImageToS3(filename)
 
-        #eliminar archivo temporal
+        # eliminar archivo temporal
 
-        #guardar archivo en disco
-        #reemplazar por subir imagen al aws
-        return Response(serializer.data['filename']+str(name))
+        # guardar archivo en disco
+        # reemplazar por subir imagen al aws
+        return Response(serializer.data['filename'] + str(name))
 
     def uploadImageToS3(self, filename):
 
-        #subir archivo con libreria boto
+        # subir archivo con libreria boto
         s3 = boto3.client('s3')
 
         s3.upload_file(
@@ -696,6 +718,7 @@ class FileUploadView(ListCreateAPIView, UpdateAPIView):
 
         # devolviendo ruta al archivo
         return 'https://s3.amazonaws.com/linkup-photos/' + filename;
+
 
 class AllFileUploadView(APIView):
     parser_classes = (FileUploadParser,)
@@ -710,6 +733,7 @@ class AllFileUploadView(APIView):
         destination.close()
 
         return Response(status=204)
+
 
 class DocumentUploadView(APIView):
     """
@@ -729,7 +753,7 @@ class DocumentUploadView(APIView):
         data = request.data
         user = self.get_object(pk)
         media_serializer = MediaSerializer(
-            data = data,
+            data=data,
             partial=True
         )
         # creando nombre de archivo
@@ -746,7 +770,7 @@ class DocumentUploadView(APIView):
         # pdb.set_trace()
         name_photo = upload_photo_s3(filename)
         os.remove(filename)
-        serializer = UserSerializer(user, data={'img_document_number': name_photo }, partial=True)
+        serializer = UserSerializer(user, data={'img_document_number': name_photo}, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -754,8 +778,7 @@ class DocumentUploadView(APIView):
 
 
 def upload_photo_s3(filename):
-
-    #subir archivo con libreria boto
+    # subir archivo con libreria boto
     s3 = boto3.client('s3')
 
     s3.upload_file(
