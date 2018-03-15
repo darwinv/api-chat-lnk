@@ -600,6 +600,9 @@ class SpecialistMessageList_sp(models.Model):
     client = models.IntegerField(blank=True)
     specialist = models.IntegerField(blank=True)
 
+    class Meta:
+        managed = False
+
     @staticmethod
     def search(flag, client_id, specialist_id):
         # create a cursor
