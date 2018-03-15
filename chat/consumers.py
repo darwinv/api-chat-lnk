@@ -48,6 +48,5 @@ def send_api(token='', arg=None, files=None):
     slug = 'client/queries'
     if token:
         headers['Authorization'] = 'Bearer {}'.format(token)
-        headers = dict(headers, **{'x-api-key': '90bd028513c2440f9c262c5c09c668e5'})
         r = requests.post(url + slug + '/', headers=headers, json=arg, files=files)
         print(r.json())
