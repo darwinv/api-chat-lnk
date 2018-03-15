@@ -305,6 +305,11 @@ class SpecialistListView(ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class PutSpecialistMessages():
+    def get(self, pk):
+        obj = SpecialistMessageList.objects.filter(client=pk)
+        serializer = SpecialistMessageListCustomSerializer(obj, many=True)
+        return serializer.data
 
 class SpecialistMessagesListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)

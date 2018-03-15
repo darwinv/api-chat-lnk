@@ -5,148 +5,176 @@ class Params:
     # prefijos para usuarios y listas
     PREFIX = {
         "client": "u",
-        "specialist": "sp",
-        "seller": "se",
+        "specialist": "s",
+        "seller": "sl",
         "category": "c"
     }
 
 
 class Payloads:
+    read = True
     categoriesList = {
-        "1": {
-            "datetime": "2018-03-31 12:52:10.742779",
+        "c1": {
+            "datetime": "",
             "id": 1,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-02.png",
-            "name": "Impuestos"
-        }, "2": {
-            "datetime": "2018-02-05 12:52:10.742769",
+            "name": "Impuestos",
+            "read": read
+        }, "c2": {
+            "datetime": "",
             "id": 2,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-03.png",
-            "name": "Contabilidad"
-        }, "3": {
-            "datetime": "2018-03-07 12:52:10.742789",
+            "name": "Contabilidad",
+            "read": read
+        }, "c3": {
+            "datetime": "",
             "id": 3,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Sin-título-1-17.png",
-            "name": "Derecho Tributario"
-        }, "4": {
-            "datetime": "2018-03-08 12:52:10.742789",
+            "name": "Derecho Tributario",
+            "read": read
+        }, "c4": {
+            "datetime": "",
             "id": 4,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-04.png",
-            "name": "Finanzas"
-        }, "5": {
-            "datetime": "2018-03-09 12:52:10.742789",
+            "name": "Finanzas",
+            "read": read
+        }, "c5": {
+            "datetime": "",
             "id": 5,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-05.png",
-            "name": "Seguros"
-        }, "6": {
-            "datetime": "2018-03-10 12:52:10.742789",
+            "name": "Seguros",
+            "read": read
+        }, "c6": {
+            "datetime": "",
             "id": 6,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-10.png",
-            "name": "Derecho Corporativo"
-        }, "7": {
-            "datetime": "2018-03-11 12:52:10.742789",
+            "name": "Derecho Corporativo",
+            "read": read
+        }, "c7": {
+            "datetime": "",
             "id": 7,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-06.png",
-            "name": "Comercio Exterior"
-        }, "8": {
-            "datetime": "2018-03-12 12:52:10.742789",
+            "name": "Comercio Exterior",
+            "read": read
+        }, "c8": {
+            "datetime": "",
             "id": 8,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-08.png",
-            "name": "Tecnología de la Información"
-        }, "9": {
-            "datetime": "2018-03-13 12:52:10.742789",
+            "name": "Tecnología de la Información",
+            "read": read
+        }, "c9": {
+            "datetime": "",
             "id": 9,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-17-2.png",
-            "name": "Propiedad Intelectual"
-        }, "10": {
-            "datetime": "2018-03-14 12:52:10.742789",
+            "name": "Propiedad Intelectual",
+            "read": read
+        }, "c10": {
+            "datetime": "",
             "id": 10,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-07.png",
-            "name": "Publicidad"
-        }, "11": {
-            "datetime": "2018-03-15 12:52:10.742789",
+            "name": "Publicidad",
+            "read": read
+        }, "c11": {
+            "datetime": "",
             "id": 11,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-09.png",
-            "name": "Psicología Organizacional"
-        }, "12": {
-            "datetime": "2018-03-16 12:52:10.742789",
+            "name": "Psicología Organizacional",
+            "read": read
+        }, "c12": {
+            "datetime": "",
             "id": 12,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-24.png",
-            "name": "Contrataciones con el Estado"
-        }, "13": {
-            "datetime": "2018-03-17 12:52:10.742789",
+            "name": "Contrataciones con el Estado",
+            "read": read
+        }, "c13": {
+            "datetime": "",
             "id": 13,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-29-1.png",
-            "name": "Marketing"
-        }, "14": {
-            "datetime": "2018-03-18 12:52:10.742789",
+            "name": "Marketing",
+            "read": read
+        }, "c14": {
+            "datetime": "",
             "id": 14,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-24-1.png",
-            "name": "Mecánica"
-        }, "15": {
-            "datetime": "2018-03-19 12:52:10.742789",
+            "name": "Mecánica",
+            "read": read
+        }, "c15": {
+            "datetime": "",
             "id": 15,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-16.png",
-            "name": "Derecho Notarial y Registral"
-        }, "16": {
-            "datetime": "2018-03-20 12:52:10.742789",
+            "name": "Derecho Notarial y Registral",
+            "read": read
+        }, "c16": {
+            "datetime": "",
             "id": 16,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-30-1.png",
-            "name": "Gestión de Proyectos"
-        }, "17": {
-            "datetime": "2018-03-21 12:52:10.742789",
+            "name": "Gestión de Proyectos",
+            "read": read
+        }, "c17": {
+            "datetime": "",
             "id": 17,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-20-1.png",
-            "name": "Electricidad"
-        }, "18": {
-            "datetime": "2018-03-22 12:52:10.742789",
+            "name": "Electricidad",
+            "read": read
+        }, "c18": {
+            "datetime": "",
             "id": 18,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-12.png",
-            "name": "Derecho Procesal Civil"
-        }, "19": {
-            "datetime": "2018-03-23 12:52:10.742789",
+            "name": "Derecho Procesal Civil",
+            "read": read
+        }, "c19": {
+            "datetime": "",
             "id": 19,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-21-3.png",
-            "name": "Agroindustria"
-        }, "20": {
-            "datetime": "2018-03-24 12:52:10.742789",
+            "name": "Agroindustria",
+            "read": read
+        }, "c20": {
+            "datetime": "",
             "id": 20,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-22-1.png",
-            "name": "Electronics"
-        }, "21": {
-            "datetime": "2018-03-25 12:52:10.742789",
+            "name": "Electronics",
+            "read": read
+        }, "c21": {
+            "datetime": "",
             "id": 21,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-14.png",
-            "name": "Derecho Penal"
-        }, "22": {
-            "datetime": "2018-03-26 12:52:10.742789",
+            "name": "Derecho Penal",
+            "read": read
+        }, "c22": {
+            "datetime": "",
             "id": 22,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-27.png",
-            "name": "Alimentaria"
-        }, "23": {
-            "datetime": "2018-03-27 12:52:10.742789",
+            "name": "Alimentaria",
+            "read": read
+        }, "c23": {
+            "datetime": "",
             "id": 23,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-23-2.png",
-            "name": "Automatización"
-        }, "24": {
-            "datetime": "2018-03-28 12:52:10.742789",
+            "name": "Automatización",
+            "read": read
+        }, "c24": {
+            "datetime": "",
             "id": 24,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Sin-título-1-11.png",
-            "name": "Derecho Laboral"
-        }, "25": {
-            "datetime": "2018-03-29 12:52:10.742789",
+            "name": "Derecho Laboral",
+            "read": read
+        }, "c25": {
+            "datetime": "",
             "id": 25,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-28-2.png",
-            "name": "Gastronomía"
-        }, "26": {
-            "datetime": "2018-03-30 12:52:10.742789",
+            "name": "Gastronomía",
+            "read": read
+        }, "c26": {
+            "datetime": "",
             "id": 26,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-26.png",
-            "name": "Plásticos"
-        }, "27": {
-            "datetime": "2018-03-31 12:52:10.742789",
+            "name": "Plásticos",
+            "read": read
+        }, "c27": {
+            "datetime": "",
             "id": 27,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Sin-título-1-15.png",
-            "name": "Derecho Minero"
+            "name": "Derecho Minero",
+            "read": read
         }
     }

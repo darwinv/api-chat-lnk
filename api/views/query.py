@@ -13,7 +13,9 @@ from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api import pyrebase
+from api.views.actors import PutSpecialistMessages
 from channels import Group
+from django.urls import reverse
 import json
 
 
@@ -66,6 +68,10 @@ class QueryListClientView(ListCreateAPIView):
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
             # Se actualiza la base de datos de firebase listado de sus especialidades
             pyrebase.categories_db(user_id, serializer.data["category"])
+
+            queryset = PutSpecialistMessages.get(self, user_id)
+            pyrebase.createListMessageClients(queryset, user_id)
+
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
             lista = list(serializer.data['message'].values())
@@ -107,6 +113,7 @@ class QueryDetailSpecialistView(APIView):
             serializer.save()
             # Actualizamos el nodo de mensajes segun su sala
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
+<<<<<<< HEAD
             # Actualizamos el listado de especialidades en Firebase
             pyrebase.categories_db(user_id, serializer.data["category"])
             lista = list(serializer.data['message'].values())
@@ -114,6 +121,13 @@ class QueryDetailSpecialistView(APIView):
             sala = str(query.client.id) + '-' + str(serializer.data["category"])
             # print(sala)
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
+=======
+            pyrebase.categories_db(user_id, data["category"])
+
+            # queryset = PutSpecialistMessages.get(self, user_id)
+            # pyrebase.createListMessageClients(queryset, user_id)
+
+>>>>>>> 2fef400b02d8c27aed855e4731df3e28a93d1e8e
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 

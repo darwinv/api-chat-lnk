@@ -22,3 +22,6 @@ Twisted==17.9.0
 Twisted[tls,http2]==17.9.0
 
 pyrebase
+
+sqlparse==0.2.4
+
