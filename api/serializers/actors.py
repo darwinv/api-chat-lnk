@@ -29,7 +29,8 @@ class SpecialistMessageListCustomSerializer(serializers.Serializer):
                 "date": aux_time,
                 "title": instance.title,
                 "total": instance.total,
-                "client": instance.client}
+                "client": instance.client,
+                "specialist": instance.specialist}
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -321,7 +322,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
             'photo', 'document_type', 'document_type_name', 'document_number', 'address', 'ruc', 'email_exact', 'code',
             'telephone', 'cellphone', 'business_name', 'payment_per_answer', 'cv', 'star_rating', 'category',
             'category_name', 'nationality', 'nationality_name', 'residence_country', 'residence_country_name',
-            'foreign_address')
+            'foreign_address', 'role')
 
     def get_nationality_name(self, obj):
         """Devuelvo la nacionalidad del especialista."""
@@ -362,6 +363,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
         password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
         validated_data['key'] = password
+        validated_data['status'] = 1
         instance = self.Meta.model(**validated_data)
         # "ruc {}".format(required)
         if validated_data["type_specialist"] == "m" and Specialist.objects.filter(type_specialist="m",
@@ -371,7 +373,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(u"{}".format(valid_spec))
         if password is not None:
             instance.set_password(password)
-
         instance.save()
 
         subject = cap(_('send credencials'))
@@ -465,8 +466,6 @@ class SellerSerializer(serializers.ModelSerializer):
 
     nationality_name = serializers.SerializerMethodField()
     quota = serializers.SerializerMethodField()
-    # count_plans_seller = serializers.SerializerMethodField()
-    # count_queries = serializers.SerializerMethodField()
     address = AddressSerializer(required=False)
     document_type = serializers.ChoiceField(choices=c.user_document_type)
     document_type_name = serializers.SerializerMethodField()
@@ -479,7 +478,6 @@ class SellerSerializer(serializers.ModelSerializer):
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
-    # ciiu = serializers.PrimaryKeyRelatedField(queryset=Ciiu.objects.all(), allow_null=True)
     ciiu_name = serializers.SerializerMethodField()
     photo = serializers.CharField(read_only=True)
 
@@ -491,7 +489,7 @@ class SellerSerializer(serializers.ModelSerializer):
             'id', 'address', 'quota', 'zone', 'username', 'nick', 'first_name',
             'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'document_type_name',
             'code', 'document_number', 'ruc', 'nationality', 'nationality_name', 'residence_country',
-            'residence_country_name', "foreign_address","ciiu","ciiu_name","photo")
+            'residence_country_name', "foreign_address", "ciiu", "ciiu_name", "photo", "role")
 
     def get_nationality_name(self, obj):
         """Devuelvo la nacionalidad del especialista."""
@@ -528,7 +526,6 @@ class SellerSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Metodo actualizar redefinido."""
-
         instance.residence_country = validated_data.get('residence_country', instance.residence_country)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.nick = validated_data.get('nick', instance.nick)
@@ -583,6 +580,7 @@ class SellerSerializer(serializers.ModelSerializer):
                 del validated_data['ruc']
         password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
         validated_data['key'] = password
+        validated_data['status'] = 1
         instance = self.Meta.model(**validated_data)
         if password is not None:
             instance.set_password(password)

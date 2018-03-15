@@ -26,6 +26,7 @@ from datetime import datetime, date
 from django.utils import timezone
 from django.db.models import Max, Count
 from api.utils.validations import Operations
+from api import pyrebase
 
 # Constantes
 PREFIX_CODE_CLIENT = 'C'
@@ -97,6 +98,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = ('username',)
 
 
+
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):
     """Vista Cliente."""
@@ -137,6 +139,8 @@ class ClientListView(ListCreateAPIView):
         serializer = ClientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            #se le crea la lista de todas las categorias al cliente en firebase
+            pyrebase.createCategoriesLisClients(serializer.data['id'])
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -167,15 +171,21 @@ class ClientDetailView(APIView):
 # Vista para detalle del cliente segun su username
 # se hizo con la finalidad de instanciar una vez logueado
 class ClientDetailByUsername(APIView):
+    """Traer detalle del cliente por nombre de usuario."""
+
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated,)
+
     def get_object(self, username):
+        """Obtener objeto si existe."""
         try:
-            return Client.objects.get(username=username)
+            client = Client.objects.get(username=username)
+            return client
         except Client.DoesNotExist:
             raise Http404
 
     def get(self, request, username):
+        """Devuelve Cliente."""
         client = self.get_object(username)
         serializer = ClientSerializer(client)
         return Response(serializer.data)
@@ -295,6 +305,11 @@ class SpecialistListView(ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class PutSpecialistMessages():
+    def get(self, pk):
+        obj = SpecialistMessageList.objects.filter(client=pk)
+        serializer = SpecialistMessageListCustomSerializer(obj, many=True)
+        return serializer.data
 
 class SpecialistMessagesListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)

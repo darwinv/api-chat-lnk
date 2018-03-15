@@ -33,7 +33,7 @@ class ChoicesAPI:
         ('m', _('Male')),
         ('f', _('Female')),
     )
-    
+
     client_civil_state = (
         ('c', _('cohabiting')),
         ('e', _('separated')),
@@ -104,7 +104,7 @@ class ChoicesAPI:
         ('1', _('Accepted')),
         ('2', _('Declined')),
     )
-    
+
     # Query Model
     query_status = (
         ('0', _('Requested')),  # Preguntada, pendiente de derivar o responder
@@ -134,8 +134,9 @@ class ChoicesAPI:
     message_content_type = (
         ('0', _('Text')),
         ('1', _('Image')),
-        ('2', _('Voice')),
-        ('3', _('Document')),
+        ('2', _('Video')),
+        ('3', _('Voice')),
+        ('4', _('Document')),
     )
 
     # Match Model

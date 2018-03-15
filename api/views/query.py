@@ -3,17 +3,19 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from api.models import Query, Message, Category
-from api.permissions import IsAdminOrClient
+from api.models import Query, Message, Category, Specialist
+from api.permissions import IsAdminOrClient, IsAdminReadOrSpecialistOwner
 from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
-from api.serializers.query import QueryDetailLastMsgSerializer, QueryChatClientSerializer
+from api.serializers.query import QueryDetailLastMsgSerializer, ChatMessageSerializer, QueryResponseSerializer
 from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api import pyrebase
+from api.views.actors import PutSpecialistMessages
 from channels import Group
+from django.urls import reverse
 import json
 
 
@@ -57,20 +59,74 @@ class QueryListClientView(ListCreateAPIView):
         if not user_id:
             raise Http404
         data = request.data
-        # tomamos del token el id de usuarios
+        # tomamos del token el id de usuario (cliente en este caso)
         data["client"] = user_id
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            # room = serializer.data[]
-            # pyrebase.chat_firebase_db(data, serializer.data["id"])
+            # Se actualiza la base de datos de firebase para el mensaje
+            pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
+            # Se actualiza la base de datos de firebase listado de sus especialidades
+            pyrebase.categories_db(user_id, serializer.data["category"])
+
+            queryset = PutSpecialistMessages.get(self, user_id)
+            pyrebase.createListMessageClients(queryset, user_id)
+
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
-            # envio = dict(handle=serializer.data["code_client"], message=serializer.data['messages'][0]["message"])
-            # Group('chat-'+str(label)).send({'text': json.dumps(envio)})
+            lista = list(serializer.data['message'].values())
+            sala = str(user_id) + '-' + str(serializer.data["category"])
+            Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             return Response(serializer.data, status.HTTP_201_CREATED)
-        # import pdb; pdb.set_trace()
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class QueryDetailSpecialistView(APIView):
+    """Vista para que el especialista responda la consulta."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsAdminReadOrSpecialistOwner]
+
+    def get_object(self, pk):
+        """Obtener objeto."""
+        try:
+            obj = Query.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj.specialist)
+            return obj
+        except Query.DoesNotExist:
+            raise Http404
+
+    # Actualizar Consulta
+    def put(self, request, pk):
+        """Actualiza la consulta."""
+        query = self.get_object(pk)
+        user_id = Operations.get_id(self, request)
+        # label = 1
+        if not user_id:
+            raise Http404
+        data = request.data
+        # tomamos del token el id de usuario (especialista en este caso)
+        spec = Specialist.objects.get(pk=user_id)
+        # No utilizamos partial=True, ya que solo actualizamos mensaje
+        serializer = QueryResponseSerializer(query, data, context={'specialist': spec})
+        if serializer.is_valid():
+            serializer.save()
+            # Actualizamos el nodo de mensajes segun su sala
+            pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
+
+            # Actualizamos el listado de especialidades en Firebase
+            pyrebase.categories_db(user_id, serializer.data["category"])
+            lista = list(serializer.data['message'].values())
+            # sala es el cliente_id y su la categoria del especialista
+            sala = str(query.client.id) + '-' + str(serializer.data["category"])
+            # print(sala)
+            Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
+
+            # queryset = PutSpecialistMessages.get(self, user_id)
+            # pyrebase.createListMessageClients(queryset, user_id)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 # Detall de consulta
 class QueryDetailView(APIView):
@@ -141,36 +197,37 @@ class QueryChatClientView(ListCreateAPIView):
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
-    serializer_class = QueryChatClientSerializer
+    serializer_class = ChatMessageSerializer
 
-
-    def list(self, request):
-
-        """
-            Listado de queries y sus respectivos mensajes para un cliente
-        """
-        if not 'category' in request.query_params:
+    def get_object(self, pk):
+        """Obtener Categoria."""
+        try:
+            # import pdb; pdb.set_trace()
+            return Category.objects.get(pk=pk)
+        except Category.DoesNotExist:
             raise Http404
 
-        category = request.query_params['category']
+    def get(self, request, pk):
+        """Listado de queries y sus respectivos mensajes para un cliente."""
+        category = self.get_object(pk)
         client = Operations.get_id(self, request)
 
         if not client:
             raise Http404
-        
-        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed', 'query_id', 'message_reference')\
-                           .annotate(title=F('query__title',),status=F('query__status',),\
-                           calification=F('query__calification',),\
+
+        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
+                                          'query_id', 'query__client_id', 'message_reference', 'specialist_id', 'content_type', 'file_url')\
+                          .annotate(title=F('query__title',), status=F('query__status',),\
+                                    calification=F('query__calification',),\
                            category_id=F('query__category_id',))\
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
-
+        # import pdb; pdb.set_trace()
         # Retorno 404 para ahorrar tiempo de ejecucion
-        if not queryset:
-            raise Http404
+        # if not queryset:
+        #     raise Http404
 
-
-        serializer = QueryChatClientSerializer(queryset, many=True)
+        serializer = ChatMessageSerializer(queryset, many=True)
 
         # pagination
         page = self.paginate_queryset(queryset)

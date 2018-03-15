@@ -1,15 +1,10 @@
 """Vista de sala de chats."""
-from django.shortcuts import render, redirect
 from chat.models import Room
 from chat.serializers import MessageSerializer
-from django.db import transaction
-import random
-import string
-from rest_framework.views import APIView
+
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 # Create your views here.
-
 
 @api_view()
 def hello_world(request):

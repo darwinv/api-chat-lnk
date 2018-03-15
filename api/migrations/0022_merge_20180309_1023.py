@@ -8,7 +8,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0021_remove_message_nick')
+        ('api', '0021_remove_message_nick'),
+        ('api', '0021_auto_20180228_1453'),
     ]
 
     operations = [
