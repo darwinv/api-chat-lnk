@@ -62,12 +62,13 @@ class QueryListClientView(ListCreateAPIView):
         data = request.data
         # tomamos del token el id de usuario (cliente en este caso)
         data["client"] = user_id
-        serializer = QuerySerializer(data=data, context={'messages_data': None})
+        serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            # import pdb; pdb.set_trace()
+            # Se actualiza la base de datos de firebase para el mensaje
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
-            pyrebase.categories_db(user_id, data["category"])
+            # Se actualiza la base de datos de firebase listado de sus especialidades
+            pyrebase.categories_db(user_id, serializer.data["category"])
 
             data_set = SpecialistMessageList_sp.search(2, user_id, 0)
             # queryset = PutSpecialistMessages.get(self, user_id)
@@ -77,10 +78,12 @@ class QueryListClientView(ListCreateAPIView):
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
-            # envio = dict(handle=serializer.data["code_client"], message=serializer.data['messages'][0]["message"])
-            # Group('chat-'+str(label)).send({'text': json.dumps(envio)})
+            lista = list(serializer.data['message'].values())
+            sala = str(user_id) + '-' + str(serializer.data["category"])
+            Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class QueryDetailSpecialistView(APIView):
     """Vista para que el especialista responda la consulta."""
@@ -97,6 +100,7 @@ class QueryDetailSpecialistView(APIView):
         except Query.DoesNotExist:
             raise Http404
 
+    # Actualizar Consulta
     def put(self, request, pk):
         """Actualiza la consulta."""
         query = self.get_object(pk)
@@ -107,16 +111,23 @@ class QueryDetailSpecialistView(APIView):
         data = request.data
         # tomamos del token el id de usuario (especialista en este caso)
         spec = Specialist.objects.get(pk=user_id)
-        # Verificar si el serializer sirve
-        serializer = QueryResponseSerializer(query, data, partial=True, context={'specialist': spec})
+        # No utilizamos partial=True, ya que solo actualizamos mensaje
+        serializer = QueryResponseSerializer(query, data, context={'specialist': spec})
         if serializer.is_valid():
             serializer.save()
+            # Actualizamos el nodo de mensajes segun su sala
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
-            pyrebase.categories_db(user_id, data["category"])
+
+            # Actualizamos el listado de especialidades en Firebase
+            pyrebase.categories_db(user_id, serializer.data["category"])
+            lista = list(serializer.data['message'].values())
+            # sala es el cliente_id y su la categoria del especialista
+            sala = str(query.client.id) + '-' + str(serializer.data["category"])
+            # print(sala)
+            Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
 
             # queryset = PutSpecialistMessages.get(self, user_id)
             # pyrebase.createListMessageClients(queryset, user_id)
-
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -210,8 +221,8 @@ class QueryChatClientView(ListCreateAPIView):
 
         queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
                                           'query_id', 'query__client_id', 'message_reference', 'specialist_id', 'content_type', 'file_url')\
-                          .annotate(title=F('query__title',),status=F('query__status',),\
-                           calification=F('query__calification',),\
+                          .annotate(title=F('query__title',), status=F('query__status',),\
+                                    calification=F('query__calification',),\
                            category_id=F('query__category_id',))\
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
@@ -219,7 +230,6 @@ class QueryChatClientView(ListCreateAPIView):
         # Retorno 404 para ahorrar tiempo de ejecucion
         # if not queryset:
         #     raise Http404
-
 
         serializer = ChatMessageSerializer(queryset, many=True)
 

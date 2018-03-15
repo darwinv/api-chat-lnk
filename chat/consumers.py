@@ -11,35 +11,27 @@ import requests
 def ws_connect(message):
     """Conexion a WebSocket."""
     message.reply_channel.send({"accept": True})  # Se Acepta la conexion
-    # import pdb; pdb.set_trace()
-    prefix, label = message['path'].strip('/').split('/')
-    room = Room.objects.get(label=label)
-    Group('chat-' + label).add(message.reply_channel)
-    message.channel_session['room'] = room.label
+    # Creamos la sala, (id de usuario - id especialidad)
+    sala = message['path'].strip('/').split('/')[0]
+    # Lo agregamos a un grupo
+    Group('chat-' + sala).add(message.reply_channel)
+    # lo agregamos a la sesion de channels
+    message.channel_session['room'] = sala
 
 
 @channel_session
 def ws_receive(message):
     """Funcion que recibe data de el socket de cliente."""
     # obj_api = api()
-    label = message.channel_session['room']
+    # sala = message.channel_session['room']
 
     # room = Room.objects.get(label=label)
     # -- aca se podria enviar el request para la api --
     data = json.loads(message['text'])
-    payload = {
-        "title": data['handle'],
-        "category": data['category'],
-        "message": [{
-            "message": data['message'],
-            "msg_type": "q",
-            "content_type": "0",
-            "file_url": ""
-            }]
-    }
+    # import pdb; pdb.set_trace()
     # m = room.messages.create(handle=data['handle'], message=data['message'])
     # data["text"] = data['message']
-    send_api(token=data['token'], arg=payload)
+    send_api(token=data['token'], arg=data)
 
 
 @channel_session
@@ -56,6 +48,5 @@ def send_api(token='', arg=None, files=None):
     slug = 'client/queries'
     if token:
         headers['Authorization'] = 'Bearer {}'.format(token)
-        headers = dict(headers, **{'x-api-key': '90bd028513c2440f9c262c5c09c668e5'})
         r = requests.post(url + slug + '/', headers=headers, json=arg, files=files)
         print(r.json())

@@ -175,16 +175,21 @@ class ClientDetailView(APIView):
 # Vista para detalle del cliente segun su username
 # se hizo con la finalidad de instanciar una vez logueado
 class ClientDetailByUsername(APIView):
+    """Traer detalle del cliente por nombre de usuario."""
+
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self, username):
+        """Obtener objeto si existe."""
         try:
-            client = Client.objects.get(username=username, )
+            client = Client.objects.get(username=username)
+            return client
         except Client.DoesNotExist:
             raise Http404
 
     def get(self, request, username):
+        """Devuelve Cliente."""
         client = self.get_object(username)
         serializer = ClientSerializer(client)
         return Response(serializer.data)

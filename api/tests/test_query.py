@@ -115,7 +115,6 @@ class CreateQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_activeplan(self):
@@ -150,7 +149,7 @@ class CreateQuery(APITestCase):
 
     def test_contentype_file(self):
         """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
-        self.valid_payload["message"]["content_type"] = '1'
+        self.valid_payload["message"][0]["content_type"] = '1'
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
@@ -161,7 +160,7 @@ class CreateQuery(APITestCase):
 
     def test_contentype_message(self):
         """Verificar que el mensaje a guardar corresponde al tipo de contenido de mensaje."""
-        self.valid_payload["message"]["message"] = ""
+        self.valid_payload["message"][0]["message"] = ""
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
@@ -182,6 +181,7 @@ class CreateQuery(APITestCase):
         )
         qq = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)
         after_post_queries = qq.available_queries
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(before_post_queries - 1, after_post_queries)
 
@@ -212,6 +212,49 @@ class ResponseSpecialistQuery(APITestCase):
             ],
         }
 
+    def test_invalid_queryid(self):
+        """Solicitud Invalida por no existir la consulta."""
+        response = self.client.put(
+            reverse('query-specialist', kwargs={'pk': 11}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_no_message(self):
+        """Solicitud invalida por no enviar un mensaje de respuesta."""
+        data = self.valid_payload
+        del data["message"]
+        response = self.client.put(
+            reverse('query-specialist', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_contentype_file(self):
+        """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
+        self.valid_payload["message"][0]["content_type"] = '1'
+        response = self.client.put(
+            reverse('query-specialist', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # al enviar un mensaje de tipo archivo, la url no puede estar vacia
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_contentype_message(self):
+        """Verificar que el mensaje a guardar corresponde al tipo de contenido de mensaje."""
+        self.valid_payload["message"][0]["message"] = ""
+        response = self.client.put(
+            reverse('query-specialist', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # al enviar un mensaje no puede estar vacio, mientras la el content_type
+        # sea 1
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_response_query(self):
         """Respuesta exitosa del especialista."""
         response = self.client.put(
@@ -219,7 +262,6 @@ class ResponseSpecialistQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
