@@ -113,7 +113,7 @@ class QueryDetailSpecialistView(APIView):
             serializer.save()
             # Actualizamos el nodo de mensajes segun su sala
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
-<<<<<<< HEAD
+
             # Actualizamos el listado de especialidades en Firebase
             pyrebase.categories_db(user_id, serializer.data["category"])
             lista = list(serializer.data['message'].values())
@@ -121,13 +121,9 @@ class QueryDetailSpecialistView(APIView):
             sala = str(query.client.id) + '-' + str(serializer.data["category"])
             # print(sala)
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
-=======
-            pyrebase.categories_db(user_id, data["category"])
 
             # queryset = PutSpecialistMessages.get(self, user_id)
             # pyrebase.createListMessageClients(queryset, user_id)
-
->>>>>>> 2fef400b02d8c27aed855e4731df3e28a93d1e8e
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -221,8 +217,8 @@ class QueryChatClientView(ListCreateAPIView):
 
         queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
                                           'query_id', 'query__client_id', 'message_reference', 'specialist_id', 'content_type', 'file_url')\
-                          .annotate(title=F('query__title',),status=F('query__status',),\
-                           calification=F('query__calification',),\
+                          .annotate(title=F('query__title',), status=F('query__status',),\
+                                    calification=F('query__calification',),\
                            category_id=F('query__category_id',))\
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
@@ -230,7 +226,6 @@ class QueryChatClientView(ListCreateAPIView):
         # Retorno 404 para ahorrar tiempo de ejecucion
         # if not queryset:
         #     raise Http404
-
 
         serializer = ChatMessageSerializer(queryset, many=True)
 
