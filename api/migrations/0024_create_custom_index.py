@@ -11,12 +11,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunSQL("DROP PROCEDURE IF EXISTS SP_MESSAGES_LIST;"),
         migrations.RunSQL(
             # 'source dump.sql'
-            """
-            DROP PROCEDURE IF EXISTS SP_MESSAGES_LIST;
-            """,
-            """
+            """                
                 CREATE PROCEDURE SP_MESSAGES_LIST(IN flag            INT,
                                                  IN p_client_id     INT,
                                                  IN p_spceialist_id INT)
