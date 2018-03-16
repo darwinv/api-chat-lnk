@@ -29,9 +29,6 @@ class Migration(migrations.Migration):
                 'db_table': 'specialist_message_list',
             },
         ),
-        migrations.DeleteModel(
-            name='MessageFile',
-        ),
         migrations.AlterField(
             model_name='matchacquiredfiles',
             name='type_file',
