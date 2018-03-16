@@ -9,6 +9,7 @@ from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer, ChatMessageSerializer, QueryResponseSerializer
+from api.serializers.actors import SpecialistMessageListCustomSerializer
 from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
@@ -17,7 +18,7 @@ from api.views.actors import PutSpecialistMessages
 from channels import Group
 from django.urls import reverse
 import json
-
+from api.views.actors import SpecialistMessageList_sp
 
 class QueryListClientView(ListCreateAPIView):
     """Vista Consulta por parte del cliente."""
@@ -69,8 +70,11 @@ class QueryListClientView(ListCreateAPIView):
             # Se actualiza la base de datos de firebase listado de sus especialidades
             pyrebase.categories_db(user_id, serializer.data["category"])
 
-            queryset = PutSpecialistMessages.get(self, user_id)
-            pyrebase.createListMessageClients(queryset, user_id)
+            data_set = SpecialistMessageList_sp.search(2, user_id, 0)
+            # queryset = PutSpecialistMessages.get(self, user_id)
+
+            serializer_tmp = SpecialistMessageListCustomSerializer(data_set, many=True)
+            pyrebase.createListMessageClients(serializer_tmp.data, user_id)
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)

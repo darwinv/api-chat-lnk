@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from api.api_choices_models import ChoicesAPI as Ch
 from django.utils.translation import ugettext_lazy as _
+from api.utils.routines import get_messages_list
 
 
 class Countries(models.Model):
@@ -129,6 +130,8 @@ class User(AbstractUser):
     foreign_address = models.CharField(_('foreign address'), max_length=200, blank=True, null=True)
     key = models.CharField(max_length=90, blank=True, null=True)
     status = models.CharField(max_length=1, choices=Ch.user_status, default='0')
+
+
 # Aplicamos herencia multi tabla para que
 # Seller herede de User y se vincule 1 a 1
 
@@ -294,6 +297,8 @@ class Bank(models.Model):
         return self.name
 
 
+
+
 class Specialist(User):
     """Modelo de Especialista (herede de user)."""
 
@@ -419,7 +424,6 @@ class QueryPlansAcquired(models.Model):
     def __str__(self):
         """String."""
         return self.plan_name
-
 
 class PaymentType(models.Model):
     """Tipos de Pago."""
@@ -564,13 +568,14 @@ class Message(models.Model):
     room = models.CharField(max_length=200)  # Sala de chat
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
     message_reference = models.ForeignKey('self', on_delete=models.PROTECT, related_name="ref", null=True)
+
     def __str__(self):
         """Str."""
         return self.message
 
 
+#Modelo para usar con una vista existente en la base de datos
 class SpecialistMessageList(models.Model):
-
     id = models.IntegerField(primary_key=True)
     photo = models.CharField(max_length=240, blank=True)
     nick = models.CharField(max_length=40, blank=True)
@@ -583,6 +588,26 @@ class SpecialistMessageList(models.Model):
     class Meta:
         db_table = u'specialist_message_list'
         managed = False
+
+
+class SpecialistMessageList_sp(models.Model):
+    id = models.IntegerField(primary_key=True)
+    photo = models.CharField(max_length=240, blank=True)
+    nick = models.CharField(max_length=40, blank=True)
+    date = models.DateField(blank=True)
+    title = models.CharField(max_length=240, blank=True)
+    total = models.IntegerField(blank=True)
+    client = models.IntegerField(blank=True)
+    specialist = models.IntegerField(blank=True)
+
+    class Meta:
+        managed = False
+
+    @staticmethod
+    def search(flag, client_id, specialist_id):
+        # create a cursor
+        results = get_messages_list(flag, client_id, specialist_id)
+        return [SpecialistMessageList_sp(*row) for row in results]
 
 
 class FeeMonthSeller(models.Model):
