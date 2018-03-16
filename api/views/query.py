@@ -222,6 +222,7 @@ class QueryChatClientView(ListCreateAPIView):
                            category_id=F('query__category_id',))\
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
+        
         # import pdb; pdb.set_trace()
         # Retorno 404 para ahorrar tiempo de ejecucion
         # if not queryset:
