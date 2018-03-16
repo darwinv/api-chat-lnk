@@ -1,6 +1,6 @@
 """Funcionamiento de Pyrebase."""
 import pyrebase
-from datetime import datetime
+from datetime import datetime, timedelta
 from api.utils.parameters import Params, Payloads
 
 # config = {
@@ -69,6 +69,9 @@ def createListMessageClients(lista, client_id):
     db = firebase.database()
     data_obj = lista[0]
     node_specialist = Params.PREFIX['specialist'] + str(data_obj['specialist'])
+
+    # delta = datetime.now()-timedelta(data_obj['date'])
+
     data_obj['date'] = str(data_obj['date'])
     del (data_obj['specialist'])
     payload = {}
