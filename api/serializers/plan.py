@@ -22,7 +22,9 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         """Modelo del especialista y sus campos."""
 
         model = QueryPlansAcquired
-        fields = ('is_active','expiration_date')
+        fields = ('id', 'plan_name','is_chosen','is_active','query_quantity',
+                    'available_queries','validity_months','expiration_date')
+        read_only_fields = ('id', 'plan_name','query_quantity','available_queries','validity_months')
 
     def update(self, instance, validated_data):
         """Redefinido metodo actualizar."""

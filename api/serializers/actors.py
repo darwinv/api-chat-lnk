@@ -8,27 +8,28 @@ from api.models import Seller, LevelInstruction
 from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
 import datetime, string, random
-from django.db.models import Sum
+# from django.db.models import Sum
 from api.emails import BasicEmailAmazon
 from rest_framework.response import Response
 from api.utils.tools import capitalize as cap
-from api.utils import tools
+# from api.utils import tools
 
 class SpecialistMessageListCustomSerializer(serializers.Serializer):
     #serializador para devolver datos customizados de un queryset dado
-    fields = ('photo','nick','date','title','total','client','specialist')
+    fields = ('photo','nick','date','title','total','message','client','specialist')
 
     #establecemos que datos del queryset pasado se mostrara en cada campo puesto en la tupla "Fields"
     def to_representation(self, instance):
-        if isinstance(instance.date, datetime.datetime):
-            aux_time = instance.date.time()
-        else:
-            aux_time = instance.date
+        # if isinstance(instance.date, datetime.datetime):
+        #     aux_time = instance.date.time()
+        # else:
+        #     aux_time = instance.date
         return {"photo": instance.photo,
                 "nick": instance.nick,
-                "date": aux_time,
+                "date": instance.date,
                 "title": instance.title,
                 "total": instance.total,
+                "message": instance.message,
                 "client": instance.client,
                 "specialist": instance.specialist}
 
@@ -52,8 +53,6 @@ class UserPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('photo',)
-
-
 
 class CommonValidation():
     def validate_img(self, photo):

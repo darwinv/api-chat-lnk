@@ -1,5 +1,6 @@
 """Funciones Varias."""
-from api.models import Specialist, QueryPlansAcquired
+from api.models import Specialist
+from api.models import QueryPlansAcquired
 from django.http import Http404
 
 
