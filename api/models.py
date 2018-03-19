@@ -605,9 +605,9 @@ class SpecialistMessageList_sp(models.Model):
         managed = False
 
     @staticmethod
-    def search(flag, client_id, specialist_id):
+    def search(flag, user_id, aux_1, aux_2, aux_3):
         # create a cursor
-        results = get_messages_list(flag, client_id, specialist_id)
+        results = get_messages_list(flag, user_id, aux_1, aux_2, aux_3)
         return [SpecialistMessageList_sp(*row) for row in results]
 
 
