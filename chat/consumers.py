@@ -45,8 +45,12 @@ def send_api(token='', arg=None, files=None):
     """Funcion para llamarse a la api."""
     headers = {'Accept-Language': 'es'}
     url = 'http://127.0.0.1:8000/'
-    slug = 'client/queries'
     if token:
         headers['Authorization'] = 'Bearer {}'.format(token)
-        r = requests.post(url + slug + '/', headers=headers, json=arg, files=files)
+        if arg["message"][0]["msg_type"] == 'q':
+            slug = 'client/queries'
+            r = requests.post(url + slug + '/', headers=headers, json=arg)
+        else:
+            slug = 'specialist/queries' + '/' + str(arg["query"])
+            r = requests.put(url + slug + '/', headers=headers, json=arg)
         print(r.json())
