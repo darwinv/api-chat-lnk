@@ -45,6 +45,11 @@ urlpatterns = [
 
     # Listado de Consulta y Creación de consultas por cliente
     url(r'^client/queries/$', query.QueryListClientView.as_view(), name='queries-client'),
+    # Queries de cliente por categoria
+    url(r'^queries/categories/(?P<pk>[0-9]+)/$', query.QueryChatClientView.as_view(), name='query-chat-client'),
+    # Consultas de especialista por cliente
+    url(r'^queries/clients/(?P<pk>[0-9]+)/$', query.QueryChatSpecialistView.as_view(), name='query-chat-specialist'),
+
     url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'),
     url(r'^query-last/(?P<category>[0-9]+)/$', query.QueryLastView.as_view(), name='last-query-bycategory'),
     # Vendedores
@@ -52,7 +57,7 @@ urlpatterns = [
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(), name='seller-detail'),
     url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(), name='seller-account-status'),
 
-    # Listado de Consultas segun especialista
+    # Actualizar Consulta por detalle (Responder)
     url(r'^specialist/queries/(?P<pk>[0-9]+)/$', query.QueryDetailSpecialistView.as_view(), name='query-specialist'),
     # Contacto no efectivo
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
@@ -88,6 +93,4 @@ urlpatterns = [
     #editar o detallar plan
     url(r'^chosens-plans/(?P<pk>[0-9]+)/$', plan.QueryPlansAcquiredDetailView.as_view(), name='chosen-plan-edit'),
 
-    # Queries de cliente por categoria
-    url(r'^queries/categories/(?P<pk>[0-9]+)/$', query.QueryChatClientView.as_view(), name='query-chat-client'),
 ]
