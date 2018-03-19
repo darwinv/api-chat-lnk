@@ -70,7 +70,7 @@ class QueryListClientView(ListCreateAPIView):
             # Se actualiza la base de datos de firebase listado de sus especialidades
             pyrebase.categories_db(user_id, serializer.data["category"])
 
-            data_set = SpecialistMessageList_sp.search(2, user_id, 0)
+            data_set = SpecialistMessageList_sp.search(2, user_id, serializer.data["category"])
             # queryset = PutSpecialistMessages.get(self, user_id)
 
             serializer_tmp = SpecialistMessageListCustomSerializer(data_set, many=True)

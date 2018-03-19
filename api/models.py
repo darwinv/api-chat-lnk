@@ -596,9 +596,10 @@ class SpecialistMessageList_sp(models.Model):
     nick = models.CharField(max_length=40, blank=True)
     date = models.DateField(blank=True)
     title = models.CharField(max_length=240, blank=True)
-    total = models.IntegerField(blank=True)
+    message = models.CharField(max_length=500,blank=True)
     client = models.IntegerField(blank=True)
     specialist = models.IntegerField(blank=True)
+    total = models.IntegerField(blank=True)
 
     class Meta:
         managed = False

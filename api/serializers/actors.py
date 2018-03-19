@@ -16,19 +16,20 @@ from api.utils.tools import capitalize as cap
 
 class SpecialistMessageListCustomSerializer(serializers.Serializer):
     #serializador para devolver datos customizados de un queryset dado
-    fields = ('photo','nick','date','title','total','client','specialist')
+    fields = ('photo','nick','date','title','total','message','client','specialist')
 
     #establecemos que datos del queryset pasado se mostrara en cada campo puesto en la tupla "Fields"
     def to_representation(self, instance):
-        if isinstance(instance.date, datetime.datetime):
-            aux_time = instance.date.time()
-        else:
-            aux_time = instance.date
+        # if isinstance(instance.date, datetime.datetime):
+        #     aux_time = instance.date.time()
+        # else:
+        #     aux_time = instance.date
         return {"photo": instance.photo,
                 "nick": instance.nick,
                 "date": instance.date,
                 "title": instance.title,
                 "total": instance.total,
+                "message": instance.message,
                 "client": instance.client,
                 "specialist": instance.specialist}
 
