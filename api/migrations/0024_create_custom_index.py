@@ -22,26 +22,26 @@ class Migration(migrations.Migration):
                    IF flag = 1
                    THEN
                      #se busca la lista de un especialista
-                     SELECT
-                       max(m.id)         AS id,
-                       u.photo,
-                       u.nick,
-                       max(m.created_at) AS date,
-                       q.title,
-                       count(1)          AS total,
-                       q.client_id       AS client,
-                       m.specialist_id   AS specialist
-                     FROM api_message m
-                       JOIN api_query q
-                         ON m.query_id = q.id
-                       JOIN api_client c
-                         ON q.client_id = c.user_ptr_id
-                       JOIN api_user u
-                         ON c.user_ptr_id = u.id
-                     WHERE m.specialist_id = p_spceialist_id AND
-                           m.viewed = 0
-                     GROUP BY q.client_id
-                     ORDER BY 4;
+                    SELECT
+                      max(m.id)         AS id,
+                      u.photo,
+                      u.nick,
+                      max(m.created_at) AS date,
+                      q.title,
+                      q.client_id       AS client,
+                      m.message,
+                      q.specialist_id   AS specialist,
+                      count(1)          AS total
+                    FROM api_message m
+                      JOIN api_query q
+                        ON m.query_id = q.id
+                      JOIN api_client c
+                        ON q.client_id = c.user_ptr_id
+                      JOIN api_user u
+                        ON c.user_ptr_id = u.id
+                    WHERE q.specialist_id = p_spceialist_id
+                    GROUP BY q.client_id
+                    ORDER BY 4;
                    ELSEIF flag = 2
                      THEN
                        # cuando buscamos por un determinado cliente
