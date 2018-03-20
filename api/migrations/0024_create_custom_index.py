@@ -15,76 +15,63 @@ class Migration(migrations.Migration):
         migrations.RunSQL(
             # 'source dump.sql'
             """
-CREATE PROCEDURE SP_MESSAGES_LIST(IN flag INT, IN p_user_id INT, IN p_aux_1 INT, IN p_aux_2 INT, IN p_aux_3 VARCHAR(20))
-  BEGIN
-    DECLARE v_id_specialist INT;
+            CREATE PROCEDURE SP_MESSAGES_LIST(IN flag INT, IN p_user_id INT, IN p_aux_1 INT, IN p_aux_2 INT, IN p_aux_3 VARCHAR(20))
+  BEGIN DECLARE v_id_specialist INT;
+    DECLARE v_total INT;
+    DECLARE v_id INT;
     IF flag = 1
-    THEN
-      #se busca la lista de un especialista
-      SELECT
-        max(m.id)         AS id,
-        u.photo,
-        u.nick,
-        max(m.created_at) AS date,
-        q.title,
-        m.message,
-        q.client_id       AS client,
-        q.specialist_id   AS specialist,
-        count(1)          AS total
-      FROM api_message m
-        JOIN api_query q
-          ON m.query_id = q.id
-        JOIN api_client c
-          ON q.client_id = c.user_ptr_id
-        JOIN api_user u
-          ON c.user_ptr_id = u.id
-      WHERE q.specialist_id = p_user_id
-      GROUP BY q.client_id
-      ORDER BY 4;
+    THEN SELECT
+           max(m.id)         AS id,
+           u.photo,
+           u.nick,
+           max(m.created_at) AS date,
+           q.title,
+           m.message,
+           q.client_id       AS client,
+           q.specialist_id   AS specialist,
+           count(1)          AS total
+         FROM api_message m
+           JOIN api_query q ON m.query_id = q.id
+           JOIN api_client c ON q.client_id = c.user_ptr_id
+           JOIN api_user u ON c.user_ptr_id = u.id
+         WHERE q.specialist_id = p_user_id
+         GROUP BY q.client_id
+         ORDER BY 4;
     ELSEIF flag = 2
-      THEN
-        # cuando buscamos por un determinado cliente
-        SELECT DISTINCT s.user_ptr_id
-        INTO v_id_specialist
-        FROM api_specialist s
-        WHERE s.category_id = p_aux_1 AND s.type_specialist = 'm';
-
-        SELECT
-          max(m.id)         AS id,
+      THEN SELECT
+             max(m.id),
+             count(1)
+           INTO v_id, v_total
+           FROM api_message m
+             JOIN api_query q ON m.query_id = q.id
+           WHERE q.client_id = p_user_id
+           ORDER BY m.created_at;
+        SELECT DISTINCT
+          v_id            AS id,
           u.photo,
           u.nick,
-          max(m.created_at) AS date,
+          m.created_at    AS date,
           q.title,
           m.message,
-          q.client_id       AS client,
-          q.specialist_id   AS specialist,
-          count(1)          AS total
+          q.client_id     AS client,
+          q.specialist_id AS specialist,
+          v_total         AS total
         FROM api_message m
-          JOIN api_query q
-            ON m.query_id = q.id
-          JOIN api_client c
-            ON q.client_id = c.user_ptr_id
-          JOIN api_user u
-            ON c.user_ptr_id = u.id
-        WHERE q.client_id = p_user_id AND
-              q.specialist_id = v_id_specialist
-        GROUP BY q.client_id
-        ORDER BY 4;
-    ELSE
-      SELECT
-        "None" AS id,
-        "None" AS photo,
-        "None" AS nick,
-        "None" AS date,
-        "None" AS title,
-        "None" AS message,
-        "None" AS client,
-        "None" AS specialist,
-        "None" AS total;
-    END IF;
+          JOIN api_query q ON m.query_id = q.id
+          JOIN api_client c ON q.client_id = c.user_ptr_id
+          JOIN api_user u ON c.user_ptr_id = u.id
+        WHERE m.id = v_id;
+    ELSE SELECT
+           "None" AS id,
+           "None" AS photo,
+           "None" AS nick,
+           "None" AS date,
+           "None" AS title,
+           "None" AS message,
+           "None" AS client,
+           "None" AS specialist,
+           "None" AS total; END IF;
   END;
-
-
-                """
+ """
             )
     ]
