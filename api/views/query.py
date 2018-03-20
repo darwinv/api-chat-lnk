@@ -1,10 +1,10 @@
 """Vistas de Consultas."""
 from rest_framework.views import APIView
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, ListAPIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from api.models import Query, Message, Category, Specialist
-from api.permissions import IsAdminOrClient, IsAdminReadOrSpecialistOwner
+from api.models import Query, Message, Category, Specialist, Client
+from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsAdminReadOrSpecialistOwner
 from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
@@ -195,24 +195,60 @@ class QueryLastView(APIView):
         return Response(serializer.data)
 
 
-# Para Crear y Listado de consultas
+class QueryChatSpecialistView(ListAPIView):
+    """Vista de consultas en el chat por parte del especialista."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrSpecialist)
+    serializer_class = ChatMessageSerializer
+
+    def get_object(self, pk):
+        """Obtener cliente."""
+        try:
+            return Client.objects.get(pk=pk)
+        except Client.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        """Listado de queries y sus respectivos mensajes para un cliente."""
+        client = self.get_object(pk)
+        specialist = Operations.get_id(self, request)
+        if not specialist:
+            raise Http404
+
+        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
+                                          'query_id', 'query__client_id', 'message_reference', 'specialist_id', 'content_type', 'file_url')\
+                          .annotate(title=F('query__title',), status=F('query__status',),
+                                    calification=F('query__calification',),
+                                    category_id=F('query__category_id',))\
+                          .filter(query__client_id=client, query__specialist_id=specialist)\
+                          .order_by('-created_at')
+        serializer = ChatMessageSerializer(queryset, many=True)
+
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
+
+
 class QueryChatClientView(ListCreateAPIView):
-    """Vista Consulta."""
+    """Vista Consultas en el chat por parte del Cliente."""
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     serializer_class = ChatMessageSerializer
 
     def get_object(self, pk):
-        """Obtener Categoria."""
+        """Obtener cliente."""
         try:
-            # import pdb; pdb.set_trace()
             return Category.objects.get(pk=pk)
         except Category.DoesNotExist:
             raise Http404
 
     def get(self, request, pk):
-        """Listado de queries y sus respectivos mensajes para un cliente."""
+        """Listado de queries y sus respectivos mensajes para un especialista."""
         category = self.get_object(pk)
         client = Operations.get_id(self, request)
 
@@ -226,10 +262,7 @@ class QueryChatClientView(ListCreateAPIView):
                            category_id=F('query__category_id',))\
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
-        # import pdb; pdb.set_trace()
-        # Retorno 404 para ahorrar tiempo de ejecucion
-        # if not queryset:
-        #     raise Http404
+
 
         serializer = ChatMessageSerializer(queryset, many=True)
 
