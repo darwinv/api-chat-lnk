@@ -54,7 +54,24 @@ class ListQueryMessagesByCategory(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-# redefinir
+class ListQueryMessagesByClient(APITestCase):
+    """Devolver Mensajes y Consultas del especialista por cliente."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chat']
+
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+
+    def test_get_chat_by_client(self):
+        """Estatus 200."""
+        client = 15
+        response = self.client.get(reverse('query-chat-specialist', kwargs={'pk': client}))
+        # self.assertEqual(response.data['results'][0]['message']['viewed'], False)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class CreateQuery(APITestCase):
     """Prueba para crear consulta."""
 

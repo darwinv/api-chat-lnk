@@ -101,7 +101,7 @@ class IsAdminOrSpecialist(permissions.BasePermission):
     """Es administrador o especialista."""
 
     def has_permission(self, request, view):
-        """Solo el vendedor puede crear."""
+        """Solo Admin o Especialista."""
         if request.user and request.user.is_staff:
             return True
         elif request.user and request.user.role_id == 3:
