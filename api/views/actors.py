@@ -325,7 +325,7 @@ class SpecialistMessagesListView(ListCreateAPIView):
     def get_object(self, pk):
         try:
             #se le manda 1 en el primer parametro para que el SP realice el filtro por especialista
-            obj = SpecialistMessageList_sp.search(1, 0, pk)
+            obj = SpecialistMessageList_sp.search(1, pk, 0, 0, "")
             self.check_object_permissions(self.request, obj)
             return obj
         except SpecialistMessageList.DoesNotExist:
