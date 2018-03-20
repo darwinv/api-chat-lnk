@@ -1,5 +1,6 @@
 """Conexiones a Channels."""
 from channels import Group
+# from channels.security.websockets import allowed_hosts_only
 from channels.sessions import channel_session
 import json
 from linkupapi.settings_secret import URL_HOST
@@ -7,6 +8,8 @@ import requests
 # from django.urls import reverse
 
 
+# Connected to websocket.connect
+# @allowed_hosts_only
 @channel_session
 def ws_connect(message):
     """Conexion a WebSocket."""
