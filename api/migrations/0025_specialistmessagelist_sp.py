@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('api', '0024_create_custom_index'),
+        ('api', '0024_merge_20180307_1537'),
     ]
 
     operations = [
