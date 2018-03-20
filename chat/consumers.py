@@ -1,11 +1,15 @@
 """Conexiones a Channels."""
 from channels import Group
+# from channels.security.websockets import allowed_hosts_only
 from channels.sessions import channel_session
 import json
+from linkupapi.settings_secret import URL_HOST
 import requests
 # from django.urls import reverse
 
 
+# Connected to websocket.connect
+# @allowed_hosts_only
 @channel_session
 def ws_connect(message):
     """Conexion a WebSocket."""
@@ -43,7 +47,8 @@ def ws_disconnect(message):
 def send_api(token='', arg=None, files=None):
     """Funcion para llamarse a la api."""
     headers = {'Accept-Language': 'es'}
-    url = 'http://127.0.0.1:9000/'
+
+    url = URL_HOST
     if token:
         headers['Authorization'] = 'Bearer {}'.format(token)
         if arg["message"][0]["msg_type"] == 'q':
@@ -52,4 +57,4 @@ def send_api(token='', arg=None, files=None):
         else:
             slug = 'specialist/queries' + '/' + str(arg["query"])
             r = requests.put(url + slug + '/', headers=headers, json=arg)
-        print(r.json())
+        print(r)
