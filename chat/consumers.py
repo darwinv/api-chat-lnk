@@ -3,7 +3,7 @@ from channels import Group
 # from channels.security.websockets import allowed_hosts_only
 from channels.sessions import channel_session
 import json
-from linkupapi.settings_secret import URL_HOST
+# from linkupapi.settings_secret import URL_HOST
 import requests
 # from django.urls import reverse
 
