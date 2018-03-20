@@ -43,7 +43,7 @@ def ws_disconnect(message):
 def send_api(token='', arg=None, files=None):
     """Funcion para llamarse a la api."""
     headers = {'Accept-Language': 'es'}
-    url = 'http://127.0.0.1:8000/'
+    url = 'http://127.0.0.1:9000/'
     if token:
         headers['Authorization'] = 'Bearer {}'.format(token)
         if arg["message"][0]["msg_type"] == 'q':
