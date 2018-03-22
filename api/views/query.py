@@ -124,9 +124,10 @@ class QueryDetailSpecialistView(APIView):
             # print(sala)
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
 
-            data_set = SpecialistMessageList_sp.search(2, user_id, serializer.data["category"], 0, "")
+            data_set = SpecialistMessageList_sp.search(2, serializer.data["client_id"],
+                                                       serializer.data["category"], 0, "")
             serializer_tmp = SpecialistMessageListCustomSerializer(data_set, many=True)
-            pyrebase.createListMessageClients(serializer_tmp.data, user_id)
+            pyrebase.createListMessageClients(serializer_tmp.data, serializer.data["client_id"])
 
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

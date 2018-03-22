@@ -273,7 +273,8 @@ class QueryResponseSerializer(serializers.ModelSerializer):
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
 
-        return {'room': ms[0]["room"], "message": chat, "category": obj.category.id}
+        return {'room': ms[0]["room"], "message": chat,
+                "category": obj.category.id, "client_id": obj.client.id}
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
 # class QueryUpdateSerializer(serializers.ModelSerializer):
