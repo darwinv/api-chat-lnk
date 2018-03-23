@@ -471,6 +471,20 @@
   }
 },
 {
+  "model": "api.saledetail",
+  "pk": 28,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL1234528",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
   "model": "api.user",
   "pk": 1,
   "fields": {
@@ -655,7 +669,7 @@
     "anonymous": true,
     "updated_at": "2018-03-05T21:35:27.592Z",
     "nationality": 1,
-    "role": 1,
+    "role": 4,
     "address": 9,
     "residence_country": 1,
     "foreign_address": null,
@@ -669,7 +683,7 @@
   "model": "api.user",
   "pk": 12,
   "fields": {
-    "password": "pbkdf2_sha256$36000$g3fK3Yu1ivV2$esUwrWx+GaBXi5arX/HrqNMnxibPw+ZH9ZTwchxly6g=",
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
     "last_login": null,
     "is_superuser": false,
     "username": "test.user@mail.com",
@@ -1719,6 +1733,123 @@
   }
 },
 {
+  "model": "api.user",
+  "pk": 42,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "cgarcia@mail.com",
+    "first_name": "Teresa",
+    "last_name": "Garcia",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:34:36.604Z",
+    "nick": "cteresanick",
+    "email_exact": "cgarcia@mail.com",
+    "telephone": "9214715593",
+    "cellphone": "9214715593",
+    "code_telephone": 18,
+    "code_cellphone": 1,
+    "photo": "",
+    "document_type": "2",
+    "document_number": "246125821",
+    "img_document_number": "",
+    "ruc": "31667434",
+    "code": "C246125821",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:34:36.669Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 7,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "",
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 43,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "egarcia@mail.com",
+    "first_name": "Teresa",
+    "last_name": "Garcia",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "eteresaNick",
+    "email_exact": "egarcia@mail.com",
+    "telephone": "0002311233",
+    "cellphone": "0002311233",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": "1",
+    "document_number": "2461258221",
+    "img_document_number": "",
+    "ruc": "316674341",
+    "code": "E2461258221",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 44,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "vgarcia@mail.com",
+    "first_name": "Teresa",
+    "last_name": "Garcia",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:27.538Z",
+    "nick": "vteresanick",
+    "email_exact": "vgarcia@mail.com",
+    "telephone": "92147155933",
+    "cellphone": "92147155933",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": "2",
+    "document_number": "2461234231",
+    "img_document_number": "",
+    "ruc": "316674342",
+    "code": "V2461234231",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:27.592Z",
+    "nationality": 1,
+    "role": 4,
+    "address": 9,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
   "model": "api.seller",
   "pk": 6,
   "fields": {
@@ -2108,165 +2239,6 @@
   }
 },
 {
-  "model": "oauth2_provider.accesstoken",
-  "pk": 1,
-  "fields": {
-    "user": 1,
-    "token": "EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz",
-    "application": 1,
-    "expires": "9999-12-31T23:59:59Z",
-    "scope": "",
-    "created": "2016-12-31T23:59:59Z",
-    "updated": "2017-10-02T22:27:09.173Z"
-  }
-},
-{
-  "model": "oauth2_provider.accesstoken",
-  "pk": 2,
-  "fields": {
-    "user": 3,
-    "token": "kEphPGlavEforKavpDzuZSgK0zpoX5",
-    "application": 1,
-    "expires": "9999-12-31T23:59:59Z",
-    "scope": "",
-    "created": "2016-12-31T23:59:59Z",
-    "updated": "2017-10-02T22:27:09.173Z"
-  }
-},
-{
-  "model": "oauth2_provider.application",
-  "pk": 1,
-  "fields": {
-    "client_id": "FUN5EkBDdiQo8SixJYslF41ZkrjAhQtWKkV7BEE2",
-    "user": null,
-    "redirect_uris": "",
-    "client_type": "public",
-    "authorization_grant_type": "password",
-    "client_secret": "P7pj3QcE6GyhlS0QUzJOJ8SRLlTGHYSMESGr7QzlyKnuMsc4osaaStB6wSiGGxAelKjXv6xJ7p9Go8R5el2KaVlcM4P50IeplkY2CWHxaOc9NI1fLKS9DoWxD9UbG4TN",
-    "name": "",
-    "skip_authorization": false,
-    "created": "2017-10-02T21:19:16.205Z",
-    "updated": "2017-10-02T21:19:16.205Z"
-  }
-},
-{
-  "model": "api.user",
-  "pk": 4,
-  "fields": {
-    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "cmoran@mail.com",
-    "first_name": "Pedro",
-    "last_name": "Moran",
-    "email": "",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2018-03-05T21:34:36.604Z",
-    "nick": "cmorannick",
-    "email_exact": "cmoran@mail.com",
-    "telephone": "921471559",
-    "cellphone": "921471559",
-    "code_telephone": 18,
-    "code_cellphone": 1,
-    "photo": null,
-    "document_type": "2",
-    "document_number": "24612582",
-    "img_document_number": null,
-    "ruc": null,
-    "code": "C24612582",
-    "anonymous": true,
-    "updated_at": "2018-03-05T21:34:36.669Z",
-    "nationality": 1,
-    "role": 2,
-    "address": 7,
-    "residence_country": 1,
-    "foreign_address": null,
-    "key": null,
-    "status": "0",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "api.user",
-  "pk": 5,
-  "fields": {
-    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "emoran@mail.com",
-    "first_name": "Pedro",
-    "last_name": "Moran",
-    "email": "",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "emoranNick",
-    "email_exact": "emoran@mail.com",
-    "telephone": "000231123",
-    "cellphone": "00012231",
-    "code_telephone": null,
-    "code_cellphone": null,
-    "photo": null,
-    "document_type": "1",
-    "document_number": "246125822",
-    "img_document_number": null,
-    "ruc": "316674344",
-    "code": "E246125822",
-    "anonymous": true,
-    "updated_at": "2018-03-05T21:35:01.071Z",
-    "nationality": 1,
-    "role": 1,
-    "address": 8,
-    "residence_country": 1,
-    "foreign_address": null,
-    "key": "QHDLZI8E5R",
-    "status": "0",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "api.user",
-  "pk": 6,
-  "fields": {
-    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "vmoran@mail.com",
-    "first_name": "Pedro",
-    "last_name": "Moran",
-    "email": "",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2018-03-05T21:35:27.538Z",
-    "nick": "vmorannick",
-    "email_exact": "vmoran@mail.com",
-    "telephone": "9214715593",
-    "cellphone": "9214715592",
-    "code_telephone": null,
-    "code_cellphone": null,
-    "photo": null,
-    "document_type": "2",
-    "document_number": "246123423",
-    "img_document_number": null,
-    "ruc": null,
-    "code": "V246123423",
-    "anonymous": true,
-    "updated_at": "2018-03-05T21:35:27.592Z",
-    "nationality": 1,
-    "role": 1,
-    "address": 9,
-    "residence_country": 1,
-    "foreign_address": null,
-    "key": "G8GAPXU05K",
-    "status": "0",
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
   "model": "api.client",
   "pk": 3,
   "fields": {
@@ -2350,6 +2322,32 @@
     "cv": null,
     "zone": null,
     "ciiu": 14,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 42,
+  "fields": {
+    "type_client": "n",
+    "sex": "f",
+    "commercial_reason": "",
+    "civil_state": "s",
+    "birthdate": "1992-09-19",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UPC",
+    "ocupation": "0",
+    "about": "iptsum aabout",
+    "business_name": "",
+    "agent_firstname": "",
+    "agent_lastname": "",
+    "position": "",
+    "profession": "",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_asigned": null,
     "groups": [],
     "user_permissions": []
   }
@@ -2895,6 +2893,26 @@
   }
 },
 {
+  "model": "api.queryplansacquired",
+  "pk": 28,
+  "fields": {
+    "expiration_date": "2018-05-15",
+    "validity_months": 6,
+    "available_queries": 172,
+    "query_quantity": 172,
+    "activation_date": null,
+    "is_active": true,
+    "is_chosen": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPackCore",
+    "client": 42,
+    "query_plans": 2,
+    "sale_detail": 28
+  }
+},
+{
   "model": "api.sale",
   "pk": 1,
   "fields": {
@@ -2934,6 +2952,62 @@
     "is_fee": true,
     "client": 3,
     "seller": null
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 4,
+  "fields": {
+    "created_at": "2018-02-08T14:28:25Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1003",
+    "description": "Test4",
+    "is_fee": true,
+    "client": 3,
+    "seller": null
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "token": "EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "",
+    "created": "2016-12-31T23:59:59Z",
+    "updated": "2017-10-02T22:27:09.173Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "token": "kEphPGlavEforKavpDzuZSgK0zpoX5",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "",
+    "created": "2016-12-31T23:59:59Z",
+    "updated": "2017-10-02T22:27:09.173Z"
+  }
+},
+{
+  "model": "oauth2_provider.application",
+  "pk": 1,
+  "fields": {
+    "client_id": "FUN5EkBDdiQo8SixJYslF41ZkrjAhQtWKkV7BEE2",
+    "user": null,
+    "redirect_uris": "",
+    "client_type": "public",
+    "authorization_grant_type": "password",
+    "client_secret": "P7pj3QcE6GyhlS0QUzJOJ8SRLlTGHYSMESGr7QzlyKnuMsc4osaaStB6wSiGGxAelKjXv6xJ7p9Go8R5el2KaVlcM4P50IeplkY2CWHxaOc9NI1fLKS9DoWxD9UbG4TN",
+    "name": "",
+    "skip_authorization": false,
+    "created": "2017-10-02T21:19:16.205Z",
+    "updated": "2017-10-02T21:19:16.205Z"
   }
 }
 ]
