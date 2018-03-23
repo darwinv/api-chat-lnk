@@ -2146,7 +2146,7 @@
     "name": "",
     "skip_authorization": false,
     "created": "2017-10-02T21:19:16.205Z",
-    "updated": "2017-10-02T21:19:16.205Z",
+    "updated": "2017-10-02T21:19:16.205Z"
   }
 },
 {
@@ -2319,7 +2319,6 @@
   }
 },
 {
-<<<<<<< HEAD
   "model": "api.client",
   "pk": 12,
   "fields": {
@@ -2341,14 +2340,16 @@
     "economic_sector": null,
     "level_instruction": 1,
     "seller_asigned": null,
-=======
-  "model": "api.seller",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{  "model": "api.seller",
   "pk": 6,
   "fields": {
     "cv": null,
     "zone": null,
     "ciiu": 14,
->>>>>>> cd30db8216e721b0efa1f2300319b841c97527a5
     "groups": [],
     "user_permissions": []
   }
@@ -2379,13 +2380,8 @@
   "fields": {
     "expiration_date": "2018-09-03",
     "validity_months": 6,
-<<<<<<< HEAD
     "available_queries": 72,
     "query_quantity": 72,
-=======
-    "available_queries": 12,
-    "query_quantity": 12,
->>>>>>> cd30db8216e721b0efa1f2300319b841c97527a5
     "activation_date": "2018-03-05",
     "is_active": false,
     "is_chosen": false,
