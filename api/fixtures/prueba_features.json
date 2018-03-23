@@ -2146,7 +2146,124 @@
     "name": "",
     "skip_authorization": false,
     "created": "2017-10-02T21:19:16.205Z",
-    "updated": "2017-10-02T21:19:16.205Z"
+    "updated": "2017-10-02T21:19:16.205Z",
+  }
+},
+{
+  "model": "api.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "cmoran@mail.com",
+    "first_name": "Pedro",
+    "last_name": "Moran",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:34:36.604Z",
+    "nick": "cmorannick",
+    "email_exact": "cmoran@mail.com",
+    "telephone": "921471559",
+    "cellphone": "921471559",
+    "code_telephone": 18,
+    "code_cellphone": 1,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "24612582",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C24612582",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:34:36.669Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 7,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "emoran@mail.com",
+    "first_name": "Pedro",
+    "last_name": "Moran",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "emoranNick",
+    "email_exact": "emoran@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "1",
+    "document_number": "246125822",
+    "img_document_number": null,
+    "ruc": "316674344",
+    "code": "E246125822",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 1,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": "QHDLZI8E5R",
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "vmoran@mail.com",
+    "first_name": "Pedro",
+    "last_name": "Moran",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:27.538Z",
+    "nick": "vmorannick",
+    "email_exact": "vmoran@mail.com",
+    "telephone": "9214715593",
+    "cellphone": "9214715592",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": "2",
+    "document_number": "246123423",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "V246123423",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:27.592Z",
+    "nationality": 1,
+    "role": 1,
+    "address": 9,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": "G8GAPXU05K",
+    "status": "0",
+    "groups": [],
+    "user_permissions": []
   }
 },
 {
@@ -2202,6 +2319,7 @@
   }
 },
 {
+<<<<<<< HEAD
   "model": "api.client",
   "pk": 12,
   "fields": {
@@ -2223,6 +2341,14 @@
     "economic_sector": null,
     "level_instruction": 1,
     "seller_asigned": null,
+=======
+  "model": "api.seller",
+  "pk": 6,
+  "fields": {
+    "cv": null,
+    "zone": null,
+    "ciiu": 14,
+>>>>>>> cd30db8216e721b0efa1f2300319b841c97527a5
     "groups": [],
     "user_permissions": []
   }
@@ -2253,8 +2379,13 @@
   "fields": {
     "expiration_date": "2018-09-03",
     "validity_months": 6,
+<<<<<<< HEAD
     "available_queries": 72,
     "query_quantity": 72,
+=======
+    "available_queries": 12,
+    "query_quantity": 12,
+>>>>>>> cd30db8216e721b0efa1f2300319b841c97527a5
     "activation_date": "2018-03-05",
     "is_active": false,
     "is_chosen": false,
