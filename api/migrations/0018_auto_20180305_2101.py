@@ -12,14 +12,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='matchacquiredfiles',
-            name='type_file',
-            field=models.CharField(choices=[('0', 'Image'), ('1', 'Voice'), ('2', 'Document'), ('3', 'Video')], max_length=1),
-        ),
-        migrations.AlterField(
-            model_name='messagefile',
-            name='type_file',
-            field=models.CharField(choices=[('0', 'Image'), ('1', 'Voice'), ('2', 'Document'), ('3', 'Video')], max_length=1),
-        ),
     ]
