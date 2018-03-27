@@ -13,6 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 import os
 from django.db import models
 from linkupapi.settings_secret import *
+from linkupapi.settings_secret import REDIS_PORT
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -165,7 +166,9 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+            "hosts": [os.environ
+                        .get('REDIS_URL',
+                             'redis://localhost:{}'.format(REDIS_PORT))],
         },
         "ROUTING": "chat.routing.channel_routing",
     },
