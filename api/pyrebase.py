@@ -2,23 +2,10 @@
 import pyrebase
 from datetime import datetime, timedelta
 from api.utils.parameters import Params, Payloads
+from linkupapi.settings import CONFIG_ENVIROMENT
 
-# config = {
-#     "apiKey": "AIzaSyAkGuOIe3oZhW2PKh6sn2qNwa1QM91JgNQ",
-#     "authDomain": "linkup-peru.firebaseapp.com",
-#     "databaseURL": "https://linkup-peru.firebaseio.com",
-#     "projectId": "linkup-peru",
-#     "storageBucket": "linkup-peru.appspot.com"
-# }
-
-config = {
-    "apiKey": "AIzaSyDoYMhNo1RP1JYrQN1pX84w4YL82N7MURM",
-    "authDomain": "linkup-5b6f4.firebaseapp.com",
-    "databaseURL": "https://linkup-5b6f4.firebaseio.com",
-    "projectId": "linkup-5b6f4",
-    "storageBucket": "linkup-5b6f4.appspot.com"
-}
-
+#definimos a que ambiente de firebase se apuntará
+config = CONFIG_ENVIROMENT
 
 # class
 def chat_firebase_db(data, room):
