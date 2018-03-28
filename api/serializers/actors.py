@@ -233,8 +233,8 @@ class ClientSerializer(serializers.ModelSerializer):
 
         if document_exists(nationality=data["nationality"], role=data["role"],
                            document_number=data["document_number"]):
-            raise serializers.ValidationError("document number already exists")
-
+            raise serializers.ValidationError(
+                        {'document_number': [_('This field must be unique')]})
         return
 
     def validate_bussines_client(self, data):
@@ -328,27 +328,39 @@ class SpecialistSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(required=True)
     document_type = serializers.ChoiceField(choices=c.user_document_type)
     document_type_name = serializers.SerializerMethodField()
-    type_specialist = serializers.ChoiceField(choices=c.specialist_type_specialist)
+    type_specialist = serializers.ChoiceField(
+                                  choices=c.specialist_type_specialist)
     type_specialist_name = serializers.SerializerMethodField()
     address = AddressSerializer(required=False)
-    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
+    email_exact = serializers.EmailField(
+                              validators=[UniqueValidator(
+                                         queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
     photo = serializers.CharField(read_only=True)
-    ruc = serializers.CharField(allow_blank=True, required=False, validators=[UniqueValidator(queryset=User.objects.all())])
+    ruc = serializers.CharField(allow_blank=True,
+                                required=False,
+                                validators=[UniqueValidator(
+                                           queryset=User.objects.all())])
     residence_country_name = serializers.SerializerMethodField()
-    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
-    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
-
+    residence_country = serializers.PrimaryKeyRelatedField(
+                                    queryset=Countries.objects.all(),
+                                    required=True)
+    nationality = serializers.PrimaryKeyRelatedField(
+                              queryset=Countries.objects.all(),
+                              required=True)
 
     class Meta:
         """Modelo del especialista y sus campos."""
 
         model = Specialist
         fields = (
-            'id', 'username', 'nick', 'first_name', 'last_name', 'type_specialist', 'type_specialist_name',
-            'photo', 'document_type', 'document_type_name', 'document_number', 'address', 'ruc', 'email_exact', 'code',
-            'telephone', 'cellphone', 'business_name', 'payment_per_answer', 'cv', 'star_rating', 'category',
-            'category_name', 'nationality', 'nationality_name', 'residence_country', 'residence_country_name',
+            'id', 'username', 'nick', 'first_name', 'last_name',
+            'type_specialist', 'type_specialist_name', 'photo',
+            'document_type', 'document_type_name', 'document_number',
+            'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
+            'business_name', 'payment_per_answer', 'cv', 'star_rating',
+            'category', 'category_name', 'nationality', 'nationality_name',
+            'residence_country', 'residence_country_name',
             'foreign_address', 'role')
 
     def get_nationality_name(self, obj):
@@ -374,7 +386,12 @@ class SpecialistSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Redefinido metodo de crear."""
         valid_spec = _('Main Specialist already exists for this speciality')
-
+        # validar si el documento ya existe
+        if document_exists(nationality=validated_data["nationality"],
+                           role=validated_data["role"],
+                           document_number=validated_data["document_number"]):
+            raise serializers.ValidationError(
+                        {'document_number': [_('This field must be unique')]})
         # Si la residencia es peru, se crea el address
         if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
             data_address = validated_data.pop('address')
@@ -549,7 +566,6 @@ class SellerSerializer(serializers.ModelSerializer):
             if "foreign_address" not in data or not data["foreign_address"]:
                 raise serializers.ValidationError("{} {}".format(address, required))
         return data
-
 
     def update(self, instance, validated_data):
         """Metodo actualizar redefinido."""
