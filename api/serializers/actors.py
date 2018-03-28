@@ -12,9 +12,8 @@ import string
 import random
 from api.emails import BasicEmailAmazon
 from rest_framework.response import Response
-from rest_framework.validators import UniqueTogetherValidator
 from api.utils.tools import capitalize as cap
-from api.utils.validations import document_exists
+from api.utils.validations import document_exists, ruc_exists
 # from api.utils import tools
 
 class SpecialistMessageListCustomSerializer(serializers.Serializer):
@@ -285,7 +284,11 @@ class ClientSerializer(serializers.ModelSerializer):
             if 'ruc' not in data or not data["ruc"]:
                 raise serializers.ValidationError("{} {}".format(inf_fiscal,
                                                                  required))
-
+        if ruc_exists(nationality=data["nationality"],
+                      role=data["role"],
+                      ruc=data["ruc"]):
+            raise serializers.ValidationError(
+                        {'ruc': [_('This field must be unique')]})
         return
 
     def validate(self, data):
@@ -337,10 +340,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
                                          queryset=User.objects.all())])
     category_name = serializers.SerializerMethodField()
     photo = serializers.CharField(read_only=True)
-    ruc = serializers.CharField(allow_blank=True,
-                                required=False,
-                                validators=[UniqueValidator(
-                                           queryset=User.objects.all())])
+    ruc = serializers.CharField(allow_blank=True, required=False)
     residence_country_name = serializers.SerializerMethodField()
     residence_country = serializers.PrimaryKeyRelatedField(
                                     queryset=Countries.objects.all(),
@@ -386,12 +386,13 @@ class SpecialistSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Redefinido metodo de crear."""
         valid_spec = _('Main Specialist already exists for this speciality')
-        # validar si el documento ya existe
-        if document_exists(nationality=validated_data["nationality"],
-                           role=validated_data["role"],
-                           document_number=validated_data["document_number"]):
+        # validar si el ruc ya existe
+        if ruc_exists(nationality=validated_data["nationality"],
+                      role=validated_data["role"],
+                      ruc=validated_data["ruc"]):
             raise serializers.ValidationError(
-                        {'document_number': [_('This field must be unique')]})
+                        {'ruc': [_('This field must be unique')]})
+
         # Si la residencia es peru, se crea el address
         if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
             data_address = validated_data.pop('address')
@@ -515,8 +516,8 @@ class SellerSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     nick = serializers.CharField(required=True)
-    ruc = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())], allow_blank=True,
-                                allow_null=True, required=False)
+    ruc = serializers.CharField(allow_blank=True, allow_null=True,
+                                required=False)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
@@ -615,6 +616,13 @@ class SellerSerializer(serializers.ModelSerializer):
                            document_number=validated_data["document_number"]):
             raise serializers.ValidationError(
                         {'document_number': [_('This field must be unique')]})
+
+        if 'ruc' in validated_data:
+            if ruc_exists(nationality=validated_data["nationality"],
+                          role=validated_data["role"],
+                          ruc=validated_data["ruc"]):
+                raise serializers.ValidationError(
+                        {'ruc': [_('This field must be unique')]})
         # si la residencia es peru, se crea la instancia de la dirección
         if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
             data_address = validated_data.pop('address')

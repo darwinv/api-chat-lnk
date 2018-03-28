@@ -42,3 +42,9 @@ def document_exists(nationality, role, document_number):
     return User.objects.filter(nationality=nationality, role=role,
                                document_number=document_number
                                ).exists()
+
+
+def ruc_exists(nationality, role, ruc):
+    """Verificar si el ruc ya existe para ese rol y nacionalidad."""
+    return User.objects.filter(nationality=nationality, role=role,
+                               ruc=ruc).exists()
