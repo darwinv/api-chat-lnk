@@ -1,4 +1,5 @@
 """Vista de todos los Actores."""
+# from api.logger import manager
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Query, Message, SpecialistMessageList, SpecialistMessageList_sp
@@ -36,10 +37,10 @@ ROLE_SELLER = 4
 PREFIX_CODE_SPECIALIST = 'E'
 PREFIX_CODE_SELLER = 'V'
 DATE_FAKE = '1900-01-01'
-
-
 # Fin de constantes
 
+#obtener el logger con la configuracion para actors
+# loggerActor = manager.setup_log(__name__)
 
 class UpdatePasswordView(APIView):
     """Actualizar Contraseña de Usuario (uso para dev)."""
@@ -104,6 +105,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):
     """Vista Cliente."""
+
 
     required = _("required")
     # Lista todos los clientes naturales o crea uno nuevo
