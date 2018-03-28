@@ -13,6 +13,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.DeleteModel(
+                name='MessageFile',
+        ),
         migrations.RemoveField(
             model_name='message',
             name='message_reference',
