@@ -1,4 +1,5 @@
-from django.http import Http404
+# from django.http import Http404
+from api.models import User
 
 class Operations():
     """
@@ -32,5 +33,12 @@ class Operations():
                 return request.user.id
         except Exception as e:
             pass
-        
+
         return None
+
+
+def document_exists(nationality, role, document_number):
+    """Verificar si el dni ya existe para ese rol y nacionalidad."""
+    return User.objects.filter(nationality=nationality, role=role,
+                               document_number=document_number
+                               ).exists()

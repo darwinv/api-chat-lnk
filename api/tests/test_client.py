@@ -60,7 +60,6 @@ class CreateNaturalClient(APITestCase):
             'residence_country': 1
         }
 
-
     # responder error al enviar email invalido
     def test_invalid_email(self):
         """Solicitud invalida por email incorrecto."""
@@ -473,6 +472,25 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_unique_role_dni(self):
+        """Solicitud invalida por ser cliente y crear un dni repetido."""
+        data1 = self.valid_payload.copy()
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        data1["username"], data1["email_exact"] = 'jesus', 'jesus@mail.com'
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data1),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+
 
     def test_no_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""
