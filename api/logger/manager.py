@@ -20,7 +20,7 @@ def setup_log(log_name):
                                  LOG_FOLDER,
                                  LOG_FILE)
     else:
-        FILE_PATH = os.path.join(os.getenv('HOME'), '~', LOG_FOLDER, 'LOG_FILE')
+        FILE_PATH = os.path.join(os.getenv('HOME'), '~', LOG_FOLDER, LOG_FILE)
 
     try:
         logger = logging.getLogger(LOGGER_NAME)
