@@ -477,7 +477,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
                                                      district= District.objects.get(pk=data_address["district"].id),
                                                      street= data_address["street"])
 
-
                 instance.address = address
         else:
             if 'foreign_address' in validated_data:
@@ -531,9 +530,11 @@ class SellerSerializer(serializers.ModelSerializer):
         model = Seller
         fields = (
             'id', 'address', 'quota', 'zone', 'username', 'nick', 'first_name',
-            'last_name', 'email_exact', 'telephone', 'cellphone', 'document_type', 'document_type_name',
-            'code', 'document_number', 'ruc', 'nationality', 'nationality_name', 'residence_country',
-            'residence_country_name', "foreign_address", "ciiu", "ciiu_name", "photo", "role")
+            'last_name', 'email_exact', 'telephone', 'cellphone', "photo",
+            'document_type', 'document_type_name', 'code', 'document_number',
+            'ruc', 'nationality', 'nationality_name', 'residence_country',
+            'residence_country_name', "foreign_address", "ciiu", "ciiu_name",
+            "role")
 
     def get_nationality_name(self, obj):
         """Devuelvo la nacionalidad del especialista."""
@@ -609,6 +610,11 @@ class SellerSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Redefinido metodo de crear vendedor."""
+        if document_exists(nationality=validated_data["nationality"],
+                           role=validated_data["role"],
+                           document_number=validated_data["document_number"]):
+            raise serializers.ValidationError(
+                        {'document_number': [_('This field must be unique')]})
         # si la residencia es peru, se crea la instancia de la dirección
         if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
             data_address = validated_data.pop('address')

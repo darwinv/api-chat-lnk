@@ -260,6 +260,26 @@ class CreateSeller(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_unique_role_dni(self):
+        """Solicitud invalida por ser cliente y crear un dni repetido."""
+        data1 = self.valid_payload.copy()
+        self.client.credentials(
+             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        data1["username"], data1["email_exact"] = 'jesus', 'jesus@mail.com'
+        data1["ruc"] = '0'
+        response1 = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data1),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_no_optionals(self):
         """Solicitud valida al no enviar los campos opcionales."""
         data = self.valid_payload
