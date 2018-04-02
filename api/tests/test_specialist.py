@@ -2,14 +2,14 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 import json
-from ..models import Specialist
+from ..models import Specialist, Countries
 from rest_framework import status
 from api.serializers.actors import SpecialistSerializer
-import pdb
 
 
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+
 
 class CreateSpecialist(APITestCase):
     """Pruebas de Crear especialista."""
@@ -265,6 +265,21 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_foreign_code(self):
+        """Verificar el codigo creado anteceda el ISO de su Nacionalidad."""
+        data = self.valid_payload
+        data["nationality"] = 4
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["code"][:3],
+                         Countries.objects.get(
+                            pk=data["nationality"]).iso_code + "E")
 
     def test_create_specialist(self):
         """Creacion de especialistas."""

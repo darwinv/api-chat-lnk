@@ -3,7 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 import json
-from ..models import Seller
+from ..models import Seller, Countries
 from rest_framework import status
 from api.serializers.actors import SellerSerializer
 import pdb
@@ -345,6 +345,21 @@ class CreateSeller(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_foreign_code(self):
+        """Verificar el codigo creado anteceda el ISO de su Nacionalidad."""
+        data = self.valid_payload
+        data["nationality"] = 4
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        response = self.client.post(
+            reverse('sellers'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["code"][:3],
+                         Countries.objects.get(
+                            pk=data["nationality"]).iso_code + "V")
 
     def test_create_seller(self):
         """Solicitud valida."""

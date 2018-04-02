@@ -3,7 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 import json
-from ..models import Client as Cliente
+from ..models import Client as Cliente, Countries
 from rest_framework import status
 from api.serializers.actors import ClientSerializer
 # Create your tests here.
@@ -246,7 +246,7 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_foreign_address(self):
-        """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
+        """Solicitud valida con dirrecion de otro pais."""
         data = self.valid_payload
         data["residence_country"] = 4
         del data["address"]
@@ -259,8 +259,37 @@ class CreateNaturalClient(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_foreign_address(self):
+        """Solicitud valida con dirrecion de otro pais."""
+        data = self.valid_payload
+        data["residence_country"] = 4
+        del data["address"]
+        # se agrega la direccion para ese pais
+        data["foreign_address"] = "lorem pias ipmasjdn kjajsdk iasjd"
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_foreign_code(self):
+        """Verificar el codigo creado anteceda el ISO de su Nacionalidad."""
+        data = self.valid_payload
+        data["nationality"] = 4
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["code"][:3],
+                         Countries.objects.get(
+                            pk=data["nationality"]).iso_code + "C")
+
     def test_no_foreign_address(self):
-        """Solicitud valida al borrar la direccion pero enviar residencia de otro pais."""
+        """Solicitud invalida al borrar la direccion pero enviar residencia de otro pais."""
         data = self.valid_payload
         data["residence_country"] = 4
         del data["address"]
@@ -920,6 +949,20 @@ class CreateBussinessClient(APITestCase):
         )
         # import pdb; pdb.set_trace()
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_foreign_code(self):
+        """Verificar el codigo creado anteceda el ISO de su Nacionalidad."""
+        data = self.valid_payload
+        data["nationality"] = 4
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["code"][:3],
+                         Countries.objects.get(
+                            pk=data["nationality"]).iso_code + "C")
 
     def test_create_bussines_client(self):
         """Crea cliente juridico de manera exitosa."""
