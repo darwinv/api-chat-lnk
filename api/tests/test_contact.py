@@ -475,6 +475,23 @@ class CreateNaturalContact(APITestCase):
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_unique_role_dni(self):
+        """Solicitud invalida por crear un contacto con dni repetido."""
+        data1 = self.valid_payload.copy()
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        data1["username"], data1["email"] = 'jesus', 'jesus@mail.com'
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data1),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_create_natural_contact(self):
         """Solicitud valida."""
         response = self.client.post(
@@ -779,6 +796,23 @@ class CreateBussinessContact(APITestCase):
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_unique_ruc(self):
+        """Solicitud invalida tener ruc repetido."""
+        data1 = self.valid_payload.copy()
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        data1["username"], data1["email"] = 'jesus', 'jesus@mail.com'
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data1),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""

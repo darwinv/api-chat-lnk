@@ -227,7 +227,7 @@ class SellerContactNoEfective(models.Model):
     longitude = models.CharField(max_length=45, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     position = models.CharField(max_length=45, null=True)
-    ruc = models.CharField(max_length=40, unique=True, null=True)
+    ruc = models.CharField(max_length=40, null=True, blank=True)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
     economic_sector = models.ForeignKey(EconomicSector, on_delete=models.PROTECT, null=True)
     objection = models.ForeignKey(Objection, on_delete=models.PROTECT)
