@@ -296,7 +296,6 @@ class ClientSerializer(serializers.ModelSerializer):
         if data['type_client'] == 'n':
             self.validate_natural_client(data)
 
-
         if data['type_client'] == 'b':
             self.validate_bussines_client(data)
         return data
@@ -304,16 +303,22 @@ class ClientSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Redefinido metodo de crear cliente."""
         CODE_CLIENT = "C"
-        if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+        country_peru = Countries.objects.get(name="Peru")
+        validated_data['code'] = CODE_CLIENT + str(validated_data.get('document_number'))
+        # Verificamos si reside en el extranjero, se elimina direccion
+        if validated_data["residence_country"] == country_peru:
             data_address = validated_data.pop('address')
             address = Address.objects.create(**data_address)
             validated_data['address'] = address
-            validated_data['code'] = CODE_CLIENT + str(validated_data.get('document_number'))
         else:
-            prefix_country = Countries.objects.get(pk=validated_data["residence_country"].id).iso_code
-            validated_data['code'] = prefix_country + CODE_CLIENT + str(validated_data.get('document_number'))
             if 'address' in validated_data:
                 del validated_data['address']
+
+        # Si nacionalidad no es peruana, el codigo de usuario se antecede por
+        # el iso del pais al que pertenece
+        if validated_data["nationality"] != country_peru:
+            prefix_country = Countries.objects.get(pk=validated_data["nationality"].id).iso_code
+            validated_data['code'] = prefix_country + validated_data['code']
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
         if password is not None:
@@ -386,6 +391,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Redefinido metodo de crear."""
         valid_spec = _('Main Specialist already exists for this speciality')
+        country_peru = Countries.objects.get(name="Peru")
         # validar si el ruc ya existe
         if ruc_exists(nationality=validated_data["nationality"],
                       role=validated_data["role"],
@@ -393,14 +399,17 @@ class SpecialistSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                         {'ruc': [_('This field must be unique')]})
 
+        if validated_data["nationality"] != country_peru:
+            validated_data['code'] = Countries.objects.get(pk=validated_data["nationality"].id).iso_code + validated_data["code"]
+
         # Si la residencia es peru, se crea el address
-        if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+        if validated_data["residence_country"] == country_peru:
             data_address = validated_data.pop('address')
             address = Address.objects.create(**data_address)
             validated_data['address'] = address
-        elif 'address' in validated_data:
-            del validated_data['address']
-
+        else:
+            if 'address' in validated_data:
+                del validated_data['address']
         # si se encuentra y esta vacio, se debe borrar para guardar null
         if 'ruc' in validated_data:
             if not validated_data['ruc']:
@@ -611,11 +620,16 @@ class SellerSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Redefinido metodo de crear vendedor."""
+        country_peru = Countries.objects.get(name="Peru")
         if document_exists(nationality=validated_data["nationality"],
                            role=validated_data["role"],
                            document_number=validated_data["document_number"]):
             raise serializers.ValidationError(
                         {'document_number': [_('This field must be unique')]})
+
+        if validated_data["nationality"] != country_peru:
+            prefix_country = Countries.objects.get(pk=validated_data["nationality"].id).iso_code
+            validated_data['code'] = prefix_country + validated_data['code']
 
         if 'ruc' in validated_data:
             if ruc_exists(nationality=validated_data["nationality"],
@@ -624,7 +638,7 @@ class SellerSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                         {'ruc': [_('This field must be unique')]})
         # si la residencia es peru, se crea la instancia de la dirección
-        if validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+        if validated_data["residence_country"] == country_peru:
             data_address = validated_data.pop('address')
             address = Address.objects.create(**data_address)
             validated_data['address'] = address
