@@ -43,9 +43,9 @@ class MessageSerializer(serializers.ModelSerializer):
         """Validacion de Data."""
         required = _('required')
         if int(data["content_type"]) > 0 and data["file_url"] == '':
-            raise serializers.ValidationError("file_url {}".format(required))
+            raise serializers.ValidationError({"file_url": [required]})
         if int(data["content_type"]) == 0 and data["message"] == '':
-            raise serializers.ValidationError("text message {}".format(required))
+            raise serializers.ValidationError({"message": [required]})
         return data
 
 
