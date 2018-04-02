@@ -475,7 +475,7 @@ class CreateNaturalContact(APITestCase):
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_unique_role_dni(self):
+    def test_unique_dni(self):
         """Solicitud invalida por crear un contacto con dni repetido."""
         data1 = self.valid_payload.copy()
         response = self.client.post(

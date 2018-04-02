@@ -226,7 +226,7 @@ class ResponseSpecialistQuery(APITestCase):
                 "content_type": "1",
                 "file_url": "img.png"
                 }
-            ],
+            ]
         }
 
     def test_invalid_queryid(self):

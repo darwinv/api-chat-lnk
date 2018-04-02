@@ -15,7 +15,7 @@ class MessageSerializer(serializers.ModelSerializer):
     # msg_type_name = serializers.SerializerMethodField()
     content_type = serializers.ChoiceField(choices=c.message_content_type)
     # content_type_name = serializers.SerializerMethodField()
-    time = serializers.SerializerMethodField()
+    # time = serializers.SerializerMethodField()
     room = serializers.CharField(max_length=100, required=False)
 
     class Meta:
@@ -23,13 +23,13 @@ class MessageSerializer(serializers.ModelSerializer):
 
         model = Message
         fields = ('id', 'message', 'msg_type', 'content_type',
-                  'time', 'code', 'specialist', 'file_url', 'room')
+                  'created_at', 'code', 'specialist', 'file_url', 'room')
 
-        read_only_fields = ('id', 'time', 'code')
+        read_only_fields = ('id', 'created_at', 'code')
 
-    def get_time(self, obj):
-        """Devuelve el tiempo formateado en horas y minutos."""
-        return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+    # def get_time(self, obj):
+    #     """Devuelve el tiempo formateado en horas y minutos."""
+    #     return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
 
     def get_msg_type_name(self, obj):
         """Devuelve el tipo de mensaje (answer,query,requery)."""
@@ -61,7 +61,7 @@ class ListMessageSerializer(serializers.ModelSerializer):
 
     def to_representation(self, obj):
         """Redefinido nombres (claves) para firebase."""
-        time = str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+        time = str(obj.created_at)
         user_id = obj.query.client.id
         if obj.specialist:
             user_id = obj.specialist.id
@@ -379,7 +379,6 @@ class QueryListClientSerializer(serializers.ModelSerializer):
         try:
             query = Query.objects.filter(category_id=obj.id, client_id=user.id)\
                              .values('message__created_at').latest('message__created_at')
-
             return get_time_message(query['message__created_at'])
 
         except Query.DoesNotExist:
