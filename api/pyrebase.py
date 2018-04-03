@@ -3,11 +3,10 @@ import pyrebase
 from datetime import datetime, timedelta
 from api.utils.parameters import Params, Payloads
 from linkupapi.settings import CONFIG_ENVIROMENT
-#from api.logger import manager
+from api.logger import manager
 
 #definimos a que ambiente de firebase se apuntará
 config = CONFIG_ENVIROMENT
-#logger = manager.setup_log(__name__)
 
 # class
 def chat_firebase_db(data, room):
@@ -27,10 +26,11 @@ def exist_room(db, room):
 
 
 def categories_db(client_id, cat_id):
-    #actualizar la hora de del momento en que se realiza una consulta
+    # Actualizar la hora de del momento en que se realiza una consulta
     firebase = pyrebase.initialize_app(config)
-    #logger.info("client_id: {}".format(client_id))
-    #logger.info("cat_id: {}".format(cat_id))
+    # logger.info("client_id: {}".format(client_id))
+    logger = manager.setup_log(__name__)
+    logger.info("id de  categoria: {}".format(cat_id))
     db = firebase.database()
     node_client = Params.PREFIX['client'] + str(client_id)
     node_category = Params.PREFIX['category'] + str(cat_id)
