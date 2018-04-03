@@ -39,8 +39,6 @@ def setup_log(log_name):
         if not os.path.exists(FOLDER_PATH):
             os.makedirs(FOLDER_PATH)
         
-        import pdb
-        pdb.set_trace()
         # loggerHandler = logging.basicConfig(filename=FILE_PATH, filemode="a", format=LOG_FORMAT, level=LOG_LEVEL)
         loggerHandler = logging.handlers.RotatingFileHandler(FILE_PATH, mode=LOG_MODE, maxBytes=LOG_MAXSIZE,
                                                              backupCount=LOG_COUNT, encoding=None, delay=0)

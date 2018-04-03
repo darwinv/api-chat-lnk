@@ -30,7 +30,7 @@ def categories_db(client_id, cat_id):
     # Actualizar la hora de del momento en que se realiza una consulta
     firebase = pyrebase.initialize_app(config)
     # logger.info("client_id: {}".format(client_id))
-    # logger.info("id de  categoria: {}".format(cat_id))
+    logger.info("id de  categoria: {}".format(cat_id))
     db = firebase.database()
     node_client = Params.PREFIX['client'] + str(client_id)
     node_category = Params.PREFIX['category'] + str(cat_id)
