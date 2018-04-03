@@ -7,7 +7,6 @@ from api.logger import manager
 
 #definimos a que ambiente de firebase se apuntará
 config = CONFIG_ENVIROMENT
-logger = manager.setup_log(__name__)
 
 # class
 def chat_firebase_db(data, room):
@@ -30,6 +29,7 @@ def categories_db(client_id, cat_id):
     # Actualizar la hora de del momento en que se realiza una consulta
     firebase = pyrebase.initialize_app(config)
     # logger.info("client_id: {}".format(client_id))
+    logger = manager.setup_log(__name__)
     logger.info("id de  categoria: {}".format(cat_id))
     db = firebase.database()
     node_client = Params.PREFIX['client'] + str(client_id)
