@@ -105,7 +105,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class ClientListView(ListCreateAPIView):
     """Vista Cliente."""
 
-
     required = _("required")
     # Lista todos los clientes naturales o crea uno nuevo
     # no olvidar lo de los permisos

@@ -1,7 +1,12 @@
 import logging.handlers
+import logging
 import sys, os, platform
 from linkupapi.settings import LOGGER_CONFIG
 
+# Ussage ############################# 
+# from api.logger import manager
+# logger = manager.setup_log(__name__)
+# logger.info("id de categoria: ")
 
 def setup_log(log_name):
     LOGGER_NAME = log_name
@@ -13,12 +18,6 @@ def setup_log(log_name):
     LOG_FORMAT = LOGGER_CONFIG['log_format']
     LOG_MAXSIZE = LOGGER_CONFIG['log_maxsize']
     LOG_MODE = LOGGER_CONFIG['log_mode']
-
-    try:
-        fp = open("nothere")
-    except IOError as e:
-        print(e.errno)
-        print(e)
 
     if platform.platform().startswith('Windows'):
         FILE_PATH = os.path.join(os.getenv('HOMEDRIVE'),
@@ -32,6 +31,7 @@ def setup_log(log_name):
     else:
         FILE_PATH = os.path.join(os.getenv('HOME'), LOG_FOLDER, LOG_FILE)
         FOLDER_PATH = os.path.join(os.getenv('HOME'), LOG_FOLDER)
+
 
     try:
         logger = logging.getLogger(LOGGER_NAME)
@@ -48,13 +48,34 @@ def setup_log(log_name):
         loggerHandler.setFormatter(formatter)
         logger.addHandler(loggerHandler)
         logger.setLevel(LOG_LEVEL)
+
+        f = ContextFilter()
+        logger.addFilter(f)
+
         return logger
     except Exception as error:
         print("Error with logs: %s" % (str(error)))
         sys.exit()
 
-# def getLogger():
-#     return logger
-# loggerMesage.critical('critical message')
-# loggerMesage.debug('debug message')
-# loggerMesage.exception("error")
+class ContextFilter(logging.Filter):
+    """
+    This is a filter which injects contextual information into the log.
+    """
+
+    def filter(self, record):
+        # record.ip = self.get_client_ip(request)
+        record.ip = '127.0.0.1'
+        return True
+
+    def get_client_ip(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+
+    def get_ip(self):
+        return ""
+        # return jsonify(request.remote_addr), 200
+        
