@@ -65,10 +65,12 @@ class QueryListClientView(ListCreateAPIView):
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            lista = list(serializer.data['message'].values())
             # Se actualiza la base de datos de firebase para el mensaje
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
             # Se actualiza la base de datos de firebase listado de sus especialidades
-            pyrebase.categories_db(user_id, serializer.data["category"])
+            pyrebase.categories_db(user_id, serializer.data["category"],
+                                   lista[-1]["timeMessage"])
 
             data_set = SpecialistMessageList_sp.search(2, user_id, serializer.data["category"], 0, "")
             serializer_tmp = SpecialistMessageListCustomSerializer(data_set, many=True)
@@ -76,7 +78,6 @@ class QueryListClientView(ListCreateAPIView):
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
-            lista = list(serializer.data['message'].values())
             sala = str(user_id) + '-' + str(serializer.data["category"])
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             return Response(serializer.data, status.HTTP_201_CREATED)
@@ -113,12 +114,13 @@ class QueryDetailSpecialistView(APIView):
         serializer = QueryResponseSerializer(query, data, context={'specialist': spec})
         if serializer.is_valid():
             serializer.save()
+            lista = list(serializer.data['message'].values())
             # Actualizamos el nodo de mensajes segun su sala
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
 
             # Actualizamos el listado de especialidades en Firebase
-            pyrebase.categories_db(user_id, serializer.data["category"])
-            lista = list(serializer.data['message'].values())
+            pyrebase.categories_db(user_id, serializer.data["category"],
+                                   lista[-1]["timeMessage"])
             # sala es el cliente_id y su la categoria del especialista
             sala = str(query.client.id) + '-' + str(serializer.data["category"])
             # print(sala)
