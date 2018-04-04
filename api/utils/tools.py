@@ -35,8 +35,8 @@ def get_time_message(date_time_message):
         date_message = date_time_message.date()
         date_time_message = date_time_message
         if date_message == date.today():
-            tiempo = time(date_time_message.hour, date_time_message.minute)
-            return tiempo
+            # tiempo = time(date_time_message.hour, date_time_message.minute)
+            return date_time_message
         elif date_message == date.today() - timedelta(days=1):
             return str(_('yesterday'))
         else:

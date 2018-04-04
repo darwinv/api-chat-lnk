@@ -3,7 +3,6 @@ from rest_framework import serializers
 from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
 from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
-from api.utils.tools import get_time_message
 from api.utils import querysets
 
 
@@ -43,9 +42,9 @@ class MessageSerializer(serializers.ModelSerializer):
         """Validacion de Data."""
         required = _('required')
         if int(data["content_type"]) > 0 and data["file_url"] == '':
-            raise serializers.ValidationError("file_url {}".format(required))
+            raise serializers.ValidationError({"file_url": [required]})
         if int(data["content_type"]) == 0 and data["message"] == '':
-            raise serializers.ValidationError("text message {}".format(required))
+            raise serializers.ValidationError({"message": [required]})
         return data
 
 
@@ -379,7 +378,7 @@ class QueryListClientSerializer(serializers.ModelSerializer):
         try:
             query = Query.objects.filter(category_id=obj.id, client_id=user.id)\
                              .values('message__created_at').latest('message__created_at')
-            return get_time_message(query['message__created_at'])
+            return query['message__created_at']
 
         except Query.DoesNotExist:
             return None
@@ -446,7 +445,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 
     def get_time_message(self, obj):
         """Devuelve el tiempo cuando se realizo el mensaje del mensaje."""
-        return get_time_message(obj['created_at'])
+        return obj['created_at']
 
     def get_query(self, obj):
         """Objeto Query."""

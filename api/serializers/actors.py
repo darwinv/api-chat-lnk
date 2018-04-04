@@ -239,7 +239,7 @@ class ClientSerializer(serializers.ModelSerializer):
     def validate_bussines_client(self, data):
         """Validacion para cuando es juridico."""
         required = _("required")
-        inf_fiscal = _("registration of tax information")
+        inf_fiscal = _("registro de información tributaria ")
         # requerido el nombre de la empresa
         if 'business_name' not in data or data["business_name"] is None:
             raise serializers.ValidationError(

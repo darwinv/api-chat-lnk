@@ -2,8 +2,8 @@
 # from api.logger import manager
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
-from api.models import User, Client, Specialist, Seller, Query, Message, SpecialistMessageList, SpecialistMessageList_sp
-from api.models import SellerContactNoEfective
+from api.models import User, Client, Specialist, Seller, Query
+from api.models import SellerContactNoEfective, SpecialistMessageList, SpecialistMessageList_sp
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
@@ -25,7 +25,6 @@ import uuid
 import boto3
 from datetime import datetime, date
 from django.utils import timezone
-from django.db.models import Max, Count
 from api.utils.validations import Operations
 from api import pyrebase
 
@@ -128,7 +127,7 @@ class ClientListView(ListCreateAPIView):
         """Redefinido metodo para crear clientes."""
         data = request.data
         if 'type_client' not in data or not data['type_client']:
-            raise serializers.ValidationError("document_number {}".format(self.required))
+            raise serializers.ValidationError({'type_client': [self.required]})
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
         elif data['type_client'] == 'b':
@@ -302,7 +301,7 @@ class SpecialistListView(ListCreateAPIView):
         data = request.data
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         if "document_number" not in data:
-            raise serializers.ValidationError("document_number {}".format(required))
+            raise serializers.ValidationError({'document_number': [required]})
         data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number')
         data['role'] = ROLE_SPECIALIST
         serializer = SpecialistSerializer(data=data)
@@ -470,7 +469,7 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
         data = request.data
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         if "document_number" not in data:
-            raise serializers.ValidationError("document_number {}".format(required))
+            raise serializers.ValidationError({'document_number': [required]})
         data['code'] = PREFIX_CODE_SELLER + request.data.get('document_number')
         data['role'] = ROLE_SELLER
         serializer = SellerSerializer(data=data)
@@ -601,14 +600,14 @@ class ContactListView(ListCreateAPIView):
         data = request.data
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         if "type_contact" not in data or not data["type_contact"]:
-            raise serializers.ValidationError("type_contact {}".format(required))
+            raise serializers.ValidationError({'type_contact': [required]})
 
         if data["type_contact"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
         elif data["type_contact"] == 'b':
             serializer = SellerContactBusinessSerializer(data=data)
         else:
-            raise serializers.ValidationError("type_contact {}".format(not_valid))
+            raise serializers.ValidationError({'type_contact': [not_valid]})
 
         if serializer.is_valid():
             serializer.save()
@@ -655,7 +654,9 @@ class PhotoUploadView(APIView):
         # se sube el archivo a amazon
         name_photo = self.upload_photo_s3(filename)
         os.remove(filename)  # se elimina del server local
-        serializer = UserPhotoSerializer(user, data={'photo': name_photo}, partial=True)
+        serializer = UserPhotoSerializer(user,
+                                         data={'photo': name_photo},
+                                         partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
