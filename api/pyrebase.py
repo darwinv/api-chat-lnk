@@ -25,7 +25,6 @@ def exist_room(db, room):
 def categories_db(client_id, cat_id):
     # Actualizar la hora de del momento en que se realiza una consulta
     firebase = pyrebase.initialize_app(config)
-
     db = firebase.database()
     node_client = Params.PREFIX['client'] + str(client_id)
     node_category = Params.PREFIX['category'] + str(cat_id)
@@ -43,7 +42,6 @@ def categories_db(client_id, cat_id):
 def createCategoriesLisClients(client_id):
     #funcion para crear la lista completa de categorias al momento de darse de alta un cliente
     firebase = pyrebase.initialize_app(config)
-    #logger.info("client_id: {}".format(client_id))
     db = firebase.database()
     node_client = Params.PREFIX['client'] + str(client_id)
     res = db.child("categories/clients").child(node_client).update(Payloads.categoriesList)
@@ -53,8 +51,6 @@ def createCategoriesLisClients(client_id):
 def createListMessageClients(lista, client_id):
     # funsion para insertar o actualizar los mensajes de los clientes del especialista
     firebase = pyrebase.initialize_app(config)
-    # logger.info("lista: {}".format(lista))
-    # logger.info("client_id: {}".format(client_id))
     db = firebase.database()
     data_obj = lista[0]
     node_specialist = Params.PREFIX['specialist'] + str(data_obj['specialist'])
