@@ -959,7 +959,6 @@
     "specialist": 4,
     "query": 2,
     "viewed": false,
-    "nick": "",
     "code": "1",
     "message_reference": null
   }
@@ -974,7 +973,6 @@
     "specialist": 4,
     "query": 3,
     "viewed": false,
-    "nick": "",
     "code": "1",
     "message_reference": null
   }
@@ -989,7 +987,6 @@
     "specialist": 4,
     "query": 4,
     "viewed": false,
-    "nick": "",
     "code": "1",
     "message_reference": 4
   }
@@ -1004,7 +1001,6 @@
     "specialist": 4,
     "query": 5,
     "viewed": false,
-    "nick": "",
     "code": "1",
     "message_reference": 7
   }
