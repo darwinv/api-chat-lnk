@@ -442,30 +442,46 @@ class SpecialistSerializer(serializers.ModelSerializer):
         valid_spec = _('Main Specialist already exists for this speciality')
         category = validated_data.get("category", None)
         instance.nick = validated_data.get('nick', instance.nick)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.first_name = validated_data.get('first_name',
+                                                 instance.first_name)
+        instance.last_name = validated_data.get('last_name',
+                                                instance.last_name)
         instance.photo = validated_data.get('photo', instance.photo)
-        instance.type_specialist = validated_data.get('type_specialist', instance.type_specialist)
-        instance.document_type = validated_data.get('document_type', instance.document_type)
-        instance.document_number = validated_data.get('document_number', instance.document_number)
-        instance.email_exact = validated_data.get('email_exact', instance.email_exact)
-        instance.telephone = validated_data.get('telephone', instance.telephone)
-        instance.cellphone = validated_data.get('cellphone', instance.cellphone)
+        instance.type_specialist = validated_data.get('type_specialist',
+                                                      instance.type_specialist)
+        instance.document_type = validated_data.get('document_type',
+                                                    instance.document_type)
+        instance.document_number = validated_data.get('document_number',
+                                                      instance.document_number)
+        instance.email_exact = validated_data.get('email_exact',
+                                                  instance.email_exact)
+        instance.telephone = validated_data.get('telephone',
+                                                instance.telephone)
+        instance.cellphone = validated_data.get('cellphone',
+                                                instance.cellphone)
         instance.ruc = validated_data.get('ruc', instance.ruc)
-        instance.business_name = validated_data.get('business_name', instance.business_name)
-        instance.payment_per_answer = validated_data.get('payment_per_answer', instance.payment_per_answer)
+        instance.business_name = validated_data.get('business_name',
+                                                    instance.business_name)
+        instance.payment_per_answer = validated_data.get(
+                        'payment_per_answer', instance.payment_per_answer)
         instance.category = validated_data.get('category', instance.category)
-        instance.residence_country = validated_data.get('residence_country', instance.residence_country)
-        instance.nationality = validated_data.get('nationality', instance.nationality)
+        instance.residence_country = validated_data.get(
+                        'residence_country', instance.residence_country)
+        instance.nationality = validated_data.get('nationality',
+                                                  instance.nationality)
 
-        if instance.type_specialist == "m" and Specialist.objects.filter(type_specialist="m",
-                                                                         category_id=category).exclude(
-                                                                         pk=instance.id).exists():
+        if (instance.type_specialist == "m"
+            and Specialist.objects.filter(type_specialist="m",
+                                          category_id=category).exclude(
+                                              pk=instance.id).exists()):
 
-            raise serializers.ValidationError(u"{} {} {} {}".format(valid_spec))
+            raise serializers.ValidationError(
+                                             {"type_specialist": [valid_spec]})
 
         # Si la residencia es peru, se crea el address
-        if "residence_country" in validated_data and validated_data["residence_country"] == Countries.objects.get(name="Peru"):
+        if ("residence_country" in validated_data
+            and validated_data["residence_country"] == Countries.objects.get(
+                name="Peru")):
             if 'address' in validated_data:
                 data_address = validated_data.pop('address')
 
@@ -474,22 +490,30 @@ class SpecialistSerializer(serializers.ModelSerializer):
                     # pdb.set_trace()
                     address = Address.objects.get(pk=instance.address_id)
                     # pdb.set_trace()
-                    address.department = Department.objects.get(pk=data_address["department"].id)
-                    address.province = Province.objects.get(pk=data_address["province"].id)
-                    address.district = District.objects.get(pk=data_address["district"].id)
+                    address.department = Department.objects.get(
+                            pk=data_address["department"].id)
+                    address.province = Province.objects.get(
+                            pk=data_address["province"].id)
+                    address.district = District.objects.get(
+                            pk=data_address["district"].id)
                     address.street = data_address['street']
 
                     address.save()
                 else:
-                    address = Address.objects.create(department= Department.objects.get(pk=data_address["department"].id),
-                                                     province= Province.objects.get(pk=data_address["province"].id),
-                                                     district= District.objects.get(pk=data_address["district"].id),
-                                                     street= data_address["street"])
+                    address = Address.objects.create(
+                        department=Department.objects.get(
+                            pk=data_address["department"].id),
+                        province=Province.objects.get(
+                            pk=data_address["province"].id),
+                        district=District.objects.get(
+                            pk=data_address["district"].id),
+                        street=data_address["street"])
 
                 instance.address = address
         else:
             if 'foreign_address' in validated_data:
-                instance.foreign_address = validated_data.get('foreign_address', instance.foreign_address)
+                instance.foreign_address = validated_data.get(
+                    'foreign_address', instance.foreign_address)
             instance.address = None
 
         instance.save()
