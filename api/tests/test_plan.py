@@ -31,16 +31,16 @@ class GetPlanByPIN(APITestCase):
             'is_chosen': False
         }
 
-        # get API response        
+        # get API response
         response = client.get(reverse('activation-plan', args=('INTEL12345',)))
-        
+
         self.assertEqual(response.data, self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_plan_active(self):
         """Traer plan activo para activacion, FALSO
         no se pueden activar un plan activado"""
-        
+
         self.valid_payload = {
             "plan_name": "Minipack",
             "query_quantity": 6,
@@ -52,11 +52,12 @@ class GetPlanByPIN(APITestCase):
             'is_chosen': False
         }
 
-        # get API response        
+        # get API response
         response = client.get(reverse('activation-plan', args=('INTEL12345',)))
-        
+
         self.assertNotEqual(response.data, self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class UpdatePlanActiveByAPI(APITestCase):
     """Test module for Activate Plan by API API."""
@@ -64,17 +65,18 @@ class UpdatePlanActiveByAPI(APITestCase):
     fixtures = ['data', 'data2', 'data3', 'test_plan']
 
     def setUp(self):
+        """SetUp."""
         # Token de un cliente con plan activo
-        client.credentials(HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
+        client.credentials(HTTP_AUTHORIZATION=
+                           'Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
 
     def test_update_plan_by_pin(self):
-
-        """Update Plan By PIN. Activacion de plan"""
+        """Update Plan By PIN. Activacion de plan."""
         code = 'INTEL12345'
 
         plan_adquired = QueryPlansAcquired.objects.values('validity_months')\
-            .filter(sale_detail__pin_code=code, is_active = False)[:1].get()
-        
+            .filter(sale_detail__pin_code=code, is_active=False)[:1].get()
+
         expiration_date = get_date_by_time(plan_adquired['validity_months'])
 
         self.valid_payload = {
@@ -84,8 +86,9 @@ class UpdatePlanActiveByAPI(APITestCase):
 
         # get API response
         response = client.put(reverse('activation-plan', args=(code,)))
-
-        self.assertEqual(response.data, self.valid_payload)
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.data['is_active'],
+                         self.valid_payload['is_active'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetClientPlansList(APITestCase):

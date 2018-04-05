@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-02 17:21-0500\n"
+"POT-Creation-Date: 2018-04-04 17:37-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -268,7 +268,7 @@ msgstr "numero de documento"
 msgid "upload document"
 msgstr "subir documento"
 
-#: .\api\models.py:130 .\api\models.py:583
+#: .\api\models.py:130 .\api\models.py:586
 msgid "code"
 msgstr "codigo"
 
@@ -288,7 +288,7 @@ msgstr "nacionalidad"
 msgid "role"
 msgstr "rol"
 
-#: .\api\models.py:141 .\api\serializers\actors.py:571
+#: .\api\models.py:141 .\api\serializers\actors.py:565
 msgid "address"
 msgstr "direccion"
 
@@ -304,45 +304,45 @@ msgstr "direccion extranjera"
 msgid "Bank"
 msgstr "Banco"
 
-#: .\api\models.py:645
+#: .\api\models.py:649
 msgid "message"
 msgstr "mensaje"
 
-#: .\api\models.py:646
+#: .\api\models.py:650
 msgid "viewed"
 msgstr "visto"
 
-#: .\api\serializers\actors.py:200 .\api\serializers\actors.py:241
-#: .\api\serializers\actors.py:501 .\api\serializers\actors.py:570
-#: .\api\serializers\query.py:44 .\api\views\actors.py:110
-#: .\api\views\actors.py:302 .\api\views\actors.py:470
-#: .\api\views\actors.py:600
+#: .\api\serializers\actors.py:200 .\api\serializers\actors.py:239
+#: .\api\serializers\actors.py:495 .\api\serializers\actors.py:564
+#: .\api\serializers\query.py:43 .\api\views\actors.py:108
+#: .\api\views\actors.py:300 .\api\views\actors.py:468
+#: .\api\views\actors.py:598
 msgid "required"
 msgstr "requerido"
 
-#: .\api\serializers\actors.py:236 .\api\serializers\actors.py:291
-#: .\api\serializers\actors.py:400 .\api\serializers\actors.py:628
-#: .\api\serializers\actors.py:639
+#: .\api\serializers\actors.py:234 .\api\serializers\actors.py:283
+#: .\api\serializers\actors.py:394 .\api\serializers\actors.py:622
+#: .\api\serializers\actors.py:633
 msgid "This field must be unique"
 msgstr "Este campo debe ser unico"
 
-#: .\api\serializers\actors.py:242
-msgid "registration of tax information"
-msgstr "registro de información tributaria"
+#: .\api\serializers\actors.py:240
+msgid "Tax Code"
+msgstr "Registro de información Fiscal"
 
-#: .\api\serializers\actors.py:393 .\api\serializers\actors.py:443
+#: .\api\serializers\actors.py:387 .\api\serializers\actors.py:437
 msgid "Main Specialist already exists for this speciality"
 msgstr "Especialista Principal ya existe para esta especialidad"
 
-#: .\api\serializers\actors.py:432
+#: .\api\serializers\actors.py:426
 msgid "send credencials"
 msgstr "enviar credenciales"
 
-#: .\api\serializers\query.py:167
+#: .\api\serializers\query.py:166
 msgid "You need to have an active plan"
 msgstr "Necesitas tener un plan activo"
 
-#: .\api\serializers\query.py:169
+#: .\api\serializers\query.py:168
 msgid "You don't have available queries"
 msgstr "No tienes consultas disponibles"
 
@@ -366,14 +366,17 @@ msgstr "contraseña"
 msgid "yesterday"
 msgstr "ayer"
 
-#: .\api\views\actors.py:601
+#: .\api\views\actors.py:599
 msgid "not valid"
 msgstr "no valido"
 
-#: .\linkupapi\settings.py:126
+#: .\linkupapi\settings.py:129
 msgid "Spanish"
 msgstr "Español"
 
-#: .\linkupapi\settings.py:127
+#: .\linkupapi\settings.py:130
 msgid "English"
 msgstr "Ingles"
+
+#~ msgid "registration of tax information"
+#~ msgstr "registro de información tributaria"

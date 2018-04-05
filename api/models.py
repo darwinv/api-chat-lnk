@@ -574,16 +574,20 @@ class Message(models.Model):
     """Mensaje."""
 
     message = models.TextField(blank=True)
-    msg_type = models.CharField(max_length=1, choices=Ch.message_msg_type, blank=True)
+    msg_type = models.CharField(max_length=1, choices=Ch.message_msg_type,
+                                blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    content_type = models.CharField(max_length=1, choices=Ch.message_content_type)
-    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
+    content_type = models.CharField(max_length=1,
+                                    choices=Ch.message_content_type)
+    specialist = models.ForeignKey(Specialist,
+                                   on_delete=models.PROTECT, null=True)
     viewed = models.BooleanField(default=False)
     file_url = models.CharField(max_length=100, blank=True)
     code = models.CharField(_('code'), max_length=45)
     room = models.CharField(max_length=200)  # Sala de chat
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
-    message_reference = models.ForeignKey('self', on_delete=models.PROTECT, related_name="ref", null=True)
+    message_reference = models.ForeignKey('self', on_delete=models.PROTECT,
+                                          related_name="ref", null=True)
 
     def __str__(self):
         """Str."""
