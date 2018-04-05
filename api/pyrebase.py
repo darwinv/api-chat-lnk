@@ -38,6 +38,11 @@ def categories_db(client_id, cat_id):
     res = db.child("categories/clients").child(node_client).child(node_category).update(data)
     return res
 
+def update_categories():
+    from linkupapi.settings import CONFIG_ENVIROMENT
+    
+    for e in Entry.objects.all():
+        categories_db()
 
 def createCategoriesLisClients(client_id):
     #funcion para crear la lista completa de categorias al momento de darse de alta un cliente

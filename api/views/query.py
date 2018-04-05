@@ -224,6 +224,7 @@ class QueryChatSpecialistView(ListAPIView):
                                     category_id=F('query__category_id',))\
                           .filter(query__client_id=client, query__specialist_id=specialist)\
                           .order_by('-created_at')
+              
         serializer = ChatMessageSerializer(queryset, many=True)
 
         # pagination
