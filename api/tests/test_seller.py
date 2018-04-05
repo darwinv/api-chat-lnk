@@ -9,7 +9,7 @@ from api.serializers.actors import SellerSerializer
 import pdb
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
 
 class CreateSeller(APITestCase):
@@ -45,7 +45,7 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por no tener el username."""
         data = self.valid_payload
         del data["username"]
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -57,7 +57,7 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por no tener el apellido."""
         data = self.valid_payload
         data["last_name"] = ''
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response1 = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -76,7 +76,7 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por no tener el nombre."""
         data = self.valid_payload
         data["first_name"] = ''
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response1 = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -95,7 +95,7 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por no tener el nick."""
         data = self.valid_payload
         del data["nick"]
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response1 = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -113,7 +113,7 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por no enviarl el email."""
         data = self.valid_payload
         data["email_exact"] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response1 = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -132,7 +132,7 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por no enviar el pais de nacionalidad."""
         data = self.valid_payload
         data["nationality"] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response1 = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -150,7 +150,7 @@ class CreateSeller(APITestCase):
     def test_no_document(self):
         """Solicitud invalida por no enviar el documento."""
         data = self.valid_payload
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         data["document_number"] = ""
         response1 = self.client.post(
             reverse('sellers'),
@@ -170,7 +170,7 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por no enviar el tipo de documento."""
         data = self.valid_payload
         data["document_type"] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response1 = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -189,7 +189,7 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por no enviar la direccion."""
         data = self.valid_payload
         data["address"] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response1 = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -208,7 +208,7 @@ class CreateSeller(APITestCase):
         """Solicitud invalida no enviar pais de residencia."""
         data = self.valid_payload
         data['residence_country'] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response1 = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -230,7 +230,7 @@ class CreateSeller(APITestCase):
         del data["address"]
         # se agrega la direccion para ese pais
         data["foreign_address"] = "lorem pias ipmasjdn kjajsdk iasjd"
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -243,7 +243,7 @@ class CreateSeller(APITestCase):
         data = self.valid_payload
         data["residence_country"] = 4
         del data["address"]
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         # se agrega la direccion para ese pais
         data["foreign_address"] = ""
         response1 = self.client.post(
@@ -264,7 +264,7 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por ser cliente y crear un dni repetido."""
         data1 = self.valid_payload.copy()
         self.client.credentials(
-             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(self.valid_payload),
@@ -284,7 +284,7 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por ser cliente y crear un dni repetido."""
         data1 = self.valid_payload.copy()
         self.client.credentials(
-             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(self.valid_payload),
@@ -307,7 +307,7 @@ class CreateSeller(APITestCase):
         del data["ruc"]
         del data["ciiu"]
         del data["telephone"]
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -322,7 +322,7 @@ class CreateSeller(APITestCase):
         data["ruc"] = None
         data["ciiu"] = None
         data["telephone"] = None
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -338,7 +338,7 @@ class CreateSeller(APITestCase):
         data["ruc"] = ""
         data["ciiu"] = ""
         data["telephone"] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -350,7 +350,7 @@ class CreateSeller(APITestCase):
         """Verificar el codigo creado anteceda el ISO de su Nacionalidad."""
         data = self.valid_payload
         data["nationality"] = 4
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -363,7 +363,7 @@ class CreateSeller(APITestCase):
 
     def test_create_seller(self):
         """Solicitud valida."""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(self.valid_payload),
