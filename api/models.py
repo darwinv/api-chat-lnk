@@ -4,8 +4,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from api.api_choices_models import ChoicesAPI as Ch
 from django.utils.translation import ugettext_lazy as _
-from api.utils.routines import get_messages_list
-
 
 class Countries(models.Model):
     """Paises."""
@@ -609,28 +607,6 @@ class SpecialistMessageList(models.Model):
         db_table = u'specialist_message_list'
         managed = False
 
-
-class SpecialistMessageList_sp(models.Model):
-    id = models.IntegerField(primary_key=True)
-    photo = models.CharField(max_length=240, blank=True)
-    nick = models.CharField(max_length=40, blank=True)
-    date = models.DateField(blank=True)
-    title = models.CharField(max_length=240, blank=True)
-    message = models.CharField(max_length=500,blank=True)
-    client = models.IntegerField(blank=True)
-    specialist = models.IntegerField(blank=True)
-    total = models.IntegerField(blank=True)
-
-    class Meta:
-        managed = False
-
-    @staticmethod
-    def search(flag, user_id, aux_1, aux_2, aux_3):
-        # create a cursor
-        results = get_messages_list(flag, user_id, aux_1, aux_2, aux_3)
-        return [SpecialistMessageList_sp(*row) for row in results]
-
-
 class FeeMonthSeller(models.Model):
     """Cuotas Mensuales del Vendedor."""
 
@@ -673,3 +649,28 @@ class Parameter(models.Model):
     def __str__(self):
         """Nombre."""
         return "Parametro: " + self.parameter
+
+""" STOREPROCEDURE y Clases exclusivas para la API"""
+""" No migrar para la web"""
+
+from api.utils.routines import get_messages_list
+
+class SpecialistMessageList_sp(models.Model):
+    id = models.IntegerField(primary_key=True)
+    photo = models.CharField(max_length=240, blank=True)
+    nick = models.CharField(max_length=40, blank=True)
+    date = models.DateField(blank=True)
+    title = models.CharField(max_length=240, blank=True)
+    message = models.CharField(max_length=500,blank=True)
+    client = models.IntegerField(blank=True)
+    specialist = models.IntegerField(blank=True)
+    total = models.IntegerField(blank=True)
+
+    class Meta:
+        managed = False
+
+    @staticmethod
+    def search(flag, user_id, aux_1, aux_2, aux_3):
+        # create a cursor
+        results = get_messages_list(flag, user_id, aux_1, aux_2, aux_3)
+        return [SpecialistMessageList_sp(*row) for row in results]
