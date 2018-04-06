@@ -325,7 +325,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
     """Serializer del especialista."""
 
     nationality_name = serializers.SerializerMethodField()
-    nick = serializers.CharField(required=True)
+    # nick = serializers.CharField(required=False)
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
     document_type = serializers.ChoiceField(choices=c.user_document_type)
@@ -547,7 +547,6 @@ class SellerSerializer(serializers.ModelSerializer):
     document_type_name = serializers.SerializerMethodField()
     first_name = serializers.CharField(required=True)
     last_name = serializers.CharField(required=True)
-    nick = serializers.CharField(required=True)
     ruc = serializers.CharField(allow_blank=True, allow_null=True,
                                 required=False)
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])

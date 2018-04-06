@@ -941,8 +941,6 @@ class CreateBussinessClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-
-
 class GetDetailClient(APITestCase):
     """Detalle del Cliente."""
 
@@ -994,15 +992,15 @@ class GetDetailClient(APITestCase):
         # import pdb; pdb.set_trace()
         response = client.get(reverse('client-detail',
                                       kwargs={'pk': send.data["id"]}),
-                                              format='json')
+                              format='json')
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-
 class GetAllClients(APITestCase):
-    """ Test module for GET all clients API """
-    fixtures = ['data','data2','data3']
+    """Test module for GET all clients API."""
+
+    fixtures = ['data', 'data2', 'data3']
     def setUp(self):
         pass
 
