@@ -7,7 +7,7 @@ from rest_framework import status
 from ..models import Client as Cliente
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
 
 class ChangeStatusClient(APITestCase):
@@ -58,7 +58,7 @@ class ChangeStatusClient(APITestCase):
             content_type='application/json'
         )
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.put(reverse('auth-clients',
                               kwargs={'pk': send.data["id"]}),
                               data, format='json')
@@ -77,7 +77,7 @@ class ChangeStatusClient(APITestCase):
             content_type='application/json'
         )
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.put(reverse('auth-clients',
                               kwargs={'pk': send.data["id"]}),
                               data, format='json')
@@ -96,7 +96,7 @@ class ChangeStatusClient(APITestCase):
             content_type='application/json'
         )
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.put(reverse('auth-clients',
                               kwargs={'pk': send.data["id"]}),
                               data, format='json')
@@ -115,7 +115,7 @@ class ChangeStatusClient(APITestCase):
             content_type='application/json'
         )
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.put(reverse('auth-clients',
                               kwargs={'pk': send.data["id"]}),
                               data, format='json')

@@ -8,7 +8,7 @@ from rest_framework import status
 # from api.serializers.actors import ClientSerializer
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
 
 class CreateNaturalContact(APITestCase):

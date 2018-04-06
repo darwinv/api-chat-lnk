@@ -92,5 +92,4 @@ urlpatterns = [
 
     #editar o detallar plan
     url(r'^chosens-plans/(?P<pk>[0-9]+)/$', plan.QueryPlansAcquiredDetailView.as_view(), name='chosen-plan-edit'),
-
 ]

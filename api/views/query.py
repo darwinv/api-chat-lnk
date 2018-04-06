@@ -62,6 +62,7 @@ class QueryListClientView(ListCreateAPIView):
         data = request.data
         # tomamos del token el id de usuario (cliente en este caso)
         data["client"] = user_id
+
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -81,6 +82,8 @@ class QueryListClientView(ListCreateAPIView):
             sala = str(user_id) + '-' + str(serializer.data["category"])
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             return Response(serializer.data, status.HTTP_201_CREATED)
+        else:
+            print(serializer.errors)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
@@ -226,6 +229,7 @@ class QueryChatSpecialistView(ListAPIView):
                                     category_id=F('query__category_id',))\
                           .filter(query__client_id=client, query__specialist_id=specialist)\
                           .order_by('-created_at')
+              
         serializer = ChatMessageSerializer(queryset, many=True)
 
         # pagination

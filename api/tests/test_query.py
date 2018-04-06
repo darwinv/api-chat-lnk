@@ -9,7 +9,7 @@ from api.models import QueryPlansAcquired
 # Create your tests here.
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')  # Api Admin
+client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')  # Api Admin
 
 
 class ListCategoriesClient(APITestCase):
@@ -24,7 +24,7 @@ class ListCategoriesClient(APITestCase):
 
     def test_get_list_by_client_whitout_id(self):
         """404 clien_id not found."""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.get(reverse('queries-client'))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 

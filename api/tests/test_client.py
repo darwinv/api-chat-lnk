@@ -9,7 +9,7 @@ from api.serializers.actors import ClientSerializer
 # Create your tests here.
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
 # user = User.objects.get(username='admin')
 # client.credentials(Authorization='Bearer ' + token.key)
@@ -1042,7 +1042,7 @@ class GetAllClients(APITestCase):
 
     def test_get_all_clients(self):
         # get API response
-        # client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        # client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.get(reverse('clients'))
         # get data from db
         clients = Cliente.objects.all()

@@ -7,7 +7,7 @@ from api.utils.tools import get_date_by_time
 from api.models import QueryPlansAcquired
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
 class GetPlanByPIN(APITestCase):
     """Test module for GET plan deactive API."""
@@ -100,7 +100,7 @@ class GetClientPlansList(APITestCase):
 
     def setUp(self):
         """Setup."""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
@@ -162,7 +162,7 @@ class GetSpecialistQueryCount(APITestCase):
     def test_get_list_token_admin(self):
         """Obtener resultado 200 de la lista."""
         #se provee un token de administrador
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.get(reverse('specialist-query-count'), format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -186,7 +186,7 @@ class GetChosemPlanClient(APITestCase):
     def test_get_chosenplan_token_admin(self):
         """Obtener resultado 404."""
         #se provee un token de administrador el cuel no tiene planes en el fixture
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx5bUCuLrc2hmup51sSGz')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.get(reverse('chosen-plan'), format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 

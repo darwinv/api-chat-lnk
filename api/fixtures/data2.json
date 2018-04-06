@@ -433,7 +433,7 @@
       "password": "pbkdf2_sha256$36000$ZoKwG4C5uFXR$IDtDvqi2/fH+4Jw4NfiZd0JW13TJ2ARQM4FhAfWZn5g=",
       "last_login": "2017-10-02T22:26:08.423Z",
       "is_superuser": true,
-      "username": "admin",
+      "username": "super",
       "first_name": "",
       "last_name": "",
       "email": "",
