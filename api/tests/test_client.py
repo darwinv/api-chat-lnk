@@ -191,23 +191,6 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_nick(self):
-        """Solicitud invalida por no enviar el nick o enviarlo vacio."""
-        data = self.valid_payload
-        data['nick'] = ''
-        response1 = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_no_password(self):
         """Solicitud invalida por no enviar el password o enviarlo vacio."""
         data = self.valid_payload
@@ -529,6 +512,7 @@ class CreateNaturalClient(APITestCase):
         del data["activity_description"]
         del data["about"]
         del data["ciiu"]
+        del data["nick"]
         del data["code_cellphone"]
         del data["code_telephone"]
         response = self.client.post(
@@ -619,25 +603,6 @@ class CreateBussinessClient(APITestCase):
         )
         del data['business_name']
         # del data['business_name']
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_no_nick(self):
-        """Solicitud invalida por no enviar el nick o enviarlo vacio."""
-        data = self.valid_payload
-        data['nick'] = ""
-        response1 = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        del data["nick"]
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
@@ -891,6 +856,7 @@ class CreateBussinessClient(APITestCase):
         del data["about"]
         del data["code_cellphone"]
         del data["code_telephone"]
+        del data["nick"]
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
