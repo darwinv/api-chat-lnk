@@ -1,6 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
 
-
 class ChoicesAPI:
     """
         Clase Choices para manejo de opciones en los modelos
@@ -27,6 +26,11 @@ class ChoicesAPI:
     client_type_client = (
         ('n', _('Natural')),
         ('b', _('Business')),
+    )
+
+    client_full_type_client = (     
+        ('n', _('Natural Person')),     
+        ('b', _('Business Person')),        
     )
 
     client_sex = (
