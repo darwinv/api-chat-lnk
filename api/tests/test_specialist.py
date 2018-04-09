@@ -234,6 +234,7 @@ class CreateSpecialist(APITestCase):
             content_type='application/json'
         )
         data1["username"], data1["email_exact"] = 'jesus', 'jesus@mail.com'
+        data1["ruc"], data1["type_specialist"] = data1["ruc"] + "2", "a"
         response1 = self.client.post(
             reverse('specialists'),
             data=json.dumps(data1),
@@ -249,8 +250,8 @@ class CreateSpecialist(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
 
     def test_uniqueness_ruc(self):
         """Solicitud invalida por ser especialista y crear un ruc repetido."""

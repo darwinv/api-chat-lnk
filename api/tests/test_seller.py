@@ -314,7 +314,7 @@ class CreateSeller(APITestCase):
         data["ruc"] = None
         data["ciiu"] = None
         data["telephone"] = None
-        data["nick"] = None
+        data["nick"] = ''
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
@@ -322,7 +322,6 @@ class CreateSeller(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):
