@@ -299,20 +299,20 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-
-
     def test_create_specialist_foreign(self):
-        """Creacion de especialistas extranjero"""
+        """Creacion de especialistas extranjero."""
         data = self.valid_payload
         data['residence_country'] = 3
         data['foreign_address'] = "Calle buena pinta - Casa 66á´05"
         data['ruc'] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_specialist_foreign_without(self):
@@ -520,7 +520,9 @@ class GetSpecialists(APITestCase):
             "ruc": "9999",
             "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": 1
+            "category": 1,
+            "nationality": 1,
+            "residence_country": 1
         }
 
         data_second_associate = {
@@ -545,7 +547,9 @@ class GetSpecialists(APITestCase):
             "ruc": "88888",
             "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": 1
+            "category": 1,
+            "nationality": 1,
+            "residence_country": 1
         }
 
         # agregamos los asociados
@@ -566,8 +570,6 @@ class GetSpecialists(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-
-        #import pdb; pdb.set_trace()
         url = "{}?main_specialist={}".format(reverse('specialists'),send.data["id"])
         response = client.get(url)
 

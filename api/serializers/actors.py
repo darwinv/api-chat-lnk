@@ -550,12 +550,13 @@ class SpecialistSerializer(serializers.ModelSerializer):
                 if 'address' not in data:
                     raise serializers.ValidationError(
                         "address {}".format(required))
-            if 'ruc' not in data:
-                raise serializers.ValidationError("ruc {}".format(required))
-            elif not data['ruc']:
-                raise serializers.ValidationError("ruc {}".format(required))
+                if 'ruc' not in data:
+                    raise serializers.ValidationError(
+                        "ruc {}".format(required))
             elif "foreign_address" not in data or not data["foreign_address"]:
-                raise serializers.ValidationError("foreign_address {}".format(required))
+                raise serializers.ValidationError(
+                    "foreign_address {}".format(required))
+
         return data
 
 
