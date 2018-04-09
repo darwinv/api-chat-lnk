@@ -321,6 +321,24 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_no_ocupation(self):
+        """Solicitud invalida por no enviar la ocupación."""
+        data = self.valid_payload
+        data["ocupation"] = ""
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["ocupation"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_invalid_countries(self):
         """Solicitud invalida por enviar codigo de pais inexistente."""
         data = self.valid_payload
@@ -524,6 +542,19 @@ class CreateNaturalClient(APITestCase):
         del data["nick"]
         del data["code_cellphone"]
         del data["code_telephone"]
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_blank_optionals(self):
+        """Solicitud valida ya que no valida campos opcionales."""
+        data = self.valid_payload
+        data["nick"] = ""
+
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),

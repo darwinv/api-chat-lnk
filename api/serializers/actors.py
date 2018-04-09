@@ -130,7 +130,7 @@ class ClientSerializer(serializers.ModelSerializer):
     ocupation = serializers.ChoiceField(choices=c.client_ocupation, allow_blank=True)
     ocupation_name = serializers.SerializerMethodField()
     address = AddressSerializer(required=False)
-    nick = serializers.CharField(required=False)
+    nick = serializers.CharField(required=False, allow_blank=True)
     residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
     commercial_reason = serializers.CharField(required=False)
