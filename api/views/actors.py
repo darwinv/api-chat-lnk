@@ -28,6 +28,8 @@ from django.utils import timezone
 from api.utils.validations import Operations
 from api import pyrebase
 
+
+
 # Constantes
 PREFIX_CODE_CLIENT = 'C'
 ROLE_CLIENT = 2
@@ -101,6 +103,9 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = ('username',)
 
 
+from api.models import QueryPlansAcquired, SaleDetail, Sale
+from datetime import datetime
+from api.utils import tools
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):
     """Vista Cliente."""
@@ -143,10 +148,58 @@ class ClientListView(ListCreateAPIView):
             serializer.save()
             # se le crea la lista de todas las categorias al cliente en firebase
             pyrebase.createCategoriesLisClients(serializer.data['id'])
+
+
+            # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
+            self.give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAR
+
+
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
+    def give_plan_new_client(self, client_id):
+        """OJO"""
+        """FUNCION CREADA PARA OTORGAR PLANES A CLIENTES NUEVOS"""
+        """ESTA FUNCION DEBE SER BORRADA DESPUES DE TENER EL MODULO DE COMPRAS"""
+        sale = Sale()
+        saleDetail = SaleDetail()
+        queryPlansAcquired = QueryPlansAcquired()
+        
+        sale.created_at = datetime.now()
+        sale.place = 'BCP'
+        sale.total_amount = '1000.00'
+        sale.reference_number = 'CD1004'
+        sale.description = 'Test Venta'
+        sale.is_fee = '1'
+        sale.client_id = client_id
+        sale.save()
+
+        saleDetail.price = '1000.00'
+        saleDetail.description = 'Plan de Prueba'
+        saleDetail.discount = '0.00'
+        saleDetail.pin_code = tools.ramdon_generator(6)
+        saleDetail.is_billable = '0'
+        saleDetail.contract_id = None
+        saleDetail.product_type_id = '1'
+        saleDetail.sale_id = sale.id
+        saleDetail.save()
+
+        queryPlansAcquired.expiration_date = '2019-04-09'
+        queryPlansAcquired.validity_months = '6'
+        queryPlansAcquired.available_queries = '500'
+        queryPlansAcquired.activation_date = None
+        queryPlansAcquired.is_active = '1'
+        queryPlansAcquired.available_requeries = '1'
+        queryPlansAcquired.maximum_response_time = '24'
+        queryPlansAcquired.acquired_at = datetime.now()
+        queryPlansAcquired.client_id = client_id
+        queryPlansAcquired.query_plans_id = '2'
+        queryPlansAcquired.sale_detail_id = saleDetail.id
+        queryPlansAcquired.query_quantity = '500'
+        queryPlansAcquired.plan_name = 'TesterPack'
+        queryPlansAcquired.is_chosen = '1'
+        queryPlansAcquired.save()
 # Vista para Detalle del Cliente
 class ClientDetailView(APIView):
     """Detalle del Cliente, GET/PUT/Delete."""
@@ -170,7 +223,6 @@ class ClientDetailView(APIView):
         client = self.get_object(pk)
         serializer = ClientSerializer(client)
         return Response(serializer.data)
-
 
 # Vista para detalle del cliente segun su username
 # se hizo con la finalidad de instanciar una vez logueado

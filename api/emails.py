@@ -4,7 +4,6 @@ from django.template.loader import get_template
 from django.template import Context
 
 
-
 class BasicEmailAmazon(object):
 
     # Replace sender@example.com with your "From" address.

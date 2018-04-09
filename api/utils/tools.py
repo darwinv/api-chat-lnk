@@ -3,8 +3,10 @@
     el manejo de variables, ejemplo: capitalizar el primer caracter
 """
 import datetime
-from datetime import datetime as date_time, date, time, timedelta
+import string
+import random
 from django.utils.translation import ugettext_lazy as _
+from datetime import datetime as date_time, date, time, timedelta
 
 def capitalize(line):
     """
@@ -44,3 +46,6 @@ def get_time_message(date_time_message):
     except Exception as e:
         pass
     return None
+
+def ramdon_generator(size=6, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
