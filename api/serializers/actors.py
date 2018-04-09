@@ -545,15 +545,16 @@ class SpecialistSerializer(serializers.ModelSerializer):
         """Redefinido metodo de validación."""
         required = _('required')
         # si la residencia es peru, es obligatoria la dirección
-
-        if "residence_country" in data and data["residence_country"] == Countries.objects.get(name="Peru"):
-            if 'address' not in data:
-                raise serializers.ValidationError("address {}".format(required))
+        if self.context['request']._request.method == 'POST':
+            if "residence_country" in data and data["residence_country"] == Countries.objects.get(name="Peru"):
+                if 'address' not in data:
+                    raise serializers.ValidationError(
+                        "address {}".format(required))
             if 'ruc' not in data:
                 raise serializers.ValidationError("ruc {}".format(required))
             elif not data['ruc']:
                 raise serializers.ValidationError("ruc {}".format(required))
-        elif "foreign_address" not in data or not data["foreign_address"]:
+            elif "foreign_address" not in data or not data["foreign_address"]:
                 raise serializers.ValidationError("foreign_address {}".format(required))
         return data
 
@@ -594,11 +595,11 @@ class SellerSerializer(serializers.ModelSerializer):
             "role")
 
     def get_nationality_name(self, obj):
-        """Devuelvo la nacionalidad del especialista."""
+        """Devuelvo la nacionalidad del vendedor."""
         return _(str(obj.nationality))
 
     def get_ciiu_name(self, obj):
-        """Devuelvo la nacionalidad del especialista."""
+        """Devuelvo la nacionalidad del vendedor."""
         try:
             return _(str(obj.ciiu.description))
         except Exception as e:
@@ -609,7 +610,7 @@ class SellerSerializer(serializers.ModelSerializer):
         return _(str(obj.residence_country))
 
     def get_document_type_name(self, obj):
-        """Devuelve el tipo de documento de identidad del especialista."""
+        """Devuelve el tipo de documento de identidad."""
         return _(obj.get_document_type_display())
 
     def validate(self, data):
