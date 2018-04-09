@@ -555,7 +555,7 @@ class GetSpecialists(APITestCase):
             content_type='application/json'
         )
 
-        #import pdb; pdb.set_trace()
+        
         url = "{}?main_specialist={}".format(reverse('specialists'),send.data["id"])
         response = client.get(url)
 
