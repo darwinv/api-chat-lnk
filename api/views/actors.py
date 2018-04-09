@@ -104,6 +104,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 from api.models import QueryPlansAcquired, SaleDetail, Sale
+from api.models import Clasification, QueryPlans, ProductType
 from datetime import datetime
 from api.utils import tools
 # Vista para Listar y Crear Clientes
@@ -155,49 +156,78 @@ class ClientListView(ListCreateAPIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+        def give_plan_new_client(self, client_id):
+            """OJO."""
+            """FUNCION CREADA PARA OTORGAR PLANES A CLIENTES NUEVOS"""
+            """ESTA FUNCION DEBE SER BORRADA DESPUES DE TENER EL MODULO DE COMPRAS"""
+            sale = Sale()
+            saleDetail = SaleDetail()
+            queryPlansAcquired = QueryPlansAcquired()
 
-    def give_plan_new_client(self, client_id):
-        """OJO"""
-        """FUNCION CREADA PARA OTORGAR PLANES A CLIENTES NUEVOS"""
-        """ESTA FUNCION DEBE SER BORRADA DESPUES DE TENER EL MODULO DE COMPRAS"""
-        sale = Sale()
-        saleDetail = SaleDetail()
-        queryPlansAcquired = QueryPlansAcquired()
+            try:
+                product_type = ProductType.objects.get(pk=1)
+            except Exception as e:
+                product_type = ProductType()
+                product_type.name = 'TesterType'
+                product_type.id = '1'
+                product_type.save()
 
-        sale.created_at = datetime.now()
-        sale.place = 'BCP'
-        sale.total_amount = '1000.00'
-        sale.reference_number = 'CD1004'
-        sale.description = 'Test Venta'
-        sale.is_fee = '1'
-        sale.client_id = client_id
-        sale.save()
+            try:
+                clasification = Clasification.objects.get(pk=1)
+            except Exception as e:
+                clasification = Clasification()
+                clasification.name = 'TesterType'
+                clasification.id = '1'
+                clasification.save()
 
-        saleDetail.price = '1000.00'
-        saleDetail.description = 'Plan de Prueba'
-        saleDetail.discount = '0.00'
-        saleDetail.pin_code = tools.ramdon_generator(6)
-        saleDetail.is_billable = '0'
-        saleDetail.contract_id = None
-        saleDetail.product_type_id = '1'
-        saleDetail.sale_id = sale.id
-        saleDetail.save()
+            try:
+                query_plans = QueryPlans.objects.get(pk=1)
+            except Exception as e:
+                query_plans = QueryPlans()
+                query_plans.product_type = product_type
+                query_plans.clasification = clasification
+                query_plans.id = '1'
+                query_plans.query_quantity = '0'
+                query_plans.validity_months = '0'
+                query_plans.maximum_response_time = '0'
+                query_plans.is_active = '0'
+                query_plans.price = '0.0000'
+                query_plans.save()
 
-        queryPlansAcquired.expiration_date = '2019-04-09'
-        queryPlansAcquired.validity_months = '6'
-        queryPlansAcquired.available_queries = '500'
-        queryPlansAcquired.activation_date = None
-        queryPlansAcquired.is_active = '1'
-        queryPlansAcquired.available_requeries = '1'
-        queryPlansAcquired.maximum_response_time = '24'
-        queryPlansAcquired.acquired_at = datetime.now()
-        queryPlansAcquired.client_id = client_id
-        queryPlansAcquired.query_plans_id = '2'
-        queryPlansAcquired.sale_detail_id = saleDetail.id
-        queryPlansAcquired.query_quantity = '500'
-        queryPlansAcquired.plan_name = 'TesterPack'
-        queryPlansAcquired.is_chosen = '1'
-        queryPlansAcquired.save()
+            sale.created_at = datetime.now()
+            sale.place = 'BCP'
+            sale.total_amount = '1000.00'
+            sale.reference_number = 'CD1004'
+            sale.description = 'Test Venta'
+            sale.is_fee = '1'
+            sale.client_id = client_id
+            sale.save()
+
+            saleDetail.price = '1000.00'
+            saleDetail.description = 'Plan de Prueba'
+            saleDetail.discount = '0.00'
+            saleDetail.pin_code = tools.ramdon_generator(6)
+            saleDetail.is_billable = '0'
+            saleDetail.contract_id = None
+            saleDetail.product_type_id = '1'
+            saleDetail.sale_id = sale.id
+            saleDetail.save()
+
+            queryPlansAcquired.expiration_date = '2019-04-09'
+            queryPlansAcquired.validity_months = '6'
+            queryPlansAcquired.available_queries = '500'
+            queryPlansAcquired.activation_date = None
+            queryPlansAcquired.is_active = '1'
+            queryPlansAcquired.available_requeries = '1'
+            queryPlansAcquired.maximum_response_time = '24'
+            queryPlansAcquired.acquired_at = datetime.now()
+            queryPlansAcquired.client_id = client_id
+            queryPlansAcquired.query_plans_id = '1'
+            queryPlansAcquired.sale_detail_id = saleDetail.id
+            queryPlansAcquired.query_quantity = '500'
+            queryPlansAcquired.plan_name = 'TesterPack'
+            queryPlansAcquired.is_chosen = '1'
+            queryPlansAcquired.save()
 # Vista para Detalle del Cliente
 class ClientDetailView(APIView):
     """Detalle del Cliente, GET/PUT/Delete."""

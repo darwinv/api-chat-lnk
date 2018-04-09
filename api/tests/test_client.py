@@ -550,18 +550,18 @@ class CreateNaturalClient(APITestCase):
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_blank_optionals(self):
-        """Solicitud valida ya que no valida campos opcionales."""
-        data = self.valid_payload
-        data["nick"] = ""
-
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        # import pdb; pdb.set_trace()
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    # def test_blank_optionals(self):
+    #     """Solicitud valida ya que no valida campos opcionales."""
+    #     data = self.valid_payload
+    #     data["nick"] = ""
+    #
+    #     response = self.client.post(
+    #         reverse('clients'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     # import pdb; pdb.set_trace()
+    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""
@@ -571,6 +571,7 @@ class CreateNaturalClient(APITestCase):
         data["activity_description"] = ""
         data["about"] = ""
         data["ciiu"] = ""
+        data["nick"] = ""
         data["code_cellphone"] = ""
         data["code_telephone"] = ""
         response = self.client.post(
@@ -916,6 +917,7 @@ class CreateBussinessClient(APITestCase):
         data["about"] = ""
         data["code_cellphone"] = ""
         data["code_telephone"] = ""
+        data["nick"] = ""
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
