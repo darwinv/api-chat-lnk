@@ -37,14 +37,14 @@ class Operations():
         return None
 
 
-def document_exists(nationality, role, document_number):
-    """Verificar si el dni ya existe para ese rol y nacionalidad."""
-    return User.objects.filter(nationality=nationality, role=role,
+def document_exists(type_doc, role, document_number):
+    """Verificar si el documento ya existe para ese rol y tipo de documento."""
+    return User.objects.filter(document_type=type_doc, role=role,
                                document_number=document_number
                                ).exists()
 
 
-def ruc_exists(nationality, role, ruc):
+def ruc_exists(residence_country, role, ruc):
     """Verificar si el ruc ya existe para ese rol y nacionalidad."""
-    return User.objects.filter(nationality=nationality, role=role,
+    return User.objects.filter(residence_country=residence_country, role=role,
                                ruc=ruc).exists()

@@ -195,6 +195,28 @@ class ClientSerializer(serializers.ModelSerializer):
         """Devuelve Ocupación."""
         return _(obj.get_ocupation_display())
 
+    def validate_document_number(self, value):
+        """Validar Numero de Documento."""
+        data = self.get_initial()
+        if data["type_client"] == 'n':
+            document_type = data.get('document_type', '0')
+            if document_exists(type_doc=document_type, role=data["role"],
+                               document_number=data["document_number"]):
+                raise serializers.ValidationError(
+                    [_('This field must be unique')])
+        return value
+
+    def validate_ruc(self, value):
+        """Validar Ruc."""
+        data = self.get_initial()
+        # Se valida solo si es tipo juridico
+        if data["type_client"] == 'b':
+            if ruc_exists(residence_country=data["residence_country"],
+                          role=data["role"], ruc=data["ruc"]):
+                raise serializers.ValidationError(
+                    [_('This field must be unique')])
+        return value
+
     def validate_natural_client(self, data):
         """Validacion para cuando es natural."""
         required = _("required")
@@ -227,17 +249,13 @@ class ClientSerializer(serializers.ModelSerializer):
                     data["foreign_address"] is None):
                 raise serializers.ValidationError(
                          {"foreign_address": [required]})
-
-        if document_exists(nationality=data["nationality"], role=data["role"],
-                           document_number=data["document_number"]):
-            raise serializers.ValidationError(
-                        {'document_number': [_('This field must be unique')]})
         return
 
     def validate_bussines_client(self, data):
         """Validacion para cuando es juridico."""
         required = _("required")
         inf_fiscal = _("Tax Code")
+        country = Countries.objects.get(name="Peru")
         # requerido el nombre de la empresa
         if 'business_name' not in data or data["business_name"] is None:
             raise serializers.ValidationError({"business_name": [required]})
@@ -252,7 +270,7 @@ class ClientSerializer(serializers.ModelSerializer):
         if 'position' not in data or data['position'] is None:
             raise serializers.ValidationError({"position": [required]})
         # si reside en peru la direccion es obligatoria.
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
+        if data["residence_country"] == country:
             if "address" not in data or not data["address"]:
                 raise serializers.ValidationError({"address": [required]})
         # sino, la direccion de extranjero es obligatoria
@@ -269,18 +287,12 @@ class ClientSerializer(serializers.ModelSerializer):
         # requerido el ciiu del cliente juridico
         if 'ciiu' not in data or not data["ciiu"]:
             raise serializers.ValidationError({"ciiu": [required]})
-        # validacion para residencia
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
+        if data["residence_country"] == country:
             if 'ruc' not in data or not data["ruc"]:
-                raise serializers.ValidationError({"ruc": [required]})
+                raise serializers.ValidationError([_("required")])
         else:
             if 'ruc' not in data or not data["ruc"]:
-                raise serializers.ValidationError({"ruc": [required]})
-        if ruc_exists(nationality=data["nationality"],
-                      role=data["role"],
-                      ruc=data["ruc"]):
-            raise serializers.ValidationError(
-                        {'ruc': [_('This field must be unique')]})
+                raise serializers.ValidationError({"Tax Code": [required]})
         return
 
     def validate(self, data):
@@ -382,12 +394,22 @@ class SpecialistSerializer(serializers.ModelSerializer):
         """Devuelve el tipo de especialista (Principal/Asociado)."""
         return _(obj.get_type_specialist_display())
 
+    def validate_document_number(self, value):
+        """Validar Numero de Documento."""
+        data = self.get_initial()
+        document_type = data.get('document_type', '0')
+        if document_exists(type_doc=document_type, role=data["role"],
+                           document_number=data["document_number"]):
+                raise serializers.ValidationError(
+                    [_('This field must be unique')])
+        return value
+
     def create(self, validated_data):
         """Redefinido metodo de crear."""
         valid_spec = _('Main Specialist already exists for this speciality')
         country_peru = Countries.objects.get(name="Peru")
         # validar si el ruc ya existe
-        if ruc_exists(nationality=validated_data["nationality"],
+        if ruc_exists(residence_country=validated_data["residence_country"],
                       role=validated_data["role"],
                       ruc=validated_data["ruc"]):
             raise serializers.ValidationError(
@@ -523,16 +545,18 @@ class SpecialistSerializer(serializers.ModelSerializer):
         """Redefinido metodo de validación."""
         required = _('required')
         # si la residencia es peru, es obligatoria la dirección
+        if self.context['request']._request.method == 'POST':
+            if "residence_country" in data and data["residence_country"] == Countries.objects.get(name="Peru"):
+                if 'address' not in data:
+                    raise serializers.ValidationError(
+                        "address {}".format(required))
+                if 'ruc' not in data:
+                    raise serializers.ValidationError(
+                        "ruc {}".format(required))
+            elif "foreign_address" not in data or not data["foreign_address"]:
+                raise serializers.ValidationError(
+                    "foreign_address {}".format(required))
 
-        if "residence_country" in data and data["residence_country"] == Countries.objects.get(name="Peru"):
-            if 'address' not in data:
-                raise serializers.ValidationError("address {}".format(required))
-            if 'ruc' not in data:
-                raise serializers.ValidationError("ruc {}".format(required))
-            elif not data['ruc']:
-                raise serializers.ValidationError("ruc {}".format(required))
-        elif "foreign_address" not in data or not data["foreign_address"]:
-                raise serializers.ValidationError("foreign_address {}".format(required))
         return data
 
 
@@ -549,9 +573,12 @@ class SellerSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(required=True)
     ruc = serializers.CharField(allow_blank=True, allow_null=True,
                                 required=False)
-    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
-    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
-    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    email_exact = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())])
+    nationality = serializers.PrimaryKeyRelatedField(
+        queryset=Countries.objects.all(), required=True)
+    residence_country = serializers.PrimaryKeyRelatedField(
+        queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
     ciiu_name = serializers.SerializerMethodField()
     photo = serializers.CharField(read_only=True)
@@ -569,11 +596,11 @@ class SellerSerializer(serializers.ModelSerializer):
             "role")
 
     def get_nationality_name(self, obj):
-        """Devuelvo la nacionalidad del especialista."""
+        """Devuelvo la nacionalidad del vendedor."""
         return _(str(obj.nationality))
 
     def get_ciiu_name(self, obj):
-        """Devuelvo la nacionalidad del especialista."""
+        """Devuelvo la nacionalidad del vendedor."""
         try:
             return _(str(obj.ciiu.description))
         except Exception as e:
@@ -584,7 +611,7 @@ class SellerSerializer(serializers.ModelSerializer):
         return _(str(obj.residence_country))
 
     def get_document_type_name(self, obj):
-        """Devuelve el tipo de documento de identidad del especialista."""
+        """Devuelve el tipo de documento de identidad."""
         return _(obj.get_document_type_display())
 
     def validate(self, data):
@@ -594,24 +621,35 @@ class SellerSerializer(serializers.ModelSerializer):
         # si la residencia es peru, es obligatoria la dirección
         if data["residence_country"] == Countries.objects.get(name="Peru"):
             if 'address' not in data:
-                raise serializers.ValidationError("{} {}".format(address, required))
+                raise serializers.ValidationError(
+                    "{} {}".format(address, required))
         else:
             if "foreign_address" not in data or not data["foreign_address"]:
-                raise serializers.ValidationError("{} {}".format(address, required))
+                raise serializers.ValidationError(
+                    "{} {}".format(address, required))
         return data
 
     def update(self, instance, validated_data):
         """Metodo actualizar redefinido."""
-        instance.residence_country = validated_data.get('residence_country', instance.residence_country)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.nick = validated_data.get('nick', instance.nick)
-        instance.photo = validated_data.get('photo', instance.photo)
-        instance.document_type = validated_data.get('document_type', instance.document_type)
-        instance.document_number = validated_data.get('document_number', instance.document_number)
+        instance.residence_country = validated_data.get(
+            'residence_country', instance.residence_country)
+        instance.first_name = validated_data.get(
+            'first_name', instance.first_name)
+        instance.nick = validated_data.get(
+            'nick', instance.nick)
+        instance.photo = validated_data.get(
+            'photo', instance.photo)
+        instance.document_type = validated_data.get(
+            'document_type', instance.document_type)
+        instance.document_number = validated_data.get(
+            'document_number', instance.document_number)
         instance.ciiu = validated_data.get('ciiu', instance.ciiu)
-        instance.email_exact = validated_data.get('email_exact', instance.email_exact)
-        instance.cellphone = validated_data.get('cellphone', instance.cellphone)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.email_exact = validated_data.get(
+            'email_exact', instance.email_exact)
+        instance.cellphone = validated_data.get(
+            'cellphone', instance.cellphone)
+        instance.last_name = validated_data.get(
+            'last_name', instance.last_name)
 
         if "residence_country" in validated_data and validated_data["residence_country"] == Countries.objects.get(name="Peru"):
             if 'address' in validated_data:
@@ -621,9 +659,12 @@ class SellerSerializer(serializers.ModelSerializer):
                     # pdb.set_trace()
                     address = Address.objects.get(pk=instance.address_id)
                     # pdb.set_trace()
-                    address.department = Department.objects.get(pk=data_address["department"].id)
-                    address.province = Province.objects.get(pk=data_address["province"].id)
-                    address.district = District.objects.get(pk=data_address["district"].id)
+                    address.department = Department.objects.get(
+                        pk=data_address["department"].id)
+                    address.province = Province.objects.get(
+                        pk=data_address["province"].id)
+                    address.district = District.objects.get(
+                        pk=data_address["district"].id)
                     address.street = data_address['street']
                     address.save()
                 else:
@@ -643,7 +684,7 @@ class SellerSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Redefinido metodo de crear vendedor."""
         country_peru = Countries.objects.get(name="Peru")
-        if document_exists(nationality=validated_data["nationality"],
+        if document_exists(type_doc=validated_data["document_type"],
                            role=validated_data["role"],
                            document_number=validated_data["document_number"]):
             raise serializers.ValidationError(
@@ -654,7 +695,7 @@ class SellerSerializer(serializers.ModelSerializer):
             validated_data['code'] = prefix_country + validated_data['code']
 
         if 'ruc' in validated_data:
-            if ruc_exists(nationality=validated_data["nationality"],
+            if ruc_exists(residence_country=validated_data["residence_country"],
                           role=validated_data["role"],
                           ruc=validated_data["ruc"]):
                 raise serializers.ValidationError(
