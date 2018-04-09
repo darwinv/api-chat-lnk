@@ -32,7 +32,7 @@ class CreateSpecialist(APITestCase):
                 "district": 1
             },
             'photo': 'preview.jpg',
-            'document_type': '2',
+            'document_type': '0',
             'document_number': '144013012',
             'email_exact': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
@@ -211,7 +211,6 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-
     def test_empty_nationality(self):
         """Solicitud invalida al no enviar sitio de residencia."""
         data = self.valid_payload
@@ -224,7 +223,7 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_unique_role_dni(self):
+    def test_uniqueness_document(self):
         """Solicitud invalida por ser especialista y crear un dni repetido."""
         data1 = self.valid_payload.copy()
         self.client.credentials(
@@ -240,10 +239,20 @@ class CreateSpecialist(APITestCase):
             data=json.dumps(data1),
             content_type='application/json'
         )
+        data2 = data1.copy()
+        data2["username"], data2["email_exact"] = 'jauna', 'jauna@mail.com'
+        data2["ruc"], data2["type_specialist"] = data2["ruc"] + '1', 'a'
+        data2["document_type"] = '1'
+        response2 = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(data2),
+            content_type='application/json'
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_unique_role_ruc(self):
+    def test_uniqueness_ruc(self):
         """Solicitud invalida por ser especialista y crear un ruc repetido."""
         data1 = self.valid_payload.copy()
         self.client.credentials(
@@ -254,6 +263,8 @@ class CreateSpecialist(APITestCase):
             content_type='application/json'
         )
         data1["username"], data1["email_exact"] = 'jesus', 'jesus@mail.com'
+        data1["document_number"] = data1["document_number"] + "1"
+        data1["type_specialist"] = "a"
         response1 = self.client.post(
             reverse('specialists'),
             data=json.dumps(data1),

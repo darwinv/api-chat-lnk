@@ -394,12 +394,22 @@ class SpecialistSerializer(serializers.ModelSerializer):
         """Devuelve el tipo de especialista (Principal/Asociado)."""
         return _(obj.get_type_specialist_display())
 
+    def validate_document_number(self, value):
+        """Validar Numero de Documento."""
+        data = self.get_initial()
+        document_type = data.get('document_type', '0')
+        if document_exists(type_doc=document_type, role=data["role"],
+                           document_number=data["document_number"]):
+                raise serializers.ValidationError(
+                    [_('This field must be unique')])
+        return value
+
     def create(self, validated_data):
         """Redefinido metodo de crear."""
         valid_spec = _('Main Specialist already exists for this speciality')
         country_peru = Countries.objects.get(name="Peru")
         # validar si el ruc ya existe
-        if ruc_exists(nationality=validated_data["nationality"],
+        if ruc_exists(residence_country=validated_data["residence_country"],
                       role=validated_data["role"],
                       ruc=validated_data["ruc"]):
             raise serializers.ValidationError(

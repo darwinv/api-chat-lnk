@@ -502,7 +502,7 @@ class CreateNaturalClient(APITestCase):
         )
         # cambio solo el tipo de documento para cerciorarse del exito.
         data2 = data1.copy()
-        data1["username"], data1["email_exact"] = 'jesus1', 'jesus1@mail.com'
+        data2["username"], data2["email_exact"] = 'jesus1', 'jesus1@mail.com'
         data2["document_type"] = '1'
         response2 = self.client.post(
             reverse('clients'),

@@ -250,8 +250,8 @@ class CreateSeller(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_unique_role_dni(self):
-        """Solicitud invalida por ser cliente y crear un dni repetido."""
+    def test_uniqueness_document(self):
+        """Solicitud invalida por ser vendedor tener un documetno existente."""
         data1 = self.valid_payload.copy()
         self.client.credentials(
              HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
