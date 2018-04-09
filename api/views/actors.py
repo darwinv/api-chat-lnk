@@ -104,6 +104,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 from api.models import QueryPlansAcquired, SaleDetail, Sale
+from api.models import Clasification, QueryPlans, ProductType
 from datetime import datetime
 from api.utils import tools
 # Vista para Listar y Crear Clientes
@@ -165,7 +166,37 @@ class ClientListView(ListCreateAPIView):
         sale = Sale()
         saleDetail = SaleDetail()
         queryPlansAcquired = QueryPlansAcquired()
-        
+
+        try:
+            product_type = ProductType.objects.get(pk=1)
+        except Exception as e:
+            product_type = ProductType()
+            product_type.name = 'TesterType'
+            product_type.id = '1'
+            product_type.save()
+
+        try:
+            clasification = Clasification.objects.get(pk=1)
+        except Exception as e:
+            clasification = Clasification()
+            clasification.name = 'TesterType'
+            clasification.id = '1'
+            clasification.save()
+
+        try:
+            query_plans = QueryPlans.objects.get(pk=1)
+        except Exception as e:
+            query_plans = QueryPlans()
+            query_plans.product_type = product_type
+            query_plans.clasification = clasification
+            query_plans.id = '1'
+            query_plans.query_quantity = '0'
+            query_plans.validity_months = '0'
+            query_plans.maximum_response_time = '0'
+            query_plans.is_active = '0'
+            query_plans.price = '0.0000'
+            query_plans.save()
+
         sale.created_at = datetime.now()
         sale.place = 'BCP'
         sale.total_amount = '1000.00'
@@ -194,7 +225,7 @@ class ClientListView(ListCreateAPIView):
         queryPlansAcquired.maximum_response_time = '24'
         queryPlansAcquired.acquired_at = datetime.now()
         queryPlansAcquired.client_id = client_id
-        queryPlansAcquired.query_plans_id = '2'
+        queryPlansAcquired.query_plans_id = '1'
         queryPlansAcquired.sale_detail_id = saleDetail.id
         queryPlansAcquired.query_quantity = '500'
         queryPlansAcquired.plan_name = 'TesterPack'
