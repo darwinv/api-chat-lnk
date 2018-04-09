@@ -195,6 +195,10 @@ class ClientSerializer(serializers.ModelSerializer):
         """Devuelve Ocupación."""
         return _(obj.get_ocupation_display())
 
+    def validate_document_number(self, value):
+        """Validar Numero de Documento."""
+            
+
     def validate_natural_client(self, data):
         """Validacion para cuando es natural."""
         required = _("required")

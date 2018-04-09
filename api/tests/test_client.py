@@ -485,7 +485,7 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_unique_role_dni(self):
+    def test_uniqueness_document(self):
         """Solicitud invalida por ser cliente y crear un dni repetido."""
         data1 = self.valid_payload.copy()
         response = self.client.post(
