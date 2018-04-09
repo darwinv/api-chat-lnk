@@ -217,7 +217,7 @@ class SpecialistDetailByUsername(APIView):
     def get(self, request, username):
         """Obtener Especialista."""
         specialist = self.get_object(username)
-        serializer = SpecialistSerializer(specialist)
+        serializer = SpecialistSerializer(specialist, context={'request': request})
         return Response(serializer.data)
 
 
@@ -280,12 +280,16 @@ class SpecialistListView(ListCreateAPIView):
         # en dado caso que exista el parametro "main_specialist", se devuelve
         # el listado de especialistas asociados, caso contrario devuelve todos
         if 'main_specialist' in request.query_params:
-            specialist = self.get_object(request.query_params["main_specialist"])
-            queryset = Specialist.objects.filter(category_id=specialist.category).exclude(type_specialist='m')
-            serializer = SpecialistSerializer(queryset, many=True)
+            specialist = self.get_object(
+                request.query_params["main_specialist"])
+            queryset = Specialist.objects.filter(
+                category_id=specialist.category).exclude(type_specialist='m')
+            serializer = SpecialistSerializer(queryset, many=True,
+                                              context={'request': request})
         else:
             queryset = self.get_queryset()
-            serializer = SpecialistSerializer(queryset, many=True)
+            serializer = SpecialistSerializer(queryset, many=True,
+                                              context={'request': request})
 
         # pagination
         page = self.paginate_queryset(queryset)
@@ -304,7 +308,8 @@ class SpecialistListView(ListCreateAPIView):
             raise serializers.ValidationError({'document_number': [required]})
         data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number')
         data['role'] = ROLE_SPECIALIST
-        serializer = SpecialistSerializer(data=data)
+        serializer = SpecialistSerializer(
+            data=data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -361,20 +366,24 @@ class SpecialistDetailView(APIView):
     # detalle
     def get(self, request, pk):
         specialist = self.get_object(pk)
-        serializer = SpecialistSerializer(specialist)
+        serializer = SpecialistSerializer(
+            specialist, context={'request': request})
         return Response(serializer.data)
 
     # actualizacion
     def put(self, request, pk):
+        """Actualizar."""
         data = request.data
         specialist = self.get_object(pk)
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
-        data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number', specialist.document_number)
+        data['code'] = PREFIX_CODE_SPECIALIST + request.data.get(
+            'document_number', specialist.document_number)
         data['photo'] = request.data.get('photo', specialist.photo)
         data['username'] = specialist.username
         data['role'] = ROLE_SPECIALIST
 
-        serializer = SpecialistSerializer(specialist, data, partial=True)
+        serializer = SpecialistSerializer(specialist, data, partial=True,
+                                          context={'request': request})
 
         if serializer.is_valid():
             serializer.save()

@@ -32,7 +32,7 @@ class CreateSpecialist(APITestCase):
                 "district": 1
             },
             'photo': 'preview.jpg',
-            'document_type': '2',
+            'document_type': '0',
             'document_number': '144013012',
             'email_exact': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
@@ -211,7 +211,6 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-
     def test_empty_nationality(self):
         """Solicitud invalida al no enviar sitio de residencia."""
         data = self.valid_payload
@@ -224,7 +223,7 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_unique_role_dni(self):
+    def test_uniqueness_document(self):
         """Solicitud invalida por ser especialista y crear un dni repetido."""
         data1 = self.valid_payload.copy()
         self.client.credentials(
@@ -235,15 +234,26 @@ class CreateSpecialist(APITestCase):
             content_type='application/json'
         )
         data1["username"], data1["email_exact"] = 'jesus', 'jesus@mail.com'
+        data1["ruc"], data1["type_specialist"] = data1["ruc"] + "2", "a"
         response1 = self.client.post(
             reverse('specialists'),
             data=json.dumps(data1),
             content_type='application/json'
         )
+        data2 = data1.copy()
+        data2["username"], data2["email_exact"] = 'jauna', 'jauna@mail.com'
+        data2["ruc"], data2["type_specialist"] = data2["ruc"] + '1', 'a'
+        data2["document_type"] = '1'
+        response2 = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(data2),
+            content_type='application/json'
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
 
-    def test_unique_role_ruc(self):
+    def test_uniqueness_ruc(self):
         """Solicitud invalida por ser especialista y crear un ruc repetido."""
         data1 = self.valid_payload.copy()
         self.client.credentials(
@@ -254,6 +264,8 @@ class CreateSpecialist(APITestCase):
             content_type='application/json'
         )
         data1["username"], data1["email_exact"] = 'jesus', 'jesus@mail.com'
+        data1["document_number"] = data1["document_number"] + "1"
+        data1["type_specialist"] = "a"
         response1 = self.client.post(
             reverse('specialists'),
             data=json.dumps(data1),
@@ -287,20 +299,20 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-
-
     def test_create_specialist_foreign(self):
-        """Creacion de especialistas extranjero"""
+        """Creacion de especialistas extranjero."""
         data = self.valid_payload
         data['residence_country'] = 3
         data['foreign_address'] = "Calle buena pinta - Casa 66á´05"
         data['ruc'] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_specialist_foreign_without(self):
@@ -508,7 +520,9 @@ class GetSpecialists(APITestCase):
             "ruc": "9999",
             "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": 1
+            "category": 1,
+            "nationality": 1,
+            "residence_country": 1
         }
 
         data_second_associate = {
@@ -533,7 +547,9 @@ class GetSpecialists(APITestCase):
             "ruc": "88888",
             "business_name": "agropatria",
             "payment_per_answer": 2.2,
-            "category": 1
+            "category": 1,
+            "nationality": 1,
+            "residence_country": 1
         }
 
         # agregamos los asociados
@@ -554,8 +570,6 @@ class GetSpecialists(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-
-        
         url = "{}?main_specialist={}".format(reverse('specialists'),send.data["id"])
         response = client.get(url)
 
