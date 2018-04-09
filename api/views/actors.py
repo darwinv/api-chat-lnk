@@ -151,9 +151,7 @@ class ClientListView(ListCreateAPIView):
 
 
             # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
-            self.give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAR
-
-
+            # self.give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -165,7 +163,7 @@ class ClientListView(ListCreateAPIView):
         sale = Sale()
         saleDetail = SaleDetail()
         queryPlansAcquired = QueryPlansAcquired()
-        
+
         sale.created_at = datetime.now()
         sale.place = 'BCP'
         sale.total_amount = '1000.00'

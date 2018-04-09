@@ -92,7 +92,8 @@ class Role(models.Model):
 
     name = models.CharField(max_length=50, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    permissions = models.ManyToManyField(Permmission, db_table='role_permission')
+    permissions = models.ManyToManyField(
+        Permmission, db_table='role_permission')
 
     def __str__(self):
         """Nombre del Rol."""
