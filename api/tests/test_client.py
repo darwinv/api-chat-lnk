@@ -493,16 +493,25 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        # cambio usuario y correo, dejando solo el tipo de documento
         data1["username"], data1["email_exact"] = 'jesus', 'jesus@mail.com'
         response1 = self.client.post(
             reverse('clients'),
             data=json.dumps(data1),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        # cambio solo el tipo de documento para cerciorarse del exito.
+        data2 = data1.copy()
+        data1["username"], data1["email_exact"] = 'jesus1', 'jesus1@mail.com'
+        data2["document_type"] = '1'
+        response2 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data2),
+            content_type='application/json'
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-
+        self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
 
     def test_no_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""
@@ -829,8 +838,8 @@ class CreateBussinessClient(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_unique_role_ruc(self):
-        """Solicitud invalida por ser cliente y crear un dni repetido."""
+    def test_uniqueness_ruc(self):
+        """Invalida por ser juridico y crear un ruc existente a ese pais."""
         data1 = self.valid_payload.copy()
         response = self.client.post(
             reverse('clients'),
@@ -843,9 +852,12 @@ class CreateBussinessClient(APITestCase):
             data=json.dumps(data1),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        data2 = data1.copy()
+        data2["username"], data1["email_exact"] = 'juan', 'juan@mail.com'
+        data2["residence_country"] = 3
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_no_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""

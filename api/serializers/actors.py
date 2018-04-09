@@ -197,7 +197,25 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def validate_document_number(self, value):
         """Validar Numero de Documento."""
-            
+        data = self.get_initial()
+        if data["type_client"] == 'n':
+            document_type = data.get('document_type', '0')
+            if document_exists(type_doc=document_type, role=data["role"],
+                               document_number=data["document_number"]):
+                raise serializers.ValidationError(
+                    [_('This field must be unique')])
+        return value
+
+    def validate_ruc(self, value):
+        """Validar Ruc."""
+        data = self.get_initial()
+        # Se valida solo si es tipo juridico
+        if data["type_client"] == 'b':
+            if ruc_exists(residence_country=data["residence_country"],
+                          role=data["role"], ruc=data["ruc"]):
+                raise serializers.ValidationError(
+                    [_('This field must be unique')])
+        return value
 
     def validate_natural_client(self, data):
         """Validacion para cuando es natural."""
@@ -231,17 +249,13 @@ class ClientSerializer(serializers.ModelSerializer):
                     data["foreign_address"] is None):
                 raise serializers.ValidationError(
                          {"foreign_address": [required]})
-
-        if document_exists(nationality=data["nationality"], role=data["role"],
-                           document_number=data["document_number"]):
-            raise serializers.ValidationError(
-                        {'document_number': [_('This field must be unique')]})
         return
 
     def validate_bussines_client(self, data):
         """Validacion para cuando es juridico."""
         required = _("required")
         inf_fiscal = _("Tax Code")
+        country = Countries.objects.get(name="Peru")
         # requerido el nombre de la empresa
         if 'business_name' not in data or data["business_name"] is None:
             raise serializers.ValidationError({"business_name": [required]})
@@ -256,7 +270,7 @@ class ClientSerializer(serializers.ModelSerializer):
         if 'position' not in data or data['position'] is None:
             raise serializers.ValidationError({"position": [required]})
         # si reside en peru la direccion es obligatoria.
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
+        if data["residence_country"] == country:
             if "address" not in data or not data["address"]:
                 raise serializers.ValidationError({"address": [required]})
         # sino, la direccion de extranjero es obligatoria
@@ -273,18 +287,12 @@ class ClientSerializer(serializers.ModelSerializer):
         # requerido el ciiu del cliente juridico
         if 'ciiu' not in data or not data["ciiu"]:
             raise serializers.ValidationError({"ciiu": [required]})
-        # validacion para residencia
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
+        if data["residence_country"] == country:
             if 'ruc' not in data or not data["ruc"]:
-                raise serializers.ValidationError({"ruc": [required]})
+                raise serializers.ValidationError([_("required")])
         else:
             if 'ruc' not in data or not data["ruc"]:
-                raise serializers.ValidationError({"ruc": [required]})
-        if ruc_exists(nationality=data["nationality"],
-                      role=data["role"],
-                      ruc=data["ruc"]):
-            raise serializers.ValidationError(
-                        {'ruc': [_('This field must be unique')]})
+                raise serializers.ValidationError({"Tax Code": [required]})
         return
 
     def validate(self, data):
