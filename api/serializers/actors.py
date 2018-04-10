@@ -299,17 +299,22 @@ class ClientSerializer(serializers.ModelSerializer):
         """Redefinido metodo de validación."""
         if data['type_client'] == 'n':
             self.validate_natural_client(data)
+            # el codigo sera el numero de documento
+            self.context["temp_code"] = data["document_number"]
 
         if data['type_client'] == 'b':
             self.validate_bussines_client(data)
+            # el codigo sera el RUC
+            self.context['temp_code'] = data["ruc"]
         return data
 
     def create(self, validated_data):
         """Redefinido metodo de crear cliente."""
         CODE_CLIENT = "C"
         country_peru = Countries.objects.get(name="Peru")
-        validated_data['code'] = CODE_CLIENT + str(validated_data.get(
-                                                   'document_number'))
+        # import pdb; pdb.set_trace()
+        validated_data['code'] = CODE_CLIENT + str(
+                                                self.context.get('temp_code'))
         # Verificamos si reside en el extranjero, se elimina direccion
         if validated_data["residence_country"] == country_peru:
             data_address = validated_data.pop('address')
