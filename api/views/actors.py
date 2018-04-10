@@ -152,7 +152,7 @@ class ClientListView(ListCreateAPIView):
 
 
             # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
-            # self.give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
+            self.give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
