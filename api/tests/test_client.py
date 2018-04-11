@@ -34,7 +34,7 @@ class CreateNaturalClient(APITestCase):
             'first_name': 'darwin',
             'last_name': 'vasquez',
             'civil_state': 's',
-            'birthdate': '2017-09-19',
+            'birthdate': '1991-09-19',
             "address": {
                 "street": "esteban camere",
                 "department": 1,
@@ -212,7 +212,6 @@ class CreateNaturalClient(APITestCase):
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
-        # import pdb; pdb.set_trace()
         data["address"] = ""
         response1 = self.client.post(
             reverse('clients'),
@@ -240,21 +239,6 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    def test_foreign_address(self):
-        """Solicitud valida con dirrecion de otro pais."""
-        data = self.valid_payload
-        data["residence_country"] = 4
-        del data["address"]
-        # se agrega la direccion para ese pais
-        data["foreign_address"] = "lorem pias ipmasjdn kjajsdk iasjd"
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_foreign_code(self):
@@ -406,6 +390,17 @@ class CreateNaturalClient(APITestCase):
         """Solicitud invalida por enviar incorrectamente la fecha."""
         data = self.valid_payload
         data['birthdate'] = '2017/09/19'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_underage_birthdate(self):
+        """Solicitud Invalida por ser menor de edad."""
+        data = self.valid_payload.copy()
+        data["birthdate"] = '2008-10-12'
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
@@ -1001,7 +996,7 @@ class GetDetailClient(APITestCase):
                 'first_name': 'darwin',
                 'last_name': 'vasquez',
                 'civil_state': 's',
-                'birthdate': '2017-09-19',
+                'birthdate': '1992-09-19',
                 "address": {
                     "street": "esteban camere",
                     "department": 1,
@@ -1034,11 +1029,9 @@ class GetDetailClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
         response = client.get(reverse('client-detail',
                                       kwargs={'pk': send.data["id"]}),
                               format='json')
-        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

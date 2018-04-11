@@ -7,6 +7,7 @@ from api.models import Province, District, Specialist, Ciiu
 from api.models import Seller, LevelInstruction
 from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
+from dateutil.relativedelta import relativedelta
 import datetime
 import string
 import random
@@ -215,6 +216,17 @@ class ClientSerializer(serializers.ModelSerializer):
                           role=data["role"], ruc=data["ruc"]):
                 raise serializers.ValidationError(
                     [_('This field must be unique')])
+        return value
+
+    def validate_birthdate(self, value):
+        """Validar Fecha de Nacimiento."""
+        data = self.get_initial()
+        today = datetime.datetime.today().date()
+        min_date = today - relativedelta(years=18)
+        if data["type_client"] == 'n':
+            if value > min_date:
+                raise serializers.ValidationError(
+                    [_("You must be of legal age")])
         return value
 
     def validate_natural_client(self, data):
