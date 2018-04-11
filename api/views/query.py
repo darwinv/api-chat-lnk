@@ -14,9 +14,7 @@ from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api import pyrebase
-from api.views.actors import PutSpecialistMessages
 from channels import Group
-from django.urls import reverse
 import json
 from api.views.actors import SpecialistMessageList_sp
 
@@ -229,7 +227,7 @@ class QueryChatSpecialistView(ListAPIView):
                                     category_id=F('query__category_id',))\
                           .filter(query__client_id=client, query__specialist_id=specialist)\
                           .order_by('-created_at')
-              
+
         serializer = ChatMessageSerializer(queryset, many=True)
 
         # pagination
