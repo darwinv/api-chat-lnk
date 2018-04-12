@@ -85,7 +85,8 @@ urlpatterns = [
         name='auth-clients'),
 
     # Activacion de planes
-    url(r'^activations/plans/(?P<code>[0-9a-zA-Z]+)/$', plan.ActivationPlanView.as_view(), name='activation-plan'),
+    url(r'^activations/plans/(?P<code>[0-9a-zA-Z]+)/$',
+        plan.ActivationPlanView.as_view(), name='activation-plan'),
 
     # Plan Principal Elegido
     url(r'^chosens-plans/$', plan.ChosemPlanView.as_view(), name='chosen-plan'),

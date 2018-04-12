@@ -324,6 +324,7 @@ class CreateSeller(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):

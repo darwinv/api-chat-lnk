@@ -3,10 +3,12 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
-from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer, QueryPlansAcquiredSerializer
+from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
+from api.serializers.plan import QueryPlansAcquiredSerializer
 from api.models import QueryPlansAcquired
-from api.permissions import IsAdminOrOwner, IsAdminOrClient
+from api.permissions import IsAdminOrClient
 from api.utils.validations import Operations
+from api import pyrebase
 from django.db.models import F
 from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
@@ -78,23 +80,32 @@ class ClientPlansView(ListCreateAPIView):
         serializer = QueryPlansAcquiredSerializer(plan, many=True)
         #paginacion
         page = self.paginate_queryset(plan)
-        if page is not None:            
+        if page is not None:
             serializer = QueryPlansAcquiredSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
         return Response(serializer.data)
 
+
 class ActivationPlanView(APIView):
+    """Activar pllan por codigo PIN.
+
+    Si activa el plan y aun no tiene ninguno elegido para consultar
+    este se elige automaticamente
+    """
+
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self, pk):
+        """Buscar plan adquirido."""
         try:
             return QueryPlansAcquired.objects.get(pk=pk)
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
 
     def get(self, request, code):
+        """Devuelve la informacion del plan segun el codigo pasado."""
         client = request.user.id
         query_set = self.get_detail_plan(code, client)
         try:
@@ -109,7 +120,7 @@ class ActivationPlanView(APIView):
         data = request.data
         client = request.user.id
 
-        activation_date = datetime.now().date()
+        # activation_date = datetime.now().date()
         if self.get_some_chosen_plan(client):
             is_chosen = False
         else:
@@ -118,11 +129,13 @@ class ActivationPlanView(APIView):
         plan_acquired = self.get_detail_plan(code, client)
         query_set = self.get_object(plan_acquired['id'])
 
-        serializer = ActivePlanSerializer(query_set, data, context={'is_chosen': is_chosen}, partial=True)
+        serializer = ActivePlanSerializer(query_set, data,
+                                          context={'is_chosen': is_chosen},
+                                          partial=True)
         # import pdb
-        # pdb.set_trace()
         if serializer.is_valid():
             serializer.save()
+            pyrebase.chosen_plan('u'+str(client), serializer.data)
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -140,13 +153,17 @@ class ActivationPlanView(APIView):
             return False
 
     def get_detail_plan(self, code, client):
+        """Obtener detalle del plan por codigo de pin.
+
+        Si no esta activo
+        """
         try:
             # EL SIGUIENTE QUERY DEBE SER OPTIMIZADO Y REUTILIZADO PARA DIFERENTES SERVICIOS
             # Query para traer el detalle de un plan por el codigo PIN
             plan = get_query_set_plan()
+            return plan.filter(client=client, sale_detail__pin_code=code,
+                               is_active=False)[:1].get()
 
-            return plan.filter(client= client, sale_detail__pin_code=code, is_active = False)[:1].get()
-            
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
 
@@ -174,7 +191,7 @@ class ChosemPlanView(APIView):
         client = request.user.id
 
         data = self.get_detail_plan(client)
-        
+
         try:
             serializer = PlanDetailSerializer(data)
             return Response(serializer.data)

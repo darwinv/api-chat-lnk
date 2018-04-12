@@ -61,7 +61,7 @@ class GetPlanByPIN(APITestCase):
 
 
 class UpdatePlanActiveByAPI(APITestCase):
-    """Test module for Activate Plan by API API."""
+    """Test module for Activate Plan by API API.""" # comentar en español ojo
 
     fixtures = ['data', 'data2', 'data3', 'test_plan']
 

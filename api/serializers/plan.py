@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from api.models import QueryPlansAcquired
-from api.utils.tools import get_date_by_time 
+from api.utils.tools import get_date_by_time
 from datetime import datetime
 
 class PlanDetailSerializer(serializers.ModelSerializer):
@@ -16,20 +16,27 @@ class PlanDetailSerializer(serializers.ModelSerializer):
 
 
 class ActivePlanSerializer(serializers.ModelSerializer):
-    """Serializer del detalle de plan."""
+    """Serializer del detalle de plan adquirido."""
 
     class Meta:
-        """Modelo del especialista y sus campos."""
+        """Model Plan adquirido."""
 
         model = QueryPlansAcquired
-        fields = ('id', 'plan_name','is_chosen','is_active','query_quantity',
-                    'available_queries','validity_months','expiration_date')
-        read_only_fields = ('id', 'plan_name','query_quantity','available_queries','validity_months')
+        fields = ('id', 'plan_name', 'is_chosen', 'is_active',
+                  'query_quantity', 'available_queries',
+                  'expiration_date')
+        extra_kwargs = {
+                'is_chosen': {'write_only': True},
+                'is_active': {'write_only': True}
+        }
+        read_only_fields = ('id', 'plan_name', 'query_quantity',
+                            'available_queries')
+        write_only_fields = ('is_chosen', 'is_active')
 
     def update(self, instance, validated_data):
         """Redefinido metodo actualizar."""
         is_chosen = self.context['is_chosen']
-        
+
         instance.is_active = True
         instance.is_chosen = is_chosen
         instance.activation_date = datetime.now().date()
