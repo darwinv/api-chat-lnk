@@ -4,7 +4,7 @@ from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
 from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
 from api.utils import querysets
-
+from api import pyrebase
 
 # Serializer de Mensajes
 class MessageSerializer(serializers.ModelSerializer):
@@ -189,29 +189,35 @@ class QuerySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Redefinido metodo create."""
         # Buscamos el especialista principal de la especialidad dada
-        specialist = Specialist.objects.get(type_specialist="m",
-                                            category_id=validated_data["category"])
+        specialist = Specialist.objects.get(
+            type_specialist="m", category_id=validated_data["category"])
         data_messages = validated_data.pop('message')
         # Buscamos el plan activo y elegido
-        acquired_plan = QueryPlansAcquired.objects.get(is_chosen=True, client=validated_data["client"])
+        acq_plan = QueryPlansAcquired.objects.get(
+                            is_chosen=True, client=validated_data["client"])
         validated_data["specialist"] = specialist
         validated_data["status"] = 0
-        validated_data["acquired_plan"] = acquired_plan
+        validated_data["acquired_plan"] = acq_plan
         # Creamos la consulta y sus mensajes
         query = Query.objects.create(**validated_data)
         # Recorremos los mensajes para crearlos todos
         for data_message in data_messages:
-            # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
+            # por defecto el tipo de mensaje al crearse
+            # debe de ser pregunta ('q')
             data_message["msg_type"] = "q"
             # data_message["specialist"] = specialist
             # armamos la sala para el usuario
-            data_message["room"] = 'u'+str(validated_data["client"].id)+'-'+'c'+str(validated_data["category"].id)
+            data_message["room"] = 'u'+str(
+                validated_data["client"].id)+'-'+'c'+str(
+                    validated_data["category"].id)
             data_message["code"] = validated_data["client"].code
             # self.context["user_id"] = validated_data["client"].id
             Message.objects.create(query=query, **data_message)
         # restamos una consulta disponible al plan adquirido
-        acquired_plan.available_queries = acquired_plan.available_queries - 1
-        acquired_plan.save()
+        acq_plan.available_queries = acq_plan.available_queries - 1
+        acq_plan.save()
+        pyrebase.chosen_plan('u'+str(validated_data["client"].id),
+                             {"available_queries": acq_plan.available_queries})
         return query
 
     def to_representation(self, obj):
