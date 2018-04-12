@@ -89,8 +89,9 @@ urlpatterns = [
         plan.ActivationPlanView.as_view(), name='activation-plan'),
 
     # Plan Principal Elegido
-    url(r'^chosens-plans/$', plan.ChosemPlanView.as_view(), name='chosen-plan'),
+    url(r'^chosens-plans/$', plan.ChosenPlanView.as_view(), name='chosen-plan'),
 
-    #editar o detallar plan
-    url(r'^chosens-plans/(?P<pk>[0-9]+)/$', plan.QueryPlansAcquiredDetailView.as_view(), name='chosen-plan-edit'),
+    # Editar o Detallar plan adquirido
+    url(r'^chosens-plans/(?P<pk>[0-9]+)/$',
+        plan.QueryPlansAcquiredDetailView.as_view(), name='chosen-plan-edit'),
 ]

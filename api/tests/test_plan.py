@@ -87,9 +87,6 @@ class UpdatePlanActiveByAPI(APITestCase):
 
         # get API response
         response = client.put(reverse('activation-plan', args=(code,)))
-        # import pdb; pdb.set_trace()
-        self.assertEqual(response.data['is_active'],
-                         self.valid_payload['is_active'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetClientPlansList(APITestCase):

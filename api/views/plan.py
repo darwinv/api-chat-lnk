@@ -16,11 +16,13 @@ from datetime import datetime
 
 
 class QueryPlansAcquiredDetailView(APIView):
+    """Detalle de Plan Adquirido."""
+
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
 
     def get_object(self, pk):
-
+        """Obtener Objeto."""
         try:
             obj = QueryPlansAcquired.objects.get(pk=pk)
             self.check_object_permissions(self.request, obj)
@@ -28,34 +30,33 @@ class QueryPlansAcquiredDetailView(APIView):
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
 
-    # detalle de plan
     def get(self, request, pk):
+        """Obtener el Plan."""
         det_plan = self.get_object(pk)
         plan = QueryPlansAcquiredSerializer(det_plan)
         return Response(plan.data)
 
-    # actualizacion
     def put(self, request, pk):
-        #Activar el plan requrido y desactivar los demas
+        """Activar el plan requrido y desactivar los demas."""
         client_id = Operations.get_id(self, request)
         data = request.data
-
         plan = self.get_object(pk)
-
-        #valido el plan que se desea activar
-        if plan.is_active == True and plan.client_id == client_id and plan.expiration_date >= datetime.now().date():
+        # valido el plan que se desea activar
+        if (plan.is_active is True and plan.client_id == client_id and
+                plan.expiration_date >= datetime.now().date()):
             serializer = QueryPlansAcquiredSerializer(plan, data, partial=True)
             if serializer.is_valid():
                 serializer.save()
-
-            #traigo todos los demas planes
-            plan_list = QueryPlansAcquired.objects.filter(client_id=client_id).exclude(pk=pk)
+                # sincronizo en pyrebase
+                pyrebase.chosen_plan('u'+str(client_id), serializer.data)
+            # traigo todos los demas planes
+            plan_list = QueryPlansAcquired.objects.filter(
+                client_id=client_id).exclude(pk=pk)
             # actualizo el campo is_chosen
             if plan_list.count() > 0:
                 plan_list.update(is_chosen=False)
             return Response(serializer.data)
         raise Http404
-        # raise serializers.ValidationError("plan_correct {}".format(required))
 
 
 class ClientPlansView(ListCreateAPIView):
@@ -174,16 +175,16 @@ class ActivationPlanView(APIView):
             retorna False si el cliente no tiene plan seleccionado
         """
         try:
-            QueryPlansAcquired.objects.values('is_chosen')\
-                .filter(client= client, is_active = True, is_chosen = True)[:1].get()
+            QueryPlansAcquired.objects.values('is_chosen').filter(
+                client=client, is_active=True, is_chosen=True)[:1].get()
             return True
         except QueryPlansAcquired.DoesNotExist:
             return False
 
-class ChosemPlanView(APIView):
-    """
-        Vista para devolver plan principal del cliente que envia el token
-    """
+
+class ChosenPlanView(APIView):
+    """Devuelve plan principal del cliente que envia el token."""
+
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated,)
 

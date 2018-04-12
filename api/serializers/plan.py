@@ -45,18 +45,25 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
+    """Plan Adquirido."""
 
     class Meta:
         """declaracion del modelo y sus campos."""
-        model = QueryPlansAcquired
-        fields = ('id', 'plan_name','is_chosen','is_active','query_quantity',
-                    'available_queries','validity_months','expiration_date')
 
+        model = QueryPlansAcquired
+        fields = ('id', 'plan_name', 'is_chosen', 'is_active',
+                  'query_quantity', 'available_queries', 'expiration_date')
+
+        extra_kwargs = {
+                'is_chosen': {'write_only': True},
+                'is_active': {'write_only': True}
+        }
 
     def update(self, instance, validated_data):
         """Metodo actualizar redefinido."""
-
-        instance.is_chosen = validated_data.get('is_chosen', instance.is_chosen)
+        instance.is_chosen = validated_data.get(
+                               'is_chosen', instance.is_chosen)
         instance.save()
         return instance
