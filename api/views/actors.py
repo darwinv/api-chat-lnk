@@ -180,7 +180,7 @@ def give_plan_new_client(client_id):
     queryPlansAcquired.plan_name = 'TesterPack'
     queryPlansAcquired.is_chosen = '1'
     queryPlansAcquired.save()
-            
+
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):
     """Vista Cliente."""
