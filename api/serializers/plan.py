@@ -24,14 +24,9 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         model = QueryPlansAcquired
         fields = ('id', 'plan_name', 'is_chosen', 'is_active',
                   'query_quantity', 'available_queries',
-                  'expiration_date')
-        extra_kwargs = {
-                'is_chosen': {'write_only': True},
-                'is_active': {'write_only': True}
-        }
+                  'validity_months', 'expiration_date')
         read_only_fields = ('id', 'plan_name', 'query_quantity',
-                            'available_queries')
-        write_only_fields = ('is_chosen', 'is_active')
+                            'available_queries', 'validity_months')
 
     def update(self, instance, validated_data):
         """Redefinido metodo actualizar."""
@@ -54,12 +49,13 @@ class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
 
         model = QueryPlansAcquired
         fields = ('id', 'plan_name', 'is_chosen', 'is_active',
-                  'query_quantity', 'available_queries', 'expiration_date')
+                  'validity_months', 'query_quantity',
+                  'available_queries', 'expiration_date')
 
-        extra_kwargs = {
-                'is_chosen': {'write_only': True},
-                'is_active': {'write_only': True}
-        }
+        # extra_kwargs = {
+        #         'is_chosen': {'write_only': True},
+        #         'is_active': {'write_only': True}
+        # }
 
     def update(self, instance, validated_data):
         """Metodo actualizar redefinido."""
