@@ -120,7 +120,7 @@ class UpdatePlanSelect (APITestCase):
 
     def test_put_plan_incorrect(self):
         """Actualizar de manera correscta."""
-        #se busca un plan cuyo id no existe
+        # se busca un plan cuyo id no existe
 
         data = {'is_chosen': 1,
                 'client_id': 5}
@@ -133,9 +133,7 @@ class UpdatePlanSelect (APITestCase):
 
     def test_put_plan_correct(self):
         """Actualizar el plan activo de manera exitosa."""
-
-        data = {'is_chosen': 1,
-	            'client_id': 11}
+        data = {'is_chosen': 1}
 
         response = self.client.put(
             reverse('chosen-plan-edit',
