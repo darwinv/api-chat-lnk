@@ -72,7 +72,8 @@ class QueryListClientView(ListCreateAPIView):
                                    lista[-1]["timeMessage"])
 
             data_set = SpecialistMessageList_sp.search(2, user_id, serializer.data["category"], 0, "")
-            serializer_tmp = SpecialistMessageListCustomSerializer(data_set, many=True)
+            serializer_tmp = SpecialistMessageListCustomSerializer(data_set,
+                                                                   many=True)
             pyrebase.createListMessageClients(serializer_tmp.data, user_id)
 
             # -- Aca una vez creada la data, cargar el mensaje directo a

@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from api.api_choices_models import ChoicesAPI as Ch
 from django.utils.translation import ugettext_lazy as _
+from api.utils.routines import get_messages_list
+
 
 class Countries(models.Model):
     """Paises."""
@@ -657,15 +659,14 @@ class Parameter(models.Model):
 """ STOREPROCEDURE y Clases exclusivas para la API"""
 """ No migrar para la web"""
 
-from api.utils.routines import get_messages_list
 
 class SpecialistMessageList_sp(models.Model):
     id = models.IntegerField(primary_key=True)
     photo = models.CharField(max_length=240, blank=True)
-    nick = models.CharField(max_length=40, blank=True)
+    display_name = models.CharField(max_length=40, blank=True)
     date = models.DateField(blank=True)
     title = models.CharField(max_length=240, blank=True)
-    message = models.CharField(max_length=500,blank=True)
+    message = models.CharField(max_length=500, blank=True)
     client = models.IntegerField(blank=True)
     specialist = models.IntegerField(blank=True)
     total = models.IntegerField(blank=True)
