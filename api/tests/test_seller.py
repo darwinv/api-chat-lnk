@@ -324,7 +324,7 @@ class CreateSeller(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):
@@ -388,6 +388,6 @@ class GetAllSellers(APITestCase):
         # get data from db
         sellers = Seller.objects.all()
         serializer = SellerSerializer(sellers, many=True)
-        print(response.data['results'])
+        # print(response.data['results'])
         self.assertEqual(response.data['results'], serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

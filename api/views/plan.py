@@ -8,6 +8,7 @@ from api.serializers.plan import QueryPlansAcquiredSerializer
 from api.models import QueryPlansAcquired
 from api.permissions import IsAdminOrClient
 from api.utils.validations import Operations
+from api.utils.querysets import get_query_set_plan
 from api import pyrebase
 from django.db.models import F
 from django.http import Http404
@@ -214,12 +215,3 @@ class ChosenPlanView(APIView):
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
 
-def get_query_set_plan():
-    """
-    Funcion creada para instancia base de los planes de un cliente
-    :return: QuerySet
-    """
-    return QueryPlansAcquired.objects.values('id', 'is_chosen', 'is_active', 'plan_name',
-                                              'query_quantity', 'available_queries',
-                                              'validity_months','expiration_date','sale_detail__price')\
-            .annotate(price=F('sale_detail__price'))
