@@ -107,6 +107,8 @@ from api.models import QueryPlansAcquired, SaleDetail, Sale
 from api.models import Clasification, QueryPlans, ProductType
 from datetime import datetime
 from api.utils import tools
+from api.pyrebase import chosen_plan
+from api.serializers.plan import QueryPlansAcquiredSerializer
 
 def give_plan_new_client(client_id):
     """OJO."""
@@ -180,6 +182,9 @@ def give_plan_new_client(client_id):
     queryPlansAcquired.plan_name = 'TesterPack'
     queryPlansAcquired.is_chosen = '1'
     queryPlansAcquired.save()
+
+    serializer = QueryPlansAcquiredSerializer(queryPlansAcquired)
+    chosen_plan('u'+str(client_id), serializer.data)
 
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):

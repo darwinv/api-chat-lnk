@@ -66,8 +66,6 @@ def update_plan_choisen():
         except Exception as e:
             pass
 
-        
-
 ########### FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
 
