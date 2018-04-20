@@ -1,8 +1,10 @@
 """Funcionamiento de Pyrebase."""
 import pyrebase
-from api.models import Client
+from api.models import Client, QueryPlansAcquired
 # from datetime import datetime, timedelta
 from api.utils.parameters import Params, Payloads
+from api.utils.querysets import get_query_set_plan
+from api.serializers.plan import QueryPlansAcquiredSerializer
 from linkupapi.settings import CONFIG_ENVIROMENT
 config = CONFIG_ENVIROMENT
 # Sugerencia para cambiar por una clase con sus metodos
@@ -41,12 +43,32 @@ def categories_db(client_id, cat_id, time_now, read=False):
                                  node_client).child(node_category).update(data)
     return res
 
-
+###########FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE##########
 def update_categories():
     """Cargar listado de categorias para todos los usuarios."""
     # SOLO USO PARA AMBIENTE EN DESARROLLO
     for client in Client.objects.all():
         createCategoriesLisClients(client.id)
+
+def update_plan_choisen():
+    """Cargar plan activo para todos los usuarios."""
+    # SOLO USO PARA AMBIENTE EN DESARROLLO
+    for client in Client.objects.all():
+        try:
+            print("new")
+            plan_chosen = get_query_set_plan()
+            plan_active = plan_chosen.filter(client= client.id, is_active = True, is_chosen = True)[:1].get()
+            
+            obj = QueryPlansAcquired.objects.get(pk=plan_active['id'])
+            plan = QueryPlansAcquiredSerializer(obj)
+            chosen_plan(Params.PREFIX['client'] + str(client.id), plan.data)
+            
+        except Exception as e:
+            pass
+
+        
+
+########### FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
 
 def createCategoriesLisClients(client_id):

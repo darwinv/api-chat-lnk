@@ -459,8 +459,8 @@ class UpdateSpecialistCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # veririficar que se actualizo la direccion
-        print (data['address']['street'])
-        print (send.data["address"]['street'])
+        # print (data['address']['street'])
+        # print (send.data["address"]['street'])
         self.assertEqual(
             data['address']['street'], response.data["address"]['street'])
 
