@@ -191,6 +191,17 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_invalidlength_password(self):
+        """Solicitud invalida por clave menor de 6 caracteres."""
+        data = self.valid_payload
+        data['password'] = '12345'
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+            )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_no_password(self):
         """Solicitud invalida por no enviar el password o enviarlo vacio."""
         data = self.valid_payload

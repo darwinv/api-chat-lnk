@@ -120,12 +120,14 @@ class AddressSerializer(serializers.ModelSerializer):
 class ClientSerializer(serializers.ModelSerializer):
     """Serializer del cliente."""
 
-    username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])
+    username = serializers.CharField(validators=[UniqueValidator(
+        queryset=User.objects.all())])
     level_instruction_name = serializers.SerializerMethodField()
-    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    nationality = serializers.PrimaryKeyRelatedField(
+        queryset=Countries.objects.all(), required=True)
     nationality_name = serializers.SerializerMethodField()
     economic_sector_name = serializers.SerializerMethodField()
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, min_length=6)
     profession = serializers.CharField(allow_blank=True)
     type_client = serializers.ChoiceField(choices=c.client_type_client)
     type_client_name = serializers.SerializerMethodField()
@@ -133,17 +135,21 @@ class ClientSerializer(serializers.ModelSerializer):
     sex_name = serializers.SerializerMethodField()
     document_type = serializers.ChoiceField(choices=c.user_document_type)
     document_type_name = serializers.SerializerMethodField()
-    civil_state = serializers.ChoiceField(choices=c.client_civil_state, allow_blank=True)
+    civil_state = serializers.ChoiceField(choices=c.client_civil_state,
+                                          allow_blank=True)
     civil_state_name = serializers.SerializerMethodField()
-    ocupation = serializers.ChoiceField(choices=c.client_ocupation, allow_blank=True)
+    ocupation = serializers.ChoiceField(choices=c.client_ocupation,
+                                        allow_blank=True)
     ocupation_name = serializers.SerializerMethodField()
     address = AddressSerializer(required=False)
     nick = serializers.CharField(required=False, allow_blank=True)
-    residence_country = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    residence_country = serializers.PrimaryKeyRelatedField(
+        queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
     commercial_reason = serializers.CharField(required=False)
     birthdate = serializers.DateField(required=True)
-    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all())])
+    email_exact = serializers.EmailField(validators=[UniqueValidator(
+        queryset=User.objects.all())])
     photo = serializers.CharField(read_only=True)
     code = serializers.CharField(read_only=True)
 
