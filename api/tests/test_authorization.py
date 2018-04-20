@@ -25,7 +25,7 @@ class ChangeStatusClient(APITestCase):
             'first_name': 'darwin',
             'last_name': 'vasquez',
             'civil_state': 's',
-            'birthdate': '2017-09-19',
+            'birthdate': '1998-09-19',
             "address": {
                 "street": "esteban camere",
                 "department": 1,
@@ -57,8 +57,10 @@ class ChangeStatusClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        # import pdb; pdb.set_trace()
         client = APIClient()
-        client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.put(reverse('auth-clients',
                               kwargs={'pk': send.data["id"]}),
                               data, format='json')

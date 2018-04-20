@@ -1,10 +1,12 @@
 """Funcionamiento de Pyrebase."""
 import pyrebase
-from datetime import datetime, timedelta
+from api.models import Client
+# from datetime import datetime, timedelta
 from api.utils.parameters import Params, Payloads
 from linkupapi.settings import CONFIG_ENVIROMENT
-
 config = CONFIG_ENVIROMENT
+# Sugerencia para cambiar por una clase con sus metodos
+
 
 def chat_firebase_db(data, room):
     """Enviar data a firebase en chat."""
@@ -22,14 +24,14 @@ def exist_room(db, room):
     return db.child("chats").child(room).get() is not None
 
 
-def categories_db(client_id, cat_id, time_now, read = False):
+def categories_db(client_id, cat_id, time_now, read=False):
     """Acualizar Listado de Categorias del Chat."""
     # Actualizar la hora de del momento en que se realiza una consulta
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
     node_client = Params.PREFIX['client'] + str(client_id)
     node_category = Params.PREFIX['category'] + str(cat_id)
-    
+
     data = {
         "datetime": time_now,
         "id": cat_id,
@@ -39,31 +41,43 @@ def categories_db(client_id, cat_id, time_now, read = False):
                                  node_client).child(node_category).update(data)
     return res
 
-from api.models import Client
+
 def update_categories():
-    """funcion para cargar listado de categorias para todos los usuarios
-    SOLO USO PARA AMBIENTE EN DESARROLLO"""
+    """Cargar listado de categorias para todos los usuarios."""
+    # SOLO USO PARA AMBIENTE EN DESARROLLO
     for client in Client.objects.all():
         createCategoriesLisClients(client.id)
-        
+
 
 def createCategoriesLisClients(client_id):
-    #funcion para crear la lista completa de categorias al momento de darse de alta un cliente
+    """Crear la lista completa de categorias.
+
+    Al momento de darse de alta un cliente
+    """
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
     node_client = Params.PREFIX['client'] + str(client_id)
-    res = db.child("categories/clients").child(node_client).update(Payloads.categoriesList)
+    res = db.child("categories/clients").child(
+        node_client).update(Payloads.categoriesList)
     return res
 
 
 def createListMessageClients(lista, client_id):
-    # funsion para insertar o actualizar los mensajes de los clientes del especialista
+    """Insertar o actualizar los mensajes de los clientes del especialista."""
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
     data_obj = lista[0]
     node_specialist = Params.PREFIX['specialist'] + str(data_obj['specialist'])
     node_client = Params.PREFIX['client'] + str(client_id)
     data_obj['date'] = str(data_obj['date'])
+    res = db.child("messagesList/specialist/").child(
+        node_specialist).child(node_client).update(data_obj)
+    return res
 
-    res = db.child("messagesList/specialist/").child(node_specialist).child(node_client).update(data_obj)
+
+def chosen_plan(client_id, data):
+    """Actualizar el plan elegido por cliente."""
+    firebase = pyrebase.initialize_app(config)
+    db = firebase.database()
+    res = db.child("chosenPlans").child(client_id).update(data)
     return res

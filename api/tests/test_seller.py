@@ -6,7 +6,6 @@ import json
 from ..models import Seller, Countries
 from rest_framework import status
 from api.serializers.actors import SellerSerializer
-import pdb
 
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
@@ -45,7 +44,8 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por no tener el username."""
         data = self.valid_payload
         del data["username"]
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -57,7 +57,8 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por no tener el apellido."""
         data = self.valid_payload
         data["last_name"] = ''
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response1 = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -76,7 +77,8 @@ class CreateSeller(APITestCase):
         """Solicitud invalida por no tener el nombre."""
         data = self.valid_payload
         data["first_name"] = ''
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response1 = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -314,7 +316,7 @@ class CreateSeller(APITestCase):
         data["ruc"] = None
         data["ciiu"] = None
         data["telephone"] = None
-        data["nick"] = ''
+        data["nick"] = None
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
@@ -322,6 +324,7 @@ class CreateSeller(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):
@@ -331,7 +334,8 @@ class CreateSeller(APITestCase):
         data["ruc"] = ""
         data["ciiu"] = ""
         data["telephone"] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -343,7 +347,8 @@ class CreateSeller(APITestCase):
         """Verificar el codigo creado anteceda el ISO de su Nacionalidad."""
         data = self.valid_payload
         data["nationality"] = 4
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(data),
@@ -356,7 +361,8 @@ class CreateSeller(APITestCase):
 
     def test_create_seller(self):
         """Solicitud valida."""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('sellers'),
             data=json.dumps(self.valid_payload),
@@ -371,11 +377,12 @@ class GetAllSellers(APITestCase):
 
     fixtures = ['data', 'data2', 'data3']
 
-
     def setUp(self):
+        """Setup."""
         pass
 
     def test_get_all_sellers(self):
+        """Trae todos los vendedores."""
         # get API response
         response = client.get(reverse('sellers'))
         # get data from db

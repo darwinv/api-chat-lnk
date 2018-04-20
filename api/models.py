@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from api.api_choices_models import ChoicesAPI as Ch
 from django.utils.translation import ugettext_lazy as _
+from api.utils.routines import get_messages_list
+
 
 class Countries(models.Model):
     """Paises."""
@@ -107,7 +109,7 @@ class User(AbstractUser):
 
     #  class Meta:
     #      db_table = 'user'
-    nick = models.CharField(_('nick'), max_length=45, blank=True)
+    nick = models.CharField(_('nick'), max_length=45, blank=True, null=True)
     email_exact = models.CharField(_('email'), max_length=150, unique=True)
     telephone = models.CharField(_('phone'), max_length=14,
                                  blank=True, null=True)
@@ -294,8 +296,10 @@ class Category(models.Model):
     image = models.CharField(max_length=169)
     description = models.CharField(max_length=255)
     # payment_per_answer = models.DecimalField(max_digits=10, decimal_places=2)
-    fixed_commission = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    variable_commission = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    fixed_commission = models.DecimalField(max_digits=10, decimal_places=2,
+                                           null=True)
+    variable_commission = models.DecimalField(max_digits=10, decimal_places=2,
+                                              null=True)
     contract = models.ForeignKey(Contract, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
@@ -318,7 +322,8 @@ class Specialist(User):
     """Modelo de Especialista (herede de user)."""
 
     business_name = models.CharField(max_length=55)
-    type_specialist = models.CharField(max_length=1, choices=Ch.specialist_type_specialist)
+    type_specialist = models.CharField(max_length=1,
+                                       choices=Ch.specialist_type_specialist)
     star_rating = models.IntegerField(null=True)
     cv = models.CharField(max_length=150, null=True)
     payment_per_answer = models.DecimalField(max_digits=10, decimal_places=2)
@@ -654,15 +659,14 @@ class Parameter(models.Model):
 """ STOREPROCEDURE y Clases exclusivas para la API"""
 """ No migrar para la web"""
 
-from api.utils.routines import get_messages_list
 
 class SpecialistMessageList_sp(models.Model):
     id = models.IntegerField(primary_key=True)
     photo = models.CharField(max_length=240, blank=True)
-    nick = models.CharField(max_length=40, blank=True)
+    display_name = models.CharField(max_length=40, blank=True)
     date = models.DateField(blank=True)
     title = models.CharField(max_length=240, blank=True)
-    message = models.CharField(max_length=500,blank=True)
+    message = models.CharField(max_length=500, blank=True)
     client = models.IntegerField(blank=True)
     specialist = models.IntegerField(blank=True)
     total = models.IntegerField(blank=True)

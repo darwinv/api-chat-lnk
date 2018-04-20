@@ -49,7 +49,8 @@ class CreateSpecialist(APITestCase):
         """Solicitud invalida por no tener el username."""
         data = self.valid_payload
         del data["username"]
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(data),
@@ -139,7 +140,8 @@ class CreateSpecialist(APITestCase):
         """Solicitud invalida por no enviar una especialidad."""
         data = self.valid_payload
         del data['category']
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -151,7 +153,8 @@ class CreateSpecialist(APITestCase):
         """Solicitud invalida por no enviar ruc."""
         data = self.valid_payload
         del data['ruc']
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -176,7 +179,8 @@ class CreateSpecialist(APITestCase):
         """Solicitud invalida por no enviar el tipo de especialista correcto."""
         data = self.valid_payload
         data['type_specialist'] = 'r'
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -190,7 +194,8 @@ class CreateSpecialist(APITestCase):
         del data["telephone"]
         del data["cellphone"]
         del data["nick"]
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -203,7 +208,8 @@ class CreateSpecialist(APITestCase):
         data = self.valid_payload
         data["last_name"] = ""
         data["first_name"] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -215,7 +221,8 @@ class CreateSpecialist(APITestCase):
         """Solicitud invalida al no enviar sitio de residencia."""
         data = self.valid_payload
         data["nationality"] = ""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(data),
@@ -278,7 +285,8 @@ class CreateSpecialist(APITestCase):
         """Verificar el codigo creado anteceda el ISO de su Nacionalidad."""
         data = self.valid_payload
         data["nationality"] = 4
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(data),
@@ -291,7 +299,8 @@ class CreateSpecialist(APITestCase):
 
     def test_create_specialist(self):
         """Creacion de especialistas."""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -316,14 +325,14 @@ class CreateSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_specialist_foreign_without(self):
-        """Validacion de especialistas extranjero sin foreign_address"""
-
+        """Validacion de especialistas extranjero sin foreign_address."""
         data = self.valid_payload
         self.test_create_specialist_foreign()  # Llamado a crear especialista extranjero
 
         data['foreign_address'] = ""
 
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -343,7 +352,8 @@ class DetailSpecialist(APITestCase):
 
     def test_get_detail(self):
         """Obtener detalle de manera exitosa."""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.get(reverse('specialist-detail',
                               kwargs={'pk': self.specialist}), format='json')
 
@@ -383,7 +393,8 @@ class UpdateSpecialistCase(APITestCase):
         # self.assertEqual(self.resp.data["id"], 'ey')
 
     def test_can_update_specialist(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -426,7 +437,8 @@ class UpdateSpecialistCase(APITestCase):
           }
 
         # agregar el especialista por defecto
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -443,17 +455,17 @@ class UpdateSpecialistCase(APITestCase):
             reverse('specialist-detail', kwargs={'pk': send.data["id"]}),
             data, format='json'
         )
-        #import pdb; pdb.set_trace()
         self.assertEqual(response.data['id'], send.data["id"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # veririficar que se actualizo la direccion
         print (data['address']['street'])
         print (send.data["address"]['street'])
-        self.assertEqual(data['address']['street'], response.data["address"]['street'])
+        self.assertEqual(
+            data['address']['street'], response.data["address"]['street'])
 
 class GetSpecialists(APITestCase):
-    fixtures = ['data','data2','data3']
+    fixtures = ['data', 'data2', 'data3']
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',
@@ -497,7 +509,7 @@ class GetSpecialists(APITestCase):
 
     # no funciona la prueba debido a que para
     def test_get_associates_by_main(self):
-        fixtures = ['data','data2','data3']
+        fixtures = ['data', 'data2', 'data3']
         data_first_associate = {
             'username': 'maria',
             'nick': 'maria',
@@ -553,7 +565,9 @@ class GetSpecialists(APITestCase):
         }
 
         # agregamos los asociados
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+
         send_associate1 = self.client.post(
             reverse('specialists'),
             data=json.dumps(data_first_associate),
@@ -609,7 +623,8 @@ class DeleteSpecialist(APITestCase):
         }
 
     def test_delete_specialist(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),

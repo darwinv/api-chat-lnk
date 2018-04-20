@@ -22,5 +22,6 @@ def has_active_plan(client):
 
 def has_available_queries(client):
     """Verificar si el usuario tiene consultas disponibles."""
+    # import pdb; pdb.set_trace()
     q = QueryPlansAcquired.objects.get(is_chosen=True, client_id=client)
     return q.available_queries >= 1
