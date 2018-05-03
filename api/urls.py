@@ -1,7 +1,7 @@
 """Urls de API Rest."""
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import actors, query, category, email, authorization, plan, chat
+from api.views import actors, query, category, email, authorization, plan, chat, oauth
 
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
@@ -105,6 +105,9 @@ urlpatterns = [
         name='auth-list-clients'),
     url(r'^authorizations/clients/(?P<pk>[0-9]+)/$', authorization.ChangeStatusClientView.as_view(),
         name='auth-clients'),
+
+    # Test auth
+    url(r'^oauth/$', oauth.TestOAuth.as_view(), name='oauth-test'),
 
     # Activacion de planes
     url(r'^activations/plans/(?P<code>[0-9a-zA-Z]+)/$',
