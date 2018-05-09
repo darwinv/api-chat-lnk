@@ -282,10 +282,8 @@ class ResponseSpecialistQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-
-
 class GetSpecialistMessages(APITestCase):
-    """Prueba para devolver el plan activo y elegido de un determinado cliente"""
+    """Prueba para devolver el plan activo y elegido de un determinado cliente."""
 
     fixtures = ['data', 'data2', 'data3', 'test_getspecialistmessages']
 
@@ -295,7 +293,8 @@ class GetSpecialistMessages(APITestCase):
 
     def test_get_list_messages_token_specialist(self):
         """Obtener resultado 200."""
-        #se provee un token de especialista el cuel tiene   mensajes pendientes de responders
+        # se provee un token de especialista el cuel tiene
+        # mensajes pendientes de responders
         self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
         response = self.client.get(reverse('specialists-list-messages'), format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
