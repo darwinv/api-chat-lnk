@@ -308,14 +308,19 @@ class QueryUploadFilesView(APIView):
     def put(self, request, pk):
         """Actualiza la consulta, subiendo archivos."""
         query = self.get_object(pk)
+        print(request.data["message_id"])
+        # import pdb; pdb.set_trace()
         # Cargamos el listado de archivos adjuntos
-        msg_id = request.data["message_id"]
+        msgs = request.data["message_id"].split(',')
         files = request.FILES.getlist('file')
         # Empezamos a subir cada archivo por hilo separado
         threads = []
+        i = 0
         for file in files:
-            t = threading.Thread(target=self.upload, args=(file, msg_id))
+            print(msgs[i])
+            t = threading.Thread(target=self.upload, args=(file, msgs[i]))
             threads.append(t)
+            i = i + 1
         for x in threads:
             x.start()
         # # Wait for all of them to finish
