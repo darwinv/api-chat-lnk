@@ -16,7 +16,8 @@ from channels import Group
 
 from api import pyrebase
 from api.models import Query, Message, Category, Specialist, Client
-from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsAdminReadOrSpecialistOwner
+from api.permissions import IsAdminOrClient, IsAdminOrSpecialist
+from api.permissions import IsAdminReadOrSpecialistOwner, IsClientAndOwner
 from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
@@ -293,14 +294,14 @@ class QueryUploadFilesView(APIView):
     """Subida de archivos para la consultas."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated, IsClientAndOwner]
     parser_classes = (JSONParser, MultiPartParser)
 
     def get_object(self, pk):
         """Devuelvo la consulta."""
         try:
             obj = Query.objects.get(pk=pk)
-            self.check_object_permissions(self.request, obj)
+            self.check_object_permissions(self.request, obj.client_id)
             return obj
         except Query.DoesNotExist:
             raise Http404

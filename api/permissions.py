@@ -80,6 +80,21 @@ class IsAdminOrClient(permissions.BasePermission):
         return False
 
 
+class IsClientAndOwner(permissions.BasePermission):
+    """Solo Cliente y Dueño del objeto actual."""
+
+    def has_permission(self, request, view):
+        """Permiso General."""
+        if request.user and request.user.role_id == 2:
+            return True
+        return False
+
+    def has_object_permission(self, request, view, owner_id):
+        """Permiso nivel objeto."""
+        if request.method == "POST" or request.method == "PUT":
+            return request.user.id == owner_id
+
+
 class IsAdminReadOrSpecialistOwner(permissions.BasePermission):
     """Solo Administradores o Especialistas."""
 
