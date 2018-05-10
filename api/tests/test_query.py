@@ -203,6 +203,47 @@ class CreateQuery(APITestCase):
         self.assertEqual(before_post_queries - 1, after_post_queries)
 
 
+class PutFilesToQuery(APITestCase):
+    """Subir archivos a la consulta."""
+
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        self.valid_payload = {
+            "title": "Pago de Impuestos",
+            "category": 24,
+            "message": [{
+                "message": "primera consulta",
+                "msg_type": "q",
+                "content_type": "0",
+                "file_url": ""
+                },
+                {
+                "message": "",
+                "msg_type": "q",
+                "content_type": "1",
+                "file_url": "img.png"
+                }
+            ],
+        }
+
+    def test_create_query_put_files(self):
+        """Creacion Exitosa de la consulta y actualizacion de archivos."""
+        q = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)
+        before_post_queries = q.available_queries
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        qq = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)
+        after_post_queries = qq.available_queries
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(before_post_queries - 1, after_post_queries)
+
+
 class ResponseSpecialistQuery(APITestCase):
     """Respuesta del especialista a la consulta."""
 
@@ -212,7 +253,8 @@ class ResponseSpecialistQuery(APITestCase):
     def setUp(self):
         """Setup."""
         self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
         self.valid_payload = {
             "message": [{
                 "message": "respuesta a consulta",

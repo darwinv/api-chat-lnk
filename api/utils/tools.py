@@ -5,6 +5,7 @@
 import datetime
 import string
 import random
+import boto3
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime as date_time, date, time, timedelta
 
@@ -47,5 +48,20 @@ def get_time_message(date_time_message):
         pass
     return None
 
+
 def ramdon_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+def s3_upload_file(file, filename):
+    """Subir archivo usando put object."""
+    client = boto3.client('s3')
+    client.put_object(
+        ACL='public-read',
+        ContentType=file.content_type,
+        Bucket='linkup-photos',
+        Body=file.read(),  # 'bytes or seekable file-like object',
+        Key=filename
+    )
+    print('https://s3.amazonaws.com/linkup-photos/' + filename)
+    # return 'https://s3.amazonaws.com/linkup-photos/' + filename

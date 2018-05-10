@@ -226,12 +226,18 @@ class QuerySerializer(serializers.ModelSerializer):
         chat = {}
 
         for message in ms:
-            message["query"] = {"id": obj.id, "title": obj.title, "status": obj.status,
+            if int(message['fileType']) > 0:
+                message['uploaded'] = 0
+            message["query"] = {"id": obj.id, "title": obj.title,
+                                "status": obj.status,
                                 "calification": obj.calification}
+
             key_message = 'm'+str(message["id"])
+            print(key_message)
             chat.update({key_message: dict(message)})
 
-        return {'room': ms[0]["room"], "message": chat, "category": obj.category.id}
+        return {'room': ms[0]["room"], "message": chat,
+                "category": obj.category.id}
 
 
 class QueryResponseSerializer(serializers.ModelSerializer):

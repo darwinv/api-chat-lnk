@@ -1,8 +1,20 @@
 """Vistas de Consultas."""
+import json
+import threading
+import os
+
+from django.db.models import OuterRef, Subquery, F
+from django.http import Http404, HttpResponse
+
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, ListAPIView
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_framework import status, permissions
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
+from channels import Group
+
+from api import pyrebase
 from api.models import Query, Message, Category, Specialist, Client
 from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsAdminReadOrSpecialistOwner
 from api.utils.validations import Operations
@@ -10,13 +22,10 @@ from api.serializers.query import QuerySerializer, QueryListClientSerializer, Me
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer, ChatMessageSerializer, QueryResponseSerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
-from django.db.models import OuterRef, Subquery, F
-from django.http import Http404
-from oauth2_provider.contrib.rest_framework import OAuth2Authentication
-from api import pyrebase
-from channels import Group
-import json
 from api.views.actors import SpecialistMessageList_sp
+from api.utils.tools import s3_upload_file
+
+
 
 class QueryListClientView(ListCreateAPIView):
     """Vista Consulta por parte del cliente."""
@@ -67,7 +76,8 @@ class QueryListClientView(ListCreateAPIView):
             lista = list(serializer.data['message'].values())
             # Se actualiza la base de datos de firebase para el mensaje
             pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
-            # Se actualiza la base de datos de firebase listado de sus especialidades
+            # Se actualiza la base de datos de firebase listado
+            # de sus especialidades
             pyrebase.categories_db(user_id, serializer.data["category"],
                                    lista[-1]["timeMessage"])
 
@@ -269,7 +279,6 @@ class QueryChatClientView(ListCreateAPIView):
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
 
-
         serializer = ChatMessageSerializer(queryset, many=True)
 
         # pagination
@@ -278,3 +287,42 @@ class QueryChatClientView(ListCreateAPIView):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
+
+
+class QueryUploadFilesView(APIView):
+    """Subida de archivos para la consultas."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.AllowAny]
+    parser_classes = (JSONParser, MultiPartParser)
+
+    def get_object(self, pk):
+        """Devuelvo la consulta."""
+        try:
+            obj = Query.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except Query.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Actualiza la consulta, subiendo archivos."""
+        query = self.get_object(pk)
+        # Cargamos el listado de archivos adjuntos
+        files = request.FILES.getlist('file')
+        # Empezamos a subir cada archivo por hilo separado
+        for file in files:
+            threading.Thread(target=self.upload, args=(file,)).start()
+
+        return HttpResponse(status=200)
+
+    def upload(self, file):
+        """Funcion para subir archivos."""
+        name_file, extension = os.path.splitext(file.name)
+        name = name_file + extension
+        # lo subimos a Amazon S3
+        s3_upload_file(file, name)
+        # devolvemos el mensaje con su id correspondiente
+        ms = Message.objects.get(file_url=name)
+        # Actualizamos el status en firebase
+        pyrebase.mark_uploaded_file(room=ms.room, message=ms.message_id)

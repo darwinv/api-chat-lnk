@@ -58,11 +58,11 @@ def update_plan_choisen():
             print("new")
             plan_chosen = get_query_set_plan()
             plan_active = plan_chosen.filter(client= client.id, is_active = True, is_chosen = True)[:1].get()
-            
+
             obj = QueryPlansAcquired.objects.get(pk=plan_active['id'])
             plan = QueryPlansAcquiredSerializer(obj)
             chosen_plan(Params.PREFIX['client'] + str(client.id), plan.data)
-            
+
         except Exception as e:
             pass
 
@@ -101,3 +101,11 @@ def chosen_plan(client_id, data):
     db = firebase.database()
     res = db.child("chosenPlans").child(client_id).update(data)
     return res
+
+
+def mark_uploaded_file(room, message_id):
+    """Actualizar que el archivo se ha subido a firebase."""
+    node = 'chats/room/' + 'm' + str(message_id)
+    firebase = pyrebase.initialize_app(config)
+    db = firebase.database()
+    db.child(node).update({"uploaded": 1})
