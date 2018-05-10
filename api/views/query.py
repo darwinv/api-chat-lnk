@@ -309,20 +309,32 @@ class QueryUploadFilesView(APIView):
         """Actualiza la consulta, subiendo archivos."""
         query = self.get_object(pk)
         # Cargamos el listado de archivos adjuntos
+        msg_id = request.data["message_id"]
         files = request.FILES.getlist('file')
         # Empezamos a subir cada archivo por hilo separado
+        threads = []
         for file in files:
-            threading.Thread(target=self.upload, args=(file,)).start()
+            t = threading.Thread(target=self.upload, args=(file, msg_id))
+            threads.append(t)
+        for x in threads:
+            x.start()
+        # # Wait for all of them to finish
+        for x in threads:
+            x.join()
 
         return HttpResponse(status=200)
 
-    def upload(self, file):
+    def upload(self, file, msg_id):
         """Funcion para subir archivos."""
         name_file, extension = os.path.splitext(file.name)
         name = name_file + extension
         # lo subimos a Amazon S3
-        s3_upload_file(file, name)
+        url = s3_upload_file(file, name)
         # devolvemos el mensaje con su id correspondiente
-        ms = Message.objects.get(file_url=name)
+        ms = Message.objects.get(pk=msg_id)
+        ms.file_url = url
+        ms.save()
         # Actualizamos el status en firebase
-        pyrebase.mark_uploaded_file(room=ms.room, message=ms.message_id)
+        r = pyrebase.mark_uploaded_file(room=ms.room, message_id=ms.id,
+                                        url_file=url)
+        print(r)

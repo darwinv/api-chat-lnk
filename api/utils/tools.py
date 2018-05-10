@@ -1,11 +1,13 @@
 """
-    Archivo creado con la finalidad de crear funciones y clases que permitan trabajar de forma estandar
+    Archivo creado con la finalidad de crear funciones y clases que permitan
+    trabajar de forma estandar
     el manejo de variables, ejemplo: capitalizar el primer caracter
 """
 import datetime
 import string
 import random
 import boto3
+import threading
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime as date_time, date, time, timedelta
 
@@ -63,5 +65,5 @@ def s3_upload_file(file, filename):
         Body=file.read(),  # 'bytes or seekable file-like object',
         Key=filename
     )
-    print('https://s3.amazonaws.com/linkup-photos/' + filename)
-    # return 'https://s3.amazonaws.com/linkup-photos/' + filename
+    # file.close()
+    return 'https://s3.amazonaws.com/linkup-photos/' + filename
