@@ -1,11 +1,15 @@
 """Pruebas unitarias para las consultas."""
+import json
+import os
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
-from django.urls import reverse
 from rest_framework import status
-import json
-from api.models import SpecialistMessageList
-from api.models import QueryPlansAcquired
+from django.urls import reverse
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from linkupapi.settings import TEST_URL
+# from api.models import SpecialistMessageList
+from api.models import QueryPlansAcquired, Message
 # Create your tests here.
 
 client = APIClient()
@@ -206,6 +210,8 @@ class CreateQuery(APITestCase):
 class PutFilesToQuery(APITestCase):
     """Subir archivos a la consulta."""
 
+    fixtures = ['data', 'data2', 'data3', 'test_query']
+
     def setUp(self):
         """Setup."""
         self.client = APIClient()
@@ -229,19 +235,26 @@ class PutFilesToQuery(APITestCase):
             ],
         }
 
-    def test_create_query_put_files(self):
-        """Creacion Exitosa de la consulta y actualizacion de archivos."""
-        q = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)
-        before_post_queries = q.available_queries
-        response = self.client.post(
-            reverse('queries-client'),
-            data=json.dumps(self.valid_payload),
-            content_type='application/json'
-        )
-        qq = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)
-        after_post_queries = qq.available_queries
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(before_post_queries - 1, after_post_queries)
+    # def test_create_query_put_files(self):
+    #     """Creacion Exitosa de la consulta y actualizacion de archivos."""
+    #     msgs = Message.objects.filter(query_id=1000)
+    #     ms = msgs.get(content_type=1)
+    #     # Uploading File Image
+    #     dir_img = os.path.join(TEST_URL, 'image.png')
+    #     # file = open(dir_img)   # str.encode(dir_img)
+    #     # import pdb; pdb.set_trace()
+    #     with open(dir_img, "rb") as fp:
+    #         f = fp.read()
+    #     # import pdb; pdb.set_trace()
+    #     imgn = SimpleUploadedFile("image.png",
+    #                               f, content_type="image/png")
+    #
+    #     # import pdb; pdb.set_trace()
+    #     response1 = self.client.put(
+    #         reverse('query-upload-files', kwargs={'pk': 1000}),
+    #         data={'message_id': ms.id, 'file': imgn}, format='multipart')
+    #
+    #     self.assertEqual(response1.status_code, status.HTTP_200_OK)
 
 
 class ResponseSpecialistQuery(APITestCase):

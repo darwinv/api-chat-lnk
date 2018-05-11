@@ -337,7 +337,8 @@ class QueryUploadFilesView(APIView):
         # lo subimos a Amazon S3
         url = s3_upload_file(file, name)
         # devolvemos el mensaje con su id correspondiente
-        ms = Message.objects.get(pk=msg_id)
+        import pdb; pdb.set_trace()
+        ms = Message.objects.get(pk=int(msg_id))
         ms.file_url = url
         ms.save()
         # Actualizamos el status en firebase
