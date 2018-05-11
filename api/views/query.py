@@ -17,7 +17,8 @@ from channels import Group
 from api import pyrebase
 from api.models import Query, Message, Category, Specialist, Client
 from api.permissions import IsAdminOrClient, IsAdminOrSpecialist
-from api.permissions import IsAdminReadOrSpecialistOwner, IsClientAndOwner
+from api.permissions import IsAdminReadOrSpecialistOwner
+from api.permissions import IsClientOrSpecialistAndOwner
 from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
@@ -294,22 +295,26 @@ class QueryUploadFilesView(APIView):
     """Subida de archivos para la consultas."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsClientAndOwner]
+    permission_classes = [permissions.IsAuthenticated,
+                          IsClientOrSpecialistAndOwner]
     parser_classes = (JSONParser, MultiPartParser)
 
-    def get_object(self, pk):
+    def get_object(self, request, pk):
         """Devuelvo la consulta."""
         try:
             obj = Query.objects.get(pk=pk)
-            self.check_object_permissions(self.request, obj.client_id)
+            if request.user.role_id == 2:
+                owner = obj.client_id
+            elif request.user.role_id == 3:
+                owner = obj.specialist_id
+            self.check_object_permissions(self.request, owner)
             return obj
         except Query.DoesNotExist:
             raise Http404
 
     def put(self, request, pk):
         """Actualiza la consulta, subiendo archivos."""
-        query = self.get_object(pk)
-        print(request.data["message_id"])
+        query = self.get_object(request, pk)
         # import pdb; pdb.set_trace()
         # Cargamos el listado de archivos adjuntos
         msgs = request.data["message_id"].split(',')
@@ -337,7 +342,6 @@ class QueryUploadFilesView(APIView):
         # lo subimos a Amazon S3
         url = s3_upload_file(file, name)
         # devolvemos el mensaje con su id correspondiente
-        import pdb; pdb.set_trace()
         ms = Message.objects.get(pk=int(msg_id))
         ms.file_url = url
         ms.save()

@@ -80,17 +80,19 @@ class IsAdminOrClient(permissions.BasePermission):
         return False
 
 
-class IsClientAndOwner(permissions.BasePermission):
+class IsClientOrSpecialistAndOwner(permissions.BasePermission):
     """Solo Cliente y Dueño del objeto actual."""
 
     def has_permission(self, request, view):
         """Permiso General."""
-        if request.user and request.user.role_id == 2:
+        if (request.user
+                and (request.user.role_id == 2 or request.user.role_id == 3)):
             return True
         return False
 
     def has_object_permission(self, request, view, owner_id):
         """Permiso nivel objeto."""
+        # import pdb; pdb.set_trace()
         if request.method == "POST" or request.method == "PUT":
             return request.user.id == owner_id
 
