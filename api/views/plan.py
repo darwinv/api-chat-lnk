@@ -70,7 +70,7 @@ class ClientPlansView(ListCreateAPIView):
         try:
             obj = QueryPlansAcquired.objects.filter(client=pk,
                                                     is_active=True,
-                                                    expiration_date__gte=datetime.now().date())
+                                                    expiration_date__gte=datetime.now().date()).order_by('id')
             self.check_object_permissions(self.request, obj)
             return obj
         except QueryPlansAcquired.DoesNotExist:
