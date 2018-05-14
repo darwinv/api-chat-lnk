@@ -275,11 +275,15 @@ class QueryResponseSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
         size = self.context["size_msgs"]
-        ms = ListMessageSerializer(obj.message_set.order_by('-created_at')[:size], many=True).data
+        ms = ListMessageSerializer(obj.message_set.order_by('-created_at')[:size],
+                                   many=True).data
         chat = {}
 
         for message in ms:
-            message["query"] = {"id": obj.id, "title": obj.title, "status": obj.status,
+            if int(message['fileType']) > 0:
+                message['uploaded'] = 0
+            message["query"] = {"id": obj.id, "title": obj.title,
+                                "status": obj.status,
                                 "calification": obj.calification}
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
