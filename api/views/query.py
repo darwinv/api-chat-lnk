@@ -314,7 +314,7 @@ class QueryUploadFilesView(APIView):
 
     def put(self, request, pk):
         """Actualiza la consulta, subiendo archivos."""
-        query = self.get_object(request, pk)
+        self.get_object(request, pk)
         # import pdb; pdb.set_trace()
         # Cargamos el listado de archivos adjuntos
         msgs = request.data["message_id"].split(',')
