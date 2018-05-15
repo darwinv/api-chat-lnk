@@ -41,8 +41,8 @@ class MessageSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Validacion de Data."""
         required = _('required')
-        if int(data["content_type"]) > 0 and data["file_url"] == '':
-            raise serializers.ValidationError({"file_url": [required]})
+        # if int(data["content_type"]) > 0 and data["file_url"] == '':
+        #     raise serializers.ValidationError({"file_url": [required]})
         if int(data["content_type"]) == 0 and data["message"] == '':
             raise serializers.ValidationError({"message": [required]})
         return data
@@ -224,10 +224,11 @@ class QuerySerializer(serializers.ModelSerializer):
         """Redefinido metodo de representación del serializer."""
         ms = ListMessageSerializer(obj.message_set.all(), many=True).data
         chat = {}
-
+        messages_files = []
         for message in ms:
             if int(message['fileType']) > 0:
                 message['uploaded'] = 0
+                messages_files.append(message["id"])
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
                                 "calification": obj.calification}
@@ -237,7 +238,8 @@ class QuerySerializer(serializers.ModelSerializer):
             chat.update({key_message: dict(message)})
 
         return {'room': ms[0]["room"], "message": chat,
-                "category": obj.category.id}
+                "message_files_id": messages_files,
+                "category": obj.category.id, "query_id": obj.id}
 
 
 class QueryResponseSerializer(serializers.ModelSerializer):
