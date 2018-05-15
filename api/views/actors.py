@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Query
 from api.models import SellerContactNoEfective, SpecialistMessageList, SpecialistMessageList_sp
+from api.models import RecoveryPassword
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
@@ -27,7 +28,7 @@ from datetime import datetime, date
 from django.utils import timezone
 from api.utils.validations import Operations
 from api import pyrebase
-
+from api.emails import BasicEmailAmazon
 
 
 # Constantes
@@ -67,6 +68,41 @@ class UpdatePasswordView(APIView):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class SendCodePassword(APIView):
+    """Actualizar Contraseña de Usuario (uso para dev)."""
+    required = _("required")
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.AllowAny]
+
+    def get_object(self, pk):
+        """Devolver objeto."""
+        try:
+            obj = User.objects.get(pk=pk)
+            return obj
+        except User.DoesNotExist:
+            raise Http404
+
+    def post(self, request):
+        """Funcion put."""
+        if 'email' in request.data:            
+            email = request.data["email"]
+        else:
+            raise serializers.ValidationError({'email': [self.required]})
+
+        user_filter = User.objects.filter(email_exact=email)
+        
+        user = self.get_object(user_filter)
+        recovery_password = RecoveryPassword()
+        recovery_password.user = user
+        recovery_password.code = tools.ramdon_generator(6)
+        recovery_password.is_active = True
+        recovery_password.save()
+
+        mail = BasicEmailAmazon(subject='Codigo cambio de contraseña', to=email,
+                                template='base')
+        data = {'code':recovery_password.code}
+        return Response(mail.sendmail(args=data))
 
 
 class ViewKey(APIView):

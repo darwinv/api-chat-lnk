@@ -634,6 +634,13 @@ class NotificationsBack(models.Model):
     code = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
 
+class RecoveryPassword(models.Model):
+    """Modelo Token para Recuperacion de Contraseñas"""
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=False)
+    key = models.CharField(max_length=6)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
 
 # Ingresar en parametros number_requery
 # language
