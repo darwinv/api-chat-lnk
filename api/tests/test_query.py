@@ -168,16 +168,16 @@ class CreateQuery(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_contentype_file(self):
-        """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
-        self.valid_payload["message"][0]["content_type"] = '1'
-        response = self.client.post(
-            reverse('queries-client'),
-            data=json.dumps(self.valid_payload),
-            content_type='application/json'
-        )
-        # al enviar un mensaje de tipo archivo, la url no puede estar vacia
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    # def test_contentype_file(self):
+    #     """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
+    #     self.valid_payload["message"][0]["content_type"] = '1'
+    #     response = self.client.post(
+    #         reverse('queries-client'),
+    #         data=json.dumps(self.valid_payload),
+    #         content_type='application/json'
+    #     )
+    #     # al enviar un mensaje de tipo archivo, la url no puede estar vacia
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_contentype_message(self):
         """Verificar que el mensaje a guardar corresponde al tipo de contenido de mensaje."""
@@ -303,16 +303,16 @@ class ResponseSpecialistQuery(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_contentype_file(self):
-        """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
-        self.valid_payload["message"][0]["content_type"] = '1'
-        response = self.client.put(
-            reverse('query-specialist', kwargs={'pk': 1000}),
-            data=json.dumps(self.valid_payload),
-            content_type='application/json'
-        )
-        # al enviar un mensaje de tipo archivo, la url no puede estar vacia
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    # def test_contentype_file(self):
+    #     """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
+    #     self.valid_payload["message"][0]["content_type"] = '1'
+    #     response = self.client.put(
+    #         reverse('query-specialist', kwargs={'pk': 1000}),
+    #         data=json.dumps(self.valid_payload),
+    #         content_type='application/json'
+    #     )
+    #     # al enviar un mensaje de tipo archivo, la url no puede estar vacia
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_contentype_message(self):
         """Verificar que el mensaje a guardar corresponde al tipo de contenido de mensaje."""

@@ -234,7 +234,6 @@ class QuerySerializer(serializers.ModelSerializer):
                                 "calification": obj.calification}
 
             key_message = 'm'+str(message["id"])
-            print(key_message)
             chat.update({key_message: dict(message)})
 
         return {'room': ms[0]["room"], "message": chat,
@@ -280,10 +279,11 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         ms = ListMessageSerializer(obj.message_set.order_by('-created_at')[:size],
                                    many=True).data
         chat = {}
-
+        messages_files = []
         for message in ms:
             if int(message['fileType']) > 0:
                 message['uploaded'] = 0
+                messages_files.append(message["id"])
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
                                 "calification": obj.calification}
@@ -291,7 +291,9 @@ class QueryResponseSerializer(serializers.ModelSerializer):
             chat.update({key_message: dict(message)})
 
         return {'room': ms[0]["room"], "message": chat,
-                "category": obj.category.id, "client_id": obj.client.id}
+                "message_files_id": messages_files,
+                "category": obj.category.id,
+                "query_id": obj.id, "client_id": obj.client.id}
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
 # class QueryUpdateSerializer(serializers.ModelSerializer):
