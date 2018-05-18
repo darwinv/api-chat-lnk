@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Query
 from api.models import SellerContactNoEfective, SpecialistMessageList, SpecialistMessageList_sp
+from api.models import RecoveryPassword
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
@@ -27,7 +28,7 @@ from datetime import datetime, date
 from django.utils import timezone
 from api.utils.validations import Operations
 from api import pyrebase
-
+from api.emails import BasicEmailAmazon
 
 
 # Constantes
@@ -68,6 +69,122 @@ class UpdatePasswordView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class SendCodePassword(APIView):
+    """Actualizar Contraseña de Usuario (uso para dev)."""
+    required = _("required")
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.AllowAny]
+
+    def get_object(self, pk):
+        """Devolver objeto."""
+        try:
+            obj = User.objects.get(pk=pk)
+            return obj
+        except User.DoesNotExist:
+            raise Http404
+
+    def post(self, request):
+        """Funcion put."""
+        if 'email' in request.data:            
+            email = request.data["email"]
+        else:
+            raise serializers.ValidationError({'email': [self.required]})
+
+        user_filter = User.objects.filter(email_exact=email)
+
+        if not user_filter:
+            raise Http404
+
+        user = self.get_object(user_filter)
+        recovery_password = RecoveryPassword()
+        recovery_password.user = user
+        recovery_password.code = code = tools.ramdon_generator(6)
+        recovery_password.is_active = True
+        recovery_password.save()
+        data = {'code':code}
+        mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña", to=email, template='send_code')
+        return Response(mail.sendmail(args=data))
+
+class ValidCodePassword(APIView):
+    """Actualizar Contraseña de Usuario (uso para dev)."""
+    required = _("required")
+    invalid = _("not valid")
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        """Funcion put."""
+        if 'code' in request.query_params:            
+            code = request.query_params["code"]
+        else:
+            raise serializers.ValidationError({'code': [self.required]})
+
+        if 'email' in request.query_params:
+            email = request.query_params["email"]
+        else:
+            raise serializers.ValidationError({'email': [self.required]})
+
+        user_filter = User.objects.filter(recoverypassword__code=code, email_exact=email, is_active=True).extra(where = ["DATEDIFF(NOW() ,created_at )<=1"])
+        # print(user_filter.query)
+        # import pdb
+        # pdb.set_trace()
+        if user_filter:
+            user = User.objects.get(pk=user_filter)
+            user_serializer = UserSerializer(user, partial=True)
+            return Response(user_serializer.data)
+        else:
+            raise Http404
+
+class UpdatePasswordRecoveryView(APIView):
+    """Actualizar Contraseña de Usuario Recuperado."""
+    required = _("required")
+    invalid = _("not valid")
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.AllowAny]
+
+    def get_object(self, pk):
+        """Devolver objeto."""
+        try:
+            obj = User.objects.get(pk=pk)
+            return obj
+        except User.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Funcion put."""
+        if 'code' in request.data:            
+            code = request.data["code"]
+        else:
+            raise serializers.ValidationError({'code': [self.required]})
+
+        user_filter = RecoveryPassword.objects.filter(code=code, user=pk, is_active=True).extra(where = ["DATEDIFF(NOW() ,created_at )<=1"])
+        
+        if user_filter:
+            data = request.data
+            user = self.get_object(pk)
+            serializer = ChangePasswordSerializer(user, data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+
+                recovery = RecoveryPassword.objects.get(pk=user_filter)
+                recovery.is_active = False
+                recovery.save()
+                return Response(serializer.data)
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            raise Http404
+
+    def get(self, request):
+        
+        user = self.get_object(user_filter)
+        user.password = True
+        user.save()
+
+        if user_filter:
+            return Response({})
+        else:
+            raise serializers.ValidationError({'code': [self.invalid]})
 
 class ViewKey(APIView):
     """Devuelve la contraseña sin encriptar (uso exclusivo para dev)."""
@@ -259,6 +376,18 @@ class ClientDetailView(APIView):
         serializer = ClientSerializer(client)
         return Response(serializer.data)
 
+    def put(self, request, pk):
+        """Detalle."""
+        client = self.get_object(pk)
+        serializer = ClientSerializer(client)
+        return Response(serializer.data)
+
+        data['username'] = specialist.username
+        data['role'] = ROLE_SPECIALIST
+
+        serializer = SpecialistSerializer(specialist, data, partial=True,
+                                          context={'request': request})
+        
 # Vista para detalle del cliente segun su username
 # se hizo con la finalidad de instanciar una vez logueado
 class ClientDetailByUsername(APIView):

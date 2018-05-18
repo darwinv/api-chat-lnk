@@ -1,0 +1,13 @@
+{% load i18n %}
+{% block content_mail %}
+
+  <h1 style="background-color:#0a0b22; color:white"> {% trans "Recovery Password"|title %} </h1>
+
+  <div style="text-align: justify;">
+    <p>
+      {% trans "This is your recovery code:" %} <strong>{{code}}</strong>
+      <br>
+      {% trans "Please, use this code for create a new secure password"|title %}
+    </p>
+  </div>
+{% endblock content_mail %}

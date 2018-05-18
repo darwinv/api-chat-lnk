@@ -1066,10 +1066,85 @@ class GetAllClients(APITestCase):
 
     def test_get_all_clients(self):
         # get API response
-        # client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.get(reverse('clients'))
         # get data from db
         clients = Cliente.objects.all()
         serializer = ClientSerializer(clients, many=True)
         self.assertEqual(response.data['results'], serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class SendRecoveryCode(APITestCase):
+    """Test module for GET all clients API."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan']
+    def setUp(self):
+        pass
+
+    def test_gest_user_by_code_recovery(self):
+        # get API response
+        data = {'email':'jefeti@pympack.com.pe'}
+        response = client.post(reverse('send-code-password'), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_error_empty_data(self):
+        # no envio de email 
+        response = client.post(reverse('send-code-password'))        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_error_bad_email(self):
+        # envio mal correo
+        data = {'email':'jefeti12345@pympack.com.pe'}
+        response = client.post(reverse('send-code-password'), data)        
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+class GetUserByRecoverCode(APITestCase):
+    """Test module for GET all clients API."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'test_recovery_password']
+    def setUp(self):
+        pass
+
+    def test_gest_user_by_code_recovery(self):
+        # get API response
+        data = {'email':'jefeti@pympack.com.pe', 'code':'WEY4D1'}
+        response = client.get(reverse('valid-code-password'), data)
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], 5)
+
+    def test_error_empty_data(self):
+        # no envio de data
+        response = client.get(reverse('valid-code-password'))        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_error_bad_email(self):
+        # envio data erronea
+        data = {'email':'jefeti12345@pympack.com.pe','code': 'XYZ123'}
+        response = client.get(reverse('valid-code-password'), data)
+        
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+class UpdatePasswordByRecoverCode(APITestCase):
+    """Test module for GET all clients API."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'test_recovery_password']
+    def setUp(self):
+        pass
+
+    def test_update_password_by_recovery(self):
+        # get API response
+        data = {'password':'123456', 'code':'WEY4D1'}
+        response = client.put(reverse('reset-password-recovery', args=(5,)), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], 5)
+
+    def test_error_empty_data(self):
+        # no envio de data
+        response = client.put(reverse('reset-password-recovery', args=(111,)))     
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_error_bad_email(self):
+        # envio data erronea
+        data = {'password':'123456', 'code':'XYZ123'}
+        response = client.put(reverse('reset-password-recovery', args=(111,)), data)        
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

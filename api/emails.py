@@ -8,8 +8,7 @@ class BasicEmailAmazon(object):
 
     # Replace sender@example.com with your "From" address.
     # This address must be verified with Amazon SES.
-    sender = "olopezdeveloper@pympack.com.pe"
-
+    sender = "team@pympack.com.pe"
     # The character encoding for the email.
 
 
@@ -25,47 +24,46 @@ class BasicEmailAmazon(object):
 
     def sendmail(self, args):
         """Metodo para enviar correos por Amazon."""
-        return True
         # Create a new SES resource and specify a region.
-        # client = boto3.client('ses', region_name=self.region)
-        # d = (args)
-        # #
-        # html = get_template(self.template_html)
-        # txt = get_template(self.template_txt)
-        # html_content = html.render(d)
-        # txt_content = txt.render(d)
-        # # Try to send the email.
-        # try:
-        #     response = client.send_email(
-        #             Destination={
-        #                 'ToAddresses': [
-        #                     self.to,
-        #                 ],
-        #             },
-        #             Message={
-        #                 'Body': {
-        #                     'Html': {
-        #                         'Charset': self.charset,
-        #                         'Data': html_content,
-        #                     },
-        #                     'Text': {
-        #                         'Charset': self.charset,
-        #                         'Data': txt_content,
-        #                     },
-        #                 },
-        #                 'Subject': {
-        #                     'Charset': self.charset,
-        #                     'Data': self.subject,
-        #                 },
-        #             },
-        #             Source=BasicEmailAmazon.sender,
-        #             # If you are not using a configuration set, comment or delete the
-        #             # following line
-        #             #ConfigurationSetName=CONFIGURATION_SET,
-        #         )
-        #     # Display an error if something goes wrong.
-        # except ClientError as e:
-        #     return (e.response['Error']['Message'])
-        # else:
-        #     # print("Email sent! Message ID:"),
-        #     return (response['ResponseMetadata']['RequestId'])
+        client = boto3.client('ses', region_name=self.region)
+        d = (args)
+        #
+        html = get_template(self.template_html)
+        txt = get_template(self.template_txt)
+        html_content = html.render(d)
+        txt_content = txt.render(d)
+        # Try to send the email.
+        try:
+            response = client.send_email(
+                    Destination={
+                        'ToAddresses': [
+                            self.to,
+                        ],
+                    },
+                    Message={
+                        'Body': {
+                            'Html': {
+                                'Charset': self.charset,
+                                'Data': html_content,
+                            },
+                            'Text': {
+                                'Charset': self.charset,
+                                'Data': txt_content,
+                            },
+                        },
+                        'Subject': {
+                            'Charset': self.charset,
+                            'Data': self.subject,
+                        },
+                    },
+                    Source=BasicEmailAmazon.sender,
+                    # If you are not using a configuration set, comment or delete the
+                    # following line
+                    #ConfigurationSetName=CONFIGURATION_SET,
+                )
+            # Display an error if something goes wrong.
+        except ClientError as e:
+            return (e.response['Error']['Message'])
+        else:
+            # print("Email sent! Message ID:"),
+            return (response['ResponseMetadata']['RequestId'])
