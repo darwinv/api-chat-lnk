@@ -32,9 +32,9 @@ urlpatterns = [
     # # Envio de codigo de verificar al correo
     url(r'^send-code-password/$', actors.SendCodePassword.as_view(), name='send-code-password'),
     # # Validacion de codigo para reseteo de contrasena
-    # url(r'^valid-code-password/$', actors.UpdatePasswordView.as_view(), name='valid-code-password'),
+    url(r'^valid-code-password/$', actors.ValidCodePassword.as_view(), name='valid-code-password'),
     # # reseteo de contraseña
-    # url(r'^reset-password/$', actors.UpdatePasswordView.as_view(), name='reset-password'),
+    url(r'^reset-password-recovery/(?P<pk>[0-9]+)/$', actors.UpdatePasswordRecoveryView.as_view(), name='reset-password-recovery'),
     
 
     # detalle de cliente

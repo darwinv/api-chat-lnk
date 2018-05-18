@@ -24,16 +24,20 @@
      <!--  Linkup logo  -->
     <center>
         {% include 'lib/header.html' %}
-    <h1 style="background-color:#0a0b22; color:white"> {% trans "Title"|title %} {{nombre}}</h1>
-<div class="cuerpo" style="text-align: justify;">
+    
+{% block content_mail %}
+
+  <h1 style="background-color:#0a0b22; color:white"> {% trans "Title"|title %} {{nombre}}</h1>
+
+  <div class="cuerpo" style="text-align: justify;">
     <p>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget lobortis eros.
    Suspendisse potenti. Integer eu purus sapien. Fusce at nisi quis elit accumsan rutrum.
    Nam gravida ac augue sit amet aliquet. Quisque laoreet tempor ex, quis tempus ligula fringilla ac.
     Aliquam lacinia scelerisque elit, ac mattis eros imperdiet a.
     </p>
- </div>
-
+  </div>
+{% endblock content_mail %}
 {% include 'lib/footer.html' %}
 
          </center>

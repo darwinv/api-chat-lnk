@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-11 14:39-0500\n"
+"POT-Creation-Date: 2018-05-16 15:08-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,16 +57,12 @@ msgid "Business"
 msgstr "Juridico"
 
 #: .\api\api_choices_models.py:32
-#, fuzzy
-#| msgid "Natural"
 msgid "Natural Person"
-msgstr "Natural"
+msgstr "Persona Natural"
 
 #: .\api\api_choices_models.py:33
-#, fuzzy
-#| msgid "Business"
 msgid "Business Person"
-msgstr "Juridico"
+msgstr "Persona Juridico"
 
 #: .\api\api_choices_models.py:37
 msgid "Male"
@@ -248,109 +244,110 @@ msgstr "Moderar"
 msgid "Positive"
 msgstr "Positivo"
 
-#: .\api\models.py:110
+#: .\api\models.py:112
 msgid "nick"
 msgstr "nick"
 
-#: .\api\models.py:111
+#: .\api\models.py:113
 msgid "email"
 msgstr "correo"
 
-#: .\api\models.py:112
+#: .\api\models.py:114
 msgid "phone"
 msgstr "telefono"
 
-#: .\api\models.py:114
+#: .\api\models.py:116
 msgid "cellphone"
 msgstr "celular"
 
-#: .\api\models.py:122
+#: .\api\models.py:124
 msgid "photo"
 msgstr "foto"
 
-#: .\api\models.py:123
+#: .\api\models.py:125
 msgid "type document"
 msgstr "tipo de documento"
 
-#: .\api\models.py:125
+#: .\api\models.py:127
 msgid "document number"
 msgstr "numero de documento"
 
-#: .\api\models.py:126
+#: .\api\models.py:128
 msgid "upload document"
 msgstr "subir documento"
 
-#: .\api\models.py:129 .\api\models.py:585
+#: .\api\models.py:131 .\api\models.py:590
 msgid "code"
 msgstr "codigo"
 
-#: .\api\models.py:130
+#: .\api\models.py:132
 msgid "anonymous"
 msgstr "anonimo"
 
-#: .\api\models.py:131
+#: .\api\models.py:133
 msgid "updated at"
 msgstr "actualizado en"
 
-#: .\api\models.py:134
+#: .\api\models.py:136
 msgid "nationality"
 msgstr "nacionalidad"
 
-#: .\api\models.py:137
+#: .\api\models.py:139
 msgid "role"
 msgstr "rol"
 
-#: .\api\models.py:140 .\api\serializers\actors.py:634
+#: .\api\models.py:142 .\api\serializers\actors.py:650
 msgid "address"
 msgstr "direccion"
 
-#: .\api\models.py:144
+#: .\api\models.py:146
 msgid "residence country"
 msgstr "pais de residencia"
 
-#: .\api\models.py:145
+#: .\api\models.py:147
 msgid "foreign address"
 msgstr "direccion extranjera"
 
-#: .\api\models.py:309
+#: .\api\models.py:313
 msgid "Bank"
 msgstr "Banco"
 
-#: .\api\models.py:626
+#: .\api\models.py:631
 msgid "message"
 msgstr "mensaje"
 
-#: .\api\models.py:627
+#: .\api\models.py:632
 msgid "viewed"
 msgstr "visto"
 
-#: .\api\serializers\actors.py:207 .\api\serializers\actors.py:218
-#: .\api\serializers\actors.py:418 .\api\serializers\actors.py:430
-#: .\api\serializers\actors.py:705 .\api\serializers\actors.py:716
+#: .\api\serializers\actors.py:220 .\api\serializers\actors.py:231
+#: .\api\serializers\actors.py:434 .\api\serializers\actors.py:446
+#: .\api\serializers\actors.py:721 .\api\serializers\actors.py:732
 msgid "This field must be unique"
 msgstr "Este campo debe ser unico"
 
-#: .\api\serializers\actors.py:226
+#: .\api\serializers\actors.py:242
 msgid "You must be of legal age"
 msgstr "Debes ser mayor de edad"
 
-#: .\api\serializers\actors.py:231 .\api\serializers\actors.py:265
-#: .\api\serializers\actors.py:301 .\api\serializers\actors.py:560
-#: .\api\serializers\actors.py:633 .\api\serializers\query.py:43
-#: .\api\views\actors.py:188 .\api\views\actors.py:386
-#: .\api\views\actors.py:559 .\api\views\actors.py:689
+#: .\api\serializers\actors.py:247 .\api\serializers\actors.py:281
+#: .\api\serializers\actors.py:317 .\api\serializers\actors.py:576
+#: .\api\serializers\actors.py:649 .\api\serializers\query.py:43
+#: .\api\views\actors.py:74 .\api\views\actors.py:112 .\api\views\actors.py:140
+#: .\api\views\actors.py:305 .\api\views\actors.py:503
+#: .\api\views\actors.py:676 .\api\views\actors.py:806
 msgid "required"
 msgstr "requerido"
 
-#: .\api\serializers\actors.py:266
+#: .\api\serializers\actors.py:282
 msgid "Tax Code"
 msgstr "Registro de información Fiscal"
 
-#: .\api\serializers\actors.py:423 .\api\serializers\actors.py:478
+#: .\api\serializers\actors.py:439 .\api\serializers\actors.py:494
 msgid "Main Specialist already exists for this speciality"
 msgstr "Especialista Principal ya existe para esta especialidad"
 
-#: .\api\serializers\actors.py:466
+#: .\api\serializers\actors.py:482
 msgid "send credencials"
 msgstr "enviar credenciales"
 
@@ -362,9 +359,21 @@ msgstr "Necesitas tener un plan activo"
 msgid "You don't have available queries"
 msgstr "No tienes consultas disponibles"
 
-#: .\api\templates\base.html:27 .\api\templates\send_credentials.html:27
+#: .\api\templates\base.html:30 .\api\templates\send_credentials.html:27
 msgid "Title"
 msgstr "titulo"
+
+#: .\api\templates\send_code.html:4
+msgid "Recovery Password"
+msgstr "Recuperar Contraseña"
+
+#: .\api\templates\send_code.html:8
+msgid "This is your recovery code:"
+msgstr "Este es su codigo"
+
+#: .\api\templates\send_code.html:10
+msgid "Please, use this code for create a new secure password"
+msgstr "Por favor, utilize este codigo para crear una nueva contraseña segura"
 
 #: .\api\templates\send_credentials.html:30
 msgid "credentials"
@@ -382,9 +391,14 @@ msgstr "contraseña"
 msgid "yesterday"
 msgstr "ayer"
 
-#: .\api\views\actors.py:690
+#: .\api\views\actors.py:113 .\api\views\actors.py:141
+#: .\api\views\actors.py:807
 msgid "not valid"
 msgstr "no valido"
+
+#: .\api\views\actors.py:171
+msgid "data error"
+msgstr "error en data"
 
 #: .\linkupapi\settings.py:129
 msgid "Spanish"
@@ -393,6 +407,3 @@ msgstr "Español"
 #: .\linkupapi\settings.py:130
 msgid "English"
 msgstr "Ingles"
-
-#~ msgid "registration of tax information"
-#~ msgstr "registro de información tributaria"
