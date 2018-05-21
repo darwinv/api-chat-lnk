@@ -2,6 +2,8 @@
 import json
 import threading
 import os
+import boto3
+from botocore.exceptions import ClientError
 
 from django.db.models import OuterRef, Subquery, F
 from django.http import Http404, HttpResponse
@@ -337,6 +339,7 @@ class QueryUploadFilesView(APIView):
 
     def upload(self, file, msg_id):
         """Funcion para subir archivos."""
+        resp = True  # variable bandera
         name_file, extension = os.path.splitext(file.name)
         name = name_file + extension
         # lo subimos a Amazon S3
@@ -345,7 +348,17 @@ class QueryUploadFilesView(APIView):
         ms = Message.objects.get(pk=int(msg_id))
         ms.file_url = url
         ms.save()
-        # Actualizamos el status en firebase
-        r = pyrebase.mark_uploaded_file(room=ms.room, message_id=ms.id,
-                                        url_file=url)
-        print(r)
+        s3 = boto3.client('s3')
+        # Evaluamos si el archivo se subio a S3
+        try:
+            s3.head_object(Bucket='linkup-photos', Key=name)
+        except ClientError as e:
+            resp = int(e.response['Error']['Code']) != 404
+        # Si no se ha subido se actualiza el estatus en firebase
+        if resp is False:
+            pyrebase.mark_failed_file(room=ms.room, message_id=ms.id)
+        else:
+            # Actualizamos el status en firebase
+            r = pyrebase.mark_uploaded_file(room=ms.room, message_id=ms.id,
+                                            url_file=url)
+            print(r)
