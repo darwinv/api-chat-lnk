@@ -64,8 +64,9 @@ class ListMessageSerializer(serializers.ModelSerializer):
         user_id = obj.query.client.id
         if obj.specialist:
             user_id = obj.specialist.id
-        return {"id": obj.id, "room": obj.room, "codeUser": obj.code, "fileType": obj.content_type,
-                "fileUrl": obj.file_url, "message": obj.message, "messageType": obj.msg_type,
+        return {"id": obj.id, "room": obj.room, "codeUser": obj.code,
+                "fileType": obj.content_type, "fileUrl": obj.file_url,
+                "message": obj.message, "messageType": obj.msg_type,
                 "timeMessage": time, "read": obj.viewed, "user_id": user_id}
 
 # Serializer para detalle de consulta
@@ -227,7 +228,9 @@ class QuerySerializer(serializers.ModelSerializer):
         messages_files = []
         for message in ms:
             if int(message['fileType']) > 0:
-                message['uploaded'] = 0
+                message['uploaded'] = 1
+            else:
+                message['uploaded'] = 2
                 messages_files.append(message["id"])
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
@@ -282,7 +285,9 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         messages_files = []
         for message in ms:
             if int(message['fileType']) > 0:
-                message['uploaded'] = 0
+                message['uploaded'] = 1
+            else:
+                message['uploaded'] = 2
                 messages_files.append(message["id"])
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,

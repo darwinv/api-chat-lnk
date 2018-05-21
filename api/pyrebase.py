@@ -109,7 +109,7 @@ def mark_failed_file(room, message_id):
     firebase = pyrebase.initialize_app(config)
     print(node)
     db = firebase.database()
-    r = db.child(node).update({"uploaded": 4, "fileUrl": "error"})
+    r = db.child(node).update({"uploaded": 5, "fileUrl": "error"})
     return r
 
 def mark_uploaded_file(room, message_id, url_file):
@@ -118,5 +118,5 @@ def mark_uploaded_file(room, message_id, url_file):
     firebase = pyrebase.initialize_app(config)
     print(node)
     db = firebase.database()
-    r = db.child(node).update({"uploaded": 1, "fileUrl": url_file})
+    r = db.child(node).update({"uploaded": 2, "fileUrl": url_file})
     return r
