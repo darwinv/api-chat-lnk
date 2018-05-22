@@ -229,9 +229,9 @@ class QuerySerializer(serializers.ModelSerializer):
         for message in ms:
             if int(message['fileType']) > 0:
                 message['uploaded'] = 1
+                messages_files.append(message["id"])
             else:
                 message['uploaded'] = 2
-                messages_files.append(message["id"])
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
                                 "calification": obj.calification}
@@ -286,9 +286,9 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         for message in ms:
             if int(message['fileType']) > 0:
                 message['uploaded'] = 1
+                messages_files.append(message["id"])
             else:
                 message['uploaded'] = 2
-                messages_files.append(message["id"])
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
                                 "calification": obj.calification}
