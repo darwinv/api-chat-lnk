@@ -379,14 +379,16 @@ class ClientDetailView(APIView):
     def put(self, request, pk):
         """Detalle."""
         client = self.get_object(pk)
-        serializer = ClientSerializer(client)
-        return Response(serializer.data)
-
-        data['username'] = specialist.username
-        data['role'] = ROLE_SPECIALIST
-
-        serializer = SpecialistSerializer(specialist, data, partial=True,
+        data = request.data
+        data["type_client"] = "b"
+        serializer = ClientSerializer(client, data, partial=True,
                                           context={'request': request})
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 # Vista para detalle del cliente segun su username
 # se hizo con la finalidad de instanciar una vez logueado

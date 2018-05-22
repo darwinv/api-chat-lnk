@@ -598,6 +598,122 @@ class CreateNaturalClient(APITestCase):
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+class UpdateNaturalClient(APITestCase):
+    """Prueba de Actualizacion de Cliente Natural."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_plan']
+
+    def setUp(self):
+        """Setup."""
+        self.valid_payload = {
+            "first_name":"oscar",
+            "last_name":"lopez",
+            "nick":"lopez",
+            "telephone":"1234567",
+            "cellphone":"1237652",
+            "residence_country":"1",
+            "address":{
+                "street": "surco",
+                "department": 1,
+                "province": 1,
+                "district": 1
+            }
+        }
+
+    def test_from_internal_country(self):
+        """actualizacion datos residente nacional"""
+        data = self.valid_payload
+        
+        response = client.put(
+            reverse('client-detail', args=(5,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_from_external_country(self):
+        """actualizacion datos residente internacional"""
+        data = self.valid_payload
+        data["country"] = "2"
+        data["foreign_address"] = "San antonio del Tachira"
+        response = client.put(
+            reverse('client-detail', args=(5,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_only_field_required(self):
+        """actualizacion datos solo requeridos"""
+        data = self.valid_payload
+        del data['nick']
+        del data['telephone']
+        del data['cellphone']
+
+        response = client.put(
+            reverse('client-detail', args=(5,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_no_optional_field(self):
+        """actualizacion datos requeridos, opcionakes vacios"""
+        data = self.valid_payload
+        data['nick'] = ""
+        data['telephone'] = ""
+        data['cellphone'] = ""
+
+        response = client.put(
+            reverse('client-detail', args=(5,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_void_requerired_field(self):
+        """actualizacion datos con requeridos vacios"""
+        data = self.valid_payload
+        data['first_name'] = ""
+        data['last_name'] = ""
+        data['residence_country'] = ""
+        data['address'] = ""
+
+        response = client.put(
+            reverse('client-detail', args=(5,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_requerired_field(self):
+        """actualizacion datos con requeridos"""
+        data = self.valid_payload
+        del data['first_name']
+        del data['last_name']
+        del data['residence_country']
+        del data['address']
+
+        response = client.put(
+            reverse('client-detail', args=(5,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+    def test_nick_to_long(self):
+        """actualizacion datos con nick largo"""
+        data = self.valid_payload
+        data['nick'] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+        response = client.put(
+            reverse('client-detail', args=(5,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 # Prueba para verificar la insercion de cliente juridico
 class CreateBussinessClient(APITestCase):
@@ -1002,6 +1118,118 @@ class CreateBussinessClient(APITestCase):
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+class UpdateBunissesClient(APITestCase):
+    """Prueba de Actualizacion de Cliente Natural."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_plan']
+
+    def setUp(self):
+        """Setup."""
+        self.valid_payload = {
+            "commercial_reason":"Cocoro",
+            "nick":"lopez",
+            "telephone":"1234567",
+            "cellphone":"1237652",
+            "residence_country":"1",
+            "address":{
+                "street": "surco",
+                "department": 1,
+                "province": 1,
+                "district": 1
+            }
+        }
+
+    def test_from_internal_country(self):
+        """actualizacion datos residente nacional"""
+        data = self.valid_payload
+        
+        response = client.put(
+            reverse('client-detail', args=(11,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_from_external_country(self):
+        """actualizacion datos residente internacional"""
+        data = self.valid_payload
+        data["country"] = "2"
+        data["foreign_address"] = "San antonio del Tachira"
+        response = client.put(
+            reverse('client-detail', args=(11,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_only_field_required(self):
+        """actualizacion datos solo requeridos"""
+        data = self.valid_payload
+        del data['nick']
+        del data['telephone']
+        del data['cellphone']
+
+        response = client.put(
+            reverse('client-detail', args=(11,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_no_optional_field(self):
+        """actualizacion datos requeridos, opcionakes vacios"""
+        data = self.valid_payload
+        data['nick'] = ""
+        data['telephone'] = ""
+        data['cellphone'] = ""
+
+        response = client.put(
+            reverse('client-detail', args=(11,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_void_requerired_field(self):
+        """actualizacion datos con requeridos vacios"""
+        data = self.valid_payload
+        data['commercial_reason'] = ""
+        data['residence_country'] = ""
+        data['address'] = ""
+
+        response = client.put(
+            reverse('client-detail', args=(11,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_requerired_field(self):
+        """actualizacion datos con requeridos"""
+        data = self.valid_payload
+        del data['commercial_reason']
+        del data['residence_country']
+        del data['address']
+
+        response = client.put(
+            reverse('client-detail', args=(11,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+    def test_nick_to_long(self):
+        """actualizacion datos con nick largo"""
+        data = self.valid_payload
+        data['nick'] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
+        response = client.put(
+            reverse('client-detail', args=(11,)),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetDetailClient(APITestCase):
     """Detalle del Cliente."""
