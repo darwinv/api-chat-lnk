@@ -1353,7 +1353,7 @@ class GetUserByRecoverCode(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 class UpdatePasswordByRecoverCode(APITestCase):
-    """Test module for GET all clients API."""
+    """Test module for Update password user API."""
 
     fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'test_recovery_password']
     def setUp(self):
@@ -1376,3 +1376,65 @@ class UpdatePasswordByRecoverCode(APITestCase):
         data = {'password':'123456', 'code':'XYZ123'}
         response = client.put(reverse('reset-password-recovery', args=(111,)), data)        
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+class UpdateEmail(APITestCase):
+    """Test module for put email user API."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_plan']
+    def setUp(self):
+        pass
+
+    def test_update_email(self):
+        # put email
+        data = {
+                'email_exact':'olopez@mail.com',
+                'password':'123456'
+            }
+            
+        response = client.put(reverse('update-email', args=(3,)), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['email_exact'], data['email_exact'])
+
+    def test_update_email_no_valid(self):
+        # put email incorrecto
+        data = {
+                'email_exact':'olopmail.com',
+                'password':'123456'
+            }
+            
+        response = client.put(reverse('update-email', args=(3,)), data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_no_email(self):
+        # put no email 
+        data = {
+                'password':'123456'
+            }
+            
+        response = client.put(reverse('update-email', args=(3,)), data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_no_data(self):
+        # put no data
+            
+        response = client.put(reverse('update-email', args=(3,)))
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_email_no_valid(self):
+        # put email repeat
+        data = {
+                'email_exact':'jose@mail.com',
+                'password':'123456'
+            }
+        response = client.put(reverse('update-email', args=(3,)), data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_email_bad_password(self):
+        # put email bad password
+        data = {
+                'email_exact':'olopezdeveloper@mail.com',
+                'password':'654321'
+            }
+            
+        response = client.put(reverse('update-email', args=(3,)), data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

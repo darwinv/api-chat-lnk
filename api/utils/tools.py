@@ -49,3 +49,15 @@ def get_time_message(date_time_message):
 
 def ramdon_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+def clear_data_no_valid(data,valid_fields):
+    """
+    data: dict
+    data: tuple for valid fields
+    """
+    # Eliminar data no valida
+    data_auxiliar = dict(data)
+    for field in data_auxiliar:
+        if not field in valid_fields:
+            data.pop(field, None)

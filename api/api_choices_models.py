@@ -111,14 +111,11 @@ class ChoicesAPI:
 
     # Query Model
     query_status = (
-        ('0', _('Requested')),  # Preguntada, pendiente de derivar o responder
-        ('1', _('Requested Derived')),  # derivada, pendiente de declinar o responder, reconsulta
-        ('2', _('Pending Response')),  # derivada a asociado, pendiente de respuesta
-        ('3', _('Pending Main Response')),  # principal, pendiente de respuesta
-        ('4', _('Answered Main')),  # respondida por principal
-        ('5', _('Answered')),  # respondida por asociado
-        ('6', _('Absolved Main')),  # resuelta por principal
-        ('7', _('Absolved')),  # resuelta por asociado
+        ('0', _('Requested')),  # pendiente por derivar, responder o declinar
+        ('1', _('Accepted')),  # consulta aceptada por un especialista
+        ('2', _('Answered')),  # respondida por especialista
+        ('3', _('To score')),  # pendiente por puntuar
+        ('4', _('Absolved')),  # resuelta y finalizada
     )
 
     # MatchAcquired model

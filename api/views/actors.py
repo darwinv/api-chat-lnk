@@ -16,9 +16,11 @@ from api.serializers.actors import ClientSerializer, UserPhotoSerializer, KeySer
 from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
+from api.serializers.actors import ChangeEmailSerializer
 from api.serializers.query import QuerySerializer, QueryCustomSerializer
 from django.http import Http404
 from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrSpecialist
+from api.permissions import IsAdminOrClient
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 from django.utils.translation import ugettext_lazy as _
 import os
@@ -27,6 +29,7 @@ import boto3
 from datetime import datetime, date
 from django.utils import timezone
 from api.utils.validations import Operations
+from api.utils.tools import clear_data_no_valid
 from api import pyrebase
 from api.emails import BasicEmailAmazon
 
@@ -185,6 +188,61 @@ class UpdatePasswordRecoveryView(APIView):
             return Response({})
         else:
             raise serializers.ValidationError({'code': [self.invalid]})
+
+class UpdatePasswordUserView(APIView):
+    """Actualizar Contraseña de Usuario Recuperado."""
+    required = _("required")
+    invalid = _("not valid")
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrOwner)
+
+    def get_object(self, pk):
+        """Devolver objeto."""
+        try:
+            obj = User.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except User.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Funcion put."""
+        data = request.data
+        user = self.get_object(pk)
+        serializer = ChangePasswordSerializer(user, data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class UpdateEmailUserView(APIView):
+    """Actualizar Contraseña de Usuario Recuperado."""
+    required = _("required")
+    invalid = _("not valid")
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrOwner)
+
+    def get_object(self, pk):
+        """Devolver objeto."""
+        try:
+            obj = User.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except User.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Funcion put."""
+        data = request.data
+        user = self.get_object(pk)
+        serializer = ChangeEmailSerializer(user, data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class ViewKey(APIView):
     """Devuelve la contraseña sin encriptar (uso exclusivo para dev)."""
@@ -357,7 +415,7 @@ class ClientDetailView(APIView):
     """Detalle del Cliente, GET/PUT/Delete."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (IsAdminOrOwner,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrOwner)
 
     # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
 
@@ -380,7 +438,12 @@ class ClientDetailView(APIView):
         """Detalle."""
         client = self.get_object(pk)
         data = request.data
-        data["type_client"] = "b"
+        valid_fields = ("commercial_reason", "first_name", "last_name", "nick", 
+                "telephone", "cellphone","residence_country", "address")
+        
+        clear_data_no_valid(data,valid_fields)
+
+
         serializer = ClientSerializer(client, data, partial=True,
                                           context={'request': request})
 

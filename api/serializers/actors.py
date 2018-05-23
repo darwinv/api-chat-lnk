@@ -15,6 +15,7 @@ from api.emails import BasicEmailAmazon
 from rest_framework.response import Response
 from api.utils.tools import capitalize as cap
 from api.utils.validations import document_exists, ruc_exists
+from django.contrib.auth import password_validation
 # from api.utils import tools
 
 
@@ -122,6 +123,8 @@ class ClientSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(validators=[UniqueValidator(
         queryset=User.objects.all())])
+    email_exact = serializers.EmailField(validators=[UniqueValidator(
+        queryset=User.objects.all())])
     level_instruction_name = serializers.SerializerMethodField()
     nationality = serializers.PrimaryKeyRelatedField(
         queryset=Countries.objects.all(), required=True)
@@ -148,8 +151,7 @@ class ClientSerializer(serializers.ModelSerializer):
     residence_country_name = serializers.SerializerMethodField()
     commercial_reason = serializers.CharField(required=False)
     birthdate = serializers.DateField(required=True)
-    email_exact = serializers.EmailField(validators=[UniqueValidator(
-        queryset=User.objects.all())])
+    
     photo = serializers.CharField(read_only=True)
     code = serializers.CharField(read_only=True)
 
@@ -322,6 +324,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
 
     def validate(self, data):
+
         if not 'request' in self.context:
             """Redefinido metodo de validación."""
             if data['type_client'] == 'n':
@@ -376,11 +379,13 @@ class ClientSerializer(serializers.ModelSerializer):
         """Redefinido metodo de actualizar cliente."""
         country_peru = Countries.objects.get(name="Peru")
         
-        # Persona juridica
-        instance.commercial_reason = validated_data.get('commercial_reason', instance.commercial_reason)
-        # Persona Natural
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
+        if instance.type_client == "b":            
+            # Persona juridica
+            instance.commercial_reason = validated_data.get('commercial_reason', instance.commercial_reason)
+        elif instance.type_client == "n":
+            # Persona Natural
+            instance.first_name = validated_data.get('first_name', instance.first_name)
+            instance.last_name = validated_data.get('last_name', instance.last_name)
         
         instance.nick = validated_data.get('nick', instance.nick)
         instance.telephone = validated_data.get('telephone', instance.telephone)
@@ -395,10 +400,10 @@ class ClientSerializer(serializers.ModelSerializer):
         else:
             if 'address' in validated_data:
                 del validated_data['address']
-
+        
         instance.address = validated_data.get('address', instance.address)             
         instance.foreign_address = validated_data.get('foreign_address', instance.foreign_address)
-
+        
         instance.save()
         return instance
 
@@ -1132,5 +1137,40 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         instance.key = password
         if password is not None:
             instance.set_password(password)
+        instance.save()
+        return instance
+
+class ChangeEmailSerializer(serializers.ModelSerializer):
+    """Cambiar clave de usuario."""
+
+    email_exact = serializers.EmailField(validators=[UniqueValidator(
+        queryset=User.objects.all())])
+
+    class Meta:
+        """Meta."""
+        model = User
+        fields = ("id", "email_exact", "password")
+        extra_kwargs = {'email_exact': {'required': True},'password': {'required': True,'write_only': True} }
+
+    def validate_password(self, value):
+        invalid = _("not valid")
+        if not self.instance.check_password(value):
+            raise serializers.ValidationError("errorrr")
+        
+        return value
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        required = _("required")
+        email_exact = validated_data.pop('email_exact', None)
+        password = validated_data.pop('password', None)
+
+        if not email_exact:
+            raise serializers.ValidationError({"email_exact":required})
+        if not password:
+            raise serializers.ValidationError({"password":required})
+
+        instance.email_exact = email_exact
+        instance.username = email_exact
         instance.save()
         return instance
