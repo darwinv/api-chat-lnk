@@ -240,7 +240,7 @@ class UpdateEmailUserView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        
+            
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
