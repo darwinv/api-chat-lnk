@@ -281,9 +281,6 @@ class ResponseSpecialistQuery(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-
-
-
 class GetSpecialistMessages(APITestCase):
     """Prueba para devolver el plan activo y elegido de un determinado cliente"""
 
@@ -298,4 +295,20 @@ class GetSpecialistMessages(APITestCase):
         #se provee un token de especialista el cuel tiene   mensajes pendientes de responders
         self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
         response = self.client.get(reverse('specialists-list-messages'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetMessageByQuery(APITestCase):
+    """Prueba para devolver mensajes de un Query"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_query']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_message(self):
+        """Obtener resultado 200."""
+        #obtiene mensajes de query
+        response = self.client.get(
+            reverse('query-messages', kwargs={'pk': 1000}),
         self.assertEqual(response.status_code, status.HTTP_200_OK)
