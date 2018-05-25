@@ -110,9 +110,11 @@ class QueryListClientView(ListCreateAPIView):
                                         .order_by('-message__created_at')
 
             query_pending = PendingQueriesSerializer(data_queries, many=True)
-
             pyrebase.createListMessageClients(serializer_tmp.data,
-                                              query_pending.data, user_id)
+                                              query_pending.data,
+                                              serializer.data["query_id"],
+                                              serializer.data["status"],
+                                              user_id)
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
@@ -196,7 +198,10 @@ class QueryDetailSpecialistView(APIView):
             # se envia el serializer el queryset para mapear
             query_pending = PendingQueriesSerializer(data_queries, many=True)
             pyrebase.createListMessageClients(serializer_tmp.data,
-                                              query_pending.data, client_id)
+                                              query_pending.data,
+                                              serializer.data["query_id"],
+                                              serializer.data["status"],
+                                              user_id)
 
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
