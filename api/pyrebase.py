@@ -58,11 +58,11 @@ def update_plan_choisen():
             print("new")
             plan_chosen = get_query_set_plan()
             plan_active = plan_chosen.filter(client= client.id, is_active = True, is_chosen = True)[:1].get()
-            
+
             obj = QueryPlansAcquired.objects.get(pk=plan_active['id'])
             plan = QueryPlansAcquiredSerializer(obj)
             chosen_plan(Params.PREFIX['client'] + str(client.id), plan.data)
-            
+
         except Exception as e:
             pass
 
@@ -82,7 +82,7 @@ def createCategoriesLisClients(client_id):
     return res
 
 
-def createListMessageClients(lista, client_id):
+def createListMessageClients(lista, queries_list, client_id):
     """Insertar o actualizar los mensajes de los clientes del especialista."""
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
@@ -90,8 +90,10 @@ def createListMessageClients(lista, client_id):
     node_specialist = Params.PREFIX['specialist'] + str(data_obj['specialist'])
     node_client = Params.PREFIX['client'] + str(client_id)
     data_obj['date'] = str(data_obj['date'])
+    data_obj['queries'] = queries_list
     res = db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).update(data_obj)
+    print(res)
     return res
 
 
