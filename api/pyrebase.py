@@ -92,6 +92,10 @@ def createListMessageClients(lista, queries_list, act_query, status, client_id):
     node_client = Params.PREFIX['client'] + str(client_id)
     data_obj['date'] = str(data_obj['date'])
     data_obj['queries'] = queries_list
+    if status >= 4:
+        data_obj['isQueryActive'] = True
+    else:
+        data_obj['isQueryActive'] = False
     query_current = {
         "id": act_query,
         "date": str(data_obj['date']),
