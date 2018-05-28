@@ -110,7 +110,7 @@
 			"key": null,
 			"groups": [],
 			"user_permissions": [],
-			"status": 0
+			"status": 1
 		}
 	}, {
 		"model": "api.user",
@@ -146,7 +146,7 @@
 			"key": null,
 			"groups": [],
 			"user_permissions": [],
-			"status": 0
+			"status": 1
 		}
 	}, {
 		"model": "api.user",
@@ -182,7 +182,7 @@
 			"key": null,
 			"groups": [],
 			"user_permissions": [],
-			"status": 0
+			"status": 1
 		}
 	}, {
 		"model": "api.user",
@@ -203,7 +203,7 @@
 			"telephone": "911321321",
 			"cellphone": "9113213212",
 			"photo": "intel12345",
-			"document_type": "0",
+			"document_type": 1,
 			"document_number": "3435436",
 			"img_document_number": null,
 			"ruc": "34354367",
@@ -218,7 +218,7 @@
 			"key": null,
 			"groups": [],
 			"user_permissions": [],
-			"status": 0
+			"status": 1
 		}
 	}, {
 		"model": "api.user",
@@ -239,7 +239,7 @@
 			"telephone": "921321231",
 			"cellphone": "921321231",
 			"photo": "intel12345",
-			"document_type": "0",
+			"document_type": 1,
 			"document_number": "9123321232",
 			"img_document_number": null,
 			"ruc": "91233212321",
@@ -254,7 +254,7 @@
 			"key": null,
 			"groups": [],
 			"user_permissions": [],
-			"status": 0
+			"status": 1
 		}
 	}, {
 		"model": "api.user",
@@ -290,7 +290,7 @@
 			"key": null,
 			"groups": [],
 			"user_permissions": [],
-			"status": 0
+			"status": 1
 		}
 	}, {
 		"model": "api.user",
@@ -311,7 +311,7 @@
 			"telephone": "93211232123",
 			"cellphone": "93211232123",
 			"photo": "intel12345",
-			"document_type": "0",
+			"document_type": 1,
 			"document_number": "93211232123",
 			"img_document_number": null,
 			"ruc": "932112321231",
@@ -326,7 +326,7 @@
 			"key": null,
 			"groups": [],
 			"user_permissions": [],
-			"status": 0
+			"status": 1
 		}
 	}, {
 		"model": "api.user",
@@ -347,7 +347,7 @@
 			"telephone": "921321321",
 			"cellphone": "921321321",
 			"photo": null,
-			"document_type": "0",
+			"document_type": 1,
 			"document_number": "921321321",
 			"img_document_number": null,
 			"ruc": "9213213211",
@@ -362,7 +362,7 @@
 			"key": null,
 			"groups": [],
 			"user_permissions": [],
-			"status": 0
+			"status": 1
 		}
 	}, {
 		"model": "api.user",
@@ -383,7 +383,7 @@
 			"telephone": "9213213212",
 			"cellphone": "9213213212",
 			"photo": null,
-			"document_type": "0",
+			"document_type": 1,
 			"document_number": "9213213212",
 			"img_document_number": null,
 			"ruc": "92132132121",
@@ -398,7 +398,7 @@
 			"key": null,
 			"groups": [],
 			"user_permissions": [],
-			"status": 0
+			"status": 1
 		}
 	}, {
 		"model": "api.user",
@@ -419,7 +419,7 @@
 			"telephone": "9213212932",
 			"cellphone": "9213212932",
 			"photo": null,
-			"document_type": "0",
+			"document_type": 1,
 			"document_number": "9213212932",
 			"img_document_number": null,
 			"ruc": "9213212932",
@@ -434,7 +434,7 @@
 			"key": null,
 			"groups": [],
 			"user_permissions": [],
-			"status": 0
+			"status": 1
 		}
 	}, {
 		"model": "api.zone",
@@ -604,7 +604,7 @@
 			"ciiu": 3,
 			"activity_description": "Programador en leyes",
 			"institute": null,
-			"ocupation": "0",
+			"ocupation": 1,
 			"about": "Soy un abogado tiempo completo que quiere saber de leyes",
 			"business_name": "Pepe Motors",
 			"agent_firstname": "Pepe",
