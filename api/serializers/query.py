@@ -43,9 +43,9 @@ class MessageSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Validacion de Data."""
         required = _('required')
-        if int(data["content_type"]) > 0 and data["file_url"] == '':
+        if int(data["content_type"]) > 1 and data["file_url"] == '':
             raise serializers.ValidationError({"file_url": [required]})
-        if int(data["content_type"]) == 0 and data["message"] == '':
+        if int(data["content_type"]) == 1 and data["message"] == '':
             raise serializers.ValidationError({"message": [required]})
         # if data["msg_type"] == 'a' or data["msg_type"] == 'r':
         #     if 'reference_id' not in data:
@@ -265,10 +265,6 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         """Actualizar la consulta."""
         data_messages = validated_data.pop('message')
         self.context["size_msgs"] = len(data_messages)
-        if instance.specialist.type_specialist == 'm':
-            instance.status = 4
-        else:
-            instance.status = 5
         # Recorremos los mensajes para crearlos todos
         for data_message in data_messages:
             # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
@@ -279,7 +275,10 @@ class QueryResponseSerializer(serializers.ModelSerializer):
             # import pdb; pdb.set_trace()
             data_message["code"] = self.context['specialist'].code
             Message.objects.create(query=instance, **data_message)
+
+        instance.status = 3  # actualizo status
         instance.save()
+        import pdb; pdb.set_trace()
         return instance
 
     def to_representation(self, obj):
@@ -520,7 +519,7 @@ class QueryMessageSerializer(serializers.ModelSerializer):
 
     message = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
-    
+
     class Meta:
         """Meta."""
         model = Query

@@ -19,7 +19,7 @@ from api.permissions import IsAdminReadOrSpecialistOwner
 from api.utils.validations import Operations
 from api.views.actors import SpecialistMessageList_sp
 from api.serializers.query import QuerySerializer, QueryListClientSerializer
-from api.serializers.query import MessageSerializer
+from api.serializers.query import MessageSerializer, QueryMessageSerializer
 from api.serializers.query import QueryDetailSerializer
 from api.serializers.query import QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
@@ -367,6 +367,6 @@ class QueryMessageView(APIView):
             .get(pk=pk)
         except Query.DoesNotExist:
             raise Http404
-        
+
         serializer = QueryMessageSerializer(message, partial=True)
         return Response(serializer.data)

@@ -82,20 +82,21 @@ class CreateQuery(APITestCase):
     def setUp(self):
         """Setup."""
         self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
         self.valid_payload = {
             "title": "Pago de Impuestos",
             "category": 24,
             "message": [{
                 "message": "primera consulta",
                 "msg_type": "q",
-                "content_type": 1,
+                "content_type": "1",
                 "file_url": ""
                 },
                 {
                 "message": "",
                 "msg_type": "q",
-                "content_type": "1",
+                "content_type": "2",
                 "file_url": "img.png"
                 }
             ],
@@ -158,7 +159,8 @@ class CreateQuery(APITestCase):
 
     def test_not_client_credentials(self):
         """Token no es de cliente (no autorizado)."""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
@@ -167,8 +169,9 @@ class CreateQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_contentype_file(self):
-        """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
-        self.valid_payload["message"][0]["content_type"] = '1'
+        """Verificar que el mensaje a guardar corresponde al tipo de contenido
+        de archivo."""
+        self.valid_payload["message"][0]["content_type"] = '2'
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
@@ -178,7 +181,8 @@ class CreateQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_contentype_message(self):
-        """Verificar que el mensaje a guardar corresponde al tipo de contenido de mensaje."""
+        """Verificar que el mensaje a guardar corresponde
+         al tipo de contenido de mensaje."""
         self.valid_payload["message"][0]["message"] = ""
         response = self.client.post(
             reverse('queries-client'),
@@ -255,7 +259,7 @@ class ResponseSpecialistQuery(APITestCase):
 
     def test_contentype_file(self):
         """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
-        self.valid_payload["message"][0]["content_type"] = '1'
+        self.valid_payload["message"][0]["content_type"] = '2'
         response = self.client.put(
             reverse('query-specialist', kwargs={'pk': 1000}),
             data=json.dumps(self.valid_payload),
@@ -308,7 +312,7 @@ class ResponseSpecialistQuery(APITestCase):
             content_type='application/json'
         )
         query_status = Query.objects.get(pk=1000)
-        self.assertEqual(4, int(query_status.status))
+        self.assertEqual(3, int(query_status.status))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -324,10 +328,14 @@ class GetSpecialistMessages(APITestCase):
 
     def test_get_list_messages_token_specialist(self):
         """Obtener resultado 200."""
-        #se provee un token de especialista el cuel tiene   mensajes pendientes de responders
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
-        response = self.client.get(reverse('specialists-list-messages'), format='json')
+        # se provee un token de especialista el cuel tiene
+        # mensajes pendientes de responders
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        response = self.client.get(reverse('specialists-list-messages'),
+                                   format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class GetMessageByQuery(APITestCase):
     """Prueba para devolver mensajes de un Query"""

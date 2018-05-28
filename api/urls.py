@@ -37,7 +37,7 @@ urlpatterns = [
     url(r'^reset-password-recovery/(?P<pk>[0-9]+)/$', actors.UpdatePasswordRecoveryView.as_view(), name='reset-password-recovery'),
     # # reseteo de contraseña
     url(r'^update-email/(?P<pk>[0-9]+)/$', actors.UpdateEmailUserView.as_view(), name='update-email'),
-    
+
 
     # detalle de cliente
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(),
