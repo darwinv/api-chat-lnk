@@ -57,11 +57,11 @@ def update_plan_choisen():
             print("new")
             plan_chosen = get_query_set_plan()
             plan_active = plan_chosen.filter(client= client.id, is_active = True, is_chosen = True)[:1].get()
-            
+
             obj = QueryPlansAcquired.objects.get(pk=plan_active['id'])
             plan = QueryPlansAcquiredSerializer(obj)
             chosen_plan(Params.PREFIX['client'] + str(client.id), plan.data)
-            
+
         except Exception as e:
             pass
 
@@ -81,16 +81,31 @@ def createCategoriesLisClients(client_id):
     return res
 
 
-def createListMessageClients(lista, client_id):
+def createListMessageClients(lista, queries_list, act_query, status, client_id):
     """Insertar o actualizar los mensajes de los clientes del especialista."""
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
+    # import pdb; pdb.set_trace()
     data_obj = lista[0]
     node_specialist = Params.PREFIX['specialist'] + str(data_obj['specialist'])
     node_client = Params.PREFIX['client'] + str(client_id)
     data_obj['date'] = str(data_obj['date'])
+    data_obj['queries'] = queries_list
+    if status >= 4:
+        data_obj['isQueryActive'] = True
+    else:
+        data_obj['isQueryActive'] = False
+    query_current = {
+        "id": act_query,
+        "date": str(data_obj['date']),
+        "message": data_obj['message'],
+        "title": data_obj['title'],
+        "status": status
+    }
+    data_obj['queryCurrent'] = query_current
     res = db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).update(data_obj)
+    print(res)
     return res
 
 

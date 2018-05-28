@@ -1,23 +1,31 @@
 """Vistas de Consultas."""
+# paquetes de python
+import json
+# paquetes de django
+from django.db.models import OuterRef, Subquery, F, Count
+from django.http import Http404
+# paquetes de terceros
+from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, ListAPIView
 from rest_framework.response import Response
-from rest_framework import status, permissions
-from api.models import Query, Message, Category, Specialist, Client
-from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsAdminReadOrSpecialistOwner
-from api.utils.validations import Operations
-from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
-from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
-from api.serializers.query import QueryDetailLastMsgSerializer, ChatMessageSerializer, QueryResponseSerializer
-from api.serializers.query import QueryMessageSerializer
-from api.serializers.actors import SpecialistMessageListCustomSerializer
-from django.db.models import OuterRef, Subquery, F
-from django.http import Http404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
-from api import pyrebase
 from channels import Group
-import json
+# llamadas de nuestro propio proyecto
+from api import pyrebase
+from api.models import Query, Message, Category, Specialist, Client
+from api.permissions import IsAdminOrClient, IsAdminOrSpecialist
+from api.permissions import IsAdminReadOrSpecialistOwner
+from api.utils.validations import Operations
 from api.views.actors import SpecialistMessageList_sp
+from api.serializers.query import QuerySerializer, QueryListClientSerializer
+from api.serializers.query import MessageSerializer
+from api.serializers.query import QueryDetailSerializer
+from api.serializers.query import QueryUpdateStatusSerializer
+from api.serializers.query import QueryDetailLastMsgSerializer
+from api.serializers.query import ChatMessageSerializer, QueryResponseSerializer
+from api.serializers.actors import SpecialistMessageListCustomSerializer
+from api.serializers.actors import PendingQueriesSerializer
 
 class QueryListClientView(ListCreateAPIView):
     """Vista Consulta por parte del cliente."""
@@ -65,17 +73,48 @@ class QueryListClientView(ListCreateAPIView):
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            category = serializer.data["category"]
             lista = list(serializer.data['message'].values())
             # Se actualiza la base de datos de firebase para el mensaje
-            pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
-            # Se actualiza la base de datos de firebase listado de sus especialidades
-            pyrebase.categories_db(user_id, serializer.data["category"],
+            pyrebase.chat_firebase_db(serializer.data["message"],
+                                      serializer.data["room"])
+            # Se actualiza la base de datos de firebase listado
+            # de sus especialidades
+            pyrebase.categories_db(user_id, category,
                                    lista[-1]["timeMessage"])
 
-            data_set = SpecialistMessageList_sp.search(2, user_id, serializer.data["category"], 0, "")
+            data_set = SpecialistMessageList_sp.search(2, user_id, category,
+                                                       0, "")
+
             serializer_tmp = SpecialistMessageListCustomSerializer(data_set,
                                                                    many=True)
-            pyrebase.createListMessageClients(serializer_tmp.data, user_id)
+
+            # Se devuelve las ultimas consultas pendientes por responder
+            # por cliente
+            # Primer una subconsulta para buscar el ultimo registro de mensaje
+            mess = Message.objects.filter(query=OuterRef("pk"))\
+                                  .order_by('-created_at')[:1]
+            # Luego se busca el titulo y su id de la consulta
+
+            data_queries = Query.objects.values('id', 'title', 'status')\
+                                        .annotate(
+                                            message=Subquery(
+                                                mess.values('message')))\
+                                        .annotate(
+                                            date_at=Subquery(
+                                                mess.values('created_at')))\
+                                        .filter(client=user_id,
+                                                category=category,
+                                                status=0)\
+                                        .annotate(count=Count('id'))\
+                                        .order_by('-message__created_at')
+
+            query_pending = PendingQueriesSerializer(data_queries, many=True)
+            pyrebase.createListMessageClients(serializer_tmp.data,
+                                              query_pending.data,
+                                              serializer.data["query_id"],
+                                              serializer.data["status"],
+                                              user_id)
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
@@ -118,21 +157,51 @@ class QueryDetailSpecialistView(APIView):
         if serializer.is_valid():
             serializer.save()
             lista = list(serializer.data['message'].values())
+            client_id = serializer.data["client_id"]
+            category_id = serializer.data["category"]
             # Actualizamos el nodo de mensajes segun su sala
-            pyrebase.chat_firebase_db(serializer.data["message"], serializer.data["room"])
+            pyrebase.chat_firebase_db(serializer.data["message"],
+                                      serializer.data["room"])
 
             # Actualizamos el listado de especialidades en Firebase
-            pyrebase.categories_db(user_id, serializer.data["category"],
+            pyrebase.categories_db(user_id, category_id,
                                    lista[-1]["timeMessage"])
             # sala es el cliente_id y su la categoria del especialista
-            sala = str(query.client.id) + '-' + str(serializer.data["category"])
-            # print(sala)
-            Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
+            sala = str(query.client.id) + '-' + str(category_id)
 
-            data_set = SpecialistMessageList_sp.search(2, serializer.data["client_id"],
-                                                       serializer.data["category"], 0, "")
-            serializer_tmp = SpecialistMessageListCustomSerializer(data_set, many=True)
-            pyrebase.createListMessageClients(serializer_tmp.data, serializer.data["client_id"])
+            Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
+            # Se llama al store procedure
+            data_set = SpecialistMessageList_sp.search(2, client_id,
+                                                       category_id, 0, "")
+            # El queryset se pasa serializer para mapear datos
+            serializer_tmp = SpecialistMessageListCustomSerializer(data_set,
+                                                                   many=True)
+            # Se devuelve las ultimas consultas pendientes por responder
+            # por cliente
+            # Primer una subconsulta para buscar el ultimo registro de mensaje
+            mess = Message.objects.filter(query=OuterRef("pk"))\
+                                  .order_by('-created_at')[:1]
+            # Luego se busca el titulo y su id de la consulta
+            data_queries = Query.objects.values('id', 'title', 'status')\
+                                        .annotate(
+                                            message=Subquery(
+                                                mess.values('message')))\
+                                        .annotate(
+                                            date_at=Subquery(
+                                                mess.values('created_at')))\
+                                        .filter(client=client_id,
+                                                category=category_id,
+                                                status=0)\
+                                        .annotate(count=Count('id'))\
+                                        .order_by('-message__created_at')
+
+            # se envia el serializer el queryset para mapear
+            query_pending = PendingQueriesSerializer(data_queries, many=True)
+            pyrebase.createListMessageClients(serializer_tmp.data,
+                                              query_pending.data,
+                                              serializer.data["query_id"],
+                                              serializer.data["status"],
+                                              user_id)
 
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -183,12 +252,14 @@ class QueryDetailView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # Devolver el detalle de una ultima consulta filtrada por categoria
 # servicio pedido para android en notificaciones
 class QueryLastView(APIView):
 
     permission_classes = [permissions.AllowAny]
-    def get_object(self,category):
+
+    def get_object(self, category):
         try:
             # import pdb; pdb.set_trace()
             return Query.objects.filter(category_id=category).all().last()

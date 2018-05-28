@@ -44,6 +44,25 @@ class SpecialistMessageListCustomSerializer(serializers.Serializer):
                 "specialist": instance.specialist}
 
 
+class PendingQueriesSerializer(serializers.Serializer):
+    """Serializer para devolver
+    las consultas pendientes por accion de un especialista"""
+
+    class Meta:
+
+        fields = ('id', 'title', 'message', 'date_at', 'status')
+
+    def to_representation(self, dicti):
+        # import pdb; pdb.set_trace()
+
+        return {"id": dicti["id"],
+                "lastMessage": dicti["message"],
+                "title": dicti["title"],
+                "date": str(dicti["date_at"]),
+                "status": dicti["status"]
+                }
+
+
 class UserSerializer(serializers.ModelSerializer):
     """
 
@@ -151,7 +170,7 @@ class ClientSerializer(serializers.ModelSerializer):
     residence_country_name = serializers.SerializerMethodField()
     commercial_reason = serializers.CharField(required=False)
     birthdate = serializers.DateField(required=True)
-    
+
     photo = serializers.CharField(read_only=True)
     code = serializers.CharField(read_only=True)
 
@@ -378,15 +397,15 @@ class ClientSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """Redefinido metodo de actualizar cliente."""
         country_peru = Countries.objects.get(name="Peru")
-        
-        if instance.type_client == "b":            
+
+        if instance.type_client == "b":
             # Persona juridica
             instance.commercial_reason = validated_data.get('commercial_reason', instance.commercial_reason)
         elif instance.type_client == "n":
             # Persona Natural
             instance.first_name = validated_data.get('first_name', instance.first_name)
             instance.last_name = validated_data.get('last_name', instance.last_name)
-        
+
         instance.nick = validated_data.get('nick', instance.nick)
         instance.telephone = validated_data.get('telephone', instance.telephone)
         instance.cellphone = validated_data.get('cellphone', instance.cellphone)
@@ -400,10 +419,10 @@ class ClientSerializer(serializers.ModelSerializer):
         else:
             if 'address' in validated_data:
                 del validated_data['address']
-        
-        instance.address = validated_data.get('address', instance.address)             
+
+        instance.address = validated_data.get('address', instance.address)
         instance.foreign_address = validated_data.get('foreign_address', instance.foreign_address)
-        
+
         instance.save()
         return instance
 
@@ -434,12 +453,12 @@ class ClientSerializer(serializers.ModelSerializer):
         required = _("required")
         inf_fiscal = _("Tax Code")
         country = Countries.objects.get(name="Peru")
-        
+
         # requerido el nombre de la empresa
         if 'commercial_reason' not in data:
             raise serializers.ValidationError(
                       {"commercial_reason": [required]})
-        
+
 
         # si reside en peru la direccion es obligatoria.
         if data["residence_country"] == country:
@@ -451,7 +470,7 @@ class ClientSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                           {"foreign_address": [required]})
         return
- 
+
 
 
 
@@ -1156,7 +1175,7 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
         invalid = _("not valid")
         if not self.instance.check_password(value):
             raise serializers.ValidationError("errorrr")
-        
+
         return value
 
     def update(self, instance, validated_data):

@@ -64,9 +64,11 @@ class ListMessageSerializer(serializers.ModelSerializer):
         user_id = obj.query.client.id
         if obj.specialist:
             user_id = obj.specialist.id
-        return {"id": obj.id, "room": obj.room, "codeUser": obj.code, "fileType": obj.content_type,
-                "fileUrl": obj.file_url, "message": obj.message, "messageType": obj.msg_type,
-                "timeMessage": time, "read": obj.viewed, "user_id": user_id}
+        return {"id": obj.id, "room": obj.room, "codeUser": obj.code,
+                "fileType": obj.content_type, "fileUrl": obj.file_url,
+                "message": obj.message, "messageType": obj.msg_type,
+                "timeMessage": time, "read": obj.viewed, "user_id": user_id
+                }
 
 # Serializer para detalle de consulta
 class QueryDetailSerializer(serializers.ModelSerializer):
@@ -226,12 +228,16 @@ class QuerySerializer(serializers.ModelSerializer):
         chat = {}
 
         for message in ms:
-            message["query"] = {"id": obj.id, "title": obj.title, "status": obj.status,
+            message["query"] = {"id": obj.id, "title": obj.title,
+                                "status": obj.status,
                                 "calification": obj.calification}
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
 
-        return {'room': ms[0]["room"], "message": chat, "category": obj.category.id}
+        return {'room': ms[0]["room"], "message": chat,
+                "category": obj.category.id, 'query_id': obj.id,
+                'status': obj.status
+                }
 
 
 class QueryResponseSerializer(serializers.ModelSerializer):
@@ -279,7 +285,9 @@ class QueryResponseSerializer(serializers.ModelSerializer):
             chat.update({key_message: dict(message)})
 
         return {'room': ms[0]["room"], "message": chat,
-                "category": obj.category.id, "client_id": obj.client.id}
+                "category": obj.category.id, 'query_id': obj.id,
+                'status': obj.status
+                }
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
 # class QueryUpdateSerializer(serializers.ModelSerializer):
