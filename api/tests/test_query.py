@@ -6,6 +6,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 # from api.models import SpecialistMessageList
 from api.models import QueryPlansAcquired
+from api.models import Query
 # Create your tests here.
 
 client = APIClient()
@@ -306,6 +307,8 @@ class ResponseSpecialistQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        query_status = Query.objects.get(pk=1000)
+        self.assertEqual(4, int(query_status.status))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
