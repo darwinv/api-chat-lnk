@@ -1,6 +1,6 @@
 """Consultas."""
 from rest_framework import serializers
-from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
+from api.models import Specialist, Query, Message, Category, QueryPlansAcquired, User
 from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
 from api.utils import querysets
@@ -514,3 +514,49 @@ class QueryChatClientSerializer(serializers.ModelSerializer):
 
     def get_query_id(self, obj):
         return obj['query_id']
+
+class QueryMessageSerializer(serializers.ModelSerializer):
+    """Informacion de los mensajes para chat de cliente."""
+
+    message = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
+    
+    class Meta:
+        """Meta."""
+        model = Query
+        fields = ('id', 'title', 'message', 'user')
+
+    def get_message(self, obj):
+        """Objeto Message."""
+        message = Message.objects.filter(query=obj['id'])
+        serializer = MessageSerializer(message, many=True)
+        return serializer.data
+
+    def get_user(self, obj):
+        """Objeto Message."""
+        serializer = UserQueryMessageSerializer(obj, partial=True)
+        return serializer.data
+
+class UserQueryMessageSerializer(serializers.ModelSerializer):
+    """User """
+    display_name = serializers.SerializerMethodField()
+    photo = serializers.SerializerMethodField()
+
+    class Meta:
+        """Meta."""
+        model = User
+        fields = ('display_name', 'photo')
+
+    def get_display_name(self, obj):
+        """String Displayname."""
+
+        if obj['client__nick'] and obj['client__nick'] != "":
+            display_name = obj['client__nick']
+        else:
+            display_name = "{} {}".format(obj['client__first_name'], obj['client__last_name'])
+
+        return display_name
+
+    def get_photo(self, obj):
+        """String Photo."""
+        return obj['client__photo']

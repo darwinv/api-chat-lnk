@@ -33,7 +33,7 @@
     "residence_country": null,
     "foreign_address": null,
     "key": null,
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -72,7 +72,7 @@
     "residence_country": 2,
     "foreign_address": "cscsc",
     "key": "JYYMST73V1",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -111,7 +111,7 @@
     "residence_country": 1,
     "foreign_address": "fefwefwef",
     "key": "MYR7U146MN",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -150,7 +150,7 @@
     "residence_country": 3,
     "foreign_address": null,
     "key": "54321",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -189,7 +189,7 @@
     "residence_country": 1,
     "foreign_address": null,
     "key": null,
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -217,7 +217,7 @@
     "ciiu": 10,
     "activity_description": "Loremp iptsum",
     "institute": "UNEFA",
-    "ocupation": "0",
+    "ocupation": 1,
     "about": "iptsum aabout",
     "business_name": "wwww",
     "agent_firstname": null,
@@ -243,7 +243,7 @@
     "ciiu": 2,
     "activity_description": "Loremp iptsum",
     "institute": "U CHILE",
-    "ocupation": "0",
+    "ocupation": 1,
     "about": "iptsum aabout",
     "business_name": null,
     "agent_firstname": null,

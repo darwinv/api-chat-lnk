@@ -89,7 +89,7 @@ class CreateQuery(APITestCase):
             "message": [{
                 "message": "primera consulta",
                 "msg_type": "q",
-                "content_type": "0",
+                "content_type": 1,
                 "file_url": ""
                 },
                 {
@@ -227,7 +227,7 @@ class ResponseSpecialistQuery(APITestCase):
                 {
                 "message": "",
                 "msg_type": "a",
-                "content_type": "1",
+                "content_type": 2,
                 "file_url": "img.png"
                 }
             ]
@@ -328,3 +328,28 @@ class GetSpecialistMessages(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
         response = self.client.get(reverse('specialists-list-messages'), format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetMessageByQuery(APITestCase):
+    """Prueba para devolver mensajes de un Query"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_query']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_message(self):
+        """Obtener resultado 200."""
+        #obtiene mensajes de query
+        response = client.get(
+            reverse('query-messages', kwargs={'pk': 1000}),)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_message_404(self):
+        """Obtener resultado 404."""
+        #obtiene mensajes de query
+        response = client.get(
+            reverse('query-messages', kwargs={'pk': 111}),)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

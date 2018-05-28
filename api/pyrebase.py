@@ -9,7 +9,6 @@ from linkupapi.settings import CONFIG_ENVIROMENT
 config = CONFIG_ENVIROMENT
 # Sugerencia para cambiar por una clase con sus metodos
 
-
 def chat_firebase_db(data, room):
     """Enviar data a firebase en chat."""
     firebase = pyrebase.initialize_app(config)

@@ -518,7 +518,7 @@
     "residence_country": null,
     "foreign_address": null,
     "key": null,
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -544,7 +544,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": "",
-    "document_type": "0",
+    "document_type": 1,
     "document_number": "98482831251464424",
     "img_document_number": "",
     "ruc": "234234233252",
@@ -557,7 +557,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -596,7 +596,7 @@
     "residence_country": 1,
     "foreign_address": null,
     "key": null,
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -635,7 +635,7 @@
     "residence_country": 1,
     "foreign_address": null,
     "key": "QHDLZI8E5R",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -674,7 +674,7 @@
     "residence_country": 1,
     "foreign_address": null,
     "key": "G8GAPXU05K",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -713,7 +713,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -739,7 +739,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": null,
-    "document_type": "0",
+    "document_type": 1,
     "document_number": "32145672",
     "img_document_number": "",
     "ruc": "32145672",
@@ -752,7 +752,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -791,7 +791,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -830,7 +830,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -869,7 +869,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -895,7 +895,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": null,
-    "document_type": "0",
+    "document_type": 1,
     "document_number": "32145676",
     "img_document_number": "",
     "ruc": "32145676",
@@ -908,7 +908,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -947,7 +947,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -986,7 +986,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1025,7 +1025,7 @@
     "residence_country": null,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1051,7 +1051,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": null,
-    "document_type": "0",
+    "document_type": 1,
     "document_number": "321456710",
     "img_document_number": "",
     "ruc": "321456710",
@@ -1064,7 +1064,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1103,7 +1103,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1142,7 +1142,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1181,7 +1181,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1207,7 +1207,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": null,
-    "document_type": "0",
+    "document_type": 1,
     "document_number": "321456714",
     "img_document_number": "",
     "ruc": "321456714",
@@ -1220,7 +1220,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1259,7 +1259,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1298,7 +1298,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1337,7 +1337,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1363,7 +1363,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": null,
-    "document_type": "0",
+    "document_type": 1,
     "document_number": "321456718",
     "img_document_number": "",
     "ruc": "321456718",
@@ -1376,7 +1376,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1415,7 +1415,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1454,7 +1454,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1493,7 +1493,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1519,7 +1519,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": null,
-    "document_type": "0",
+    "document_type": 1,
     "document_number": "321456722",
     "img_document_number": "",
     "ruc": "321456722",
@@ -1532,7 +1532,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1571,7 +1571,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1610,7 +1610,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1636,7 +1636,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": "",
-    "document_type": "0",
+    "document_type": 1,
     "document_number": "321456725",
     "img_document_number": "",
     "ruc": "321456725",
@@ -1649,7 +1649,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1688,7 +1688,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1727,7 +1727,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1766,7 +1766,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1805,7 +1805,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -1844,7 +1844,7 @@
     "residence_country": 1,
     "foreign_address": "",
     "key": "123456",
-    "status": "0",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -2276,7 +2276,7 @@
     "ciiu": 2,
     "activity_description": "Loremp iptsum",
     "institute": "UPC",
-    "ocupation": "0",
+    "ocupation": 1,
     "about": "iptsum aabout",
     "business_name": null,
     "agent_firstname": null,
@@ -2302,7 +2302,7 @@
     "ciiu": 2,
     "activity_description": "Loremp iptsum",
     "institute": "UPC",
-    "ocupation": "0",
+    "ocupation": 1,
     "about": "iptsum aabout",
     "business_name": "",
     "agent_firstname": "",
@@ -2338,7 +2338,7 @@
     "ciiu": 2,
     "activity_description": "Loremp iptsum",
     "institute": "UPC",
-    "ocupation": "0",
+    "ocupation": 1,
     "about": "iptsum aabout",
     "business_name": "",
     "agent_firstname": "",

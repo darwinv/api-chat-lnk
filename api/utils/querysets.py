@@ -36,3 +36,4 @@ def get_query_set_plan():
                                               'query_quantity', 'available_queries',
                                               'validity_months','expiration_date','sale_detail__price')\
             .annotate(price=F('sale_detail__price'))
+

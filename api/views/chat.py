@@ -33,7 +33,7 @@ def chat(request):
 
         Group('chat-'+str(label)).send({'text': json.dumps(m.as_dict())})
         # Code block for POST request
-        print(request.data)
+        # print(request.data)
         return Response("exit")
     # else:
         # Code block for GET request (will also match PUT, HEAD, DELETE, etc)

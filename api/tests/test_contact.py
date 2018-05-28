@@ -43,7 +43,7 @@ class CreateNaturalContact(APITestCase):
             'level_instruction': 1,
             'institute': 'UNEFA',
             'profession': "Administrador",
-            'ocupation': '0',
+            'ocupation': 1,
             "latitude": "-77.0282400",
             "longitude": "-12.0431800",
             'about': 'iptsum aabout',

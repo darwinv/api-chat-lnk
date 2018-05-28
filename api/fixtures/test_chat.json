@@ -33,7 +33,7 @@
         "residence_country": 1,
         "foreign_address": null,
         "key": "54321",
-        "status": "0",
+        "status": 1,
         "groups": [],
         "user_permissions": []
       }
@@ -166,7 +166,7 @@
             "residence_country": null,
             "foreign_address": null,
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -205,7 +205,7 @@
             "residence_country": 2,
             "foreign_address": "eplpasd",
             "key": "9G9HQLG8K7",
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -244,7 +244,7 @@
             "residence_country": 2,
             "foreign_address": "423434343241412424",
             "key": "6S9W38D3PN",
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -283,7 +283,7 @@
             "residence_country": 1,
             "foreign_address": null,
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -322,7 +322,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -361,7 +361,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -400,7 +400,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -439,7 +439,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -478,7 +478,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -504,7 +504,7 @@
             "code_telephone": null,
             "code_cellphone": null,
             "photo": null,
-            "document_type": "0",
+            "document_type": 1,
             "document_number": "9848283123123438498556464424",
             "img_document_number": null,
             "ruc": "23423423",
@@ -517,7 +517,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -543,7 +543,7 @@
             "code_telephone": null,
             "code_cellphone": null,
             "photo": null,
-            "document_type": "0",
+            "document_type": 1,
             "document_number": "984828312311312323438498556464424",
             "img_document_number": null,
             "ruc": "23423423121",
@@ -556,7 +556,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -582,7 +582,7 @@
             "code_telephone": null,
             "code_cellphone": null,
             "photo": null,
-            "document_type": "0",
+            "document_type": 1,
             "document_number": "98482831234444444444123438498556464424",
             "img_document_number": null,
             "ruc": "23423423123123",
@@ -595,7 +595,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -621,7 +621,7 @@
             "code_telephone": null,
             "code_cellphone": null,
             "photo": null,
-            "document_type": "0",
+            "document_type": 1,
             "document_number": "98482831231234384954353458556464424",
             "img_document_number": null,
             "ruc": "2312412423423",
@@ -634,7 +634,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -660,7 +660,7 @@
             "code_telephone": null,
             "code_cellphone": null,
             "photo": null,
-            "document_type": "0",
+            "document_type": 1,
             "document_number": "9848283125125123123438498556464424",
             "img_document_number": null,
             "ruc": "2342342332523",
@@ -673,7 +673,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -699,7 +699,7 @@
             "code_telephone": null,
             "code_cellphone": null,
             "photo": null,
-            "document_type": "0",
+            "document_type": 1,
             "document_number": "9848283438498432435564644",
             "img_document_number": null,
             "ruc": "8949812989823565464",
@@ -712,7 +712,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": "8K7YVZVQV5",
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -751,7 +751,7 @@
             "residence_country": 1,
             "foreign_address": null,
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -790,7 +790,7 @@
             "residence_country": 1,
             "foreign_address": "",
             "key": null,
-            "status": "0",
+            "status": 1,
             "groups": [],
             "user_permissions": []
         }
@@ -807,7 +807,7 @@
             "ciiu": 10,
             "activity_description": "Loremp iptsum",
             "institute": "UNEFA",
-            "ocupation": "0",
+            "ocupation": 1,
             "about": "iptsum aabout",
             "business_name": null,
             "agent_firstname": null,
@@ -1093,7 +1093,7 @@
             "ciiu": 2,
             "activity_description": "Loremp iptsum",
             "institute": "UPC",
-            "ocupation": "0",
+            "ocupation": 1,
             "about": "iptsum aabout",
             "business_name": null,
             "agent_firstname": null,
@@ -1119,7 +1119,7 @@
             "ciiu": 8,
             "activity_description": "na",
             "institute": "nueva",
-            "ocupation": "0",
+            "ocupation": 1,
             "about": "asd",
             "business_name": null,
             "agent_firstname": null,
@@ -1320,7 +1320,7 @@
         "pk": 2,
         "fields": {
             "title": "Ayuda con peticion de SUNAT",
-            "status": "0",
+            "status": 1,
             "created_at": "2018-02-15T10:13:07Z",
             "last_modified": "2018-02-15T10:13:09Z",
             "calification": null,
@@ -1335,7 +1335,7 @@
         "pk": 3,
         "fields": {
             "title": "Ayuda con Tesis de Inteligencia Artificial",
-            "status": "0",
+            "status": 1,
             "created_at": "2018-02-15T11:13:07Z",
             "last_modified": "2018-02-15T11:13:09Z",
             "calification": null,
@@ -1352,7 +1352,7 @@
             "message": "Buenos dias, quisiera saber como puedo solucionar mi problema con la facturacion del SUNAT adjunto imagen de mi impresora DDHP-F5001",
             "msg_type": "q",
             "created_at": "2018-02-15T10:26:34Z",
-            "content_type": "0",
+            "content_type": 1,
             "specialist": 3,
             "query": 2,
             "viewed": false,
@@ -1366,7 +1366,7 @@
             "message": "Buenos dias Equipo de Tecnologia, me gustaria saber que cientificos de datos contemporaneos, son los mas reconocidos en el area de inteligencia artificial, adjunto mi tesis para que revisen los que ya tengo agregado, y 2 fotos para que me sugieran cual usar en la portada",
             "msg_type": "q",
             "created_at": "2018-02-15T11:26:34Z",
-            "content_type": "0",
+            "content_type": 1,
             "specialist": 3,
             "file_url": "",
             "query": 2,

@@ -33,7 +33,7 @@ class ChangeStatusClient(APITestCase):
                 "district": 1
             },
             'sex': 'm',
-            'document_type': '2',
+            'document_type': 3,
             'document_number': '144013012',
             'email_exact': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
@@ -42,7 +42,7 @@ class ChangeStatusClient(APITestCase):
             'level_instruction': 1,
             'institute': 'UNEFA',
             'profession': "Administrador",
-            'ocupation': '0',
+            'ocupation': 1,
             'about': 'iptsum aabout',
             'ciiu': 1,
             'nationality': 1,
@@ -72,7 +72,7 @@ class ChangeStatusClient(APITestCase):
 
     def test_change_to_pending(self):
         """Cambia el status del cliente a Pending."""
-        data = {"status": 0}
+        data = {"status": 1}
         send = self.client.post(
             reverse('clients'),
             data=json.dumps(self.valid_payload),
@@ -85,7 +85,7 @@ class ChangeStatusClient(APITestCase):
                               data, format='json')
 
         c = Cliente.objects.get(pk=send.data["id"])
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["status"], int(c.status))
 
@@ -135,7 +135,7 @@ class GetClientsToAuthorization(APITestCase):
             "last_name": "garzon",
             "type_specialist": "m",
             'photo': 'preview.jpg',
-            'document_type': '2',
+            'document_type': 3,
             'document_number': '144013012',
             'email_exact': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
@@ -153,7 +153,7 @@ class GetClientsToAuthorization(APITestCase):
             "name":"Don Venus",
             "document":"34354367",
             "document_type":"RUC",
-            "status":"0",
+            "status":'1',
             "document_type_name":"RUC",
             "date_join": "2017-11-13",
             "id": 4
@@ -161,6 +161,5 @@ class GetClientsToAuthorization(APITestCase):
 
         # get API response
         response = client.get(reverse('auth-list-clients'))
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0], result_expected)
+        self.assertEqual(response.json()[0], result_expected)

@@ -11,15 +11,15 @@ class ChoicesAPI:
 
     # User Model
     user_document_type = (
-        ('0', _('DNI')),
-        ('1', _('Passport')),
-        ('2', _('Foreign Card')),
+        ('1', _('DNI')),
+        ('2', _('Passport')),
+        ('3', _('Foreign Card')),
     )
     user_status = (
-        ('0', _('Pending')),
-        ('1', _('Activate')),
-        ('2', _('Reject')),
-        ('3', _('Deactivated')),
+        ('1', _('Pending')),
+        ('2', _('Activate')),
+        ('3', _('Reject')),
+        ('4', _('Deactivated')),
     )
 
     # Client Model
@@ -48,13 +48,13 @@ class ChoicesAPI:
     )
 
     client_ocupation = (
-        ('0', _('Employer')),
-        ('1', _('Independent worker')),
-        ('2', _('Employee')),
-        ('3', _('Worker')),
-        ('4', _('Worker in a family business')),
-        ('5', _('Home worker')),
-        ('6', _('Other')),
+        ('1', _('Employer')),
+        ('2', _('Independent worker')),
+        ('3', _('Employee')),
+        ('4', _('Worker')),
+        ('5', _('Worker in a family business')),
+        ('6', _('Home worker')),
+        ('7', _('Other')),
     )
 
     # Specialist Model
@@ -78,8 +78,8 @@ class ChoicesAPI:
 
     # Purchase Model
     purchase_status = (
-        ('0', _('Pending')),
-        ('1', _('Paid')),
+        ('1', _('Pending')),
+        ('2', _('Paid')),
     )
 
     # Purchase Model
@@ -90,8 +90,8 @@ class ChoicesAPI:
 
     # Sale Model
     sale_status = (
-        ('0', _('Pending')),
-        ('1', _('Paid')),
+        ('1', _('Pending')),
+        ('2', _('Paid')),
     )
 
     # CulqiPayment Model
@@ -104,25 +104,25 @@ class ChoicesAPI:
 
     # payment model
     payment_status = (
-        ('0', _('Pending')),
-        ('1', _('Accepted')),
-        ('2', _('Declined')),
+        ('1', _('Pending')),
+        ('2', _('Accepted')),
+        ('3', _('Declined')),
     )
 
     # Query Model
     query_status = (
-        ('0', _('Requested')),  # pendiente por derivar, responder o declinar
-        ('1', _('Accepted')),  # consulta aceptada por un especialista
-        ('2', _('Answered')),  # respondida por especialista
-        ('3', _('To score')),  # pendiente por puntuar
-        ('4', _('Absolved')),  # resuelta y finalizada
+        ('1', _('Requested')),  # pendiente por derivar, responder o declinar
+        ('2', _('Accepted')),  # consulta aceptada por un especialista
+        ('3', _('Answered')),  # respondida por especialista
+        ('4', _('To score')),  # pendiente por puntuar
+        ('5', _('Absolved')),  # resuelta y finalizada
     )
 
     # MatchAcquired model
     match_acquired_status = (
-        ('0', _('Requested')),
-        ('1', _('Accepted')),
-        ('2', _('Declined')),
+        ('1', _('Requested')),
+        ('2', _('Accepted')),
+        ('3', _('Declined')),
     )
 
     # Message Model
@@ -133,18 +133,18 @@ class ChoicesAPI:
     )
 
     message_content_type = (
-        ('0', _('Text')),
-        ('1', _('Image')),
-        ('2', _('Video')),
-        ('3', _('Voice')),
-        ('4', _('Document')),
+        ('1', _('Text')),
+        ('2', _('Image')),
+        ('3', _('Video')),
+        ('4', _('Voice')),
+        ('5', _('Document')),
     )
 
     # Match Model
     match_type_file = (
-        ('1', _('Image')),
-        ('2', _('Voice')),
-        ('3', _('Document')),
+        ('2', _('Image')),
+        ('3', _('Voice')),
+        ('4', _('Document')),
     )
 
     # AlertCategory Model
