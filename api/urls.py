@@ -66,6 +66,9 @@ urlpatterns = [
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$',
         actors.SpecialistAccountView.as_view(),
         name='specialist-account-status'),
+    # Especialistas Asociados
+    url(r'^specialists-asociate/$', actors.SpecialistAsociateListView.as_view(),
+        name='specialists-asociate'),
     # Consultas
     # Listado de Consultas por especialista
     # url(r'^specialist-queries/$', query.QueryListSpecialistView.as_view(),
@@ -86,6 +89,8 @@ urlpatterns = [
 
     url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'),
     url(r'^query-last/(?P<category>[0-9]+)/$', query.QueryLastView.as_view(), name='last-query-bycategory'),
+    url(r'^queries-messages/(?P<pk>[0-9]+)/$', query.QueryMessageView.as_view(), name='query-messages'),
+
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(), name='seller-detail'),

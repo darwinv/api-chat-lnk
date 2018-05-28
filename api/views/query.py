@@ -9,6 +9,7 @@ from api.utils.validations import Operations
 from api.serializers.query import QuerySerializer, QueryListClientSerializer, MessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer, ChatMessageSerializer, QueryResponseSerializer
+from api.serializers.query import QueryMessageSerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from django.db.models import OuterRef, Subquery, F
 from django.http import Http404
@@ -277,4 +278,23 @@ class QueryChatClientView(ListCreateAPIView):
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
+
+
+class QueryMessageView(APIView):
+    """Vista Consultas en el chat por parte del Cliente."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrSpecialist)
+
+    def get(self, request, pk):
+        """Listado de queries y sus respectivos mensajes para un especialista."""
+        try:
+            message = Query.objects.values('id', 'title', 'client__last_name',\
+            'client__first_name', 'client__nick', 'client__photo')\
+            .get(pk=pk)
+        except Query.DoesNotExist:
+            raise Http404
+        
+        serializer = QueryMessageSerializer(message, partial=True)
         return Response(serializer.data)

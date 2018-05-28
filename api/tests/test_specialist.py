@@ -32,7 +32,7 @@ class CreateSpecialist(APITestCase):
                 "district": 1
             },
             'photo': 'preview.jpg',
-            'document_type': '0',
+            'document_type': 1,
             'document_number': '144013012',
             'email_exact': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
@@ -250,12 +250,13 @@ class CreateSpecialist(APITestCase):
         data2 = data1.copy()
         data2["username"], data2["email_exact"] = 'jauna', 'jauna@mail.com'
         data2["ruc"], data2["type_specialist"] = data2["ruc"] + '1', 'a'
-        data2["document_type"] = '1'
+        data2["document_type"] = 2
         response2 = self.client.post(
             reverse('specialists'),
             data=json.dumps(data2),
             content_type='application/json'
         )
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
@@ -352,7 +353,7 @@ class DetailSpecialist(APITestCase):
 
     def test_get_detail(self):
         """Obtener detalle de manera exitosa."""
-        self.client.credentials(
+        client.credentials(
             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.get(reverse('specialist-detail',
                               kwargs={'pk': self.specialist}), format='json')
@@ -499,11 +500,10 @@ class GetSpecialists(APITestCase):
     def test_get_all_specialists(self):
         # get API response
         self.client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
-        response = client.get(reverse('specialists'))
+        response = self.client.get(reverse('specialists'))
         # get data from db
         specialists = Specialist.objects.all()
         serializer = SpecialistSerializer(specialists, many=True)
-
         self.assertEqual(response.data['results'], serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -585,7 +585,7 @@ class GetSpecialists(APITestCase):
             content_type='application/json'
         )
         url = "{}?main_specialist={}".format(reverse('specialists'),send.data["id"])
-        response = client.get(url)
+        response = self.client.get(url)
 
         self.assertEqual(Specialist.objects.filter(category=send.data["category"]).exclude(type_specialist='m').count(),
                                                    response.data["count"])
@@ -638,3 +638,20 @@ class DeleteSpecialist(APITestCase):
             None, format='json'
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class GetAsociateSpecialist(APITestCase):
+    """Devolver Especialistas asociados"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_address', 'test_specialist']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_specialists(self):
+        """Obtener resultado 200."""
+        #obtiene especialistas asociados
+        client.credentials(HTTP_AUTHORIZATION='Bearer vvP8pKMAULMa2qQtaTnJpx2l87nWc2')
+        response = client.get(reverse('specialists-asociate'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

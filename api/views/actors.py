@@ -32,7 +32,7 @@ from api.utils.validations import Operations
 from api.utils.tools import clear_data_no_valid
 from api import pyrebase
 from api.emails import BasicEmailAmazon
-
+from api.api_choices_models import ChoicesAPI as c
 
 # Constantes
 PREFIX_CODE_CLIENT = 'C'
@@ -117,7 +117,7 @@ class ValidCodePassword(APIView):
 
     def get(self, request):
         """Funcion put."""
-        if 'code' in request.query_params:            
+        if 'code' in request.query_params:
             code = request.query_params["code"]
         else:
             raise serializers.ValidationError({'code': [self.required]})
@@ -596,6 +596,24 @@ class SpecialistListView(ListCreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class SpecialistAsociateListView(APIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrSpecialist)
+
+    def get(self, request):
+        pk = Operations.get_id(self, request)
+        
+        try:
+            obj = Specialist.objects.get(pk=pk)
+        except Specialist.DoesNotExist:
+            raise Http404
+
+        specialists = Specialist.objects.filter(category=obj.category, type_specialist="a")
+        
+        serializer = SpecialistSerializer(specialists, many=True)
+        return Response(serializer.data)
+        
 
 class PutSpecialistMessages():
     def get(self, pk):

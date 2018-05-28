@@ -28,7 +28,7 @@
     "telephone": "1234567",
     "cellphone": "123456789",
     "photo": "preview.png",
-    "document_type": "0",
+    "document_type": 1,
     "document_number": "48464954",
     "ruc": null,
     "code": "c48464954",
