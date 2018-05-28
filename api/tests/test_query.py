@@ -6,6 +6,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 # from api.models import SpecialistMessageList
 from api.models import QueryPlansAcquired
+from api.models import Query
 # Create your tests here.
 
 client = APIClient()
@@ -213,7 +214,8 @@ class ResponseSpecialistQuery(APITestCase):
     def setUp(self):
         """Setup."""
         self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
         self.valid_payload = {
             "message": [{
                 "message": "respuesta a consulta",
@@ -263,19 +265,40 @@ class ResponseSpecialistQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_contentype_message(self):
-        """Verificar que el mensaje a guardar corresponde al tipo de contenido de mensaje."""
+        """Verificar que el mensaje a guardar corresponde
+         al tipo de contenido de mensaje."""
         self.valid_payload["message"][0]["message"] = ""
         response = self.client.put(
             reverse('query-specialist', kwargs={'pk': 1000}),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # al enviar un mensaje no puede estar vacio, mientras la el content_type
-        # sea 1
+        # al enviar un mensaje no puede estar vacio, mientras
+        # la el content_type sea 1
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-# prueba para que el reference exista
 
-# prueba para que el que responda tiene permisos correctos
+    def test_invalid_reference(self):
+        """Envio de respuesta con reference_id inexistente."""
+        self.valid_payload["message"][0]["message_reference"] = 5000
+        response = self.client.put(
+            reverse('query-specialist', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_permissions(self):
+        """Credenciales incorrectas."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        response = self.client.put(
+            reverse('query-specialist', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # Permisos incorrectos
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_response_query(self):
         """Respuesta exitosa del especialista."""
         # import pdb; pdb.set_trace()
@@ -284,7 +307,8 @@ class ResponseSpecialistQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        import pdb; pdb.set_trace()
+        query_status = Query.objects.get(pk=1000)
+        self.assertEqual(4, int(query_status.status))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

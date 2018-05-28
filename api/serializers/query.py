@@ -67,12 +67,16 @@ class ListMessageSerializer(serializers.ModelSerializer):
         """Redefinido nombres (claves) para firebase."""
         time = str(obj.created_at)
         user_id = obj.query.client.id
+        reference_id = ''
         if obj.specialist:
             user_id = obj.specialist.id
+        # metodo para renderizar objeto en el json
+        if obj.message_reference:
+            reference_id = obj.message_reference.id
         return {"id": obj.id, "room": obj.room, "codeUser": obj.code,
                 "fileType": obj.content_type, "fileUrl": obj.file_url,
                 "message": obj.message, "messageType": obj.msg_type,
-                # "reference_id": obj.message_reference,
+                "message_reference": reference_id,
                 "timeMessage": time, "read": obj.viewed, "user_id": user_id
                 }
 
