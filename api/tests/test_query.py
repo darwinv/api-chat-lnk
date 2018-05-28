@@ -1,15 +1,16 @@
 """Pruebas unitarias para las consultas."""
+import json
+from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
-from django.urls import reverse
 from rest_framework import status
-import json
-from api.models import SpecialistMessageList
+# from api.models import SpecialistMessageList
 from api.models import QueryPlansAcquired
 # Create your tests here.
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')  # Api Admin
+client.credentials(
+    HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')  # Api Admin
 
 
 class ListCategoriesClient(APITestCase):
@@ -218,7 +219,8 @@ class ResponseSpecialistQuery(APITestCase):
                 "message": "respuesta a consulta",
                 "msg_type": "a",
                 "content_type": "0",
-                "file_url": ""
+                "file_url": "",
+                "message_reference": 1
                 },
                 {
                 "message": "",
@@ -271,16 +273,19 @@ class ResponseSpecialistQuery(APITestCase):
         # al enviar un mensaje no puede estar vacio, mientras la el content_type
         # sea 1
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+# prueba para que el reference exista
 
+# prueba para que el que responda tiene permisos correctos
     def test_response_query(self):
         """Respuesta exitosa del especialista."""
+        # import pdb; pdb.set_trace()
         response = self.client.put(
             reverse('query-specialist', kwargs={'pk': 1000}),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
 
 
 

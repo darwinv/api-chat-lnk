@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from api.utils import querysets
 from api import pyrebase
 
+
 # Serializer de Mensajes
 class MessageSerializer(serializers.ModelSerializer):
     """Serializer para el mensaje."""
@@ -22,7 +23,8 @@ class MessageSerializer(serializers.ModelSerializer):
 
         model = Message
         fields = ('id', 'message', 'msg_type', 'content_type',
-                  'created_at', 'code', 'specialist', 'file_url', 'room')
+                  'message_reference', 'created_at', 'code',
+                  'specialist', 'file_url', 'room')
 
         read_only_fields = ('id', 'created_at', 'code')
 
@@ -45,6 +47,9 @@ class MessageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"file_url": [required]})
         if int(data["content_type"]) == 0 and data["message"] == '':
             raise serializers.ValidationError({"message": [required]})
+        # if data["msg_type"] == 'a' or data["msg_type"] == 'r':
+        #     if 'reference_id' not in data:
+        #         raise serializers.ValidationError({"reference_id": [required]})
         return data
 
 
@@ -67,6 +72,7 @@ class ListMessageSerializer(serializers.ModelSerializer):
         return {"id": obj.id, "room": obj.room, "codeUser": obj.code,
                 "fileType": obj.content_type, "fileUrl": obj.file_url,
                 "message": obj.message, "messageType": obj.msg_type,
+                # "reference_id": obj.message_reference,
                 "timeMessage": time, "read": obj.viewed, "user_id": user_id
                 }
 
@@ -279,14 +285,15 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         chat = {}
 
         for message in ms:
-            message["query"] = {"id": obj.id, "title": obj.title, "status": obj.status,
+            message["query"] = {"id": obj.id, "title": obj.title,
+                                "status": obj.status,
                                 "calification": obj.calification}
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
 
         return {'room': ms[0]["room"], "message": chat,
                 "category": obj.category.id, 'query_id': obj.id,
-                'status': obj.status
+                'status': obj.status, "client_id": obj.client.id
                 }
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta

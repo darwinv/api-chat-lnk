@@ -153,7 +153,8 @@ class QueryDetailSpecialistView(APIView):
         # tomamos del token el id de usuario (especialista en este caso)
         spec = Specialist.objects.get(pk=user_id)
         # No utilizamos partial=True, ya que solo actualizamos mensaje
-        serializer = QueryResponseSerializer(query, data, context={'specialist': spec})
+        serializer = QueryResponseSerializer(query, data,
+                                             context={'specialist': spec})
         if serializer.is_valid():
             serializer.save()
             lista = list(serializer.data['message'].values())

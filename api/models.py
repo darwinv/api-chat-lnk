@@ -62,7 +62,8 @@ class Address(models.Model):
     """Direccion."""
 
     street = models.CharField(max_length=100, blank=True)
-    department = models.ForeignKey(Department, on_delete=models.PROTECT, null=True)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT,
+                                   null=True)
     province = models.ForeignKey(Province, on_delete=models.PROTECT, null=True)
     district = models.ForeignKey(District, on_delete=models.PROTECT, null=True)
 
