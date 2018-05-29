@@ -278,7 +278,6 @@ class QueryResponseSerializer(serializers.ModelSerializer):
 
         instance.status = 3  # actualizo status
         instance.save()
-        import pdb; pdb.set_trace()
         return instance
 
     def to_representation(self, obj):
