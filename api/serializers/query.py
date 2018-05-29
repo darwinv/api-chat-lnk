@@ -267,7 +267,8 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         self.context["size_msgs"] = len(data_messages)
         # Recorremos los mensajes para crearlos todos
         for data_message in data_messages:
-            # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
+            # por defecto el tipo de mensaje al actualizarse debe
+            # de ser pregunta ('a')
             data_message["msg_type"] = "a"
             data_message["specialist"] = self.context['specialist']
             # armamos la sala para el usuario
