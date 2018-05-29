@@ -224,7 +224,7 @@ class ResponseSpecialistQuery(APITestCase):
             "message": [{
                 "message": "respuesta a consulta",
                 "msg_type": "a",
-                "content_type": "0",
+                "content_type": "1",
                 "file_url": "",
                 "message_reference": 1
                 },
@@ -305,7 +305,6 @@ class ResponseSpecialistQuery(APITestCase):
 
     def test_response_query(self):
         """Respuesta exitosa del especialista."""
-        # import pdb; pdb.set_trace()
         response = self.client.put(
             reverse('query-specialist', kwargs={'pk': 1000}),
             data=json.dumps(self.valid_payload),

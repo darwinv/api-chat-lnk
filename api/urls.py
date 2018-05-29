@@ -102,7 +102,8 @@ urlpatterns = [
     url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(), name='seller-account-status'),
 
     # Actualizar Consulta por detalle (Responder)
-    url(r'^specialist/queries/(?P<pk>[0-9]+)/$', query.QueryDetailSpecialistView.as_view(), name='query-specialist'),
+    url(r'^specialist/queries/(?P<pk>[0-9]+)/$',
+        query.QueryDetailSpecialistView.as_view(), name='query-specialist'),
     # Contacto no efectivo
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
     # url para subir imagen
