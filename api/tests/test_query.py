@@ -1,15 +1,17 @@
 """Pruebas unitarias para las consultas."""
+import json
+from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
-from django.urls import reverse
 from rest_framework import status
-import json
-from api.models import SpecialistMessageList
+# from api.models import SpecialistMessageList
 from api.models import QueryPlansAcquired
+from api.models import Query
 # Create your tests here.
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')  # Api Admin
+client.credentials(
+    HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')  # Api Admin
 
 
 class ListCategoriesClient(APITestCase):
@@ -80,20 +82,21 @@ class CreateQuery(APITestCase):
     def setUp(self):
         """Setup."""
         self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
         self.valid_payload = {
             "title": "Pago de Impuestos",
             "category": 24,
             "message": [{
                 "message": "primera consulta",
                 "msg_type": "q",
-                "content_type": 1,
+                "content_type": "1",
                 "file_url": ""
                 },
                 {
                 "message": "",
                 "msg_type": "q",
-                "content_type": "1",
+                "content_type": "2",
                 "file_url": "img.png"
                 }
             ],
@@ -156,7 +159,8 @@ class CreateQuery(APITestCase):
 
     def test_not_client_credentials(self):
         """Token no es de cliente (no autorizado)."""
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
@@ -165,8 +169,9 @@ class CreateQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_contentype_file(self):
-        """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
-        self.valid_payload["message"][0]["content_type"] = '1'
+        """Verificar que el mensaje a guardar corresponde al tipo de contenido
+        de archivo."""
+        self.valid_payload["message"][0]["content_type"] = '2'
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
@@ -176,7 +181,8 @@ class CreateQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_contentype_message(self):
-        """Verificar que el mensaje a guardar corresponde al tipo de contenido de mensaje."""
+        """Verificar que el mensaje a guardar corresponde
+         al tipo de contenido de mensaje."""
         self.valid_payload["message"][0]["message"] = ""
         response = self.client.post(
             reverse('queries-client'),
@@ -212,13 +218,15 @@ class ResponseSpecialistQuery(APITestCase):
     def setUp(self):
         """Setup."""
         self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
         self.valid_payload = {
             "message": [{
                 "message": "respuesta a consulta",
                 "msg_type": "a",
-                "content_type": 1,
-                "file_url": ""
+                "content_type": "0",
+                "file_url": "",
+                "message_reference": 1
                 },
                 {
                 "message": "",
@@ -251,7 +259,7 @@ class ResponseSpecialistQuery(APITestCase):
 
     def test_contentype_file(self):
         """Verificar que el mensaje a guardar corresponde al tipo de contenido de archivo."""
-        self.valid_payload["message"][0]["content_type"] = '1'
+        self.valid_payload["message"][0]["content_type"] = '2'
         response = self.client.put(
             reverse('query-specialist', kwargs={'pk': 1000}),
             data=json.dumps(self.valid_payload),
@@ -261,25 +269,53 @@ class ResponseSpecialistQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_contentype_message(self):
-        """Verificar que el mensaje a guardar corresponde al tipo de contenido de mensaje."""
+        """Verificar que el mensaje a guardar corresponde
+         al tipo de contenido de mensaje."""
         self.valid_payload["message"][0]["message"] = ""
         response = self.client.put(
             reverse('query-specialist', kwargs={'pk': 1000}),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # al enviar un mensaje no puede estar vacio, mientras la el content_type
-        # sea 1
+        # al enviar un mensaje no puede estar vacio, mientras
+        # la el content_type sea 1
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_response_query(self):
-        """Respuesta exitosa del especialista."""
+    def test_invalid_reference(self):
+        """Envio de respuesta con reference_id inexistente."""
+        self.valid_payload["message"][0]["message_reference"] = 5000
         response = self.client.put(
             reverse('query-specialist', kwargs={'pk': 1000}),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_permissions(self):
+        """Credenciales incorrectas."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        response = self.client.put(
+            reverse('query-specialist', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # Permisos incorrectos
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_response_query(self):
+        """Respuesta exitosa del especialista."""
+        # import pdb; pdb.set_trace()
+        response = self.client.put(
+            reverse('query-specialist', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        query_status = Query.objects.get(pk=1000)
+        self.assertEqual(3, int(query_status.status))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 
 class GetSpecialistMessages(APITestCase):
     """Prueba para devolver el plan activo y elegido de un determinado cliente"""
@@ -292,10 +328,14 @@ class GetSpecialistMessages(APITestCase):
 
     def test_get_list_messages_token_specialist(self):
         """Obtener resultado 200."""
-        #se provee un token de especialista el cuel tiene   mensajes pendientes de responders
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
-        response = self.client.get(reverse('specialists-list-messages'), format='json')
+        # se provee un token de especialista el cuel tiene
+        # mensajes pendientes de responders
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        response = self.client.get(reverse('specialists-list-messages'),
+                                   format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class GetMessageByQuery(APITestCase):
     """Prueba para devolver mensajes de un Query"""
@@ -337,9 +377,10 @@ class PutAcceptQuery(APITestCase):
         #obtiene mensajes de query
 
         self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
-        response = self.client.put(reverse('query-accept'))
+        response = self.client.put(reverse('query-accept', kwargs={'pk': 2}),)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
     def test_query_status(self):
         """status 0 to query"""

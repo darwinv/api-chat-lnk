@@ -42,12 +42,14 @@ def categories_db(client_id, cat_id, time_now, read=False):
                                  node_client).child(node_category).update(data)
     return res
 
-###########FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE##########
+
+# FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE #
 def update_categories():
     """Cargar listado de categorias para todos los usuarios."""
     # SOLO USO PARA AMBIENTE EN DESARROLLO
     for client in Client.objects.all():
         createCategoriesLisClients(client.id)
+
 
 def update_plan_choisen():
     """Cargar plan activo para todos los usuarios."""
@@ -56,7 +58,8 @@ def update_plan_choisen():
         try:
             print("new")
             plan_chosen = get_query_set_plan()
-            plan_active = plan_chosen.filter(client= client.id, is_active = True, is_chosen = True)[:1].get()
+            plan_active = plan_chosen.filter(client=client.id, is_active=True,
+                                             is_chosen=True)[:1].get()
 
             obj = QueryPlansAcquired.objects.get(pk=plan_active['id'])
             plan = QueryPlansAcquiredSerializer(obj)
@@ -65,7 +68,7 @@ def update_plan_choisen():
         except Exception as e:
             pass
 
-########### FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
+# FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
 
 def createCategoriesLisClients(client_id):

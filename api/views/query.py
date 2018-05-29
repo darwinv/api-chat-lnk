@@ -14,12 +14,12 @@ from channels import Group
 # llamadas de nuestro propio proyecto
 from api import pyrebase
 from api.models import Query, Message, Category, Specialist, Client
-from api.permissions import IsAdminOrClient, IsAdminOrSpecialist
+from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsSpecialist
 from api.permissions import IsAdminReadOrSpecialistOwner
 from api.utils.validations import Operations
 from api.views.actors import SpecialistMessageList_sp
 from api.serializers.query import QuerySerializer, QueryListClientSerializer
-from api.serializers.query import MessageSerializer
+from api.serializers.query import MessageSerializer, QueryMessageSerializer
 from api.serializers.query import QueryDetailSerializer
 from api.serializers.query import QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
@@ -153,7 +153,8 @@ class QueryDetailSpecialistView(APIView):
         # tomamos del token el id de usuario (especialista en este caso)
         spec = Specialist.objects.get(pk=user_id)
         # No utilizamos partial=True, ya que solo actualizamos mensaje
-        serializer = QueryResponseSerializer(query, data, context={'specialist': spec})
+        serializer = QueryResponseSerializer(query, data,
+                                             context={'specialist': spec})
         if serializer.is_valid():
             serializer.save()
             lista = list(serializer.data['message'].values())
@@ -366,6 +367,25 @@ class QueryMessageView(APIView):
             .get(pk=pk)
         except Query.DoesNotExist:
             raise Http404
-        
+
         serializer = QueryMessageSerializer(message, partial=True)
         return Response(serializer.data)
+
+class QueryAcceptView(APIView):
+    """Vista Consultas en el chat por parte del Cliente."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSpecialist)
+
+    def put(self, request, pk):
+        """Listado de queries y sus respectivos mensajes para un especialista."""
+        try:
+            query = Query.objects.get(pk=pk)
+        except Query.DoesNotExist:
+            raise Http404
+
+        serializer = QueryAcceptSerializer(query, data)
+        if serializer.is_valid():
+            serializer.save()
+
+        return Response(serializer.errors)

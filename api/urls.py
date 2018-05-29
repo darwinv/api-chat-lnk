@@ -37,7 +37,7 @@ urlpatterns = [
     url(r'^reset-password-recovery/(?P<pk>[0-9]+)/$', actors.UpdatePasswordRecoveryView.as_view(), name='reset-password-recovery'),
     # # reseteo de contraseña
     url(r'^update-email/(?P<pk>[0-9]+)/$', actors.UpdateEmailUserView.as_view(), name='update-email'),
-    
+
 
     # detalle de cliente
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(),
@@ -90,6 +90,11 @@ urlpatterns = [
     url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'),
     url(r'^query-last/(?P<category>[0-9]+)/$', query.QueryLastView.as_view(), name='last-query-bycategory'),
     url(r'^queries-messages/(?P<pk>[0-9]+)/$', query.QueryMessageView.as_view(), name='query-messages'),
+
+    # Specialist Accept Query
+    
+    url(r'^query-accept/(?P<pk>[0-9]+)/$', query.QueryAcceptView.as_view(), name='query-accept'),
+
 
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),

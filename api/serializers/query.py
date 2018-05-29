@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from api.utils import querysets
 from api import pyrebase
 
+
 # Serializer de Mensajes
 class MessageSerializer(serializers.ModelSerializer):
     """Serializer para el mensaje."""
@@ -22,7 +23,8 @@ class MessageSerializer(serializers.ModelSerializer):
 
         model = Message
         fields = ('id', 'message', 'msg_type', 'content_type',
-                  'created_at', 'code', 'specialist', 'file_url', 'room')
+                  'message_reference', 'created_at', 'code',
+                  'specialist', 'file_url', 'room')
 
         read_only_fields = ('id', 'created_at', 'code')
 
@@ -41,10 +43,13 @@ class MessageSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Validacion de Data."""
         required = _('required')
-        if int(data["content_type"]) > 0 and data["file_url"] == '':
+        if int(data["content_type"]) > 1 and data["file_url"] == '':
             raise serializers.ValidationError({"file_url": [required]})
-        if int(data["content_type"]) == 0 and data["message"] == '':
+        if int(data["content_type"]) == 1 and data["message"] == '':
             raise serializers.ValidationError({"message": [required]})
+        # if data["msg_type"] == 'a' or data["msg_type"] == 'r':
+        #     if 'reference_id' not in data:
+        #         raise serializers.ValidationError({"reference_id": [required]})
         return data
 
 
@@ -62,11 +67,16 @@ class ListMessageSerializer(serializers.ModelSerializer):
         """Redefinido nombres (claves) para firebase."""
         time = str(obj.created_at)
         user_id = obj.query.client.id
+        reference_id = ''
         if obj.specialist:
             user_id = obj.specialist.id
+        # metodo para renderizar objeto en el json
+        if obj.message_reference:
+            reference_id = obj.message_reference.id
         return {"id": obj.id, "room": obj.room, "codeUser": obj.code,
                 "fileType": obj.content_type, "fileUrl": obj.file_url,
                 "message": obj.message, "messageType": obj.msg_type,
+                "message_reference": reference_id,
                 "timeMessage": time, "read": obj.viewed, "user_id": user_id
                 }
 
@@ -198,7 +208,7 @@ class QuerySerializer(serializers.ModelSerializer):
         acq_plan = QueryPlansAcquired.objects.get(
                             is_chosen=True, client=validated_data["client"])
         validated_data["specialist"] = specialist
-        validated_data["status"] = 0
+        validated_data["status"] = 1
         validated_data["acquired_plan"] = acq_plan
         # Creamos la consulta y sus mensajes
         query = Query.objects.create(**validated_data)
@@ -255,10 +265,6 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         """Actualizar la consulta."""
         data_messages = validated_data.pop('message')
         self.context["size_msgs"] = len(data_messages)
-        if instance.specialist.type_specialist == 'm':
-            instance.status = 4
-        else:
-            instance.status = 5
         # Recorremos los mensajes para crearlos todos
         for data_message in data_messages:
             # por defecto el tipo de mensaje al crearse debe de ser pregunta ('q')
@@ -269,7 +275,10 @@ class QueryResponseSerializer(serializers.ModelSerializer):
             # import pdb; pdb.set_trace()
             data_message["code"] = self.context['specialist'].code
             Message.objects.create(query=instance, **data_message)
+
+        instance.status = 3  # actualizo status
         instance.save()
+        import pdb; pdb.set_trace()
         return instance
 
     def to_representation(self, obj):
@@ -279,14 +288,15 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         chat = {}
 
         for message in ms:
-            message["query"] = {"id": obj.id, "title": obj.title, "status": obj.status,
+            message["query"] = {"id": obj.id, "title": obj.title,
+                                "status": obj.status,
                                 "calification": obj.calification}
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
 
         return {'room': ms[0]["room"], "message": chat,
                 "category": obj.category.id, 'query_id': obj.id,
-                'status': obj.status
+                'status': obj.status, "client_id": obj.client.id
                 }
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
@@ -509,7 +519,7 @@ class QueryMessageSerializer(serializers.ModelSerializer):
 
     message = serializers.SerializerMethodField()
     user = serializers.SerializerMethodField()
-    
+
     class Meta:
         """Meta."""
         model = Query

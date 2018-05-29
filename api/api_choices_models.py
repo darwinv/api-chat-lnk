@@ -29,8 +29,8 @@ class ChoicesAPI:
     )
 
     client_full_type_client = (
-        ('n', _('Natural Person')),     
-        ('b', _('Business Person')),        
+        ('n', _('Natural Person')),
+        ('b', _('Business Person')),
     )
 
     client_sex = (
