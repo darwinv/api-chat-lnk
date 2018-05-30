@@ -95,7 +95,7 @@
 			"telephone": "",
 			"cellphone": "",
 			"photo": "preview.png",
-			"document_type": "",
+			"document_type": 1,
 			"document_number": "00",
 			"img_document_number": null,
 			"ruc": null,
@@ -597,7 +597,7 @@
 		"pk": 3,
 		"fields": {
 			"type_client": "b",
-			"sex": "",
+			"sex": "m",
 			"commercial_reason": null,
 			"civil_state": "c",
 			"birthdate": "1957-12-10",

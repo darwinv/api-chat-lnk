@@ -527,7 +527,7 @@ class CreateNaturalClient(APITestCase):
         # cambio solo el tipo de documento para cerciorarse del exito.
         data2 = data1.copy()
         data2["username"], data2["email_exact"] = 'jesus1', 'jesus1@mail.com'
-        data2["document_type"] = '1'
+        data2["document_type"] = 1
         response2 = self.client.post(
             reverse('clients'),
             data=json.dumps(data2),
@@ -611,7 +611,7 @@ class UpdateNaturalClient(APITestCase):
             "nick":"lopez",
             "telephone":"1234567",
             "cellphone":"1237652",
-            "residence_country":"1",
+            "residence_country":1,
             "address":{
                 "street": "surco",
                 "department": 1,
@@ -1130,7 +1130,7 @@ class UpdateBunissesClient(APITestCase):
             "nick":"lopez",
             "telephone":"1234567",
             "cellphone":"1237652",
-            "residence_country":"1",
+            "residence_country":1,
             "address":{
                 "street": "surco",
                 "department": 1,

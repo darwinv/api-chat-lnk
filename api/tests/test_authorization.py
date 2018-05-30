@@ -153,7 +153,7 @@ class GetClientsToAuthorization(APITestCase):
             "name":"Don Venus",
             "document":"34354367",
             "document_type":"RUC",
-            "status":'1',
+            "status":1,
             "document_type_name":"RUC",
             "date_join": "2017-11-13",
             "id": 4

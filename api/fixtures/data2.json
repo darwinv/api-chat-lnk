@@ -445,7 +445,7 @@
       "telephone": "",
       "cellphone": "",
       "photo": "preview.png",
-      "document_type": "",
+      "document_type": 1,
       "document_number": "00",
       "ruc": null,
       "code": "00",
