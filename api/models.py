@@ -520,7 +520,7 @@ class MonthlyFee(models.Model):
     reference_number = models.CharField(max_length=20)
     sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
     pay_before = models.DateField()
-    status = models.CharField(max_length=1, choices=Ch.fee_status)
+    status = models.PositiveIntegerField(max_length=1, choices=Ch.fee_status)
     payment = models.ForeignKey(Payment, null=True)
 
 
