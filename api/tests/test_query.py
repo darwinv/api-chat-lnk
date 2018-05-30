@@ -315,7 +315,6 @@ class ResponseSpecialistQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-
 class GetSpecialistMessages(APITestCase):
     """Prueba para devolver el plan activo y elegido de un determinado cliente"""
 

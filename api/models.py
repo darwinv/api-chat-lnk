@@ -572,9 +572,14 @@ class QueryLogs(models.Model):
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
 
 
-# Para traerse el historico de mensajes de consultas de un especialista que ya ha respondido
-# se hace la consulta de traerse todos los mensajes anteriories pertenecientes a una consulta donde ya he
-# respondido
+class GroupMessage(models.Model):
+    """Grupo de Mensajes"""
+    status = models.PositiveIntegerField()
+
+
+# Para traerse el historico de mensajes de consultas de un especialista que ya
+# ha respondido se hace la consulta de traerse todos los mensajes anteriories
+# pertenecientes a una consulta donde ya he respondido
 class Message(models.Model):
     """Mensaje."""
 
@@ -591,12 +596,15 @@ class Message(models.Model):
     code = models.CharField(_('code'), max_length=45)
     room = models.CharField(max_length=200)  # Sala de chat
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
+    group = models.ForeignKey(GroupMessage, on_delete=models.PROTECT,
+                              null=True)
     message_reference = models.ForeignKey('self', on_delete=models.PROTECT,
                                           related_name="ref", null=True)
 
     def __str__(self):
         """Str."""
         return self.message
+
 
 
 #Modelo para usar con una vista existente en la base de datos
