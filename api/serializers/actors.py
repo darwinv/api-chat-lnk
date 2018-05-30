@@ -529,6 +529,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
     def get_document_type_name(self, obj):
         """Devuelve el tipo de documento de identidad del especialista."""
+        import pdb
+        pdb.set_trace()
         return _(obj.get_document_type_display())
 
     def get_type_specialist_name(self, obj):
