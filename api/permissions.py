@@ -96,6 +96,14 @@ class IsAdminReadOrSpecialistOwner(permissions.BasePermission):
         if request.method == "POST" or request.method == "PUT":
             return (request.user and request.user.role_id == 3) and request.user.id == obj.id
 
+class IsSpecialist(permissions.BasePermission):
+    """Es administrador o especialista."""
+
+    def has_permission(self, request, view):
+        """Solo Admin o Especialista."""
+        if request.user and request.user.role_id == 3:
+            return True
+        return False
 
 class IsAdminOrSpecialist(permissions.BasePermission):
     """Es administrador o especialista."""
@@ -124,5 +132,4 @@ class IsAdminOnList(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return request.user and request.user.is_staff
-
         return True

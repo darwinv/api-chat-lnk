@@ -14,7 +14,7 @@ from channels import Group
 # llamadas de nuestro propio proyecto
 from api import pyrebase
 from api.models import Query, Message, Category, Specialist, Client
-from api.permissions import IsAdminOrClient, IsAdminOrSpecialist
+from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsSpecialist
 from api.permissions import IsAdminReadOrSpecialistOwner
 from api.utils.validations import Operations
 from api.views.actors import SpecialistMessageList_sp
@@ -370,3 +370,22 @@ class QueryMessageView(APIView):
 
         serializer = QueryMessageSerializer(message, partial=True)
         return Response(serializer.data)
+
+class QueryAcceptView(APIView):
+    """Vista Consultas en el chat por parte del Cliente."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSpecialist)
+
+    def put(self, request, pk):
+        """Listado de queries y sus respectivos mensajes para un especialista."""
+        try:
+            query = Query.objects.get(pk=pk)
+        except Query.DoesNotExist:
+            raise Http404
+
+        serializer = QueryAcceptSerializer(query, data)
+        if serializer.is_valid():
+            serializer.save()
+
+        return Response(serializer.errors)

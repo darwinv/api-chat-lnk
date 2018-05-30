@@ -208,7 +208,7 @@ class QuerySerializer(serializers.ModelSerializer):
         acq_plan = QueryPlansAcquired.objects.get(
                             is_chosen=True, client=validated_data["client"])
         validated_data["specialist"] = specialist
-        validated_data["status"] = 0
+        validated_data["status"] = 1
         validated_data["acquired_plan"] = acq_plan
         # Creamos la consulta y sus mensajes
         query = Query.objects.create(**validated_data)

@@ -91,6 +91,11 @@ urlpatterns = [
     url(r'^query-last/(?P<category>[0-9]+)/$', query.QueryLastView.as_view(), name='last-query-bycategory'),
     url(r'^queries-messages/(?P<pk>[0-9]+)/$', query.QueryMessageView.as_view(), name='query-messages'),
 
+    # Specialist Accept Query
+    
+    url(r'^query-accept/(?P<pk>[0-9]+)/$', query.QueryAcceptView.as_view(), name='query-accept'),
+
+
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(), name='seller-detail'),
