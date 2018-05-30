@@ -1,8 +1,9 @@
 """Consultas."""
-from rest_framework import serializers
-from api.models import Specialist, Query, Message, Category, QueryPlansAcquired, User
-from api.api_choices_models import ChoicesAPI as c
 from django.utils.translation import ugettext_lazy as _
+from rest_framework import serializers
+from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
+from api.models import User, GroupMessage
+from api.api_choices_models import ChoicesAPI as c
 from api.utils import querysets
 from api import pyrebase
 
@@ -76,7 +77,8 @@ class ListMessageSerializer(serializers.ModelSerializer):
         return {"id": obj.id, "room": obj.room, "codeUser": obj.code,
                 "fileType": obj.content_type, "fileUrl": obj.file_url,
                 "message": obj.message, "messageType": obj.msg_type,
-                "message_reference": reference_id,
+                "messageReference": reference_id,
+                "groupStatus": obj.group.status, "groupId": obj.group.id,
                 "timeMessage": time, "read": obj.viewed, "user_id": user_id
                 }
 
@@ -212,6 +214,8 @@ class QuerySerializer(serializers.ModelSerializer):
         validated_data["acquired_plan"] = acq_plan
         # Creamos la consulta y sus mensajes
         query = Query.objects.create(**validated_data)
+        # creamos el grupo para ese mensaje
+        group = GroupMessage.objects.create(status=1)
         # Recorremos los mensajes para crearlos todos
         for data_message in data_messages:
             # por defecto el tipo de mensaje al crearse
@@ -224,7 +228,7 @@ class QuerySerializer(serializers.ModelSerializer):
                     validated_data["category"].id)
             data_message["code"] = validated_data["client"].code
             # self.context["user_id"] = validated_data["client"].id
-            Message.objects.create(query=query, **data_message)
+            Message.objects.create(query=query, group=group, **data_message)
         # restamos una consulta disponible al plan adquirido
         acq_plan.available_queries = acq_plan.available_queries - 1
         acq_plan.save()
