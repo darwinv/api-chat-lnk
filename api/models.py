@@ -123,8 +123,8 @@ class User(AbstractUser):
                                        on_delete=models.PROTECT,
                                        related_name="prefix_cellphone")
     photo = models.CharField(_('photo'), max_length=250, null=True)
-    document_type = models.PositiveIntegerField(_('type document'), max_length=1,
-                                     choices=Ch.user_document_type)
+    document_type = models.PositiveIntegerField(_('type document'),
+                                                choices=Ch.user_document_type)
     document_number = models.CharField(_('document number'), max_length=45)
     img_document_number = models.CharField(_('upload document'),
                                            max_length=250, null=True)
@@ -148,8 +148,7 @@ class User(AbstractUser):
     foreign_address = models.CharField(_('foreign address'), max_length=200,
                                        blank=True, null=True)
     key = models.CharField(max_length=90, blank=True, null=True)
-    status = models.PositiveIntegerField(max_length=1, choices=Ch.user_status,
-                              default='1')
+    status = models.PositiveIntegerField(choices=Ch.user_status, default=1)
 
 
 # Aplicamos herencia multi tabla para que
@@ -205,20 +204,27 @@ class SellerContactNoEfective(models.Model):
 
     first_name = models.CharField(max_length=45, null=True)
     last_name = models.CharField(max_length=55, null=True)
-    type_contact = models.CharField(max_length=1, choices=Ch.client_type_client)  # si es efectivo o no efectivo
-    document_type = models.PositiveIntegerField(max_length=1, choices=Ch.user_document_type)
+    # si es efectivo o no efectivo
+    type_contact = models.CharField(max_length=1,
+                                    choices=Ch.client_type_client)
+    document_type = models.PositiveIntegerField(choices=Ch.user_document_type)
     document_number = models.CharField(max_length=45)
     email = models.CharField(max_length=150, null=True)
-    civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
+    civil_state = models.CharField(max_length=1,
+                                   choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
     ciiu = models.ForeignKey(Ciiu, null=True)
-    activity_description = models.CharField(max_length=255, null=True, blank=True)
+    activity_description = models.CharField(max_length=255, null=True,
+                                            blank=True)
     photo = models.CharField(max_length=250, null=True)
     about = models.CharField(max_length=255, null=True, blank=True)
     cellphone = models.CharField(max_length=14, blank=True, null=True)
     telephone = models.CharField(max_length=14, blank=True, null=True)
-    ocupation = models.PositiveIntegerField(choices=Ch.client_ocupation, null=True, blank=True, default=7)
+
+    ocupation = models.PositiveIntegerField(choices=Ch.client_ocupation,
+                                            null=True, default=7)
+
     profession = models.CharField(max_length=45, null=True)
     business_name = models.CharField(max_length=45, null=True)
     commercial_reason = models.CharField(max_length=45, null=True)
@@ -231,11 +237,14 @@ class SellerContactNoEfective(models.Model):
     position = models.CharField(max_length=45, null=True)
     ruc = models.CharField(max_length=40, null=True, blank=True)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
-    economic_sector = models.ForeignKey(EconomicSector, on_delete=models.PROTECT, null=True)
+    economic_sector = models.ForeignKey(EconomicSector,
+                                        on_delete=models.PROTECT, null=True)
     objection = models.ForeignKey(Objection, on_delete=models.PROTECT)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
-    level_instruction = models.ForeignKey(LevelInstruction, on_delete=models.PROTECT, null=True)
-    nationality = models.ForeignKey(Countries, on_delete=models.PROTECT, default=1)
+    level_instruction = models.ForeignKey(LevelInstruction,
+                                          on_delete=models.PROTECT, null=True)
+    nationality = models.ForeignKey(Countries,
+                                    on_delete=models.PROTECT, default=1)
 
     def __str__(self):
         """Nombre del Contacto."""
@@ -472,7 +481,7 @@ class Payment(models.Model):
     authorized_by = models.ForeignKey(User, on_delete=models.PROTECT)
     authorization_date = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.PositiveIntegerField(max_length=1, choices=Ch.payment_status)
+    status = models.PositiveIntegerField(choices=Ch.payment_status)
     observations = models.CharField(max_length=255)
     bank = models.ForeignKey(Bank, on_delete=models.PROTECT)
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
@@ -483,7 +492,7 @@ class MatchAcquired(models.Model):
 
     price = models.DecimalField(max_digits=10, decimal_places=2)
     cause = models.TextField()
-    status = models.PositiveIntegerField(max_length=1, choices=Ch.match_acquired_status)
+    status = models.PositiveIntegerField(choices=Ch.match_acquired_status)
     paid_by_specialist = models.BooleanField(default=False)
     paid_by_client = models.BooleanField(default=True)
     paid_by_specialist = models.BooleanField(default=False)
@@ -496,7 +505,7 @@ class MatchAcquiredFiles(models.Model):
     """Archivos Adjuntos del Match."""
 
     file_url = models.CharField(max_length=100)
-    type_file = models.PositiveIntegerField(max_length=1, choices=Ch.match_type_file)
+    type_file = models.PositiveIntegerField(choices=Ch.match_type_file)
     match_acquired = models.ForeignKey(MatchAcquired)
 
 
@@ -505,7 +514,7 @@ class MatchAcquiredLog(models.Model):
 
     changed_on = models.DateTimeField(auto_now_add=True)
     action = models.CharField(max_length=50)
-    status = models.PositiveIntegerField(max_length=1, choices=Ch.match_acquired_status)
+    status = models.PositiveIntegerField(choices=Ch.match_acquired_status)
     declined = models.NullBooleanField()
     declined_motive = models.CharField(max_length=255, null=True)
     match_acquired = models.ForeignKey(MatchAcquired, on_delete=models.PROTECT)
@@ -520,7 +529,7 @@ class MonthlyFee(models.Model):
     reference_number = models.CharField(max_length=20)
     sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
     pay_before = models.DateField()
-    status = models.PositiveIntegerField(max_length=1, choices=Ch.fee_status)
+    status = models.PositiveIntegerField(choices=Ch.fee_status)
     payment = models.ForeignKey(Payment, null=True)
 
 
@@ -542,15 +551,18 @@ class Query(models.Model):
     """Consultas."""
 
     title = models.CharField(max_length=100)
-    status = models.PositiveIntegerField(max_length=1, choices=Ch.query_status)
+    status = models.PositiveIntegerField(choices=Ch.query_status)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     calification = models.PositiveSmallIntegerField(null=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
-    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True)
-    acquired_plan = models.ForeignKey(QueryPlansAcquired, on_delete=models.PROTECT)
-    changed_on = models.DateTimeField(auto_now=True, null=True)  # Fecha en la que adjudicada la consulta
+    specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT,
+                                   null=True)
+    acquired_plan = models.ForeignKey(QueryPlansAcquired,
+                                      on_delete=models.PROTECT)
+    # Fecha en la que adjudicada la consulta
+    changed_on = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         """Titulo."""
@@ -563,12 +575,16 @@ class QueryLogs(models.Model):
     action = models.CharField(max_length=10)
     description = models.CharField(max_length=200, null=True)
     changed_on = models.DateTimeField()
-    status_log = models.PositiveIntegerField(max_length=1, choices=Ch.query_status)
+    status_log = models.PositiveIntegerField(choices=Ch.query_status)
     derived = models.NullBooleanField()
     declined = models.NullBooleanField()
     declined_motive = models.TextField(null=True)
-    to_specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT, null=True, related_name="del_especialista")
-    from_specialist = models.ForeignKey(Specialist, related_name="al_especialista", on_delete=models.PROTECT, null=True)
+    to_specialist = models.ForeignKey(Specialist,
+                                      on_delete=models.PROTECT, null=True,
+                                      related_name="del_especialista")
+    from_specialist = models.ForeignKey(Specialist, null=True,
+                                        related_name="al_especialista",
+                                        on_delete=models.PROTECT)
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
 
 
@@ -587,8 +603,7 @@ class Message(models.Model):
     msg_type = models.CharField(max_length=1, choices=Ch.message_msg_type,
                                 blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    content_type = models.PositiveIntegerField(max_length=1,
-                                    choices=Ch.message_content_type)
+    content_type = models.PositiveIntegerField(choices=Ch.message_content_type)
     specialist = models.ForeignKey(Specialist,
                                    on_delete=models.PROTECT, null=True)
     viewed = models.BooleanField(default=False)
