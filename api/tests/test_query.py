@@ -90,7 +90,7 @@ class CreateQuery(APITestCase):
             "message": [{
                 "message": "primera consulta",
                 "msg_type": "q",
-                "content_type": "1",
+                "content_type": 1,
                 "file_url": ""
                 },
                 {
@@ -223,7 +223,7 @@ class ResponseSpecialistQuery(APITestCase):
             "message": [{
                 "message": "respuesta a consulta",
                 "msg_type": "a",
-                "content_type": "1",
+                "content_type": 1,
                 "file_url": "",
                 "message_reference": 1
                 },

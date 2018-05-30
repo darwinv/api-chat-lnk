@@ -355,7 +355,7 @@
     "pk": 40,
     "fields": {
       "name": "Canada",
-      "code_phone": "1",
+      "code_phone": 1,
       "iso_code": "CA"
     }
   },
@@ -589,7 +589,7 @@
     "pk": 66,
     "fields": {
       "name": "United States of America",
-      "code_phone": "1",
+      "code_phone": 1,
       "iso_code": "US"
     }
   },
@@ -1642,7 +1642,7 @@
     "pk": 184,
     "fields": {
       "name": "Puerto Rico",
-      "code_phone": "1",
+      "code_phone": 1,
       "iso_code": "PR"
     }
   },
