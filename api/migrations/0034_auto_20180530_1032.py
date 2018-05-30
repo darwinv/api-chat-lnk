@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='monthlyfee',
             name='status',
-            field=models.CharField(choices=[(1, 'Pending'), (2, 'Paid')], max_length=1),
+            field=models.PositiveIntegerField(choices=[(1, 'Pending'), (2, 'Paid')], max_length=1),
         ),
         migrations.AlterField(
             model_name='payment',
