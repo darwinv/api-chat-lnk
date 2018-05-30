@@ -571,9 +571,12 @@ class QueryLogs(models.Model):
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
 
 
-# Para traerse el historico de mensajes de consultas de un especialista que ya ha respondido
-# se hace la consulta de traerse todos los mensajes anteriories pertenecientes a una consulta donde ya he
-# respondido
+
+
+# Para traerse el historico de mensajes de consultas de un especialista
+# que ya ha respondido
+# se hace la consulta de traerse todos los mensajes anteriories pertenecientes
+# a una consulta donde ya he respondido
 class Message(models.Model):
     """Mensaje."""
 
@@ -593,6 +596,7 @@ class Message(models.Model):
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
     message_reference = models.ForeignKey('self', on_delete=models.PROTECT,
                                           related_name="ref", null=True)
+
 
     def __str__(self):
         """Str."""
