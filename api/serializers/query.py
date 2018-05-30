@@ -270,6 +270,7 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         data_messages = validated_data.pop('message')
         self.context["size_msgs"] = len(data_messages)
         # Recorremos los mensajes para crearlos todos
+        group = GroupMessage.objects.create(status=1)
         for data_message in data_messages:
             # por defecto el tipo de mensaje al actualizarse debe
             # de ser pregunta ('a')
@@ -279,16 +280,22 @@ class QueryResponseSerializer(serializers.ModelSerializer):
             data_message["room"] = 'u'+str(instance.client.id)+'-'+'c'+str(instance.category.id)
             # import pdb; pdb.set_trace()
             data_message["code"] = self.context['specialist'].code
-            Message.objects.create(query=instance, **data_message)
+            # se busca el mensaje de referencia y se extrae de la respuesta
+            if 'message_reference' in data_message:
+                ms_ref = data_message['message_reference']
+            Message.objects.create(query=instance, group=group, **data_message)
 
         instance.status = 3  # actualizo status
+        # actualizo el estado del grupo al cual se le responde
+        GroupMessage.objects.filter(message__id=ms_ref).update(status=2)
         instance.save()
         return instance
 
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
         size = self.context["size_msgs"]
-        ms = ListMessageSerializer(obj.message_set.order_by('-created_at')[:size], many=True).data
+        ms = ListMessageSerializer(
+            obj.message_set.order_by('-created_at')[:size], many=True).data
         chat = {}
 
         for message in ms:
