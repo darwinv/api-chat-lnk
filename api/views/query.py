@@ -150,13 +150,13 @@ class QueryDetailSpecialistView(APIView):
         if not user_id:
             raise Http404
         data = request.data
-        import pdb; pdb.set_trace()
         # tomamos del token el id de usuario (especialista en este caso)
         spec = Specialist.objects.get(pk=user_id)
         # No utilizamos partial=True, ya que solo actualizamos mensaje
         serializer = QueryResponseSerializer(query, data,
                                              context={'specialist': spec})
         if serializer.is_valid():
+            import pdb; pdb.set_trace()
             serializer.save()
             lista = list(serializer.data['message'].values())
             client_id = serializer.data["client_id"]

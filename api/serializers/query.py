@@ -278,15 +278,16 @@ class QueryResponseSerializer(serializers.ModelSerializer):
             data_message["specialist"] = self.context['specialist']
             # armamos la sala para el usuario
             data_message["room"] = 'u'+str(instance.client.id)+'-'+'c'+str(instance.category.id)
-            # import pdb; pdb.set_trace()
             data_message["code"] = self.context['specialist'].code
             # se busca el mensaje de referencia y se extrae de la respuesta
             if 'message_reference' in data_message:
-                ms_ref = data_message['message_reference']
+                # import pdb; pdb.set_trace()
+                ms_ref = data_message['message_reference'].id
             Message.objects.create(query=instance, group=group, **data_message)
 
         instance.status = 3  # actualizo status
         # actualizo el estado del grupo al cual se le responde
+        # import pdb; pdb.set_trace()
         GroupMessage.objects.filter(message__id=ms_ref).update(status=2)
         instance.save()
         return instance
