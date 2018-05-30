@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='sellercontactnoefective',
             name='ocupation',
-            field=models.PositiveIntegerField(blank=True, choices=[(1, 'Employer'), (2, 'Independent worker'), (3, 'Employee'), (4, 'Worker'), (5, 'Worker in a family business'), (6, 'Home worker'), (7, 'Other')], max_length=1, blank=True),
+            field=models.PositiveIntegerField(choices=[(1, 'Employer'), (2, 'Independent worker'), (3, 'Employee'), (4, 'Worker'), (5, 'Worker in a family business'), (6, 'Home worker'), (7, 'Other')], max_length=1, blank=True),
         ),
         migrations.AlterField(
             model_name='user',
