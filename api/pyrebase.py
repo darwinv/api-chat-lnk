@@ -66,7 +66,7 @@ def update_plan_choisen():
             chosen_plan(Params.PREFIX['client'] + str(client.id), plan.data)
 
         except Exception as e:
-            pass
+            print("error")
 
 # FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
