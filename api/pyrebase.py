@@ -9,6 +9,9 @@ from linkupapi.settings import CONFIG_ENVIROMENT
 config = CONFIG_ENVIROMENT
 # Sugerencia para cambiar por una clase con sus metodos
 
+firebase = pyrebase.initialize_app(config)
+db = firebase.database()
+
 def chat_firebase_db(data, room):
     """Enviar data a firebase en chat."""
     firebase = pyrebase.initialize_app(config)
@@ -82,6 +85,45 @@ def update_plan_choisen():
 
 # FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
+def updateStatusQueryAccept(specialist_id, client_id):
+    """ Actualizacion query en listado y chat """
+    updateStatusQueryAcceptList(specialist_id, client_id)
+
+    # updateStatusQueryAcceptChat(specialist_id, client_id)
+
+def updateStatusQueryAcceptList(specialist_id, client_id):
+    """ Actualizacion query en listado de clientes"""
+    
+    node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
+    node_client = Params.PREFIX['client'] + str(client_id)
+    node_query = 'queryCurrent'
+    
+    status = 2;
+    query = {
+        "status": status
+    }
+
+    res = db.child("messagesList/specialist/").child(
+        node_specialist).child(node_client).child(node_query).update(query)
+    
+    return res
+
+def updateStatusQueryAcceptChat(specialist_id, client_id):
+    """ Actualizacion query en el chat """
+    
+    node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
+    node_client = Params.PREFIX['client'] + str(client_id)
+    node_query = 'queryCurrent'
+    
+    status = 2;
+    query = {
+        "status": status
+    }
+
+    res = db.child("messagesList/specialist/").child(
+        node_specialist).child(node_client).child(node_query).update(query)
+    
+    return res
 
 def createCategoriesLisClients(client_id):
     """Crear la lista completa de categorias.
