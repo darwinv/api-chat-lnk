@@ -86,6 +86,10 @@ urlpatterns = [
     url(r'^queries/clients/(?P<pk>[0-9]+)/$',
         query.QueryChatSpecialistView.as_view(),
         name='query-chat-specialist'),
+    # Subida de archivos a la consulta (pk)
+    url(r'^queries/upload_files/(?P<pk>[0-9]+)/$',
+        query.QueryUploadFilesView.as_view(), name='query-upload-files'),
+
 
     url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'),
     url(r'^query-last/(?P<category>[0-9]+)/$', query.QueryLastView.as_view(), name='last-query-bycategory'),

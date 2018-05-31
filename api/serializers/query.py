@@ -236,18 +236,24 @@ class QuerySerializer(serializers.ModelSerializer):
         """Redefinido metodo de representación del serializer."""
         ms = ListMessageSerializer(obj.message_set.all(), many=True).data
         chat = {}
-
+        messages_files = []
         for message in ms:
+            if int(message['fileType']) > 0:
+                message['uploaded'] = 1
+                messages_files.append(message["id"])
+            else:
+                message['uploaded'] = 2
+
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
                                 "calification": obj.calification}
+
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
 
         return {'room': ms[0]["room"], "message": chat,
-                "category": obj.category.id, 'query_id': obj.id,
-                'status': obj.status
-                }
+                "message_files_id": messages_files, 'status': obj.status,
+                "category": obj.category.id, "query_id": obj.id}
 
 
 class QueryResponseSerializer(serializers.ModelSerializer):
@@ -284,10 +290,16 @@ class QueryResponseSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
         size = self.context["size_msgs"]
-        ms = ListMessageSerializer(obj.message_set.order_by('-created_at')[:size], many=True).data
+        ms = ListMessageSerializer(obj.message_set.order_by('-created_at')[:size],
+                                   many=True).data
         chat = {}
-
+        messages_files = []
         for message in ms:
+            if int(message['fileType']) > 0:
+                message['uploaded'] = 1
+                messages_files.append(message["id"])
+            else:
+                message['uploaded'] = 2
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
                                 "calification": obj.calification}
@@ -295,9 +307,9 @@ class QueryResponseSerializer(serializers.ModelSerializer):
             chat.update({key_message: dict(message)})
 
         return {'room': ms[0]["room"], "message": chat,
-                "category": obj.category.id, 'query_id': obj.id,
-                'status': obj.status, "client_id": obj.client.id
-                }
+                "message_files_id": messages_files,
+                "category": obj.category.id, 'status': obj.status,
+                "query_id": obj.id, "client_id": obj.client.id}
 
 # se utiliza para reconsulta, agregar mensajes nuevos a la consulta y respuesta
 # class QueryUpdateSerializer(serializers.ModelSerializer):

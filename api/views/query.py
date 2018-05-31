@@ -1,6 +1,9 @@
 """Vistas de Consultas."""
 # paquetes de python
 import json
+import threading
+import os
+import boto3
 # paquetes de django
 from django.db.models import OuterRef, Subquery, F, Count
 from django.http import Http404
@@ -9,6 +12,7 @@ from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, ListAPIView
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser, MultiPartParser
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from channels import Group
 # llamadas de nuestro propio proyecto
@@ -16,6 +20,7 @@ from api import pyrebase
 from api.models import Query, Message, Category, Specialist, Client
 from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsSpecialist
 from api.permissions import IsAdminReadOrSpecialistOwner
+from api.permissions import IsClientOrSpecialistAndOwner
 from api.utils.validations import Operations
 from api.views.actors import SpecialistMessageList_sp
 from api.serializers.query import QuerySerializer, QueryListClientSerializer
@@ -26,6 +31,8 @@ from api.serializers.query import QueryDetailLastMsgSerializer
 from api.serializers.query import ChatMessageSerializer, QueryResponseSerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
+from botocore.exceptions import ClientError
+from api.utils.tools import s3_upload_file
 
 class QueryListClientView(ListCreateAPIView):
     """Vista Consulta por parte del cliente."""
@@ -342,7 +349,6 @@ class QueryChatClientView(ListCreateAPIView):
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
 
-
         serializer = ChatMessageSerializer(queryset, many=True)
 
         # pagination
@@ -351,6 +357,77 @@ class QueryChatClientView(ListCreateAPIView):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
+
+
+class QueryUploadFilesView(APIView):
+    """Subida de archivos para la consultas."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated,
+                          IsClientOrSpecialistAndOwner]
+    parser_classes = (JSONParser, MultiPartParser)
+
+    def get_object(self, request, pk):
+        """Devuelvo la consulta."""
+        try:
+            obj = Query.objects.get(pk=pk)
+            if request.user.role_id == 2:
+                owner = obj.client_id
+            elif request.user.role_id == 3:
+                owner = obj.specialist_id
+            self.check_object_permissions(self.request, owner)
+            return obj
+        except Query.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Actualiza la consulta, subiendo archivos."""
+        self.get_object(request, pk)
+        # import pdb; pdb.set_trace()
+        # Cargamos el listado de archivos adjuntos
+        msgs = request.data["message_id"].split(',')
+        files = request.FILES.getlist('file')
+        # Empezamos a subir cada archivo por hilo separado
+        threads = []
+        i = 0
+        for file in files:
+            print(msgs[i])
+            t = threading.Thread(target=self.upload, args=(file, msgs[i]))
+            threads.append(t)
+            i = i + 1
+        for x in threads:
+            x.start()
+        # # Wait for all of them to finish
+        for x in threads:
+            x.join()
+
+        return HttpResponse(status=200)
+
+    def upload(self, file, msg_id):
+        """Funcion para subir archivos."""
+        resp = True  # variable bandera
+        name_file, extension = os.path.splitext(file.name)
+        name = name_file + extension
+        # lo subimos a Amazon S3
+        url = s3_upload_file(file, name)
+        # devolvemos el mensaje con su id correspondiente
+        ms = Message.objects.get(pk=int(msg_id))
+        ms.file_url = url
+        ms.save()
+        s3 = boto3.client('s3')
+        # Evaluamos si el archivo se subio a S3
+        try:
+            s3.head_object(Bucket='linkup-photos', Key=name)
+        except ClientError as e:
+            resp = int(e.response['Error']['Code']) != 404
+        # Si no se ha subido se actualiza el estatus en firebase
+        if resp is False:
+            pyrebase.mark_failed_file(room=ms.room, message_id=ms.id)
+        else:
+            # Actualizamos el status en firebase
+            r = pyrebase.mark_uploaded_file(room=ms.room, message_id=ms.id,
+                                            url_file=url)
+            print(r)
 
 
 class QueryMessageView(APIView):
@@ -370,6 +447,7 @@ class QueryMessageView(APIView):
 
         serializer = QueryMessageSerializer(message, partial=True)
         return Response(serializer.data)
+
 
 class QueryAcceptView(APIView):
     """Vista Consultas en el chat por parte del Cliente."""
