@@ -369,7 +369,7 @@ class PutAcceptQuery(APITestCase):
     def setUp(self):
         """Setup."""
         pass
-
+    
     def test_put_query_accept(self):
         """Obtener resultado 200."""
         #obtiene mensajes de query
@@ -378,11 +378,17 @@ class PutAcceptQuery(APITestCase):
         response = self.client.put(reverse('query-accept', kwargs={'pk': 2}),)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+    # PENDIENTE
+    # def test_query_status(self):
+    #     """status 0 to query"""
+    #     self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+    #     response = self.client.put(reverse('query-accept', kwargs={'pk': 1}),)
 
-    def test_query_status(self):
-        """status 0 to query"""
-        pass
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_specialist_owner(self):
-        """el especialista tiene asignada la query"""
-        pass
+    # def test_specialist_owner(self):
+    #     """el especialista tiene asignada la query"""
+    #     self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+    #     response = self.client.put(reverse('query-accept', kwargs={'pk': 1}),)
+
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
