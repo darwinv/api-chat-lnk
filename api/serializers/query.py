@@ -287,8 +287,15 @@ class QueryResponseSerializer(serializers.ModelSerializer):
 
         instance.status = 3  # actualizo status
         # actualizo el estado del grupo al cual se le responde
-        # import pdb; pdb.set_trace()
-        GroupMessage.objects.filter(message__id=ms_ref).update(status=2)
+        # GroupMessage.objects.filter(message__id=ms_ref).update(status=2)
+        gp = GroupMessage.objects.get(message__id=ms_ref)
+        gp.status = 2
+        msgs = gp.message_set.all()
+        # lista_msgs = [{l.room: l.id} for l in msgs]
+        lista_msgs = [{str(l.room) + '/' + 'm' +
+                       str(l.id): {'groupStatus': 2}} for l in msgs]
+        pyrebase.update_status_messages(lista_msgs)
+        gp.save()
         instance.save()
         return instance
 

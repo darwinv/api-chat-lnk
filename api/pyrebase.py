@@ -84,6 +84,14 @@ def createCategoriesLisClients(client_id):
     return res
 
 
+def update_status_messages(data_msgs):
+    """Actualizar el status si puede o no reconsultar, responder, etc."""
+    firebase = pyrebase.initialize_app(config)
+    db = firebase.database()
+    res = db.child("chats").update(data_msgs)
+    print(res)
+
+
 def createListMessageClients(lista, queries_list, act_query, status, client_id):
     """Insertar o actualizar los mensajes de los clientes del especialista."""
     firebase = pyrebase.initialize_app(config)
