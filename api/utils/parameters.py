@@ -7,7 +7,9 @@ class Params:
         "client": "u",
         "specialist": "s",
         "seller": "sl",
-        "category": "c"
+        "category": "c",
+        "query": "q",
+        "message": "m"
     }
 
 

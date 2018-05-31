@@ -34,6 +34,7 @@ from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
 from api.utils.tools import s3_upload_file
 
+
 class QueryListClientView(ListCreateAPIView):
     """Vista Consulta por parte del cliente."""
 

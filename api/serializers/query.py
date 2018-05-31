@@ -5,6 +5,7 @@ from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
 from api.models import User, GroupMessage
 from api.api_choices_models import ChoicesAPI as c
 from api.utils import querysets
+from api.utils.parameters import Params
 from api import pyrebase
 
 
@@ -223,8 +224,8 @@ class QuerySerializer(serializers.ModelSerializer):
             data_message["msg_type"] = "q"
             # data_message["specialist"] = specialist
             # armamos la sala para el usuario
-            data_message["room"] = 'u'+str(
-                validated_data["client"].id)+'-'+'c'+str(
+            data_message["room"] = Params.PREFIX['client']+str(
+                validated_data["client"].id)+'-'+Params.PREFIX['category']+str(
                     validated_data["category"].id)
             data_message["code"] = validated_data["client"].code
             # self.context["user_id"] = validated_data["client"].id
@@ -232,8 +233,9 @@ class QuerySerializer(serializers.ModelSerializer):
         # restamos una consulta disponible al plan adquirido
         acq_plan.available_queries = acq_plan.available_queries - 1
         acq_plan.save()
-        pyrebase.chosen_plan('u'+str(validated_data["client"].id),
-                             {"available_queries": acq_plan.available_queries})
+        pyrebase.chosen_plan(
+            Params.PREFIX['client']+str(validated_data["client"].id),
+            {"available_queries": acq_plan.available_queries})
         return query
 
     def to_representation(self, obj):
@@ -283,7 +285,9 @@ class QueryResponseSerializer(serializers.ModelSerializer):
             data_message["msg_type"] = "a"
             data_message["specialist"] = self.context['specialist']
             # armamos la sala para el usuario
-            data_message["room"] = 'u'+str(instance.client.id)+'-'+'c'+str(instance.category.id)
+            data_message["room"] = Params.PREFIX['client'] +\
+                str(instance.client.id)+'-'+Params.PREFIX['category'] +\
+                str(instance.category.id)
             data_message["code"] = self.context['specialist'].code
             # se busca el mensaje de referencia y se extrae de la respuesta
             if 'message_reference' in data_message:
@@ -306,13 +310,8 @@ class QueryResponseSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
         size = self.context["size_msgs"]
-<<<<<<< HEAD
-        ms = ListMessageSerializer(obj.message_set.order_by('-created_at')[:size],
-                                   many=True).data
-=======
         ms = ListMessageSerializer(
             obj.message_set.order_by('-created_at')[:size], many=True).data
->>>>>>> feature/add_status_group
         chat = {}
         messages_files = []
         for message in ms:
@@ -324,7 +323,7 @@ class QueryResponseSerializer(serializers.ModelSerializer):
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
                                 "calification": obj.calification}
-            key_message = 'm'+str(message["id"])
+            key_message = Params.PREFIX['message']+str(message["id"])
             chat.update({key_message: dict(message)})
 
         return {'room': ms[0]["room"], "message": chat,

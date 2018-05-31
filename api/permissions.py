@@ -12,6 +12,7 @@ class IsAdminUserOrReadOnly(permissions.BasePermission):
         # so we'll always allow GET, HEAD or OPTIONS requests.
         if request.method in permissions.SAFE_METHODS:
             return True
+
         # solo puede crear categorias si es admin.
         return request.user and request.user.is_staff
 
@@ -77,23 +78,6 @@ class IsAdminOrClient(permissions.BasePermission):
         elif request.user and request.user.role_id == 2:
             return True
         return False
-
-
-class IsClientOrSpecialistAndOwner(permissions.BasePermission):
-    """Solo Cliente y Dueño del objeto actual."""
-
-    def has_permission(self, request, view):
-        """Permiso General."""
-        if (request.user
-                and (request.user.role_id == 2 or request.user.role_id == 3)):
-            return True
-        return False
-
-    def has_object_permission(self, request, view, owner_id):
-        """Permiso nivel objeto."""
-        # import pdb; pdb.set_trace()
-        if request.method == "POST" or request.method == "PUT":
-            return request.user.id == owner_id
 
 
 class IsAdminReadOrSpecialistOwner(permissions.BasePermission):
