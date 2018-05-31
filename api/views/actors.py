@@ -88,7 +88,7 @@ class SendCodePassword(APIView):
 
     def post(self, request):
         """Funcion put."""
-        if 'email' in request.data:            
+        if 'email' in request.data:
             email = request.data["email"]
         else:
             raise serializers.ValidationError({'email': [self.required]})
@@ -155,13 +155,13 @@ class UpdatePasswordRecoveryView(APIView):
 
     def put(self, request, pk):
         """Funcion put."""
-        if 'code' in request.data:            
+        if 'code' in request.data:
             code = request.data["code"]
         else:
             raise serializers.ValidationError({'code': [self.required]})
 
         user_filter = RecoveryPassword.objects.filter(code=code, user=pk, is_active=True).extra(where = ["DATEDIFF(NOW() ,created_at )<=1"])
-        
+
         if user_filter:
             data = request.data
             user = self.get_object(pk)
@@ -179,7 +179,7 @@ class UpdatePasswordRecoveryView(APIView):
             raise Http404
 
     def get(self, request):
-        
+
         user = self.get_object(user_filter)
         user.password = True
         user.save()
@@ -213,7 +213,7 @@ class UpdatePasswordUserView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        
+
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class UpdateEmailUserView(APIView):
@@ -240,7 +240,7 @@ class UpdateEmailUserView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-            
+
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
@@ -388,6 +388,7 @@ class ClientListView(ListCreateAPIView):
         data = request.data
         if 'type_client' not in data or not data['type_client']:
             raise serializers.ValidationError({'type_client': [self.required]})
+        # import pdb; pdb.set_trace()
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
         elif data['type_client'] == 'b':
@@ -396,7 +397,7 @@ class ClientListView(ListCreateAPIView):
             data['civil_state'] = ''
             data['level_instruction'] = ''
             data['profession'] = ''
-            data['ocupation'] = ''
+            data['ocupation'] = None
         data['role'] = ROLE_CLIENT
         serializer = ClientSerializer(data=data)
         if serializer.is_valid():
@@ -438,9 +439,9 @@ class ClientDetailView(APIView):
         """Detalle."""
         client = self.get_object(pk)
         data = request.data
-        valid_fields = ("commercial_reason", "first_name", "last_name", "nick", 
+        valid_fields = ("commercial_reason", "first_name", "last_name", "nick",
                 "telephone", "cellphone","residence_country", "address")
-        
+
         clear_data_no_valid(data,valid_fields)
 
 
@@ -452,7 +453,7 @@ class ClientDetailView(APIView):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
 # Vista para detalle del cliente segun su username
 # se hizo con la finalidad de instanciar una vez logueado
 class ClientDetailByUsername(APIView):
@@ -603,17 +604,17 @@ class SpecialistAsociateListView(APIView):
 
     def get(self, request):
         pk = Operations.get_id(self, request)
-        
+
         try:
             obj = Specialist.objects.get(pk=pk)
         except Specialist.DoesNotExist:
             raise Http404
 
         specialists = Specialist.objects.filter(category=obj.category, type_specialist="a")
-        
+
         serializer = SpecialistSerializer(specialists, many=True)
         return Response(serializer.data)
-        
+
 
 class PutSpecialistMessages():
     def get(self, pk):
