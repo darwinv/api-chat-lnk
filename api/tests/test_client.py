@@ -316,24 +316,6 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_ocupation(self):
-        """Solicitud invalida por no enviar la ocupación."""
-        data = self.valid_payload
-        data["ocupation"] = ""
-        response1 = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        del data["ocupation"]
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_invalid_countries(self):
         """Solicitud invalida por enviar codigo de pais inexistente."""
         data = self.valid_payload
@@ -476,12 +458,13 @@ class CreateNaturalClient(APITestCase):
     def test_no_document_type(self):
         """Solicitud invalida por no enviar el tipo de documento."""
         data = self.valid_payload
-        data["document_type"] = ""
+        data["document_type"] = None
         response1 = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
             content_type='application/json'
         )
+        # import pdb; pdb.set_trace()
         del data["document_type"]
         response = self.client.post(
             reverse('clients'),
@@ -623,7 +606,7 @@ class UpdateNaturalClient(APITestCase):
     def test_from_internal_country(self):
         """actualizacion datos residente nacional"""
         data = self.valid_payload
-        
+
         response = client.put(
             reverse('client-detail', args=(5,)),
             data=json.dumps(data),
@@ -1023,7 +1006,7 @@ class CreateBussinessClient(APITestCase):
             content_type='application/json'
             )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        
+
     def test_no_optionals(self):
         """Solicitud valida ya que no valida campos opcionales."""
         data = self.valid_payload
@@ -1115,7 +1098,6 @@ class CreateBussinessClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 class UpdateBunissesClient(APITestCase):
@@ -1142,7 +1124,7 @@ class UpdateBunissesClient(APITestCase):
     def test_from_internal_country(self):
         """actualizacion datos residente nacional"""
         data = self.valid_payload
-        
+
         response = client.put(
             reverse('client-detail', args=(11,)),
             data=json.dumps(data),
@@ -1315,14 +1297,14 @@ class SendRecoveryCode(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_error_empty_data(self):
-        # no envio de email 
-        response = client.post(reverse('send-code-password'))        
+        # no envio de email
+        response = client.post(reverse('send-code-password'))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_error_bad_email(self):
         # envio mal correo
         data = {'email':'jefeti12345@pympack.com.pe'}
-        response = client.post(reverse('send-code-password'), data)        
+        response = client.post(reverse('send-code-password'), data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 class GetUserByRecoverCode(APITestCase):
@@ -1336,20 +1318,20 @@ class GetUserByRecoverCode(APITestCase):
         # get API response
         data = {'email':'jefeti@pympack.com.pe', 'code':'WEY4D1'}
         response = client.get(reverse('valid-code-password'), data)
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], 5)
 
     def test_error_empty_data(self):
         # no envio de data
-        response = client.get(reverse('valid-code-password'))        
+        response = client.get(reverse('valid-code-password'))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_error_bad_email(self):
         # envio data erronea
         data = {'email':'jefeti12345@pympack.com.pe','code': 'XYZ123'}
         response = client.get(reverse('valid-code-password'), data)
-        
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 class UpdatePasswordByRecoverCode(APITestCase):
@@ -1368,13 +1350,13 @@ class UpdatePasswordByRecoverCode(APITestCase):
 
     def test_error_empty_data(self):
         # no envio de data
-        response = client.put(reverse('reset-password-recovery', args=(111,)))     
+        response = client.put(reverse('reset-password-recovery', args=(111,)))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_error_bad_email(self):
         # envio data erronea
         data = {'password':'123456', 'code':'XYZ123'}
-        response = client.put(reverse('reset-password-recovery', args=(111,)), data)        
+        response = client.put(reverse('reset-password-recovery', args=(111,)), data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 class UpdateEmail(APITestCase):
@@ -1390,7 +1372,7 @@ class UpdateEmail(APITestCase):
                 'email_exact':'olopez@mail.com',
                 'password':'123456'
             }
-            
+
         response = client.put(reverse('update-email', args=(3,)), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['email_exact'], data['email_exact'])
@@ -1401,22 +1383,22 @@ class UpdateEmail(APITestCase):
                 'email_exact':'olopmail.com',
                 'password':'123456'
             }
-            
+
         response = client.put(reverse('update-email', args=(3,)), data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_no_email(self):
-        # put no email 
+        # put no email
         data = {
                 'password':'123456'
             }
-            
+
         response = client.put(reverse('update-email', args=(3,)), data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_no_data(self):
         # put no data
-            
+
         response = client.put(reverse('update-email', args=(3,)))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -1435,6 +1417,6 @@ class UpdateEmail(APITestCase):
                 'email_exact':'olopezdeveloper@mail.com',
                 'password':'654321'
             }
-            
+
         response = client.put(reverse('update-email', args=(3,)), data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

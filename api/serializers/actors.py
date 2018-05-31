@@ -161,7 +161,7 @@ class ClientSerializer(serializers.ModelSerializer):
                                           allow_blank=True)
     civil_state_name = serializers.SerializerMethodField()
     ocupation = serializers.ChoiceField(choices=c.client_ocupation,
-                                        allow_blank=True)
+                                        allow_null=True)
     ocupation_name = serializers.SerializerMethodField()
     address = AddressSerializer(required=False)
     nick = serializers.CharField(required=False, allow_blank=True)
@@ -228,7 +228,9 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def get_ocupation_name(self, obj):
         """Devuelve Ocupación."""
-        return _(obj.get_ocupation_display())
+        if obj.ocupation:
+            return _(obj.get_ocupation_display())
+        return None
 
     def validate_document_number(self, value):
         """Validar Numero de Documento."""
@@ -341,10 +343,8 @@ class ClientSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError({"Tax Code": [required]})
         return
 
-
     def validate(self, data):
-
-        if not 'request' in self.context:
+        if 'request' not in self.context:
             """Redefinido metodo de validación."""
             if data['type_client'] == 'n':
                 self.validate_natural_client(data)
@@ -459,7 +459,6 @@ class ClientSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                       {"commercial_reason": [required]})
 
-
         # si reside en peru la direccion es obligatoria.
         if data["residence_country"] == country:
             if "address" not in data or not data["address"]:
@@ -470,8 +469,6 @@ class ClientSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                           {"foreign_address": [required]})
         return
-
-
 
 
 class SpecialistSerializer(serializers.ModelSerializer):
