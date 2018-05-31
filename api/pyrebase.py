@@ -1,6 +1,6 @@
 """Funcionamiento de Pyrebase."""
 import pyrebase
-from api.models import Client, QueryPlansAcquired
+from api.models import Client, QueryPlansAcquired, Category
 # from datetime import datetime, timedelta
 from api.utils.parameters import Params, Payloads
 from api.utils.querysets import get_query_set_plan
@@ -44,6 +44,18 @@ def categories_db(client_id, cat_id, time_now, read=False):
 
 
 # FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE #
+def update_categories_detail():
+    """Cargar listado de categorias para todos los usuarios."""
+    # SOLO USO PARA AMBIENTE EN DESARROLLO
+    for categorie in Category.objects.all():
+
+        firebase = pyrebase.initialize_app(config)
+        db = firebase.database()
+        node_client = Params.PREFIX['category'] + str(categorie.id)
+        res = db.child("categories/categoryDetail").child(
+            node_client).update({"description":categorie.description})
+
+
 def update_categories():
     """Cargar listado de categorias para todos los usuarios."""
     # SOLO USO PARA AMBIENTE EN DESARROLLO
