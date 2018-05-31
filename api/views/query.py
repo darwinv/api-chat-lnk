@@ -20,7 +20,7 @@ from api.utils.validations import Operations
 from api.views.actors import SpecialistMessageList_sp
 from api.serializers.query import QuerySerializer, QueryListClientSerializer
 from api.serializers.query import MessageSerializer, QueryMessageSerializer
-from api.serializers.query import QueryDetailSerializer
+from api.serializers.query import QueryDetailSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
 from api.serializers.query import ChatMessageSerializer, QueryResponseSerializer

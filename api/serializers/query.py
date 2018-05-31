@@ -559,3 +559,35 @@ class UserQueryMessageSerializer(serializers.ModelSerializer):
     def get_photo(self, obj):
         """String Photo."""
         return obj['client__photo']
+
+class QueryAcceptSerializer(serializers.ModelSerializer):
+    """Cambiar clave de usuario."""
+
+    class Meta:
+        """Meta."""
+        model = Query
+        fields = ("id", "email_exact", "password")
+        extra_kwargs = {'email_exact': {'required': True},'password': {'required': True,'write_only': True} }
+
+    def validate_password(self, value):
+        invalid = _("not valid")
+        if not self.instance.check_password(value):
+            raise serializers.ValidationError("errorrr")
+
+        return value
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        required = _("required")
+        email_exact = validated_data.pop('email_exact', None)
+        password = validated_data.pop('password', None)
+
+        if not email_exact:
+            raise serializers.ValidationError({"email_exact":required})
+        if not password:
+            raise serializers.ValidationError({"password":required})
+
+        instance.email_exact = email_exact
+        instance.username = email_exact
+        instance.save()
+        return instance
