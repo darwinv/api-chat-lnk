@@ -291,10 +291,8 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         gp = GroupMessage.objects.get(message__id=ms_ref)
         gp.status = 2
         msgs = gp.message_set.all()
-        # lista_msgs = [{l.room: l.id} for l in msgs]
-        lista_msgs = [{str(l.room) + '/' + 'm' +
-                       str(l.id): {'groupStatus': 2}} for l in msgs]
-        pyrebase.update_status_messages(lista_msgs)
+        # se pasa el queryset con el cual s
+        pyrebase.update_status_messages(msgs)
         gp.save()
         instance.save()
         return instance

@@ -105,7 +105,7 @@ class QueryListClientView(ListCreateAPIView):
                                                 mess.values('created_at')))\
                                         .filter(client=user_id,
                                                 category=category,
-                                                status=0)\
+                                                status=1)\
                                         .annotate(count=Count('id'))\
                                         .order_by('-message__created_at')
 
@@ -156,7 +156,6 @@ class QueryDetailSpecialistView(APIView):
         serializer = QueryResponseSerializer(query, data,
                                              context={'specialist': spec})
         if serializer.is_valid():
-            import pdb; pdb.set_trace()
             serializer.save()
             lista = list(serializer.data['message'].values())
             client_id = serializer.data["client_id"]
