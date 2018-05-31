@@ -10,9 +10,7 @@ class ClientAuthorization(serializers.ModelSerializer):
     code_seller = serializers.CharField()
     name = serializers.CharField()
     document = serializers.CharField()
-    document_type = serializers.CharField()
     document_type_name = serializers.SerializerMethodField()
-    status = serializers.CharField()
     date_join = serializers.CharField()
 
     class Meta:

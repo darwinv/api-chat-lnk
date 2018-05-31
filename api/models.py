@@ -221,8 +221,10 @@ class SellerContactNoEfective(models.Model):
     about = models.CharField(max_length=255, null=True, blank=True)
     cellphone = models.CharField(max_length=14, blank=True, null=True)
     telephone = models.CharField(max_length=14, blank=True, null=True)
+
     ocupation = models.PositiveIntegerField(choices=Ch.client_ocupation,
                                             null=True, default=7)
+
     profession = models.CharField(max_length=45, null=True)
     business_name = models.CharField(max_length=45, null=True)
     commercial_reason = models.CharField(max_length=45, null=True)
@@ -255,22 +257,28 @@ class Client(User):
     type_client = models.CharField(max_length=1, choices=Ch.client_type_client)
     sex = models.CharField(max_length=1, choices=Ch.client_sex, blank=True)
     commercial_reason = models.CharField(max_length=45, null=True)
-    civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state, null=True)
+    civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state,
+                                   null=True)
     birthdate = models.DateField(null=True)
     # ciiu = models.CharField(max_length=4, blank=True)
     ciiu = models.ForeignKey(Ciiu, null=True)
-    activity_description = models.CharField(max_length=255, null=True, blank=True)
+    activity_description = models.CharField(max_length=255, null=True,
+                                            blank=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
-    ocupation = models.PositiveIntegerField(max_length=1, choices=Ch.client_ocupation)
+    ocupation = models.PositiveIntegerField(null=True,
+                                            choices=Ch.client_ocupation)
     about = models.CharField(max_length=255, null=True, blank=True)
     business_name = models.CharField(max_length=45, null=True)
     agent_firstname = models.CharField(max_length=45, null=True)
     agent_lastname = models.CharField(max_length=45, null=True)
     position = models.CharField(max_length=45, null=True)
     profession = models.CharField(max_length=45, null=True)
-    economic_sector = models.ForeignKey(EconomicSector, on_delete=models.PROTECT, null=True)
-    level_instruction = models.ForeignKey(LevelInstruction, on_delete=models.PROTECT, null=True)
-    seller_asigned = models.ForeignKey(Seller, on_delete=models.PROTECT, null=True)
+    economic_sector = models.ForeignKey(EconomicSector,
+                                        on_delete=models.PROTECT, null=True)
+    level_instruction = models.ForeignKey(LevelInstruction,
+                                          on_delete=models.PROTECT, null=True)
+    seller_asigned = models.ForeignKey(Seller, on_delete=models.PROTECT,
+                                       null=True)
 
     class Meta:
         """Modelo de Cliente."""
