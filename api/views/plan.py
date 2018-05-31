@@ -214,4 +214,3 @@ class ChosenPlanView(APIView):
 
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
-

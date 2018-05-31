@@ -952,7 +952,7 @@ class PhotoUploadView(APIView):
         )
         # creando nombre de archivo
         filename = str(uuid.uuid4())
-        filename = filename + '.png';
+        filename = filename + '.png'
         if media_serializer.is_valid():
             destination = open(filename, 'wb+')
             for chunk in data['photo'].chunks():
