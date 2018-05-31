@@ -112,7 +112,7 @@ class QueryListClientView(ListCreateAPIView):
                                                 mess.values('created_at')))\
                                         .filter(client=user_id,
                                                 category=category,
-                                                status=0)\
+                                                status=1)\
                                         .annotate(count=Count('id'))\
                                         .order_by('-message__created_at')
 
