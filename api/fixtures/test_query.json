@@ -253,6 +253,7 @@
     "code": "C0119201",
     "room": "u2-s1",
     "query": 1000,
+		"group": 1,
     "message_reference": null
   }
 },
@@ -270,7 +271,15 @@
     "code": "C0119201",
     "room": "u2-s1",
     "query": 1000,
+		"group": 1,
     "message_reference": null
   }
+},
+{
+	"model": "api.groupmessage",
+	"pk": 1,
+	"fields": {
+		"status": 1
+	}
 }
 ]

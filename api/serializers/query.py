@@ -69,7 +69,7 @@ class ListMessageSerializer(serializers.ModelSerializer):
         """Redefinido nombres (claves) para firebase."""
         time = str(obj.created_at)
         user_id = obj.query.client.id
-        reference_id = ''
+        reference_id = 0
         if obj.specialist:
             user_id = obj.specialist.id
         # metodo para renderizar objeto en el json
@@ -244,7 +244,7 @@ class QuerySerializer(serializers.ModelSerializer):
         chat = {}
         messages_files = []
         for message in ms:
-            if int(message['fileType']) > 0:
+            if int(message['fileType']) > 1:
                 message['uploaded'] = 1
                 messages_files.append(message["id"])
             else:
@@ -297,7 +297,6 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         
         instance.status = 3  # actualizo status
         # actualizo el estado del grupo al cual se le responde
-        # GroupMessage.objects.filter(message__id=ms_ref).update(status=2)
         gp = GroupMessage.objects.get(message__id=ms_ref)
         gp.status = 2
         msgs = gp.message_set.all()
@@ -315,7 +314,7 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         chat = {}
         messages_files = []
         for message in ms:
-            if int(message['fileType']) > 0:
+            if int(message['fileType']) > 1:
                 message['uploaded'] = 1
                 messages_files.append(message["id"])
             else:

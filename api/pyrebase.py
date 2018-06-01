@@ -172,9 +172,9 @@ def createListMessageClients(lista, queries_list, act_query, status, client_id):
     data_obj['date'] = str(data_obj['date'])
     data_obj['queries'] = queries_list
     if status >= 4:
-        data_obj['isQueryActive'] = True
-    else:
         data_obj['isQueryActive'] = False
+    else:
+        data_obj['isQueryActive'] = True
     query_current = {
         "id": act_query,
         "date": str(data_obj['date']),
@@ -183,9 +183,10 @@ def createListMessageClients(lista, queries_list, act_query, status, client_id):
         "status": status
     }
     data_obj['queryCurrent'] = query_current
+    del data_obj['message']
+    del data_obj['title']
     res = db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).update(data_obj)
-    # print(res)
     return res
 
 
