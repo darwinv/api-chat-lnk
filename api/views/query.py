@@ -458,13 +458,16 @@ class QueryAcceptView(APIView):
 
     def put(self, request, pk):
         """Listado de queries y sus respectivos mensajes para un especialista."""
+        specialist = Operations.get_id(self, request)
         try:
-            query = Query.objects.get(pk=pk)
+            query = Query.objects.get(pk=pk, status=1, specialist=specialist)
         except Query.DoesNotExist:
             raise Http404
 
+        data = {}
         serializer = QueryAcceptSerializer(query, data)
         if serializer.is_valid():
             serializer.save()
-
-        return Response(serializer.errors)
+            pyrebase.updateStatusQueryAccept(specialist, query.client.id, pk)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
