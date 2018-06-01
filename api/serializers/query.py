@@ -288,6 +288,7 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         instance.status = 3  # actualizo status
         # actualizo el estado del grupo al cual se le responde
         # GroupMessage.objects.filter(message__id=ms_ref).update(status=2)
+        # import pdb; pdb.set_trace()
         gp = GroupMessage.objects.get(message__id=ms_ref)
         gp.status = 2
         msgs = gp.message_set.all()
