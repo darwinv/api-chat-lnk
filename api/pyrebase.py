@@ -1,13 +1,12 @@
 """Funcionamiento de Pyrebase."""
 import pyrebase
-from api.models import Client, QueryPlansAcquired, Category
+from api.models import Client, QueryPlansAcquired, Category, Message
 # from datetime import datetime, timedelta
 from api.utils.parameters import Params, Payloads
 from api.utils.querysets import get_query_set_plan
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from linkupapi.settings import CONFIG_ENVIROMENT
 config = CONFIG_ENVIROMENT
-# Sugerencia para cambiar por una clase con sus metodos
 
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
@@ -23,7 +22,7 @@ def update_categories_detail():
         db = firebase.database()
         node_client = Params.PREFIX['category'] + str(categorie.id)
         res = db.child("categories/categoryDetail").child(
-            node_client).update({"description":categorie.description})
+            node_client).update({"description": categorie.description})
 
 
 def update_categories():
@@ -93,7 +92,9 @@ def updateStatusQueryAccept(specialist_id, client_id, query_id):
     data = {"status": 2}  # Query Aceptado por especialista
     updateStatusQueryAcceptList(specialist_id, client_id, query_id, data)
     updateStatusQueryCurrentList(specialist_id, client_id, query_id, data)
-    # updateStatusQueryAcceptChat(specialist_id, client_id, query_id, data)
+
+    data_msgs = Message.objects.filter(query=query_id)
+    updateStatusQueryAcceptChat(data_msgs, data)
 
 def updateStatusQueryAcceptList(specialist_id, client_id, query_id):
     """ Actualizacion query en listado de clientes"""
@@ -121,17 +122,14 @@ def updateStatusQueryCurrentList(specialist_id, client_id, query_id, data):
         res = None
     return res
 
-def updateStatusQueryAcceptChat(specialist_id, client_id, query_id, data):
+def updateStatusQueryAcceptChat(data_msgs, data):
     """ Actualizacion query en el chat """
     
-    node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
-    node_client = Params.PREFIX['client'] + str(client_id)
-    prefix_message = Params.PREFIX['message']
-    node_base = 'chats/{}-{}/{}'.format(node_client, node_category, prefix_message)
-
-    for x in xrange(1,10):        
-        node = node_base + str(message_id)
-        db.child("chats/").child(node).update(query)
+    for msgs in data_msgs:        
+        db.child("chats").child(msgs.room)\
+            .child(Params.PREFIX['message']+str(msgs.id))\
+            .child("query")\
+            .update(data)
     
     return res
 
@@ -146,6 +144,17 @@ def createCategoriesLisClients(client_id):
     res = db.child("categories/clients").child(
         node_client).update(Payloads.categoriesList)
     return res
+
+
+def update_status_messages(data_msgs):
+    """Actualizar el status si puede o no reconsultar, responder, etc."""
+    firebase = pyrebase.initialize_app(config)
+    db = firebase.database()
+    for msgs in data_msgs:
+        res = db.child("chats").child(msgs.room)\
+            .child(Params.PREFIX['message']+str(msgs.id))\
+            .update({"groupStatus": 2})
+        print(res)
 
 
 def createListMessageClients(lista, queries_list, act_query, status, client_id):
@@ -172,7 +181,7 @@ def createListMessageClients(lista, queries_list, act_query, status, client_id):
     data_obj['queryCurrent'] = query_current
     res = db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).update(data_obj)
-    print(res)
+    # print(res)
     return res
 
 
@@ -188,7 +197,7 @@ def mark_failed_file(room, message_id):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + 'm' + str(message_id)
     firebase = pyrebase.initialize_app(config)
-    print(node)
+    # print(node)
     db = firebase.database()
     r = db.child(node).update({"uploaded": 5, "fileUrl": "error"})
     return r
@@ -198,7 +207,7 @@ def mark_uploaded_file(room, message_id, url_file):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + 'm' + str(message_id)
     firebase = pyrebase.initialize_app(config)
-    print(node)
+    # print(node)
     db = firebase.database()
     r = db.child(node).update({"uploaded": 2, "fileUrl": url_file})
     return r

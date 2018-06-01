@@ -9,7 +9,7 @@ class Params:
         "seller": "sl",
         "category": "c",
         "query": "q",
-        "message": "m",
+        "message": "m"
     }
 
 
