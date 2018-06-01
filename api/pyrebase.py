@@ -7,7 +7,7 @@ from api.utils.querysets import get_query_set_plan
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from linkupapi.settings import CONFIG_ENVIROMENT
 config = CONFIG_ENVIROMENT
-# Sugerencia para cambiar por una clase con sus metodos
+
 
 def chat_firebase_db(data, room):
     """Enviar data a firebase en chat."""
@@ -53,7 +53,7 @@ def update_categories_detail():
         db = firebase.database()
         node_client = Params.PREFIX['category'] + str(categorie.id)
         res = db.child("categories/categoryDetail").child(
-            node_client).update({"description":categorie.description})
+            node_client).update({"description": categorie.description})
 
 
 def update_categories():
@@ -96,6 +96,17 @@ def createCategoriesLisClients(client_id):
     return res
 
 
+def update_status_messages(data_msgs):
+    """Actualizar el status si puede o no reconsultar, responder, etc."""
+    firebase = pyrebase.initialize_app(config)
+    db = firebase.database()
+    for msgs in data_msgs:
+        res = db.child("chats").child(msgs.room)\
+            .child(Params.PREFIX['message']+str(msgs.id))\
+            .update({"groupStatus": 2})
+        print(res)
+
+
 def createListMessageClients(lista, queries_list, act_query, status, client_id):
     """Insertar o actualizar los mensajes de los clientes del especialista."""
     firebase = pyrebase.initialize_app(config)
@@ -120,7 +131,7 @@ def createListMessageClients(lista, queries_list, act_query, status, client_id):
     data_obj['queryCurrent'] = query_current
     res = db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).update(data_obj)
-    print(res)
+    # print(res)
     return res
 
 
@@ -136,7 +147,7 @@ def mark_failed_file(room, message_id):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + 'm' + str(message_id)
     firebase = pyrebase.initialize_app(config)
-    print(node)
+    # print(node)
     db = firebase.database()
     r = db.child(node).update({"uploaded": 5, "fileUrl": "error"})
     return r
@@ -146,7 +157,7 @@ def mark_uploaded_file(room, message_id, url_file):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + 'm' + str(message_id)
     firebase = pyrebase.initialize_app(config)
-    print(node)
+    # print(node)
     db = firebase.database()
     r = db.child(node).update({"uploaded": 2, "fileUrl": url_file})
     return r

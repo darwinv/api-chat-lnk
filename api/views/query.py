@@ -34,6 +34,7 @@ from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
 from api.utils.tools import s3_upload_file
 
+
 class QueryListClientView(ListCreateAPIView):
     """Vista Consulta por parte del cliente."""
 
@@ -112,7 +113,7 @@ class QueryListClientView(ListCreateAPIView):
                                                 mess.values('created_at')))\
                                         .filter(client=user_id,
                                                 category=category,
-                                                status=0)\
+                                                status=1)\
                                         .annotate(count=Count('id'))\
                                         .order_by('-message__created_at')
 
