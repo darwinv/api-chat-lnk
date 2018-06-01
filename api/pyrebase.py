@@ -90,12 +90,12 @@ def categories_db(client_id, cat_id, time_now, read=False):
 def updateStatusQueryAccept(specialist_id, client_id, query_id):
     """ Actualizacion query en listado y chat """
     data = {"status": 2}  # Query Aceptado por especialista
-    
+
     # Remover query del listado de pendientes
     removeQueryAcceptList(specialist_id, client_id, query_id, data)
-    
-    # Actualizar estatus de query actual 
-    updateStatusQueryCurrentList(specialist_id, client_id, query_id, data)
+
+    # Actualizar estatus de query actual
+    update_status_query_current_list(specialist_id, client_id, data, query_id)
 
     # Actualizar estatus de los mensajes del chat
     data_msgs = Message.objects.filter(query=query_id)
@@ -105,33 +105,39 @@ def removeQueryAcceptList(specialist_id, client_id, query_id, data):
     """ Remover query nodo en listado de clientes"""
     node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
-    node_query = 'query/{}'.format(Params.PREFIX['query'] + str(query_id))    
+    node_query = 'query/{}'.format(Params.PREFIX['query'] + str(query_id))
 
     res = db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).child(node_query).remove()
-    
+
     return res
 
-def updateStatusQueryCurrentList(specialist_id, client_id, query_id, data):
+
+def update_status_query_current_list(specialist_id, client_id,
+                                     data, query_id=None):
+
     """ Actualizacion query en listado de clientes"""
     node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
     node_query = 'queryCurrent'
-    room = "messagesList/specialist/{}/{}/{}/".format(node_specialist, node_client, node_query)
-    
-    node = db.child(room + '/id').get()
+    room = "messagesList/specialist/{}/{}/{}/".format(node_specialist,
+                                                      node_client, node_query)
 
-    if node.pyres and node.pyres == query_id:
-        res = db.child(room).update(data)
+    node = db.child(room + '/id').get()
+    if query_id:
+        if node.pyres and node.pyres == query_id:
+            res = db.child(room).update(data)
+        else:
+            pass
+            res = None
     else:
-        pass
-        res = None
+        res = db.child(room).update(data)
     return res
 
 def updateStatusQueryAcceptChat(data_msgs, data):
     """ Actualizacion query en el chat """
-    
-    for msgs in data_msgs:        
+
+    for msgs in data_msgs:
         print(db.child("chats").child(msgs.room)\
             .child(Params.PREFIX['message']+str(msgs.id))\
             .child("query")\
@@ -161,7 +167,8 @@ def update_status_messages(data_msgs):
         print(res)
 
 
-def createListMessageClients(lista, queries_list, act_query, status, client_id):
+def createListMessageClients(lista, act_query, status,
+                             client_id, queries_list=None):
     """Insertar o actualizar los mensajes de los clientes del especialista."""
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
