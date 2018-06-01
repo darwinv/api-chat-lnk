@@ -12,39 +12,6 @@ config = CONFIG_ENVIROMENT
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
-def chat_firebase_db(data, room):
-    """Enviar data a firebase en chat."""
-    firebase = pyrebase.initialize_app(config)
-    db = firebase.database()
-    if exist_room(db, room):
-        res = db.child("chats").child(room).update(data)
-    else:
-        res = db.child("chats").child(room).set(data)
-    return res
-
-
-def exist_room(db, room):
-    """Chequear si el nodo de sala existe."""
-    return db.child("chats").child(room).get() is not None
-
-
-def categories_db(client_id, cat_id, time_now, read=False):
-    """Acualizar Listado de Categorias del Chat."""
-    # Actualizar la hora de del momento en que se realiza una consulta
-    firebase = pyrebase.initialize_app(config)
-    db = firebase.database()
-    node_client = Params.PREFIX['client'] + str(client_id)
-    node_category = Params.PREFIX['category'] + str(cat_id)
-
-    data = {
-        "datetime": time_now,
-        "id": cat_id,
-        "read": read
-    }
-    res = db.child("categories/clients").child(
-                                 node_client).child(node_category).update(data)
-    return res
-
 
 # FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE #
 def update_categories_detail():
@@ -85,43 +52,86 @@ def update_plan_choisen():
 
 # FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
-def updateStatusQueryAccept(specialist_id, client_id):
-    """ Actualizacion query en listado y chat """
-    updateStatusQueryAcceptList(specialist_id, client_id)
 
-    # updateStatusQueryAcceptChat(specialist_id, client_id)
+def chat_firebase_db(data, room):
+    """Enviar data a firebase en chat."""
+    firebase = pyrebase.initialize_app(config)
+    db = firebase.database()
+    room = "chats/{}/".format(room)
+    if exist_room(room):
+        res = db.child(room).update(data)
+    else:
+        res = db.child(room).set(data)
+    return res
 
-def updateStatusQueryAcceptList(specialist_id, client_id):
-    """ Actualizacion query en listado de clientes"""
-    
-    node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
+def exist_room(room):
+    """Chequear si el nodo de sala existe."""
+    return db.child(room).get() is not None
+
+
+def categories_db(client_id, cat_id, time_now, read=False):
+    """Acualizar Listado de Categorias del Chat."""
+    # Actualizar la hora de del momento en que se realiza una consulta
+    firebase = pyrebase.initialize_app(config)
+    db = firebase.database()
     node_client = Params.PREFIX['client'] + str(client_id)
-    node_query = 'queryCurrent'
-    
-    status = 2;
-    query = {
-        "status": status
+    node_category = Params.PREFIX['category'] + str(cat_id)
+
+    data = {
+        "datetime": time_now,
+        "id": cat_id,
+        "read": read
     }
 
+    res = db.child("categories/clients").child(
+                                 node_client).child(node_category).update(data)
+    return res
+
+
+def updateStatusQueryAccept(specialist_id, client_id, query_id):
+    """ Actualizacion query en listado y chat """
+    data = {"status": 2}  # Query Aceptado por especialista
+    updateStatusQueryAcceptList(specialist_id, client_id, query_id, data)
+    updateStatusQueryCurrentList(specialist_id, client_id, query_id, data)
+    # updateStatusQueryAcceptChat(specialist_id, client_id, query_id, data)
+
+def updateStatusQueryAcceptList(specialist_id, client_id, query_id):
+    """ Actualizacion query en listado de clientes"""
+    node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
+    node_client = Params.PREFIX['client'] + str(client_id)
+    node_query = 'query/{}'.format(Params.PREFIX['query'] + str(query_id))    
+
     res = db.child("messagesList/specialist/").child(
-        node_specialist).child(node_client).child(node_query).update(query)
+        node_specialist).child(node_client).child(node_query).update(data)
     
     return res
 
-def updateStatusQueryAcceptChat(specialist_id, client_id):
+def updateStatusQueryCurrentList(specialist_id, client_id, query_id, data):
+    """ Actualizacion query en listado de clientes"""
+    node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
+    node_client = Params.PREFIX['client'] + str(client_id)
+    node_query = 'queryCurrent'
+    room = "messagesList/specialist/{}/{}/{}/".format(node_specialist, node_client, node_query)
+    
+    node = db.child(room).get()
+
+    if node.id == query_id:
+        res = db.child("messagesList/specialist/").child(room).update(data)
+    else:
+        res = None
+    return res
+
+def updateStatusQueryAcceptChat(specialist_id, client_id, query_id, data):
     """ Actualizacion query en el chat """
     
     node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
-    node_query = 'queryCurrent'
-    
-    status = 2;
-    query = {
-        "status": status
-    }
+    prefix_message = Params.PREFIX['message']
+    node_base = 'chats/{}-{}/{}'.format(node_client, node_category, prefix_message)
 
-    res = db.child("messagesList/specialist/").child(
-        node_specialist).child(node_client).child(node_query).update(query)
+    for x in xrange(1,10):        
+        node = node_base + str(message_id)
+        db.child("chats/").child(node).update(query)
     
     return res
 

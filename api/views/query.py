@@ -467,13 +467,6 @@ class QueryAcceptView(APIView):
         serializer = QueryAcceptSerializer(query, data)
         if serializer.is_valid():
             serializer.save()
-            
-            # actualizar status de los listados de clientes
-            # messagesList/specialist Sn -> Un -> Queries -> Qn -> Status
-            # specialistas relacionados con cliente para la consulta PK,
-            
-            # actualizar chat nodos
-            # chats UnCn -> Mn -> query -> status
-            # Listado de mensajes con, client, category, status del query PK
+            # pyrebase.updateStatusQueryAccept(specialist_id, client_id)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors)
