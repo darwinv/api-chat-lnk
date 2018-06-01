@@ -294,7 +294,7 @@ class QueryResponseSerializer(serializers.ModelSerializer):
                 # import pdb; pdb.set_trace()
                 ms_ref = data_message['message_reference'].id
             Message.objects.create(query=instance, group=group, **data_message)
-
+        
         instance.status = 3  # actualizo status
         # actualizo el estado del grupo al cual se le responde
         gp = GroupMessage.objects.get(message__id=ms_ref)
@@ -590,3 +590,15 @@ class UserQueryMessageSerializer(serializers.ModelSerializer):
     def get_photo(self, obj):
         """String Photo."""
         return obj['client__photo']
+
+class QueryAcceptSerializer(serializers.Serializer):
+    """Cambiar clave de usuario."""
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        status = 2  # Status Query Accept
+
+        instance.status = status
+        instance.save()
+        return instance
+
