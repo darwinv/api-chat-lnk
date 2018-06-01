@@ -33,6 +33,7 @@ from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
 from api.utils.tools import s3_upload_file
+from api.utils.parameters import Params
 
 
 class QueryListClientView(ListCreateAPIView):
@@ -118,8 +119,9 @@ class QueryListClientView(ListCreateAPIView):
                                         .order_by('-message__created_at')
 
             query_pending = PendingQueriesSerializer(data_queries, many=True)
+            lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
             pyrebase.createListMessageClients(serializer_tmp.data,
-                                              query_pending.data,
+                                              lista_d,
                                               serializer.data["query_id"],
                                               serializer.data["status"],
                                               user_id)
@@ -200,14 +202,16 @@ class QueryDetailSpecialistView(APIView):
                                                 mess.values('created_at')))\
                                         .filter(client=client_id,
                                                 category=category_id,
-                                                status=0)\
+                                                status=1)\
                                         .annotate(count=Count('id'))\
                                         .order_by('-message__created_at')
 
             # se envia el serializer el queryset para mapear
             query_pending = PendingQueriesSerializer(data_queries, many=True)
+            # devolver con los indices
+            lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
             pyrebase.createListMessageClients(serializer_tmp.data,
-                                              query_pending.data,
+                                              lista_d,
                                               serializer.data["query_id"],
                                               serializer.data["status"],
                                               user_id)
