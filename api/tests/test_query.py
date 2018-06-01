@@ -427,7 +427,6 @@ class PutAcceptQuery(APITestCase):
 
         self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
         response = self.client.put(reverse('query-accept', kwargs={'pk': 2}),)
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
     # PENDIENTE
     # def test_query_status(self):

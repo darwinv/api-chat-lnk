@@ -592,13 +592,8 @@ class UserQueryMessageSerializer(serializers.ModelSerializer):
         """String Photo."""
         return obj['client__photo']
 
-class QueryAcceptSerializer(serializers.ModelSerializer):
+class QueryAcceptSerializer(serializers.Serializer):
     """Cambiar clave de usuario."""
-
-    class Meta:
-        """Meta."""
-        model = Query
-        fields = ('status',)
 
     def update(self, instance, validated_data):
         """Redefinir update."""

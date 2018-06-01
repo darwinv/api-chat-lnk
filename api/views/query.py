@@ -468,6 +468,6 @@ class QueryAcceptView(APIView):
         serializer = QueryAcceptSerializer(query, data)
         if serializer.is_valid():
             serializer.save()
-            # pyrebase.updateStatusQueryAccept(specialist_id, client_id)
+            pyrebase.updateStatusQueryAccept(specialist, query.client.id, pk)
             return Response(serializer.data, status.HTTP_200_OK)
-        return Response(serializer.errors)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
