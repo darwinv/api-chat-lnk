@@ -6,7 +6,7 @@ import os
 import boto3
 # paquetes de django
 from django.db.models import OuterRef, Subquery, F, Count
-from django.http import Http404
+from django.http import Http404, HttpResponse
 # paquetes de terceros
 from rest_framework import status, permissions
 from rest_framework.views import APIView
