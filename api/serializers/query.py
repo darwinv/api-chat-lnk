@@ -603,3 +603,14 @@ class QueryAcceptSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+class QueryDeriveSerializer(serializers.Serializer):
+    """Cambiar clave de usuario."""
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        status = 1  # Status Query Accept
+
+        instance.status = status
+        instance.save()
+        return instance
+

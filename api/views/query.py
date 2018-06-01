@@ -451,7 +451,29 @@ class QueryMessageView(APIView):
 
 
 class QueryAcceptView(APIView):
-    """Vista Consultas en el chat por parte del Cliente."""
+    """Vista Aceptar Query"""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSpecialist)
+
+    def put(self, request, pk):
+        """Listado de queries y sus respectivos mensajes para un especialista."""
+        specialist = Operations.get_id(self, request)
+        try:
+            query = Query.objects.get(pk=pk, status=1, specialist=specialist)
+        except Query.DoesNotExist:
+            raise Http404
+
+        data = {}
+        serializer = QueryAcceptSerializer(query, data)
+        if serializer.is_valid():
+            serializer.save()
+            pyrebase.updateStatusQueryAccept(specialist, query.client.id, pk)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class QueryDeriveView(APIView):
+    """Vista Derivar Query"""
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsSpecialist)
