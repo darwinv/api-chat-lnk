@@ -101,11 +101,12 @@ def updateStatusQueryAccept(specialist_id, client_id, query_id):
     data_msgs = Message.objects.filter(query=query_id)
     updateStatusQueryAcceptChat(data_msgs, data)
 
+
 def removeQueryAcceptList(specialist_id, client_id, query_id, data):
-    """ Remover query nodo en listado de clientes"""
+    """ Remover query nodo en listado de clientes """
     node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
-    node_query = 'query/{}'.format(Params.PREFIX['query'] + str(query_id))
+    node_query = 'queries/{}'.format(Params.PREFIX['query'] + str(query_id))
 
     res = db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).child(node_query).remove()
