@@ -591,25 +591,33 @@ class UserQueryMessageSerializer(serializers.ModelSerializer):
         """String Photo."""
         return obj['client__photo']
 
-class QueryAcceptSerializer(serializers.Serializer):
+class QueryAcceptSerializer(serializers.ModelSerializer):
     """Cambiar clave de usuario."""
+
+    class Meta:
+        """Meta."""
+        model = Query
+        fields = ('status', 'specialist')
 
     def update(self, instance, validated_data):
         """Redefinir update."""
-        status = 2  # Status Query Accept
-
-        instance.status = status
+        import pdb
+        pdb.set_trace()
+        instance.status = validated_data["status"]
         instance.save()
         return instance
 
-class QueryDeriveSerializer(serializers.Serializer):
+class QueryDeriveSerializer(serializers.ModelSerializer):
     """Cambiar clave de usuario."""
+
+    class Meta:
+        """Meta."""
+        model = Query
+        fields = ('status', 'specialist')
 
     def update(self, instance, validated_data):
         """Redefinir update."""
-        status = 1  # Status Query Accept
-
-        instance.status = status
+        instance.status = validated_data["status"]
+        instance.specialist = validated_data["specialist"]
         instance.save()
         return instance
-

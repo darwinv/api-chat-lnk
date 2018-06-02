@@ -29,6 +29,7 @@ from api.serializers.query import QueryDetailSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
 from api.serializers.query import ChatMessageSerializer, QueryResponseSerializer
+from api.serializers.query import QueryDeriveSerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
@@ -82,6 +83,7 @@ class QueryListClientView(ListCreateAPIView):
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+
             category = serializer.data["category"]
             lista = list(serializer.data['message'].values())
             # Se actualiza la base de datos de firebase para el mensaje
@@ -468,8 +470,9 @@ class QueryAcceptView(APIView):
         except Query.DoesNotExist:
             raise Http404
 
-        data = {}
-        serializer = QueryAcceptSerializer(query, data)
+        data = request.data
+        data["status"] = 2
+        serializer = QueryAcceptSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
             pyrebase.updateStatusQueryAccept(specialist, query.client.id, pk)
@@ -490,10 +493,11 @@ class QueryDeriveView(APIView):
         except Query.DoesNotExist:
             raise Http404
 
-        data = {}
-        serializer = QueryAcceptSerializer(query, data)
+        data = request.data
+        data["status"] = 1
+        serializer = QueryDeriveSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
-            pyrebase.updateStatusQueryAccept(specialist, query.client.id, pk)
+            pyrebase.updateStatusQueryDerive(specialist, data["specialist"], query)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

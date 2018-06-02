@@ -457,7 +457,8 @@ class PutDeriveQuery(APITestCase):
         #obtiene mensajes de query
 
         self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
-        data = {'specialist_asociate':31}
+        data = {'specialist':31}
         response = self.client.put(reverse('query-derive',
-            data=json.dumps(data), kwargs={'pk': 2}),)
+            kwargs={'pk': 2}), data=json.dumps(data),
+            content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
