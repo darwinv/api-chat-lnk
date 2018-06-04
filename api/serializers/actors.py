@@ -57,7 +57,7 @@ class PendingQueriesSerializer(serializers.Serializer):
 
     def to_representation(self, dicti):
         # import pdb; pdb.set_trace()
-
+        
         return {"id": dicti["id"],
                 "message": dicti["message"],
                 "title": dicti["title"],
