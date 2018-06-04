@@ -113,14 +113,14 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     """
     """ Actualizacion query en listado y chat """
     status = 1
-    data = {"status": status}  # Query Aceptado por especialista
+    data = {"status": status, 'specialist_id': specialist_id}  # Query Aceptado por especialista
     
     client_id = query.client.id
     query_id = query.id
     category_id = query.category.id
 
     # Remover query del listado de especialista actual
-    # removeQueryAcceptList(old_specialist_id, client_id, query_id)
+    removeQueryAcceptList(old_specialist_id, client_id, query_id)
 
     # Generar nodos de listado para nuevo especialista
     generateDataMessageClients(client_id, category_id, query_id, status, specialist_id)
@@ -214,13 +214,13 @@ def createListMessageClients(lista, query_id, status,
         "title": data_obj['title'],
         "date": str(data_obj['date']),
         "message": data_obj['message'],
-        "specialist_id": data_obj['specialist']
+        "id": data_obj['id']
     }
     data_obj['queryCurrent'] = query_current
-    del data_obj['specialist']
     del data_obj['message']
     del data_obj['title']
     del data_obj['date']
+    del data_obj['id']
 
     return db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).update(data_obj)
@@ -233,16 +233,13 @@ def chosen_plan(client_id, data):
     res = db.child("chosenPlans").child(client_id).update(data)
     return res
 
-
 def mark_failed_file(room, message_id):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + 'm' + str(message_id)
     firebase = pyrebase.initialize_app(config)
     # print(node)
     db = firebase.database()
-    r = db.child(node).update({"uploaded": 5, "fileUrl": "error"})
-    return r
-
+    return db.child(node).update({"uploaded": 5, "fileUrl": "error"})
 
 def mark_uploaded_file(room, message_id, url_file):
     """Actualizar que el archivo se ha subido a firebase."""
@@ -250,9 +247,7 @@ def mark_uploaded_file(room, message_id, url_file):
     firebase = pyrebase.initialize_app(config)
     # print(node)
     db = firebase.database()
-    r = db.child(node).update({"uploaded": 2, "fileUrl": url_file})
-    return r
-
+    return db.child(node).update({"uploaded": 2, "fileUrl": url_file})
 
 def generateDataMessageClients(client_id, category_id, query_id, status, specialist_id):
     # Luego se busca el titulo y su id de la consulta

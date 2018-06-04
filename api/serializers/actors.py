@@ -34,16 +34,16 @@ class SpecialistMessageListCustomSerializer(serializers.Serializer):
         #     aux_time = instance.date.time()
         # else:
         #     aux_time = instance.date
-        return {"client": instance.client,
-                "photo": instance.photo,
-                "displayName": instance.display_name,
-
-                "title": instance.title,
-                "message": instance.message,                
-                "date": instance.date,
-                "specialist": instance.specialist,
-
-                # "total": instance.total
+        return {
+                    "client": instance.client,
+                    "photo": instance.photo,
+                    "displayName": instance.display_name,
+                    "specialist": instance.specialist,
+                    "title": instance.title,
+                    "message": instance.message,                
+                    "date": instance.date,
+                    "id": instance.id,
+                    # "total": instance.total
                 }
 
 

@@ -249,10 +249,11 @@ class QuerySerializer(serializers.ModelSerializer):
                 messages_files.append(message["id"])
             else:
                 message['uploaded'] = 2
-
+            
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
-                                "calification": obj.calification}
+                                "calification": obj.calification,
+                                "specialist_id": obj.specialist.id}
 
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
