@@ -321,7 +321,7 @@ class QueryResponseSerializer(BaseQueryResponseSerializer):
                 str(instance.category.id)
             data_message["code"] = self.context['specialist'].code
             # se busca el mensaje de referencia y se extrae de la respuesta
-            if 'message_reference' in data_message:
+            if 'message_reference' in data_message and data_message['message_reference'] != 0:
                 ms_ref = data_message['message_reference'].id
             Message.objects.create(query=instance, group=group, **data_message)
 
@@ -363,7 +363,7 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
                 str(instance.category.id)
             data_message["code"] = instance.client.code
             # se busca el mensaje de referencia y se extrae de la respuesta
-            if 'message_reference' in data_message:
+            if 'message_reference' in data_message and data_message['message_reference'] != 0:
                 ms_ref = data_message['message_reference'].id
             Message.objects.create(query=instance, group=group, **data_message)
         instance.status = 2  # actualizo status
