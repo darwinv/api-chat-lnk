@@ -94,7 +94,6 @@ class IsClientOrSpecialistAndOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, owner_id):
         """Permiso nivel objeto."""
-        # import pdb; pdb.set_trace()
         if request.method == "POST" or request.method == "PUT":
             return request.user.id == owner_id
 
@@ -104,7 +103,7 @@ class IsOwnerAndClient(permissions.BasePermission):
 
     def has_object_permission(self, request, view, owner_id):
         """Permiso nivel objeto."""
-        
+
 
 
 class IsAdminReadOrSpecialistOwner(permissions.BasePermission):

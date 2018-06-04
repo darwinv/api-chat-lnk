@@ -369,7 +369,7 @@ class ResponseSpecialistQuery(APITestCase):
 class ReQuery(APITestCase):
     """Pruebas para reconsultas."""
 
-    fixtures = ['data', 'data2', 'data3', 'test_query']
+    fixtures = ['data', 'data2', 'data3', 'test_query', 'test_requery']
 
     def setUp(self):
         """SetUp."""
@@ -381,17 +381,23 @@ class ReQuery(APITestCase):
                 "message": "reconsulta hecha",
                 "msg_type": 'r',
                 "content_type": 1,
-                "file_url": ""
+                "file_url": "",
+                "message_reference": 3
                 }
             ],
         }
 
+# aqui la prueba de reference en 0
+
+# aqui la prueba de otros casos
     def test_create_requery(self):
         """Reconsulta creada exitosamente."""
         response = self.client.put(reverse('query-client',
                                            kwargs={'pk': 1000}),
                                    data=json.dumps(self.valid_payload),
                                    content_type='application/json')
+        query_status = Query.objects.get(pk=1000)
+        self.assertEqual(2, int(query_status.status))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

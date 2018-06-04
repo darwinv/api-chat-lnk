@@ -361,7 +361,7 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
             data_message["room"] = Params.PREFIX['client'] +\
                 str(instance.client.id)+'-'+Params.PREFIX['category'] +\
                 str(instance.category.id)
-            data_message["code"] = validated_data["client"].code
+            data_message["code"] = instance.client.code
             # se busca el mensaje de referencia y se extrae de la respuesta
             if 'message_reference' in data_message:
                 ms_ref = data_message['message_reference'].id

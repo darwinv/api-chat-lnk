@@ -28,7 +28,8 @@ from api.serializers.query import MessageSerializer, QueryMessageSerializer
 from api.serializers.query import QueryDetailSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
-from api.serializers.query import ChatMessageSerializer, QueryResponseSerializer
+from api.serializers.query import ChatMessageSerializer
+from api.serializers.query import QueryResponseSerializer, ReQuerySerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
@@ -211,7 +212,7 @@ class QueryDetailClientView(APIView):
         """Obtener objeto."""
         try:
             obj = Query.objects.get(pk=pk)
-            self.check_object_permissions(self.request, obj.client)
+            self.check_object_permissions(self.request, obj.client.id)
             return obj
         except Query.DoesNotExist:
             raise Http404
@@ -220,6 +221,45 @@ class QueryDetailClientView(APIView):
         """Actualizar consulta."""
         query = self.get_object(pk)
         user_id = Operations.get_id(self, request)
+        if not user_id:
+            raise Http404
+        data = request.data
+        # No utilizamos partial=True, ya que solo actualizamos mensaje
+        serializer = ReQuerySerializer(query, data)
+        if serializer.is_valid():
+            serializer.save()
+            lista = list(serializer.data['message'].values())
+            client_id = serializer.data["client_id"]
+            category_id = serializer.data["category"]
+            # Actualizamos el nodo de mensajes segun su sala
+            pyrebase.chat_firebase_db(serializer.data["message"],
+                                      serializer.data["room"])
+
+            # Actualizamos el listado de especialidades en Firebase
+            pyrebase.categories_db(user_id, category_id,
+                                   lista[-1]["timeMessage"])
+            # sala es el cliente_id y su la categoria del especialista
+            sala = str(query.client.id) + '-' + str(category_id)
+
+            Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
+            # Se llama al store procedure
+            data_set = SpecialistMessageList_sp.search(2, client_id,
+                                                       category_id, 0, "")
+            # El queryset se pasa serializer para mapear datos
+            serializer_tmp = SpecialistMessageListCustomSerializer(data_set,
+                                                                   many=True)
+            pyrebase.createListMessageClients(serializer_tmp.data,
+                                              serializer.data["query_id"],
+                                              serializer.data["status"],
+                                              user_id)
+            # actualizo el querycurrent del listado de mensajes
+            data = {'status': 2,
+                    'date': lista[-1]["timeMessage"],
+                    'message': lista[-1]["message"]}
+            pyrebase.update_status_query_current_list(user_id, client_id, data)
+
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 # Devolver el detalle de una ultima consulta filtrada por categoria
 # servicio pedido para android en notificaciones
