@@ -290,11 +290,10 @@ class QueryResponseSerializer(serializers.ModelSerializer):
                 str(instance.category.id)
             data_message["code"] = self.context['specialist'].code
             # se busca el mensaje de referencia y se extrae de la respuesta
-            if 'message_reference' in data_message:
-                # import pdb; pdb.set_trace()
+            if 'message_reference' in data_message and data_message['message_reference'] != 0:
                 ms_ref = data_message['message_reference'].id
             Message.objects.create(query=instance, group=group, **data_message)
-        
+
         instance.status = 3  # actualizo status
         # actualizo el estado del grupo al cual se le responde
         gp = GroupMessage.objects.get(message__id=ms_ref)
@@ -601,4 +600,3 @@ class QueryAcceptSerializer(serializers.Serializer):
         instance.status = status
         instance.save()
         return instance
-
