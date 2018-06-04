@@ -123,10 +123,12 @@ class QueryListClientView(ListCreateAPIView):
             query_pending = PendingQueriesSerializer(data_queries, many=True)
             lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
             pyrebase.createListMessageClients(serializer_tmp.data,
-                                              lista_d,
                                               serializer.data["query_id"],
                                               serializer.data["status"],
-                                              user_id)
+                                              user_id,
+                                              serializer_tmp.data[0]['specialist'],
+                                                queries_list=lista_d
+                                              )
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
@@ -189,34 +191,16 @@ class QueryDetailSpecialistView(APIView):
             # El queryset se pasa serializer para mapear datos
             serializer_tmp = SpecialistMessageListCustomSerializer(data_set,
                                                                    many=True)
-            # Se devuelve las ultimas consultas pendientes por responder
-            # por cliente
-            # Primer una subconsulta para buscar el ultimo registro de mensaje
-            mess = Message.objects.filter(query=OuterRef("pk"))\
-                                  .order_by('-created_at')[:1]
-            # Luego se busca el titulo y su id de la consulta
-            data_queries = Query.objects.values('id', 'title', 'status')\
-                                        .annotate(
-                                            message=Subquery(
-                                                mess.values('message')))\
-                                        .annotate(
-                                            date_at=Subquery(
-                                                mess.values('created_at')))\
-                                        .filter(client=client_id,
-                                                category=category_id,
-                                                status=1)\
-                                        .annotate(count=Count('id'))\
-                                        .order_by('-message__created_at')
-
-            # se envia el serializer el queryset para mapear
-            query_pending = PendingQueriesSerializer(data_queries, many=True)
-            # devolver con los indices
-            lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
             pyrebase.createListMessageClients(serializer_tmp.data,
-                                              lista_d,
                                               serializer.data["query_id"],
                                               serializer.data["status"],
-                                              user_id)
+                                              user_id,
+                                              serializer_tmp.data[0]['specialist'])
+            # actualizo el querycurrent del listado de mensajes
+            data = {'status': 3,
+                    'date': lista[-1]["timeMessage"],
+                    'message': lista[-1]["message"] }
+            pyrebase.update_status_query_current_list(user_id, client_id, data)
 
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -486,6 +470,7 @@ class QueryDeriveView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsSpecialist)
 
     def put(self, request, pk):
+
         """Listado de queries y sus respectivos mensajes para un especialista."""
         specialist = Operations.get_id(self, request)
         try:
@@ -493,7 +478,7 @@ class QueryDeriveView(APIView):
         except Query.DoesNotExist:
             raise Http404
 
-        data = request.data
+        data = dict(request.data)
         data["status"] = 1
         serializer = QueryDeriveSerializer(query, data=data)
         if serializer.is_valid():

@@ -94,7 +94,7 @@ def categories_db(client_id, cat_id, time_now, read=False):
 def updateStatusQueryAccept(specialist_id, client_id, query_id):
     """ Actualizacion query en listado y chat """
     data = {"status": 2}  # Query Aceptado por especialista
-    
+
     # Remover query del listado de pendientes
     removeQueryAcceptList(specialist_id, client_id, query_id)
     
@@ -123,7 +123,7 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     # removeQueryAcceptList(old_specialist_id, client_id, query_id)
 
     # Generar nodos de listado para nuevo especialista
-    generateDataMessageClients(client_id, category_id, query_id, status)
+    generateDataMessageClients(client_id, category_id, query_id, status, specialist_id)
 
     # Actualizar estatus de query actual
     # updateStatusQueryCurrentList(specialist_id, client_id, query_id, data)
@@ -141,28 +141,35 @@ def removeQueryAcceptList(specialist_id, client_id, query_id):
 
     res = db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).child(node_query).remove()
-    
+
     return res
 
-def updateStatusQueryCurrentList(specialist_id, client_id, query_id, data):
+
+def update_status_query_current_list(specialist_id, client_id,
+                                     data, query_id=None):
+
     """ Actualizacion query en listado de clientes"""
     node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
     node_query = 'queryCurrent'
-    room = "messagesList/specialist/{}/{}/{}/".format(node_specialist, node_client, node_query)
-    
+
+    room = "messagesList/specialist/{}/{}/{}/".format(node_specialist,
+                                                      node_client, node_query)
     node = db.child(room + 'id').get()
-    if node.pyres and node.pyres == int(query_id):
-        res = db.child(room).update(data)
+    if query_id:
+        if node.pyres and node.pyres == int(query_id):
+            res = db.child(room).update(data)
+        else:
+            pass
+            res = None
     else:
-        pass
-        res = None
+        res = db.child(room).update(data)
     return res
 
 def updateStatusQueryAcceptChat(data_msgs, data):
     """ Actualizacion query en el chat """
-    
-    for msgs in data_msgs:        
+
+    for msgs in data_msgs:
         print(db.child("chats").child(msgs.room)\
             .child(Params.PREFIX['message']+str(msgs.id))\
             .child("query")\
@@ -192,33 +199,35 @@ def update_status_messages(data_msgs):
         print(res)
 
 
-def createListMessageClients(lista, queries_list, act_query, status, client_id):
+def createListMessageClients(lista, query_id, status,
+                             client_id, specialist_id, queries_list=None):
     """Insertar o actualizar los mensajes de los clientes del especialista."""
-    firebase = pyrebase.initialize_app(config)
-    db = firebase.database()
-    # import pdb; pdb.set_trace()
     data_obj = lista[0]
-    node_specialist = Params.PREFIX['specialist'] + str(data_obj['specialist'])
+
+    node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
-    data_obj['date'] = str(data_obj['date'])
-    data_obj['queries'] = queries_list
+
     if status >= 4:
         data_obj['isQueryActive'] = False
     else:
         data_obj['isQueryActive'] = True
-    query_current = {
-        "id": act_query,
+
+    data_obj['queries'] = queries_list
+    query_current = {    
+        "status": status,      
+        "title": data_obj['title'],
         "date": str(data_obj['date']),
         "message": data_obj['message'],
-        "title": data_obj['title'],
-        "status": status
+        "specialist_id": data_obj['specialist']
     }
     data_obj['queryCurrent'] = query_current
+    del data_obj['specialist']
     del data_obj['message']
     del data_obj['title']
-    res = db.child("messagesList/specialist/").child(
+    del data_obj['date']
+
+    return db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).update(data_obj)
-    return res
 
 
 def chosen_plan(client_id, data):
@@ -249,25 +258,24 @@ def mark_uploaded_file(room, message_id, url_file):
     return r
 
 
-def generateDataMessageClients(client_id, category_id, query_id, status):
+def generateDataMessageClients(client_id, category_id, query_id, status, specialist_id):
     # Luego se busca el titulo y su id de la consulta
-    serializer_tmp = SpecialistMessageListCustom(client_id, category_id)
+    lista = SpecialistMessageListCustom(client_id, category_id)
 
-    queries_list = PendingQueriesList(client_id, category_id)
-
-    # Agregar query del listado de especialista nuevo    
-    return createListMessageClients(serializer_tmp.data, queries_list, query_id, status, client_id)
+    queries_list = PendingQueriesList(client_id, specialist_id)
+    
+    return createListMessageClients(lista.data, query_id, status, 
+                                    client_id, specialist_id, queries_list)
 
 def SpecialistMessageListCustom(client_id, category_id):
     # Se llama al store procedure
     data_set = SpecialistMessageList_sp.search(2, client_id,
                                                category_id, 0, "")
-    import pdb
-    pdb.set_trace()
+
     # El queryset se pasa serializer para mapear datos
     return SpecialistMessageListCustomSerializer(data_set,
                                                            many=True)
-def PendingQueriesList(client_id, category_id):
+def PendingQueriesList(client_id, specialist_id):
     mess = Message.objects.filter(query=OuterRef("pk"))\
                                   .order_by('-created_at')[:1]
 
@@ -279,7 +287,7 @@ def PendingQueriesList(client_id, category_id):
                                     date_at=Subquery(
                                         mess.values('created_at')))\
                                 .filter(client=client_id,
-                                        category=category_id,
+                                        specialist=specialist_id,
                                         status=1)\
                                 .annotate(count=Count('id'))\
                                 .order_by('-message__created_at')
