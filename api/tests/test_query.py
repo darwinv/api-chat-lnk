@@ -387,7 +387,60 @@ class ReQuery(APITestCase):
             ],
         }
 
-# aqui la prueba de reference en 0
+    def test_invalid_queryid(self):
+        """Solicitud Invalida por no existir la consulta."""
+        response = self.client.put(
+            reverse('query-client', kwargs={'pk': 11}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_no_message(self):
+        """Solicitud invalida por no enviar un mensaje de respuesta."""
+        data = self.valid_payload
+        del data["message"]
+        response = self.client.put(
+            reverse('query-client', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_contentype_message(self):
+        """Verificar que el mensaje a guardar corresponde
+         al tipo de contenido de mensaje."""
+        self.valid_payload["message"][0]["message"] = ""
+        response = self.client.put(
+            reverse('query-client', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # al enviar un mensaje no puede estar vacio, mientras
+        # la el content_type sea 1
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_reference(self):
+        """Envio de respuesta con reference_id inexistente."""
+        self.valid_payload["message"][0]["message_reference"] = 5000
+        response = self.client.put(
+            reverse('query-client', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_permissions(self):
+        """Credenciales incorrectas."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        response = self.client.put(
+            reverse('query-client', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # Permisos incorrectos
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 # aqui la prueba de otros casos
     def test_create_requery(self):
