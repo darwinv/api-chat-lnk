@@ -462,3 +462,25 @@ class PutDeriveQuery(APITestCase):
             kwargs={'pk': 2}), data=json.dumps(data),
             content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class PutDeclineQuery(APITestCase):
+    """Prueba para especialista deribar query"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_getspecialistmessages']
+
+    def setUp(self):
+        """Setup."""
+        pass
+    
+    def test_put_query_derive(self):
+        """Obtener resultado 200."""
+        #obtiene mensajes de query
+
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        data = {'message': "Voy a declinar porque no estoy claro en la respuesta"}
+        response = self.client.put(reverse('query-decline',
+            kwargs={'pk': 2}), data=json.dumps(data),
+            content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
