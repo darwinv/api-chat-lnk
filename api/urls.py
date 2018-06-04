@@ -86,17 +86,19 @@ urlpatterns = [
     url(r'^queries/clients/(?P<pk>[0-9]+)/$',
         query.QueryChatSpecialistView.as_view(),
         name='query-chat-specialist'),
+
+    url(r'^client/queries/(?P<pk>[0-9]+)/$',
+        query.QueryDetailClientView.as_view(), name='query-client'),
+
     # Subida de archivos a la consulta (pk)
     url(r'^queries/upload_files/(?P<pk>[0-9]+)/$',
         query.QueryUploadFilesView.as_view(), name='query-upload-files'),
 
-
-    url(r'^queries/(?P<pk>[0-9]+)/$', query.QueryDetailView.as_view(), name='query-detail'),
     url(r'^query-last/(?P<category>[0-9]+)/$', query.QueryLastView.as_view(), name='last-query-bycategory'),
     url(r'^queries-messages/(?P<pk>[0-9]+)/$', query.QueryMessageView.as_view(), name='query-messages'),
 
     # Specialist Accept Query
-    
+
     url(r'^query-accept/(?P<pk>[0-9]+)/$', query.QueryAcceptView.as_view(), name='query-accept'),
 
 
@@ -108,6 +110,7 @@ urlpatterns = [
     # Actualizar Consulta por detalle (Responder)
     url(r'^specialist/queries/(?P<pk>[0-9]+)/$',
         query.QueryDetailSpecialistView.as_view(), name='query-specialist'),
+
     # Contacto no efectivo
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
     # url para subir imagen

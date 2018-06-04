@@ -366,6 +366,35 @@ class ResponseSpecialistQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
+class ReQuery(APITestCase):
+    """Pruebas para reconsultas."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_query']
+
+    def setUp(self):
+        """SetUp."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        self.valid_payload = {
+            "message": [{
+                "message": "reconsulta hecha",
+                "msg_type": 'r',
+                "content_type": 1,
+                "file_url": ""
+                }
+            ],
+        }
+
+    def test_create_requery(self):
+        """Reconsulta creada exitosamente."""
+        response = self.client.put(reverse('query-client',
+                                           kwargs={'pk': 1000}),
+                                   data=json.dumps(self.valid_payload),
+                                   content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class GetSpecialistMessages(APITestCase):
     """Prueba para devolver el plan activo y elegido de un determinado cliente."""
 
@@ -420,7 +449,7 @@ class PutAcceptQuery(APITestCase):
     def setUp(self):
         """Setup."""
         pass
-    
+
     def test_put_query_accept(self):
         """Obtener resultado 200."""
         #obtiene mensajes de query

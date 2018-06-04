@@ -194,58 +194,32 @@ class QueryDetailSpecialistView(APIView):
             # actualizo el querycurrent del listado de mensajes
             data = {'status': 3,
                     'date': lista[-1]["timeMessage"],
-                    'message': lista[-1]["message"] }
+                    'message': lista[-1]["message"]}
             pyrebase.update_status_query_current_list(user_id, client_id, data)
 
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
-# Detall de consulta
-class QueryDetailView(APIView):
-    # se debe definir todos los sets de permisos
-    # ejemplo solo el principal puede derivar
-    # solo el cliente puede preguntar, etc
-    permission_classes = [permissions.AllowAny]
+class QueryDetailClientView(APIView):
+    """Vista para reconsultar."""  # por ahora
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated,
+                          IsClientOrSpecialistAndOwner]
+
     def get_object(self, pk):
+        """Obtener objeto."""
         try:
-            return Query.objects.get(pk=pk)
+            obj = Query.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj.client)
+            return obj
         except Query.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk):
-        # si el argumento lastmsg existe, se debe volver,
-        # el ultimo mensaje de consulta, por detalle
-        # (android especifico)
-        if 'last_msg' in request.query_params:
-            # import pdb; pdb.set_trace()
-            msg = Message.objects.filter(query_id=pk).last()
-            serializer = MessageSerializer(msg)
-        # se devuelve el ultimo query solicitado
-        # (notificacion en android)
-        elif 'query_last_msg' in request.query_params:
-            query = self.get_object(pk)
-            serializer = QueryDetailLastMsgSerializer(query)
-        else:
-            query = self.get_object(pk)
-            serializer = QueryDetailSerializer(query)
-        return Response(serializer.data)
-
-    # actualizacion
     def put(self, request, pk):
-        data = request.data
+        """Actualizar consulta."""
         query = self.get_object(pk)
-        # si se envia status o calification se actualiza usando otro serializer
-        if 'status' in data or 'calification' in data:
-            serializer = QueryUpdateStatusSerializer(query, data, partial=True)
-        else:
-            # en caso contrario se envian mensjaes
-            serializer = QuerySerializer(query, data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        user_id = Operations.get_id(self, request)
 
 # Devolver el detalle de una ultima consulta filtrada por categoria
 # servicio pedido para android en notificaciones

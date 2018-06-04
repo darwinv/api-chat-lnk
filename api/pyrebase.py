@@ -135,6 +135,7 @@ def update_status_query_current_list(specialist_id, client_id,
         res = db.child(room).update(data)
     return res
 
+
 def updateStatusQueryAcceptChat(data_msgs, data):
     """ Actualizacion query en el chat """
 
