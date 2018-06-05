@@ -115,7 +115,7 @@ class QueryListClientView(ListCreateAPIView):
                                             date_at=Subquery(
                                                 mess.values('created_at')))\
                                         .filter(client=user_id,
-                                                category=category,
+                                                specialist=serializer_tmp.data[0]['specialist'],
                                                 status=1)\
                                         .annotate(count=Count('id'))\
                                         .order_by('-message__created_at')
