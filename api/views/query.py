@@ -185,17 +185,6 @@ class QueryDetailSpecialistView(APIView):
             sala = str(query.client.id) + '-' + str(category_id)
 
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
-            # Se llama al store procedure
-            data_set = SpecialistMessageList_sp.search(2, client_id,
-                                                       category_id, 0, "")
-            # El queryset se pasa serializer para mapear datos
-            serializer_tmp = SpecialistMessageListCustomSerializer(data_set,
-                                                                   many=True)
-            pyrebase.createListMessageClients(serializer_tmp.data,
-                                              serializer.data["query_id"],
-                                              serializer.data["status"],
-                                              user_id,
-                                              serializer_tmp.data[0]['specialist'])
             # actualizo el querycurrent del listado de mensajes
             data = {'status': 3,
                     'date': lista[-1]["timeMessage"],
