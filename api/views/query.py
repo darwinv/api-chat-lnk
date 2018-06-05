@@ -19,7 +19,7 @@ from channels import Group
 from api import pyrebase
 from api.models import Query, Message, Category, Specialist, Client
 from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsSpecialist
-from api.permissions import IsAdminReadOrSpecialistOwner
+from api.permissions import IsAdminReadOrSpecialistOwner, IsClient
 from api.permissions import IsClientOrSpecialistAndOwner
 from api.utils.validations import Operations
 from api.views.actors import SpecialistMessageList_sp

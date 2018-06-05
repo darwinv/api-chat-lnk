@@ -460,12 +460,11 @@ class ReQuery(APITestCase):
 
     def test_decline_requery(self):
         """No reconsultas disponibles."""
-        response = self.client.put(reverse('query-client',
-                                           kwargs={'pk': 1000}),
-                                   data=json.dumps(self.valid_payload),
-                                   content_type='application/json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
+        data = {"category_id": 1}
+        response = self.client.post(reverse('query-deny-requery'),
+                                    data=json.dumps(data),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_create_requery(self):
         """Reconsulta creada exitosamente."""
