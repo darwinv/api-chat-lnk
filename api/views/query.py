@@ -474,13 +474,13 @@ class QueryDeriveView(APIView):
         """Listado de queries y sus respectivos mensajes para un especialista."""
         specialist = Operations.get_id(self, request)
         try:
-            # Queris status menor a 3
-            query = Query.objects.get(pk=pk, status__lt=3, specialist=specialist)
+            query = Query.objects.get(pk=pk, status__lt=1, specialist=specialist)
         except Query.DoesNotExist:
             raise Http404
 
-        data = dict(request.data)
+        data = {}
         data["status"] = 1
+        data["specialist"] = request.data["specialist"]
         serializer = QueryDeriveSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()

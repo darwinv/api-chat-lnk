@@ -287,7 +287,8 @@ def PendingQueriesList(client_id, specialist_id):
                                         status=1)\
                                 .annotate(count=Count('id'))\
                                 .order_by('-message__created_at')
-
+    
+    
     query_pending = PendingQueriesSerializer(data_queries, many=True)
     queries_list = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
     return queries_list
