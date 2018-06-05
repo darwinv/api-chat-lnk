@@ -27,8 +27,10 @@ from api.serializers.query import QuerySerializer, QueryListClientSerializer
 from api.serializers.query import QueryMessageSerializer
 from api.serializers.query import QueryDeriveSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
-from api.serializers.query import ChatMessageSerializer
+
+from api.serializers.query import ChatMessageSerializer, QueryDeclineSerializer
 from api.serializers.query import QueryResponseSerializer, ReQuerySerializer
+
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
@@ -495,6 +497,7 @@ class QueryDeclineView(APIView):
 
         """Listado de queries y sus respectivos mensajes para un especialista."""
         specialist = Operations.get_id(self, request)
+
         try:
             # Queris status menor a 3
             query = Query.objects.get(pk=pk, status__lt=3, specialist=specialist)
@@ -505,14 +508,14 @@ class QueryDeclineView(APIView):
             main_specialist = Specialist.objects.get(category=query.category, type_specialist='m')
         except Specialist.DoesNotExist:
             raise Http404
+        
+        context = {}
+        context["status"] = 1
+        context["specialist"] = main_specialist
+        serializer = QueryDeclineSerializer(query, data=request.data, context=context)
 
-        data = {}
-        data["status"] = 1
-        data["specialist"] = main_specialist.id
-        serializer = QueryDeriveSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
-            # data["message"] save decline specialist asociate
-            pyrebase.updateStatusQueryDerive(specialist, data["specialist"], query)
+            pyrebase.updateStatusQueryDerive(specialist, main_specialist.id, query)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

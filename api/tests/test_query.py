@@ -582,3 +582,8 @@ class PutDeclineQuery(APITestCase):
             kwargs={'pk': 6}), data=json.dumps(data),
             content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        response = self.client.put(reverse('query-decline',
+            kwargs={'pk': 6}), data=json.dumps(data),
+            content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

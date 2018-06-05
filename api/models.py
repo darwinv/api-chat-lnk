@@ -629,6 +629,15 @@ class Message(models.Model):
         return self.message
 
 
+class Declinator(models.Model):    
+    message = models.TextField(blank=True)
+    specialist = models.ForeignKey(Specialist,
+                                   on_delete=models.PROTECT)
+    query = models.ForeignKey(Query, on_delete=models.PROTECT)
+
+    def __str__(self):
+        """Str."""
+        return self.message
 
 #Modelo para usar con una vista existente en la base de datos
 class SpecialistMessageList(models.Model):

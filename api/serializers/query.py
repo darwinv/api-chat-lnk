@@ -2,7 +2,7 @@
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
-from api.models import User, GroupMessage
+from api.models import User, GroupMessage, Declinator
 from api.api_choices_models import ChoicesAPI as c
 from api.utils import querysets
 from api.utils.parameters import Params
@@ -661,3 +661,22 @@ class QueryDeriveSerializer(serializers.ModelSerializer):
         instance.specialist = validated_data["specialist"]
         instance.save()
         return instance
+
+class QueryDeclineSerializer(QueryDeriveSerializer):
+    """Cambiar clave de usuario."""
+
+    class Meta:
+        """Meta."""
+        model = Declinator
+        fields = ('message',)
+
+    def update(self, instance, validated_data):
+        validated_data['status'] = self.context['status']
+        validated_data['specialist'] = self.context['specialist']
+        super(QueryDeclineSerializer, self).update(instance, validated_data)
+
+        data_declinator = {}
+        data_declinator["message"] = validated_data['message']
+        data_declinator["query"] = instance
+        data_declinator["specialist"] = validated_data['specialist']
+        return Declinator.objects.create(**data_declinator)
