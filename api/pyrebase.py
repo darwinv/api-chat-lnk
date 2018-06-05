@@ -141,10 +141,10 @@ def removeQueryAcceptList(specialist_id, client_id, query_id):
     return db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).child(node_query).remove()
 
+
 def update_status_query_current_list(specialist_id, client_id,
                                      data, query_id=None):
-
-    """ Actualizacion query en listado de clientes"""
+    """ Actualizacion query en listado de clientes."""
     node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
     node_query = 'queryCurrent'
