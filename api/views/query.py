@@ -29,6 +29,7 @@ from api.serializers.query import QueryDetailSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
 from api.serializers.query import ChatMessageSerializer, QueryResponseSerializer
+from api.serializers.query import QueryDeriveSerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
@@ -82,6 +83,7 @@ class QueryListClientView(ListCreateAPIView):
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+
             category = serializer.data["category"]
             lista = list(serializer.data['message'].values())
             # Se actualiza la base de datos de firebase para el mensaje
@@ -123,7 +125,9 @@ class QueryListClientView(ListCreateAPIView):
             pyrebase.createListMessageClients(serializer_tmp.data,
                                               serializer.data["query_id"],
                                               serializer.data["status"],
-                                              user_id, queries_list=lista_d
+                                              user_id,
+                                              serializer_tmp.data[0]['specialist'],
+                                                queries_list=lista_d
                                               )
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
@@ -190,7 +194,8 @@ class QueryDetailSpecialistView(APIView):
             pyrebase.createListMessageClients(serializer_tmp.data,
                                               serializer.data["query_id"],
                                               serializer.data["status"],
-                                              user_id)
+                                              user_id,
+                                              serializer_tmp.data[0]['specialist'])
             # actualizo el querycurrent del listado de mensajes
             data = {'status': 3,
                     'date': lista[-1]["timeMessage"],
@@ -436,7 +441,7 @@ class QueryMessageView(APIView):
 
 
 class QueryAcceptView(APIView):
-    """Vista Consultas en el chat por parte del Cliente."""
+    """Vista Aceptar Query"""
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsSpecialist)
@@ -449,10 +454,35 @@ class QueryAcceptView(APIView):
         except Query.DoesNotExist:
             raise Http404
 
-        data = {}
-        serializer = QueryAcceptSerializer(query, data)
+        data = request.data
+        data["status"] = 2
+        serializer = QueryAcceptSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
             pyrebase.updateStatusQueryAccept(specialist, query.client.id, pk)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class QueryDeriveView(APIView):
+    """Vista Derivar Query"""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSpecialist)
+
+    def put(self, request, pk):
+
+        """Listado de queries y sus respectivos mensajes para un especialista."""
+        specialist = Operations.get_id(self, request)
+        try:
+            query = Query.objects.get(pk=pk, status=1, specialist=specialist)
+        except Query.DoesNotExist:
+            raise Http404
+
+        data = dict(request.data)
+        data["status"] = 1
+        serializer = QueryDeriveSerializer(query, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            pyrebase.updateStatusQueryDerive(specialist, data["specialist"], query)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

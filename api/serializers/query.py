@@ -252,7 +252,8 @@ class QuerySerializer(serializers.ModelSerializer):
 
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
-                                "calification": obj.calification}
+                                "calification": obj.calification,
+                                "specialist_id": obj.specialist.id}
 
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
@@ -590,13 +591,33 @@ class UserQueryMessageSerializer(serializers.ModelSerializer):
         """String Photo."""
         return obj['client__photo']
 
-class QueryAcceptSerializer(serializers.Serializer):
+class QueryAcceptSerializer(serializers.ModelSerializer):
     """Cambiar clave de usuario."""
+
+    class Meta:
+        """Meta."""
+        model = Query
+        fields = ('status', 'specialist')
 
     def update(self, instance, validated_data):
         """Redefinir update."""
-        status = 2  # Status Query Accept
+        import pdb
+        pdb.set_trace()
+        instance.status = validated_data["status"]
+        instance.save()
+        return instance
 
-        instance.status = status
+class QueryDeriveSerializer(serializers.ModelSerializer):
+    """Cambiar clave de usuario."""
+
+    class Meta:
+        """Meta."""
+        model = Query
+        fields = ('status', 'specialist')
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        instance.status = validated_data["status"]
+        instance.specialist = validated_data["specialist"]
         instance.save()
         return instance
