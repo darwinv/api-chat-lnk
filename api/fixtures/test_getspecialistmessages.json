@@ -1055,8 +1055,22 @@
     "message": "mensaje de prueba 2",
     "msg_type": "q",
     "created_at": "2018-02-22T14:37:15.234Z",
-    "specialist": 4,
+    "specialist": null,
     "query": 5,
+    "viewed": false,
+    "code": 1,
+    "message_reference": 7
+  }
+},{
+  "model": "api.message",
+  "pk": 8,
+  "fields": {
+    "content_type": 1,
+    "message": "mensaje de prueba 2",
+    "msg_type": "q",
+    "created_at": "2018-02-22T14:37:15.234Z",
+    "specialist": 4,
+    "query": 6,
     "viewed": false,
     "code": 1,
     "message_reference": 7
@@ -1817,6 +1831,18 @@
     "created": "2018-02-26T21:10:22Z",
     "updated": "2018-02-26T21:10:22Z"
   }
+},{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 4,
+  "fields": {
+    "user": 31,
+    "token": "rRNQmSvkyHvi80asoclRvLmckV3DYy",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "groups read write",
+    "created": "2018-02-26T21:10:22Z",
+    "updated": "2018-02-26T21:10:22Z"
+  }
 },
 {
   "model": "oauth2_provider.accesstoken",
@@ -2541,7 +2567,7 @@
     "created_at": "2018-02-20T22:12:36.131Z",
     "last_modified": "2018-02-22T14:38:30.934Z",
     "calification": null,
-    "category": 8,
+    "category": 22,
     "client": 5,
     "specialist": 4,
     "acquired_plan": 2,
@@ -2557,7 +2583,7 @@
     "created_at": "2018-02-20T22:14:43.332Z",
     "last_modified": "2018-02-22T14:38:13.654Z",
     "calification": null,
-    "category": 8,
+    "category": 22,
     "client": 5,
     "specialist": 4,
     "acquired_plan": 2,
@@ -2573,7 +2599,7 @@
     "created_at": "2018-02-20T22:14:43Z",
     "last_modified": "2018-02-22T14:37:58.492Z",
     "calification": null,
-    "category": 8,
+    "category": 22,
     "client": 5,
     "specialist": 4,
     "acquired_plan": 3,
@@ -2589,7 +2615,7 @@
     "created_at": "2018-02-21T19:16:12.640Z",
     "last_modified": "2018-02-22T14:37:49.568Z",
     "calification": null,
-    "category": 8,
+    "category": 22,
     "client": 5,
     "specialist": 4,
     "acquired_plan": 2,
@@ -2605,11 +2631,27 @@
     "created_at": "2018-02-21T19:21:12.977Z",
     "last_modified": "2018-02-22T14:37:15.182Z",
     "calification": null,
-    "category": 8,
+    "category": 22,
     "client": 11,
     "specialist": 4,
     "acquired_plan": 2,
     "changed_on": "2018-02-22T14:37:15.182Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 6,
+  "fields": {
+    "title": "consulta 6",
+    "status": 2,
+    "created_at": "2018-02-20T22:12:36.131Z",
+    "last_modified": "2018-02-22T14:38:30.934Z",
+    "calification": null,
+    "category": 22,
+    "client": 5,
+    "specialist": 31,
+    "acquired_plan": 2,
+    "changed_on": "2018-02-22T14:38:30.934Z"
   }
 },
 {
