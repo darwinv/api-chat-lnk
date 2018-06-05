@@ -99,7 +99,7 @@ def updateStatusQueryAccept(specialist_id, client_id, query_id):
     removeQueryAcceptList(specialist_id, client_id, query_id)
     
     # Actualizar estatus de query actual 
-    updateStatusQueryCurrentList(specialist_id, client_id, query_id, data)
+    update_status_query_current_list(specialist_id, client_id, query_id, data)
 
     # Actualizar estatus de los mensajes del chat
     data_msgs = Message.objects.filter(query=query_id)
