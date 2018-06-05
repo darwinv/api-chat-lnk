@@ -18,6 +18,7 @@ from channels import Group
 # llamadas de nuestro propio proyecto
 from api import pyrebase
 from api.models import Query, Message, Category, Specialist, Client
+from api.models import Declinator
 from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsSpecialist
 from api.permissions import IsAdminReadOrSpecialistOwner
 from api.permissions import IsClientOrSpecialistAndOwner
@@ -487,8 +488,7 @@ class QueryDeclineView(APIView):
 
         """Listado de queries y sus respectivos mensajes para un especialista."""
         specialist = Operations.get_id(self, request)
-        import pdb
-        pdb.set_trace()
+        
         try:
             # Queris status menor a 3
             query = Query.objects.get(pk=pk, status__lt=3, specialist=specialist)
@@ -496,7 +496,7 @@ class QueryDeclineView(APIView):
             raise Http404
 
         try:
-            main_specialist = Specialist.objects.get(category=query.category, type_specialist='m')
+            main_specialist = Specialist.objects.get(category=query.category, type_specialist='m', specialist__declinator=1)
         except Specialist.DoesNotExist:
             raise Http404
         
@@ -506,6 +506,13 @@ class QueryDeclineView(APIView):
         serializer = QueryDeriveSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
+
+            # agrega declinacion
+            declined = SpecialistDecline()
+            declined.query = query
+            declined.specialist = specialist
+            declined.save()
+
             # data["message"] save decline specialist asociate
             pyrebase.updateStatusQueryDerive(specialist, data["specialist"], query)
             return Response(serializer.data, status.HTTP_200_OK)
