@@ -185,6 +185,17 @@ def createCategoriesLisClients(client_id):
     return res
 
 
+def update_status_querymessages(data_msgs, data):
+    """Actualizar el status de los mensajes pertenecientes a una consulta."""
+    firebase = pyrebase.initialize_app(config)
+    db = firebase.database()
+    for msgs in data_msgs:
+        db.child("chats").child(msgs.room)\
+              .child(Params.PREFIX['message']+str(msgs.id))\
+              .child("query")\
+              .update(data)
+
+
 def update_status_messages(data_msgs):
     """Actualizar el status si puede o no reconsultar, responder, etc."""
     firebase = pyrebase.initialize_app(config)
@@ -193,7 +204,6 @@ def update_status_messages(data_msgs):
         res = db.child("chats").child(msgs.room)\
             .child(Params.PREFIX['message']+str(msgs.id))\
             .update({"groupStatus": 2})
-        print(res)
 
 
 def createListMessageClients(lista, query_id, status,
