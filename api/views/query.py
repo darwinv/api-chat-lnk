@@ -18,7 +18,6 @@ from channels import Group
 # llamadas de nuestro propio proyecto
 from api import pyrebase
 from api.models import Query, Message, Category, Specialist, Client
-from api.models import Declinator
 from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsSpecialist
 from api.permissions import IsAdminReadOrSpecialistOwner
 from api.permissions import IsClientOrSpecialistAndOwner
@@ -30,7 +29,7 @@ from api.serializers.query import QueryDetailSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryUpdateStatusSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
 from api.serializers.query import ChatMessageSerializer, QueryResponseSerializer
-from api.serializers.query import QueryDeriveSerializer
+from api.serializers.query import QueryDeriveSerializer, QueryDeclineSerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
@@ -496,24 +495,16 @@ class QueryDeclineView(APIView):
             raise Http404
 
         try:
-            main_specialist = Specialist.objects.get(category=query.category, type_specialist='m', specialist__declinator=1)
+            main_specialist = Specialist.objects.get(category=query.category, type_specialist='m')
         except Specialist.DoesNotExist:
             raise Http404
         
-        data = {}
-        data["status"] = 1
-        data["specialist"] = main_specialist.id
-        serializer = QueryDeriveSerializer(query, data=data)
+        context = {}
+        context["status"] = 1
+        context["specialist"] = main_specialist
+        serializer = QueryDeclineSerializer(query, data=request.data, context=context)
         if serializer.is_valid():
             serializer.save()
-
-            # agrega declinacion
-            declined = SpecialistDecline()
-            declined.query = query
-            declined.specialist = specialist
-            declined.save()
-
-            # data["message"] save decline specialist asociate
-            pyrebase.updateStatusQueryDerive(specialist, data["specialist"], query)
+            pyrebase.updateStatusQueryDerive(specialist, main_specialist.id, query)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
