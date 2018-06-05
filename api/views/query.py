@@ -144,7 +144,8 @@ class QueryDetailSpecialistView(APIView):
     """Vista para que el especialista responda la consulta."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsAdminReadOrSpecialistOwner]
+    permission_classes = [permissions.IsAuthenticated,
+                          IsAdminReadOrSpecialistOwner]
 
     def get_object(self, pk):
         """Obtener objeto."""
@@ -185,17 +186,7 @@ class QueryDetailSpecialistView(APIView):
             sala = str(query.client.id) + '-' + str(category_id)
 
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
-            # Se llama al store procedure
-            data_set = SpecialistMessageList_sp.search(2, client_id,
-                                                       category_id, 0, "")
-            # El queryset se pasa serializer para mapear datos
-            serializer_tmp = SpecialistMessageListCustomSerializer(data_set,
-                                                                   many=True)
-            pyrebase.createListMessageClients(serializer_tmp.data,
-                                              serializer.data["query_id"],
-                                              serializer.data["status"],
-                                              user_id,
-                                              serializer_tmp.data[0]['specialist'])
+
             # actualizo el querycurrent del listado de mensajes
             data = {'status': 3,
                     'date': lista[-1]["timeMessage"],
@@ -235,6 +226,7 @@ class QueryDetailClientView(APIView):
             lista = list(serializer.data['message'].values())
             client_id = serializer.data["client_id"]
             category_id = serializer.data["category"]
+            specialist_id = serializer.data["specialist_id"]
             # Actualizamos el nodo de mensajes segun su sala
             pyrebase.chat_firebase_db(serializer.data["message"],
                                       serializer.data["room"])
@@ -246,22 +238,14 @@ class QueryDetailClientView(APIView):
             sala = str(query.client.id) + '-' + str(category_id)
 
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
-            # Se llama al store procedure
-            data_set = SpecialistMessageList_sp.search(2, client_id,
-                                                       category_id, 0, "")
-            # El queryset se pasa serializer para mapear datos
-            serializer_tmp = SpecialistMessageListCustomSerializer(data_set,
-                                                                   many=True)
-            pyrebase.createListMessageClients(serializer_tmp.data,
-                                              serializer.data["query_id"],
-                                              serializer.data["status"],
-                                              user_id)
             # actualizo el querycurrent del listado de mensajes
             data = {'status': 2,
                     'date': lista[-1]["timeMessage"],
-                    'message': lista[-1]["message"]}
-            pyrebase.update_status_query_current_list(user_id, client_id, data)
-
+                    'message': lista[-1]["message"]
+                    }
+            
+            pyrebase.update_status_query_current_list(specialist_id, client_id,
+                                                      data)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 

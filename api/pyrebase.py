@@ -97,8 +97,8 @@ def updateStatusQueryAccept(specialist_id, client_id, query_id):
 
     # Remover query del listado de pendientes
     removeQueryAcceptList(specialist_id, client_id, query_id)
-    
-    # Actualizar estatus de query actual 
+
+    # Actualizar estatus de query actual
     updateStatusQueryCurrentList(specialist_id, client_id, query_id, data)
 
     # Actualizar estatus de los mensajes del chat
@@ -114,7 +114,7 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     """ Actualizacion query en listado y chat """
     status = 1
     data = {"status": status, 'specialist_id': specialist_id}  # Query Aceptado por especialista
-    
+
     client_id = query.client.id
     query_id = query.id
     category_id = query.category.id
@@ -128,7 +128,7 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     # Actualizar estatus de query actual
     # updateStatusQueryCurrentList(specialist_id, client_id, query_id, data)
 
-    # Actualizar estatus de los mensajes del chat 
+    # Actualizar estatus de los mensajes del chat
     # y especialista encargado
     data_msgs = Message.objects.filter(query=query_id)
     updateStatusQueryAcceptChat(data_msgs, data)
@@ -210,8 +210,8 @@ def createListMessageClients(lista, query_id, status,
         data_obj['isQueryActive'] = True
 
     data_obj['queries'] = queries_list
-    query_current = {    
-        "status": status,      
+    query_current = {
+        "status": status,
         "title": data_obj['title'],
         "date": str(data_obj['date']),
         "message": data_obj['message'],
@@ -255,8 +255,8 @@ def generateDataMessageClients(client_id, category_id, query_id, status, special
     lista = SpecialistMessageListCustom(client_id, category_id)
 
     queries_list = PendingQueriesList(client_id, specialist_id)
-    
-    return createListMessageClients(lista.data, query_id, status, 
+
+    return createListMessageClients(lista.data, query_id, status,
                                     client_id, specialist_id, queries_list)
 
 def SpecialistMessageListCustom(client_id, category_id):
@@ -283,8 +283,8 @@ def PendingQueriesList(client_id, specialist_id):
                                         status=1)\
                                 .annotate(count=Count('id'))\
                                 .order_by('-message__created_at')
-    
-    
+
+
     query_pending = PendingQueriesSerializer(data_queries, many=True)
     queries_list = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
     return queries_list

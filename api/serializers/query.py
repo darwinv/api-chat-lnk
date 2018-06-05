@@ -288,7 +288,8 @@ class BaseQueryResponseSerializer(serializers.ModelSerializer):
         return {'room': ms[0]["room"], "message": chat,
                 "message_files_id": messages_files,
                 "category": obj.category.id, 'status': obj.status,
-                "query_id": obj.id, "client_id": obj.client.id}
+                "query_id": obj.id, "client_id": obj.client.id,
+                "specialist_id": obj.specialist.id}
 
 
 class QueryResponseSerializer(BaseQueryResponseSerializer):
