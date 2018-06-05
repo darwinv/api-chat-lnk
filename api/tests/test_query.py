@@ -442,7 +442,18 @@ class ReQuery(APITestCase):
         # Permisos incorrectos
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-# aqui la prueba de otros casos
+# aqui la prueba de reconsultas no disponibles
+    def test_no_requeries(self):
+        """No reconsultas disponibles."""
+        query = Query.objects.get(pk=1000)
+        query.acquired_plan.available_requeries = 0
+        query.acquired_plan.save()
+        response = self.client.put(reverse('query-client',
+                                           kwargs={'pk': 1000}),
+                                   data=json.dumps(self.valid_payload),
+                                   content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    
     def test_create_requery(self):
         """Reconsulta creada exitosamente."""
         response = self.client.put(reverse('query-client',

@@ -348,6 +348,10 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
 
     def update(self, instance, validated_data):
         """Update."""
+        if instance.acquired_plan.available_requeries == 0:
+            raise serializers.ValidationError(
+                _("You don't have available reconsults"))
+
         data_messages = validated_data.pop('message')
         self.context["size_msgs"] = len(data_messages)
         # creamos el grupo
