@@ -477,10 +477,12 @@ class PutDeclineQuery(APITestCase):
         """Obtener resultado 200."""
         #obtiene mensajes de query
 
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80asoclRvLmckV3DYy')
         data = {'message': "Voy a declinar porque no estoy claro en la respuesta"}
         response = self.client.put(reverse('query-decline',
-            kwargs={'pk': 2}), data=json.dumps(data),
+            kwargs={'pk': 6}), data=json.dumps(data),
             content_type='application/json')
+        import pdb
+        pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
