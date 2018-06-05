@@ -936,11 +936,64 @@
   }
 },
 {
+  "model": "api.user",
+  "pk": 31,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$VOeT7PriDQ3N$u+QeTUC3lfrWf1E2RVXniMLrjF+rjhXGFwJMA11vIOU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teresaqr2@tesla.com",
+    "first_name": "tere",
+    "last_name": "garcia",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-09T19:21:10.101Z",
+    "nick": "teresas",
+    "email_exact": "teresaqr2@tesla.com",
+    "telephone": "00023123",
+    "cellphone": "0001231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://s3.amazonaws.com/linkup-photos/5b645dfa-e2ea-4319-a706-3374e5f65561.png",
+    "document_type": 1,
+    "document_number": "555",
+    "img_document_number": null,
+    "ruc": "33333",
+    "code": "E555",
+    "anonymous": true,
+    "updated_at": "2018-02-09T19:21:10.179Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 7,
+    "residence_country": 1,
+    "foreign_address": "fefwefwef",
+    "key": "MYR7U146MN",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
   "model": "api.specialist",
   "pk": 4,
   "fields": {
     "business_name": "paty electronics",
     "type_specialist": "m",
+    "star_rating": null,
+    "cv": null,
+    "payment_per_answer": "3.20",
+    "category": 22,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 31,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
     "star_rating": null,
     "cv": null,
     "payment_per_answer": "3.20",
@@ -1002,8 +1055,22 @@
     "message": "mensaje de prueba 2",
     "msg_type": "q",
     "created_at": "2018-02-22T14:37:15.234Z",
-    "specialist": 4,
+    "specialist": null,
     "query": 5,
+    "viewed": false,
+    "code": 1,
+    "message_reference": 7
+  }
+},{
+  "model": "api.message",
+  "pk": 8,
+  "fields": {
+    "content_type": 1,
+    "message": "mensaje de prueba 2",
+    "msg_type": "q",
+    "created_at": "2018-02-22T14:37:15.234Z",
+    "specialist": 4,
+    "query": 6,
     "viewed": false,
     "code": 1,
     "message_reference": 7
@@ -1764,6 +1831,18 @@
     "created": "2018-02-26T21:10:22Z",
     "updated": "2018-02-26T21:10:22Z"
   }
+},{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 4,
+  "fields": {
+    "user": 31,
+    "token": "rRNQmSvkyHvi80asoclRvLmckV3DYy",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "groups read write",
+    "created": "2018-02-26T21:10:22Z",
+    "updated": "2018-02-26T21:10:22Z"
+  }
 },
 {
   "model": "oauth2_provider.accesstoken",
@@ -2488,7 +2567,7 @@
     "created_at": "2018-02-20T22:12:36.131Z",
     "last_modified": "2018-02-22T14:38:30.934Z",
     "calification": null,
-    "category": 8,
+    "category": 22,
     "client": 5,
     "specialist": 4,
     "acquired_plan": 2,
@@ -2504,7 +2583,7 @@
     "created_at": "2018-02-20T22:14:43.332Z",
     "last_modified": "2018-02-22T14:38:13.654Z",
     "calification": null,
-    "category": 8,
+    "category": 22,
     "client": 5,
     "specialist": 4,
     "acquired_plan": 2,
@@ -2520,7 +2599,7 @@
     "created_at": "2018-02-20T22:14:43Z",
     "last_modified": "2018-02-22T14:37:58.492Z",
     "calification": null,
-    "category": 8,
+    "category": 22,
     "client": 5,
     "specialist": 4,
     "acquired_plan": 3,
@@ -2536,7 +2615,7 @@
     "created_at": "2018-02-21T19:16:12.640Z",
     "last_modified": "2018-02-22T14:37:49.568Z",
     "calification": null,
-    "category": 8,
+    "category": 22,
     "client": 5,
     "specialist": 4,
     "acquired_plan": 2,
@@ -2552,11 +2631,27 @@
     "created_at": "2018-02-21T19:21:12.977Z",
     "last_modified": "2018-02-22T14:37:15.182Z",
     "calification": null,
-    "category": 8,
+    "category": 22,
     "client": 11,
     "specialist": 4,
     "acquired_plan": 2,
     "changed_on": "2018-02-22T14:37:15.182Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 6,
+  "fields": {
+    "title": "consulta 6",
+    "status": 2,
+    "created_at": "2018-02-20T22:12:36.131Z",
+    "last_modified": "2018-02-22T14:38:30.934Z",
+    "calification": null,
+    "category": 22,
+    "client": 5,
+    "specialist": 31,
+    "acquired_plan": 2,
+    "changed_on": "2018-02-22T14:38:30.934Z"
   }
 },
 {

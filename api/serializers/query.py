@@ -49,9 +49,6 @@ class MessageSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"file_url": [required]})
         if int(data["content_type"]) == 1 and data["message"] == '':
             raise serializers.ValidationError({"message": [required]})
-        # if data["msg_type"] == 'a' or data["msg_type"] == 'r':
-        #     if 'reference_id' not in data:
-        #         raise serializers.ValidationError({"reference_id": [required]})
         return data
 
 
@@ -253,7 +250,8 @@ class QuerySerializer(serializers.ModelSerializer):
 
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
-                                "calification": obj.calification}
+                                "calification": obj.calification,
+                                "specialist_id": obj.specialist.id}
 
             key_message = 'm'+str(message["id"])
             chat.update({key_message: dict(message)})
@@ -321,7 +319,7 @@ class QueryResponseSerializer(BaseQueryResponseSerializer):
                 str(instance.category.id)
             data_message["code"] = self.context['specialist'].code
             # se busca el mensaje de referencia y se extrae de la respuesta
-            if 'message_reference' in data_message and data_message['message_reference'] != 0:
+            if data_message['message_reference'] is not None and data_message['message_reference'] != 0:
                 ms_ref = data_message['message_reference'].id
             Message.objects.create(query=instance, group=group, **data_message)
 
@@ -620,13 +618,33 @@ class UserQueryMessageSerializer(serializers.ModelSerializer):
         """String Photo."""
         return obj['client__photo']
 
-class QueryAcceptSerializer(serializers.Serializer):
+class QueryAcceptSerializer(serializers.ModelSerializer):
     """Cambiar clave de usuario."""
+
+    class Meta:
+        """Meta."""
+        model = Query
+        fields = ('status', 'specialist')
 
     def update(self, instance, validated_data):
         """Redefinir update."""
-        status = 2  # Status Query Accept
+        import pdb
+        pdb.set_trace()
+        instance.status = validated_data["status"]
+        instance.save()
+        return instance
 
-        instance.status = status
+class QueryDeriveSerializer(serializers.ModelSerializer):
+    """Cambiar clave de usuario."""
+
+    class Meta:
+        """Meta."""
+        model = Query
+        fields = ('status', 'specialist')
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        instance.status = validated_data["status"]
+        instance.specialist = validated_data["specialist"]
         instance.save()
         return instance

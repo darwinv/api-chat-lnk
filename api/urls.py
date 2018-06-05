@@ -98,8 +98,11 @@ urlpatterns = [
     url(r'^queries-messages/(?P<pk>[0-9]+)/$', query.QueryMessageView.as_view(), name='query-messages'),
 
     # Specialist Accept Query
-
     url(r'^query-accept/(?P<pk>[0-9]+)/$', query.QueryAcceptView.as_view(), name='query-accept'),
+    # Specialist Derive Query
+    url(r'^query-derive/(?P<pk>[0-9]+)/$', query.QueryDeriveView.as_view(), name='query-derive'),
+    # Specialist Decline Query
+    url(r'^query-decline/(?P<pk>[0-9]+)/$', query.QueryDeclineView.as_view(), name='query-decline'),
 
 
     # Vendedores

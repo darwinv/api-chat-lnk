@@ -34,14 +34,17 @@ class SpecialistMessageListCustomSerializer(serializers.Serializer):
         #     aux_time = instance.date.time()
         # else:
         #     aux_time = instance.date
-        return {"photo": instance.photo,
-                "displayName": instance.display_name,
-                "date": instance.date,
-                "title": instance.title,
-                "total": instance.total,
-                "message": instance.message,
-                "client": instance.client,
-                "specialist": instance.specialist}
+        return {
+                    "client": instance.client,
+                    "photo": instance.photo,
+                    "displayName": instance.display_name,
+                    "specialist": instance.specialist,
+                    "title": instance.title,
+                    "message": instance.message,                
+                    "date": instance.date,
+                    "id": instance.id,
+                    # "total": instance.total
+                }
 
 
 class PendingQueriesSerializer(serializers.Serializer):
@@ -54,9 +57,9 @@ class PendingQueriesSerializer(serializers.Serializer):
 
     def to_representation(self, dicti):
         # import pdb; pdb.set_trace()
-
+        
         return {"id": dicti["id"],
-                "lastMessage": dicti["message"],
+                "message": dicti["message"],
                 "title": dicti["title"],
                 "date": str(dicti["date_at"]),
                 "status": dicti["status"]

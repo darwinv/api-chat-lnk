@@ -83,6 +83,7 @@ class QueryListClientView(ListCreateAPIView):
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+
             category = serializer.data["category"]
             lista = list(serializer.data['message'].values())
             # Se actualiza la base de datos de firebase para el mensaje
@@ -114,7 +115,7 @@ class QueryListClientView(ListCreateAPIView):
                                             date_at=Subquery(
                                                 mess.values('created_at')))\
                                         .filter(client=user_id,
-                                                category=category,
+                                                specialist=serializer_tmp.data[0]['specialist'],
                                                 status=1)\
                                         .annotate(count=Count('id'))\
                                         .order_by('-message__created_at')
@@ -124,7 +125,9 @@ class QueryListClientView(ListCreateAPIView):
             pyrebase.createListMessageClients(serializer_tmp.data,
                                               serializer.data["query_id"],
                                               serializer.data["status"],
-                                              user_id, queries_list=lista_d
+                                              user_id,
+                                              serializer_tmp.data[0]['specialist'],
+                                                queries_list=lista_d
                                               )
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
@@ -191,7 +194,8 @@ class QueryDetailSpecialistView(APIView):
             pyrebase.createListMessageClients(serializer_tmp.data,
                                               serializer.data["query_id"],
                                               serializer.data["status"],
-                                              user_id)
+                                              user_id,
+                                              serializer_tmp.data[0]['specialist'])
             # actualizo el querycurrent del listado de mensajes
             data = {'status': 3,
                     'date': lista[-1]["timeMessage"],
@@ -450,7 +454,7 @@ class QueryMessageView(APIView):
 
 
 class QueryAcceptView(APIView):
-    """Vista Consultas en el chat por parte del Cliente."""
+    """Vista Aceptar Query"""
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsSpecialist)
@@ -463,10 +467,70 @@ class QueryAcceptView(APIView):
         except Query.DoesNotExist:
             raise Http404
 
-        data = {}
-        serializer = QueryAcceptSerializer(query, data)
+        data = request.data
+        data["status"] = 2
+        serializer = QueryAcceptSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
             pyrebase.updateStatusQueryAccept(specialist, query.client.id, pk)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class QueryDeriveView(APIView):
+    """Vista Derivar Query"""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSpecialist)
+
+    def put(self, request, pk):
+
+        """Listado de queries y sus respectivos mensajes para un especialista."""
+        specialist = Operations.get_id(self, request)
+        try:
+            query = Query.objects.get(pk=pk, status__lt=1, specialist=specialist)
+        except Query.DoesNotExist:
+            raise Http404
+
+        data = {}
+        data["status"] = 1
+        data["specialist"] = request.data["specialist"]
+        serializer = QueryDeriveSerializer(query, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            pyrebase.updateStatusQueryDerive(specialist, data["specialist"], query)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class QueryDeclineView(APIView):
+    """Vista Derivar Query"""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSpecialist)
+
+    def put(self, request, pk):
+
+        """Listado de queries y sus respectivos mensajes para un especialista."""
+        specialist = Operations.get_id(self, request)
+        import pdb
+        pdb.set_trace()
+        try:
+            # Queris status menor a 3
+            query = Query.objects.get(pk=pk, status__lt=3, specialist=specialist)
+        except Query.DoesNotExist:
+            raise Http404
+
+        try:
+            main_specialist = Specialist.objects.get(category=query.category, type_specialist='m')
+        except Specialist.DoesNotExist:
+            raise Http404
+
+        data = {}
+        data["status"] = 1
+        data["specialist"] = main_specialist.id
+        serializer = QueryDeriveSerializer(query, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            # data["message"] save decline specialist asociate
+            pyrebase.updateStatusQueryDerive(specialist, data["specialist"], query)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

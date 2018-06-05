@@ -1,6 +1,10 @@
 """Funcionamiento de Pyrebase."""
 import pyrebase
-from api.models import Client, QueryPlansAcquired, Category, Message
+from api.models import Client, QueryPlansAcquired, Category, Message, Query
+from api.views.actors import SpecialistMessageList_sp
+from api.serializers.actors import SpecialistMessageListCustomSerializer
+from django.db.models import OuterRef, Subquery, Count
+from api.serializers.actors import PendingQueriesSerializer
 # from datetime import datetime, timedelta
 from api.utils.parameters import Params, Payloads
 from api.utils.querysets import get_query_set_plan
@@ -92,27 +96,50 @@ def updateStatusQueryAccept(specialist_id, client_id, query_id):
     data = {"status": 2}  # Query Aceptado por especialista
 
     # Remover query del listado de pendientes
-    removeQueryAcceptList(specialist_id, client_id, query_id, data)
-
-    # Actualizar estatus de query actual
-    update_status_query_current_list(specialist_id, client_id, data, query_id)
+    removeQueryAcceptList(specialist_id, client_id, query_id)
+    
+    # Actualizar estatus de query actual 
+    updateStatusQueryCurrentList(specialist_id, client_id, query_id, data)
 
     # Actualizar estatus de los mensajes del chat
     data_msgs = Message.objects.filter(query=query_id)
     updateStatusQueryAcceptChat(data_msgs, data)
 
+def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
+    """
+        old_specialist_id: anterior especialista
+        specialist_id: nuevo especialista
+        query: instancia del query a modificar
+    """
+    """ Actualizacion query en listado y chat """
+    status = 1
+    data = {"status": status, 'specialist_id': specialist_id}  # Query Aceptado por especialista
+    
+    client_id = query.client.id
+    query_id = query.id
+    category_id = query.category.id
 
-def removeQueryAcceptList(specialist_id, client_id, query_id, data):
+    # Remover query del listado de especialista actual
+    removeQueryAcceptList(old_specialist_id, client_id, query_id)
+
+    # Generar nodos de listado para nuevo especialista
+    generateDataMessageClients(client_id, category_id, query_id, status, specialist_id)
+
+    # Actualizar estatus de query actual
+    # updateStatusQueryCurrentList(specialist_id, client_id, query_id, data)
+
+    # Actualizar estatus de los mensajes del chat 
+    # y especialista encargado
+    data_msgs = Message.objects.filter(query=query_id)
+    updateStatusQueryAcceptChat(data_msgs, data)
+
+def removeQueryAcceptList(specialist_id, client_id, query_id):
     """ Remover query nodo en listado de clientes """
     node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
     node_query = 'queries/{}'.format(Params.PREFIX['query'] + str(query_id))
-
-    res = db.child("messagesList/specialist/").child(
+    return db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).child(node_query).remove()
-
-    return res
-
 
 def update_status_query_current_list(specialist_id, client_id,
                                      data, query_id=None):
@@ -121,12 +148,12 @@ def update_status_query_current_list(specialist_id, client_id,
     node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
     node_query = 'queryCurrent'
+
     room = "messagesList/specialist/{}/{}/{}/".format(node_specialist,
                                                       node_client, node_query)
-
-    node = db.child(room + '/id').get()
+    node = db.child(room + 'id').get()
     if query_id:
-        if node.pyres and node.pyres == query_id:
+        if node.pyres and node.pyres == int(query_id):
             res = db.child(room).update(data)
         else:
             pass
@@ -169,34 +196,35 @@ def update_status_messages(data_msgs):
         print(res)
 
 
-def createListMessageClients(lista, act_query, status,
-                             client_id, queries_list=None):
+def createListMessageClients(lista, query_id, status,
+                             client_id, specialist_id, queries_list=None):
     """Insertar o actualizar los mensajes de los clientes del especialista."""
-    firebase = pyrebase.initialize_app(config)
-    db = firebase.database()
-    # import pdb; pdb.set_trace()
     data_obj = lista[0]
-    node_specialist = Params.PREFIX['specialist'] + str(data_obj['specialist'])
+
+    node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
-    data_obj['date'] = str(data_obj['date'])
-    data_obj['queries'] = queries_list
+
     if status >= 4:
         data_obj['isQueryActive'] = False
     else:
         data_obj['isQueryActive'] = True
-    query_current = {
-        "id": act_query,
+
+    data_obj['queries'] = queries_list
+    query_current = {    
+        "status": status,      
+        "title": data_obj['title'],
         "date": str(data_obj['date']),
         "message": data_obj['message'],
-        "title": data_obj['title'],
-        "status": status
+        "id": data_obj['id']
     }
     data_obj['queryCurrent'] = query_current
     del data_obj['message']
     del data_obj['title']
-    res = db.child("messagesList/specialist/").child(
+    del data_obj['date']
+    del data_obj['id']
+
+    return db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).update(data_obj)
-    return res
 
 
 def chosen_plan(client_id, data):
@@ -206,16 +234,13 @@ def chosen_plan(client_id, data):
     res = db.child("chosenPlans").child(client_id).update(data)
     return res
 
-
 def mark_failed_file(room, message_id):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + 'm' + str(message_id)
     firebase = pyrebase.initialize_app(config)
     # print(node)
     db = firebase.database()
-    r = db.child(node).update({"uploaded": 5, "fileUrl": "error"})
-    return r
-
+    return db.child(node).update({"uploaded": 5, "fileUrl": "error"})
 
 def mark_uploaded_file(room, message_id, url_file):
     """Actualizar que el archivo se ha subido a firebase."""
@@ -223,5 +248,43 @@ def mark_uploaded_file(room, message_id, url_file):
     firebase = pyrebase.initialize_app(config)
     # print(node)
     db = firebase.database()
-    r = db.child(node).update({"uploaded": 2, "fileUrl": url_file})
-    return r
+    return db.child(node).update({"uploaded": 2, "fileUrl": url_file})
+
+def generateDataMessageClients(client_id, category_id, query_id, status, specialist_id):
+    # Luego se busca el titulo y su id de la consulta
+    lista = SpecialistMessageListCustom(client_id, category_id)
+
+    queries_list = PendingQueriesList(client_id, specialist_id)
+    
+    return createListMessageClients(lista.data, query_id, status, 
+                                    client_id, specialist_id, queries_list)
+
+def SpecialistMessageListCustom(client_id, category_id):
+    # Se llama al store procedure
+    data_set = SpecialistMessageList_sp.search(2, client_id,
+                                               category_id, 0, "")
+
+    # El queryset se pasa serializer para mapear datos
+    return SpecialistMessageListCustomSerializer(data_set,
+                                                           many=True)
+def PendingQueriesList(client_id, specialist_id):
+    mess = Message.objects.filter(query=OuterRef("pk"))\
+                                  .order_by('-created_at')[:1]
+
+    data_queries = Query.objects.values('id', 'title', 'status')\
+                                .annotate(
+                                    message=Subquery(
+                                        mess.values('message')))\
+                                .annotate(
+                                    date_at=Subquery(
+                                        mess.values('created_at')))\
+                                .filter(client=client_id,
+                                        specialist=specialist_id,
+                                        status=1)\
+                                .annotate(count=Count('id'))\
+                                .order_by('-message__created_at')
+    
+    
+    query_pending = PendingQueriesSerializer(data_queries, many=True)
+    queries_list = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
+    return queries_list
