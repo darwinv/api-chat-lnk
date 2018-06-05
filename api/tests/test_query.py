@@ -94,13 +94,15 @@ class CreateQuery(APITestCase):
                 "message": "primera consulta",
                 "msg_type": "q",
                 "content_type": 1,
-                "file_url": ""
+                "file_url": "",
+                "message_reference": None
                 },
                 {
                 "message": "",
                 "msg_type": "q",
                 "content_type": "2",
-                "file_url": "img.png"
+                "file_url": "img.png",
+                "message_reference": None
                 }
             ],
         }
@@ -226,14 +228,16 @@ class PutFilesToQuery(APITestCase):
             "message": [{
                 "message": "primera consulta",
                 "msg_type": "q",
-                "content_type": "0",
-                "file_url": ""
+                "content_type": 1,
+                "file_url": "",
+                "message_reference": None
                 },
                 {
                 "message": "",
                 "msg_type": "q",
-                "content_type": "1",
-                "file_url": "img.png"
+                "content_type": 2,
+                "file_url": "img.png",
+                "message_reference": None
                 }
             ],
         }
@@ -283,7 +287,8 @@ class ResponseSpecialistQuery(APITestCase):
                 "message": "",
                 "msg_type": "a",
                 "content_type": 2,
-                "file_url": "img.png"
+                "file_url": "img.png",
+                "message_reference": None
                 }
             ]
         }
@@ -420,7 +425,7 @@ class PutAcceptQuery(APITestCase):
     def setUp(self):
         """Setup."""
         pass
-    
+
     def test_put_query_accept(self):
         """Obtener resultado 200."""
 
@@ -451,7 +456,7 @@ class PutDeriveQuery(APITestCase):
     def setUp(self):
         """Setup."""
         pass
-    
+
     def test_put_query_derive(self):
         """Obtener resultado 200."""
         #obtiene mensajes de query
@@ -472,7 +477,7 @@ class PutDeclineQuery(APITestCase):
     def setUp(self):
         """Setup."""
         pass
-    
+
     def test_put_query_derive(self):
         """Obtener resultado 200."""
         #obtiene mensajes de query
@@ -482,7 +487,4 @@ class PutDeclineQuery(APITestCase):
         response = self.client.put(reverse('query-decline',
             kwargs={'pk': 6}), data=json.dumps(data),
             content_type='application/json')
-        import pdb
-        pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
