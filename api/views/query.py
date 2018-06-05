@@ -443,7 +443,7 @@ class QueryAcceptView(APIView):
         except Query.DoesNotExist:
             raise Http404
 
-        data = request.data
+        data = {}
         data["status"] = 2
         serializer = QueryAcceptSerializer(query, data=data)
         if serializer.is_valid():

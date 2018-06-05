@@ -594,12 +594,10 @@ class QueryAcceptSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta."""
         model = Query
-        fields = ('status', 'specialist')
+        fields = ('status',)
 
     def update(self, instance, validated_data):
         """Redefinir update."""
-        import pdb
-        pdb.set_trace()
         instance.status = validated_data["status"]
         instance.save()
         return instance
