@@ -1,0 +1,27 @@
+[
+  {
+    "model": "api.message",
+    "pk": 3,
+    "fields": {
+      "message": "respuesta",
+      "msg_type": "a",
+      "created_at": "2018-03-06T15:58:12.450Z",
+      "content_type": 1,
+      "specialist": 3,
+      "viewed": false,
+      "file_url": "",
+      "code": "E555",
+      "room": "u2-s1",
+      "query": 1000,
+  		"group": 2,
+      "message_reference": 1
+    }
+  },
+  {
+  	"model": "api.groupmessage",
+  	"pk": 2,
+  	"fields": {
+  		"status": 1
+  	}
+  }
+]
