@@ -463,7 +463,7 @@ class QueryDeriveView(APIView):
         """Listado de queries y sus respectivos mensajes para un especialista."""
         specialist = Operations.get_id(self, request)
         try:
-            query = Query.objects.get(pk=pk, status__lt=1, specialist=specialist)
+            query = Query.objects.get(pk=pk, status__lt=3, specialist=specialist)
         except Query.DoesNotExist:
             raise Http404
 

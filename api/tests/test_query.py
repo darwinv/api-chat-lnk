@@ -424,28 +424,23 @@ class PutAcceptQuery(APITestCase):
 
     def setUp(self):
         """Setup."""
-        pass
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
 
     def test_put_query_accept(self):
         """Obtener resultado 200."""
-
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
-        response = self.client.put(reverse('query-accept', kwargs={'pk': 2}),)
+        response = self.client.put(reverse('query-accept', kwargs={'pk': 2}),)       
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    # PENDIENTE
-    # def test_query_status(self):
-    #     """status 0 to query"""
-    #     self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
-    #     response = self.client.put(reverse('query-accept', kwargs={'pk': 1}),)
+    
+        response = self.client.put(reverse('query-accept', kwargs={'pk': 2}),)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_specialist_owner(self):
+        """el especialista tiene asignada la query"""
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80asoclRvLmckV3DYy')
+        response = self.client.put(reverse('query-accept', kwargs={'pk': 2}),)
 
-    # def test_specialist_owner(self):
-    #     """el especialista tiene asignada la query"""
-    #     self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
-    #     response = self.client.put(reverse('query-accept', kwargs={'pk': 1}),)
-
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class PutDeriveQuery(APITestCase):
