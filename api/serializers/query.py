@@ -156,7 +156,8 @@ class QueryCustomSerializer(serializers.Serializer):
 
     fields = ('specialist_id', 'month_count', 'year_count')
 
-    # establecemos que datos del diccionario pasado se mostrara en cada campo puesto en la tupla "Fields"
+    # establecemos que datos del diccionario pasado se mostrara en cada
+    # campo puesto en la tupla "Fields"
     def to_representation(self, dic):
         """Diccionario redefinido."""
         return {"specialist_id": dic['specialist_id'],
@@ -264,7 +265,38 @@ class QuerySerializer(serializers.ModelSerializer):
                 "category": obj.category.id, "query_id": obj.id}
 
 
-class QueryResponseSerializer(serializers.ModelSerializer):
+class BaseQueryResponseSerializer(serializers.ModelSerializer):
+    """Para base de respuesta y reconsulta."""
+
+    message = MessageSerializer(many=True)
+
+    def to_representation(self, obj):
+        """Redefinido metodo de representación del serializer."""
+        size = self.context["size_msgs"]
+        ms = ListMessageSerializer(
+            obj.message_set.order_by('-created_at')[:size], many=True).data
+        chat = {}
+        messages_files = []
+        for message in ms:
+            if int(message['fileType']) > 1:
+                message['uploaded'] = 1
+                messages_files.append(message["id"])
+            else:
+                message['uploaded'] = 2
+            message["query"] = {"id": obj.id, "title": obj.title,
+                                "status": obj.status,
+                                "calification": obj.calification}
+            key_message = Params.PREFIX['message']+str(message["id"])
+            chat.update({key_message: dict(message)})
+
+        return {'room': ms[0]["room"], "message": chat,
+                "message_files_id": messages_files,
+                "category": obj.category.id, 'status': obj.status,
+                "query_id": obj.id, "client_id": obj.client.id,
+                "specialist_id": obj.specialist.id}
+
+
+class QueryResponseSerializer(BaseQueryResponseSerializer):
     """Para respuesta de especialista."""
 
     message = MessageSerializer(many=True)
@@ -301,35 +333,71 @@ class QueryResponseSerializer(serializers.ModelSerializer):
         gp = GroupMessage.objects.get(message__id=ms_ref)
         gp.status = 2
         msgs = gp.message_set.all()
-        # se pasa el queryset con el cual s
+        msgs_query = instance.message_set.all()
+        # se pasa el queryset
         pyrebase.update_status_messages(msgs)
+        pyrebase.update_status_querymessages(data_msgs=msgs_query,
+                                             data={"status": instance.status})
         gp.save()
         instance.save()
         return instance
-
-    def to_representation(self, obj):
-        """Redefinido metodo de representación del serializer."""
-        size = self.context["size_msgs"]
-        ms = ListMessageSerializer(
-            obj.message_set.order_by('-created_at')[:size], many=True).data
-        chat = {}
-        messages_files = []
-        for message in ms:
-            if int(message['fileType']) > 1:
-                message['uploaded'] = 1
-                messages_files.append(message["id"])
-            else:
-                message['uploaded'] = 2
-            message["query"] = {"id": obj.id, "title": obj.title,
-                                "status": obj.status,
-                                "calification": obj.calification}
-            key_message = Params.PREFIX['message']+str(message["id"])
-            chat.update({key_message: dict(message)})
-
+ 
         return {'room': ms[0]["room"], "message": chat,
                 "message_files_id": messages_files,
                 "category": obj.category.id, 'status': obj.status,
                 "query_id": obj.id, "client_id": obj.client.id}
+ 
+class ReQuerySerializer(BaseQueryResponseSerializer):
+    """Serializer de Reconsulta."""
+
+    class Meta:
+        """Meta."""
+
+        model = Query
+        fields = ('id', 'message')
+
+    def update(self, instance, validated_data):
+        """Update."""
+        if instance.acquired_plan.available_requeries == 0:
+            raise serializers.ValidationError(
+                _("You don't have available reconsults"))
+
+        data_messages = validated_data.pop('message')
+        self.context["size_msgs"] = len(data_messages)
+        # creamos el grupo
+        group = GroupMessage.objects.create(status=1)
+        # Recorremos los mensajes para crearlos todos
+        for data_message in data_messages:
+            # por defecto el tipo de mensaje al actualizarse debe
+            # de ser re consulta ('r')
+            data_message["msg_type"] = "r"
+            # armamos la sala para el usuario
+            data_message["room"] = Params.PREFIX['client'] +\
+                str(instance.client.id)+'-'+Params.PREFIX['category'] +\
+                str(instance.category.id)
+            data_message["code"] = instance.client.code
+            # se busca el mensaje de referencia y se extrae de la respuesta
+            if 'message_reference' in data_message and data_message['message_reference'] != 0:
+                ms_ref = data_message['message_reference'].id
+            Message.objects.create(query=instance, group=group, **data_message)
+        instance.status = 2  # actualizo status
+        # actualizo el estado del grupo al cual se le responde
+        gp = GroupMessage.objects.get(message__id=ms_ref)
+        gp.status = 2
+        msgs = gp.message_set.all()
+        msgs_query = instance.message_set.all()
+        # se pasa el queryset
+        pyrebase.update_status_messages(msgs)
+        pyrebase.update_status_querymessages(data_msgs=msgs_query,
+                                             data={"status": instance.status})
+        gp.save()
+        av_requeries = instance.acquired_plan.available_requeries - 1
+        instance.acquired_plan.available_requeries = av_requeries
+        instance.acquired_plan.save()
+        instance.save()
+        return instance
+
+
 
 # serializer para actualizar solo status de la consulta sin
 # enviar msjs
@@ -577,6 +645,7 @@ class QueryAcceptSerializer(serializers.ModelSerializer):
         instance.status = validated_data["status"]
         instance.save()
         return instance
+
 
 class QueryDeriveSerializer(serializers.ModelSerializer):
     """Cambiar clave de usuario."""

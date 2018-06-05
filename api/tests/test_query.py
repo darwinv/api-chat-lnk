@@ -371,6 +371,105 @@ class ResponseSpecialistQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
+class ReQuery(APITestCase):
+    """Pruebas para reconsultas."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_query', 'test_requery']
+
+    def setUp(self):
+        """SetUp."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        self.valid_payload = {
+            "message": [{
+                "message": "reconsulta hecha",
+                "msg_type": 'r',
+                "content_type": 1,
+                "file_url": "",
+                "message_reference": 3
+                }
+            ],
+        }
+
+    def test_invalid_queryid(self):
+        """Solicitud Invalida por no existir la consulta."""
+        response = self.client.put(
+            reverse('query-client', kwargs={'pk': 11}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_no_message(self):
+        """Solicitud invalida por no enviar un mensaje de respuesta."""
+        data = self.valid_payload
+        del data["message"]
+        response = self.client.put(
+            reverse('query-client', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_contentype_message(self):
+        """Verificar que el mensaje a guardar corresponde
+         al tipo de contenido de mensaje."""
+        self.valid_payload["message"][0]["message"] = ""
+        response = self.client.put(
+            reverse('query-client', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # al enviar un mensaje no puede estar vacio, mientras
+        # la el content_type sea 1
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_reference(self):
+        """Envio de respuesta con reference_id inexistente."""
+        self.valid_payload["message"][0]["message_reference"] = 5000
+        response = self.client.put(
+            reverse('query-client', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_permissions(self):
+        """Credenciales incorrectas."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        response = self.client.put(
+            reverse('query-client', kwargs={'pk': 1000}),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        # Permisos incorrectos
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+# aqui la prueba de reconsultas no disponibles
+    def test_no_requeries(self):
+        """No reconsultas disponibles."""
+        query = Query.objects.get(pk=1000)
+        query.acquired_plan.available_requeries = 0
+        query.acquired_plan.save()
+        response = self.client.put(reverse('query-client',
+                                           kwargs={'pk': 1000}),
+                                   data=json.dumps(self.valid_payload),
+                                   content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    
+    def test_create_requery(self):
+        """Reconsulta creada exitosamente."""
+        response = self.client.put(reverse('query-client',
+                                           kwargs={'pk': 1000}),
+                                   data=json.dumps(self.valid_payload),
+                                   content_type='application/json')
+        query_status = Query.objects.get(pk=1000)
+        self.assertEqual(2, int(query_status.status))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class GetSpecialistMessages(APITestCase):
     """Prueba para devolver el plan activo y elegido de un determinado cliente."""
 

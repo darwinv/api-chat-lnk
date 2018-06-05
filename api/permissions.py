@@ -43,12 +43,14 @@ class IsAdminOrOwner(permissions.BasePermission):
         """Metodo redefinido."""
         return (request.user and request.user.is_staff) or request.user.id == obj.id
 
+
 class IsAdmin(permissions.BasePermission):
     """Solo el administrador."""
 
     def has_object_permission(self, request, view, obj):
         """Metodo redefinido."""
         return request.user and request.user.is_staff
+
 
 class IsClient(permissions.BasePermission):
     """Permiso solo para el rol cliente."""
@@ -79,6 +81,7 @@ class IsAdminOrClient(permissions.BasePermission):
             return True
         return False
 
+
 class IsClientOrSpecialistAndOwner(permissions.BasePermission):
     """Solo Cliente y Dueño del objeto actual."""
 
@@ -91,9 +94,17 @@ class IsClientOrSpecialistAndOwner(permissions.BasePermission):
 
     def has_object_permission(self, request, view, owner_id):
         """Permiso nivel objeto."""
-        # import pdb; pdb.set_trace()
         if request.method == "POST" or request.method == "PUT":
             return request.user.id == owner_id
+
+
+class IsOwnerAndClient(permissions.BasePermission):
+    """Solo Dueños y que sea cliente."""
+
+    def has_object_permission(self, request, view, owner_id):
+        """Permiso nivel objeto."""
+
+
 
 class IsAdminReadOrSpecialistOwner(permissions.BasePermission):
     """Solo Administradores o Especialistas."""
@@ -111,6 +122,7 @@ class IsAdminReadOrSpecialistOwner(permissions.BasePermission):
         if request.method == "POST" or request.method == "PUT":
             return (request.user and request.user.role_id == 3) and request.user.id == obj.id
 
+
 class IsSpecialist(permissions.BasePermission):
     """Es administrador o especialista."""
 
@@ -119,6 +131,7 @@ class IsSpecialist(permissions.BasePermission):
         if request.user and request.user.role_id == 3:
             return True
         return False
+
 
 class IsAdminOrSpecialist(permissions.BasePermission):
     """Es administrador o especialista."""

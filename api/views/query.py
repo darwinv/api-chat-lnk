@@ -24,12 +24,11 @@ from api.permissions import IsClientOrSpecialistAndOwner
 from api.utils.validations import Operations
 from api.views.actors import SpecialistMessageList_sp
 from api.serializers.query import QuerySerializer, QueryListClientSerializer
-from api.serializers.query import MessageSerializer, QueryMessageSerializer
-from api.serializers.query import QueryDetailSerializer, QueryAcceptSerializer
-from api.serializers.query import QueryUpdateStatusSerializer
+from api.serializers.query import QueryMessageSerializer
+from api.serializers.query import QueryDeriveSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
-from api.serializers.query import ChatMessageSerializer, QueryResponseSerializer
-from api.serializers.query import QueryDeriveSerializer
+from api.serializers.query import ChatMessageSerializer
+from api.serializers.query import QueryResponseSerializer, ReQuerySerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
@@ -144,7 +143,8 @@ class QueryDetailSpecialistView(APIView):
     """Vista para que el especialista responda la consulta."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsAdminReadOrSpecialistOwner]
+    permission_classes = [permissions.IsAuthenticated,
+                          IsAdminReadOrSpecialistOwner]
 
     def get_object(self, pk):
         """Obtener objeto."""
@@ -188,58 +188,64 @@ class QueryDetailSpecialistView(APIView):
             # actualizo el querycurrent del listado de mensajes
             data = {'status': 3,
                     'date': lista[-1]["timeMessage"],
-                    'message': lista[-1]["message"] }
+                    'message': lista[-1]["message"]}
             pyrebase.update_status_query_current_list(user_id, client_id, data)
 
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
-# Detall de consulta
-class QueryDetailView(APIView):
-    # se debe definir todos los sets de permisos
-    # ejemplo solo el principal puede derivar
-    # solo el cliente puede preguntar, etc
-    permission_classes = [permissions.AllowAny]
+class QueryDetailClientView(APIView):
+    """Vista para reconsultar."""  # por ahora
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated,
+                          IsClientOrSpecialistAndOwner]
+
     def get_object(self, pk):
+        """Obtener objeto."""
         try:
-            return Query.objects.get(pk=pk)
+            obj = Query.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj.client.id)
+            return obj
         except Query.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk):
-        # si el argumento lastmsg existe, se debe volver,
-        # el ultimo mensaje de consulta, por detalle
-        # (android especifico)
-        if 'last_msg' in request.query_params:
-            # import pdb; pdb.set_trace()
-            msg = Message.objects.filter(query_id=pk).last()
-            serializer = MessageSerializer(msg)
-        # se devuelve el ultimo query solicitado
-        # (notificacion en android)
-        elif 'query_last_msg' in request.query_params:
-            query = self.get_object(pk)
-            serializer = QueryDetailLastMsgSerializer(query)
-        else:
-            query = self.get_object(pk)
-            serializer = QueryDetailSerializer(query)
-        return Response(serializer.data)
-
-    # actualizacion
     def put(self, request, pk):
-        data = request.data
+        """Actualizar consulta."""
         query = self.get_object(pk)
-        # si se envia status o calification se actualiza usando otro serializer
-        if 'status' in data or 'calification' in data:
-            serializer = QueryUpdateStatusSerializer(query, data, partial=True)
-        else:
-            # en caso contrario se envian mensjaes
-            serializer = QuerySerializer(query, data, partial=True)
+        user_id = Operations.get_id(self, request)
+        if not user_id:
+            raise Http404
+        data = request.data
+        # No utilizamos partial=True, ya que solo actualizamos mensaje
+        serializer = ReQuerySerializer(query, data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            lista = list(serializer.data['message'].values())
+            client_id = serializer.data["client_id"]
+            category_id = serializer.data["category"]
+            specialist_id = serializer.data["specialist_id"]
+            # Actualizamos el nodo de mensajes segun su sala
+            pyrebase.chat_firebase_db(serializer.data["message"],
+                                      serializer.data["room"])
 
+            # Actualizamos el listado de especialidades en Firebase
+            pyrebase.categories_db(user_id, category_id,
+                                   lista[-1]["timeMessage"])
+            # sala es el cliente_id y su la categoria del especialista
+            sala = str(query.client.id) + '-' + str(category_id)
+
+            Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
+            # actualizo el querycurrent del listado de mensajes
+            data = {'status': 2,
+                    'date': lista[-1]["timeMessage"],
+                    'message': lista[-1]["message"]
+                    }
+
+            pyrebase.update_status_query_current_list(specialist_id, client_id,
+                                                      data)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 # Devolver el detalle de una ultima consulta filtrada por categoria
 # servicio pedido para android en notificaciones
@@ -452,6 +458,7 @@ class QueryAcceptView(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+
 class QueryDeriveView(APIView):
     """Vista Derivar Query"""
 
@@ -463,7 +470,8 @@ class QueryDeriveView(APIView):
         """Listado de queries y sus respectivos mensajes para un especialista."""
         specialist = Operations.get_id(self, request)
         try:
-            query = Query.objects.get(pk=pk, status__lt=3, specialist=specialist)
+            query = Query.objects.get(pk=pk, status__lt=3,
+                                      specialist=specialist)
         except Query.DoesNotExist:
             raise Http404
 
@@ -497,7 +505,7 @@ class QueryDeclineView(APIView):
             main_specialist = Specialist.objects.get(category=query.category, type_specialist='m')
         except Specialist.DoesNotExist:
             raise Http404
-        
+
         data = {}
         data["status"] = 1
         data["specialist"] = main_specialist.id
