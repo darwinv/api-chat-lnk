@@ -487,8 +487,6 @@ class QueryDeclineView(APIView):
 
         """Listado de queries y sus respectivos mensajes para un especialista."""
         specialist = Operations.get_id(self, request)
-        import pdb
-        pdb.set_trace()
         try:
             # Queris status menor a 3
             query = Query.objects.get(pk=pk, status__lt=3, specialist=specialist)
