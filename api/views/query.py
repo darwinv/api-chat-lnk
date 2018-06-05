@@ -186,7 +186,6 @@ class QueryDetailSpecialistView(APIView):
             sala = str(query.client.id) + '-' + str(category_id)
 
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
-
             # actualizo el querycurrent del listado de mensajes
             data = {'status': 3,
                     'date': lista[-1]["timeMessage"],
@@ -243,7 +242,7 @@ class QueryDetailClientView(APIView):
                     'date': lista[-1]["timeMessage"],
                     'message': lista[-1]["message"]
                     }
-            
+
             pyrebase.update_status_query_current_list(specialist_id, client_id,
                                                       data)
             return Response(serializer.data, status.HTTP_200_OK)
@@ -451,7 +450,7 @@ class QueryAcceptView(APIView):
         except Query.DoesNotExist:
             raise Http404
 
-        data = request.data
+        data = {}
         data["status"] = 2
         serializer = QueryAcceptSerializer(query, data=data)
         if serializer.is_valid():
