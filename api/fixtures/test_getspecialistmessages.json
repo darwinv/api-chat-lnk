@@ -1833,7 +1833,7 @@
   }
 },{
   "model": "oauth2_provider.accesstoken",
-  "pk": 4,
+  "pk": 5,
   "fields": {
     "user": 31,
     "token": "rRNQmSvkyHvi80asoclRvLmckV3DYy",
