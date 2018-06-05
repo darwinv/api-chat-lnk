@@ -459,6 +459,20 @@ class QueryAcceptView(APIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
+class DeclineRequeryView(APIView):
+    """Vista Declinar Reconsulta"""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsClient]
+
+    def post(self, request):
+        """Actualizar mensajes de categoria."""
+        user_id = Operations.get_id(self, request)
+        category = request.data["category_id"]
+        querys = Query.objects.filter(category=category,
+                                      client=user_id).update(status=4)
+        if querys:
+            return Response({}, status.HTTP_200_OK)
+
 class QueryDeriveView(APIView):
     """Vista Derivar Query"""
 

@@ -447,7 +447,6 @@ class ReQuery(APITestCase):
         # Permisos incorrectos
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-# aqui la prueba de reconsultas no disponibles
     def test_no_requeries(self):
         """No reconsultas disponibles."""
         query = Query.objects.get(pk=1000)
@@ -458,7 +457,16 @@ class ReQuery(APITestCase):
                                    data=json.dumps(self.valid_payload),
                                    content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    
+
+    def test_decline_requery(self):
+        """No reconsultas disponibles."""
+        response = self.client.put(reverse('query-client',
+                                           kwargs={'pk': 1000}),
+                                   data=json.dumps(self.valid_payload),
+                                   content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
     def test_create_requery(self):
         """Reconsulta creada exitosamente."""
         response = self.client.put(reverse('query-client',
@@ -528,9 +536,9 @@ class PutAcceptQuery(APITestCase):
 
     def test_put_query_accept(self):
         """Obtener resultado 200."""
-        response = self.client.put(reverse('query-accept', kwargs={'pk': 2}),)       
+        response = self.client.put(reverse('query-accept', kwargs={'pk': 2}),)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    
+
         response = self.client.put(reverse('query-accept', kwargs={'pk': 2}),)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
