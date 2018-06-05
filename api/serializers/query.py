@@ -639,6 +639,7 @@ class QueryAcceptSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class QueryDeriveSerializer(serializers.ModelSerializer):
     """Cambiar clave de usuario."""
 
