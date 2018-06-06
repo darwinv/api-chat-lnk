@@ -538,6 +538,7 @@ class QueryDeclineView(APIView):
         context = {}
         context["status"] = 1
         context["specialist"] = main_specialist
+        context["specialist_declined"] = specialist
         serializer = QueryDeclineSerializer(query, data=request.data, context=context)
 
         if serializer.is_valid():

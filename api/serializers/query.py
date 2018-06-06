@@ -693,5 +693,6 @@ class QueryDeclineSerializer(QueryDeriveSerializer):
         data_declinator = {}
         data_declinator["message"] = validated_data['message']
         data_declinator["query"] = instance
-        data_declinator["specialist"] = validated_data['specialist']
+        specialist = self.context['specialist_declined']
+        data_declinator["specialist"] = Specialist.objects.get(pk=specialist)
         return Declinator.objects.create(**data_declinator)
