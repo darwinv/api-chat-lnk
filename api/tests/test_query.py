@@ -571,6 +571,8 @@ class PutDeriveQuery(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
+
+
 class PutDeclineQuery(APITestCase):
     """Prueba para especialista deribar query"""
 
@@ -595,3 +597,62 @@ class PutDeclineQuery(APITestCase):
             kwargs={'pk': 6}), data=json.dumps(data),
             content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class SetCalification(APITestCase):
+    """Prueba para calificar consulta."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_query', 'test_requery']
+
+    def setUp(self):
+        """SetUp."""
+        self.client = APIClient()
+        self.valid_payload = {
+            'calification': 5
+        }
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+
+    def test_invalid_calification(self):
+        """Numero de calificacion invalida."""
+        data = {"calification": 6}
+        Query.objects.filter(pk=1000).update(status=4)
+        response = self.client.put(reverse('query-calification',
+                                           kwargs={'pk': 1000}),
+                                   data=json.dumps(data),
+                                   content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_calification(self):
+        """Calificacion vacia."""
+        data = {}
+        Query.objects.filter(pk=1000).update(status=4)
+        response = self.client.put(reverse('query-calification',
+                                           kwargs={'pk': 1000}),
+                                   data=json.dumps(data),
+                                   content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_null_calification(self):
+        """Calificacion vacia."""
+        data = {"calification": None}
+        Query.objects.filter(pk=1000).update(status=4)
+        response = self.client.put(reverse('query-calification',
+                                           kwargs={'pk': 1000}),
+                                   data=json.dumps(data),
+                                   content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_set_calification(self):
+        """Calificacion de manera exitosa."""
+        data = self.valid_payload
+        Query.objects.filter(pk=1000).update(status=4)
+        response = self.client.put(reverse('query-calification',
+                                           kwargs={'pk': 1000}),
+                                   data=json.dumps(data),
+                                   content_type='application/json')
+
+        q = Query.objects.get(pk=1000)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(q.status, 5)
+        self.assertEqual(q.calification, 5)
