@@ -31,7 +31,7 @@ from api.serializers.query import QueryDetailLastMsgSerializer
 
 from api.serializers.query import ChatMessageSerializer, QueryDeclineSerializer
 from api.serializers.query import QueryResponseSerializer, ReQuerySerializer
-
+from api.serializers.query import QueryCalificationSerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
@@ -545,4 +545,32 @@ class QueryDeclineView(APIView):
             serializer.save()
             pyrebase.updateStatusQueryDerive(specialist, main_specialist.id, query)
             return Response(serializer.data, status.HTTP_200_OK)
+
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class SetCalificationView(APIView):
+    """Vista colocar calification."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsClient]
+
+    def get_object(self, pk):
+        """Obtener objeto."""
+        try:
+            obj = Query.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj.client.id)
+            return obj
+        except Query.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Actualizar consulta."""
+        query = self.get_object(pk)
+        data = request.data
+        serializer = QueryCalificationSerializer(query, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            msgs = query.message_set.all()
+            pyrebase.update_status_querymessages(msgs, serializer.data)
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+

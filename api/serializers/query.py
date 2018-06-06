@@ -677,6 +677,26 @@ class QueryDeriveSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
+class QueryCalificationSerializer(serializers.ModelSerializer):
+    """Calificar Consulta."""
+    
+    calification = serializers.IntegerField(max_value=5, min_value=1)
+
+    class Meta:
+        """Meta."""
+        model = Query
+        fields = ('status', 'calification')
+        read_only_fields = ('status',)
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        instance.status = 5
+        instance.calification = validated_data["calification"]
+        instance.save()
+        return instance
+
+
 class QueryDeclineSerializer(QueryDeriveSerializer):
     """Cambiar clave de usuario."""
 
