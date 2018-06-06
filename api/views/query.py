@@ -18,8 +18,9 @@ from channels import Group
 # llamadas de nuestro propio proyecto
 from api import pyrebase
 from api.models import Query, Message, Category, Specialist, Client
+from api.models import GroupMessage
 from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsSpecialist
-from api.permissions import IsAdminReadOrSpecialistOwner
+from api.permissions import IsAdminReadOrSpecialistOwner, IsClient
 from api.permissions import IsClientOrSpecialistAndOwner
 from api.utils.validations import Operations
 from api.views.actors import SpecialistMessageList_sp
@@ -460,6 +461,30 @@ class QueryAcceptView(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+
+class DeclineRequeryView(APIView):
+    """Vista Declinar Reconsulta"""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsClient]
+
+    def post(self, request):
+        """Actualizar mensajes de categoria."""
+        user_id = Operations.get_id(self, request)
+        category = request.data["category_id"]
+        queries = Query.objects.filter(category=category, client=user_id,
+                                       status=3)
+        for query in queries:
+            msgs = query.message_set.all()
+            # import pdb; pdb.set_trace()
+            pyrebase.update_status_querymessages(msgs, {"status": 4})
+            # import pdb; pdb.set_trace()
+            for ms in msgs:
+                GroupMessage.objects.filter(message__id=ms.id).update(status=2)
+            # import pdb; pdb.set_trace()
+            pyrebase.update_status_group_messages(msgs, 2)
+        success = queries.update(status=4)
+        if success:
+            return Response({}, status.HTTP_200_OK)
 
 class QueryDeriveView(APIView):
     """Vista Derivar Query"""
