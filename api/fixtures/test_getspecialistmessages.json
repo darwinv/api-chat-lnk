@@ -3121,5 +3121,14 @@
     "client": 11,
     "seller": 3
   }
-}
+},
+{
+  "model": "api.declinator",
+  "pk": 1,
+  "fields": {
+    "specialist": 31,
+    "query": 1,
+    "message": "No Query"
+  }
+},
 ]

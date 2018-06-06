@@ -643,7 +643,7 @@ class DeleteSpecialist(APITestCase):
 class GetAsociateSpecialist(APITestCase):
     """Devolver Especialistas asociados"""
 
-    fixtures = ['data', 'data2', 'data3', 'test_address', 'test_specialist']
+    fixtures = ['data', 'data2', 'data3', 'test_getspecialistmessages']
 
     def setUp(self):
         """Setup."""
@@ -652,6 +652,6 @@ class GetAsociateSpecialist(APITestCase):
     def test_get_specialists(self):
         """Obtener resultado 200."""
         #obtiene especialistas asociados
-        client.credentials(HTTP_AUTHORIZATION='Bearer vvP8pKMAULMa2qQtaTnJpx2l87nWc2')
+        client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
         response = client.get(reverse('specialists-asociate'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
