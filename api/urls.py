@@ -67,7 +67,7 @@ urlpatterns = [
         actors.SpecialistAccountView.as_view(),
         name='specialist-account-status'),
     # Especialistas Asociados
-    url(r'^specialists-asociate/$', actors.SpecialistAsociateListView.as_view(),
+    url(r'^specialists-asociate/$', actors.SpecialistAsociateListByQueryView.as_view(),
         name='specialists-asociate'),
     # Consultas
     # Listado de Consultas por especialista

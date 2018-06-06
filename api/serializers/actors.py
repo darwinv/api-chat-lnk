@@ -500,6 +500,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
     nationality = serializers.PrimaryKeyRelatedField(
                               queryset=Countries.objects.all(),
                               required=True)
+    declined = serializers.SerializerMethodField()
 
     class Meta:
         """Modelo del especialista y sus campos."""
@@ -513,7 +514,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
             'business_name', 'payment_per_answer', 'cv', 'star_rating',
             'category', 'category_name', 'nationality', 'nationality_name',
             'residence_country', 'residence_country_name',
-            'foreign_address', 'role')
+            'foreign_address', 'role', 'declined')
 
     def get_nationality_name(self, obj):
         """Devuelvo la nacionalidad del especialista."""
@@ -534,6 +535,11 @@ class SpecialistSerializer(serializers.ModelSerializer):
     def get_type_specialist_name(self, obj):
         """Devuelve el tipo de especialista (Principal/Asociado)."""
         return _(obj.get_type_specialist_display())
+
+    def get_declined(self, obj):
+        import pdb
+        pdb.set_trace()
+        return True
 
     def validate_document_number(self, value):
         """Validar Numero de Documento."""

@@ -615,24 +615,31 @@ class SpecialistAsociateListView(APIView):
         serializer = SpecialistSerializer(specialists, many=True)
         return Response(serializer.data)
 
-class SpecialistAsociateListByQueryView(SpecialistAsociateListView):
+class SpecialistAsociateListByQueryView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrSpecialist)
-
+    required = _("required")
+    
     def get(self, request):
         pk = Operations.get_id(self, request)
 
         if 'query' in request.query_params:
             query = request.query_params["query"]
         else:
-            raise serializers.ValidationError({'query': [self.required]})        
+            raise serializers.ValidationError({'query': [self.required]})
         
         try:
             obj = Specialist.objects.get(pk=pk)
         except Specialist.DoesNotExist:
             raise Http404
 
-        specialists = Specialist.objects.filter(category=obj.category, type_specialist="a")
+        import pdb
+        pdb.set_trace()
+
+        decline = Declinator.objects.filter(specialist=OuterRef('pk'), query= query)
+
+        specialists = Specialist.objects.filter(category=obj.category, type_specialist="a")\
+                        .annotate(decline=Subquery(decline.values('specialist')[:1]))
 
         serializer = SpecialistSerializer(specialists, many=True)
         return Response(serializer.data)
