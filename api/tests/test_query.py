@@ -461,6 +461,7 @@ class ReQuery(APITestCase):
     def test_decline_requery(self):
         """No reconsultas disponibles."""
         data = {"category_id": 1}
+        Query.objects.filter(pk=1000).update(status=3)
         response = self.client.post(reverse('query-deny-requery'),
                                     data=json.dumps(data),
                                     content_type='application/json')
@@ -589,7 +590,7 @@ class PutDeclineQuery(APITestCase):
             kwargs={'pk': 6}), data=json.dumps(data),
             content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
         response = self.client.put(reverse('query-decline',
             kwargs={'pk': 6}), data=json.dumps(data),
             content_type='application/json')

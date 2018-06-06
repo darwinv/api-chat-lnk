@@ -485,6 +485,7 @@ class DeclineRequeryView(APIView):
         success = queries.update(status=4)
         if success:
             return Response({}, status.HTTP_200_OK)
+        return Response({}, status.HTTP_400_BAD_REQUEST)
 
 class QueryDeriveView(APIView):
     """Vista Derivar Query"""
@@ -533,7 +534,7 @@ class QueryDeclineView(APIView):
             main_specialist = Specialist.objects.get(category=query.category, type_specialist='m')
         except Specialist.DoesNotExist:
             raise Http404
-        
+
         context = {}
         context["status"] = 1
         context["specialist"] = main_specialist
