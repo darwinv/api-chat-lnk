@@ -652,6 +652,9 @@ class GetAsociateSpecialist(APITestCase):
     def test_get_specialists(self):
         """Obtener resultado 200."""
         #obtiene especialistas asociados
+
         client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
-        response = client.get(reverse('specialists-asociate'))
+        data = {'query':1}
+        response = client.get(reverse('specialists-asociate'), data=data)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
