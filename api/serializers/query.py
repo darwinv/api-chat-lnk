@@ -2,7 +2,7 @@
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
-from api.models import User, GroupMessage
+from api.models import User, GroupMessage, Declinator
 from api.api_choices_models import ChoicesAPI as c
 from api.utils import querysets
 from api.utils.parameters import Params
@@ -19,6 +19,7 @@ class MessageSerializer(serializers.ModelSerializer):
     # content_type_name = serializers.SerializerMethodField()
     # time = serializers.SerializerMethodField()
     room = serializers.CharField(max_length=100, required=False)
+    created_at = serializers.SerializerMethodField()
 
     class Meta:
         """Configuro el modelo y sus campos."""
@@ -33,6 +34,9 @@ class MessageSerializer(serializers.ModelSerializer):
     # def get_time(self, obj):
     #     """Devuelve el tiempo formateado en horas y minutos."""
     #     return str(obj.created_at.hour) + ':' + str(obj.created_at.minute)
+
+    def get_created_at(self, obj):
+        return str(obj.created_at)
 
     def get_msg_type_name(self, obj):
         """Devuelve el tipo de mensaje (answer,query,requery)."""
@@ -344,8 +348,12 @@ class QueryResponseSerializer(BaseQueryResponseSerializer):
         gp.save()
         instance.save()
         return instance
-
-
+ 
+        return {'room': ms[0]["room"], "message": chat,
+                "message_files_id": messages_files,
+                "category": obj.category.id, 'status': obj.status,
+                "query_id": obj.id, "client_id": obj.client.id}
+ 
 class ReQuerySerializer(BaseQueryResponseSerializer):
     """Serializer de Reconsulta."""
 
@@ -398,7 +406,6 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
         pyrebase.update_status_querymessages(data_msgs=msgs_query,
                                              data=data_update)
         return instance
-
 
 
 
@@ -553,7 +560,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 
     def get_user_id(self, obj):
         """Devolver id del usuario que lo envia."""
-        # import pdb; pdb.set_trace()
+        
         if obj["specialist_id"]:
             return obj["specialist_id"]
         return obj["query__client_id"]
@@ -664,3 +671,22 @@ class QueryDeriveSerializer(serializers.ModelSerializer):
         instance.specialist = validated_data["specialist"]
         instance.save()
         return instance
+
+class QueryDeclineSerializer(QueryDeriveSerializer):
+    """Cambiar clave de usuario."""
+
+    class Meta:
+        """Meta."""
+        model = Declinator
+        fields = ('message',)
+
+    def update(self, instance, validated_data):
+        validated_data['status'] = self.context['status']
+        validated_data['specialist'] = self.context['specialist']
+        super(QueryDeclineSerializer, self).update(instance, validated_data)
+
+        data_declinator = {}
+        data_declinator["message"] = validated_data['message']
+        data_declinator["query"] = instance
+        data_declinator["specialist"] = validated_data['specialist']
+        return Declinator.objects.create(**data_declinator)
