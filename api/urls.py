@@ -86,9 +86,12 @@ urlpatterns = [
     url(r'^queries/clients/(?P<pk>[0-9]+)/$',
         query.QueryChatSpecialistView.as_view(),
         name='query-chat-specialist'),
-
+    # Reconsulta
     url(r'^client/queries/(?P<pk>[0-9]+)/$',
         query.QueryDetailClientView.as_view(), name='query-client'),
+    # Negacion de reconsulta
+    url(r'^client/deny_requery/$',
+        query.DeclineRequeryView.as_view(), name='query-deny-requery'),
 
     # Subida de archivos a la consulta (pk)
     url(r'^queries/upload_files/(?P<pk>[0-9]+)/$',
@@ -104,7 +107,9 @@ urlpatterns = [
     url(r'^query-derive/(?P<pk>[0-9]+)/$', query.QueryDeriveView.as_view(),
         name='query-derive'),
     # Specialist Decline Query
-    url(r'^query-decline/(?P<pk>[0-9]+)/$', query.QueryDeclineView.as_view(), name='query-decline'),
+    url(r'^query-decline/(?P<pk>[0-9]+)/$', query.QueryDeclineView.as_view(),
+        name='query-decline'),
+
 
 
     # Vendedores

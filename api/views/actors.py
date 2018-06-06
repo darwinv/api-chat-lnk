@@ -1,15 +1,17 @@
 """Vista de todos los Actores."""
 # from api.logger import manager
+
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Query
 from api.models import SellerContactNoEfective, SpecialistMessageList, SpecialistMessageList_sp
-from api.models import RecoveryPassword
+from api.models import RecoveryPassword, Declinator
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
 from django.db.models import Sum, Manager
+from django.db.models import OuterRef, Subquery
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer, KeySerializer
@@ -129,8 +131,6 @@ class ValidCodePassword(APIView):
 
         user_filter = User.objects.filter(recoverypassword__code=code, email_exact=email, is_active=True).extra(where = ["DATEDIFF(NOW() ,created_at )<=1"])
         # print(user_filter.query)
-        # import pdb
-        # pdb.set_trace()
         if user_filter:
             user = User.objects.get(pk=user_filter)
             user_serializer = UserSerializer(user, partial=True)
@@ -388,7 +388,7 @@ class ClientListView(ListCreateAPIView):
         data = request.data
         if 'type_client' not in data or not data['type_client']:
             raise serializers.ValidationError({'type_client': [self.required]})
-        # import pdb; pdb.set_trace()
+        
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
         elif data['type_client'] == 'b':
@@ -622,7 +622,6 @@ class SpecialistAsociateListByQueryView(APIView):
     
     def get(self, request):
         pk = Operations.get_id(self, request)
-
         if 'query' in request.query_params:
             query = request.query_params["query"]
         else:
@@ -633,17 +632,13 @@ class SpecialistAsociateListByQueryView(APIView):
         except Specialist.DoesNotExist:
             raise Http404
 
-        import pdb
-        pdb.set_trace()
-
-        decline = Declinator.objects.filter(specialist=OuterRef('pk'), query= query)
+        declined = Declinator.objects.filter(specialist=OuterRef('pk'), query= query)
 
         specialists = Specialist.objects.filter(category=obj.category, type_specialist="a")\
-                        .annotate(decline=Subquery(decline.values('specialist')[:1]))
-
+                        .annotate(declined=Subquery(declined.values('specialist')[:1]))
+        
         serializer = SpecialistSerializer(specialists, many=True)
         return Response(serializer.data)
-
 
 class PutSpecialistMessages():
     def get(self, pk):

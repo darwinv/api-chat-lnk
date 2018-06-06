@@ -61,6 +61,9 @@ class IsClient(permissions.BasePermission):
             return request.user and request.user.role_id == 2
         return True
 
+    def has_permission(self, request, view):
+        """Permiso general."""
+        return request.user and request.user.role_id == 2
 
 class IsAdminOrClient(permissions.BasePermission):
     """Solo Administradores o Clientes."""

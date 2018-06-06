@@ -251,13 +251,15 @@ class QuerySerializer(serializers.ModelSerializer):
                 messages_files.append(message["id"])
             else:
                 message['uploaded'] = 2
-
+            av_reqs = obj.acquired_plan.available_requeries
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
                                 "calification": obj.calification,
-                                "specialist_id": obj.specialist.id}
+                                "availableRequeries": av_reqs,
+                                "specialist_id": obj.specialist.id
+                                }
 
-            key_message = 'm'+str(message["id"])
+            key_message = Params.PREFIX['message']+str(message["id"])
             chat.update({key_message: dict(message)})
 
         return {'room': ms[0]["room"], "message": chat,
@@ -283,9 +285,11 @@ class BaseQueryResponseSerializer(serializers.ModelSerializer):
                 messages_files.append(message["id"])
             else:
                 message['uploaded'] = 2
+            av_reqs = obj.acquired_plan.available_requeries
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
-                                "calification": obj.calification}
+                                "calification": obj.calification,
+                                "availableRequeries": av_reqs}
             key_message = Params.PREFIX['message']+str(message["id"])
             chat.update({key_message: dict(message)})
 
@@ -335,18 +339,23 @@ class QueryResponseSerializer(BaseQueryResponseSerializer):
         msgs = gp.message_set.all()
         msgs_query = instance.message_set.all()
         # se pasa el queryset
-        pyrebase.update_status_messages(msgs)
+        pyrebase.update_status_group_messages(msgs, gp.status)
+        requeries = instance.acquired_plan.available_requeries
+        data_update = {
+            "status": instance.status,
+            "availableRequeries": requeries
+            }
         pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                             data={"status": instance.status})
+                                             data=data_update)
         gp.save()
         instance.save()
         return instance
- 
+
         return {'room': ms[0]["room"], "message": chat,
                 "message_files_id": messages_files,
                 "category": obj.category.id, 'status': obj.status,
                 "query_id": obj.id, "client_id": obj.client.id}
- 
+
 class ReQuerySerializer(BaseQueryResponseSerializer):
     """Serializer de Reconsulta."""
 
@@ -387,7 +396,7 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
         msgs = gp.message_set.all()
         msgs_query = instance.message_set.all()
         # se pasa el queryset
-        pyrebase.update_status_messages(msgs)
+        pyrebase.update_status_group_messages(msgs, gp.status)
         pyrebase.update_status_querymessages(data_msgs=msgs_query,
                                              data={"status": instance.status})
         gp.save()
@@ -395,6 +404,12 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
         instance.acquired_plan.available_requeries = av_requeries
         instance.acquired_plan.save()
         instance.save()
+        data_update = {
+            "status": instance.status,
+            "availableRequeries": av_requeries
+            }
+        pyrebase.update_status_querymessages(data_msgs=msgs_query,
+                                             data=data_update)
         return instance
 
 
@@ -550,7 +565,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 
     def get_user_id(self, obj):
         """Devolver id del usuario que lo envia."""
-        
+
         if obj["specialist_id"]:
             return obj["specialist_id"]
         return obj["query__client_id"]

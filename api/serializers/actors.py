@@ -537,9 +537,9 @@ class SpecialistSerializer(serializers.ModelSerializer):
         return _(obj.get_type_specialist_display())
 
     def get_declined(self, obj):
-        import pdb
-        pdb.set_trace()
-        return True
+        if hasattr(obj, 'declined') and obj.declined:
+            return True
+        return False
 
     def validate_document_number(self, value):
         """Validar Numero de Documento."""
