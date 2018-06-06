@@ -196,14 +196,14 @@ def update_status_querymessages(data_msgs, data):
               .update(data)
 
 
-def update_status_messages(data_msgs, status):
+def update_status_group_messages(data_msgs, status):
     """Actualizar el status si puede o no reconsultar, responder, etc."""
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
     for msgs in data_msgs:
         res = db.child("chats").child(msgs.room)\
             .child(Params.PREFIX['message']+str(msgs.id))\
-            .update({"groupStatus": 2})
+            .update({"groupStatus": status})
 
 
 def createListMessageClients(lista, query_id, status,
