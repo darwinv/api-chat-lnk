@@ -196,7 +196,7 @@ def update_status_querymessages(data_msgs, data):
               .update(data)
 
 
-def update_status_messages(data_msgs):
+def update_status_messages(data_msgs, status):
     """Actualizar el status si puede o no reconsultar, responder, etc."""
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()

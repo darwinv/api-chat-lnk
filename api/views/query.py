@@ -468,9 +468,9 @@ class DeclineRequeryView(APIView):
         """Actualizar mensajes de categoria."""
         user_id = Operations.get_id(self, request)
         category = request.data["category_id"]
-        querys = Query.objects.filter(category=category,
-                                      client=user_id).update(status=4)
-        if querys:
+        success = Query.objects.filter(category=category,
+                                       client=user_id).update(status=4)
+        if success:
             return Response({}, status.HTTP_200_OK)
 
 class QueryDeriveView(APIView):
