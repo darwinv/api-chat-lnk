@@ -103,7 +103,7 @@ def updateStatusQueryAccept(specialist_id, client_id, query_id):
 
     # Actualizar estatus de los mensajes del chat
     data_msgs = Message.objects.filter(query=query_id)
-    updateStatusQueryAcceptChat(data_msgs, data)
+    update_status_querymessages(data_msgs, data)
 
 def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     """
@@ -131,7 +131,7 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     # Actualizar estatus de los mensajes del chat
     # y especialista encargado
     data_msgs = Message.objects.filter(query=query_id)
-    updateStatusQueryAcceptChat(data_msgs, data)
+    update_status_querymessages(data_msgs, data)
 
 def removeQueryAcceptList(specialist_id, client_id, query_id):
     """ Remover query nodo en listado de clientes """
@@ -163,15 +163,6 @@ def update_status_query_current_list(specialist_id, client_id,
     return res
 
 
-def updateStatusQueryAcceptChat(data_msgs, data):
-    """ Actualizacion query en el chat """
-
-    for msgs in data_msgs:
-        print(db.child("chats").child(msgs.room)\
-            .child(Params.PREFIX['message']+str(msgs.id))\
-            .child("query")\
-            .update(data))
-
 def createCategoriesLisClients(client_id):
     """Crear la lista completa de categorias.
 
@@ -186,9 +177,7 @@ def createCategoriesLisClients(client_id):
 
 
 def update_status_querymessages(data_msgs, data):
-    """Actualizar el status de los mensajes pertenecientes a una consulta."""
-    firebase = pyrebase.initialize_app(config)
-    db = firebase.database()
+    """Actualizar query de los mensajes."""
     for msgs in data_msgs:
         db.child("chats").child(msgs.room)\
               .child(Params.PREFIX['message']+str(msgs.id))\
