@@ -604,7 +604,29 @@ class SpecialistAsociateListView(APIView):
 
     def get(self, request):
         pk = Operations.get_id(self, request)
+        
+        try:
+            obj = Specialist.objects.get(pk=pk)
+        except Specialist.DoesNotExist:
+            raise Http404
 
+        specialists = Specialist.objects.filter(category=obj.category, type_specialist="a")
+
+        serializer = SpecialistSerializer(specialists, many=True)
+        return Response(serializer.data)
+
+class SpecialistAsociateListByQueryView(SpecialistAsociateListView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrSpecialist)
+
+    def get(self, request):
+        pk = Operations.get_id(self, request)
+
+        if 'query' in request.query_params:
+            query = request.query_params["query"]
+        else:
+            raise serializers.ValidationError({'query': [self.required]})        
+        
         try:
             obj = Specialist.objects.get(pk=pk)
         except Specialist.DoesNotExist:
