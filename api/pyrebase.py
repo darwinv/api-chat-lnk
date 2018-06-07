@@ -113,7 +113,7 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     """
     """ Actualizacion query en listado y chat """
     status = 1
-    data = {"status": status, 'specialist_id': specialist_id}  # Query Aceptado por especialista
+    data = {"status": status, 'specialist_id': int(specialist_id)}  # Query Aceptado por especialista
 
     client_id = query.client.id
     query_id = query.id
@@ -122,11 +122,11 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     # Remover query del listado de especialista actual
     removeQueryAcceptList(old_specialist_id, client_id, query_id)
 
+    # Actualizar estatus de query actual especialista anterior
+    update_status_query_current_list(old_specialist_id, client_id, data, query_id)
+
     # Generar nodos de listado para nuevo especialista
     generateDataMessageClients(client_id, category_id, query_id, status, specialist_id)
-
-    # Actualizar estatus de query actual
-    # updateStatusQueryCurrentList(specialist_id, client_id, query_id, data)
 
     # Actualizar estatus de los mensajes del chat
     # y especialista encargado
@@ -214,9 +214,11 @@ def createListMessageClients(lista, query_id, status,
         "title": data_obj['title'],
         "date": str(data_obj['date']),
         "message": data_obj['message'],
-        "id": data_obj['id']
+        "id": data_obj['id'],
+        "specialist_id": data_obj['specialist']
     }
     data_obj['queryCurrent'] = query_current
+    del data_obj['specialist']
     del data_obj['message']
     del data_obj['title']
     del data_obj['date']
@@ -266,11 +268,12 @@ def SpecialistMessageListCustom(client_id, category_id):
     # El queryset se pasa serializer para mapear datos
     return SpecialistMessageListCustomSerializer(data_set,
                                                            many=True)
+
 def PendingQueriesList(client_id, specialist_id):
     mess = Message.objects.filter(query=OuterRef("pk"))\
                                   .order_by('-created_at')[:1]
 
-    data_queries = Query.objects.values('id', 'title', 'status')\
+    data_queries = Query.objects.values('id', 'title', 'status', 'specialist')\
                                 .annotate(
                                     message=Subquery(
                                         mess.values('message')))\

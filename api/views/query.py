@@ -109,7 +109,7 @@ class QueryListClientView(ListCreateAPIView):
                                   .order_by('-created_at')[:1]
             # Luego se busca el titulo y su id de la consulta
 
-            data_queries = Query.objects.values('id', 'title', 'status')\
+            data_queries = Query.objects.values('id', 'title', 'status', 'specialist')\
                                         .annotate(
                                             message=Subquery(
                                                 mess.values('message')))\
@@ -538,14 +538,15 @@ class QueryDeclineView(APIView):
         context = {}
         context["status"] = 1
         context["specialist"] = main_specialist
+        context["specialist_declined"] = specialist
         serializer = QueryDeclineSerializer(query, data=request.data, context=context)
 
         if serializer.is_valid():
             serializer.save()
             pyrebase.updateStatusQueryDerive(specialist, main_specialist.id, query)
             return Response(serializer.data, status.HTTP_200_OK)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class SetCalificationView(APIView):
     """Vista colocar calification."""
@@ -572,3 +573,4 @@ class SetCalificationView(APIView):
             pyrebase.update_status_querymessages(msgs, serializer.data)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
