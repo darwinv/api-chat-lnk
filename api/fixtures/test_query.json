@@ -236,6 +236,7 @@
     "client": 5,
     "specialist": 3,
     "acquired_plan": 1,
+		"available_requeries": 3,
     "changed_on": "2018-03-06T15:53:12.393Z"
   }
 },

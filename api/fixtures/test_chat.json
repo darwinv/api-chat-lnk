@@ -1326,6 +1326,7 @@
             "calification": null,
             "category": 8,
             "client": 15,
+            "available_requeries":10,
             "specialist": 3,
             "acquired_plan": 1
         }
@@ -1341,6 +1342,7 @@
             "calification": null,
             "category": 8,
             "client": 15,
+            "available_requeries":10,
             "specialist": 3,
             "acquired_plan": 1
         }
