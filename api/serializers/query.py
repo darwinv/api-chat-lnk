@@ -216,6 +216,7 @@ class QuerySerializer(serializers.ModelSerializer):
         validated_data["status"] = 1
         validated_data["acquired_plan"] = acq_plan
         # Creamos la consulta y sus mensajes
+        validated_data["available_requeries"] = acq_plan.available_requeries
         query = Query.objects.create(**validated_data)
         # creamos el grupo para ese mensaje
         group = GroupMessage.objects.create(status=1)
@@ -251,7 +252,7 @@ class QuerySerializer(serializers.ModelSerializer):
                 messages_files.append(message["id"])
             else:
                 message['uploaded'] = 2
-            av_reqs = obj.acquired_plan.available_requeries
+            av_reqs = obj.available_requeries
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
                                 "calification": obj.calification,
@@ -285,7 +286,7 @@ class BaseQueryResponseSerializer(serializers.ModelSerializer):
                 messages_files.append(message["id"])
             else:
                 message['uploaded'] = 2
-            av_reqs = obj.acquired_plan.available_requeries
+            av_reqs = obj.available_requeries
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
                                 "calification": obj.calification,
@@ -351,10 +352,6 @@ class QueryResponseSerializer(BaseQueryResponseSerializer):
         instance.save()
         return instance
 
-        return {'room': ms[0]["room"], "message": chat,
-                "message_files_id": messages_files,
-                "category": obj.category.id, 'status': obj.status,
-                "query_id": obj.id, "client_id": obj.client.id}
 
 class ReQuerySerializer(BaseQueryResponseSerializer):
     """Serializer de Reconsulta."""
@@ -400,9 +397,8 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
         pyrebase.update_status_querymessages(data_msgs=msgs_query,
                                              data={"status": instance.status})
         gp.save()
-        av_requeries = instance.acquired_plan.available_requeries - 1
-        instance.acquired_plan.available_requeries = av_requeries
-        instance.acquired_plan.save()
+        av_requeries = instance.available_requeries - 1
+        instance.available_requeries = av_requeries
         instance.save()
         data_update = {
             "status": instance.status,
@@ -680,7 +676,7 @@ class QueryDeriveSerializer(serializers.ModelSerializer):
 
 class QueryCalificationSerializer(serializers.ModelSerializer):
     """Calificar Consulta."""
-    
+
     calification = serializers.IntegerField(max_value=5, min_value=1)
 
     class Meta:

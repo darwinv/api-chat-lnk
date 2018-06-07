@@ -561,6 +561,7 @@ class Query(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     calification = models.PositiveSmallIntegerField(null=True)
+    available_requeries = models.PositiveIntegerField()
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT,
@@ -629,7 +630,7 @@ class Message(models.Model):
         return self.message
 
 
-class Declinator(models.Model):    
+class Declinator(models.Model):
     message = models.TextField(blank=True)
     specialist = models.ForeignKey(Specialist,
                                    on_delete=models.PROTECT)
