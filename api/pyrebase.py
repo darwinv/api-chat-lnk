@@ -113,7 +113,7 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     """
     """ Actualizacion query en listado y chat """
     status = 1
-    data = {"status": status, 'specialist_id': specialist_id}  # Query Aceptado por especialista
+    data = {"status": status, 'specialist_id': int(specialist_id)}  # Query Aceptado por especialista
 
     client_id = query.client.id
     query_id = query.id
