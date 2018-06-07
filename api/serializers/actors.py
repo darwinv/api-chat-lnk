@@ -62,7 +62,8 @@ class PendingQueriesSerializer(serializers.Serializer):
                 "message": dicti["message"],
                 "title": dicti["title"],
                 "date": str(dicti["date_at"]),
-                "status": dicti["status"]
+                "status": dicti["status"],
+                "specialist": dicti["specialist"]
                 }
 
 

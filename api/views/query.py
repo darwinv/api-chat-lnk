@@ -109,7 +109,7 @@ class QueryListClientView(ListCreateAPIView):
                                   .order_by('-created_at')[:1]
             # Luego se busca el titulo y su id de la consulta
 
-            data_queries = Query.objects.values('id', 'title', 'status')\
+            data_queries = Query.objects.values('id', 'title', 'status', 'specialist')\
                                         .annotate(
                                             message=Subquery(
                                                 mess.values('message')))\
