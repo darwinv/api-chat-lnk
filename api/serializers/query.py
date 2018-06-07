@@ -286,13 +286,16 @@ class BaseQueryResponseSerializer(serializers.ModelSerializer):
             else:
                 message['uploaded'] = 2
             av_reqs = obj.acquired_plan.available_requeries
-            message["query"] = {"id": obj.id, "title": obj.title,
+            message["query"] = {
+                                "id": obj.id, "title": obj.title,
                                 "status": obj.status,
                                 "calification": obj.calification,
-                                "availableRequeries": av_reqs}
+                                "availableRequeries": av_reqs,
+                                "specialist_id": obj.specialist.id
+                                }
             key_message = Params.PREFIX['message']+str(message["id"])
             chat.update({key_message: dict(message)})
-
+        
         return {'room': ms[0]["room"], "message": chat,
                 "message_files_id": messages_files,
                 "category": obj.category.id, 'status': obj.status,
@@ -350,11 +353,6 @@ class QueryResponseSerializer(BaseQueryResponseSerializer):
         gp.save()
         instance.save()
         return instance
-
-        return {'room': ms[0]["room"], "message": chat,
-                "message_files_id": messages_files,
-                "category": obj.category.id, 'status': obj.status,
-                "query_id": obj.id, "client_id": obj.client.id}
 
 class ReQuerySerializer(BaseQueryResponseSerializer):
     """Serializer de Reconsulta."""
