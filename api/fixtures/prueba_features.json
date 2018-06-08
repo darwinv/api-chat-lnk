@@ -484,6 +484,36 @@
     "sale": 3
   }
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {
   "model": "api.user",
   "pk": 1,
@@ -527,7 +557,7 @@
   "model": "api.user",
   "pk": 3,
   "fields": {
-    "password": "pbkdf2_sha256$36000$ZoKwG4C5uFXR$IDtDvqi2/fH+4Jw4NfiZd0JW13TJ2ARQM4FhAfWZn5g=",
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
     "last_login": null,
     "is_superuser": false,
     "username": "clientoscar@mail.com",
@@ -583,7 +613,7 @@
     "code_telephone": 18,
     "code_cellphone": 1,
     "photo": null,
-    "document_type": "2",
+    "document_type": 2,
     "document_number": "24612582",
     "img_document_number": null,
     "ruc": null,
@@ -661,7 +691,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": null,
-    "document_type": "2",
+    "document_type": 2,
     "document_number": "246123423",
     "img_document_number": null,
     "ruc": null,
@@ -700,7 +730,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": "",
-    "document_type": "2",
+    "document_type": 2,
     "document_number": "20155984",
     "img_document_number": "",
     "ruc": "",
@@ -778,7 +808,7 @@
     "code_telephone": 18,
     "code_cellphone": 1,
     "photo": null,
-    "document_type": "2",
+    "document_type": 2,
     "document_number": "32145673",
     "img_document_number": "",
     "ruc": "32145673",
@@ -856,7 +886,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": null,
-    "document_type": "2",
+    "document_type": 2,
     "document_number": "32145675",
     "img_document_number": "",
     "ruc": "32145675",
@@ -1090,7 +1120,7 @@
     "code_telephone": 18,
     "code_cellphone": 1,
     "photo": null,
-    "document_type": "2",
+    "document_type": 2,
     "document_number": "321456711",
     "img_document_number": "",
     "ruc": "321456711",
@@ -1168,7 +1198,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": null,
-    "document_type": "2",
+    "document_type": 2,
     "document_number": "321456713",
     "img_document_number": "",
     "ruc": "321456713",
@@ -1402,7 +1432,7 @@
     "code_telephone": 18,
     "code_cellphone": 1,
     "photo": null,
-    "document_type": "2",
+    "document_type": 2,
     "document_number": "321456719",
     "img_document_number": "",
     "ruc": "321456719",
@@ -1480,7 +1510,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": null,
-    "document_type": "2",
+    "document_type": 2,
     "document_number": "321456721",
     "img_document_number": "",
     "ruc": "321456721",
@@ -1753,7 +1783,7 @@
     "code_telephone": 18,
     "code_cellphone": 1,
     "photo": "",
-    "document_type": "2",
+    "document_type": 2,
     "document_number": "246125821",
     "img_document_number": "",
     "ruc": "31667434",
@@ -1831,7 +1861,7 @@
     "code_telephone": null,
     "code_cellphone": null,
     "photo": "",
-    "document_type": "2",
+    "document_type": 2,
     "document_number": "2461234231",
     "img_document_number": "",
     "ruc": "316674342",
@@ -1850,6 +1880,483 @@
   }
 },
 {
+  "model": "api.user",
+  "pk": 46,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance2@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance2@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 47,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance3@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance3@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 48,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance4@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance4@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 49,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance5@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance5@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 50,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance1@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance1@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 52,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance6@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance6@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 53,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance7@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance7@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 54,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance8@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance8@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 55,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance9@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance9@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://s3.amazonaws.com/linkup-photos/8c687b3a-cb79-4e84-a7f2-c5f77b497f1a.png",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 56,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance10@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance10@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://s3.amazonaws.com/linkup-photos/8c687b3a-cb79-4e84-a7f2-c5f77b497f1a.png",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 57,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance11@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance11@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 58,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "finance12@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "finance ML",
+    "email_exact": "finance12@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://s3.amazonaws.com/linkup-photos/8c687b3a-cb79-4e84-a7f2-c5f77b497f1a.png",
+    "document_type": 1,
+    "document_number": "32145674",
+    "img_document_number": "",
+    "ruc": "32145674",
+    "code": "E3145674",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+}
+
+
+
+
+
+
+
+
+,
+{
   "model": "api.seller",
   "pk": 6,
   "fields": {
@@ -1860,6 +2367,17 @@
     "user_permissions": []
   }
 },
+
+
+
+
+
+
+
+
+
+
+
 {
   "model": "api.specialist",
   "pk": 5,
@@ -2239,6 +2757,194 @@
   }
 },
 {
+  "model": "api.specialist",
+  "pk": 46,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 4,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 47,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 4,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 48,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 4,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 49,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 4,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 50,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 4,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 52,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 4,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 53,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 4,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 54,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 4,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 55,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 4,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 56,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 4,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 57,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 17,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 58,
+  "fields": {
+    "business_name": "paty electronics",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 17,
+    "groups": [],
+    "user_permissions": []
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+,
+{
   "model": "api.client",
   "pk": 3,
   "fields": {
@@ -2363,7 +3069,7 @@
     "activation_date": null,
     "is_active": false,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "Minipack",
@@ -2383,7 +3089,7 @@
     "activation_date": "2018-03-05",
     "is_active": false,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack2",
@@ -2403,7 +3109,7 @@
     "activation_date": null,
     "is_active": false,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2423,7 +3129,7 @@
     "activation_date": null,
     "is_active": false,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2443,7 +3149,7 @@
     "activation_date": null,
     "is_active": false,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2463,7 +3169,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2483,7 +3189,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": true,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2503,7 +3209,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": true,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2523,7 +3229,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2543,7 +3249,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2563,7 +3269,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2583,7 +3289,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2603,7 +3309,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2623,7 +3329,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2643,7 +3349,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2663,7 +3369,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2683,7 +3389,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2703,7 +3409,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2723,7 +3429,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack19",
@@ -2743,7 +3449,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack20",
@@ -2763,7 +3469,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack21",
@@ -2783,7 +3489,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2803,7 +3509,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2823,7 +3529,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack",
@@ -2843,7 +3549,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPackLast25",
@@ -2863,7 +3569,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack26",
@@ -2883,7 +3589,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": false,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPack27",
@@ -2903,7 +3609,7 @@
     "activation_date": null,
     "is_active": true,
     "is_chosen": true,
-    "available_requeries": 1,
+    "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
     "plan_name": "PlusPackCore",
