@@ -340,20 +340,12 @@ class QueryResponseSerializer(BaseQueryResponseSerializer):
         # actualizo el estado del grupo al cual se le responde
         gp = GroupMessage.objects.get(message__id=ms_ref)
         gp.status = 2
-        msgs = gp.message_set.all()
-        msgs_query = instance.message_set.all()
         # se pasa el queryset
-        pyrebase.update_status_group_messages(msgs, gp.status)
-        requeries = instance.acquired_plan.available_requeries
-        data_update = {
-            "status": instance.status,
-            "availableRequeries": requeries
-            }
-        pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                             data=data_update)
+        # pyrebase.update_status_group_messages(msgs, gp.status)
         gp.save()
         instance.save()
         return instance
+
 
 class ReQuerySerializer(BaseQueryResponseSerializer):
     """Serializer de Reconsulta."""
@@ -392,12 +384,7 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
         # actualizo el estado del grupo al cual se le responde
         gp = GroupMessage.objects.get(message__id=ms_ref)
         gp.status = 2
-        msgs = gp.message_set.all()
-        msgs_query = instance.message_set.all()
         # se pasa el queryset
-        pyrebase.update_status_group_messages(msgs, gp.status)
-        pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                             data={"status": instance.status})
         gp.save()
         av_requeries = instance.available_requeries - 1
         instance.available_requeries = av_requeries

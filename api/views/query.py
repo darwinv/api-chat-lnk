@@ -188,6 +188,23 @@ class QueryDetailSpecialistView(APIView):
             sala = str(query.client.id) + '-' + str(category_id)
 
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
+
+            for li in lista:
+                if li['messageReference'] is not None and li['messageReference'] != 0:
+                    ms_ref = li['messageReference']
+
+            gp = GroupMessage.objects.get(message__id=ms_ref)
+            msgs = gp.message_set.all()
+
+            pyrebase.update_status_group_messages(msgs, gp.status)
+            msgs_query = query.message_set.all()
+            requeries = query.available_requeries
+            data_update = {
+                "status": query.status,
+                "availableRequeries": requeries
+                }
+            pyrebase.update_status_querymessages(data_msgs=msgs_query,
+                                                 data=data_update)
             # actualizo el querycurrent del listado de mensajes
             data = {'status': 3,
                     'date': lista[-1]["timeMessage"],
@@ -240,20 +257,28 @@ class QueryDetailClientView(APIView):
 
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             # actualizo el querycurrent del listado de mensajes
+            for li in lista:
+                if li['messageReference'] is not None and li['messageReference'] != 0:
+                    ms_ref = li['messageReference']
+
+            gp = GroupMessage.objects.get(message__id=ms_ref)
+            msgs = gp.message_set.all()
+
+            pyrebase.update_status_group_messages(msgs, gp.status)
+            msgs_query = query.message_set.all()
+            requeries = lista[0]['query']['availableRequeries']
+
+            data_update = {
+                "status": query.status,
+                "availableRequeries": requeries
+                }
+
+            pyrebase.update_status_querymessages(data_msgs=msgs_query,
+                                                 data=data_update)
             data = {'status': 2,
                     'date': lista[-1]["timeMessage"],
                     'message': lista[-1]["message"]
                     }
-
-            # import pdb; pdb.set_trace()
-            data_update = {
-                "status": 2,
-                "availableRequeries": lista[0]['query']['availableRequeries']
-                }
-            msgs_all = query.message_set.all()
-            pyrebase.update_status_querymessages(data_msgs=msgs_all,
-                                                 data=data_update)
-
             pyrebase.update_status_query_current_list(specialist_id, client_id,
                                                       data)
             return Response(serializer.data, status.HTTP_200_OK)
