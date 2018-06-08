@@ -41,7 +41,6 @@ def update_plan_choisen():
     # SOLO USO PARA AMBIENTE EN DESARROLLO
     for client in Client.objects.all():
         try:
-            print("new")
             plan_chosen = get_query_set_plan()
             plan_active = plan_chosen.filter(client=client.id, is_active=True,
                                              is_chosen=True)[:1].get()

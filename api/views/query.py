@@ -245,6 +245,15 @@ class QueryDetailClientView(APIView):
                     'message': lista[-1]["message"]
                     }
 
+            # import pdb; pdb.set_trace()
+            data_update = {
+                "status": 2,
+                "availableRequeries": lista[0]['query']['availableRequeries']
+                }
+            msgs_all = query.message_set.all()
+            pyrebase.update_status_querymessages(data_msgs=msgs_all,
+                                                 data=data_update)
+
             pyrebase.update_status_query_current_list(specialist_id, client_id,
                                                       data)
             return Response(serializer.data, status.HTTP_200_OK)
@@ -573,4 +582,3 @@ class SetCalificationView(APIView):
             pyrebase.update_status_querymessages(msgs, serializer.data)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
