@@ -49,7 +49,7 @@ class QueryListClientView(ListCreateAPIView):
     serializer_class = QueryListClientSerializer
 
     def list(self, request):
-        """List."""
+        """List."""        
         user_id = Operations.get_id(self, request)
 
         if not user_id:
@@ -72,6 +72,10 @@ class QueryListClientView(ListCreateAPIView):
 
 #   Crear Consulta
     def post(self, request):
+        pyrebase.update_categories_detail()
+        pyrebase.update_categories()
+        pyrebase.update_plan_choisen()
+
         """Metodo para Crear consulta."""
         # Devolvemos el id del usuario
         user_id = Operations.get_id(self, request)
