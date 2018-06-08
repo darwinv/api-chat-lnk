@@ -188,7 +188,6 @@ class QueryDetailSpecialistView(APIView):
             sala = str(query.client.id) + '-' + str(category_id)
 
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
-
             for li in lista:
                 if li['messageReference'] is not None and li['messageReference'] != 0:
                     ms_ref = li['messageReference']
@@ -203,6 +202,7 @@ class QueryDetailSpecialistView(APIView):
                 "status": query.status,
                 "availableRequeries": requeries
                 }
+
             pyrebase.update_status_querymessages(data_msgs=msgs_query,
                                                  data=data_update)
             # actualizo el querycurrent del listado de mensajes
