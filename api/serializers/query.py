@@ -287,7 +287,6 @@ class BaseQueryResponseSerializer(serializers.ModelSerializer):
             else:
                 message['uploaded'] = 2
 
-
             av_reqs = obj.available_requeries
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
@@ -297,7 +296,7 @@ class BaseQueryResponseSerializer(serializers.ModelSerializer):
                                 }
             key_message = Params.PREFIX['message']+str(message["id"])
             chat.update({key_message: dict(message)})
-        
+
         return {'room': ms[0]["room"], "message": chat,
                 "message_files_id": messages_files,
                 "category": obj.category.id, 'status': obj.status,
@@ -403,12 +402,6 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
         av_requeries = instance.available_requeries - 1
         instance.available_requeries = av_requeries
         instance.save()
-        data_update = {
-            "status": instance.status,
-            "availableRequeries": av_requeries
-            }
-        pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                             data=data_update)
         return instance
 
 

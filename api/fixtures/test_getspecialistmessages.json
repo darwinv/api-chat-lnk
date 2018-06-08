@@ -2570,6 +2570,7 @@
     "category": 22,
     "client": 5,
     "specialist": 4,
+    "available_requeries": 23,
     "acquired_plan": 2,
     "changed_on": "2018-02-22T14:38:30.934Z"
   }
@@ -2586,6 +2587,7 @@
     "category": 22,
     "client": 5,
     "specialist": 4,
+    "available_requeries": 23,
     "acquired_plan": 2,
     "changed_on": "2018-02-22T14:38:13.654Z"
   }
@@ -2602,6 +2604,7 @@
     "category": 22,
     "client": 5,
     "specialist": 4,
+    "available_requeries": 23,
     "acquired_plan": 3,
     "changed_on": "2018-02-22T14:37:58.492Z"
   }
@@ -2618,6 +2621,7 @@
     "category": 22,
     "client": 5,
     "specialist": 4,
+    "available_requeries": 23,
     "acquired_plan": 2,
     "changed_on": "2018-02-22T14:37:49.568Z"
   }
@@ -2634,6 +2638,7 @@
     "category": 22,
     "client": 11,
     "specialist": 4,
+    "available_requeries": 23,
     "acquired_plan": 2,
     "changed_on": "2018-02-22T14:37:15.182Z"
   }
@@ -2650,6 +2655,7 @@
     "category": 22,
     "client": 5,
     "specialist": 31,
+    "available_requeries": 23,
     "acquired_plan": 2,
     "changed_on": "2018-02-22T14:38:30.934Z"
   }
