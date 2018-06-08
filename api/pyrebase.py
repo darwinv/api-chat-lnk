@@ -1,10 +1,12 @@
 """Funcionamiento de Pyrebase."""
 import pyrebase
+
 from api.models import Client, QueryPlansAcquired, Category, Message, Query
-from api.views.actors import SpecialistMessageList_sp
+from api.models import SpecialistMessageList_sp
 from api.serializers.actors import SpecialistMessageListCustomSerializer
-from django.db.models import OuterRef, Subquery, Count
 from api.serializers.actors import PendingQueriesSerializer
+from django.db.models import OuterRef, Subquery, Count
+
 # from datetime import datetime, timedelta
 from api.utils.parameters import Params, Payloads
 from api.utils.querysets import get_query_set_plan

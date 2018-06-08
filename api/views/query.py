@@ -18,12 +18,11 @@ from channels import Group
 # llamadas de nuestro propio proyecto
 from api import pyrebase
 from api.models import Query, Message, Category, Specialist, Client
-from api.models import GroupMessage
+from api.models import GroupMessage, SpecialistMessageList_sp
 from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsSpecialist
 from api.permissions import IsAdminReadOrSpecialistOwner, IsClient
 from api.permissions import IsClientOrSpecialistAndOwner
 from api.utils.validations import Operations
-from api.views.actors import SpecialistMessageList_sp
 from api.serializers.query import QuerySerializer, QueryListClientSerializer
 from api.serializers.query import QueryMessageSerializer
 from api.serializers.query import QueryDeriveSerializer, QueryAcceptSerializer
