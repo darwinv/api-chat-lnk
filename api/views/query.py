@@ -48,7 +48,7 @@ class QueryListClientView(ListCreateAPIView):
     serializer_class = QueryListClientSerializer
 
     def list(self, request):
-        """List."""        
+        """List."""
         user_id = Operations.get_id(self, request)
 
         if not user_id:

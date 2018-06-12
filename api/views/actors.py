@@ -213,7 +213,6 @@ class UpdatePasswordUserView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class UpdateEmailUserView(APIView):
@@ -388,7 +387,7 @@ class ClientListView(ListCreateAPIView):
         data = request.data
         if 'type_client' not in data or not data['type_client']:
             raise serializers.ValidationError({'type_client': [self.required]})
-        
+
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
         elif data['type_client'] == 'b':
@@ -604,7 +603,7 @@ class SpecialistAsociateListView(APIView):
 
     def get(self, request):
         pk = Operations.get_id(self, request)
-        
+
         try:
             obj = Specialist.objects.get(pk=pk)
         except Specialist.DoesNotExist:
@@ -619,14 +618,14 @@ class SpecialistAsociateListByQueryView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrSpecialist)
     required = _("required")
-    
+
     def get(self, request):
         pk = Operations.get_id(self, request)
         if 'query' in request.query_params:
             query = request.query_params["query"]
         else:
             raise serializers.ValidationError({'query': [self.required]})
-        
+
         try:
             obj = Specialist.objects.get(pk=pk)
         except Specialist.DoesNotExist:
@@ -636,7 +635,7 @@ class SpecialistAsociateListByQueryView(APIView):
 
         specialists = Specialist.objects.filter(category=obj.category, type_specialist="a")\
                         .annotate(declined=Subquery(declined.values('specialist')[:1]))
-        
+
         serializer = SpecialistSerializer(specialists, many=True)
         return Response(serializer.data)
 
