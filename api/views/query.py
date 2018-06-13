@@ -48,7 +48,7 @@ class QueryListClientView(ListCreateAPIView):
     serializer_class = QueryListClientSerializer
 
     def list(self, request):
-        """List."""        
+        """List."""
         user_id = Operations.get_id(self, request)
 
         if not user_id:
@@ -89,7 +89,7 @@ class QueryListClientView(ListCreateAPIView):
             lista = list(serializer.data['message'].values())
             # Se actualiza la base de datos de firebase para el mensaje
             pyrebase.chat_firebase_db(serializer.data["message"],
-                                      serializer.data["room"])
+                                           serializer.data["room"])
             # Se actualiza la base de datos de firebase listado
             # de sus especialidades
             pyrebase.categories_db(user_id, category,
@@ -128,7 +128,7 @@ class QueryListClientView(ListCreateAPIView):
                                               serializer.data["status"],
                                               user_id,
                                               serializer_tmp.data[0]['specialist'],
-                                                queries_list=lista_d
+                                              queries_list=lista_d
                                               )
 
             # -- Aca una vez creada la data, cargar el mensaje directo a

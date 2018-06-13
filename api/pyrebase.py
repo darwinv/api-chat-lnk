@@ -12,6 +12,9 @@ from api.utils.parameters import Params, Payloads
 from api.utils.querysets import get_query_set_plan
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from linkupapi.settings import CONFIG_ENVIROMENT
+from api.logger import manager
+logger = manager.setup_log(__name__)
+
 config = CONFIG_ENVIROMENT
 
 firebase = pyrebase.initialize_app(config)
@@ -62,15 +65,17 @@ def chat_firebase_db(data, room):
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
     room = "chats/{}/".format(room)
-    if exist_room(room):
+    if exist_node(room):
         res = db.child(room).update(data)
     else:
         res = db.child(room).set(data)
     return res
 
-def exist_room(room):
+
+def exist_node(node):
     """Chequear si el nodo de sala existe."""
-    return db.child(room).get() is not None
+    r = db.child(node).get() is not None
+    return r
 
 
 def categories_db(client_id, cat_id, time_now, read=False):
@@ -80,15 +85,20 @@ def categories_db(client_id, cat_id, time_now, read=False):
     db = firebase.database()
     node_client = Params.PREFIX['client'] + str(client_id)
     node_category = Params.PREFIX['category'] + str(cat_id)
+    main_node = 'categories/clients' + node_client + '/' + node_category
 
     data = {
         "datetime": time_now,
         "id": cat_id,
         "read": read
     }
-
-    res = db.child("categories/clients").child(
-                                 node_client).child(node_category).update(data)
+    if exist_node(main_node):
+        res = db.child("categories/clients").child(
+            node_client).child(node_category).update(data)
+    else:
+        res = db.child("categories/clients").child(
+            node_client).child(node_category).set(data)
+        logger.info("no existia nodo:" + main_node)
     return res
 
 
@@ -105,6 +115,7 @@ def updateStatusQueryAccept(specialist_id, client_id, query_id):
     # Actualizar estatus de los mensajes del chat
     data_msgs = Message.objects.filter(query=query_id)
     update_status_querymessages(data_msgs, data)
+
 
 def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     """
@@ -124,23 +135,34 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     removeQueryAcceptList(old_specialist_id, client_id, query_id)
 
     # Actualizar estatus de query actual especialista anterior
-    update_status_query_current_list(old_specialist_id, client_id, data, query_id)
+    update_status_query_current_list(old_specialist_id, client_id,
+                                     data, query_id)
 
     # Generar nodos de listado para nuevo especialista
-    generateDataMessageClients(client_id, category_id, query_id, status, specialist_id)
+    generateDataMessageClients(client_id, category_id, query_id,
+                               status, specialist_id)
 
     # Actualizar estatus de los mensajes del chat
     # y especialista encargado
     data_msgs = Message.objects.filter(query=query_id)
     update_status_querymessages(data_msgs, data)
 
+
 def removeQueryAcceptList(specialist_id, client_id, query_id):
     """ Remover query nodo en listado de clientes """
     node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
     node_query = 'queries/{}'.format(Params.PREFIX['query'] + str(query_id))
-    return db.child("messagesList/specialist/").child(
-        node_specialist).child(node_client).child(node_query).remove()
+
+    main_node = "messagesList/specialist/{}/{}/{}".format(node_specialist,
+                                                          node_client,
+                                                          node_query)
+    if exist_node(main_node):
+        db.child("messagesList/specialist/").child(
+            node_specialist).child(node_client).child(node_query).remove()
+    else:
+        logger.warning(
+            "RemoveQueryAccept: no existe nodo {}".format(main_node))
 
 
 def update_status_query_current_list(specialist_id, client_id,
@@ -152,15 +174,20 @@ def update_status_query_current_list(specialist_id, client_id,
 
     room = "messagesList/specialist/{}/{}/{}/".format(node_specialist,
                                                       node_client, node_query)
-    node = db.child(room + 'id').get()
     if query_id:
+        node = db.child(room + 'id').get()
         if node.pyres and node.pyres == int(query_id):
             res = db.child(room).update(data)
         else:
-            pass
+            logger.warning(
+                'status_query_currentlist-queryid nodo no existe {}'.format(room))
             res = None
     else:
-        res = db.child(room).update(data)
+        if exist_node(room):
+            res = db.child(room).update(data)
+        else:
+            logger.warning(
+                'status_query_currentlist nodo no existe {}'.format(room))
     return res
 
 
@@ -180,10 +207,16 @@ def createCategoriesLisClients(client_id):
 def update_status_querymessages(data_msgs, data):
     """Actualizar query de los mensajes."""
     for msgs in data_msgs:
-        db.child("chats").child(msgs.room)\
+        node_msg = Params.PREFIX['message']+str(msgs.id)
+        if exist_node('chats/{}/{}/query'.format(msgs.room, node_msg)):
+            db.child("chats").child(msgs.room)\
               .child(Params.PREFIX['message']+str(msgs.id))\
               .child("query")\
               .update(data)
+        else:
+            logger.warning(
+                'update_status_querymsgs nodo no existe - chats/{}/{}/query'
+                .format(msgs.room, node_msg))
 
 
 def update_status_group_messages(data_msgs, status):
@@ -191,9 +224,14 @@ def update_status_group_messages(data_msgs, status):
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
     for msgs in data_msgs:
-        res = db.child("chats").child(msgs.room)\
-            .child(Params.PREFIX['message']+str(msgs.id))\
-            .update({"groupStatus": status})
+        node_msg = Params.PREFIX['message']+str(msgs.id)
+        if exist_node('chats/{}/{}'.format(msgs.room, node_msg)):
+            db.child("chats").child(msgs.room)\
+              .child(node_msg).update({"groupStatus": status})
+        else:
+            logger.warning(
+                'update_statusgroup nodo no existe - chats/{}/{}'
+                .format(msgs.room, node_msg))
 
 
 def createListMessageClients(lista, query_id, status,
@@ -225,8 +263,12 @@ def createListMessageClients(lista, query_id, status,
     del data_obj['date']
     del data_obj['id']
 
-    return db.child("messagesList/specialist/").child(
-        node_specialist).child(node_client).update(data_obj)
+    main_node = "messagesList/specialist/{}/{}"
+    if exist_node(main_node):
+        db.child("messagesList/specialist/").child(
+            node_specialist).child(node_client).update(data_obj)
+    else:
+        logger.warning("createListMessageClients, no existe:" + main_node)
 
 
 def chosen_plan(client_id, data):
@@ -236,21 +278,30 @@ def chosen_plan(client_id, data):
     res = db.child("chosenPlans").child(client_id).update(data)
     return res
 
+
 def mark_failed_file(room, message_id):
     """Actualizar que el archivo se ha subido a firebase."""
-    node = 'chats/' + room + '/' + 'm' + str(message_id)
+    node = 'chats/' + room + '/' + Params.PREFIX['message'] + str(message_id)
     firebase = pyrebase.initialize_app(config)
     # print(node)
     db = firebase.database()
-    return db.child(node).update({"uploaded": 5, "fileUrl": "error"})
+    if exist_node(node):
+        db.child(node).update({"uploaded": 5, "fileUrl": "error"})
+    else:
+        logger.warning("mark_failed_file, nodo no existe:" + node)
+
 
 def mark_uploaded_file(room, message_id, url_file):
     """Actualizar que el archivo se ha subido a firebase."""
-    node = 'chats/' + room + '/' + 'm' + str(message_id)
+    node = 'chats/' + room + '/' + Params.PREFIX['message'] + str(message_id)
     firebase = pyrebase.initialize_app(config)
     # print(node)
     db = firebase.database()
-    return db.child(node).update({"uploaded": 2, "fileUrl": url_file})
+    if exist_node(node):
+        db.child(node).update({"uploaded": 2, "fileUrl": url_file})
+    else:
+        logger.warning("mark_uploaded_file, nodo no existe:" + node)
+
 
 def generateDataMessageClients(client_id, category_id, query_id, status, specialist_id):
     # Luego se busca el titulo y su id de la consulta
@@ -261,14 +312,15 @@ def generateDataMessageClients(client_id, category_id, query_id, status, special
     return createListMessageClients(lista.data, query_id, status,
                                     client_id, specialist_id, queries_list)
 
+
 def SpecialistMessageListCustom(client_id, category_id):
     # Se llama al store procedure
     data_set = SpecialistMessageList_sp.search(2, client_id,
                                                category_id, 0, "")
 
     # El queryset se pasa serializer para mapear datos
-    return SpecialistMessageListCustomSerializer(data_set,
-                                                           many=True)
+    return SpecialistMessageListCustomSerializer(data_set, many=True)
+
 
 def PendingQueriesList(client_id, specialist_id):
     mess = Message.objects.filter(query=OuterRef("pk"))\
@@ -286,7 +338,6 @@ def PendingQueriesList(client_id, specialist_id):
                                         status=1)\
                                 .annotate(count=Count('id'))\
                                 .order_by('-message__created_at')
-
 
     query_pending = PendingQueriesSerializer(data_queries, many=True)
     queries_list = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
