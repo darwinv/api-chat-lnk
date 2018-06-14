@@ -76,7 +76,8 @@ def check_type_data(type_data, node):
     if type_data == 'chats':
         new_str = ns[0]['query'].keys()
         data_chat_int.extend(new_str)
-        data_chat_int.remove('title')
+        if 'title' in data_chat_int:
+            data_chat_int.remove('title')
         for n in nodo.val().values():
             for l in data_chat_string:
                 if n['query'].get(l):
@@ -92,7 +93,7 @@ def check_type_data(type_data, node):
                 else:
                     if type(n.get(k)) is not int:
                         logger.error("{} - {} no es int".format(node, k))
-    logger.info('chequeo de chata data realizada')
+    logger.info('chequeo de data realizada')
 
 
 def chat_firebase_db(data, room):
@@ -243,6 +244,7 @@ def createCategoriesLisClients(client_id):
 
 def update_status_querymessages(data_msgs, data):
     """Actualizar query de los mensajes."""
+
     for msgs in data_msgs:
         node_msg = Params.PREFIX['message']+str(msgs.id)
         if exist_node('chats/{}/{}/query'.format(msgs.room, node_msg)):
@@ -254,6 +256,8 @@ def update_status_querymessages(data_msgs, data):
             logger.warning(
                 'update_status_querymsgs nodo no existe - chats/{}/{}/query'
                 .format(msgs.room, node_msg))
+
+    # check_type_data('chats', 'chats/{}'.format(data_msgs[0].room))
 
 
 def update_status_group_messages(data_msgs, status):
@@ -269,6 +273,8 @@ def update_status_group_messages(data_msgs, status):
             logger.warning(
                 'update_statusgroup nodo no existe - chats/{}/{}'
                 .format(msgs.room, node_msg))
+
+    # check_type_data('chats', 'chats/{}'.format(data_msgs[0].room))
 
 
 def createListMessageClients(lista, query_id, status,
@@ -324,6 +330,7 @@ def mark_failed_file(room, message_id):
     db = firebase.database()
     if exist_node(node):
         db.child(node).update({"uploaded": 5, "fileUrl": "error"})
+        check_type_data('chats', node)
     else:
         logger.warning("mark_failed_file, nodo no existe:" + node)
 
@@ -336,6 +343,7 @@ def mark_uploaded_file(room, message_id, url_file):
     db = firebase.database()
     if exist_node(node):
         db.child(node).update({"uploaded": 2, "fileUrl": url_file})
+        check_type_data('chats', node)
     else:
         logger.warning("mark_uploaded_file, nodo no existe:" + node)
 
