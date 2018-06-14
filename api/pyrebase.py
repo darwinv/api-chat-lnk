@@ -56,8 +56,43 @@ def update_plan_choisen():
 
         except Exception as e:
             print("error")
-
 # FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
+
+
+def check_type_data(type_data, node):
+    """Chequear tipos de datos en los nodos """
+
+    data_chat_string = [
+        'codeUser', 'fileUrl', 'message', 'messageType', 'room',
+        ]
+
+    data_chat_int = [
+        'fileType', 'groupId', 'groupStatus', 'id',
+        'messageReference', 'uploaded', 'user_id']
+
+    # data_msgs_string = ['displayName', 'photo', ]
+    nodo = db.child(node).get()
+    ns = list(nodo.val().values())
+    if type_data == 'chats':
+        new_str = ns[0]['query'].keys()
+        data_chat_int.extend(new_str)
+        data_chat_int.remove('title')
+        for n in nodo.val().values():
+            for l in data_chat_string:
+                if n['query'].get(l):
+                    if type(n['query'].get(l)) is not str:
+                            logger.error("{} - query/{} no es String".format(node, l))
+                if type(n.get(l)) is not str:
+                    logger.error("{} - {} no es String".format(node, l))
+            for k in data_chat_int:
+                # import pdb; pdb.set_trace()
+                if n['query'].get(k):
+                    if type(n['query'].get(k)) is not int:
+                            logger.error("{} - query/{} no es int".format(node, k))
+                else:
+                    if type(n.get(k)) is not int:
+                        logger.error("{} - {} no es int".format(node, k))
+    logger.info('chequeo de chata data realizada')
 
 
 def chat_firebase_db(data, room):
@@ -69,6 +104,8 @@ def chat_firebase_db(data, room):
         res = db.child(room).update(data)
     else:
         res = db.child(room).set(data)
+    # chequear que los tipos de datos correspondan
+    check_type_data('chats', room)
     return res
 
 
