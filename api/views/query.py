@@ -4,6 +4,7 @@ import json
 import threading
 import os
 import boto3
+import uuid
 # paquetes de django
 from django.db.models import OuterRef, Subquery, F, Count
 from django.http import Http404, HttpResponse
@@ -429,8 +430,9 @@ class QueryUploadFilesView(APIView):
         """Funcion para subir archivos."""
         resp = True  # variable bandera
         name_file, extension = os.path.splitext(file.name)
-        name = name_file + extension
-        name_thumb = name_file + '-thumb' + extension
+        filename = str(uuid.uuid4())
+        name = filename + extension
+        name_thumb = filename + '-thumb' + extension
         # lo subimos a Amazon S3
         url = s3_upload_file(file, name)
 
