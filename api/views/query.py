@@ -23,6 +23,7 @@ from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsSpecialist
 from api.permissions import IsAdminReadOrSpecialistOwner, IsClient
 from api.permissions import IsClientOrSpecialistAndOwner
 from api.utils.validations import Operations
+from api.utils.tools import resize_img
 from api.serializers.query import QuerySerializer, QueryListClientSerializer
 from api.serializers.query import QueryMessageSerializer
 from api.serializers.query import QueryDeriveSerializer, QueryAcceptSerializer
@@ -430,11 +431,18 @@ class QueryUploadFilesView(APIView):
         resp = True  # variable bandera
         name_file, extension = os.path.splitext(file.name)
         name = name_file + extension
+        name_thumb = name_file + '-thumb' + extension
         # lo subimos a Amazon S3
         url = s3_upload_file(file, name)
+
+        thumb = resize_img(file, 512)
+        if thumb:
+            url_thumb = s3_upload_file(thumb, name_thumb)
+
         # devolvemos el mensaje con su id correspondiente
         ms = Message.objects.get(pk=int(msg_id))
         ms.file_url = url
+        ms.file_preview_url = url_thumb
         ms.save()
         s3 = boto3.client('s3')
         # Evaluamos si el archivo se subio a S3
