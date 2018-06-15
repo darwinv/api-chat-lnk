@@ -23,7 +23,6 @@ from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsSpecialist
 from api.permissions import IsAdminReadOrSpecialistOwner, IsClient
 from api.permissions import IsClientOrSpecialistAndOwner
 from api.utils.validations import Operations
-from api.utils.tools import resize_img
 from api.serializers.query import QuerySerializer, QueryListClientSerializer
 from api.serializers.query import QueryMessageSerializer
 from api.serializers.query import QueryDeriveSerializer, QueryAcceptSerializer
@@ -35,7 +34,7 @@ from api.serializers.query import QueryCalificationSerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
-from api.utils.tools import s3_upload_file
+from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.utils.parameters import Params
 
 
@@ -438,6 +437,7 @@ class QueryUploadFilesView(APIView):
         thumb = resize_img(file, 512)
         if thumb:
             url_thumb = s3_upload_file(thumb, name_thumb)
+            remove_file(thumb)
 
         # devolvemos el mensaje con su id correspondiente
         ms = Message.objects.get(pk=int(msg_id))
@@ -451,12 +451,14 @@ class QueryUploadFilesView(APIView):
         except ClientError as e:
             resp = int(e.response['Error']['Code']) != 404
         # Si no se ha subido se actualiza el estatus en firebase
+
         if resp is False:
             pyrebase.mark_failed_file(room=ms.room, message_id=ms.id)
         else:
             # Actualizamos el status en firebase
+            data = {"uploaded": 2, "fileUrl": url, "filePreviewUrl": url_thumb}
             r = pyrebase.mark_uploaded_file(room=ms.room, message_id=ms.id,
-                                            url_file=url)
+                                            data=data)
             print(r)
 
 
