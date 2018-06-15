@@ -116,7 +116,7 @@ def exist_node(node):
     return r
 
 
-def categories_db(client_id, cat_id, time_now, read=False):
+def categories_db(client_id, cat_id, time_now=None, read=False):
     """Acualizar Listado de Categorias del Chat."""
     # Actualizar la hora de del momento en que se realiza una consulta
     firebase = pyrebase.initialize_app(config)
@@ -124,12 +124,20 @@ def categories_db(client_id, cat_id, time_now, read=False):
     node_client = Params.PREFIX['client'] + str(client_id)
     node_category = Params.PREFIX['category'] + str(cat_id)
     main_node = 'categories/clients' + node_client + '/' + node_category
-
+    pending = Message.objects.filter(query__status=3,
+                                     viewed=0, msg_type='a',
+                                     query__category=cat_id,
+                                     query__client=client_id).count()
     data = {
-        "datetime": time_now,
+        # "datetime": time_now,
         "id": cat_id,
-        "read": read
+        "read": read,
+        "pendingRead": pending
     }
+
+    if time_now:
+        data["datetime"] = time_now
+
     if exist_node(main_node):
         res = db.child("categories/clients").child(
             node_client).child(node_category).update(data)
@@ -274,7 +282,20 @@ def update_status_group_messages(data_msgs, status):
                 'update_statusgroup nodo no existe - chats/{}/{}'
                 .format(msgs.room, node_msg))
 
-    # check_type_data('chats', 'chats/{}'.format(data_msgs[0].room))
+
+def set_message_viewed(data_msgs):
+    """Actualizar el status de visto para los mensajes."""
+    import pdb; pdb.set_trace()
+    for msgs in data_msgs:
+        node_msg = Params.PREFIX['message']+str(msgs.id)
+        print(node_msg)
+        if exist_node('chats/{}/{}'.format(msgs.room, node_msg)):
+            db.child("chats").child(msgs.room)\
+              .child(node_msg).update({"read": True})
+        else:
+            logger.warning(
+                'set_message_viewed nodo no existe - chats/{}/{}'
+                .format(msgs.room, node_msg))
 
 
 def createListMessageClients(lista, query_id, status,

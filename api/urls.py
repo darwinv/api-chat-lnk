@@ -95,6 +95,9 @@ urlpatterns = [
     # Calificar consulta
     url(r'^client/calification/queries/(?P<pk>[0-9]+)/$',
         query.SetCalificationView.as_view(), name='query-calification'),
+    # leer mensajes pendientes
+    url(r'^client/messages/read_pending/$',
+        query.ReadPendingAnswerView.as_view(), name='read-pending-answer'),
     # Subida de archivos a la consulta (pk)
     url(r'^queries/upload_files/(?P<pk>[0-9]+)/$',
         query.QueryUploadFilesView.as_view(), name='query-upload-files'),
