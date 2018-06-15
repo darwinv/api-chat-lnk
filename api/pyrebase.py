@@ -242,15 +242,15 @@ def mark_failed_file(room, message_id):
     firebase = pyrebase.initialize_app(config)
     # print(node)
     db = firebase.database()
-    return db.child(node).update({"uploaded": 5, "fileUrl": "error"})
+    return db.child(node).update({"uploaded": 5, "fileUrl": "error", "filePreviewUrl": "error"})
 
-def mark_uploaded_file(room, message_id, url_file):
+def mark_uploaded_file(room, message_id, data):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + 'm' + str(message_id)
     firebase = pyrebase.initialize_app(config)
     # print(node)
     db = firebase.database()
-    return db.child(node).update({"uploaded": 2, "fileUrl": url_file})
+    return db.child(node).update(data)
 
 def generateDataMessageClients(client_id, category_id, query_id, status, specialist_id):
     # Luego se busca el titulo y su id de la consulta
