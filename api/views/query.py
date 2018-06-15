@@ -436,7 +436,7 @@ class QueryUploadFilesView(APIView):
         # lo subimos a Amazon S3
         url = s3_upload_file(file, name)
 
-        thumb = resize_img(file, 512)
+        thumb = resize_img(file, 256)
         if thumb:
             url_thumb = s3_upload_file(thumb, name_thumb)
             remove_file(thumb)
