@@ -661,7 +661,8 @@ class ReadPendingAnswerView(APIView):
             viewed=0, msg_type='a', query__client=client_id,
             query__category=data["category"])
         if 'test' not in sys.argv:
-            pyrebase.categories_db(client_id, data["category"])
             pyrebase.set_message_viewed(mesgs_res)
         r = mesgs_res.update(viewed=1)
+        if 'test' not in sys.argv:
+            pyrebase.categories_db(client_id, data["category"])
         return Response({'resp': r}, status.HTTP_200_OK)
