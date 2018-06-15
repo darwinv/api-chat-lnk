@@ -285,7 +285,6 @@ def update_status_group_messages(data_msgs, status):
 
 def set_message_viewed(data_msgs):
     """Actualizar el status de visto para los mensajes."""
-    import pdb; pdb.set_trace()
     for msgs in data_msgs:
         node_msg = Params.PREFIX['message']+str(msgs.id)
         print(node_msg)
@@ -350,20 +349,21 @@ def mark_failed_file(room, message_id):
     # print(node)
     db = firebase.database()
     if exist_node(node):
-        db.child(node).update({"uploaded": 5, "fileUrl": "error"})
+        db.child(node).update({"uploaded": 5, "fileUrl": "error",
+                               "filePreviewUrl": "error"})
         check_type_data('chats', node)
     else:
         logger.warning("mark_failed_file, nodo no existe:" + node)
 
 
-def mark_uploaded_file(room, message_id, url_file):
+def mark_uploaded_file(room, message_id, data):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + Params.PREFIX['message'] + str(message_id)
     firebase = pyrebase.initialize_app(config)
     # print(node)
     db = firebase.database()
     if exist_node(node):
-        db.child(node).update({"uploaded": 2, "fileUrl": url_file})
+        db.child(node).update(data)
         check_type_data('chats', node)
     else:
         logger.warning("mark_uploaded_file, nodo no existe:" + node)

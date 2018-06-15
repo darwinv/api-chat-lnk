@@ -975,6 +975,8 @@ class PhotoUploadView(APIView):
             partial=True
         )
         # creando nombre de archivo
+        import pdb
+        pdb.set_trace()
         filename = str(uuid.uuid4())
         filename = filename + '.png'
         if media_serializer.is_valid():
