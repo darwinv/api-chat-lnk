@@ -360,7 +360,6 @@ def mark_uploaded_file(room, message_id, data):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + Params.PREFIX['message'] + str(message_id)
     firebase = pyrebase.initialize_app(config)
-    # print(node)
     db = firebase.database()
     if exist_node(node):
         db.child(node).update(data)
@@ -369,7 +368,8 @@ def mark_uploaded_file(room, message_id, data):
         logger.warning("mark_uploaded_file, nodo no existe:" + node)
 
 
-def generateDataMessageClients(client_id, category_id, query_id, status, specialist_id):
+def generateDataMessageClients(client_id, category_id, query_id,
+                               status, specialist_id):
     # Luego se busca el titulo y su id de la consulta
     lista = SpecialistMessageListCustom(client_id, category_id)
 
