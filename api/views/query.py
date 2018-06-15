@@ -37,6 +37,7 @@ from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.utils.parameters import Params
+import sys
 
 
 class QueryListClientView(ListCreateAPIView):
@@ -49,7 +50,7 @@ class QueryListClientView(ListCreateAPIView):
     serializer_class = QueryListClientSerializer
 
     def list(self, request):
-        """List."""        
+        """List."""
         user_id = Operations.get_id(self, request)
 
         if not user_id:
@@ -89,12 +90,14 @@ class QueryListClientView(ListCreateAPIView):
             category = serializer.data["category"]
             lista = list(serializer.data['message'].values())
             # Se actualiza la base de datos de firebase para el mensaje
-            pyrebase.chat_firebase_db(serializer.data["message"],
-                                      serializer.data["room"])
+            if 'test' not in sys.argv:
+                pyrebase.chat_firebase_db(serializer.data["message"],
+                                          serializer.data["room"])
             # Se actualiza la base de datos de firebase listado
             # de sus especialidades
-            pyrebase.categories_db(user_id, category,
-                                   lista[-1]["timeMessage"])
+            if 'test' not in sys.argv:
+                pyrebase.categories_db(user_id, category,
+                                       lista[-1]["timeMessage"])
 
             data_set = SpecialistMessageList_sp.search(2, user_id, category,
                                                        0, "")
@@ -124,13 +127,14 @@ class QueryListClientView(ListCreateAPIView):
 
             query_pending = PendingQueriesSerializer(data_queries, many=True)
             lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
-            pyrebase.createListMessageClients(serializer_tmp.data,
-                                              serializer.data["query_id"],
-                                              serializer.data["status"],
-                                              user_id,
-                                              serializer_tmp.data[0]['specialist'],
-                                                queries_list=lista_d
-                                              )
+            if 'test' not in sys.argv:
+                pyrebase.createListMessageClients(serializer_tmp.data,
+                                                  serializer.data["query_id"],
+                                                  serializer.data["status"],
+                                                  user_id,
+                                                  serializer_tmp.data[0]['specialist'],
+                                                  queries_list=lista_d
+                                                  )
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
@@ -138,8 +142,8 @@ class QueryListClientView(ListCreateAPIView):
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             return Response(serializer.data, status.HTTP_201_CREATED)
         else:
-            print(serializer.errors)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+            # print(serializer.errors)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class QueryDetailSpecialistView(APIView):
@@ -178,12 +182,12 @@ class QueryDetailSpecialistView(APIView):
             client_id = serializer.data["client_id"]
             category_id = serializer.data["category"]
             # Actualizamos el nodo de mensajes segun su sala
-            pyrebase.chat_firebase_db(serializer.data["message"],
-                                      serializer.data["room"])
-
-            # Actualizamos el listado de especialidades en Firebase
-            pyrebase.categories_db(user_id, category_id,
-                                   lista[-1]["timeMessage"])
+            if 'test' not in sys.argv:
+                pyrebase.chat_firebase_db(serializer.data["message"],
+                                          serializer.data["room"])
+                # Actualizamos el listado de especialidades en Firebase
+                pyrebase.categories_db(user_id,
+                                       category_id, lista[-1]["timeMessage"])
             # sala es el cliente_id y su la categoria del especialista
             sala = str(query.client.id) + '-' + str(category_id)
 
@@ -195,7 +199,8 @@ class QueryDetailSpecialistView(APIView):
             gp = GroupMessage.objects.get(message__id=ms_ref)
             msgs = gp.message_set.all()
 
-            pyrebase.update_status_group_messages(msgs, gp.status)
+            if 'test' not in sys.argv:
+                pyrebase.update_status_group_messages(msgs, gp.status)
             msgs_query = query.message_set.all()
             requeries = query.available_requeries
             data_update = {
@@ -203,13 +208,17 @@ class QueryDetailSpecialistView(APIView):
                 "availableRequeries": requeries
                 }
 
-            pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                                 data=data_update)
+            if 'test' not in sys.argv:
+                pyrebase.update_status_querymessages(data_msgs=msgs_query,
+                                                     data=data_update)
             # actualizo el querycurrent del listado de mensajes
             data = {'status': 3,
                     'date': lista[-1]["timeMessage"],
                     'message': lista[-1]["message"]}
-            pyrebase.update_status_query_current_list(user_id, client_id, data)
+
+            if 'test' not in sys.argv:
+                pyrebase.update_status_query_current_list(user_id,
+                                                          client_id, data)
 
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -246,12 +255,14 @@ class QueryDetailClientView(APIView):
             category_id = serializer.data["category"]
             specialist_id = serializer.data["specialist_id"]
             # Actualizamos el nodo de mensajes segun su sala
-            pyrebase.chat_firebase_db(serializer.data["message"],
-                                      serializer.data["room"])
+            if 'test' not in sys.argv:
+                pyrebase.chat_firebase_db(serializer.data["message"],
+                                          serializer.data["room"])
 
             # Actualizamos el listado de especialidades en Firebase
-            pyrebase.categories_db(user_id, category_id,
-                                   lista[-1]["timeMessage"])
+            if 'test' not in sys.argv:
+                pyrebase.categories_db(user_id, category_id,
+                                       lista[-1]["timeMessage"])
             # sala es el cliente_id y su la categoria del especialista
             sala = str(query.client.id) + '-' + str(category_id)
 
@@ -264,7 +275,8 @@ class QueryDetailClientView(APIView):
             gp = GroupMessage.objects.get(message__id=ms_ref)
             msgs = gp.message_set.all()
 
-            pyrebase.update_status_group_messages(msgs, gp.status)
+            if 'test' not in sys.argv:
+                pyrebase.update_status_group_messages(msgs, gp.status)
             msgs_query = query.message_set.all()
             requeries = lista[0]['query']['availableRequeries']
 
@@ -272,17 +284,20 @@ class QueryDetailClientView(APIView):
                 "status": query.status,
                 "availableRequeries": requeries
                 }
-
-            pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                                 data=data_update)
+            if 'test' not in sys.argv:
+                pyrebase.update_status_querymessages(data_msgs=msgs_query,
+                                                     data=data_update)
             data = {'status': 2,
                     'date': lista[-1]["timeMessage"],
                     'message': lista[-1]["message"]
                     }
-            pyrebase.update_status_query_current_list(specialist_id, client_id,
-                                                      data)
+            if 'test' not in sys.argv:
+                pyrebase.update_status_query_current_list(specialist_id,
+                                                          client_id,
+                                                          data)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 # Devolver el detalle de una ultima consulta filtrada por categoria
 # servicio pedido para android en notificaciones
@@ -502,7 +517,9 @@ class QueryAcceptView(APIView):
         serializer = QueryAcceptSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
-            pyrebase.updateStatusQueryAccept(specialist, query.client.id, pk)
+            if 'test' not in sys.argv:
+                pyrebase.updateStatusQueryAccept(specialist,
+                                                 query.client.id, pk)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -526,11 +543,13 @@ class DeclineRequeryView(APIView):
             for ms in msgs:
                 GroupMessage.objects.filter(message__id=ms.id).update(status=2)
             # import pdb; pdb.set_trace()
-            pyrebase.update_status_group_messages(msgs, 2)
+            if 'test' not in sys.argv:
+                pyrebase.update_status_group_messages(msgs, 2)
         success = queries.update(status=4)
         if success:
             return Response({}, status.HTTP_200_OK)
         return Response({}, status.HTTP_400_BAD_REQUEST)
+
 
 class QueryDeriveView(APIView):
     """Vista Derivar Query"""
@@ -554,9 +573,12 @@ class QueryDeriveView(APIView):
         serializer = QueryDeriveSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
-            pyrebase.updateStatusQueryDerive(specialist, data["specialist"], query)
+            if 'test' not in sys.argv:
+                pyrebase.updateStatusQueryDerive(specialist,
+                                                 data["specialist"], query)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class QueryDeclineView(APIView):
     """Vista Derivar Query"""
@@ -571,27 +593,32 @@ class QueryDeclineView(APIView):
 
         try:
             # Queris status menor a 3
-            query = Query.objects.get(pk=pk, status__lt=3, specialist=specialist)
+            query = Query.objects.get(pk=pk, status__lt=3,
+                                      specialist=specialist)
         except Query.DoesNotExist:
             raise Http404
 
         try:
-            main_specialist = Specialist.objects.get(category=query.category, type_specialist='m')
+            main_specialist = Specialist.objects.get(category=query.category,
+                                                     type_specialist='m')
         except Specialist.DoesNotExist:
             raise Http404
-
         context = {}
         context["status"] = 1
         context["specialist"] = main_specialist
         context["specialist_declined"] = specialist
-        serializer = QueryDeclineSerializer(query, data=request.data, context=context)
+        serializer = QueryDeclineSerializer(query, data=request.data,
+                                            context=context)
 
         if serializer.is_valid():
             serializer.save()
-            pyrebase.updateStatusQueryDerive(specialist, main_specialist.id, query)
+            if 'test' not in sys.argv:
+                pyrebase.updateStatusQueryDerive(specialist,
+                                                 main_specialist.id, query)
             return Response(serializer.data, status.HTTP_200_OK)
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class SetCalificationView(APIView):
     """Vista colocar calification."""
@@ -615,6 +642,26 @@ class SetCalificationView(APIView):
         if serializer.is_valid():
             serializer.save()
             msgs = query.message_set.all()
-            pyrebase.update_status_querymessages(msgs, serializer.data)
+            if 'test' not in sys.argv:
+                pyrebase.update_status_querymessages(msgs, serializer.data)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class ReadPendingAnswerView(APIView):
+    """Vista de lectura de respuestas no vistos del cliente."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsClient]
+
+    def post(self, request):
+        """Enviar data."""
+        data = request.data
+        client_id = Operations.get_id(self, request)
+        mesgs_res = Message.objects.filter(
+            viewed=0, msg_type='a', query__client=client_id,
+            query__category=data["category"])
+        if 'test' not in sys.argv:
+            pyrebase.categories_db(client_id, data["category"])
+            pyrebase.set_message_viewed(mesgs_res)
+        r = mesgs_res.update(viewed=1)
+        return Response({'resp': r}, status.HTTP_200_OK)
