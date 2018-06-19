@@ -97,8 +97,6 @@ def resize_img(file, size):
     thumb.save(file.name,image.format,quality=95)
 
     data = open(file.name,'rb')
-    import pdb
-    pdb.set_trace()
 
     data.content_type = file.content_type
 
