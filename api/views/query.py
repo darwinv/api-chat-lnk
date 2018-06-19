@@ -82,7 +82,7 @@ class QueryListClientView(ListCreateAPIView):
         data = request.data
         # tomamos del token el id de usuario (cliente en este caso)
         data["client"] = user_id
-
+        # import pdb; pdb.set_trace()
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -186,7 +186,7 @@ class QueryDetailSpecialistView(APIView):
                 pyrebase.chat_firebase_db(serializer.data["message"],
                                           serializer.data["room"])
                 # Actualizamos el listado de especialidades en Firebase
-                pyrebase.categories_db(user_id,
+                pyrebase.categories_db(client_id,
                                        category_id, lista[-1]["timeMessage"])
             # sala es el cliente_id y su la categoria del especialista
             sala = str(query.client.id) + '-' + str(category_id)

@@ -80,6 +80,7 @@ def check_type_data(type_data, node):
             data_chat_int.remove('title')
         for n in nodo.val().values():
             for l in data_chat_string:
+                # import pdb; pdb.set_trace()
                 if n['query'].get(l):
                     if type(n['query'].get(l)) is not str:
                             logger.error("{} - query/{} no es String".format(node, l))
@@ -130,11 +131,10 @@ def categories_db(client_id, cat_id, time_now=None, read=False):
                                      query__client=client_id).count()
     data = {
         # "datetime": time_now,
-        "id": cat_id,
+        "id": int(cat_id),
         "read": read,
         "pendingRead": pending
     }
-
     if time_now:
         data["datetime"] = time_now
 
