@@ -70,11 +70,13 @@ def s3_upload_file(file, filename):
 def resize_img(img, size):
     """
         file type image
-        size int of image
+        size int of image thumb
     """
-    media_type,extension = img.content_type.split("/")
+    media_type = img.content_type.split("/")[0]
     
-    if media_type != 'image':
+    if media_type == 'image' or media_type == 'multipart':
+        pass
+    else:
         return None
 
     image = Image.open(img)

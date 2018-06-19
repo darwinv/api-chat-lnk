@@ -93,7 +93,7 @@ def check_type_data(type_data, node):
                 else:
                     if type(n.get(k)) is not int:
                         logger.error("{} - {} no es int".format(node, k))
-    logger.info('chequeo de data realizada')
+    # logger.info('chequeo de data realizada')
 
 
 def chat_firebase_db(data, room):
@@ -144,7 +144,7 @@ def categories_db(client_id, cat_id, time_now=None, read=False):
     else:
         res = db.child("categories/clients").child(
             node_client).child(node_category).set(data)
-        logger.info("no existia nodo:" + main_node)
+        logger.warning("no existia nodo:" + main_node)
     return res
 
 
@@ -255,11 +255,10 @@ def update_status_querymessages(data_msgs, data):
 
     for msgs in data_msgs:
         node_msg = Params.PREFIX['message']+str(msgs.id)
-        if exist_node('chats/{}/{}/query'.format(msgs.room, node_msg)):
-            db.child("chats").child(msgs.room)\
-              .child(Params.PREFIX['message']+str(msgs.id))\
-              .child("query")\
-              .update(data)
+        node = 'chats/{}/{}/query/'.format(msgs.room, node_msg)
+
+        if exist_node(node):
+            db.child(node).update(data)
         else:
             logger.warning(
                 'update_status_querymsgs nodo no existe - chats/{}/{}/query'
@@ -274,9 +273,9 @@ def update_status_group_messages(data_msgs, status):
     db = firebase.database()
     for msgs in data_msgs:
         node_msg = Params.PREFIX['message']+str(msgs.id)
-        if exist_node('chats/{}/{}'.format(msgs.room, node_msg)):
-            db.child("chats").child(msgs.room)\
-              .child(node_msg).update({"groupStatus": status})
+        node = 'chats/{}/{}/'.format(msgs.room, node_msg)
+        if exist_node(node):
+            db.child(node).update({"groupStatus": status})
         else:
             logger.warning(
                 'update_statusgroup nodo no existe - chats/{}/{}'
@@ -287,10 +286,10 @@ def set_message_viewed(data_msgs):
     """Actualizar el status de visto para los mensajes."""
     for msgs in data_msgs:
         node_msg = Params.PREFIX['message']+str(msgs.id)
-        print(node_msg)
-        if exist_node('chats/{}/{}'.format(msgs.room, node_msg)):
-            db.child("chats").child(msgs.room)\
-              .child(node_msg).update({"read": True})
+        node = 'chats/{}/{}/'.format(msgs.room, node_msg)
+        
+        if exist_node(node):
+            db.child(node).update({"read": True})
         else:
             logger.warning(
                 'set_message_viewed nodo no existe - chats/{}/{}'
