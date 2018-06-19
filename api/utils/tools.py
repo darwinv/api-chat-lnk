@@ -96,11 +96,13 @@ def resize_img(file, size):
     
     thumb.save(file.name,image.format,quality=95)
 
-    file = open(file.name,'rb')
+    data = open(file.name,'rb')
+    import pdb
+    pdb.set_trace()
 
-    file.content_type = file.content_type
+    data.content_type = file.content_type
 
-    return file
+    return data
 
 def remove_file(file):
     """Remove File from Disk"""
