@@ -67,19 +67,23 @@ def s3_upload_file(file, filename):
     # file.close()
     return 'https://s3.amazonaws.com/linkup-photos/' + filename
 
-def resize_img(img, size):
+def resize_img(file, size):
     """
         file type image
         size int of image thumb
     """
-    media_type = img.content_type.split("/")[0]
-    
-    if media_type == 'image' or media_type == 'multipart':
+    # media_type = file.content_type.split("/")[0]
+    # import pdb
+    # pdb.set_trace()
+
+    extension = file.name.split(".")[-1]
+
+    if extension == 'png' or extension == 'jpg' or extension == 'gif':
         pass
     else:
         return None
 
-    image = Image.open(img)
+    image = Image.open(file)
 
     width, height = image.size
 
@@ -90,11 +94,11 @@ def resize_img(img, size):
 
     thumb = image.resize((int(width * factor), int(height * factor)))
     
-    thumb.save(img.name,image.format,quality=95)
+    thumb.save(file.name,image.format,quality=95)
 
-    file = open(img.name,'rb')
+    file = open(file.name,'rb')
 
-    file.content_type = img.content_type
+    file.content_type = file.content_type
 
     return file
 

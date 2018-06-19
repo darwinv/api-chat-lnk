@@ -425,6 +425,7 @@ class QueryUploadFilesView(APIView):
         # Cargamos el listado de archivos adjuntos
         msgs = request.data["message_id"].split(',')
         files = request.FILES.getlist('file')
+        
         # Empezamos a subir cada archivo por hilo separado
         threads = []
         i = 0
@@ -455,6 +456,8 @@ class QueryUploadFilesView(APIView):
         if thumb:
             url_thumb = s3_upload_file(thumb, name_thumb)
             remove_file(thumb)
+        else:
+            url_thumb = ""
 
         # devolvemos el mensaje con su id correspondiente
         ms = Message.objects.get(pk=int(msg_id))
