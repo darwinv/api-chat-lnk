@@ -78,6 +78,7 @@ class ListMessageSerializer(serializers.ModelSerializer):
             reference_id = obj.message_reference.id
         return {"id": obj.id, "room": obj.room, "codeUser": obj.code,
                 "fileType": obj.content_type, "fileUrl": obj.file_url,
+                "filePreviewUrl": obj.file_preview_url,
                 "message": obj.message, "messageType": obj.msg_type,
                 "messageReference": reference_id,
                 "groupStatus": obj.group.status, "groupId": obj.group.id,

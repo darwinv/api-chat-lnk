@@ -614,7 +614,8 @@ class Message(models.Model):
     specialist = models.ForeignKey(Specialist,
                                    on_delete=models.PROTECT, null=True)
     viewed = models.BooleanField(default=False)
-    file_url = models.CharField(max_length=100, blank=True)
+    file_url = models.CharField(max_length=500, blank=True)
+    file_preview_url = models.CharField(max_length=500, blank=True)
     code = models.CharField(_('code'), max_length=45)
     # uploaded = models.NullBooleanField(null=True)
     room = models.CharField(max_length=200)  # Sala de chat

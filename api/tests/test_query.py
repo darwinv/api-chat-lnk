@@ -564,13 +564,12 @@ class PutDeriveQuery(APITestCase):
         #obtiene mensajes de query
 
         self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
-        data = {'specialist':31}
+        data = {'specialist': 31}
         response = self.client.put(reverse('query-derive',
-            kwargs={'pk': 2}), data=json.dumps(data),
-            content_type='application/json')
+                                           kwargs={'pk': 2}),
+                                   data=json.dumps(data),
+                                   content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-
 
 
 class PutDeclineQuery(APITestCase):
@@ -582,20 +581,24 @@ class PutDeclineQuery(APITestCase):
         """Setup."""
         pass
 
-    def test_put_query_derive(self):
+    def test_put_query_decline(self):
         """Obtener resultado 200."""
-        #obtiene mensajes de query
+        # obtiene mensajes de query
 
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80asoclRvLmckV3DYy')
-        data = {'message': "Voy a declinar porque no estoy claro en la respuesta"}
-        response = self.client.put(reverse('query-decline',
-            kwargs={'pk': 6}), data=json.dumps(data),
-            content_type='application/json')
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80asoclRvLmckV3DYy')
+        data = {
+            'message': "Voy a declinar porque no estoy claro en la respuesta"
+            }
+        response = self.client.put(reverse('query-decline', kwargs={'pk': 6}),
+                                   data=json.dumps(data),
+                                   content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         response = self.client.put(reverse('query-decline',
-            kwargs={'pk': 6}), data=json.dumps(data),
-            content_type='application/json')
+                                           kwargs={'pk': 6}),
+                                   data=json.dumps(data),
+                                   content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 

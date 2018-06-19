@@ -3,13 +3,12 @@
     trabajar de forma estandar
     el manejo de variables, ejemplo: capitalizar el primer caracter
 """
-import datetime
-import string
-import random
-import boto3
-import threading
+import datetime, string, random, boto3, threading, os
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime as date_time, date, time, timedelta
+from PIL import Image
+from api.logger import manager
+logger = manager.setup_log(__name__)
 
 def capitalize(line):
     """
@@ -68,6 +67,46 @@ def s3_upload_file(file, filename):
     # file.close()
     return 'https://s3.amazonaws.com/linkup-photos/' + filename
 
+def resize_img(img, size):
+    """
+        file type image
+        size int of image thumb
+    """
+    media_type = img.content_type.split("/")[0]
+    
+    if media_type == 'image' or media_type == 'multipart':
+        pass
+    else:
+        return None
+
+    image = Image.open(img)
+
+    width, height = image.size
+
+    if width > height:
+        factor = size / width
+    else:
+        factor = size / height
+
+    thumb = image.resize((int(width * factor), int(height * factor)))
+    
+    thumb.save(img.name,image.format,quality=95)
+
+    file = open(img.name,'rb')
+
+    file.content_type = img.content_type
+
+    return file
+
+def remove_file(file):
+    """Remove File from Disk"""
+    file.close()
+    if os.path.exists(file.name):
+        try:
+            os.remove(file.name)
+        except Exception as e:
+            print(e.strerror)
+            logger.warning(e.strerror)
 
 def clear_data_no_valid(data,valid_fields):
     """
