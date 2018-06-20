@@ -12,6 +12,7 @@ from api.utils.parameters import Params, Payloads
 from api.utils.querysets import get_query_set_plan
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from linkupapi.settings import CONFIG_ENVIROMENT
+from linkupapi.settings import DEBUG_FIREBASE
 from api.logger import manager
 logger = manager.setup_log(__name__)
 
@@ -74,13 +75,17 @@ def check_type_data(type_data, node):
     nodo = db.child(node).get()
     ns = list(nodo.val().values())
     if type_data == 'chats':
-        new_str = ns[0]['query'].keys()
+        size = len(node.split('/'))
+        if size == 2:
+            new_str = ns[0]['query'].keys()
+        elif size == 3:
+            new_str = nodo.val().get('query').keys()
+
         data_chat_int.extend(new_str)
         if 'title' in data_chat_int:
             data_chat_int.remove('title')
         for n in nodo.val().values():
             for l in data_chat_string:
-                # import pdb; pdb.set_trace()
                 if n['query'].get(l):
                     if type(n['query'].get(l)) is not str:
                             logger.error("{} - query/{} no es String".format(node, l))
@@ -101,13 +106,14 @@ def chat_firebase_db(data, room):
     """Enviar data a firebase en chat."""
     firebase = pyrebase.initialize_app(config)
     db = firebase.database()
-    room = "chats/{}/".format(room)
+    room = "chats/{}".format(room)
     if exist_node(room):
         res = db.child(room).update(data)
     else:
         res = db.child(room).set(data)
     # chequear que los tipos de datos correspondan
-    check_type_data('chats', room)
+    if DEBUG_FIREBASE:
+        check_type_data('chats', room)
     return res
 
 
@@ -287,7 +293,7 @@ def set_message_viewed(data_msgs):
     for msgs in data_msgs:
         node_msg = Params.PREFIX['message']+str(msgs.id)
         node = 'chats/{}/{}/'.format(msgs.room, node_msg)
-        
+
         if exist_node(node):
             db.child(node).update({"read": True})
         else:
@@ -350,7 +356,8 @@ def mark_failed_file(room, message_id):
     if exist_node(node):
         db.child(node).update({"uploaded": 5, "fileUrl": "error",
                                "filePreviewUrl": "error"})
-        check_type_data('chats', node)
+        if DEBUG_FIREBASE:
+            check_type_data('chats', node)
     else:
         logger.warning("mark_failed_file, nodo no existe:" + node)
 
@@ -362,7 +369,8 @@ def mark_uploaded_file(room, message_id, data):
     db = firebase.database()
     if exist_node(node):
         db.child(node).update(data)
-        check_type_data('chats', node)
+        if DEBUG_FIREBASE:
+            check_type_data('chats', node)
     else:
         logger.warning("mark_uploaded_file, nodo no existe:" + node)
 
