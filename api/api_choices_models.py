@@ -15,6 +15,7 @@ class ChoicesAPI:
         (2, _('Passport')),
         (3, _('Foreign Card')),
     )
+    
     user_status = (
         (1, _('Pending')),
         (2, _('Activate')),
