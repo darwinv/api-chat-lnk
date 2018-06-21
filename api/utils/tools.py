@@ -94,7 +94,7 @@ def resize_img(file, size):
 
     thumb = image.resize((int(width * factor), int(height * factor)))
     
-    thumb.save(file.name,image.format,quality=95)
+    thumb.save(file.name,image.format, quality=95)
 
     data = open(file.name,'rb')
 
@@ -102,15 +102,19 @@ def resize_img(file, size):
 
     return data
 
+def thumb_video(file, size):
+    pass
+
 def remove_file(file):
     """Remove File from Disk"""
-    file.close()
-    if os.path.exists(file.name):
-        try:
-            os.remove(file.name)
-        except Exception as e:
-            print(e.strerror)
-            logger.warning(e.strerror)
+    if file:
+        file.close()
+        if os.path.exists(file.name):
+            try:
+                os.remove(file.name)
+            except Exception as e:
+                print(e.strerror)
+                logger.warning(e.strerror)
 
 def clear_data_no_valid(data,valid_fields):
     """
