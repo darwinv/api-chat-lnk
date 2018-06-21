@@ -451,15 +451,17 @@ class QueryUploadFilesView(APIView):
         # lo subimos a Amazon S3
         url = s3_upload_file(file, name)
 
-        thumb = resize_img(file, 256)
+
+        if extension == '.mp4':
+            url_thumb = 'https://s3.amazonaws.com/linkup-photos/api/thumb-video-copy-thumb.jpg'
+            thumb = None
+        else:
+            thumb = resize_img(file, 256)
+
         if thumb:
-            name_file_thumb, extension_thumb = os.path.splitext(thumb.name)
-            
-            if extension != '.mp4':
-                url_thumb = s3_upload_file(thumb, filename + '-thumb' + extension_thumb)
-                remove_file(thumb)
-            else:
-                url_thumb = 'https://s3.amazonaws.com/linkup-photos/api/thumb-video-copy-thumb.jpg'
+            name_file_thumb, extension_thumb = os.path.splitext(thumb.name)            
+            url_thumb = s3_upload_file(thumb, filename + '-thumb' + extension_thumb)
+            remove_file(thumb)            
         else:
             url_thumb = ""
 
