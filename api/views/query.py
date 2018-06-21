@@ -458,12 +458,12 @@ class QueryUploadFilesView(APIView):
         else:
             thumb = resize_img(file, 256)
 
-        if thumb:
-            name_file_thumb, extension_thumb = os.path.splitext(thumb.name)            
-            url_thumb = s3_upload_file(thumb, filename + '-thumb' + extension_thumb)
-            remove_file(thumb)            
-        else:
-            url_thumb = ""
+            if thumb:
+                name_file_thumb, extension_thumb = os.path.splitext(thumb.name)            
+                url_thumb = s3_upload_file(thumb, filename + '-thumb' + extension_thumb)
+                remove_file(thumb)            
+            else:
+                url_thumb = ""
 
         # devolvemos el mensaje con su id correspondiente
         ms = Message.objects.get(pk=int(msg_id))
