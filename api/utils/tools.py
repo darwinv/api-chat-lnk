@@ -77,9 +77,11 @@ def resize_img(file, size):
     # pdb.set_trace()
 
     extension = file.name.split(".")[-1]
-
+    
     if extension == 'png' or extension == 'jpg' or extension == 'gif':
         pass
+    elif extension == 'mp4':
+        return thumb_video(file, size)
     else:
         return None
 
@@ -103,7 +105,15 @@ def resize_img(file, size):
     return data
 
 def thumb_video(file, size):
-    pass
+    from shutil import copyfile
+    src = 'api/thumb-video.jpg'
+    dst = 'api/thumb-video-copy.jpg'
+    copyfile(src, dst)
+
+    data = open(dst,'rb')
+    data.content_type = 'image/jpg'
+
+    return data
 
 def remove_file(file):
     """Remove File from Disk"""

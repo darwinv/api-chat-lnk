@@ -448,13 +448,13 @@ class QueryUploadFilesView(APIView):
         name_file, extension = os.path.splitext(file.name)
         filename = str(uuid.uuid4())
         name = filename + extension
-        name_thumb = filename + '-thumb' + extension
         # lo subimos a Amazon S3
         url = s3_upload_file(file, name)
 
         thumb = resize_img(file, 256)
         if thumb:
-            url_thumb = s3_upload_file(thumb, name_thumb)
+            name_file_thumb, extension_thumb = os.path.splitext(thumb.name)
+            url_thumb = s3_upload_file(thumb, name_file_thumb + '-thumb' + extension_thumb)
             remove_file(thumb)
         else:
             url_thumb = ""
