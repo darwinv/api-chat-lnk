@@ -467,7 +467,7 @@ class QueryUploadFilesView(APIView):
         # devolvemos el mensaje con su id correspondiente
         ms = Message.objects.get(pk=int(msg_id))
         ms.file_url = url
-        ms.file_preview_url = 'https://s3.amazonaws.com/linkup-photos/api/thumb-video-copy-thumb.jpg'
+        ms.file_preview_url = url_thumb
         ms.save()
         s3 = boto3.client('s3')
         # Evaluamos si el archivo se subio a S3
