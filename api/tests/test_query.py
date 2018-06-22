@@ -611,16 +611,16 @@ class SetCalification(APITestCase):
         """SetUp."""
         self.client = APIClient()
         self.valid_payload = {
-            'calification': 5
+            'qualification': 5
         }
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
 
     def test_invalid_calification(self):
         """Numero de calificacion invalida."""
-        data = {"calification": 6}
+        data = {"qualification": 6}
         Query.objects.filter(pk=1000).update(status=4)
-        response = self.client.put(reverse('query-calification',
+        response = self.client.put(reverse('query-qualify',
                                            kwargs={'pk': 1000}),
                                    data=json.dumps(data),
                                    content_type='application/json')
@@ -630,7 +630,7 @@ class SetCalification(APITestCase):
         """Calificacion vacia."""
         data = {}
         Query.objects.filter(pk=1000).update(status=4)
-        response = self.client.put(reverse('query-calification',
+        response = self.client.put(reverse('query-qualify',
                                            kwargs={'pk': 1000}),
                                    data=json.dumps(data),
                                    content_type='application/json')
@@ -638,9 +638,9 @@ class SetCalification(APITestCase):
 
     def test_null_calification(self):
         """Calificacion vacia."""
-        data = {"calification": None}
+        data = {"qualification": None}
         Query.objects.filter(pk=1000).update(status=4)
-        response = self.client.put(reverse('query-calification',
+        response = self.client.put(reverse('query-qualify',
                                            kwargs={'pk': 1000}),
                                    data=json.dumps(data),
                                    content_type='application/json')
@@ -650,7 +650,7 @@ class SetCalification(APITestCase):
         """Calificacion de manera exitosa."""
         data = self.valid_payload
         Query.objects.filter(pk=1000).update(status=4)
-        response = self.client.put(reverse('query-calification',
+        response = self.client.put(reverse('query-qualify',
                                            kwargs={'pk': 1000}),
                                    data=json.dumps(data),
                                    content_type='application/json')
@@ -658,4 +658,4 @@ class SetCalification(APITestCase):
         q = Query.objects.get(pk=1000)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(q.status, 5)
-        self.assertEqual(q.calification, 5)
+        self.assertEqual(q.qualification, 5)

@@ -73,7 +73,7 @@ class QueryAdmin(admin.ModelAdmin):
     """Consulta en el admin."""
 
     inlines = [MessageInline]
-    readonly_fields = ('calification',)
+    readonly_fields = ('qualification',)
     exclude = ('acq3uired_plan',)
 
 class SellerAdmin(admin.ModelAdmin):

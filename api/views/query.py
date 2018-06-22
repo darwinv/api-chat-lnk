@@ -31,7 +31,7 @@ from api.serializers.query import QueryDetailLastMsgSerializer
 
 from api.serializers.query import ChatMessageSerializer, QueryDeclineSerializer
 from api.serializers.query import QueryResponseSerializer, ReQuerySerializer
-from api.serializers.query import QueryCalificationSerializer
+from api.serializers.query import QueryQualifySerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
@@ -347,7 +347,7 @@ class QueryChatSpecialistView(ListAPIView):
         queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
                                           'query_id', 'query__client_id', 'message_reference', 'specialist_id', 'content_type', 'file_url')\
                           .annotate(title=F('query__title',), status=F('query__status',),
-                                    calification=F('query__calification',),
+                                    qualification=F('query__qualification',),
                                     category_id=F('query__category_id',))\
                           .filter(query__client_id=client, query__specialist_id=specialist)\
                           .order_by('-created_at')
@@ -387,7 +387,7 @@ class QueryChatClientView(ListCreateAPIView):
         queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
                                           'query_id', 'query__client_id', 'message_reference', 'specialist_id', 'content_type', 'file_url')\
                           .annotate(title=F('query__title',), status=F('query__status',),\
-                                    calification=F('query__calification',),\
+                                    qualification=F('query__qualification',),\
                            category_id=F('query__category_id',))\
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
@@ -430,7 +430,7 @@ class QueryUploadFilesView(APIView):
         # Cargamos el listado de archivos adjuntos
         msgs = request.data["message_id"].split(',')
         files = request.FILES.getlist('file')
-        
+
         # Empezamos a subir cada archivo por hilo separado
         threads = []
         i = 0
@@ -463,9 +463,9 @@ class QueryUploadFilesView(APIView):
             thumb = resize_img(file, 256)
 
             if thumb:
-                name_file_thumb, extension_thumb = os.path.splitext(thumb.name)            
+                name_file_thumb, extension_thumb = os.path.splitext(thumb.name)
                 url_thumb = s3_upload_file(thumb, filename + '-thumb' + extension_thumb)
-                remove_file(thumb)            
+                remove_file(thumb)
             else:
                 url_thumb = ""
 
@@ -633,8 +633,8 @@ class QueryDeclineView(APIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
-class SetCalificationView(APIView):
-    """Vista colocar calification."""
+class SetQualificationView(APIView):
+    """Vista colocar calificacion ."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsClient]
 
@@ -651,7 +651,7 @@ class SetCalificationView(APIView):
         """Actualizar consulta."""
         query = self.get_object(pk)
         data = request.data
-        serializer = QueryCalificationSerializer(query, data=data)
+        serializer = QueryQualifySerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
             msgs = query.message_set.all()

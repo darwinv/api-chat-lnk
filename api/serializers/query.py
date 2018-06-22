@@ -99,7 +99,7 @@ class QueryDetailSerializer(serializers.ModelSerializer):
         model = Query
         fields = (
             'id', 'title', 'status', 'messages', 'last_modified', 'client', 'code_client', 'specialist', 'category',
-            'category_name', 'calification')
+            'category_name', 'qualification')
         read_only_fields = ('status', 'last_modified')
 
         # Traer por consulta relacionada
@@ -133,7 +133,7 @@ class QueryDetailLastMsgSerializer(serializers.ModelSerializer):
         model = Query
         fields = (
             'id', 'title', 'status', 'last_msg', 'last_modified', 'client', 'code_client', 'specialist', 'category',
-            'category_name', 'calification')
+            'category_name', 'qualification')
         read_only_fields = ('status', 'last_modified')
 
         # Traer por consulta relacionada
@@ -256,7 +256,7 @@ class QuerySerializer(serializers.ModelSerializer):
             av_reqs = obj.available_requeries
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
-                                "calification": obj.calification,
+                                "qualification": obj.qualification,
                                 "availableRequeries": av_reqs,
                                 "specialist_id": obj.specialist.id
                                 }
@@ -291,7 +291,7 @@ class BaseQueryResponseSerializer(serializers.ModelSerializer):
             av_reqs = obj.available_requeries
             message["query"] = {"id": obj.id, "title": obj.title,
                                 "status": obj.status,
-                                "calification": obj.calification,
+                                "qualification": obj.qualification,
                                 "availableRequeries": av_reqs,
                                 "specialist_id": obj.specialist.id
                                 }
@@ -410,7 +410,7 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
         """Meta."""
 
         model = Query
-        fields = ('id', 'title', 'status', 'calification')
+        fields = ('id', 'title', 'status', 'qualification')
         read_only_fields = ('title',)
 
     def update(self, instance, validated_data):
@@ -425,20 +425,20 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
 
             instance.status = validated_data["status"]
 
-        # se comprueba si hay calification en data
+        # se comprueba si hay qualification en data
         # si se quiere calificar la respuesta debe estar absuelta primero
-        if 'calification' in validated_data:
-            if int(validated_data["calification"]) > 5:
-                raise serializers.ValidationError(u"Invalid calification.")
+        if 'qualification' in validated_data:
+            if int(validated_data["qualification"]) > 5:
+                raise serializers.ValidationError(u"Invalid qualification.")
             if int(instance.status) < 6:
                 raise serializers.ValidationError(u"to qualify, it must be absolved first.")
-            instance.calification = validated_data["calification"]
+            instance.qualification = validated_data["qualification"]
         instance.save()
         return instance
 
     def to_representation(self, obj):
         """Redefinido metodo de representación."""
-        return {"calification": obj.calification, "status": obj.status}
+        return {"qualification": obj.qualification, "status": obj.status}
 
 
 class QueryListClientSerializer(serializers.ModelSerializer):
@@ -495,7 +495,7 @@ class QueryListSpecialistSerializer(serializers.ModelSerializer):
         model = Query
         fields = (
             'id', 'title', 'last_msg', 'status', 'last_modified', 'category', 'category_name', 'client', 'specialist',
-            'calification')
+            'qualification')
         read_only_fields = ('specialist', 'id', 'last_time')
 
     # Devuelvo la hora y minuto separados
@@ -580,7 +580,7 @@ class QueryChatClientSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta."""
         model = Query
-        fields = ('title', 'category_id', 'calification', 'status', 'query_id')
+        fields = ('title', 'category_id', 'qualification', 'status', 'query_id')
 
 
     def get_query_id(self, obj):
@@ -663,21 +663,21 @@ class QueryDeriveSerializer(serializers.ModelSerializer):
         return instance
 
 
-class QueryCalificationSerializer(serializers.ModelSerializer):
+class QueryQualifySerializer(serializers.ModelSerializer):
     """Calificar Consulta."""
 
-    calification = serializers.IntegerField(max_value=5, min_value=1)
+    qualification = serializers.IntegerField(max_value=5, min_value=1)
 
     class Meta:
         """Meta."""
         model = Query
-        fields = ('status', 'calification')
+        fields = ('status', 'qualification')
         read_only_fields = ('status',)
 
     def update(self, instance, validated_data):
         """Redefinir update."""
         instance.status = 5
-        instance.calification = validated_data["calification"]
+        instance.qualification = validated_data["qualification"]
         instance.save()
         return instance
 
