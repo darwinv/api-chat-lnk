@@ -178,41 +178,46 @@ class QueryDetailSpecialistView(APIView):
                                              context={'specialist': spec})
         if serializer.is_valid():
             serializer.save()
+
             lista = list(serializer.data['message'].values())
             client_id = serializer.data["client_id"]
             category_id = serializer.data["category"]
-            # Actualizamos el nodo de mensajes segun su sala
+
             if 'test' not in sys.argv:
+                # Actualizamos el nodo de mensajes segun su sala
                 pyrebase.chat_firebase_db(serializer.data["message"],
                                           serializer.data["room"])
                 # Actualizamos el listado de especialidades en Firebase
                 pyrebase.categories_db(client_id,
                                        category_id, lista[-1]["timeMessage"])
+
             # sala es el cliente_id y su la categoria del especialista
             sala = str(query.client.id) + '-' + str(category_id)
 
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
-            for li in lista:
-                if li['messageReference'] is not None and li['messageReference'] != 0:
-                    ms_ref = li['messageReference']
+            for row in lista:
+                if row['messageReference'] is not None and row['messageReference'] != 0:
+                    ms_ref = row['messageReference']
 
-            gp = GroupMessage.objects.get(message__id=ms_ref)
-            msgs = gp.message_set.all()
+            group = GroupMessage.objects.get(message__id=ms_ref)
+            msgs = group.message_set.all()
 
             if 'test' not in sys.argv:
-                pyrebase.update_status_group_messages(msgs, gp.status)
+                pyrebase.update_status_group_messages(msgs, group.status)
+
             msgs_query = query.message_set.all()
             requeries = query.available_requeries
             data_update = {
                 "status": query.status,
                 "availableRequeries": requeries
-                }
+            }
 
             if 'test' not in sys.argv:
                 pyrebase.update_status_querymessages(data_msgs=msgs_query,
                                                      data=data_update)
+            
             # actualizo el querycurrent del listado de mensajes
-            data = {'status': 3,
+            data = {'status': query.status,
                     'date': lista[-1]["timeMessage"],
                     'message': lista[-1]["message"]}
 

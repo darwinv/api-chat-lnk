@@ -337,7 +337,12 @@ class QueryResponseSerializer(BaseQueryResponseSerializer):
                 ms_ref = data_message['message_reference'].id
             Message.objects.create(query=instance, group=group, **data_message)
 
-        instance.status = 3  # actualizo status
+        
+        # Actualizo status dependiendo de cantidad de reconsultas
+        if instance.available_requeries >= 1:
+            instance.status = 3
+        else:
+            instance.status = 4
         # actualizo el estado del grupo al cual se le responde
         gp = GroupMessage.objects.get(message__id=ms_ref)
         gp.status = 2

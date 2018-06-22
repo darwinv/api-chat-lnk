@@ -439,10 +439,11 @@ class ClientDetailView(APIView):
         """Detalle."""
         client = self.get_object(pk)
         data = request.data
-        valid_fields = ("commercial_reason", "first_name", "last_name", "nick",
-                "telephone", "cellphone","residence_country", "address")
 
-        clear_data_no_valid(data,valid_fields)
+        valid_fields = ("commercial_reason", "first_name", "last_name", "nick",
+                "telephone", "cellphone","residence_country", "address", "foreign_address")
+
+        clear_data_no_valid(data, valid_fields)
 
 
         serializer = ClientSerializer(client, data, partial=True,
@@ -451,7 +452,6 @@ class ClientDetailView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Vista para detalle del cliente segun su username
