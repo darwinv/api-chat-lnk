@@ -425,7 +425,7 @@ class QueryUploadFilesView(APIView):
         # Cargamos el listado de archivos adjuntos
         msgs = request.data["message_id"].split(',')
         files = request.FILES.getlist('file')
-        
+
         # Empezamos a subir cada archivo por hilo separado
         threads = []
         i = 0
@@ -450,19 +450,14 @@ class QueryUploadFilesView(APIView):
         name = filename + extension
         # lo subimos a Amazon S3
         url = s3_upload_file(file, name)
-
-        if extension == '.mp4':
-            url_thumb = 'https://s3.amazonaws.com/linkup-photos/api/thumb-video-copy-thumb.jpg'
-            thumb = None
+        # generamos la miniatura
+        thumb = resize_img(file, 256)
+        if thumb:
+            name_file_thumb, extension_thumb = os.path.splitext(thumb.name)
+            url_thumb = s3_upload_file(thumb, filename + '-thumb' + extension_thumb)
+            remove_file(thumb)
         else:
-            thumb = resize_img(file, 256)
-
-            if thumb:
-                name_file_thumb, extension_thumb = os.path.splitext(thumb.name)            
-                url_thumb = s3_upload_file(thumb, filename + '-thumb' + extension_thumb)
-                remove_file(thumb)            
-            else:
-                url_thumb = ""
+            url_thumb = ""
 
         # devolvemos el mensaje con su id correspondiente
         ms = Message.objects.get(pk=int(msg_id))

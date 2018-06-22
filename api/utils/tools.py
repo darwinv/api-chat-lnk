@@ -3,9 +3,10 @@
     trabajar de forma estandar
     el manejo de variables, ejemplo: capitalizar el primer caracter
 """
-import datetime, string, random, boto3, threading, os
+import datetime, string, random, boto3, os
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime as date_time, date, time, timedelta
+from moviepy.editor import *
 from PIL import Image
 from api.logger import manager
 logger = manager.setup_log(__name__)
@@ -67,6 +68,7 @@ def s3_upload_file(file, filename):
     # file.close()
     return 'https://s3.amazonaws.com/linkup-photos/' + filename
 
+
 def resize_img(file, size):
     """
         file type image
@@ -77,7 +79,7 @@ def resize_img(file, size):
     # pdb.set_trace()
 
     extension = file.name.split(".")[-1]
-    
+
     if extension == 'png' or extension == 'jpg' or extension == 'gif':
         pass
     elif extension == 'mp4':
@@ -95,7 +97,7 @@ def resize_img(file, size):
         factor = size / height
 
     thumb = image.resize((int(width * factor), int(height * factor)))
-    
+
     thumb.save(file.name,image.format, quality=95)
 
     data = open(file.name,'rb')
@@ -104,11 +106,15 @@ def resize_img(file, size):
 
     return data
 
+
 def thumb_video(file, size):
-    from shutil import copyfile
+    # from shutil import copyfile
+    clip = VideoFileClip(file)
+    thumb = os.path.join("api/", "thumbnail_%s.png" % file.name)
+    clip.save_frame(thumb, t=random.uniform(0.1, clip.duration))
     src = 'api/thumb-video.jpg'
     dst = 'api/thumb-video-copy.jpg'
-    copyfile(src, dst)
+    # copyfile(src, dst)
 
     data = open(dst,'rb')
     data.content_type = 'image/jpg'

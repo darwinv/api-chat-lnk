@@ -24,3 +24,4 @@ Twisted[tls,http2]==17.9.0
 pyrebase
 
 sqlparse==0.2.4
+moviepy==0.2.3.5
