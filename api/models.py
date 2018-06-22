@@ -560,7 +560,7 @@ class Query(models.Model):
     status = models.PositiveIntegerField(choices=Ch.query_status)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
-    calification = models.PositiveSmallIntegerField(null=True)
+    qualification = models.PositiveSmallIntegerField(null=True)
     available_requeries = models.PositiveIntegerField()
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
