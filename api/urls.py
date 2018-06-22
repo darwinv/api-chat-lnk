@@ -93,8 +93,8 @@ urlpatterns = [
     url(r'^client/deny_requery/$',
         query.DeclineRequeryView.as_view(), name='query-deny-requery'),
     # Calificar consulta
-    url(r'^client/calification/queries/(?P<pk>[0-9]+)/$',
-        query.SetCalificationView.as_view(), name='query-calification'),
+    url(r'^client/qualify/queries/(?P<pk>[0-9]+)/$',
+        query.SetQualificationView.as_view(), name='query-qualify'),
     # leer mensajes pendientes
     url(r'^client/messages/read_pending/$',
         query.ReadPendingAnswerView.as_view(), name='read-pending-answer'),

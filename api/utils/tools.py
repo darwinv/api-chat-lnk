@@ -4,6 +4,8 @@
     el manejo de variables, ejemplo: capitalizar el primer caracter
 """
 import datetime, string, random, boto3, os
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime as date_time, date, time, timedelta
 from moviepy.editor import *
@@ -109,14 +111,18 @@ def resize_img(file, size):
 
 def thumb_video(file, size):
     # from shutil import copyfile
-    clip = VideoFileClip(file)
+    # file_content = file.read()
+    path = default_storage.save('tmp/{}'.format(file.name), ContentFile(file.read()))
+    print(path)
+    clip = VideoFileClip(path)
+    import pdb; pdb.set_trace()
     thumb = os.path.join("api/", "th_%s.jpg" % file.name)
     clip.save_frame(thumb, t=random.uniform(0.1, clip.duration))
     dst = 'api/th_{}'.format(file.name)
     # copyfile(src, dst)
     data = open(dst, 'rb')
     data.content_type = 'image/jpg'
-
+    # default_storage.delete(path)
     return data
 
 def remove_file(file):
