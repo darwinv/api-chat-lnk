@@ -110,13 +110,11 @@ def resize_img(file, size):
 def thumb_video(file, size):
     # from shutil import copyfile
     clip = VideoFileClip(file)
-    thumb = os.path.join("api/", "thumbnail_%s.png" % file.name)
+    thumb = os.path.join("api/", "th_%s.jpg" % file.name)
     clip.save_frame(thumb, t=random.uniform(0.1, clip.duration))
-    src = 'api/thumb-video.jpg'
-    dst = 'api/thumb-video-copy.jpg'
+    dst = 'api/th_{}'.format(file.name)
     # copyfile(src, dst)
-
-    data = open(dst,'rb')
+    data = open(dst, 'rb')
     data.content_type = 'image/jpg'
 
     return data
