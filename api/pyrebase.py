@@ -64,7 +64,8 @@ def check_type_data(type_data, node):
     """Chequear tipos de datos en los nodos """
 
     data_chat_string = [
-        'codeUser', 'fileUrl', 'message', 'messageType', 'room',
+        'codeUser', 'fileUrl', 'filePreviewUrl',
+        'message', 'messageType', 'room',
         ]
 
     data_chat_int = [

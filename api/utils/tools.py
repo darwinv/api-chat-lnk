@@ -8,6 +8,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime as date_time, date, time, timedelta
+import time as ti
 from moviepy.editor import *
 from PIL import Image
 from api.logger import manager
@@ -111,20 +112,21 @@ def resize_img(file, size):
 
 def thumb_video(file, size):
     # from shutil import copyfile
-    # file_content = file.read()
-    with default_storage.open('tmp/'+file.name, 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
-    print(destination)
-    clip = VideoFileClip(MEDIA_ROOT)
-    import pdb; pdb.set_trace()
-    thumb = os.path.join("api/", "th_%s.jpg" % file.name)
+    # fn = os.path.basename(file.name)
+    arch = default_storage.save(name='files/' + file.name, content=file)
+    # import pdb; pdb.set_trace()
+    clip = VideoFileClip(arch)
+    name = file.name.split(".")[0]
+    # import pdb; pdb.set_trace()
+    thumb = os.path.join("api/", "th_%s.jpg" % name)
     clip.save_frame(thumb, t=random.uniform(0.1, clip.duration))
-    dst = 'api/th_{}'.format(file.name)
+    dst = 'api/th_{}.jpg'.format(name)
     # copyfile(src, dst)
     data = open(dst, 'rb')
     data.content_type = 'image/jpg'
-    # default_storage.delete(path)
+    # clip.__del__()
+    # video = open(arch, 'rb')
+    # remove_file(video)
     return data
 
 def remove_file(file):
