@@ -112,9 +112,11 @@ def resize_img(file, size):
 def thumb_video(file, size):
     # from shutil import copyfile
     # file_content = file.read()
-    path = default_storage.save('tmp/{}'.format(file.name), ContentFile(file.read()))
-    print(path)
-    clip = VideoFileClip(path)
+    with default_storage.open('tmp/'+file.name, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    print(destination)
+    clip = VideoFileClip(MEDIA_ROOT)
     import pdb; pdb.set_trace()
     thumb = os.path.join("api/", "th_%s.jpg" % file.name)
     clip.save_frame(thumb, t=random.uniform(0.1, clip.duration))
