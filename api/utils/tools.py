@@ -8,7 +8,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime as date_time, date, time, timedelta
-import time as ti
+from linkupapi.settings import MEDIA_ROOT
 from moviepy.editor import *
 from PIL import Image
 from api.logger import manager
@@ -113,16 +113,16 @@ def resize_img(file, size):
 def thumb_video(file, size):
     # from shutil import copyfile
     # fn = os.path.basename(file.name)
-    arch = default_storage.save(name='files/' + file.name, content=file)
+    arch = default_storage.save(name=MEDIA_ROOT + file.name, content=file)
     # import pdb; pdb.set_trace()
     clip = VideoFileClip(arch)
     name = file.name.split(".")[0]
     # import pdb; pdb.set_trace()
-    thumb = os.path.join("api/", "th_%s.jpg" % name)
+    thumb = os.path.join(MEDIA_ROOT, "th_%s.jpg" % name)
     clip.save_frame(thumb, t=random.uniform(0.1, clip.duration))
-    dst = 'api/th_{}.jpg'.format(name)
+    # dst = '{api}/th_{}.jpg'.format(name)
     # copyfile(src, dst)
-    data = open(dst, 'rb')
+    data = open(thumb, 'rb')
     data.content_type = 'image/jpg'
     # clip.__del__()
     # video = open(arch, 'rb')

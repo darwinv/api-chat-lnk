@@ -155,6 +155,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'files/')
 TEST_URL = os.path.join(BASE_DIR, 'api/tests/files')
 
 REST_FRAMEWORK = {
