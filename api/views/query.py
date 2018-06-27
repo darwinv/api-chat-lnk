@@ -215,7 +215,7 @@ class QueryDetailSpecialistView(APIView):
             if 'test' not in sys.argv:
                 pyrebase.update_status_querymessages(data_msgs=msgs_query,
                                                      data=data_update)
-            
+
             # actualizo el querycurrent del listado de mensajes
             data = {'status': query.status,
                     'date': lista[-1]["timeMessage"],
@@ -451,15 +451,15 @@ class QueryUploadFilesView(APIView):
         """Funcion para subir archivos."""
         resp = True  # variable bandera
         name_file, extension = os.path.splitext(file.name)
-        filename = str(uuid.uuid4())
-        name = filename + extension
+        # filename = str(uuid.uuid4())
+        # name = filename + extension
         # lo subimos a Amazon S3
-        url = s3_upload_file(file, name)
+        url = s3_upload_file(file, file.name)
         # generamos la miniatura
         thumb = resize_img(file, 256)
         if thumb:
             name_file_thumb, extension_thumb = os.path.splitext(thumb.name)
-            url_thumb = s3_upload_file(thumb, filename + '-thumb' + extension_thumb)
+            url_thumb = s3_upload_file(thumb, name_file + '-thumb' + extension_thumb)
             remove_file(thumb)
         else:
             url_thumb = ""
@@ -472,7 +472,7 @@ class QueryUploadFilesView(APIView):
         s3 = boto3.client('s3')
         # Evaluamos si el archivo se subio a S3
         try:
-            s3.head_object(Bucket='linkup-photos', Key=name)
+            s3.head_object(Bucket='linkup-photos', Key=file.name)
         except ClientError as e:
             resp = int(e.response['Error']['Code']) != 404
         # Si no se ha subido se actualiza el estatus en firebase
