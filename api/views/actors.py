@@ -1159,24 +1159,28 @@ class RucDetailView(APIView):
 
         url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
         response2 = requests.get(url2)
-        
-        data = {'ruc': str(pk)}
-        if response.status_code == 200:
+               
+        # Se evaluan las 2 respuestas
+        if response.status_code == 200 and response2.status_code == 200:
+            data = {'ruc': str(pk)}
+            # Convinamos los diccionarios
             data = dict(data, **response.json())
-
-        if response2.status_code == 200:
+            
             if 'telefono' in response2.json():
-                phones = response2.json()['telefono'].split('|')
+                telefonos = response2.json()['telefono']
+                phones = telefonos.split('|')
+                data['cellphone'] = data['telephone'] = ""
                 for phone in phones:
                     if phone[0]=='9' and 'cellphone' not in data:
                         data['cellphone'] = phone
                     elif 'telephone' not in data:
                         data['telephone'] = phone
+            
+            if 'nombre_comercial' in response2.json():
+                data['commercial_reason'] = response2.json()['nombre_comercial']
+            else:
+                data['commercial_reason'] = ""
 
-                data['nombre_comercial'] = response2.json()['nombre_comercial']
-
-        
-        if response.status_code == 200 and response2.status_code == 200:
             serializer = RucApiDetailSerializer(data, partial=True)        
             return Response(serializer.data)
         raise Http404

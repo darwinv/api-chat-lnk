@@ -1218,7 +1218,7 @@ class RucApiDetailSerializer(serializers.Serializer):
     address = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
 
-    commercial_reason = serializers.SerializerMethodField()
+    commercial_reason = serializers.CharField()
     telephone = serializers.CharField()
     cellphone = serializers.CharField()    
     ruc = serializers.CharField()
@@ -1260,17 +1260,9 @@ class RucApiDetailSerializer(serializers.Serializer):
         else:
             return ""
 
-    def get_commercial_reason(self, obj):
-        if 'nombre_comercial' in obj:
-            return obj['nombre_comercial']
-        else:
-            return ""
-
     def get_status(self, obj):
         if 'estado_del_contribuyente' in obj:
             return obj['estado_del_contribuyente']
         else:
             return ""
-
-
             
