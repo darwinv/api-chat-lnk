@@ -1166,14 +1166,15 @@ class RucDetailView(APIView):
             # Convinamos los diccionarios
             data = dict(data, **response.json())
             
+
+            data['cellphone'] = data['telephone'] = ""
             if 'telefono' in response2.json():
                 telefonos = response2.json()['telefono']
                 phones = telefonos.split('|')
-                data['cellphone'] = data['telephone'] = ""
                 for phone in phones:
-                    if phone[0]=='9' and 'cellphone' not in data:
+                    if phone[0]=='9':
                         data['cellphone'] = phone
-                    elif 'telephone' not in data:
+                    else:
                         data['telephone'] = phone
             
             if 'nombre_comercial' in response2.json():
@@ -1181,6 +1182,6 @@ class RucDetailView(APIView):
             else:
                 data['commercial_reason'] = ""
 
-            serializer = RucApiDetailSerializer(data, partial=True)        
+            serializer = RucApiDetailSerializer(data, partial=True)
             return Response(serializer.data)
         raise Http404
