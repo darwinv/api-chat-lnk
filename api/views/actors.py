@@ -1174,8 +1174,9 @@ class RucDetailView(APIView):
                         data['telephone'] = phone
 
                 data['nombre_comercial'] = response2.json()['nombre_comercial']
-        
-        serializer = RucApiDetailSerializer(data, partial=True)
-        
-        return Response(serializer.data)
 
+        
+        if response.status_code == 200 and response2.status_code == 200:
+            serializer = RucApiDetailSerializer(data, partial=True)        
+            return Response(serializer.data)
+        raise Http404
