@@ -1160,7 +1160,7 @@ class RucDetailView(APIView):
         url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
         response2 = requests.get(url2)
         
-        data = {}
+        data = {'ruc': str(pk)}
         if response.status_code == 200:
             data = dict(data, **response.json())
 

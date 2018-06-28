@@ -1216,11 +1216,13 @@ class RucApiDetailSerializer(serializers.Serializer):
     """Detalle por Ruc."""
     business_name = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
 
     commercial_reason = serializers.SerializerMethodField()
     telephone = serializers.CharField()
-    cellphone = serializers.CharField()
-    
+    cellphone = serializers.CharField()    
+    ruc = serializers.CharField()
+
     def get_address(self, obj):
         address = {}
         if 'departamento' in obj:
@@ -1263,3 +1265,12 @@ class RucApiDetailSerializer(serializers.Serializer):
             return obj['nombre_comercial']
         else:
             return ""
+
+    def get_status(self, obj):
+        if 'estado_del_contribuyente' in obj:
+            return obj['estado_del_contribuyente']
+        else:
+            return ""
+
+
+            
