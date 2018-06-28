@@ -129,15 +129,21 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = ('street', 'department', 'department_name', 'province', 'province_name', 'district', 'district_name')
 
     def get_department_name(self, obj):
-        """Devuelve departamento."""
+        """Devuelve departamento."""        
+        if type(obj) is dict:
+            return str(obj['department'])
         return str(obj.department)
 
     def get_province_name(self, obj):
         """Devuelve provincia."""
+        if type(obj) is dict:
+            return str(obj['province'])
         return str(obj.province)
 
     def get_district_name(self, obj):
         """Devuelve distrito."""
+        if type(obj) is dict:
+            return str(obj['district'])
         return str(obj.district)
 
 
@@ -1200,3 +1206,60 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
         instance.username = email_exact
         instance.save()
         return instance
+
+
+# AddressSerializer
+#     fields = ('street', 'department', 'province', 'district')
+
+
+class RucApiDetailSerializer(serializers.Serializer):
+    """Detalle por Ruc."""
+    business_name = serializers.SerializerMethodField()
+    address = serializers.SerializerMethodField()
+
+    commercial_reason = serializers.SerializerMethodField()
+    telephone = serializers.CharField()
+    cellphone = serializers.CharField()
+    
+    def get_address(self, obj):
+        address = {}
+        if 'departamento' in obj:
+            department = Department.objects.get(name=obj['departamento'])
+            address['department'] = department
+        else:
+            address['department'] = None
+
+        if 'provincia' in obj:
+            province = Province.objects.get(name=obj['provincia'])
+            address['province'] = province
+        else:
+            address['province'] = None
+
+        if 'distrito' in obj:
+            district = District.objects.get(name=obj['distrito'])
+            address['district'] = district
+        else:
+            address['district'] = None
+
+        if 'direccion' in obj:
+            address['street'] = obj['direccion']
+        else:
+            address['street'] = ""
+
+        if address:
+            return AddressSerializer(address).data
+        else:
+            return None
+         
+
+    def get_business_name(self, obj):
+        if 'nombre_o_razon_social' in obj:
+            return obj['nombre_o_razon_social']
+        else:
+            return ""
+
+    def get_commercial_reason(self, obj):
+        if 'nombre_comercial' in obj:
+            return obj['nombre_comercial']
+        else:
+            return ""

@@ -164,4 +164,7 @@ urlpatterns = [
     # Editar o Detallar plan adquirido
     url(r'^chosens-plans/(?P<pk>[0-9]+)/$',
         plan.QueryPlansAcquiredDetailView.as_view(), name='chosen-plan-edit'),
+
+    # Api RUC Publico
+    url(r'^ruc/(?P<pk>[0-9]+)/$', actors.RucDetailView.as_view(), name='ruc-detail'),
 ]

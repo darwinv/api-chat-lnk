@@ -1127,3 +1127,55 @@ def upload_photo_s3(filename):
     )
     # devolviendo ruta al archivo
     return 'https://s3.amazonaws.com/linkup-photos/' + filename;
+
+
+
+
+class RucDetailView(APIView):
+    """
+        Traer informacion de RUC
+    """
+    permission_classes = (IsAdminOrOwner,)
+    queryset = User.objects.all()
+    parser_classes = (JSONParser, MultiPartParser)
+
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        import requests
+        from api.serializers.actors import RucApiDetailSerializer
+        from linkupapi import settings_secret
+
+        url = "https://ruc.com.pe/api/v1/ruc"
+        payload = {
+          "token": settings_secret.TOKEN_RUC,
+          "ruc": pk
+        }
+        response = requests.post(url, json=payload)
+
+        url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
+        response2 = requests.get(url2)
+        
+        data = {}
+        if response.status_code == 200:
+            data = dict(data, **response.json())
+
+        if response2.status_code == 200:
+            if 'telefono' in response2.json():
+                phones = response2.json()['telefono'].split('|')
+                for phone in phones:
+                    if phone[0]=='9' and 'cellphone' not in data:
+                        data['cellphone'] = phone
+                    elif 'telephone' not in data:
+                        data['telephone'] = phone
+
+                data['nombre_comercial'] = response2.json()['nombre_comercial']
+        
+        serializer = RucApiDetailSerializer(data, partial=True)
+        
+        return Response(serializer.data)
+
