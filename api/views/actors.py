@@ -18,7 +18,7 @@ from api.serializers.actors import ClientSerializer, UserPhotoSerializer, KeySer
 from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
-from api.serializers.actors import ChangeEmailSerializer
+from api.serializers.actors import ChangeEmailSerializer, ChangePassword
 from api.serializers.query import QuerySerializer, QueryCustomSerializer
 from django.http import Http404
 from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrSpecialist
@@ -48,6 +48,32 @@ DATE_FAKE = '1900-01-01'
 
 #obtener el logger con la configuracion para actors
 # loggerActor = manager.setup_log(__name__)
+
+
+class UpdateUserPassword(APIView):
+    """Actualizar contraseña de Usuario."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrOwner)
+
+    def get_object(self, pk):
+        """Devolver objeto."""
+        try:
+            obj = User.objects.get(pk=pk)
+            return obj
+        except User.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Funcion put."""
+        data = request.data
+        user = self.get_object(pk)
+        serializer = ChangePassword(user, data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UpdatePasswordView(APIView):
     """Actualizar Contraseña de Usuario (uso para dev)."""
@@ -388,7 +414,7 @@ class ClientListView(ListCreateAPIView):
         data = request.data
         if 'type_client' not in data or not data['type_client']:
             raise serializers.ValidationError({'type_client': [self.required]})
-        
+
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
         elif data['type_client'] == 'b':
@@ -604,7 +630,7 @@ class SpecialistAsociateListView(APIView):
 
     def get(self, request):
         pk = Operations.get_id(self, request)
-        
+
         try:
             obj = Specialist.objects.get(pk=pk)
         except Specialist.DoesNotExist:
@@ -619,14 +645,14 @@ class SpecialistAsociateListByQueryView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrSpecialist)
     required = _("required")
-    
+
     def get(self, request):
         pk = Operations.get_id(self, request)
         if 'query' in request.query_params:
             query = request.query_params["query"]
         else:
             raise serializers.ValidationError({'query': [self.required]})
-        
+
         try:
             obj = Specialist.objects.get(pk=pk)
         except Specialist.DoesNotExist:
@@ -636,7 +662,7 @@ class SpecialistAsociateListByQueryView(APIView):
 
         specialists = Specialist.objects.filter(category=obj.category, type_specialist="a")\
                         .annotate(declined=Subquery(declined.values('specialist')[:1]))
-        
+
         serializer = SpecialistSerializer(specialists, many=True)
         return Response(serializer.data)
 
@@ -1159,13 +1185,13 @@ class RucDetailView(APIView):
 
         url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
         response2 = requests.get(url2)
-               
+
         # Se evaluan las 2 respuestas
         if response.status_code == 200 and response2.status_code == 200:
             data = {'ruc': str(pk)}
             # Convinamos los diccionarios
             data = dict(data, **response.json())
-            
+
 
             data['cellphone'] = data['telephone'] = ""
             if 'telefono' in response2.json():
@@ -1176,7 +1202,7 @@ class RucDetailView(APIView):
                         data['cellphone'] = phone
                     else:
                         data['telephone'] = phone
-            
+
             if 'nombre_comercial' in response2.json():
                 data['commercial_reason'] = response2.json()['nombre_comercial']
             else:
