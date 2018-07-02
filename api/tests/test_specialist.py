@@ -256,7 +256,7 @@ class CreateSpecialist(APITestCase):
             data=json.dumps(data2),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
@@ -657,4 +657,44 @@ class GetAsociateSpecialist(APITestCase):
         data = {'query':1}
         response = client.get(reverse('specialists-asociate'), data=data)
 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class UpdatePasswordSpecialist(APITestCase):
+    """Actualizar clave del especialista."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_specialist']
+
+    def setUp(self):
+        self.data = {
+            "old_password": '123456',
+            "password": '123459'
+        }
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer vvP8pKMAULMa2qQtaTnJpx2l87nWc2')
+
+    def test_invalid_permission(self):
+        """Credenciales no permitidas."""
+        client = APIClient()
+        client.credentials(
+            HTTP_AUTHORIZATION='ZZk2avXwe09l8lqS3zTc0Q3Qsl7yZZ')
+        response = client.put(reverse('update-password',
+                              args=(3,)), data=json.dumps(self.data),
+                              content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_invalid_old_password(self):
+            """Password actual invalida."""
+            self.data["old_password"] = '123468'
+            response = client.put(reverse('update-password',
+                                  args=(3,)), data=json.dumps(self.data),
+                                  content_type='application/json')
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_password(self):
+        """Actualizar contraseña."""
+        response = client.put(reverse('update-password',
+                              args=(3,)), data=json.dumps(self.data),
+                              content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
