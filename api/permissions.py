@@ -37,7 +37,7 @@ class IsOwner(permissions.BasePermission):
 
 
 class IsAdminOrOwner(permissions.BasePermission):
-    """Solo el administrador el mismo usuario."""
+    """Solo el administrador o el mismo usuario."""
 
     def has_object_permission(self, request, view, obj):
         """Metodo redefinido."""

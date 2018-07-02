@@ -132,18 +132,17 @@ urlpatterns = [
     url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(), name='upload-photo'),
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
     url(r'^upload_document/(?P<pk>[0-9]+)/$', actors.DocumentUploadView.as_view(), name='upload-document'),
-
+    # cambiar clave de usuario
+    url(r'^change/password/(?P<pk>[0-9]+)/$',
+        actors.UpdateUserPassword.as_view(),
+        name='update-password'),
     # url(r'^upload_archivo/(?P<filename>[^/]+)$', actors.AllFileUploadView.as_view())
 
     # chat (prueba con channels)
     url(r'^chat/$', chat.chat, name='chat'),
     # email
     url(r'^mail/$', email.mail, name='mails'),
-    # servicio exclusivo para devolver key, solo para equipo de desarrollo
-    url(r'^key/(?P<pk>[0-9]+)/$', actors.ViewKey.as_view(), name='get-key'),
 
-    # servicio exclusivo para cambiar clave, solo para equipo de desarrollo
-    url(r'^password/(?P<pk>[0-9]+)/$', actors.UpdatePasswordView.as_view(), name='update-pass'),
 
     # autorizacion para cliente
     url(r'^authorizations/clients/$', authorization.ClientListView.as_view(),
@@ -167,4 +166,11 @@ urlpatterns = [
 
     # Api RUC Publico
     url(r'^ruc/(?P<pk>[0-9]+)/$', actors.RucDetailView.as_view(), name='ruc-detail'),
+
+    # Only DEVs
+    # servicio exclusivo para devolver key, solo para equipo de desarrollo
+    url(r'^key/(?P<pk>[0-9]+)/$', actors.ViewKey.as_view(), name='get-key'),
+    # servicio exclusivo para cambiar clave, solo para equipo de desarrollo
+    url(r'^password/(?P<pk>[0-9]+)/$', actors.UpdatePasswordView.as_view(),
+        name='update-pass'),
 ]
