@@ -393,6 +393,37 @@ class GetAllSellers(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
+class UpdateProfileSeller(APITestCase):
+    """Actualizar perfil de vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_seller']
+
+    def setUp(self):
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        self.valid_payload = {
+            'nick': 'dar',
+            'first_name': 'darwin',
+            'last_name': 'vasquez',
+            "address": {
+                "street": "esteban camere",
+                "department": 1,
+                "province": 1,
+                "district": 1
+            },
+            'document_number': '144013012',
+            'telephone': '921471559',
+            'cellphone': '921471559',
+        }
+
+    def test_update_seller(self):
+        response = client.put(reverse('seller-detail',
+                              args=(8,)), data=json.dumps(self.valid_payload),
+                              content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class UpdatePasswordSeller(APITestCase):
     """Actualizar clave del vendedor."""
 

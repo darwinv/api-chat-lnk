@@ -630,8 +630,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
                                                     instance.document_type)
         instance.document_number = validated_data.get('document_number',
                                                       instance.document_number)
-        instance.email_exact = validated_data.get('email_exact',
-                                                  instance.email_exact)
         instance.telephone = validated_data.get('telephone',
                                                 instance.telephone)
         instance.cellphone = validated_data.get('cellphone',
@@ -774,14 +772,16 @@ class SellerSerializer(serializers.ModelSerializer):
         required = _('required')
         address = _('address')
         # si la residencia es peru, es obligatoria la dirección
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
-            if 'address' not in data:
-                raise serializers.ValidationError(
-                    "{} {}".format(address, required))
-        else:
-            if "foreign_address" not in data or not data["foreign_address"]:
-                raise serializers.ValidationError(
-                    "{} {}".format(address, required))
+        # import pdb; pdb.set_trace()
+        if not self.instance:
+            if data["residence_country"] == Countries.objects.get(name="Peru"):
+                if 'address' not in data:
+                    raise serializers.ValidationError(
+                        "{} {}".format(address, required))
+            else:
+                if "foreign_address" not in data or not data["foreign_address"]:
+                    raise serializers.ValidationError(
+                            "{} {}".format(address, required))
         return data
 
     def update(self, instance, validated_data):

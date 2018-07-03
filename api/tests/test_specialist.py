@@ -591,8 +591,9 @@ class GetSpecialists(APITestCase):
                                                    response.data["count"])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+
 class DeleteSpecialist(APITestCase):
-    fixtures = ['data','data2','data3']
+    fixtures = ['data', 'data2', 'data3']
 
     def setUp(self):
         self.valid_payload = {
@@ -676,10 +677,9 @@ class UpdatePasswordSpecialist(APITestCase):
 
     def test_invalid_permission(self):
         """Credenciales no permitidas."""
-        client = APIClient()
-        client.credentials(
+        self.client.credentials(
             HTTP_AUTHORIZATION='ZZk2avXwe09l8lqS3zTc0Q3Qsl7yZZ')
-        response = client.put(reverse('update-password',
+        response = self.client.put(reverse('update-password',
                               args=(3,)), data=json.dumps(self.data),
                               content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -687,14 +687,50 @@ class UpdatePasswordSpecialist(APITestCase):
     def test_invalid_old_password(self):
             """Password actual invalida."""
             self.data["old_password"] = '123468'
-            response = client.put(reverse('update-password',
-                                  args=(3,)), data=json.dumps(self.data),
-                                  content_type='application/json')
+            response = self.client.put(reverse('update-password',
+                                               args=(3,)),
+                                       data=json.dumps(self.data),
+                                       content_type='application/json')
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_password(self):
         """Actualizar contraseña."""
-        response = client.put(reverse('update-password',
-                              args=(3,)), data=json.dumps(self.data),
-                              content_type='application/json')
+        response = self.client.put(reverse('update-password',
+                                           args=(3,)),
+                                   data=json.dumps(self.data),
+                                   content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class UpdateProfileSpecialist(APITestCase):
+    """Actualizar perfil de especialista."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_specialist']
+
+    def setUp(self):
+        self.valid_payload = {
+            "first_name": 'juan',
+            "last_name": 'delgado',
+            "business_name": "barca",
+            "telephone": "921099231",
+            "cellphone": "091231231",
+            "address": {
+                "street": "jupiter 209",
+                "department": 1,
+                "province": 1,
+                "district": 1
+            },
+            "nick": "jdelg"
+
+        }
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer vvP8pKMAULMa2qQtaTnJpx2l87nWc2')
+
+    def test_update_profile(self):
+        """Actualizar Perfil."""
+        response = self.client.put(
+            reverse('specialist-detail', kwargs={'pk': 3}),
+            self.valid_payload, format='json'
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
