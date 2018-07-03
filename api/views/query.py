@@ -7,7 +7,7 @@ import boto3
 import uuid
 # paquetes de django
 from django.db.models import OuterRef, Subquery, F, Count
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 # paquetes de terceros
 from rest_framework import status, permissions
 from rest_framework.views import APIView
@@ -664,16 +664,25 @@ class ReadPendingAnswerView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsClient]
 
+    def get_category(self, categ):
+        """Obtener objeto."""
+        try:
+            obj = Category.objects.get(pk=categ)
+            return obj
+        except Category.DoesNotExist:
+            raise HttpResponseBadRequest
+
     def post(self, request):
         """Enviar data."""
         data = request.data
         client_id = Operations.get_id(self, request)
+        category = self.get_category(data["category"])
         mesgs_res = Message.objects.filter(
             viewed=0, msg_type='a', query__client=client_id,
-            query__category=data["category"])
+            query__category=category)
         if 'test' not in sys.argv:
             pyrebase.set_message_viewed(mesgs_res)
         r = mesgs_res.update(viewed=1)
         if 'test' not in sys.argv:
-            pyrebase.categories_db(client_id, data["category"])
+            pyrebase.categories_db(client_id, category)
         return Response({'resp': r}, status.HTTP_200_OK)
