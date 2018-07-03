@@ -772,14 +772,15 @@ class SellerSerializer(serializers.ModelSerializer):
         required = _('required')
         address = _('address')
         # si la residencia es peru, es obligatoria la dirección
+        # import pdb; pdb.set_trace()
         if not self.instance:
             if data["residence_country"] == Countries.objects.get(name="Peru"):
                 if 'address' not in data:
                     raise serializers.ValidationError(
                         "{} {}".format(address, required))
-                else:
-                    if "foreign_address" not in data or not data["foreign_address"]:
-                        raise serializers.ValidationError(
+            else:
+                if "foreign_address" not in data or not data["foreign_address"]:
+                    raise serializers.ValidationError(
                             "{} {}".format(address, required))
         return data
 
