@@ -93,7 +93,6 @@ def check_type_data(type_data, node):
                 if type(n.get(l)) is not str:
                     logger.error("{} - {} no es String".format(node, l))
             for k in data_chat_int:
-                # import pdb; pdb.set_trace()
                 if n['query'].get(k):
                     if type(n['query'].get(k)) is not int:
                             logger.error("{} - query/{} no es int".format(node, k))
