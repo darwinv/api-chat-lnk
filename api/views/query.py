@@ -207,8 +207,7 @@ class QueryDetailSpecialistView(APIView):
 
             if 'test' not in sys.argv:
                 pyrebase.update_status_group_messages(msgs, group.status)
-
-            msgs_query = query.message_set.all()
+                
             requeries = query.available_requeries
             data_update = {
                 "status": query.status,
@@ -216,8 +215,7 @@ class QueryDetailSpecialistView(APIView):
             }
 
             if 'test' not in sys.argv:
-                pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                                     data=data_update)
+                pyrebase.update_status_query(query_id=query, data=data_update)
 
             # actualizo el querycurrent del listado de mensajes
             data = {'status': query.status,
