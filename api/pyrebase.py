@@ -121,10 +121,7 @@ def chat_firebase_db(data, room):
 def node_query(data, id):
     """Actualizar o crear nodos de consulta."""
     node = "queries/{}".format(Params.PREFIX['query'] + str(id))
-    print("id: " + str(id) + " node: " + node)
     if exist_node(node):
-        print("actualizo")
-        print(data)
         res = db.child(node).update(data)
     else:
         print("creo")
@@ -274,17 +271,6 @@ def update_status_query(query_id, data):
     """Actualizar query de los mensajes."""
     # print(data)
     node_query(data=data, id=query_id)
-    # for msgs in data_msgs:
-    #     node_msg = Params.PREFIX['message']+str(msgs.id)
-    #     node = 'chats/{}/{}/query/'.format(msgs.room, node_msg)
-    #
-    #     if exist_node(node):
-    #         db.child(node).update(data)
-    #     else:
-    #         logger.warning(
-    #             'update_status_querymsgs nodo no existe - chats/{}/{}/query'
-    #             .format(msgs.room, node_msg))
-
     # check_type_data('chats', 'chats/{}'.format(data_msgs[0].room))
 
 

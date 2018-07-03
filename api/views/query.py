@@ -215,7 +215,8 @@ class QueryDetailSpecialistView(APIView):
             }
 
             if 'test' not in sys.argv:
-                pyrebase.update_status_query(query_id=query.id, data=data_update)
+                pyrebase.update_status_query(query_id=query.id,
+                                             data=data_update)
 
             # actualizo el querycurrent del listado de mensajes
             data = {'status': query.status,
@@ -283,16 +284,15 @@ class QueryDetailClientView(APIView):
 
             if 'test' not in sys.argv:
                 pyrebase.update_status_group_messages(msgs, gp.status)
-            msgs_query = query.message_set.all()
-            requeries = lista[0]['query']['availableRequeries']
+            # import pdb; pdb.set_trace()
+            requeries = serializer.data['obj_query']['availableRequeries']
 
             data_update = {
                 "status": query.status,
                 "availableRequeries": requeries
                 }
             if 'test' not in sys.argv:
-                pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                                     data=data_update)
+                pyrebase.update_status_query(query.id, data_update)
             data = {'status': 2,
                     'date': lista[-1]["timeMessage"],
                     'message': lista[-1]["message"]
@@ -547,7 +547,7 @@ class DeclineRequeryView(APIView):
         for query in queries:
             msgs = query.message_set.all()
             # import pdb; pdb.set_trace()
-            pyrebase.update_status_querymessages(msgs, {"status": 4})
+            pyrebase.update_status_query(query.id, {"status": 4})
             # import pdb; pdb.set_trace()
             for ms in msgs:
                 GroupMessage.objects.filter(message__id=ms.id).update(status=2)
@@ -650,9 +650,8 @@ class SetQualificationView(APIView):
         serializer = QueryQualifySerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
-            msgs = query.message_set.all()
             if 'test' not in sys.argv:
-                pyrebase.update_status_querymessages(msgs, serializer.data)
+                pyrebase.update_status_query(query.id, serializer.data)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
