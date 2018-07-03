@@ -93,6 +93,9 @@ class QueryListClientView(ListCreateAPIView):
             if 'test' not in sys.argv:
                 pyrebase.chat_firebase_db(serializer.data["message"],
                                           serializer.data["room"])
+
+                pyrebase.node_query(serializer.data["obj_query"],
+                                    serializer.data["query_id"])
             # Se actualiza la base de datos de firebase listado
             # de sus especialidades
             if 'test' not in sys.argv:

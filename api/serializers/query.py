@@ -254,19 +254,21 @@ class QuerySerializer(serializers.ModelSerializer):
             else:
                 message['uploaded'] = 2
             av_reqs = obj.available_requeries
-            message["query"] = {"id": obj.id, "title": obj.title,
-                                "status": obj.status,
-                                "qualification": obj.qualification,
-                                "availableRequeries": av_reqs,
-                                "specialist_id": obj.specialist.id
-                                }
+            message["query_id"] = obj.id
 
             key_message = Params.PREFIX['message']+str(message["id"])
             chat.update({key_message: dict(message)})
 
+        # devuelvo el objeto query para actualizar en su nodo de firebase
+        obj_query = {"id": obj.id, "title": obj.title, "status": obj.status,
+                     "qualification": obj.qualification,
+                     "availableRequeries": av_reqs,
+                     "specialist_id": obj.specialist.id}
+
         return {'room': ms[0]["room"], "message": chat,
                 "message_files_id": messages_files, 'status': obj.status,
-                "category": obj.category.id, "query_id": obj.id}
+                "category": obj.category.id, "query_id": obj.id,
+                "obj_query": obj_query}
 
 
 class BaseQueryResponseSerializer(serializers.ModelSerializer):
@@ -289,20 +291,20 @@ class BaseQueryResponseSerializer(serializers.ModelSerializer):
                 message['uploaded'] = 2
 
             av_reqs = obj.available_requeries
-            message["query"] = {"id": obj.id, "title": obj.title,
-                                "status": obj.status,
-                                "qualification": obj.qualification,
-                                "availableRequeries": av_reqs,
-                                "specialist_id": obj.specialist.id
-                                }
+            message["query_id"] = obj.id
             key_message = Params.PREFIX['message']+str(message["id"])
             chat.update({key_message: dict(message)})
+
+        obj_query = {"id": obj.id, "title": obj.title, "status": obj.status,
+                     "qualification": obj.qualification,
+                     "availableRequeries": av_reqs,
+                     "specialist_id": obj.specialist.id}
 
         return {'room': ms[0]["room"], "message": chat,
                 "message_files_id": messages_files,
                 "category": obj.category.id, 'status': obj.status,
                 "query_id": obj.id, "client_id": obj.client.id,
-                "specialist_id": obj.specialist.id}
+                "specialist_id": obj.specialist.id, "obj_query": obj_query}
 
 
 class QueryResponseSerializer(BaseQueryResponseSerializer):
@@ -337,7 +339,7 @@ class QueryResponseSerializer(BaseQueryResponseSerializer):
                 ms_ref = data_message['message_reference'].id
             Message.objects.create(query=instance, group=group, **data_message)
 
-        
+
         # Actualizo status dependiendo de cantidad de reconsultas
         if instance.available_requeries >= 1:
             instance.status = 3
