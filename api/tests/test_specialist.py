@@ -203,6 +203,19 @@ class CreateSpecialist(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_null_nick(self):
+        """Nick es null."""
+        data = self.valid_payload
+        data["nick"] = None
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        response = self.client.post(
+            reverse('specialists'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_empty_names(self):
         """Solicitud invalida al enviar los nombres vacios."""
         data = self.valid_payload

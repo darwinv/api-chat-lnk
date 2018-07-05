@@ -539,6 +539,18 @@ class CreateNaturalClient(APITestCase):
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_null_nick(self):
+        """Nick es null."""
+        data = self.valid_payload
+        data["nick"] = None
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     # def test_blank_optionals(self):
     #     """Solicitud valida ya que no valida campos opcionales."""
     #     data = self.valid_payload
@@ -699,7 +711,7 @@ class UpdateNaturalClient(APITestCase):
 
 
 # Prueba para verificar la insercion de cliente juridico
-class CreateBussinessClient(APITestCase):
+class CreateBusinessClient(APITestCase):
     """Test Para Crear Persona juridica."""
 
     fixtures = ['data', 'data2']
@@ -1090,6 +1102,18 @@ class CreateBussinessClient(APITestCase):
         self.assertEqual(response.data["code"][:3],
                          Countries.objects.get(
                             pk=data["nationality"]).iso_code + "C")
+
+    def test_null_nick(self):
+        """Nick es null."""
+        data = self.valid_payload
+        data["nick"] = None
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_bussines_client(self):
         """Crea cliente juridico de manera exitosa."""

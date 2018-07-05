@@ -175,7 +175,8 @@ class ClientSerializer(serializers.ModelSerializer):
                                         allow_null=True)
     ocupation_name = serializers.SerializerMethodField()
     address = AddressSerializer(required=False)
-    nick = serializers.CharField(required=False, allow_blank=True)
+    nick = serializers.CharField(required=False, allow_blank=True,
+                                 allow_null=True)
     residence_country = serializers.PrimaryKeyRelatedField(
         queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
