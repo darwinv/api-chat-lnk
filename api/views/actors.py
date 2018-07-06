@@ -445,7 +445,6 @@ class ClientDetailView(APIView):
 
         clear_data_no_valid(data, valid_fields)
 
-
         serializer = ClientSerializer(client, data, partial=True,
                                           context={'request': request})
 

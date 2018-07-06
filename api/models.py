@@ -453,13 +453,35 @@ class QueryPlansAcquired(models.Model):
     maximum_response_time = models.PositiveIntegerField()  # En Horas
     acquired_at = models.DateTimeField(auto_now_add=True)
     plan_name = models.CharField(max_length=50)
-    client = models.ForeignKey(Client, on_delete=models.PROTECT)
     query_plans = models.ForeignKey(QueryPlans, on_delete=models.PROTECT)
     sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
 
     def __str__(self):
         """String."""
         return self.plan_name
+
+class QueryPlansClient(models.Model):
+    """Planes asociados a clientes"""
+    acquired_plan = models.ForeignKey(QueryPlansAcquired,
+                                      on_delete=models.PROTECT)
+    client = models.ForeignKey(Client, on_delete=models.PROTECT)
+    owner  = models.BooleanField(default=True)
+    transfer = models.BooleanField(default=True)
+    share = models.BooleanField(default=True)
+    empower = models.BooleanField(default=True)
+    status = models.PositiveIntegerField(choices=Ch.queryplansclient_status)
+
+class QueryPlansManage(models.Model):
+    """Manejador de Planes"""    
+    sender = models.ForeignKey(Client, on_delete=models.PROTECT, related_name="plan_sender")
+    receiver = models.ForeignKey(Client, on_delete=models.PROTECT)
+    acquired_plan = models.ForeignKey(QueryPlansAcquired,
+                                      on_delete=models.PROTECT, related_name="plan_acquired_plan")
+    new_acquired_plan = models.ForeignKey(QueryPlansAcquired,
+                                      on_delete=models.PROTECT)
+    type_operation = models.PositiveIntegerField(choices=Ch.queryplansmanage_type_operation)
+    status = models.PositiveIntegerField(choices=Ch.queryplansmanage_status)
+
 
 class PaymentType(models.Model):
     """Tipos de Pago."""
