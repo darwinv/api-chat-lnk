@@ -275,25 +275,25 @@ class CheckData(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # import pdb; pdb.set_trace()
 
-    # def get(self, request):
-    #     """Funcion get."""
-    #     print("hey")
-    #     import pdb; pdb.set_trace()
-    #     queryset = User.objects.all()
-    #     # rol debe ser obligatorio
-    #     if 'role' in request.query_params:
-    #         role = request.query_params["role"]
-    #     else:
-    #         raise serializers.ValidationError({'role': ["required"]})
-    #
-    #     if 'ruc' in request.query_params:
-    #         queryset = queryset.filter(ruc=request.query_params['ruc'],
-    #                                    role=role)
-    #
-    #     if queryset:
-    #         return JsonResponse({'ruc ya existe'})
-    #     else:
-    #         raise Http404
+    def get(self, request):
+        """Funcion get."""
+        print("hey")
+        import pdb; pdb.set_trace()
+        queryset = User.objects.all()
+        # rol debe ser obligatorio
+        if 'role' in request.query_params:
+            role = request.query_params["role"]
+        else:
+            raise serializers.ValidationError({'role': ["required"]})
+
+        if 'ruc' in request.query_params:
+            queryset = queryset.filter(ruc=request.query_params['ruc'],
+                                       role=role)
+
+        if queryset:
+            return JsonResponse({'ruc ya existe'})
+        else:
+            raise Http404
 
 
 class ViewKey(APIView):
