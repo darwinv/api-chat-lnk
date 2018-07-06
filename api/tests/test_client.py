@@ -1343,9 +1343,44 @@ class CheckData(APITestCase):
         data = {"ruc": "123456789", "role": 2}
         # import pdb; pdb.set_trace()
         response = client.get(reverse('check-data'), data)
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_check_no_role(self):
+        """chequear si no existe rol."""
+        data = {"ruc": "123456789"}
+        response = client.get(reverse('check-data'), data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_check_email(self):
+        """chequear si existe el correo."""
+        data = {"role": 2, "email_exact": "darwinio_vasqz@gmail.com"}
+        response = client.get(reverse('check-data'), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_check_DNI(self):
+        """chequera si existe el dni."""
+        data = {"role": 2, "document_type": "dni",
+                "document_number": "20122984"}
+        response = client.get(reverse('check-data'), data)
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_check_passport(self):
+        """chequera si existe el pasaporte."""
+        data = {"role": 2, "document_type": "pasaporte",
+                "document_number": "20122984"}
+        # import pdb; pdb.set_trace()
+        response = client.get(reverse('check-data'), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_check_foreign_card(self):
+        """chequear si existe el carnet de extranjeria."""
+        data = {"role": 2, "document_type": "tarjeta extranjera",
+                "document_number": "20122984"}
+        response = client.get(reverse('check-data'), data)
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class GetUserByRecoverCode(APITestCase):

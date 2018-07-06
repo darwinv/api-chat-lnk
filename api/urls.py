@@ -1,8 +1,8 @@
 """Urls de API Rest."""
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import actors, query, category, email, authorization, plan, chat, oauth
-
+from api.views import actors, query, category, email, authorization
+from api.views import validations, plan, chat, oauth
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
 router = routers.DefaultRouter()
@@ -44,8 +44,8 @@ urlpatterns = [
         actors.UpdateEmailUserView.as_view(), name='update-email'),
 
     # chequear data de filtrado
-    url(r'^users/check_data/$',
-        actors.CheckData.as_view(), name='check-data'),
+    url(r'^check-data/$',
+        validations.CheckData.as_view(), name='check-data'),
 
     # detalle de cliente
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(),
