@@ -18,7 +18,6 @@ class Countries(models.Model):
         """nombre."""
         return self.name
 
-
 class Ciiu(models.Model):
     """Codigo CIIU."""
 

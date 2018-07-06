@@ -1330,10 +1330,29 @@ class SendRecoveryCode(APITestCase):
         response = client.post(reverse('send-code-password'), data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+
+class CheckData(APITestCase):
+    """Chequear si existe algun cliente con  esos datos"""
+    fixtures = ['data', 'data2', 'data3', 'test_client']
+
+    def setUp(self):
+        pass
+
+    def test_check_ruc(self):
+        """chequear si existe  el ruc."""
+        data = {"ruc": "123456789", "role": 2}
+        # import pdb; pdb.set_trace()
+        response = client.get(reverse('check-data'), data)
+        import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+
 class GetUserByRecoverCode(APITestCase):
     """Test module for GET all clients API."""
 
     fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'test_recovery_password']
+
     def setUp(self):
         pass
 
