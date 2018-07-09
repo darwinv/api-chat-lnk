@@ -242,6 +242,9 @@ class UpdatePasswordUserView(APIView):
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+
+
+
 class UpdateEmailUserView(APIView):
     """Actualizar Contraseña de Usuario Recuperado."""
     required = _("required")
@@ -268,6 +271,7 @@ class UpdateEmailUserView(APIView):
             return Response(serializer.data)
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 
 class ViewKey(APIView):

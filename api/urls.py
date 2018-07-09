@@ -1,8 +1,8 @@
 """Urls de API Rest."""
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import actors, query, category, email, authorization, plan, chat, oauth
-
+from api.views import actors, query, category, email, authorization
+from api.views import validations, plan, chat, oauth
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
 router = routers.DefaultRouter()
@@ -30,14 +30,22 @@ urlpatterns = [
 
 
     # # Envio de codigo de verificar al correo
-    url(r'^send-code-password/$', actors.SendCodePassword.as_view(), name='send-code-password'),
+    url(r'^send-code-password/$', actors.SendCodePassword.as_view(),
+        name='send-code-password'),
     # # Validacion de codigo para reseteo de contrasena
-    url(r'^valid-code-password/$', actors.ValidCodePassword.as_view(), name='valid-code-password'),
+    url(r'^valid-code-password/$', actors.ValidCodePassword.as_view(),
+        name='valid-code-password'),
     # # reseteo de contraseña
-    url(r'^reset-password-recovery/(?P<pk>[0-9]+)/$', actors.UpdatePasswordRecoveryView.as_view(), name='reset-password-recovery'),
-    # # reseteo de contraseña
-    url(r'^update-email/(?P<pk>[0-9]+)/$', actors.UpdateEmailUserView.as_view(), name='update-email'),
+    url(r'^reset-password-recovery/(?P<pk>[0-9]+)/$',
+        actors.UpdatePasswordRecoveryView.as_view(),
+        name='reset-password-recovery'),
+    # # reseteo de email
+    url(r'^update-email/(?P<pk>[0-9]+)/$',
+        actors.UpdateEmailUserView.as_view(), name='update-email'),
 
+    # chequear data de filtrado
+    url(r'^check-data/$',
+        validations.CheckData.as_view(), name='check-data'),
 
     # detalle de cliente
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(),
