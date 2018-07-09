@@ -52,7 +52,7 @@ class CheckData(APIView):
                     {'document_number': ["tipo de documento requerido"]})
 
         if queryset:
-            return Response({"ya existe"})
+            return Response({"usuario ya existe"})
         else:
             raise Http404
 
