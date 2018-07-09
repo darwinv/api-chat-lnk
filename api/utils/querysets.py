@@ -15,7 +15,7 @@ def get_main_specialist(category):
 
 def has_active_plan(client):
     """Verificar si el usuario tiene un plan activo."""
-    if QueryPlansAcquired.objects.filter(is_active=True, client_id=client).exists():
+    if QueryPlansAcquired.objects.filter(is_active=True, queryplansclient__client=client).exists():
         return True
     return False
 
@@ -23,7 +23,7 @@ def has_active_plan(client):
 def has_available_queries(client):
     """Verificar si el usuario tiene consultas disponibles."""
     # import pdb; pdb.set_trace()
-    q = QueryPlansAcquired.objects.get(is_chosen=True, client_id=client)
+    q = QueryPlansAcquired.objects.get(is_chosen=True, queryplansclient__client=client)
     return q.available_queries >= 1
 
 """ Planes de Consultas """

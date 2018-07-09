@@ -180,9 +180,10 @@ class QuerySerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Validaciones Generales."""
         # Valido si posee un plan activo
-        if not querysets.has_active_plan(data["client"]):
+
+        if not querysets.has_active_plan(data["client"].id):
             raise serializers.ValidationError(_("You need to have an active plan"))
-        if not querysets.has_available_queries(data["client"]):
+        if not querysets.has_available_queries(data["client"].id):
             raise serializers.ValidationError(_("You don't have available queries"))
         return data
 
@@ -211,8 +212,9 @@ class QuerySerializer(serializers.ModelSerializer):
             type_specialist="m", category_id=validated_data["category"])
         data_messages = validated_data.pop('message')
         # Buscamos el plan activo y elegido
+        
         acq_plan = QueryPlansAcquired.objects.get(
-                            is_chosen=True, client=validated_data["client"])
+                            is_chosen=True, queryplansclient__client=validated_data["client"])
         validated_data["specialist"] = specialist
         validated_data["status"] = 1
         validated_data["acquired_plan"] = acq_plan

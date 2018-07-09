@@ -488,7 +488,6 @@
     "maximum_response_time": 23,
     "acquired_at": "2018-02-15T23:09:23.626Z",
     "plan_name": "express",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -508,7 +507,6 @@
     "maximum_response_time": 23,
     "acquired_at": "2018-02-16T17:49:14.106Z",
     "plan_name": "minipack",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -528,7 +526,6 @@
     "maximum_response_time": 123,
     "acquired_at": "2018-02-19T20:29:12.399Z",
     "plan_name": "megaplan",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -548,7 +545,6 @@
     "maximum_response_time": 32,
     "acquired_at": "2018-02-26T15:55:55.940Z",
     "plan_name": "super plan",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -568,7 +564,6 @@
     "maximum_response_time": 435,
     "acquired_at": "2018-02-26T21:58:39.709Z",
     "plan_name": "test1",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -588,7 +583,6 @@
     "maximum_response_time": 2,
     "acquired_at": "2018-02-26T21:59:03.628Z",
     "plan_name": "test2",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -608,7 +602,6 @@
     "maximum_response_time": 1,
     "acquired_at": "2018-02-26T21:59:24.673Z",
     "plan_name": "test3",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -628,7 +621,6 @@
     "maximum_response_time": 1,
     "acquired_at": "2018-02-26T21:59:41.322Z",
     "plan_name": "test5",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -648,7 +640,6 @@
     "maximum_response_time": 2,
     "acquired_at": "2018-02-26T22:00:15.227Z",
     "plan_name": "test4",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -668,7 +659,6 @@
     "maximum_response_time": 3,
     "acquired_at": "2018-02-26T22:00:57.006Z",
     "plan_name": "test6",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -688,7 +678,6 @@
     "maximum_response_time": 5,
     "acquired_at": "2018-02-26T22:01:17.499Z",
     "plan_name": "test7",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -708,7 +697,6 @@
     "maximum_response_time": 2,
     "acquired_at": "2018-02-26T22:01:35.056Z",
     "plan_name": "test8",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -728,7 +716,6 @@
     "maximum_response_time": 2,
     "acquired_at": "2018-02-26T22:01:53.756Z",
     "plan_name": "test9",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -748,7 +735,6 @@
     "maximum_response_time": 4,
     "acquired_at": "2018-02-26T22:02:11.042Z",
     "plan_name": "test10",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -768,7 +754,6 @@
     "maximum_response_time": 8,
     "acquired_at": "2018-02-26T22:08:04.971Z",
     "plan_name": "test 11",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -788,7 +773,6 @@
     "maximum_response_time": 3,
     "acquired_at": "2018-02-26T22:10:48.155Z",
     "plan_name": "test 12",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -808,7 +792,6 @@
     "maximum_response_time": 3,
     "acquired_at": "2018-02-26T22:14:17.141Z",
     "plan_name": "test 13",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -828,7 +811,6 @@
     "maximum_response_time": 11,
     "acquired_at": "2018-02-26T22:14:48.116Z",
     "plan_name": "test 14",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -848,7 +830,6 @@
     "maximum_response_time": 4,
     "acquired_at": "2018-02-26T22:15:18.376Z",
     "plan_name": "test 15",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -868,7 +849,6 @@
     "maximum_response_time": 8,
     "acquired_at": "2018-02-26T22:16:33.238Z",
     "plan_name": "test 16",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 1
   }
@@ -888,9 +868,281 @@
     "maximum_response_time": 6,
     "acquired_at": "2018-02-26T22:17:05.963Z",
     "plan_name": "test 17",
-    "client": 11,
     "query_plans": 1,
     "sale_detail": 2
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 2,
+  "fields": {
+    "acquired_plan": 2,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 3,
+  "fields": {
+    "acquired_plan": 3,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 4,
+  "fields": {
+    "acquired_plan": 4,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 5,
+  "fields": {
+    "acquired_plan": 5,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 6,
+  "fields": {
+    "acquired_plan": 6,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 7,
+  "fields": {
+    "acquired_plan": 7,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 8,
+  "fields": {
+    "acquired_plan": 8,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 9,
+  "fields": {
+    "acquired_plan": 9,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 10,
+  "fields": {
+    "acquired_plan": 10,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 11,
+  "fields": {
+    "acquired_plan": 11,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 12,
+  "fields": {
+    "acquired_plan": 12,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 13,
+  "fields": {
+    "acquired_plan": 13,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 14,
+  "fields": {
+    "acquired_plan": 14,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 15,
+  "fields": {
+    "acquired_plan": 15,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 16,
+  "fields": {
+    "acquired_plan": 16,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 17,
+  "fields": {
+    "acquired_plan": 17,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 18,
+  "fields": {
+    "acquired_plan": 18,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 19,
+  "fields": {
+    "acquired_plan": 19,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 20,
+  "fields": {
+    "acquired_plan": 20,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 21,
+  "fields": {
+    "acquired_plan": 21,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 22,
+  "fields": {
+    "acquired_plan": 22,
+    "client": 11,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
   }
 }
 ]

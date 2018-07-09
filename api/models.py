@@ -474,7 +474,8 @@ class QueryPlansClient(models.Model):
 class QueryPlansManage(models.Model):
     """Manejador de Planes"""    
     sender = models.ForeignKey(Client, on_delete=models.PROTECT, related_name="plan_sender")
-    receiver = models.ForeignKey(Client, on_delete=models.PROTECT)
+    receiver = models.ForeignKey(Client, on_delete=models.PROTECT, null=True)    
+    email_receiver = models.CharField(max_length=150, null=True)
     acquired_plan = models.ForeignKey(QueryPlansAcquired,
                                       on_delete=models.PROTECT, related_name="plan_acquired_plan")
     new_acquired_plan = models.ForeignKey(QueryPlansAcquired,

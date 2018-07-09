@@ -5,7 +5,7 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer
-from api.models import QueryPlansAcquired
+from api.models import QueryPlansAcquired, QueryPlansClient
 from api.permissions import IsAdminOrClient
 from api.utils.validations import Operations
 from api.utils.querysets import get_query_set_plan
@@ -42,8 +42,14 @@ class QueryPlansAcquiredDetailView(APIView):
         client_id = Operations.get_id(self, request)
         data = request.data
         plan = self.get_object(pk)
+        
+        try:
+            plan_client = QueryPlansClient.objects.get(client=client_id, acquired_plan=plan.id)
+        except QueryPlansAcquired.DoesNotExist:
+            raise Http404
+        
         # valido el plan que se desea activar
-        if (plan.is_active is True and plan.client_id == client_id and
+        if (plan.is_active is True and plan_client.client_id == client_id and
                 plan.expiration_date >= datetime.now().date()):
             serializer = QueryPlansAcquiredSerializer(plan, data, partial=True)
             if serializer.is_valid():
@@ -52,7 +58,7 @@ class QueryPlansAcquiredDetailView(APIView):
                 pyrebase.chosen_plan('u'+str(client_id), serializer.data)
             # traigo todos los demas planes
             plan_list = QueryPlansAcquired.objects.filter(
-                client_id=client_id).exclude(pk=pk)
+                queryplansclient__client=client_id).exclude(pk=pk)
             # actualizo el campo is_chosen
             if plan_list.count() > 0:
                 plan_list.update(is_chosen=False)
@@ -68,9 +74,36 @@ class ClientPlansView(ListCreateAPIView):
     def get_object(self, pk):
         """Obtener lista de planes."""
         try:
-            obj = QueryPlansAcquired.objects.filter(client=pk,
+            obj = QueryPlansAcquired.objects.filter(queryplansclient__client=pk,
                                                     is_active=True,
                                                     expiration_date__gte=datetime.now().date()).order_by('id')
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except QueryPlansAcquired.DoesNotExist:
+            raise Http404
+
+    def get(self, request):
+        """Obtener la lista con todos los planes del cliente."""
+        id = request.user.id
+        plan = self.get_object(id)
+        serializer = QueryPlansAcquiredSerializer(plan, many=True)
+        # paginacion
+        page = self.paginate_queryset(plan)
+        if page is not None:
+            serializer = QueryPlansAcquiredSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        return Response(serializer.data)
+
+class ClientAllPlansView(ListCreateAPIView):
+    """Vista para obetener todos los planes de un cliente."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
+
+    def get_object(self, pk):
+        """Obtener lista de planes."""
+        try:
+            obj = QueryPlansAcquired.objects.filter(queryplansclient__client=pk).order_by('id')
             self.check_object_permissions(self.request, obj)
             return obj
         except QueryPlansAcquired.DoesNotExist:
@@ -150,7 +183,7 @@ class ActivationPlanView(APIView):
         """
         try:
             QueryPlansAcquired.objects.values('is_chosen')\
-                .filter(client= client, is_active = True, is_chosen = True)[:1].get()
+                .filter(queryplansclient__client= client, is_active = True, is_chosen = True)[:1].get()
             return True
         except QueryPlansAcquired.DoesNotExist:
             return False
@@ -164,7 +197,7 @@ class ActivationPlanView(APIView):
             # EL SIGUIENTE QUERY DEBE SER OPTIMIZADO Y REUTILIZADO PARA DIFERENTES SERVICIOS
             # Query para traer el detalle de un plan por el codigo PIN
             plan = get_query_set_plan()
-            return plan.filter(client=client, sale_detail__pin_code=code,
+            return plan.filter(queryplansclient__client=client, sale_detail__pin_code=code,
                                is_active=False)[:1].get()
 
         except QueryPlansAcquired.DoesNotExist:
@@ -178,7 +211,7 @@ class ActivationPlanView(APIView):
         """
         try:
             QueryPlansAcquired.objects.values('is_chosen').filter(
-                client=client, is_active=True, is_chosen=True)[:1].get()
+                queryplansclient__client=client, is_active=True, is_chosen=True)[:1].get()
             return True
         except QueryPlansAcquired.DoesNotExist:
             return False
@@ -210,7 +243,7 @@ class ChosenPlanView(APIView):
         """
         try:
             plan_chosen = get_query_set_plan()
-            return plan_chosen.filter(client= client, is_active = True, is_chosen = True)[:1].get()
+            return plan_chosen.filter(queryplansclient__client= client, is_active = True, is_chosen = True)[:1].get()
 
         except QueryPlansAcquired.DoesNotExist:
             raise Http404

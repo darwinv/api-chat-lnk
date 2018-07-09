@@ -19,6 +19,8 @@ urlpatterns = [
     # todos los planes activos de un cliente
     url(r'^clients/plans/$', plan.ClientPlansView.as_view(),
         name='client-plans'),
+    url(r'^clients/plans-all/$', plan.ClientAllPlansView.as_view(),
+        name='client-plans-all'),
 
     url(r'^specialists-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$',
         actors.SpecialistDetailByUsername.as_view(),

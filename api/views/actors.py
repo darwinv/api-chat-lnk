@@ -1128,8 +1128,6 @@ def upload_photo_s3(filename):
     return 'https://s3.amazonaws.com/linkup-photos/' + filename;
 
 
-
-
 class RucDetailView(APIView):
     """
         Traer informacion de RUC
@@ -1155,16 +1153,19 @@ class RucDetailView(APIView):
           "ruc": pk
         }
         response = requests.post(url, json=payload)
+        
+        try:
+            url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
+            response2 = requests.get(url2)
+        except Exception as e:
+            response2 = response
 
-        url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
-        response2 = requests.get(url2)
-               
         # Se evaluan las 2 respuestas
         if response.status_code == 200 and response2.status_code == 200:
             data = {'ruc': str(pk)}
             # Convinamos los diccionarios
             data = dict(data, **response.json())
-            
+
 
             data['cellphone'] = data['telephone'] = ""
             if 'telefono' in response2.json():
@@ -1175,7 +1176,7 @@ class RucDetailView(APIView):
                         data['cellphone'] = phone
                     else:
                         data['telephone'] = phone
-            
+
             if 'nombre_comercial' in response2.json():
                 data['commercial_reason'] = response2.json()['nombre_comercial']
             else:
