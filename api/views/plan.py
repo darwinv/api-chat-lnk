@@ -1,4 +1,5 @@
 """Activacion y modificacion de planes."""
+import sys
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
@@ -122,9 +123,11 @@ class ActivationPlanView(APIView):
         """Activar producto, via codigo PIN."""
         data = request.data
         client = request.user.id
+        has_chosen = False
 
         # activation_date = datetime.now().date()
         if self.get_some_chosen_plan(client):
+            has_chosen = True
             is_chosen = False
         else:
             is_chosen = True
@@ -135,10 +138,13 @@ class ActivationPlanView(APIView):
         serializer = ActivePlanSerializer(query_set, data,
                                           context={'is_chosen': is_chosen},
                                           partial=True)
-        # import pdb
+        # import pdb; pdb.set_trace()
         if serializer.is_valid():
             serializer.save()
-            pyrebase.chosen_plan('u'+str(client), serializer.data)
+            if not has_chosen:
+                # print('no deberia  de entrar')
+                if 'test' not in sys.argv:
+                    pyrebase.chosen_plan('u'+str(client), serializer.data)
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
