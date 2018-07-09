@@ -1186,12 +1186,13 @@ class RucDetailView(APIView):
         }
         response = requests.post(url, json=payload)
         
-        try:
-            url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
-            response2 = requests.get(url2)
-        except Exception as e:
-            response2 = response
-
+        # try:
+        #     url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
+        #     response2 = requests.get(url2)
+        # except Exception as e:
+        #     response2 = response
+        response2 = response
+        
         # Se evaluan las 2 respuestas
         if response.status_code == 200 and response2.status_code == 200:
             data = {'ruc': str(pk)}
