@@ -1160,7 +1160,6 @@ def upload_photo_s3(filename):
 
 
 
-
 class RucDetailView(APIView):
     """
         Traer informacion de RUC
@@ -1186,9 +1185,12 @@ class RucDetailView(APIView):
           "ruc": pk
         }
         response = requests.post(url, json=payload)
-
-        url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
-        response2 = requests.get(url2)
+        
+        try:
+            url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
+            response2 = requests.get(url2)
+        except Exception as e:
+            response2 = response
 
         # Se evaluan las 2 respuestas
         if response.status_code == 200 and response2.status_code == 200:
