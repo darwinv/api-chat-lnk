@@ -95,6 +95,20 @@ class GetClientPlansList(APITestCase):
 
     fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
 
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+
+    def test_get_list(self):
+        """Obtener resultado 200 de la lista."""
+        response = self.client.get(reverse('client-plans'), format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetDetailPlan(APITestCase):
+    """Prueba para devolver informacion de un plan"""
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
 
     def setUp(self):
         """Setup."""
@@ -107,12 +121,11 @@ class GetClientPlansList(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-class GetClientPlansList(APITestCase):
+class GetClientPlansAllList(APITestCase):
     """Prueba para devolver listado de planes al cliente"""
     # fixtures = ['data', 'data2', 'data3']
 
     fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
-
 
     def setUp(self):
         """Setup."""
