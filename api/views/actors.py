@@ -475,7 +475,6 @@ class ClientDetailView(APIView):
 
         clear_data_no_valid(data, valid_fields)
 
-
         serializer = ClientSerializer(client, data, partial=True,
                                           context={'request': request})
 
@@ -1158,8 +1157,6 @@ def upload_photo_s3(filename):
     # devolviendo ruta al archivo
     return 'https://s3.amazonaws.com/linkup-photos/' + filename;
 
-
-
 class RucDetailView(APIView):
     """
         Traer informacion de RUC
@@ -1186,13 +1183,12 @@ class RucDetailView(APIView):
         }
         response = requests.post(url, json=payload)
         
-        # try:
-        #     url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
-        #     response2 = requests.get(url2)
-        # except Exception as e:
-        #     response2 = response
-        response2 = response
-        
+        try:
+            url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
+            response2 = requests.get(url2)
+        except Exception as e:
+            response2 = response
+
         # Se evaluan las 2 respuestas
         if response.status_code == 200 and response2.status_code == 200:
             data = {'ruc': str(pk)}

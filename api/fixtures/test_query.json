@@ -218,11 +218,25 @@
     "maximum_response_time": 3,
     "acquired_at": "2018-02-26T23:24:28.136Z",
     "plan_name": "Minipack",
-    "client": 5,
     "query_plans": 1,
     "sale_detail": 1
   }
 },
+{
+  "model": "api.queryplansclient",
+  "pk": 1,
+  "fields": {
+    "acquired_plan": 1,
+    "client": 5,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1
+  }
+},
+
+
 {
   "model": "api.query",
   "pk": 1000,
