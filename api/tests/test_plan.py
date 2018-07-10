@@ -117,13 +117,12 @@ class GetDetailPlan(APITestCase):
 
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
-        response = self.client.get(reverse('client-plans'), format='json')
-
+        response = self.client.get(reverse('client-plans-detail', args=(3,))+'?client_id=11', format='json')
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetClientPlansAllList(APITestCase):
     """Prueba para devolver listado de planes al cliente"""
-    # fixtures = ['data', 'data2', 'data3']
 
     fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
 

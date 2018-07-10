@@ -15,6 +15,7 @@ from api.emails import BasicEmailAmazon
 from rest_framework.response import Response
 from api.utils.tools import capitalize as cap
 from api.utils.validations import document_exists, ruc_exists
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth import password_validation
 # from api.utils import tools
 
@@ -40,7 +41,7 @@ class SpecialistMessageListCustomSerializer(serializers.Serializer):
                     "displayName": instance.display_name,
                     "specialist": instance.specialist,
                     "title": instance.title,
-                    "message": instance.message,                
+                    "message": instance.message,
                     "date": instance.date,
                     "id": instance.id,
                     # "total": instance.total
@@ -57,7 +58,7 @@ class PendingQueriesSerializer(serializers.Serializer):
 
     def to_representation(self, dicti):
         # import pdb; pdb.set_trace()
-        
+
         return {"id": dicti["id"],
                 "message": dicti["message"],
                 "title": dicti["title"],
@@ -129,7 +130,7 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = ('street', 'department', 'department_name', 'province', 'province_name', 'district', 'district_name')
 
     def get_department_name(self, obj):
-        """Devuelve departamento."""        
+        """Devuelve departamento."""
         if type(obj) is dict:
             return str(obj['department'])
         return str(obj.department)
@@ -174,7 +175,8 @@ class ClientSerializer(serializers.ModelSerializer):
                                         allow_null=True)
     ocupation_name = serializers.SerializerMethodField()
     address = AddressSerializer(required=False)
-    nick = serializers.CharField(required=False, allow_blank=True)
+    nick = serializers.CharField(required=False, allow_blank=True,
+                                 allow_null=True)
     residence_country = serializers.PrimaryKeyRelatedField(
         queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
@@ -629,8 +631,6 @@ class SpecialistSerializer(serializers.ModelSerializer):
                                                     instance.document_type)
         instance.document_number = validated_data.get('document_number',
                                                       instance.document_number)
-        instance.email_exact = validated_data.get('email_exact',
-                                                  instance.email_exact)
         instance.telephone = validated_data.get('telephone',
                                                 instance.telephone)
         instance.cellphone = validated_data.get('cellphone',
@@ -773,14 +773,16 @@ class SellerSerializer(serializers.ModelSerializer):
         required = _('required')
         address = _('address')
         # si la residencia es peru, es obligatoria la dirección
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
-            if 'address' not in data:
-                raise serializers.ValidationError(
-                    "{} {}".format(address, required))
-        else:
-            if "foreign_address" not in data or not data["foreign_address"]:
-                raise serializers.ValidationError(
-                    "{} {}".format(address, required))
+        # import pdb; pdb.set_trace()
+        if not self.instance:
+            if data["residence_country"] == Countries.objects.get(name="Peru"):
+                if 'address' not in data:
+                    raise serializers.ValidationError(
+                        "{} {}".format(address, required))
+            else:
+                if "foreign_address" not in data or not data["foreign_address"]:
+                    raise serializers.ValidationError(
+                            "{} {}".format(address, required))
         return data
 
     def update(self, instance, validated_data):
@@ -1151,8 +1153,43 @@ class KeySerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
-class ChangePasswordSerializer(serializers.ModelSerializer):
+class ChangePassword(serializers.ModelSerializer):
     """Cambiar clave de usuario."""
+    old_password = serializers.CharField(required=True)
+
+    class Meta:
+        """Meta."""
+
+        model = User
+        fields = ("id", "password", 'old_password')
+        extra_kwargs = {
+                'password': {'write_only': True},
+                'old_password': {'write_only': True}
+        }
+
+    def validate_old_password(self, value):
+        """Check if password  is correct."""
+        error = _("old password is invalid")
+        if check_password(value, self.instance.password):
+            return value
+        else:
+            raise serializers.ValidationError(error)
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        password = validated_data.pop('password', None)
+        instance.key = password
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
+
+    def to_representation(self, obj):
+        return {}
+
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    """Cambiar clave de usuario (solos dev)."""
 
     class Meta:
         """Meta."""
@@ -1220,7 +1257,7 @@ class RucApiDetailSerializer(serializers.Serializer):
 
     commercial_reason = serializers.CharField()
     telephone = serializers.CharField()
-    cellphone = serializers.CharField()    
+    cellphone = serializers.CharField()
     ruc = serializers.CharField()
 
     def get_address(self, obj):
@@ -1252,7 +1289,7 @@ class RucApiDetailSerializer(serializers.Serializer):
             return AddressSerializer(address).data
         else:
             return None
-         
+
 
     def get_business_name(self, obj):
         if 'nombre_o_razon_social' in obj:
@@ -1265,4 +1302,3 @@ class RucApiDetailSerializer(serializers.Serializer):
             return obj['estado_del_contribuyente']
         else:
             return ""
-            

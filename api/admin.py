@@ -17,11 +17,9 @@ from .models import Query, QueryLogs, Message, FeeMonthSeller, NotificationsBack
 from .models import Parameter
 # Register your models here.
 
-
-
 class ClientNaturalAdmin(admin.ModelAdmin):
     fields = ('first_name', 'last_name',
-     'sex', 'civil_state','birthdate',
+     'sex', 'civil_state', 'birthdate',
      'level_instruction', 'institute','profession',
      'ocupation')
 
@@ -74,7 +72,7 @@ class QueryAdmin(admin.ModelAdmin):
 
     inlines = [MessageInline]
     readonly_fields = ('qualification',)
-    exclude = ('acq3uired_plan',)
+    exclude = ('acquired_plan',)
 
 class SellerAdmin(admin.ModelAdmin):
     fields = ('zone','username', 'nick','password','first_name', 'last_name',

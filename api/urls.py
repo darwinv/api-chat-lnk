@@ -1,8 +1,8 @@
 """Urls de API Rest."""
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import actors, query, category, email, authorization, plan, chat, oauth
-
+from api.views import actors, query, category, email, authorization
+from api.views import validations, plan, chat, oauth
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
 router = routers.DefaultRouter()
@@ -21,6 +21,10 @@ urlpatterns = [
         name='client-plans'),
     url(r'^clients/plans-all/$', plan.ClientAllPlansView.as_view(),
         name='client-plans-all'),
+    
+    url(r'^clients/plans/(?P<pk>[0-9]+)/$', plan.ClientPlansDetailView.as_view(),
+        name='client-plans-detail'),
+
 
     url(r'^specialists-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$',
         actors.SpecialistDetailByUsername.as_view(),
@@ -32,14 +36,22 @@ urlpatterns = [
 
 
     # # Envio de codigo de verificar al correo
-    url(r'^send-code-password/$', actors.SendCodePassword.as_view(), name='send-code-password'),
+    url(r'^send-code-password/$', actors.SendCodePassword.as_view(),
+        name='send-code-password'),
     # # Validacion de codigo para reseteo de contrasena
-    url(r'^valid-code-password/$', actors.ValidCodePassword.as_view(), name='valid-code-password'),
+    url(r'^valid-code-password/$', actors.ValidCodePassword.as_view(),
+        name='valid-code-password'),
     # # reseteo de contraseña
-    url(r'^reset-password-recovery/(?P<pk>[0-9]+)/$', actors.UpdatePasswordRecoveryView.as_view(), name='reset-password-recovery'),
-    # # reseteo de contraseña
-    url(r'^update-email/(?P<pk>[0-9]+)/$', actors.UpdateEmailUserView.as_view(), name='update-email'),
+    url(r'^reset-password-recovery/(?P<pk>[0-9]+)/$',
+        actors.UpdatePasswordRecoveryView.as_view(),
+        name='reset-password-recovery'),
+    # # reseteo de email
+    url(r'^update-email/(?P<pk>[0-9]+)/$',
+        actors.UpdateEmailUserView.as_view(), name='update-email'),
 
+    # chequear data de filtrado
+    url(r'^check-data/$',
+        validations.CheckData.as_view(), name='check-data'),
 
     # detalle de cliente
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(),
@@ -121,7 +133,8 @@ urlpatterns = [
 
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
-    url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(), name='seller-detail'),
+    url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(),
+        name='seller-detail'),
     url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(), name='seller-account-status'),
 
     # Actualizar Consulta por detalle (Responder)
@@ -134,18 +147,17 @@ urlpatterns = [
     url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(), name='upload-photo'),
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
     url(r'^upload_document/(?P<pk>[0-9]+)/$', actors.DocumentUploadView.as_view(), name='upload-document'),
-
+    # cambiar clave de usuario
+    url(r'^change/password/(?P<pk>[0-9]+)/$',
+        actors.UpdateUserPassword.as_view(),
+        name='update-password'),
     # url(r'^upload_archivo/(?P<filename>[^/]+)$', actors.AllFileUploadView.as_view())
 
     # chat (prueba con channels)
     url(r'^chat/$', chat.chat, name='chat'),
     # email
     url(r'^mail/$', email.mail, name='mails'),
-    # servicio exclusivo para devolver key, solo para equipo de desarrollo
-    url(r'^key/(?P<pk>[0-9]+)/$', actors.ViewKey.as_view(), name='get-key'),
 
-    # servicio exclusivo para cambiar clave, solo para equipo de desarrollo
-    url(r'^password/(?P<pk>[0-9]+)/$', actors.UpdatePasswordView.as_view(), name='update-pass'),
 
     # autorizacion para cliente
     url(r'^authorizations/clients/$', authorization.ClientListView.as_view(),
@@ -169,4 +181,11 @@ urlpatterns = [
 
     # Api RUC Publico
     url(r'^ruc/(?P<pk>[0-9]+)/$', actors.RucDetailView.as_view(), name='ruc-detail'),
+
+    # Only DEVs
+    # servicio exclusivo para devolver key, solo para equipo de desarrollo
+    url(r'^key/(?P<pk>[0-9]+)/$', actors.ViewKey.as_view(), name='get-key'),
+    # servicio exclusivo para cambiar clave, solo para equipo de desarrollo
+    url(r'^password/(?P<pk>[0-9]+)/$', actors.UpdatePasswordView.as_view(),
+        name='update-pass'),
 ]

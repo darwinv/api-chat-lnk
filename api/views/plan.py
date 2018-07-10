@@ -1,10 +1,11 @@
 """Activacion y modificacion de planes."""
+import sys
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
-from api.serializers.plan import QueryPlansAcquiredSerializer
+from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquiredDetailSerializer
 from api.models import QueryPlansAcquired, QueryPlansClient
 from api.permissions import IsAdminOrClient
 from api.utils.validations import Operations
@@ -95,6 +96,27 @@ class ClientPlansView(ListCreateAPIView):
 
         return Response(serializer.data)
 
+
+class ClientPlansDetailView(ListCreateAPIView):
+    """Vista para obetener todos los planes de un cliente."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
+
+    def get(self, request, pk):
+        """Obtener la lista con todos los planes del cliente."""
+        client = Operations.get_id(self, request)
+        plan = QueryPlansAcquired.objects.filter(pk=pk, queryplansclient__client=client).values('id', 'plan_name', 'is_chosen', 'is_active',
+                  'validity_months', 'query_quantity',
+                  'available_queries', 'expiration_date', 'queryplansclient__transfer',
+                  'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner')
+        
+        if plan:
+            serializer = QueryPlansAcquiredDetailSerializer(plan[0], partial=True)
+            return Response(serializer.data)
+        else:
+            raise Http404
+
+
 class ClientAllPlansView(ListCreateAPIView):
     """Vista para obetener todos los planes de un cliente."""
     authentication_classes = (OAuth2Authentication,)
@@ -103,7 +125,12 @@ class ClientAllPlansView(ListCreateAPIView):
     def get_object(self, pk):
         """Obtener lista de planes."""
         try:
-            obj = QueryPlansAcquired.objects.filter(queryplansclient__client=pk).order_by('id')
+            obj = QueryPlansAcquired.objects.filter(queryplansclient__client=pk).values('id',
+                'plan_name', 'is_chosen', 'is_active',
+                'validity_months', 'query_quantity',
+                'available_queries', 'expiration_date', 'queryplansclient__transfer',
+                'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner'
+                ).order_by('id')
             self.check_object_permissions(self.request, obj)
             return obj
         except QueryPlansAcquired.DoesNotExist:
@@ -113,11 +140,11 @@ class ClientAllPlansView(ListCreateAPIView):
         """Obtener la lista con todos los planes del cliente."""
         id = request.user.id
         plan = self.get_object(id)
-        serializer = QueryPlansAcquiredSerializer(plan, many=True)
+        serializer = QueryPlansAcquiredDetailSerializer(plan, many=True)
         # paginacion
         page = self.paginate_queryset(plan)
         if page is not None:
-            serializer = QueryPlansAcquiredSerializer(page, many=True)
+            serializer = QueryPlansAcquiredDetailSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
         return Response(serializer.data)
@@ -155,9 +182,11 @@ class ActivationPlanView(APIView):
         """Activar producto, via codigo PIN."""
         data = request.data
         client = request.user.id
+        has_chosen = False
 
         # activation_date = datetime.now().date()
         if self.get_some_chosen_plan(client):
+            has_chosen = True
             is_chosen = False
         else:
             is_chosen = True
@@ -168,10 +197,13 @@ class ActivationPlanView(APIView):
         serializer = ActivePlanSerializer(query_set, data,
                                           context={'is_chosen': is_chosen},
                                           partial=True)
-        # import pdb
+        # import pdb; pdb.set_trace()
         if serializer.is_valid():
             serializer.save()
-            pyrebase.chosen_plan('u'+str(client), serializer.data)
+            if not has_chosen:
+                # print('no deberia  de entrar')
+                if 'test' not in sys.argv:
+                    pyrebase.chosen_plan('u'+str(client), serializer.data)
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
