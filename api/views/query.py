@@ -7,7 +7,7 @@ import boto3
 import uuid
 # paquetes de django
 from django.db.models import OuterRef, Subquery, F, Count
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 # paquetes de terceros
 from rest_framework import status, permissions
 from rest_framework.views import APIView
@@ -655,6 +655,7 @@ class SetQualificationView(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+
 class ReadPendingAnswerView(APIView):
     """Vista de lectura de respuestas no vistos del cliente."""
     authentication_classes = (OAuth2Authentication,)
@@ -680,5 +681,5 @@ class ReadPendingAnswerView(APIView):
             pyrebase.set_message_viewed(mesgs_res)
         r = mesgs_res.update(viewed=1)
         if 'test' not in sys.argv:
-            pyrebase.categories_db(client_id, category)
+            pyrebase.categories_db(client_id, category.id)
         return Response({'resp': r}, status.HTTP_200_OK)
