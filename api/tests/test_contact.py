@@ -11,8 +11,8 @@ client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
 
-class CreateNaturalContact(APITestCase):
-    """Prueba de Registro de Contacto Natural."""
+class CreateNaturalContactNonEffective(APITestCase):
+    """Prueba de Registro de Contacto Natural No Efectivo."""
 
     fixtures = ['data', 'data2', 'data3', 'test_contact']
 
