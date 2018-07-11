@@ -63,3 +63,40 @@ class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
                                'is_chosen', instance.is_chosen)
         instance.save()
         return instance
+
+class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
+    """Plan Adquirido Detail."""
+    transfer = serializers.SerializerMethodField()
+    share = serializers.SerializerMethodField()
+    empower = serializers.SerializerMethodField()
+    owner = serializers.SerializerMethodField()
+
+    class Meta:
+        """declaracion del modelo y sus campos."""
+
+        model = QueryPlansAcquired
+        fields = ('id', 'plan_name', 'is_chosen', 'is_active',
+                  'validity_months', 'query_quantity',
+                  'available_queries', 'expiration_date', 'transfer',
+                  'share', 'empower', 'owner')
+
+    def get_transfer(self, obj):
+        if 'queryplansclient__transfer' in obj:
+            return obj['queryplansclient__transfer']
+        else:
+            return False
+    def get_share(self, obj):
+        if 'queryplansclient__share' in obj:
+            return obj['queryplansclient__share']
+        else:
+            return False
+    def get_empower(self, obj):
+        if 'queryplansclient__empower' in obj:
+            return obj['queryplansclient__empower']
+        else:
+            return False
+    def get_owner(self, obj):
+        if 'queryplansclient__owner' in obj:
+            return obj['queryplansclient__owner']
+        else:
+            return False

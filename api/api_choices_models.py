@@ -154,3 +154,20 @@ class ChoicesAPI:
         ('m', _('Moderate')),
         ('p', _('Positive')),
     )
+
+    # Query Plan Client
+    queryplansclient_status = (
+        (1, _('Active')),
+        (2, _('Deactive')),
+    )
+
+    # Query Plan Manage
+    queryplansmanage_type_operation = (
+        (1, _('Transfer')),
+        (2, _('Share')),
+        (3, _('Empower')),
+    )
+    queryplansmanage_status = (
+        (1, _('Active')),
+        (2, _('Deactive')),
+    )
