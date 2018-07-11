@@ -510,5 +510,26 @@
       "description": "Contratacion de especialista",
       "created_at": "2018-02-26T23:13:47.490Z"
     }
+  },
+  {
+    "model": "api.objection",
+    "pk": 1,
+    "fields":{
+      "name":"has a lawyer who advises"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 1,
+    "fields":{
+      "name":"has a lawyer who advises"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 2,
+    "fields":{
+      "name":"has a accountant who advises"
+    }
   }
 ]

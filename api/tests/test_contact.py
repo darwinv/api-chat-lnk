@@ -24,7 +24,8 @@ class CreateNaturalContact(APITestCase):
         self.valid_payload = {
             'first_name': 'darwin',
             'last_name': 'vasquez',
-            'type_contact': 'n',
+            'type_contact': 1,
+            'type_client': 'n',
             'civil_state': 's',
             'birthdate': '2017-09-19',
             "address": {
@@ -44,10 +45,10 @@ class CreateNaturalContact(APITestCase):
             'institute': 'UNEFA',
             'profession': "Administrador",
             'ocupation': 1,
+            "objection": [1],
             "latitude": "-77.0282400",
             "longitude": "-12.0431800",
             'about': 'iptsum aabout',
-            'objection': 1,
             'seller': 2,
             'nationality': 1
         }
@@ -499,7 +500,7 @@ class CreateNaturalContact(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
