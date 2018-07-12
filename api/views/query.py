@@ -9,6 +9,7 @@ import uuid
 from django.db.models import OuterRef, Subquery, F, Count
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 # paquetes de terceros
+from rest_framework import serializers
 from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, ListAPIView
@@ -667,7 +668,7 @@ class ReadPendingAnswerView(APIView):
             obj = Category.objects.get(pk=categ)
             return obj
         except Category.DoesNotExist:
-            raise HttpResponseBadRequest
+            raise serializers.ValidationError({"category": [str(categ)+' no existe']})
 
     def post(self, request):
         """Enviar data."""
@@ -681,5 +682,5 @@ class ReadPendingAnswerView(APIView):
             pyrebase.set_message_viewed(mesgs_res)
         r = mesgs_res.update(viewed=1)
         if 'test' not in sys.argv:
-            pyrebase.categories_db(client_id, category)
+            pyrebase.categories_db(client_id, category.id)
         return Response({'resp': r}, status.HTTP_200_OK)
