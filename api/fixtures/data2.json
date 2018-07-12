@@ -522,14 +522,28 @@
     "model": "api.objection",
     "pk": 1,
     "fields":{
-      "name":"has a lawyer who advises"
+      "name":"tiene abogado que lo asesora"
     }
   },
   {
     "model": "api.objection",
     "pk": 2,
     "fields":{
-      "name":"has a accountant who advises"
+      "name":"tiene contador que lo asesora"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 3,
+    "fields":{
+      "name":"no tiene dinero"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 4,
+    "fields":{
+      "name":"otro motivo"
     }
   }
 ]
