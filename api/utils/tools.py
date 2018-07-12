@@ -4,6 +4,9 @@
     el manejo de variables, ejemplo: capitalizar el primer caracter
 """
 import datetime, string, random, boto3, os
+import requests
+from django.urls import reverse
+from linkupapi.settings_secret import URL_HOST
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.utils.translation import ugettext_lazy as _
@@ -150,3 +153,8 @@ def clear_data_no_valid(data,valid_fields):
     for field in data_auxiliar:
         if not field in valid_fields:
             data.pop(field, None)
+
+
+def send_api(url_name, token='', arg=None, files=None):
+    r = requests.post(URL_HOST + url_name, json=arg)
+    return r

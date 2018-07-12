@@ -2,7 +2,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers
 from api.views import actors, query, category, email, authorization
-from api.views import validations, plan, chat, oauth
+from api.views import validations, plan, chat, oauth, static_data
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
 router = routers.DefaultRouter()
@@ -56,6 +56,9 @@ urlpatterns = [
     # detalle de cliente
     url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(),
         name='client-detail'),
+
+    url(r'^objections/$', static_data.ObjectionsListView.as_view(),
+        name='objections'),
     # Especialidades
     url(r'^categories/$', category.CategoryListView.as_view(),
         name='categories'),

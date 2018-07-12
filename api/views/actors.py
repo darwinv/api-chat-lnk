@@ -4,7 +4,7 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Query
-from api.models import SellerContactNoEfective, SpecialistMessageList, SpecialistMessageList_sp
+from api.models import SellerContact, SpecialistMessageList, SpecialistMessageList_sp
 from api.models import RecoveryPassword, Declinator
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
@@ -34,6 +34,7 @@ from api.utils.validations import Operations
 from api.utils.tools import clear_data_no_valid
 from api import pyrebase
 from api.emails import BasicEmailAmazon
+from api.utils.parameters import Params
 from api.api_choices_models import ChoicesAPI as c
 
 # Constantes
@@ -950,10 +951,10 @@ class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (IsSeller,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller,)
     # aca se debe colocar el serializer para listar todos
     serializer_class = SellerContactNaturalSerializer
-    queryset = SellerContactNoEfective.objects.all()
+    queryset = SellerContact.objects.all()
 
     def post(self, request):
         """Redefinido funcion para crear vendedor."""
@@ -961,15 +962,15 @@ class ContactListView(ListCreateAPIView):
         not_valid = _("not valid")
         data = request.data
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
-        if "type_contact" not in data or not data["type_contact"]:
-            raise serializers.ValidationError({'type_contact': [required]})
+        if "type_client" not in data or not data["type_client"]:
+            raise serializers.ValidationError({'type_client': [required]})
 
-        if data["type_contact"] == 'n':
+        if data["type_client"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
-        elif data["type_contact"] == 'b':
+        elif data["type_client"] == 'b':
             serializer = SellerContactBusinessSerializer(data=data)
         else:
-            raise serializers.ValidationError({'type_contact': [not_valid]})
+            raise serializers.ValidationError({'type_client': [not_valid]})
 
         if serializer.is_valid():
             serializer.save()

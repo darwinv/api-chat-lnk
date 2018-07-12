@@ -510,5 +510,40 @@
       "description": "Contratacion de especialista",
       "created_at": "2018-02-26T23:13:47.490Z"
     }
+  },
+  {
+    "model": "api.objection",
+    "pk": 1,
+    "fields":{
+      "name":"has a lawyer who advises"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 1,
+    "fields":{
+      "name":"tiene abogado que lo asesora"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 2,
+    "fields":{
+      "name":"tiene contador que lo asesora"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 3,
+    "fields":{
+      "name":"no tiene dinero"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 4,
+    "fields":{
+      "name":"otro motivo"
+    }
   }
 ]

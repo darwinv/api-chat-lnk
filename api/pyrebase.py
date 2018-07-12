@@ -144,7 +144,7 @@ def categories_db(client_id, cat_id, time_now=None, read=False):
     }
     if time_now:
         data["datetime"] = time_now
-
+    # print(data["id"])
     if exist_node(main_node):
         res = db.child("categories/clients").child(
             node_client).child(node_category).update(data)
