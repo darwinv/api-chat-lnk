@@ -14,10 +14,11 @@ from dateutil.relativedelta import relativedelta
 from api.emails import BasicEmailAmazon
 from rest_framework.response import Response
 from api.utils.tools import capitalize as cap
+from api.utils.parameters import Params
 from api.utils.validations import document_exists, ruc_exists
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import password_validation
-# from api.utils import tools
+from api.utils import tools
 
 
 class SpecialistMessageListCustomSerializer(serializers.Serializer):
@@ -1032,7 +1033,7 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
     photo = serializers.CharField(read_only=True)
     objection_name = serializers.SerializerMethodField()
     objection = serializers.ListField(child=serializers.PrimaryKeyRelatedField(
-        queryset=Objection.objects.all(), required=False))
+        queryset=Objection.objects.all()), write_only=True, required=False)
     level_instruction = serializers.PrimaryKeyRelatedField(queryset=LevelInstruction.objects.all(), required=True)
     level_instruction_name = serializers.SerializerMethodField()
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
@@ -1052,9 +1053,9 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
                   'longitude', 'seller', 'objection_name', 'nationality',
                   'nationality_name', 'level_instruction_name', 'photo'
                   )
-        extra_kwargs = {
-                'objection': {'write_only': True},
-        }
+        # extra_kwargs = {
+        #         'objection': {'write_only': True},
+        # }
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -1132,6 +1133,18 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
                 # objection_obj = Objection.objects.get(pk=objection)
                 ObjectionsList.objects.create(contact=instance,
                                               objection=objection)
+        else:
+            # registro de cliente si es efectivo
+            data_client = self.get_initial()
+            data_client["email_exact"] = data_client["email"]
+            data_client["username"] = data_client["email"]
+            data_client["role"] = Params.ROLE_CLIENT
+            # import pdb; pdb.set_trace()
+            serializer_client = ClientSerializer(data=data_client)
+            if serializer_client.is_valid():
+                serializer_client.save()
+            else:
+                raise serializers.ValidationError(serializer_client.errors)
         return instance
 
 

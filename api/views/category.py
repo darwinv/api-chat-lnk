@@ -6,7 +6,6 @@ from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
-import pdb
 
 # Devuelve las especialidaddes que solo tienen especialista principal
 class CategoryListView(APIView):

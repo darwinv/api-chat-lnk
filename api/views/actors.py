@@ -34,6 +34,7 @@ from api.utils.validations import Operations
 from api.utils.tools import clear_data_no_valid
 from api import pyrebase
 from api.emails import BasicEmailAmazon
+from api.utils.parameters import Params
 from api.api_choices_models import ChoicesAPI as c
 
 # Constantes

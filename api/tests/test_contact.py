@@ -11,7 +11,7 @@ client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
 
-class CreateNaturalContactNonEffective(APITestCase):
+class CreateNaturalContact(APITestCase):
     """Prueba de Registro de Contacto Natural No Efectivo."""
 
     fixtures = ['data', 'data2', 'data3', 'test_contact']
@@ -27,7 +27,7 @@ class CreateNaturalContactNonEffective(APITestCase):
             'type_contact': 1,
             'type_client': 'n',
             'civil_state': 's',
-            'birthdate': '2017-09-19',
+            'birthdate': '1990-09-19',
             "address": {
                 "street": "esteban camere",
                 "department": 1,
@@ -50,7 +50,8 @@ class CreateNaturalContactNonEffective(APITestCase):
             "longitude": "-12.0431800",
             'about': 'iptsum aabout',
             'seller': 2,
-            'nationality': 1
+            'nationality': 1,
+            'residence_country': 1
         }
 
     def test_no_firstname(self):
@@ -493,8 +494,8 @@ class CreateNaturalContactNonEffective(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_natural_contact(self):
-        """Solicitud valida."""
+    def test_create_non_effective(self):
+        """Crear conctacto no efectivo."""
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(self.valid_payload),
@@ -502,6 +503,21 @@ class CreateNaturalContactNonEffective(APITestCase):
         )
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_effective(self):
+        """Crear conctacto efectivo."""
+        self.valid_payload.pop('objection')
+        self.valid_payload["type_contact"] = 2
+        # registro como usuario tambien
+        self.valid_payload["password"] = '123456'
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
 
 
 # Prueba para verificar la insercion de cliente juridico
@@ -851,3 +867,17 @@ class CreateBussinessContact(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class GetObjections(APITestCase):
+    """Devolver listado de objeciones."""
+
+    fixtures = ['data', 'data2', 'data3']
+
+    def setUp(self):
+        pass
+
+    def test_get_all_objectios(self):
+        """Get objections."""
+        response = client.get(reverse('objections'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
