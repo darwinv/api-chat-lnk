@@ -136,7 +136,7 @@ class ClientTransferPlansView(APIView):
         try:
             acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
              queryplansclient__client=client)
-        except Client.DoesNotExist:
+        except QueryPlansAcquired.DoesNotExist:
             raise Http404    
 
         email_receiver = receiver = None
@@ -173,16 +173,16 @@ class ClientTransferPlansView(APIView):
             'client': receiver
         }
         data_context['client_sender'] = {
-            'status': 2,
             'acquired_plan': acquired_plan.id,
             'client': client
         }
-
         serializer = QueryPlansTransfer(data=data_transfer, context=data_context)
         
         if serializer.is_valid():
             if 'test' not in sys.argv:
-                pyrebase.delete_actual_plan_client(client)
+                if acquired_plan.is_chosen:  # Si el plan estaba escogido
+                    pyrebase.delete_actual_plan_client(client)
+                # send email
             serializer.save()
 
             return Response(serializer.data)

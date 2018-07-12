@@ -120,12 +120,14 @@ class QueryPlansTransfer(serializers.ModelSerializer):
         instance = QueryPlansManage.objects.create(**validated_data)
         
         if 'client' in receiver and receiver['client']:
+            plan = receiver['acquired_plan']
+            plan.is_chosen = False
+            plan.save()
             QueryPlansClient.objects.create(**receiver)
 
         older_owner = QueryPlansClient.objects.get(client=sender['client'],
             acquired_plan=sender['acquired_plan'])
-        older_owner.status = sender['status']
-        older_owner.save()
+        older_owner.delete()
 
         return instance
 
