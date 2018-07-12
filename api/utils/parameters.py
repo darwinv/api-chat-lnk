@@ -12,7 +12,8 @@ class Params:
         "message": "m"
     }
 
-
+    ROLE_CLIENT = 2
+    
 class Payloads:
     read = True
     categoriesList = {

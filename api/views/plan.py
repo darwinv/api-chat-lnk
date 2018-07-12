@@ -18,7 +18,7 @@ from django.utils.translation import ugettext_lazy as _
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from datetime import datetime
 from rest_framework import serializers
-
+from linkupapi.settings_secret import WEB_HOST
 
 class QueryPlansAcquiredDetailView(APIView):
     """Detalle de Plan Adquirido."""
@@ -124,6 +124,7 @@ class ClientTransferPlansView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     required = _("required")
+    subject = _("Transfer Plan Success")
 
     def post(self, request):
         """Obtener la lista con todos los planes del cliente."""
@@ -182,7 +183,15 @@ class ClientTransferPlansView(APIView):
             if 'test' not in sys.argv:
                 if acquired_plan.is_chosen:  # Si el plan estaba escogido
                     pyrebase.delete_actual_plan_client(client)
-                # send email
+
+                    mail = BasicEmailAmazon(subject=self.subject, to=email_receiver,
+                                template='email/transfer')
+
+                    args = {
+                        'link': WEB_HOST
+                    }
+                    mail.sendmail(args=request.data)
+                
             serializer.save()
 
             return Response(serializer.data)

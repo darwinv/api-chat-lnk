@@ -198,14 +198,16 @@ class LevelInstruction(models.Model):
         return self.name
 
 
-class SellerContactNoEfective(models.Model):
-    """Contacto No Efectivo."""
+class SellerContact(models.Model):
+    """Contacto de Vendedor."""
 
     first_name = models.CharField(max_length=45, null=True)
     last_name = models.CharField(max_length=55, null=True)
-    # si es efectivo o no efectivo
-    type_contact = models.CharField(max_length=1,
-                                    choices=Ch.client_type_client)
+    # tipo de contacto
+    type_contact = models.PositiveIntegerField(choices=Ch.type_seller_contact)
+    # tipo de cliente
+    type_client = models.CharField(max_length=1,
+                                   choices=Ch.client_type_client)
     document_type = models.PositiveIntegerField(choices=Ch.user_document_type)
     document_number = models.CharField(max_length=45)
     email = models.CharField(max_length=150, null=True)
@@ -214,10 +216,10 @@ class SellerContactNoEfective(models.Model):
     birthdate = models.DateField(null=True)
     institute = models.CharField(max_length=100, null=True, blank=True)
     ciiu = models.ForeignKey(Ciiu, null=True)
-    activity_description = models.CharField(max_length=255, null=True,
+    activity_description = models.CharField(max_length=250, null=True,
                                             blank=True)
     photo = models.CharField(max_length=250, null=True)
-    about = models.CharField(max_length=255, null=True, blank=True)
+    about = models.CharField(max_length=250, null=True, blank=True)
     cellphone = models.CharField(max_length=14, blank=True, null=True)
     telephone = models.CharField(max_length=14, blank=True, null=True)
 
@@ -238,16 +240,25 @@ class SellerContactNoEfective(models.Model):
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
     economic_sector = models.ForeignKey(EconomicSector,
                                         on_delete=models.PROTECT, null=True)
-    objection = models.ForeignKey(Objection, on_delete=models.PROTECT)
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
     level_instruction = models.ForeignKey(LevelInstruction,
                                           on_delete=models.PROTECT, null=True)
-    nationality = models.ForeignKey(Countries,
-                                    on_delete=models.PROTECT, default=1)
+    nationality = models.ForeignKey(Countries, on_delete=models.PROTECT,
+                                    default=1)
+    residence_country = models.ForeignKey(Countries, null=True,
+                                          on_delete=models.PROTECT,
+                                          related_name="residence_contact",
+                                          verbose_name=_('residence country contact'))
 
     def __str__(self):
         """Nombre del Contacto."""
         return self.first_name
+
+
+class ObjectionsList(models.Model):
+    """Lista de objeciones."""
+    objection = models.ForeignKey(Objection, on_delete=models.PROTECT)
+    contact = models.ForeignKey(SellerContact, on_delete=models.PROTECT)
 
 
 class Client(User):

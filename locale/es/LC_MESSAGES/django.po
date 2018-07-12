@@ -18,6 +18,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+
+
+#objections
+msgid "has a lawyer who advises"
+msgstr "tiene abogado que lo asesora"
+
+msgid "has a accountant who advises"
+msgstr "tiene contador que lo asesora"
+
+msgid "does not have money"
+msgstr "no tiene dinero"
+
+msgid "other reason"
+msgstr "otro motivo"
+
 #: .\api\api_choices_models.py:14
 msgid "DNI"
 msgstr "DNI"
@@ -25,6 +40,8 @@ msgstr "DNI"
 #: .\api\api_choices_models.py:15
 msgid "Passport"
 msgstr "Pasaporte"
+
+
 
 #: .\api\api_choices_models.py:16
 msgid "Foreign Card"
