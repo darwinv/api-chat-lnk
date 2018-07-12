@@ -1000,15 +1000,72 @@ class ListObjectionsSerializer(serializers.ModelSerializer):
         return _(str(obj.objection))
 
 
-# class SellerContactSerializer(serializers.ModelSerializer):
-#     """Base para representacion de contacto."""
-#
-#     class Meta:
-#         """Modelo."""
-#         model = SellerContact
+class BaseSellerContactSerializer(serializers.ModelSerializer):
+    """Base para contacto."""
+
+    def to_representation(self, obj):
+        """Redefinido metodo de representación del serializer."""
+        data = {
+            "id": obj.id, "type_contact": obj.type_contact,
+            "first_name": obj.first_name, "last_name": obj.last_name,
+            "document_type": obj.document_type,
+            "document_number": obj.document_number
+            }
+        # serializamos la lista de objeciones si es no efectivo
+        if obj.type_contact == 1:
+            objections = ListObjectionsSerializer(
+                obj.objectionslist_set.all(), many=True).data
+
+            data["objections"] = objections
+
+        return data
+
+    def validate(self, data):
+        """Validate."""
+        if data["type_contact"] == 1:
+            if 'objection' not in data:
+                raise serializers.ValidationError(
+                    _("the objection is required"))
+        return data
+
+    def create(self, validated_data):
+        """Redefinido metodo de crear contacto."""
+        data_address = validated_data.pop('address')
+        if 'objection' in validated_data:
+            objection_list = validated_data.pop('objection')
+
+        if 'password' in validated_data:
+            password = validated_data.pop('password')
+
+        address = Address.objects.create(**data_address)
+        validated_data['address'] = address
+
+        instance = self.Meta.model(**validated_data)
+        # import pdb; pdb.set_trace()
+        # creo el listado de objeciones si es no efectivo
+        instance.save()
+        if validated_data["type_contact"] == 1:
+            for objection in objection_list:
+                # objection_obj = Objection.objects.get(pk=objection)
+                ObjectionsList.objects.create(contact=instance,
+                                              objection=objection)
+        else:
+            # registro de cliente si es efectivo
+            data_client = self.get_initial()
+            data_client["email_exact"] = data_client["email"]
+            data_client["username"] = data_client["email"]
+            data_client["role"] = Params.ROLE_CLIENT
+            data_client['password'] = password
+            # import pdb; pdb.set_trace()
+            serializer_client = ClientSerializer(data=data_client)
+            if serializer_client.is_valid():
+                serializer_client.save()
+            else:
+                raise serializers.ValidationError(serializer_client.errors)
+        return instance
 
 
-class SellerContactNaturalSerializer(serializers.ModelSerializer):
+class SellerContactNaturalSerializer(BaseSellerContactSerializer):
     """Serializer de Contacto No Efectivo (tipo natural)."""
 
     first_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
@@ -1034,10 +1091,15 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
     objection_name = serializers.SerializerMethodField()
     objection = serializers.ListField(child=serializers.PrimaryKeyRelatedField(
         queryset=Objection.objects.all()), write_only=True, required=False)
-    level_instruction = serializers.PrimaryKeyRelatedField(queryset=LevelInstruction.objects.all(), required=True)
+    level_instruction = serializers.PrimaryKeyRelatedField(
+        queryset=LevelInstruction.objects.all(), required=True)
     level_instruction_name = serializers.SerializerMethodField()
-    nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
+    nationality = serializers.PrimaryKeyRelatedField(
+        queryset=Countries.objects.all(), required=True)
     nationality_name = serializers.SerializerMethodField()
+    residence_country = serializers.PrimaryKeyRelatedField(
+        queryset=Countries.objects.all(), required=True)
+    password = serializers.CharField(required=False)
 
     class Meta:
         """Meta de Contacto."""
@@ -1051,7 +1113,8 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
                   'photo', 'about', 'cellphone', 'telephone', 'ocupation',
                   'profession', 'address', 'level_instruction', 'latitude',
                   'longitude', 'seller', 'objection_name', 'nationality',
-                  'nationality_name', 'level_instruction_name', 'photo'
+                  'nationality_name', 'level_instruction_name', 'photo',
+                  'residence_country', 'password',
                   )
         # extra_kwargs = {
         #         'objection': {'write_only': True},
@@ -1090,80 +1153,32 @@ class SellerContactNaturalSerializer(serializers.ModelSerializer):
         """Devuelve Ocupación."""
         return _(obj.get_ocupation_display())
 
-    def validate(self, data):
-        """Validate."""
-        if data["type_contact"] == 1:
-            if 'objection' not in data:
-                raise serializers.ValidationError(
-                    _("the objection is required"))
-        return data
-
-    def to_representation(self, obj):
-        """Redefinido metodo de representación del serializer."""
-        data = {
-            "id": obj.id, "type_contact": obj.type_contact,
-            "first_name": obj.first_name, "last_name": obj.last_name,
-            "document_type": obj.document_type,
-            "document_number": obj.document_number
-            }
-        # serializamos la lista de objeciones si es no efectivo
-        if obj.type_contact == 1:
-            objections = ListObjectionsSerializer(
-                obj.objectionslist_set.all(), many=True).data
-
-            data["objections"] = objections
-
-        return data
-
-    def create(self, validated_data):
-        """Redefinido metodo de crear contacto."""
-        data_address = validated_data.pop('address')
-        if 'objection' in validated_data:
-            objection_list = validated_data.pop('objection')
-
-        address = Address.objects.create(**data_address)
-        validated_data['address'] = address
-
-        instance = self.Meta.model(**validated_data)
-        # import pdb; pdb.set_trace()
-        # creo el listado de objeciones si es no efectivo
-        instance.save()
-        if validated_data["type_contact"] == 1:
-            for objection in objection_list:
-                # objection_obj = Objection.objects.get(pk=objection)
-                ObjectionsList.objects.create(contact=instance,
-                                              objection=objection)
-        else:
-            # registro de cliente si es efectivo
-            data_client = self.get_initial()
-            data_client["email_exact"] = data_client["email"]
-            data_client["username"] = data_client["email"]
-            data_client["role"] = Params.ROLE_CLIENT
-            # import pdb; pdb.set_trace()
-            serializer_client = ClientSerializer(data=data_client)
-            if serializer_client.is_valid():
-                serializer_client.save()
-            else:
-                raise serializers.ValidationError(serializer_client.errors)
-        return instance
 
 
-class SellerContactBusinessSerializer(serializers.ModelSerializer):
+class SellerContactBusinessSerializer(BaseSellerContactSerializer):
     """Serializer de Contacto No Efectivo (tipo juridico)."""
 
-    business_name = serializers.CharField(required=True, allow_blank=False, allow_null=False)
-    commercial_reason = serializers.CharField(required=True, allow_blank=False, allow_null=False)
+    business_name = serializers.CharField(required=True,
+                                          allow_blank=False,
+                                          allow_null=False)
+    commercial_reason = serializers.CharField(required=True,
+                                              allow_blank=False,
+                                              allow_null=False)
     email = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContact.objects.all())])
     address = AddressSerializer()
     ruc = serializers.CharField(required=True, validators=[UniqueValidator(queryset=SellerContact.objects.filter(type_client='b'))])
     latitude = serializers.CharField(required=True, allow_blank=False)
     longitude = serializers.CharField(required=True, allow_blank=False)
-    type_contact = serializers.ChoiceField(choices=c.client_type_client)
+    type_contact = serializers.ChoiceField(choices=c.type_seller_contact)
     type_contact_name = serializers.SerializerMethodField()
+    type_client = serializers.ChoiceField(choices=c.client_type_client)
     document_type = serializers.ChoiceField(choices=c.user_document_type)
     document_type_name = serializers.SerializerMethodField()
     ciiu = serializers.PrimaryKeyRelatedField(queryset=Ciiu.objects.all(), required=True)
     photo = serializers.CharField(read_only=True)
+    objection_name = serializers.SerializerMethodField()
+    objection = serializers.ListField(child=serializers.PrimaryKeyRelatedField(
+        queryset=Objection.objects.all()), write_only=True, required=False)
     agent_firstname = serializers.CharField(max_length=45, allow_blank=False, allow_null=False)
     agent_lastname = serializers.CharField(max_length=45, allow_blank=False, allow_null=False)
     position = serializers.CharField(max_length=45, allow_null=True)
@@ -1171,17 +1186,22 @@ class SellerContactBusinessSerializer(serializers.ModelSerializer):
     nationality = serializers.PrimaryKeyRelatedField(queryset=Countries.objects.all(), required=True)
     nationality_name = serializers.SerializerMethodField()
     economic_sector = serializers.PrimaryKeyRelatedField(queryset=EconomicSector.objects.all(), required=True)
+    residence_country = serializers.PrimaryKeyRelatedField(
+        queryset=Countries.objects.all(), required=True)
+    password = serializers.CharField(required=False)
 
     class Meta:
-        """Meta de Contacto No Efectivo."""
+        """Meta de Contacto."""
 
         model = SellerContact
-        fields = ('id', 'business_name', 'commercial_reason', 'type_contact', 'type_contact_name',
-                  'document_type', 'document_type_name', 'document_number', 'email',
-                  'ruc', 'economic_sector', 'activity_description', 'about', 'ciiu',
+        fields = ('id', 'business_name', 'commercial_reason', 'type_contact',
+                  'document_type', 'document_type_name', 'document_number',
+                  'ruc', 'economic_sector', 'activity_description', 'about',
                   'cellphone', 'telephone', 'address', 'latitude', 'position',
-                  'longitude', 'seller', 'objection', 'objection_name', 'nationality',
-                  'nationality_name', 'photo', 'agent_firstname', 'agent_lastname'
+                  'type_client', 'longitude', 'seller', 'objection', 'email',
+                  'objection_name', 'nationality', 'type_contact_name',
+                  'nationality_name', 'photo', 'agent_firstname', 'objection',
+                  'agent_lastname', 'residence_country', 'password', 'ciiu',
                   )
 
     def get_nationality_name(self, obj):
@@ -1201,15 +1221,6 @@ class SellerContactBusinessSerializer(serializers.ModelSerializer):
         """Devuelve tipo de documento de identidad."""
         return _(obj.get_document_type_display())
 
-
-    def create(self, validated_data):
-        """Redefinido metodo de crear contacto."""
-        data_address = validated_data.pop('address')
-        address = Address.objects.create(**data_address)
-        validated_data['address'] = address
-        instance = self.Meta.model(**validated_data)
-        instance.save()
-        return instance
 
 class MediaSerializer(serializers.Serializer):
     photo = serializers.ImageField(max_length=None, required=False, allow_empty_file=False)

@@ -243,8 +243,12 @@ class SellerContact(models.Model):
     address = models.ForeignKey(Address, on_delete=models.PROTECT, null=True)
     level_instruction = models.ForeignKey(LevelInstruction,
                                           on_delete=models.PROTECT, null=True)
-    nationality = models.ForeignKey(Countries,
-                                    on_delete=models.PROTECT, default=1)
+    nationality = models.ForeignKey(Countries, on_delete=models.PROTECT,
+                                    default=1)
+    residence_country = models.ForeignKey(Countries, null=True,
+                                          on_delete=models.PROTECT,
+                                          related_name="residence_contact",
+                                          verbose_name=_('residence country contact'))
 
     def __str__(self):
         """Nombre del Contacto."""

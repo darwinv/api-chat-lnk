@@ -952,7 +952,7 @@ class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (IsSeller,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller,)
     # aca se debe colocar el serializer para listar todos
     serializer_class = SellerContactNaturalSerializer
     queryset = SellerContact.objects.all()
