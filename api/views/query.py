@@ -7,7 +7,8 @@ import boto3
 import uuid
 # paquetes de django
 from django.db.models import OuterRef, Subquery, F, Count
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.http import Http404, HttpResponse
+from rest_framework import serializers
 # paquetes de terceros
 from rest_framework import status, permissions
 from rest_framework.views import APIView
@@ -667,7 +668,7 @@ class ReadPendingAnswerView(APIView):
             obj = Category.objects.get(pk=categ)
             return obj
         except Category.DoesNotExist:
-            raise HttpResponseBadRequest
+            raise serializers.ValidationError({"category": [str(categ)+' no existe']})
 
     def post(self, request):
         """Enviar data."""
