@@ -6,15 +6,18 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquiredDetailSerializer
-from api.models import QueryPlansAcquired, QueryPlansClient
+from api.serializers.plan import QueryPlansTransfer
+from api.models import QueryPlansAcquired, QueryPlansClient, Client
 from api.permissions import IsAdminOrClient
 from api.utils.validations import Operations
 from api.utils.querysets import get_query_set_plan
 from api import pyrebase
 from django.db.models import F
 from django.http import Http404
+from django.utils.translation import ugettext_lazy as _
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from datetime import datetime
+from rest_framework import serializers
 
 
 class QueryPlansAcquiredDetailView(APIView):
@@ -115,6 +118,75 @@ class ClientPlansDetailView(ListCreateAPIView):
             return Response(serializer.data)
         else:
             raise Http404
+
+class ClientTransferPlansView(APIView):
+    """Vista para obetener todos los planes de un cliente."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
+    required = _("required")
+
+    def post(self, request):
+        """Obtener la lista con todos los planes del cliente."""
+        client = Operations.get_id(self, request)
+        data = request.data
+
+        if not 'acquired_plan' in data:
+            raise serializers.ValidationError({'acquired_plan': [self.required]})
+
+        try:
+            acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
+             queryplansclient__client=client)
+        except Client.DoesNotExist:
+            raise Http404    
+
+        email_receiver = receiver = None
+        if 'email' in data:
+            email_receiver = data['email']
+
+        try:
+            receiver = Client.objects.get(email_exact=email_receiver)
+            status_transfer = 1
+        except Client.DoesNotExist:
+            status_transfer = 3
+        
+
+        if not email_receiver and not receiver:
+            raise serializers.ValidationError({'email': [self.required]})
+
+        data_transfer = {
+            'type_operation': 3,  # transferencia
+            'status': status_transfer,
+            'acquired_plan': acquired_plan.id,
+            'new_acquired_plan': None,
+            'sender': client,
+            'receiver': receiver,
+            'email_receiver': email_receiver
+        }
+        data_context = {}
+        data_context['client_receiver'] = {
+            'owner': True,
+            'transfer': True,
+            'share': True,
+            'empower': True,
+            'status': status_transfer,
+            'acquired_plan': acquired_plan,
+            'client': receiver
+        }
+        data_context['client_sender'] = {
+            'status': 2,
+            'acquired_plan': acquired_plan.id,
+            'client': client
+        }
+
+        serializer = QueryPlansTransfer(data=data_transfer, context=data_context)
+        
+        if serializer.is_valid():
+            if 'test' not in sys.argv:
+                pyrebase.delete_actual_plan_client(client)
+            serializer.save()
+
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ClientAllPlansView(ListCreateAPIView):

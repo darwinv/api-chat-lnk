@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import QueryPlansAcquired
+from api.models import QueryPlansAcquired, QueryPlansClient, QueryPlansManage
 from api.utils.tools import get_date_by_time
 from datetime import datetime
 
@@ -100,3 +100,32 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
             return obj['queryplansclient__owner']
         else:
             return False
+
+class QueryPlansTransfer(serializers.ModelSerializer):
+    """Plan Adquirido Detail."""
+
+    class Meta:
+        """declaracion del modelo y sus campos."""
+
+        model = QueryPlansManage
+        fields = ('type_operation','status','acquired_plan','new_acquired_plan',
+            'sender','receiver','email_receiver')
+
+    def create(self, validated_data):
+        """Transferir plan de consultas"""
+        # manage = validated_data.pop('manage')
+        receiver = self.context['client_receiver']
+        sender = self.context['client_sender']
+        
+        instance = QueryPlansManage.objects.create(**validated_data)
+        
+        if 'client' in receiver and receiver['client']:
+            QueryPlansClient.objects.create(**receiver)
+
+        older_owner = QueryPlansClient.objects.get(client=sender['client'],
+            acquired_plan=sender['acquired_plan'])
+        older_owner.status = sender['status']
+        older_owner.save()
+
+        return instance
+
