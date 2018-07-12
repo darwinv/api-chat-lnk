@@ -9,6 +9,7 @@ import uuid
 from django.db.models import OuterRef, Subquery, F, Count
 from django.http import Http404, HttpResponse
 # paquetes de terceros
+from api.models import Declinator
 from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, ListAPIView
@@ -588,7 +589,7 @@ class QueryDeriveView(APIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
-class QueryDeclineView(APIView):
+class QueryDeclineView(ListAPIView):
     """Vista Derivar Query"""
 
     authentication_classes = (OAuth2Authentication,)
@@ -627,6 +628,15 @@ class QueryDeclineView(APIView):
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+
+    def get(self, request, pk):
+        """Obtener la lista con todos los planes del cliente."""
+        declinators = Declinator.objects.filter(query=pk).values('message',
+            'specialist__first_name','specialist__last_name')
+        
+        serializer = QueryDeclineSerializer(declinators, many=True)
+
+        return Response(serializer.data)
 
 class SetQualificationView(APIView):
     """Vista colocar calificacion ."""

@@ -3380,5 +3380,14 @@
     "client": 11,
     "seller": 3
   }
+},
+{
+  "model": "api.declinator",
+  "pk": 1,
+  "fields": {
+    "message": "no tengo tiempo",
+    "query": 3,
+    "specialist": 31
+  }
 }
 ]

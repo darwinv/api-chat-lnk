@@ -34,7 +34,6 @@ def update_categories_detail():
         res = db.child("categories/categoryDetail").child(
             node_client).update({"description": categorie.description})
 
-
 def update_categories():
     """Cargar listado de categorias para todos los usuarios."""
     # SOLO USO PARA AMBIENTE EN DESARROLLO
@@ -416,3 +415,11 @@ def PendingQueriesList(client_id, specialist_id):
     query_pending = PendingQueriesSerializer(data_queries, many=True)
     queries_list = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
     return queries_list
+
+
+def delete_actual_plan_client(client_id):
+    """Elimina nodo de plan de clientes"""
+    node_client = Params.PREFIX['client'] + str(client_id)
+    res = db.child("chosenPlans").child(node_client).remove()
+    return res
+
