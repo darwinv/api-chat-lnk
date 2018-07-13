@@ -159,7 +159,6 @@ class ChoicesAPI:
     queryplansclient_status = (
         (1, _('Active')),
         (2, _('Deactive')),
-        (3, _('Processing')),
     )
 
     # Query Plan Manage
@@ -171,13 +170,12 @@ class ChoicesAPI:
     queryplansmanage_status = (
         (1, _('Active')),
         (2, _('Deactive')),
-<<<<<<< HEAD
         (3, _('Processing')),
-=======
+    )
+    
     # tipo de Contacto
     type_seller_contact = (
         (1, _('Non-effective')),
         (2, _('Effective to pay')),
         (3, _('Effective')),
->>>>>>> 0e93f00d09694e62781ab8e948a2707fce64d81d
     )
