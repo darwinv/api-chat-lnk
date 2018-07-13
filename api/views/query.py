@@ -617,6 +617,7 @@ class QueryDeclineView(ListAPIView):
         context["status"] = 1
         context["specialist"] = main_specialist
         context["specialist_declined"] = specialist
+        
         serializer = QueryDeclineSerializer(query, data=request.data,
                                             context=context)
 

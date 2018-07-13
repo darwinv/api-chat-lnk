@@ -708,13 +708,12 @@ class QueryDeclineSerializer(QueryDeriveSerializer):
         return Declinator.objects.create(**data_declinator)
 
     def get_name(self, obj):
-        if 'specialist__first_name' in obj:
+        if type(obj) is dict and 'specialist__first_name' in obj:
             return obj['specialist__first_name']
-        else:
-            return ""
+        return ""
 
-    def get_last_name(self, obj):
-        if 'specialist__last_name' in obj:
+
+    def get_last_name(self, obj):        
+        if type(obj) is dict and 'specialist__last_name' in obj:
             return obj['specialist__last_name']
-        else:
-            return ""
+        return ""
