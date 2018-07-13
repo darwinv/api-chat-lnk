@@ -172,7 +172,6 @@ class ChoicesAPI:
         (2, _('Deactive')),
         (3, _('Processing')),
     )
-    
     # tipo de Contacto
     type_seller_contact = (
         (1, _('Non-effective')),
