@@ -24,6 +24,10 @@ urlpatterns = [
     
     url(r'^clients/plans/(?P<pk>[0-9]+)/$', plan.ClientPlansDetailView.as_view(),
         name='client-plans-detail'),
+    
+    # Transferir plan de consultas
+    url(r'^clients/plans-transfer/$', plan.ClientTransferPlansView.as_view(),
+        name='client-plans-transfer'),
 
 
     url(r'^specialists-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$',

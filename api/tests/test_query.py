@@ -602,6 +602,41 @@ class PutDeclineQuery(APITestCase):
                                    content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+class GetDeclineListQuery(APITestCase):
+    """Prueba para especialista deribar query"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_getspecialistmessages']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_query_decline(self):
+        """Obtener resultado 200."""
+        # obtiene mensajes de declinacion
+
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        
+        response = self.client.get(reverse('query-decline', kwargs={'pk': 3}),
+                                   content_type='application/json')
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+
+    def test_no_get_query_decline(self):
+        """Obtener resultado."""
+        # obtiene mensajes de query
+
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        
+        response = self.client.get(reverse('query-decline', kwargs={'pk': 333}),
+                                   content_type='application/json')
+        self.assertEqual(not response.data, True)
+
+
+
 
 class SetCalification(APITestCase):
     """Prueba para calificar consulta."""

@@ -266,3 +266,30 @@ class GetChosemPlanClient(APITestCase):
 
         self.assertNotEqual(response.data, self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class CreateTransferPlan(APITestCase):
+    """Prueba para transferir un plan"""
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+
+    def test_post_data_email_not_client(self):
+        """Obtener resultado 200."""
+        data = {
+            "email": "test.user23@mail.com",
+            "acquired_plan": 22
+        }
+        response = self.client.post(reverse('client-plans-transfer'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_post_data_email_client(self):
+        """Obtener resultado 200."""
+        data = {
+            "email": "jefeti@pympack.com.pe",
+            "acquired_plan": 22
+        }
+        response = self.client.post(reverse('client-plans-transfer'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

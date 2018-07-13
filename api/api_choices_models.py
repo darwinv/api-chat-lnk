@@ -170,6 +170,7 @@ class ChoicesAPI:
     queryplansmanage_status = (
         (1, _('Active')),
         (2, _('Deactive')),
+        (3, _('Processing')),
     )
     # tipo de Contacto
     type_seller_contact = (

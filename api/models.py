@@ -489,7 +489,7 @@ class QueryPlansManage(models.Model):
     acquired_plan = models.ForeignKey(QueryPlansAcquired,
                                       on_delete=models.PROTECT, related_name="plan_acquired_plan")
     new_acquired_plan = models.ForeignKey(QueryPlansAcquired,
-                                      on_delete=models.PROTECT)
+                                      on_delete=models.PROTECT, null=True)
     type_operation = models.PositiveIntegerField(choices=Ch.queryplansmanage_type_operation)
     status = models.PositiveIntegerField(choices=Ch.queryplansmanage_status)
 

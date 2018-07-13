@@ -687,10 +687,13 @@ class QueryQualifySerializer(serializers.ModelSerializer):
 class QueryDeclineSerializer(QueryDeriveSerializer):
     """Cambiar clave de usuario."""
 
+    name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+
     class Meta:
         """Meta."""
         model = Declinator
-        fields = ('message',)
+        fields = ('message', 'name', 'last_name')
 
     def update(self, instance, validated_data):
         validated_data['status'] = self.context['status']
@@ -703,3 +706,15 @@ class QueryDeclineSerializer(QueryDeriveSerializer):
         specialist = self.context['specialist_declined']
         data_declinator["specialist"] = Specialist.objects.get(pk=specialist)
         return Declinator.objects.create(**data_declinator)
+
+    def get_name(self, obj):
+        if 'specialist__first_name' in obj:
+            return obj['specialist__first_name']
+        else:
+            return ""
+
+    def get_last_name(self, obj):
+        if 'specialist__last_name' in obj:
+            return obj['specialist__last_name']
+        else:
+            return ""
