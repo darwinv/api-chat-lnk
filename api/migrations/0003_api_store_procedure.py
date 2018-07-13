@@ -70,5 +70,5 @@ BEGIN DECLARE v_id_specialist INT;
            "None" AS specialist,
            "None" AS total; END IF;
   END
- """    )
+ """   )
     ]
