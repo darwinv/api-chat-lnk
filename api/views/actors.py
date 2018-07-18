@@ -1182,16 +1182,20 @@ class RucDetailView(APIView):
           "token": settings_secret.TOKEN_RUC,
           "ruc": pk
         }
-        response = requests.post(url, json=payload)
         
         try:
-            url2 = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
-            response2 = requests.get(url2)
+            response = requests.post(url, json=payload, timeout=2.5)
+        except Exception as e:
+            response = None
+
+        try:
+            url_sunat = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
+            response2 = requests.get(url_sunat, timeout=2.5)
         except Exception as e:
             response2 = response
 
         # Se evaluan las 2 respuestas
-        if response.status_code == 200 and response2.status_code == 200:
+        if response and response.status_code == 200 and response2.status_code == 200:
             data = {'ruc': str(pk)}
             # Convinamos los diccionarios
             data = dict(data, **response.json())
