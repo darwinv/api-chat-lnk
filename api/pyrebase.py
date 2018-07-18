@@ -92,7 +92,6 @@ def check_type_data(type_data, node):
                 if type(n.get(l)) is not str:
                     logger.error("{} - {} no es String".format(node, l))
             for k in data_chat_int:
-                # import pdb; pdb.set_trace()
                 if n['query'].get(k):
                     if type(n['query'].get(k)) is not int:
                             logger.error("{} - query/{} no es int".format(node, k))
@@ -115,6 +114,18 @@ def chat_firebase_db(data, room):
     if DEBUG_FIREBASE:
         check_type_data('chats', room)
     return res
+
+
+def node_query(data, id):
+    """Actualizar o crear nodos de consulta."""
+    node = "queries/{}".format(Params.PREFIX['query'] + str(id))
+    if exist_node(node):
+        res = db.child(node).update(data)
+    else:
+        print("creo")
+        res = db.child(node).set(data)
+    # print(res)
+    # pass
 
 
 def exist_node(node):
@@ -164,9 +175,9 @@ def updateStatusQueryAccept(specialist_id, client_id, query_id):
     # Actualizar estatus de query actual
     update_status_query_current_list(specialist_id, client_id, data, query_id)
 
-    # Actualizar estatus de los mensajes del chat
-    data_msgs = Message.objects.filter(query=query_id)
-    update_status_querymessages(data_msgs, data)
+    # Actualizar estatus de los consulta en el nodo de query
+    # data_msgs = Message.objects.filter(query=query_id)
+    update_status_query(query_id, data)
 
 
 def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
@@ -194,10 +205,8 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     generateDataMessageClients(client_id, category_id, query_id,
                                status, specialist_id)
 
-    # Actualizar estatus de los mensajes del chat
-    # y especialista encargado
-    data_msgs = Message.objects.filter(query=query_id)
-    update_status_querymessages(data_msgs, data)
+    # Actualizar estatus de las consultas
+    update_status_query(query_id, data)
 
 
 def removeQueryAcceptList(specialist_id, client_id, query_id):
@@ -256,20 +265,10 @@ def createCategoriesLisClients(client_id):
     return res
 
 
-def update_status_querymessages(data_msgs, data):
+def update_status_query(query_id, data):
     """Actualizar query de los mensajes."""
-
-    for msgs in data_msgs:
-        node_msg = Params.PREFIX['message']+str(msgs.id)
-        node = 'chats/{}/{}/query/'.format(msgs.room, node_msg)
-
-        if exist_node(node):
-            db.child(node).update(data)
-        else:
-            logger.warning(
-                'update_status_querymsgs nodo no existe - chats/{}/{}/query'
-                .format(msgs.room, node_msg))
-
+    # print(data)
+    node_query(data=data, id=query_id)
     # check_type_data('chats', 'chats/{}'.format(data_msgs[0].room))
 
 
