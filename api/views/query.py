@@ -3,8 +3,8 @@
 import json
 import threading
 import os
+import sys
 import boto3
-import uuid
 # paquetes de django
 from django.db.models import OuterRef, Subquery, F, Count
 from django.http import Http404, HttpResponse
@@ -39,7 +39,7 @@ from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.utils.parameters import Params
-import sys
+from fcm.fcm import Notification
 
 
 class QueryListClientView(ListCreateAPIView):
@@ -133,6 +133,19 @@ class QueryListClientView(ListCreateAPIView):
             query_pending = PendingQueriesSerializer(data_queries, many=True)
             lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
             if 'test' not in sys.argv:
+                import pdb; pdb.set_trace()
+                data_notif_push = {
+                    "title": serializer_tmp.data[0]['displayName'],
+                    "body": lista[-1]["message"],
+                    "sub_text": "",
+                    "ticker": lista[-1]["query"]["title"],
+                    "badge": "17",
+                    "icon": "https://images.pexels.com/photos/906024/pexels-photo-906024.jpeg",
+                    "client_id": user_id,
+                    "category_id": category,
+                    "query_id": serializer.data["query_id"]
+
+                }
                 pyrebase.createListMessageClients(serializer_tmp.data,
                                                   serializer.data["query_id"],
                                                   serializer.data["status"],
@@ -140,6 +153,10 @@ class QueryListClientView(ListCreateAPIView):
                                                   serializer_tmp.data[0]['specialist'],
                                                   queries_list=lista_d
                                                   )
+                Notification.fcm_send_data(
+                    user_id=serializer_tmp.data[0]['specialist'],
+                    data=data_notif_push)
+
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
