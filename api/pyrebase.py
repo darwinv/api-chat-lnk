@@ -422,4 +422,3 @@ def delete_actual_plan_client(client_id):
     node_client = Params.PREFIX['client'] + str(client_id)
     res = db.child("chosenPlans").child(node_client).remove()
     return res
-
