@@ -805,6 +805,8 @@ class SellerSerializer(serializers.ModelSerializer):
             'email_exact', instance.email_exact)
         instance.cellphone = validated_data.get(
             'cellphone', instance.cellphone)
+        instance.telephone = validated_data.get(
+            'telephone', instance.telephone)
         instance.last_name = validated_data.get(
             'last_name', instance.last_name)
 

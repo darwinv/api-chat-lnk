@@ -421,7 +421,18 @@ class UpdateProfileSeller(APITestCase):
         response = client.put(reverse('seller-detail',
                               args=(8,)), data=json.dumps(self.valid_payload),
                               content_type='application/json')
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_update_telephone(self):
+        "actualizar solo telefono."
+        data = {}
+        data["telephone"] = '12356789'
+        response = client.put(reverse('seller-detail',
+                              args=(8,)), data=json.dumps(data),
+                              content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["telephone"], data["telephone"])
 
 
 class UpdatePasswordSeller(APITestCase):
