@@ -232,13 +232,17 @@ class QueryDetailSpecialistView(APIView):
             if 'test' not in sys.argv:
                 pyrebase.update_status_group_messages(msgs, group.status)
 
+                pending_badge = Message.objects.filter(
+                    query__status=3, viewed=0,
+                    msg_type='a', query__client=client_id).count()
+
                 data_fcm = {
-                    "title": "Finanzas",
+                    "title": cat.name,
                     "body": lista[-1]["message"],
-                    "sub_text": "Finanzas",
+                    "sub_text": cat.name,
                     "ticker": query.title,
                     "icon": cat.image,
-                    "badge": "17",
+                    "badge": pending_badge,  # mensajes por ver
                     "client_id": query.client.id,
                     "category_id": category_id,
                     "query_id": query.id
