@@ -130,9 +130,12 @@ class QueryListClientView(ListCreateAPIView):
                                                 status=1)\
                                         .annotate(count=Count('id'))\
                                         .order_by('-message__created_at')
-
+            print(data_queries)
             query_pending = PendingQueriesSerializer(data_queries, many=True)
             lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
+            # determino el total de consultas pendientes (status 1 o 2)
+            badge_count = Query.objects.filter(specialist=specialist_id,
+                                               status__lte=2).count()
             if 'test' not in sys.argv:
                 # crea data de notificacion push
                 data_notif_push = {
@@ -140,7 +143,7 @@ class QueryListClientView(ListCreateAPIView):
                     "body": lista[-1]["message"],
                     "sub_text": "",
                     "ticker": serializer.data["obj_query"]["title"],
-                    "badge": "17",
+                    "badge": badge_count,
                     "icon": "https://images.pexels.com/photos/906024/pexels-photo-906024.jpeg",
                     "client_id": user_id,
                     "category_id": category,
