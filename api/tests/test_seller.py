@@ -415,6 +415,7 @@ class UpdateProfileSeller(APITestCase):
             'document_number': '144013012',
             'telephone': '921471559',
             'cellphone': '921471559',
+            "ciiu": 10,
         }
 
     def test_update_seller(self):

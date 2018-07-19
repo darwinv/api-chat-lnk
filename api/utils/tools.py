@@ -155,6 +155,20 @@ def clear_data_no_valid(data,valid_fields):
             data.pop(field, None)
 
 
+def get_body(file_type, message):
+    """obtengo el valor del body dependiendo el tipo de mensaje."""
+    if file_type == 1:
+        return message
+    if file_type == 2:
+        return "\uD83D\uDCF7 Foto"
+    elif file_type == 3:
+        return "\uD83C\uDFA5 Vídeo"
+    elif file_type == 4:
+        return "\uD83C\uDFA4 Mensaje de voz"
+    else:
+        return "\uD83D\uDCC4 Documento"
+
+
 def send_api(url_name, token='', arg=None, files=None):
     r = requests.post(URL_HOST + url_name, json=arg)
     return r
