@@ -116,6 +116,7 @@ class QueryListClientView(ListCreateAPIView):
             mess = Message.objects.filter(query=OuterRef("pk"))\
                                   .order_by('-created_at')[:1]
             # Luego se busca el titulo y su id de la consulta
+            specialist_id = serializer_tmp.data[0]['specialist']
 
             data_queries = Query.objects.values('id', 'title', 'status', 'specialist')\
                                         .annotate(
@@ -125,7 +126,7 @@ class QueryListClientView(ListCreateAPIView):
                                             date_at=Subquery(
                                                 mess.values('created_at')))\
                                         .filter(client=user_id,
-                                                specialist=serializer_tmp.data[0]['specialist'],
+                                                specialist=specialist_id,
                                                 status=1)\
                                         .annotate(count=Count('id'))\
                                         .order_by('-message__created_at')
@@ -133,12 +134,12 @@ class QueryListClientView(ListCreateAPIView):
             query_pending = PendingQueriesSerializer(data_queries, many=True)
             lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
             if 'test' not in sys.argv:
-                import pdb; pdb.set_trace()
+                # crea data de notificacion push
                 data_notif_push = {
                     "title": serializer_tmp.data[0]['displayName'],
                     "body": lista[-1]["message"],
                     "sub_text": "",
-                    "ticker": lista[-1]["query"]["title"],
+                    "ticker": serializer.data["obj_query"]["title"],
                     "badge": "17",
                     "icon": "https://images.pexels.com/photos/906024/pexels-photo-906024.jpeg",
                     "client_id": user_id,
@@ -146,17 +147,17 @@ class QueryListClientView(ListCreateAPIView):
                     "query_id": serializer.data["query_id"]
 
                 }
+                # crea nodo de listado de mensajes
                 pyrebase.createListMessageClients(serializer_tmp.data,
                                                   serializer.data["query_id"],
                                                   serializer.data["status"],
                                                   user_id,
-                                                  serializer_tmp.data[0]['specialist'],
+                                                  specialist_id,
                                                   queries_list=lista_d
                                                   )
-                Notification.fcm_send_data(
-                    user_id=serializer_tmp.data[0]['specialist'],
-                    data=data_notif_push)
-
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=specialist_id,
+                                           data=data_notif_push)
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
@@ -204,6 +205,7 @@ class QueryDetailSpecialistView(APIView):
             lista = list(serializer.data['message'].values())
             client_id = serializer.data["client_id"]
             category_id = serializer.data["category"]
+            cat = Category.objects.get(pk=category_id)
 
             if 'test' not in sys.argv:
                 # Actualizamos el nodo de mensajes segun su sala
@@ -226,6 +228,19 @@ class QueryDetailSpecialistView(APIView):
 
             if 'test' not in sys.argv:
                 pyrebase.update_status_group_messages(msgs, group.status)
+
+                data_fcm = {
+                    "title": "Finanzas",
+                    "body": lista[-1]["message"],
+                    "sub_text": "Finanzas",
+                    "ticker": query.title,
+                    "icon": cat.image,
+                    "badge": "17",
+                    "client_id": query.client.id,
+                    "category_id": category_id,
+                    "query_id": query.id
+                }
+                Notification.fcm_send_data(user_id=client_id, data=data_fcm)
 
             requeries = query.available_requeries
             data_update = {

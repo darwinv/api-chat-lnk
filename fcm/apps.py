@@ -7,6 +7,6 @@ class FcmConfig(AppConfig):
 # cargar configuracion del settings secret
     name = 'fcm'
     FCM_SETTINGS = {
-     "FCM_SERVER_KEY": CONFIG_ENVIROMENT["apiKey"],
+     "FCM_SERVER_KEY": CONFIG_ENVIROMENT["fcmServerKey"],
      "FCM_SERVER": "https://fcm.googleapis.com/fcm/send",
     }
