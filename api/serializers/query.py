@@ -212,7 +212,7 @@ class QuerySerializer(serializers.ModelSerializer):
             type_specialist="m", category_id=validated_data["category"])
         data_messages = validated_data.pop('message')
         # Buscamos el plan activo y elegido
-        
+
         acq_plan = QueryPlansAcquired.objects.get(
                             is_chosen=True, queryplansclient__client=validated_data["client"])
         validated_data["specialist"] = specialist
@@ -715,7 +715,7 @@ class QueryDeclineSerializer(QueryDeriveSerializer):
         return ""
 
 
-    def get_last_name(self, obj):        
+    def get_last_name(self, obj):
         if type(obj) is dict and 'specialist__last_name' in obj:
             return obj['specialist__last_name']
         return ""

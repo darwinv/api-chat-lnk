@@ -92,7 +92,7 @@ class QueryListClientView(ListCreateAPIView):
             category = serializer.data["category"]
             lista = list(serializer.data['message'].values())
             # Se actualiza la base de datos de firebase para el mensaje
-            if 'test' in sys.argv:
+            if 'test' not in sys.argv:
                 pyrebase.chat_firebase_db(serializer.data["message"],
                                           serializer.data["room"])
 
@@ -131,7 +131,6 @@ class QueryListClientView(ListCreateAPIView):
                                                 status=1)\
                                         .annotate(count=Count('id'))\
                                         .order_by('-message__created_at')
-            print(data_queries)
             query_pending = PendingQueriesSerializer(data_queries, many=True)
             lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
             # determino el total de consultas pendientes (status 1 o 2)
@@ -592,7 +591,8 @@ class DeclineRequeryView(APIView):
         for query in queries:
             msgs = query.message_set.all()
             # import pdb; pdb.set_trace()
-            pyrebase.update_status_query(query.id, {"status": 4})
+            pyrebase.update_status_query(query.id, {"status": 4},
+                                         msgs.last().room)
             # import pdb; pdb.set_trace()
             for ms in msgs:
                 GroupMessage.objects.filter(message__id=ms.id).update(status=2)
@@ -684,6 +684,7 @@ class QueryDeclineView(ListAPIView):
 
         return Response(serializer.data)
 
+
 class SetQualificationView(APIView):
     """Vista colocar calificacion ."""
     authentication_classes = (OAuth2Authentication,)
@@ -706,7 +707,8 @@ class SetQualificationView(APIView):
         if serializer.is_valid():
             serializer.save()
             if 'test' not in sys.argv:
-                pyrebase.update_status_query(query.id, serializer.data)
+                room = query.message_set.last().room
+                pyrebase.update_status_query(query.id, serializer.data, room)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
