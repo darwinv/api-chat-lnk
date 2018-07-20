@@ -92,12 +92,13 @@ class QueryListClientView(ListCreateAPIView):
             category = serializer.data["category"]
             lista = list(serializer.data['message'].values())
             # Se actualiza la base de datos de firebase para el mensaje
-            if 'test' not in sys.argv:
+            if 'test' in sys.argv:
                 pyrebase.chat_firebase_db(serializer.data["message"],
                                           serializer.data["room"])
 
                 pyrebase.node_query(serializer.data["obj_query"],
-                                    serializer.data["query_id"])
+                                    serializer.data["query_id"],
+                                    serializer.data["room"])
             # Se actualiza la base de datos de firebase listado
             # de sus especialidades
             if 'test' not in sys.argv:
@@ -258,7 +259,8 @@ class QueryDetailSpecialistView(APIView):
 
             if 'test' not in sys.argv:
                 pyrebase.update_status_query(query_id=query.id,
-                                             data=data_update)
+                                             data=data_update,
+                                             room=serializer.data["room"])
 
             # actualizo el querycurrent del listado de mensajes
             data = {'status': query.status,
@@ -334,7 +336,8 @@ class QueryDetailClientView(APIView):
                 "availableRequeries": requeries
                 }
             if 'test' not in sys.argv:
-                pyrebase.update_status_query(query.id, data_update)
+                pyrebase.update_status_query(query.id, data_update,
+                                             serializer.data["room"])
             data = {'status': 2,
                     'date': lista[-1]["timeMessage"],
                     'message': lista[-1]["message"]

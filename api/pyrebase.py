@@ -117,9 +117,9 @@ def chat_firebase_db(data, room):
     return res
 
 
-def node_query(data, id):
+def node_query(data, id, room):
     """Actualizar o crear nodos de consulta."""
-    node = "queries/{}".format(Params.PREFIX['query'] + str(id))
+    node = "queries/{}/{}".format(room, Params.PREFIX['query'] + str(id))
     if exist_node(node):
         res = db.child(node).update(data)
     else:
