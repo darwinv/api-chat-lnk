@@ -146,6 +146,7 @@ class ClientSharePlansView(APIView):
     subject = _("Share Plan Success")
     to_much_query_share = _("too many queries to share")
     already_exists_empower = _("Empower already exists")
+    
     def post(self, request):
         """Obtener la lista con todos los planes del cliente."""
         client = Operations.get_id(self, request)
@@ -158,14 +159,13 @@ class ClientSharePlansView(APIView):
             clients = data['client']
         else:
             raise serializers.ValidationError({'client': [self.required]})
-        
+
         try:
             acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
              queryplansclient__client=client, queryplansclient__share=True)
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
-        import pdb
-        pdb.set_trace()
+
         try:
             client_obj = Client.objects.get(pk=client)
         except Client.DoesNotExist:
@@ -266,7 +266,7 @@ class ClientSharePlansView(APIView):
 
                 # Ejecutamos el serializer
                 serializer_data[email_receiver].save()
-            
+
             if acquired_plan.is_chosen:
                 data_plan = {
                     'available_queries': acquired_plan.available_queries
