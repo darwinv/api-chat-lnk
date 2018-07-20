@@ -62,10 +62,7 @@ def update_plan_choisen():
 def check_type_data(type_data, node):
     """Chequear tipos de datos en los nodos """
     pass
-<<<<<<< HEAD
-=======
 
->>>>>>> feature/notifications_push
     # data_chat_string = [
     #     'codeUser', 'fileUrl', 'filePreviewUrl',
     #     'message', 'messageType', 'room',
