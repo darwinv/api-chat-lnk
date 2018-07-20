@@ -9,7 +9,7 @@ from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquire
 from api.serializers.plan import QueryPlansSerializer, QueryPlansManageSerializer
 from api.models import QueryPlans, Client, QueryPlansManage
 from api.serializers.plan import QueryPlansTransfer, QueryPlansShare, QueryPlansEmpower
-from api.models import QueryPlansAcquired, QueryPlansClient,
+from api.models import QueryPlansAcquired, QueryPlansClient
 from api.permissions import IsAdminOrClient
 from api.utils.validations import Operations
 from api.utils.querysets import get_query_set_plan
