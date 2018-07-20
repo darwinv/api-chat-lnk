@@ -45,7 +45,7 @@ class CreateNaturalContact(APITestCase):
             'institute': 'UNEFA',
             'profession': "Administrador",
             'ocupation': 1,
-            "objection": [1],
+            "objection": [1,2],
             "latitude": "-77.0282400",
             "longitude": "-12.0431800",
             'about': 'iptsum aabout',
@@ -502,6 +502,18 @@ class CreateNaturalContact(APITestCase):
             content_type='application/json'
         )
         # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_send_other_objection(self):
+        """Enviar otra razon."""
+        data = self.valid_payload
+        data["other_objection"] = "Otra  razon"
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_effective(self):

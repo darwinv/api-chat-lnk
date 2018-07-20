@@ -19,7 +19,7 @@ from api.utils.validations import document_exists, ruc_exists
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth import password_validation
 from api.utils import tools
-
+from collections import OrderedDict
 
 class SpecialistMessageListCustomSerializer(serializers.Serializer):
     """Serializador para devolver datos customizados de un queryset dado."""
@@ -1017,8 +1017,12 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         if obj.type_contact == 1:
             objections = ListObjectionsSerializer(
                 obj.objectionslist_set.all(), many=True).data
-
             data["objections"] = objections
+            # import pdb; pdb.set_trace()
+            if obj.other_objection:
+                other = OrderedDict()
+                other['name'] = obj.other_objection
+                data["objections"].append(other)
 
         return data
 
@@ -1116,7 +1120,7 @@ class SellerContactNaturalSerializer(BaseSellerContactSerializer):
                   'profession', 'address', 'level_instruction', 'latitude',
                   'longitude', 'seller', 'objection_name', 'nationality',
                   'nationality_name', 'level_instruction_name', 'photo',
-                  'residence_country', 'password',
+                  'residence_country', 'password', 'other_objection'
                   )
         # extra_kwargs = {
         #         'objection': {'write_only': True},
@@ -1204,6 +1208,7 @@ class SellerContactBusinessSerializer(BaseSellerContactSerializer):
                   'objection_name', 'nationality', 'type_contact_name',
                   'nationality_name', 'photo', 'agent_firstname', 'objection',
                   'agent_lastname', 'residence_country', 'password', 'ciiu',
+                  'other_objection'
                   )
 
     def get_nationality_name(self, obj):

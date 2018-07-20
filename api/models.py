@@ -237,6 +237,7 @@ class SellerContact(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     position = models.CharField(max_length=45, null=True)
     ruc = models.CharField(max_length=40, null=True, blank=True)
+    other_objection = models.CharField(max_length=120, null=True, blank=True)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
     economic_sector = models.ForeignKey(EconomicSector,
                                         on_delete=models.PROTECT, null=True)
@@ -482,9 +483,9 @@ class QueryPlansClient(models.Model):
     status = models.PositiveIntegerField(choices=Ch.queryplansclient_status)
 
 class QueryPlansManage(models.Model):
-    """Manejador de Planes"""    
+    """Manejador de Planes"""
     sender = models.ForeignKey(Client, on_delete=models.PROTECT, related_name="plan_sender")
-    receiver = models.ForeignKey(Client, on_delete=models.PROTECT, null=True)    
+    receiver = models.ForeignKey(Client, on_delete=models.PROTECT, null=True)
     email_receiver = models.CharField(max_length=150, null=True)
     acquired_plan = models.ForeignKey(QueryPlansAcquired,
                                       on_delete=models.PROTECT, related_name="plan_acquired_plan")
