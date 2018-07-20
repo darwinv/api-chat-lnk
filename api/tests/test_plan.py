@@ -154,7 +154,24 @@ class GetClientPlansAllList(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-class UpdatePlanSelect (APITestCase):
+class GetClientPlansShareEmpowerList(APITestCase):
+    """Prueba para devolver listado de clientes compartidos facultados"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+
+    def test_get_list(self):
+        """Obtener resultado 200 de la lista."""
+        response = self.client.get(reverse('client-plans-share-empower',
+            kwargs={'pk': 22}), format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class UpdatePlanSelect(APITestCase):
     """Prueba para actualizar el plan activo de un cliente"""
 
     fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
@@ -296,7 +313,7 @@ class CreateTransferPlan(APITestCase):
     def test_post_data_email_not_client(self):
         """Obtener resultado 200."""
         data = {
-            "email": "test.user23@mail.com",
+            "email_receiver": "test.user23@mail.com",
             "acquired_plan": 22
         }
         response = self.client.post(reverse('client-plans-transfer'), format='json', data=data)
@@ -305,8 +322,150 @@ class CreateTransferPlan(APITestCase):
     def test_post_data_email_client(self):
         """Obtener resultado 200."""
         data = {
-            "email": "jefeti@pympack.com.pe",
+            "email_receiver": "jefeti@pympack.com.pe",
             "acquired_plan": 22
         }
         response = self.client.post(reverse('client-plans-transfer'), format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class MakeSharePlan(APITestCase):
+    """Prueba para compartir un plan"""
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+
+    def test_post_data_email_success(self):
+        """Obtener resultado 200."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "jefeti@pympack.com.pe",
+                    "count": 1
+                },
+                {
+                    "email_receiver": "jefeti2@pympack.com.pe",
+                    "count": 2
+                }
+            ]
+
+        }
+        response = self.client.post(reverse('client-plans-share'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_post_data_to_many_query(self):
+        """Obtener resultado 400 demasiadas consultas."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "jefeti2@pympack.com.pe",
+                    "count": 10000
+                }
+            ]
+
+        }
+        response = self.client.post(reverse('client-plans-share'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_data_to_many_query2(self):
+        """Obtener resultado 400 demasiadas consultas x2."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "jefeti@pympack.com.pe",
+                    "count": 5
+                },
+                {
+                    "email_receiver": "jefeti2@pympack.com.pe",
+                    "count": 5
+                }
+            ]
+
+        }
+        response = self.client.post(reverse('client-plans-share'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_data_email_myself(self):
+        """Obtener resultado 200."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "clientejosue@mail.com",
+                    "count": 2
+                }
+            ]
+        }
+        response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class MakeEmpowerPlan(APITestCase):
+    """Prueba para facultar un plan"""
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+
+    def test_post_data_email(self):
+        """Obtener resultado 200."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "jefeti@pympack.com.pe",
+                },
+                {
+                    "email_receiver": "jefeti2@pympack.com.pe"
+                }
+            ]
+        }
+        response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_post_data_email_myself(self):
+        """Obtener resultado 200."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "clientejosue@mail.com"
+                }
+            ]
+        }
+        response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_data_email_already(self):
+        """email ya esta siento facultado con este plan."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "cliente_no_existe@mail.com"
+                }
+            ]
+        }
+        response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_data_email_exists_already(self):
+        """email ya esta siento facultado con este plan. (cliente no existe)"""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "cliente_extra@mail.com"
+                }
+            ]
+        }
+        response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

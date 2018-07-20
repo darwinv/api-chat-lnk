@@ -609,7 +609,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
         subject = cap(_('send credencials'))
         mail = BasicEmailAmazon(subject=subject,
                                 to=validated_data["email_exact"],
-                                template='send_credentials')
+                                template='email/send_credentials')
         credentials = {}
         credentials["user"] = validated_data["username"]
         credentials["pass"] = password
@@ -879,7 +879,7 @@ class SellerSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         mail = BasicEmailAmazon(subject='Envio Credenciales', to=validated_data["email_exact"],
-                                template='send_credentials')
+                                template='email/send_credentials')
         # import pdb; pdb.set_trace()
         credentials = {}
         credentials["user"] = validated_data["username"]

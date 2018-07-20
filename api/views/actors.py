@@ -134,7 +134,7 @@ class SendCodePassword(APIView):
         recovery_password.is_active = True
         recovery_password.save()
         data = {'code':code}
-        mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña", to=email, template='send_code')
+        mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña", to=email, template='email/send_code')
         return Response(mail.sendmail(args=data))
 
 class ValidCodePassword(APIView):
@@ -309,7 +309,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = ('username',)
 
 
-from api.models import QueryPlansAcquired, SaleDetail, Sale
+from api.models import QueryPlansAcquired, SaleDetail, Sale, QueryPlansClient
 from api.models import Clasification, QueryPlans, ProductType
 from datetime import datetime
 from api.utils import tools
@@ -323,6 +323,8 @@ def give_plan_new_client(client_id):
     sale = Sale()
     saleDetail = SaleDetail()
     queryPlansAcquired = QueryPlansAcquired()
+    queryPlansClient = QueryPlansClient()
+
 
     try:
         product_type = ProductType.objects.get(pk=1)
@@ -381,13 +383,21 @@ def give_plan_new_client(client_id):
     queryPlansAcquired.available_requeries = '1'
     queryPlansAcquired.maximum_response_time = '24'
     queryPlansAcquired.acquired_at = datetime.now()
-    queryPlansAcquired.client_id = client_id
     queryPlansAcquired.query_plans_id = '1'
     queryPlansAcquired.sale_detail_id = saleDetail.id
     queryPlansAcquired.query_quantity = '500'
     queryPlansAcquired.plan_name = 'TesterPack'
     queryPlansAcquired.is_chosen = '1'
     queryPlansAcquired.save()
+
+    queryPlansClient.owner = True
+    queryPlansClient.transfer = True
+    queryPlansClient.share = True
+    queryPlansClient.empower = True
+    queryPlansClient.status = 1
+    queryPlansClient.acquired_plan_id = queryPlansAcquired.id
+    queryPlansClient.client_id = client_id
+    queryPlansClient.save()
 
     serializer = QueryPlansAcquiredSerializer(queryPlansAcquired)
     chosen_plan('u'+str(client_id), serializer.data)
@@ -435,7 +445,6 @@ class ClientListView(ListCreateAPIView):
             serializer.save()
             # se le crea la lista de todas las categorias al cliente en firebase
             pyrebase.createCategoriesLisClients(serializer.data['id'])
-
 
             # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
             give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
@@ -1020,6 +1029,7 @@ class PhotoUploadView(APIView):
         serializer = UserPhotoSerializer(user,
                                          data={'photo': name_photo},
                                          partial=True)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

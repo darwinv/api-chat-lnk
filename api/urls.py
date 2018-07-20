@@ -8,6 +8,8 @@ from api.views import validations, plan, chat, oauth, static_data
 router = routers.DefaultRouter()
 router.register(r'users', actors.UserViewSet)
 
+# app_name = 'api'
+
 urlpatterns = [
     url(r'^', include(router.urls)),
     # Clientes
@@ -29,6 +31,16 @@ urlpatterns = [
     # Transferir plan de consultas
     url(r'^clients/plans-transfer/$', plan.ClientTransferPlansView.as_view(),
         name='client-plans-transfer'),
+    # Compartir plan de consultas
+    url(r'^clients/plans-share/$', plan.ClientSharePlansView.as_view(),
+        name='client-plans-share'),
+    # Facultar plan de consultas
+    url(r'^clients/plans-empower/$', plan.ClientEmpowerPlansView.as_view(),
+        name='client-plans-empower'),
+
+    # Facultar plan de consultas
+    url(r'^clients/plans-share-empower/(?P<pk>[0-9]+)$', plan.ClientShareEmpowerPlansView.as_view(),
+        name='client-plans-share-empower'),
 
 
     url(r'^specialists-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$',
@@ -53,7 +65,7 @@ urlpatterns = [
     url(r'^reset-password-recovery/(?P<pk>[0-9]+)/$',
         actors.UpdatePasswordRecoveryView.as_view(),
         name='reset-password-recovery'),
-    # # reseteo de email
+    # actualizar de email
     url(r'^update-email/(?P<pk>[0-9]+)/$',
         actors.UpdateEmailUserView.as_view(), name='update-email'),
 
