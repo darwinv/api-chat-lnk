@@ -36,8 +36,7 @@ class CheckData(APIView):
         # debo devolver la  clave del tipo de documento
         # si es proporcionado
         if "document_type" in request.query_params:
-            doc_type = return_type_document(
-                request.query_params["document_type"])
+            doc_type = request.query_params["document_type"]
         # si es suministrado numero de documento tambien debe suministrase su
         # tipo
         if 'document_number' in request.query_params:

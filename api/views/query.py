@@ -95,6 +95,9 @@ class QueryListClientView(ListCreateAPIView):
             if 'test' not in sys.argv:
                 pyrebase.chat_firebase_db(serializer.data["message"],
                                           serializer.data["room"])
+
+                pyrebase.node_query(serializer.data["obj_query"],
+                                    serializer.data["query_id"])
             # Se actualiza la base de datos de firebase listado
             # de sus especialidades
             if 'test' not in sys.argv:
@@ -207,7 +210,6 @@ class QueryDetailSpecialistView(APIView):
             if 'test' not in sys.argv:
                 pyrebase.update_status_group_messages(msgs, group.status)
 
-            msgs_query = query.message_set.all()
             requeries = query.available_requeries
             data_update = {
                 "status": query.status,
@@ -215,8 +217,8 @@ class QueryDetailSpecialistView(APIView):
             }
 
             if 'test' not in sys.argv:
-                pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                                     data=data_update)
+                pyrebase.update_status_query(query_id=query.id,
+                                             data=data_update)
 
             # actualizo el querycurrent del listado de mensajes
             data = {'status': query.status,
@@ -284,16 +286,15 @@ class QueryDetailClientView(APIView):
 
             if 'test' not in sys.argv:
                 pyrebase.update_status_group_messages(msgs, gp.status)
-            msgs_query = query.message_set.all()
-            requeries = lista[0]['query']['availableRequeries']
+            # import pdb; pdb.set_trace()
+            requeries = serializer.data['obj_query']['availableRequeries']
 
             data_update = {
                 "status": query.status,
                 "availableRequeries": requeries
                 }
             if 'test' not in sys.argv:
-                pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                                     data=data_update)
+                pyrebase.update_status_query(query.id, data_update)
             data = {'status': 2,
                     'date': lista[-1]["timeMessage"],
                     'message': lista[-1]["message"]
@@ -548,7 +549,7 @@ class DeclineRequeryView(APIView):
         for query in queries:
             msgs = query.message_set.all()
             # import pdb; pdb.set_trace()
-            pyrebase.update_status_querymessages(msgs, {"status": 4})
+            pyrebase.update_status_query(query.id, {"status": 4})
             # import pdb; pdb.set_trace()
             for ms in msgs:
                 GroupMessage.objects.filter(message__id=ms.id).update(status=2)
@@ -617,7 +618,7 @@ class QueryDeclineView(ListAPIView):
         context["status"] = 1
         context["specialist"] = main_specialist
         context["specialist_declined"] = specialist
-        
+
         serializer = QueryDeclineSerializer(query, data=request.data,
                                             context=context)
 
@@ -635,7 +636,7 @@ class QueryDeclineView(ListAPIView):
         """Obtener la lista con todos los planes del cliente."""
         declinators = Declinator.objects.filter(query=pk).values('message',
             'specialist__first_name','specialist__last_name')
-        
+
         serializer = QueryDeclineSerializer(declinators, many=True)
 
         return Response(serializer.data)
@@ -661,9 +662,8 @@ class SetQualificationView(APIView):
         serializer = QueryQualifySerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
-            msgs = query.message_set.all()
             if 'test' not in sys.argv:
-                pyrebase.update_status_querymessages(msgs, serializer.data)
+                pyrebase.update_status_query(query.id, serializer.data)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
