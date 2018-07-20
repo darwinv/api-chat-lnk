@@ -6,13 +6,15 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquiredDetailSerializer
-from api.serializers.plan import QueryPlansTransfer
-from api.models import QueryPlansAcquired, QueryPlansClient, Client
+from api.serializers.plan import QueryPlansManageSerializer
+from api.serializers.plan import QueryPlansTransfer, QueryPlansShare, QueryPlansEmpower
+from api.models import QueryPlansAcquired, QueryPlansClient, Client, QueryPlansManage
 from api.permissions import IsAdminOrClient
 from api.utils.validations import Operations
 from api.utils.querysets import get_query_set_plan
+from api.emails import BasicEmailAmazon
 from api import pyrebase
-from django.db.models import F
+from django.db.models import F,Q
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
@@ -119,12 +121,264 @@ class ClientPlansDetailView(ListCreateAPIView):
         else:
             raise Http404
 
+
+
+class ClientSharePlansView(APIView):
+    """Vista para obetener todos los planes de un cliente."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
+    required = _("required")
+    subject = _("Share Plan Success")
+    to_much_query_share = _("too many queries to share")
+    already_exists_empower = _("Empower already exists")
+    def post(self, request):
+        """Obtener la lista con todos los planes del cliente."""
+        client = Operations.get_id(self, request)
+        data = request.data
+
+        if not 'acquired_plan' in data:
+            raise serializers.ValidationError({'acquired_plan': [self.required]})
+
+        if 'client' in data and type(data['client']) is list:
+            clients = data['client']
+        else:
+            raise serializers.ValidationError({'client': [self.required]})
+
+        try:
+            acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
+             queryplansclient__client=client, queryplansclient__empower=True)
+        except QueryPlansAcquired.DoesNotExist:
+            raise Http404
+
+        try:
+            client_obj = Client.objects.get(pk=client)
+        except Client.DoesNotExist:
+            raise Http404
+        
+        errors = {}
+        serializer_data = {}
+
+        # Validar cantidad total de consultas
+        acumulator = 0
+        for client_data in clients:
+            if 'count' in client_data:
+                acumulator += int(client_data['count'])
+
+        if acumulator > acquired_plan.available_queries:
+            raise serializers.ValidationError({'count': [self.to_much_query_share]})
+
+        for client_data in clients:
+            email_receiver = receiver = count = None
+
+            # Validamos si enviar el correo del cliente
+            if 'email_receiver' in client_data:
+                email_receiver = client_data['email_receiver']
+            else:
+                errors[email_receiver] = {'email_receiver': [self.required]}
+                continue
+
+            # Se valida que enviaron la cantidad
+            if 'count' in client_data:
+                count = int(client_data['count'])
+            else:
+                errors[email_receiver] = {'count': [self.required]}
+                continue
+
+            # Traer cliente by email si existe!
+            try:
+                receiver = Client.objects.get(email_exact=email_receiver)
+                status_transfer = 1
+            except Client.DoesNotExist:
+                status_transfer = 3
+
+            # No realizar operacion a sigo mismo
+            if email_receiver == client_obj.email_exact:
+                errors[email_receiver] = {'email_receiver': [self.invalid]}
+                continue
+
+            # No realizar operacion si tiene operacioens previas para este plan
+            plan_manage = QueryPlansManage.objects.filter(
+                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
+                acquired_plan=acquired_plan.id, sender=client, type_operation=3)
+            
+            if plan_manage:
+                errors[email_receiver] = {'email_receiver': [self.already_exists_empower]}
+                continue
+            
+            data_manage = {
+                'type_operation': 2,  # Compartir
+                'status': status_transfer,
+                'acquired_plan': acquired_plan.id,
+                'new_acquired_plan': None,
+                'sender': client,
+                'receiver': receiver,
+                'email_receiver': email_receiver
+            }
+            data_context = {}
+            data_context['client_receiver'] = {
+                'owner': True,
+                'transfer': True,
+                'share': True,
+                'empower': True,
+                'status': status_transfer,
+                'acquired_plan': None,
+                'client': receiver
+            }
+            data_context['count'] = count
+            data_context['acquired_plan'] = acquired_plan
+            serializer = QueryPlansShare(data=data_manage, context=data_context)
+            
+            if serializer.is_valid():
+                serializer_data[email_receiver] = serializer
+            else:
+                errors[email_receiver] = serializer.errors
+
+        # Se retornan los errores que se acumularon
+        if errors:
+            import pdb
+            pdb.set_trace()
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # Para cada uno de los correos guardados
+            for email_receiver in serializer_data:
+                if 'test' not in sys.argv:
+                        # Envio de correos notificacion
+                        mail = BasicEmailAmazon(subject="Share Plan Success", to=email_receiver,
+                                    template='email/share')
+                        arguments = {'link': WEB_HOST}
+                        mail.sendmail(args=arguments)
+
+                # Ejecutamos el serializer
+                serializer_data[email_receiver].save()
+
+            return Response({})
+
+
+class ClientEmpowerPlansView(APIView):
+    """Vista para obetener todos los planes de un cliente."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
+    required = _("required")
+    invalid = _("invalid")
+    subject = _("Empower Plan Success")
+    already_exists_empower = _("Empower already exists")
+    already_exists_share = _("Share already exists")
+
+    def post(self, request):
+        """Obtener la lista con todos los planes del cliente."""
+        client = Operations.get_id(self, request)
+        data = request.data
+
+        if not 'acquired_plan' in data:
+            raise serializers.ValidationError({'acquired_plan': [self.required]})
+
+        if 'client' in data and type(data['client']) is list:
+            clients = data['client']
+        else:
+            raise serializers.ValidationError({'client': [self.required]})
+
+        try:
+            acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
+             queryplansclient__client=client, queryplansclient__empower=True)
+        except QueryPlansAcquired.DoesNotExist:
+            raise Http404
+
+        try:
+            client_obj = Client.objects.get(pk=client)
+        except Client.DoesNotExist:
+            raise Http404
+
+        errors = {}
+        serializer_data = {}
+        for client_data in clients:
+            email_receiver = receiver = None
+
+            # Validamos si enviar el correo del cliente
+            if 'email_receiver' in client_data:
+                email_receiver = client_data['email_receiver']
+            else:
+                continue
+
+            # Traer cliente by email si existe!
+            try:
+                receiver = Client.objects.get(email_exact=email_receiver)
+                status_transfer = 1
+            except Client.DoesNotExist:
+                status_transfer = 3
+
+            # No realizar operacion a sigo mismo
+            if email_receiver == client_obj.email_exact:
+                errors[email_receiver] = {'email_receiver': [self.invalid]}
+                continue
+
+            # No realizar operacion si tiene operacioens previas para este plan
+            plan_manage = QueryPlansManage.objects.filter(
+                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
+                acquired_plan=acquired_plan.id, sender=client)
+
+            if plan_manage:
+                if plan_manage[0].type_operation == 3:
+                    errors[email_receiver] = {'email_receiver': [self.already_exists_empower]}
+                elif plan_manage[0].type_operation == 2:
+                    errors[email_receiver] = {'email_receiver': [self.already_exists_share]}
+                continue
+
+            # Data del plan a Manejar
+            data_manage = {
+                'type_operation': 3,  # Facultar
+                'status': status_transfer,
+                'acquired_plan': acquired_plan.id,
+                'new_acquired_plan': None,
+                'sender': client,
+                'receiver': receiver,
+                'email_receiver': email_receiver
+            }
+            # Data de conexto para el cliente que recive plan
+            data_context = {}
+            data_context['client_receiver'] = {
+                'owner': False,
+                'transfer': True,
+                'share': True,
+                'empower': False,
+                'status': status_transfer,
+                'acquired_plan': acquired_plan,
+                'client': receiver
+            }
+
+            serializer = QueryPlansEmpower(data=data_manage, context=data_context)
+            
+            if serializer.is_valid():
+                serializer_data[email_receiver] = serializer
+            else:
+                errors[email_receiver] = serializer.errors
+        
+        # Se retornan los errores que se acumularon
+        if errors:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # Para cada uno de los correos guardados
+            for email_receiver in serializer_data:
+                if 'test' not in sys.argv:
+                        # Envio de correos notificacion
+                        mail = BasicEmailAmazon(subject="Facultar Plan Exitoso", to=email_receiver,
+                                    template='email/empower')
+                        arguments = {'link': WEB_HOST}
+                        mail.sendmail(args=arguments)
+
+                # Ejecutamos el serializer
+                serializer_data[email_receiver].save()
+
+            return Response({})
+
+
 class ClientTransferPlansView(APIView):
     """Vista para obetener todos los planes de un cliente."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     required = _("required")
     subject = _("Transfer Plan Success")
+    invalid = _("invalid")
+    already_exists = _("it already exists")
 
     def post(self, request):
         """Obtener la lista con todos los planes del cliente."""
@@ -135,27 +389,43 @@ class ClientTransferPlansView(APIView):
             raise serializers.ValidationError({'acquired_plan': [self.required]})
 
         try:
+            client_obj = Client.objects.get(pk=client)
+        except Client.DoesNotExist:
+            raise Http404
+
+        try:
             acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
-             queryplansclient__client=client)
+             queryplansclient__client=client, queryplansclient__transfer=True)
         except QueryPlansAcquired.DoesNotExist:
-            raise Http404    
+            raise Http404
 
         email_receiver = receiver = None
-        if 'email' in data:
-            email_receiver = data['email']
+        if 'email_receiver' in data:
+            email_receiver = data['email_receiver']
 
         try:
             receiver = Client.objects.get(email_exact=email_receiver)
             status_transfer = 1
         except Client.DoesNotExist:
-            status_transfer = 3
-        
+            status_transfer = 3        
 
         if not email_receiver and not receiver:
-            raise serializers.ValidationError({'email': [self.required]})
+            raise serializers.ValidationError({'email_receiver': [self.required]})
+
+        # No realizar operacion a sigo mismo
+        if email_receiver == client_obj.email_exact:
+            raise serializers.ValidationError({'email_receiver': [self.invalid]})
+
+        # No realizar operacion si tiene operacioens previas para este plan        
+        plan_manage = QueryPlansManage.objects.filter(
+            Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
+            acquired_plan=acquired_plan.id, sender=client)
+        
+        if plan_manage:
+            raise serializers.ValidationError({'email_receiver': [self.already_exists]})
 
         data_transfer = {
-            'type_operation': 3,  # transferencia
+            'type_operation': 1,  # transferencia
             'status': status_transfer,
             'acquired_plan': acquired_plan.id,
             'new_acquired_plan': None,
@@ -177,26 +447,25 @@ class ClientTransferPlansView(APIView):
             'acquired_plan': acquired_plan.id,
             'client': client
         }
+        is_chosen_plan = acquired_plan.is_chosen
         serializer = QueryPlansTransfer(data=data_transfer, context=data_context)
         
         if serializer.is_valid():
             if 'test' not in sys.argv:
-                if acquired_plan.is_chosen:  # Si el plan estaba escogido
+                # Envio de correos notificacion
+                mail = BasicEmailAmazon(subject="Facultar Plan Exitoso", to=email_receiver,
+                            template='email/empower')
+                arguments = {'link': WEB_HOST}
+                mail.sendmail(args=arguments)
+
+                # Si el plan estaba escogido por el anterior cliente
+                if is_chosen_plan:
                     pyrebase.delete_actual_plan_client(client)
-
-                    mail = BasicEmailAmazon(subject=self.subject, to=email_receiver,
-                                template='email/transfer')
-
-                    args = {
-                        'link': WEB_HOST
-                    }
-                    mail.sendmail(args=request.data)
                 
             serializer.save()
 
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class ClientAllPlansView(ListCreateAPIView):
     """Vista para obetener todos los planes de un cliente."""
@@ -360,3 +629,32 @@ class ChosenPlanView(APIView):
 
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
+
+class ClientShareEmpowerPlansView(ListCreateAPIView):
+    """Vista para clientes Compartidos y facultados"""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
+
+    def get(self, request, pk):
+        client = Operations.get_id(self, request)
+        data = request.data
+
+        manage_data = QueryPlansManage.objects.values('email_receiver',
+            'status','type_operation', 'receiver', 'new_acquired_plan'
+            ).annotate(available_queries=F('new_acquired_plan__available_queries',),
+            query_quantity=F('new_acquired_plan__query_quantity',),
+            first_name=F('receiver__first_name',),
+            last_name=F('receiver__last_name',),
+            business_name=F('receiver__business_name',),
+            type_client=F('receiver__type_client',),
+            photo=F('receiver__photo',)).filter(acquired_plan = pk)
+        
+        # paginacion
+        page = self.paginate_queryset(manage_data)
+        if page is not None:
+            serializer = QueryPlansManageSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = QueryPlansManageSerializer(manage_data, many=True)
+        return Response(serializer.data)

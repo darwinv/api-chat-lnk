@@ -134,7 +134,7 @@ class SendCodePassword(APIView):
         recovery_password.is_active = True
         recovery_password.save()
         data = {'code':code}
-        mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña", to=email, template='send_code')
+        mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña", to=email, template='email/send_code')
         return Response(mail.sendmail(args=data))
 
 class ValidCodePassword(APIView):
@@ -1030,6 +1030,7 @@ class PhotoUploadView(APIView):
         serializer = UserPhotoSerializer(user,
                                          data={'photo': name_photo},
                                          partial=True)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

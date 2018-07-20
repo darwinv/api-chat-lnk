@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from api.models import QueryPlansAcquired, QueryPlansClient, QueryPlansManage
+
+from api.models import Client
+
 from api.utils.tools import get_date_by_time
 from datetime import datetime
 
@@ -131,3 +134,125 @@ class QueryPlansTransfer(serializers.ModelSerializer):
 
         return instance
 
+
+
+class QueryPlansShare(serializers.ModelSerializer):
+    """Plan Adquirido Detail."""
+
+    class Meta:
+        """declaracion del modelo y sus campos."""
+
+        model = QueryPlansManage
+        fields = ('type_operation','status','acquired_plan','new_acquired_plan',
+            'sender','receiver','email_receiver')
+
+    def create(self, validated_data):
+        """Transferir plan de consultas"""
+
+        count = self.context['count']
+        receiver = self.context['client_receiver']
+        acquired_plan = self.context['acquired_plan']
+        
+        query_plans = QueryPlansAcquired()
+        query_plans.available_queries = count
+        query_plans.query_quantity = count
+        query_plans.expiration_date = acquired_plan.expiration_date
+        query_plans.validity_months = acquired_plan.validity_months
+        query_plans.activation_date = acquired_plan.activation_date
+        query_plans.is_active = acquired_plan.is_active
+        query_plans.available_requeries = acquired_plan.available_requeries
+        query_plans.maximum_response_time = acquired_plan.maximum_response_time
+        query_plans.acquired_at = acquired_plan.acquired_at
+        query_plans.query_plans_id = acquired_plan.query_plans_id
+        query_plans.sale_detail_id = acquired_plan.sale_detail_id
+        query_plans.plan_name = acquired_plan.plan_name
+        query_plans.is_chosen = acquired_plan.is_chosen
+        query_plans.save()
+
+        acquired_plan.query_quantity = acquired_plan.query_quantity - count
+        acquired_plan.save()
+
+        validated_data['new_acquired_plan'] = query_plans
+        receiver['acquired_plan'] = query_plans
+        
+        instance = QueryPlansManage.objects.create(**validated_data)
+        
+        if 'client' in receiver and receiver['client']:
+            QueryPlansClient.objects.create(**receiver)
+
+        return instance
+
+class QueryPlansEmpower(serializers.ModelSerializer):
+    """Plan Adquirido Detail."""
+
+    class Meta:
+        """declaracion del modelo y sus campos."""
+
+        model = QueryPlansManage
+        fields = ('type_operation','status','acquired_plan','new_acquired_plan',
+            'sender','receiver','email_receiver')
+
+    def create(self, validated_data):
+        """Transferir plan de consultas"""
+
+        receiver = self.context['client_receiver']
+        
+        instance = QueryPlansManage.objects.create(**validated_data)
+        
+        if 'client' in receiver and receiver['client']:
+            QueryPlansClient.objects.create(**receiver)
+
+        return instance
+
+class ClientPlanSerializer(serializers.ModelSerializer):
+    """Serializer del detalle de plan."""
+    display_name = serializers.SerializerMethodField()
+    class Meta:
+        """Modelo del especialista y sus campos."""
+
+        model = Client
+        fields = ('display_name','photo')
+
+    def get_display_name(self, obj):
+        """String Displayname."""
+
+        if obj['type_client'] == 'n':
+            display_name = obj['last_name'] + " " + obj['first_name']
+        elif obj['type_client'] == 'b':
+            display_name = obj['business_name']
+        else:
+            display_name = ""
+
+        return display_name
+
+class QueryPlansAcquiredSimpleSerializer(serializers.ModelSerializer):
+    """Serializer del detalle de plan."""
+    class Meta:
+        """Modelo del especialista y sus campos."""
+        model = QueryPlansAcquired
+        fields = ('query_quantity', 'available_queries')
+
+
+class QueryPlansManageSerializer(serializers.ModelSerializer):
+    """Serializer del detalle de plan."""
+    receiver = serializers.SerializerMethodField()
+    new_acquired_plan = serializers.SerializerMethodField()
+    class Meta:
+        """Modelo del especialista y sus campos."""
+
+        model = QueryPlansManage
+        fields = ('status',
+            'email_receiver', 'type_operation',
+            'receiver','new_acquired_plan')
+
+    def get_receiver(self, obj):
+        """Cliente"""
+        if obj['receiver']:
+            return ClientPlanSerializer(obj).data
+        return None
+
+    def get_new_acquired_plan(self, obj):
+        """plan de consulta"""
+        if obj['new_acquired_plan']:
+            return QueryPlansAcquiredSimpleSerializer(obj).data
+        return None
