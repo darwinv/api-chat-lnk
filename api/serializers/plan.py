@@ -1,10 +1,9 @@
 from rest_framework import serializers
 from api.models import QueryPlansAcquired, QueryPlansClient, QueryPlansManage
-
-from api.models import Client
-
+from api.models import QueryPlans, Client
 from api.utils.tools import get_date_by_time
 from datetime import datetime
+
 
 class PlanDetailSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
@@ -104,6 +103,7 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
         else:
             return False
 
+
 class QueryPlansTransfer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
 
@@ -119,9 +119,9 @@ class QueryPlansTransfer(serializers.ModelSerializer):
         # manage = validated_data.pop('manage')
         receiver = self.context['client_receiver']
         sender = self.context['client_sender']
-        
+
         instance = QueryPlansManage.objects.create(**validated_data)
-        
+
         if 'client' in receiver and receiver['client']:
             plan = receiver['acquired_plan']
             plan.is_chosen = False
@@ -135,6 +135,13 @@ class QueryPlansTransfer(serializers.ModelSerializer):
         return instance
 
 
+class QueryPlansSerializer(serializers.ModelSerializer):
+    """Listado de planes."""
+
+    class Meta:
+        """Modelo."""
+        model = QueryPlans
+        fields = ('name', 'query_quantity', 'validity_months', 'price')
 
 class QueryPlansShare(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
@@ -152,7 +159,7 @@ class QueryPlansShare(serializers.ModelSerializer):
         count = self.context['count']
         receiver = self.context['client_receiver']
         acquired_plan = self.context['acquired_plan']
-        
+
         query_plans = QueryPlansAcquired()
         query_plans.available_queries = count
         query_plans.query_quantity = count
@@ -174,9 +181,9 @@ class QueryPlansShare(serializers.ModelSerializer):
 
         validated_data['new_acquired_plan'] = query_plans
         receiver['acquired_plan'] = query_plans
-        
+
         instance = QueryPlansManage.objects.create(**validated_data)
-        
+
         if 'client' in receiver and receiver['client']:
             QueryPlansClient.objects.create(**receiver)
 
@@ -196,9 +203,9 @@ class QueryPlansEmpower(serializers.ModelSerializer):
         """Transferir plan de consultas"""
 
         receiver = self.context['client_receiver']
-        
+
         instance = QueryPlansManage.objects.create(**validated_data)
-        
+
         if 'client' in receiver and receiver['client']:
             QueryPlansClient.objects.create(**receiver)
 

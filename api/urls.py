@@ -21,12 +21,13 @@ urlpatterns = [
     # todos los planes activos de un cliente
     url(r'^clients/plans/$', plan.ClientPlansView.as_view(),
         name='client-plans'),
+
     url(r'^clients/plans-all/$', plan.ClientAllPlansView.as_view(),
         name='client-plans-all'),
-    
+
     url(r'^clients/plans/(?P<pk>[0-9]+)/$', plan.ClientPlansDetailView.as_view(),
         name='client-plans-detail'),
-    
+
     # Transferir plan de consultas
     url(r'^clients/plans-transfer/$', plan.ClientTransferPlansView.as_view(),
         name='client-plans-transfer'),
@@ -50,6 +51,9 @@ urlpatterns = [
         actors.SellerDetailByUsername.as_view(),
         name='seller-detail-username'),
 
+    # listado de planes a la venta
+    url(r'^plans/$', plan.PlansView.as_view(),
+        name='plans'),
 
     # # Envio de codigo de verificar al correo
     url(r'^send-code-password/$', actors.SendCodePassword.as_view(),

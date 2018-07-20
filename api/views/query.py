@@ -3,8 +3,8 @@
 import json
 import threading
 import os
+import sys
 import boto3
-import uuid
 # paquetes de django
 from django.db.models import OuterRef, Subquery, F, Count
 from django.http import Http404, HttpResponse
@@ -37,9 +37,9 @@ from api.serializers.query import QueryQualifySerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
-from api.utils.tools import s3_upload_file, remove_file, resize_img
+from api.utils.tools import s3_upload_file, remove_file, resize_img, get_body
 from api.utils.parameters import Params
-import sys
+from fcm.fcm import Notification
 
 
 class QueryListClientView(ListCreateAPIView):
@@ -116,6 +116,7 @@ class QueryListClientView(ListCreateAPIView):
             mess = Message.objects.filter(query=OuterRef("pk"))\
                                   .order_by('-created_at')[:1]
             # Luego se busca el titulo y su id de la consulta
+            specialist_id = serializer_tmp.data[0]['specialist']
 
             data_queries = Query.objects.values('id', 'title', 'status', 'specialist')\
                                         .annotate(
@@ -125,21 +126,42 @@ class QueryListClientView(ListCreateAPIView):
                                             date_at=Subquery(
                                                 mess.values('created_at')))\
                                         .filter(client=user_id,
-                                                specialist=serializer_tmp.data[0]['specialist'],
+                                                specialist=specialist_id,
                                                 status=1)\
                                         .annotate(count=Count('id'))\
                                         .order_by('-message__created_at')
-
+            print(data_queries)
             query_pending = PendingQueriesSerializer(data_queries, many=True)
             lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
+            # determino el total de consultas pendientes (status 1 o 2)
+            badge_count = Query.objects.filter(specialist=specialist_id,
+                                               status__lte=2).count()
             if 'test' not in sys.argv:
+                # crea data de notificacion push
+                body = get_body(lista[-1]["fileType"], lista[-1]["message"])
+                data_notif_push = {
+                    "title": serializer_tmp.data[0]['displayName'],
+                    "body": body,
+                    "sub_text": "",
+                    "ticker": serializer.data["obj_query"]["title"],
+                    "badge": badge_count,
+                    "icon": "https://images.pexels.com/photos/906024/pexels-photo-906024.jpeg",
+                    "client_id": user_id,
+                    "category_id": category,
+                    "query_id": serializer.data["query_id"]
+
+                }
+                # crea nodo de listado de mensajes
                 pyrebase.createListMessageClients(serializer_tmp.data,
                                                   serializer.data["query_id"],
                                                   serializer.data["status"],
                                                   user_id,
-                                                  serializer_tmp.data[0]['specialist'],
+                                                  specialist_id,
                                                   queries_list=lista_d
                                                   )
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=specialist_id,
+                                           data=data_notif_push)
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
@@ -187,6 +209,7 @@ class QueryDetailSpecialistView(APIView):
             lista = list(serializer.data['message'].values())
             client_id = serializer.data["client_id"]
             category_id = serializer.data["category"]
+            cat = Category.objects.get(pk=category_id)
 
             if 'test' not in sys.argv:
                 # Actualizamos el nodo de mensajes segun su sala
@@ -209,6 +232,23 @@ class QueryDetailSpecialistView(APIView):
 
             if 'test' not in sys.argv:
                 pyrebase.update_status_group_messages(msgs, group.status)
+
+                pending_badge = Message.objects.filter(
+                    query__status=3, viewed=0,
+                    msg_type='a', query__client=client_id).count()
+                body = get_body(lista[-1]["fileType"], lista[-1]["message"])
+                data_fcm = {
+                    "title": cat.name,
+                    "body": body,
+                    "sub_text": cat.name,
+                    "ticker": query.title,
+                    "icon": cat.image,
+                    "badge": pending_badge,  # mensajes por ver
+                    "client_id":  query.client.id,
+                    "category_id": category_id,
+                    "query_id": query.id
+                }
+                Notification.fcm_send_data(user_id=client_id, data=data_fcm)
 
             requeries = query.available_requeries
             data_update = {
