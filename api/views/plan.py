@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquiredDetailSerializer
 from api.serializers.plan import QueryPlansSerializer, QueryPlansManageSerializer
+from api.serializers.plan import QueryPlansClientSerializer
 from api.models import QueryPlans, Client, QueryPlansManage
 from api.serializers.plan import QueryPlansTransfer, QueryPlansShare, QueryPlansEmpower
 from api.models import QueryPlansAcquired, QueryPlansClient
@@ -72,7 +73,7 @@ class QueryPlansAcquiredDetailView(APIView):
         # valido el plan que se desea activar
         if (plan.is_active is True and plan_client.client_id == client_id and
                 plan.expiration_date >= datetime.now().date()):
-            serializer = QueryPlansAcquiredSerializer(plan, data, partial=True)
+            serializer = QueryPlansClientSerializer(plan_client, data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 # sincronizo en pyrebase
@@ -164,8 +165,7 @@ class ClientSharePlansView(APIView):
              queryplansclient__client=client, queryplansclient__share=True)
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
-        import pdb
-        pdb.set_trace()
+        
         try:
             client_obj = Client.objects.get(pk=client)
         except Client.DoesNotExist:
@@ -595,7 +595,7 @@ class ActivationPlanView(APIView):
         """
         try:
             QueryPlansAcquired.objects.values('is_chosen')\
-                .filter(queryplansclient__client= client, is_active = True, is_chosen = True)[:1].get()
+                .filter(queryplansclient__client= client, is_active = True, queryplansclient__is_chosen = True)[:1].get()
             return True
         except QueryPlansAcquired.DoesNotExist:
             return False
@@ -655,7 +655,7 @@ class ChosenPlanView(APIView):
         """
         try:
             plan_chosen = get_query_set_plan()
-            return plan_chosen.filter(queryplansclient__client= client, is_active = True, is_chosen = True)[:1].get()
+            return plan_chosen.filter(queryplansclient__client= client, is_active = True, queryplansclient__is_chosen = True)[:1].get()
 
         except QueryPlansAcquired.DoesNotExist:
             raise Http404

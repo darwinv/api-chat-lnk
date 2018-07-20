@@ -45,7 +45,7 @@ class ActivePlanSerializer(serializers.ModelSerializer):
 
 class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
     """Plan Adquirido."""
-
+    is_chosen = serializers.SerializerMethodField()
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -53,6 +53,37 @@ class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
         fields = ('id', 'plan_name', 'is_chosen', 'is_active',
                   'validity_months', 'query_quantity',
                   'available_queries', 'expiration_date')
+
+        # extra_kwargs = {
+        #         'is_chosen': {'write_only': True},
+        #         'is_active': {'write_only': True}
+        # }
+
+    def update(self, instance, validated_data):
+        """Metodo actualizar redefinido."""
+        instance.is_chosen = validated_data.get(
+                               'is_chosen', instance.is_chosen)
+        instance.save()
+        return instance
+
+    def get_is_chosen(self, obj):
+        import pdb
+        pdb.set_trace()
+        if type(obj) is dict and 'is_chosen' in obj:
+            return obj['is_chosen']
+        else:
+            return obj.is_chosen
+
+class QueryPlansClientSerializer(serializers.ModelSerializer):
+    """Plan Adquirido."""
+
+    class Meta:
+        """declaracion del modelo y sus campos."""
+
+        model = QueryPlansClient
+        fields = ('id','acquired_plan', 'client', 'owner', 'transfer',
+                  'share', 'empower',
+                  'status', 'is_chosen')
 
         # extra_kwargs = {
         #         'is_chosen': {'write_only': True},

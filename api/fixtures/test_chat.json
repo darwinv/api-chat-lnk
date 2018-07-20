@@ -71,7 +71,7 @@
         "model": "api.queryplansacquired",
         "pk": 1,
         "fields": {
-            "is_chosen": false,
+            
             "expiration_date": "2018-05-14",
             "validity_months": 3,
             "available_queries": 6,
@@ -91,6 +91,7 @@
       "model": "api.queryplansclient",
       "pk": 1,
       "fields": {
+        "is_chosen": false,
         "acquired_plan": 1,
         "client": 15,
         "owner": true,

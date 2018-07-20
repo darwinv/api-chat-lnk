@@ -459,7 +459,6 @@ class QueryPlansAcquired(models.Model):
     query_quantity = models.PositiveIntegerField()
     activation_date = models.DateField(null=True)
     is_active = models.BooleanField(default=False)
-    is_chosen = models.BooleanField(default=False)
     available_requeries = models.PositiveIntegerField()
     maximum_response_time = models.PositiveIntegerField()  # En Horas
     acquired_at = models.DateTimeField(auto_now_add=True)
@@ -480,7 +479,8 @@ class QueryPlansClient(models.Model):
     transfer = models.BooleanField(default=True)
     share = models.BooleanField(default=True)
     empower = models.BooleanField(default=True)
-    status = models.PositiveIntegerField(choices=Ch.queryplansclient_status)
+    status = models.PositiveIntegerField(choices=Ch.queryplansclient_status)    
+    is_chosen = models.BooleanField(default=False)
 
 class QueryPlansManage(models.Model):
     """Manejador de Planes"""
