@@ -117,9 +117,9 @@ def chat_firebase_db(data, room):
     return res
 
 
-def node_query(data, id):
+def node_query(data, id, room):
     """Actualizar o crear nodos de consulta."""
-    node = "queries/{}".format(Params.PREFIX['query'] + str(id))
+    node = "queries/{}/{}".format(room, Params.PREFIX['query'] + str(id))
     if exist_node(node):
         res = db.child(node).update(data)
     else:
@@ -266,10 +266,10 @@ def createCategoriesLisClients(client_id):
     return res
 
 
-def update_status_query(query_id, data):
+def update_status_query(query_id, data, room):
     """Actualizar query de los mensajes."""
     # print(data)
-    node_query(data=data, id=query_id)
+    node_query(data=data, id=query_id, room=room)
     # check_type_data('chats', 'chats/{}'.format(data_msgs[0].room))
 
 
