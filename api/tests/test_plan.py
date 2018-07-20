@@ -89,6 +89,23 @@ class UpdatePlanActiveByAPI(APITestCase):
         response = client.put(reverse('activation-plan', args=(code,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+
+class GetPlans(APITestCase):
+    """Devolver el listado de todos los planes."""
+
+    fixtures = ['data', 'data2', 'data3']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+
+    def test_get_list(self):
+        """Obtener resultado 200 de la lista."""
+        response = self.client.get(reverse('plans'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class GetClientPlansList(APITestCase):
     """Prueba para devolver listado de planes al cliente"""
     # fixtures = ['data', 'data2', 'data3']
@@ -118,7 +135,7 @@ class GetDetailPlan(APITestCase):
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
         response = self.client.get(reverse('client-plans-detail', args=(3,))+'?client_id=11', format='json')
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetClientPlansAllList(APITestCase):

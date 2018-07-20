@@ -512,6 +512,59 @@
     }
   },
   {
+    "model": "api.clasification",
+    "pk": 1,
+    "fields": {
+      "name": "Popular",
+      "created_at": "2018-02-08T14:39:12Z"
+    }
+  },
+  {
+    "model": "api.queryplans",
+    "pk": 2,
+    "fields": {
+      "name": "Minipack",
+      "query_quantity": 6,
+      "validity_months": 3,
+      "maximum_response_time": 24,
+      "price": "700.0000",
+      "created_at": "2018-02-08T14:37:27Z",
+      "is_active": true,
+      "product_type": 1,
+      "clasification": 1
+    }
+  },
+  {
+    "model": "api.queryplans",
+    "pk": 3,
+    "fields": {
+      "name": "Pluspack",
+      "query_quantity": 6,
+      "validity_months": 3,
+      "maximum_response_time": 24,
+      "price": "700.0000",
+      "created_at": "2018-02-08T14:37:27Z",
+      "is_active": true,
+      "product_type": 1,
+      "clasification": 1
+    }
+  },
+  {
+    "model": "api.queryplans",
+    "pk": 4,
+    "fields": {
+      "name": "SuperPack",
+      "query_quantity": 6,
+      "validity_months": 3,
+      "maximum_response_time": 24,
+      "price": "700.0000",
+      "created_at": "2018-02-08T14:37:27Z",
+      "is_active": true,
+      "product_type": 1,
+      "clasification": 1
+    }
+  },
+  {
     "model": "api.objection",
     "pk": 1,
     "fields":{

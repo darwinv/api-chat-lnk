@@ -1,4 +1,4 @@
-"""Activacion y modificacion de planes."""
+"""Activacion, modificacion y listado de planes."""
 import sys
 from rest_framework import permissions, status
 from rest_framework.views import APIView
@@ -6,8 +6,8 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
 from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquiredDetailSerializer
-from api.serializers.plan import QueryPlansTransfer
-from api.models import QueryPlansAcquired, QueryPlansClient, Client
+from api.serializers.plan import QueryPlansTransfer, QueryPlansSerializer
+from api.models import QueryPlansAcquired, QueryPlansClient, Client, QueryPlans
 from api.permissions import IsAdminOrClient
 from api.utils.validations import Operations
 from api.utils.querysets import get_query_set_plan
@@ -19,6 +19,20 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from datetime import datetime
 from rest_framework import serializers
 from linkupapi.settings_secret import WEB_HOST
+
+
+class PlansView(APIView):
+    """Listado de planes activos a la venta."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def get(self, request):
+        """Devolver Planes."""
+        q_plans = QueryPlans.objects.filter(is_active=True)
+        plans = QueryPlansSerializer(q_plans, many=True)
+        return Response(plans.data)
+
 
 class QueryPlansAcquiredDetailView(APIView):
     """Detalle de Plan Adquirido."""
@@ -46,12 +60,12 @@ class QueryPlansAcquiredDetailView(APIView):
         client_id = Operations.get_id(self, request)
         data = request.data
         plan = self.get_object(pk)
-        
+
         try:
             plan_client = QueryPlansClient.objects.get(client=client_id, acquired_plan=plan.id)
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
-        
+
         # valido el plan que se desea activar
         if (plan.is_active is True and plan_client.client_id == client_id and
                 plan.expiration_date >= datetime.now().date()):
@@ -112,7 +126,7 @@ class ClientPlansDetailView(ListCreateAPIView):
                   'validity_months', 'query_quantity',
                   'available_queries', 'expiration_date', 'queryplansclient__transfer',
                   'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner')
-        
+
         if plan:
             serializer = QueryPlansAcquiredDetailSerializer(plan[0], partial=True)
             return Response(serializer.data)
@@ -138,7 +152,7 @@ class ClientTransferPlansView(APIView):
             acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
              queryplansclient__client=client)
         except QueryPlansAcquired.DoesNotExist:
-            raise Http404    
+            raise Http404
 
         email_receiver = receiver = None
         if 'email' in data:
@@ -149,7 +163,7 @@ class ClientTransferPlansView(APIView):
             status_transfer = 1
         except Client.DoesNotExist:
             status_transfer = 3
-        
+
 
         if not email_receiver and not receiver:
             raise serializers.ValidationError({'email': [self.required]})
@@ -178,7 +192,7 @@ class ClientTransferPlansView(APIView):
             'client': client
         }
         serializer = QueryPlansTransfer(data=data_transfer, context=data_context)
-        
+
         if serializer.is_valid():
             if 'test' not in sys.argv:
                 if acquired_plan.is_chosen:  # Si el plan estaba escogido
@@ -191,7 +205,7 @@ class ClientTransferPlansView(APIView):
                         'link': WEB_HOST
                     }
                     mail.sendmail(args=request.data)
-                
+
             serializer.save()
 
             return Response(serializer.data)

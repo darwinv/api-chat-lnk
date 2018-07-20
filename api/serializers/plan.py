@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from api.models import QueryPlansAcquired, QueryPlansClient, QueryPlansManage
+from api.models import QueryPlans
 from api.utils.tools import get_date_by_time
 from datetime import datetime
+
 
 class PlanDetailSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
@@ -101,6 +103,7 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
         else:
             return False
 
+
 class QueryPlansTransfer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
 
@@ -116,9 +119,9 @@ class QueryPlansTransfer(serializers.ModelSerializer):
         # manage = validated_data.pop('manage')
         receiver = self.context['client_receiver']
         sender = self.context['client_sender']
-        
+
         instance = QueryPlansManage.objects.create(**validated_data)
-        
+
         if 'client' in receiver and receiver['client']:
             plan = receiver['acquired_plan']
             plan.is_chosen = False
@@ -131,3 +134,11 @@ class QueryPlansTransfer(serializers.ModelSerializer):
 
         return instance
 
+
+class QueryPlansSerializer(serializers.ModelSerializer):
+    """Listado de planes."""
+
+    class Meta:
+        """Modelo."""
+        model = QueryPlans
+        fields = ('name', 'query_quantity', 'validity_months', 'price')
