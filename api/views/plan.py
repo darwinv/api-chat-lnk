@@ -51,7 +51,7 @@ class QueryPlansAcquiredDetailView(APIView):
         
         try:
             plan_client = QueryPlansClient.objects.get(client=client_id, acquired_plan=plan.id)
-        except QueryPlansAcquired.DoesNotExist:
+        except QueryPlansClient.DoesNotExist:
             raise Http404
         
         # valido el plan que se desea activar
@@ -143,13 +143,14 @@ class ClientSharePlansView(APIView):
             clients = data['client']
         else:
             raise serializers.ValidationError({'client': [self.required]})
-
+        
         try:
             acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
-             queryplansclient__client=client, queryplansclient__empower=True)
+             queryplansclient__client=client, queryplansclient__share=True)
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
-
+        import pdb
+        pdb.set_trace()
         try:
             client_obj = Client.objects.get(pk=client)
         except Client.DoesNotExist:
@@ -250,7 +251,12 @@ class ClientSharePlansView(APIView):
 
                 # Ejecutamos el serializer
                 serializer_data[email_receiver].save()
-
+            
+            if acquired_plan.is_chosen:
+                data_plan = {
+                    'available_queries': acquired_plan.available_queries
+                }
+                pyrebase.chosen_plan(client, data_plan)
             return Response({})
 
 

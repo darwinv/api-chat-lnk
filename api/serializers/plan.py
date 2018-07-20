@@ -166,7 +166,7 @@ class QueryPlansShare(serializers.ModelSerializer):
         query_plans.query_plans_id = acquired_plan.query_plans_id
         query_plans.sale_detail_id = acquired_plan.sale_detail_id
         query_plans.plan_name = acquired_plan.plan_name
-        query_plans.is_chosen = acquired_plan.is_chosen
+        query_plans.is_chosen = False
         query_plans.save()
 
         acquired_plan.query_quantity = acquired_plan.query_quantity - count
