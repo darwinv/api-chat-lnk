@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Query
 from api.models import SellerContact, SpecialistMessageList, SpecialistMessageList_sp
-from api.models import RecoveryPassword, Declinator
+from api.models import RecoveryPassword, Declinator, QueryPlansManage
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
@@ -265,10 +265,18 @@ class UpdateEmailUserView(APIView):
     def put(self, request, pk):
         """Funcion put."""
         data = request.data
+        pk = Operations.get_id(self, request)
         user = self.get_object(pk)
+        last_email = user.email_exact
         serializer = ChangeEmailSerializer(user, data, partial=True)
         if serializer.is_valid():
             serializer.save()
+
+            # Actualizamos Email si existe en el manejo de planes
+            plan_manages = QueryPlansManage.objects.filter(email_receiver=last_email)
+            if plan_manages:
+                success = plan_manages.update(email_receiver=data['email_exact'])
+
             return Response(serializer.data)
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

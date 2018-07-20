@@ -1337,6 +1337,7 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
 
         instance.email_exact = email_exact
         instance.username = email_exact
+        instance.email = email_exact
         instance.save()
         return instance
 
