@@ -580,7 +580,7 @@ class QueryAcceptView(APIView):
 
 
 class DeclineRequeryView(APIView):
-    """Vista Declinar Reconsulta"""
+    """Vista Declinar Reconsulta."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsClient]
 
