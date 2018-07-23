@@ -490,7 +490,7 @@ class CreatePlansNonBillable(APITestCase):
         """Sin Cantidad."""
         data = self.valid_payload.copy()
         data["quantity"] = ""
-        response = client.post(reverse('add-plans-nonbillable'),
+        response = client.post(reverse('plans-nonbillable'),
                                format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -498,7 +498,7 @@ class CreatePlansNonBillable(APITestCase):
         """Sin plan de consulta."""
         data = self.valid_payload.copy()
         data["query_plans"] = ""
-        response = client.post(reverse('add-plans-nonbillable'),
+        response = client.post(reverse('plans-nonbillable'),
                                format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -506,7 +506,7 @@ class CreatePlansNonBillable(APITestCase):
         """Sin vendedor."""
         data = self.valid_payload.copy()
         data["seller"] = ""
-        response = client.post(reverse('add-plans-nonbillable'),
+        response = client.post(reverse('plans-nonbillable'),
                                format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -514,14 +514,32 @@ class CreatePlansNonBillable(APITestCase):
         """Sin numero de mes."""
         data = self.valid_payload.copy()
         data["number_month"] = ""
-        response = client.post(reverse('add-plans-nonbillable'),
+        response = client.post(reverse('plans-nonbillable'),
                                format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_plans(self):
         """Crearle planes no Facturables"""
         data = self.valid_payload.copy()
-        response = client.post(reverse('add-plans-nonbillable'),
+        response = client.post(reverse('plans-nonbillable'),
                                format='json', data=data)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class GetPromocionalPlans(APITestCase):
+    """Devolver  los  planes promocionales de un vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_promotional_plans']
+
+    def setUp(self):
+        """Setup."""
+        # credenciales de vendedor
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
+
+    def test_get_seller_plans(self):
+        """devolver todos los planes pertenecientes al vendedor."""
+        response = self.client.get(reverse('seller-plans-nonbillable'))
+        import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
