@@ -571,14 +571,16 @@ class QueryAcceptView(APIView):
         if serializer.is_valid():
             serializer.save()
             if 'test' not in sys.argv:
+                room = query.message_set.last().room
                 pyrebase.updateStatusQueryAccept(specialist,
-                                                 query.client.id, pk)
+                                                 query.client.id, pk,
+                                                 room)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class DeclineRequeryView(APIView):
-    """Vista Declinar Reconsulta"""
+    """Vista Declinar Reconsulta."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsClient]
 
