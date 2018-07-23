@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from api.models import QueryPlansAcquired, QueryPlansClient, QueryPlansManage
 from api.models import QueryPlans, Client
+from api.models import SellerNonBillablePlans
 from api.utils.tools import get_date_by_time
 from datetime import datetime
 
@@ -263,3 +264,12 @@ class QueryPlansManageSerializer(serializers.ModelSerializer):
         if obj['new_acquired_plan']:
             return QueryPlansAcquiredSimpleSerializer(obj).data
         return None
+
+
+class PlansNonBillableSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        """Modelo."""
+        model = SellerNonBillablePlans
+        fields = ('seller', 'query_plans', 'quantity',
+                  'number_month')

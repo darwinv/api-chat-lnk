@@ -55,6 +55,8 @@ urlpatterns = [
     url(r'^plans/$', plan.PlansView.as_view(),
         name='plans'),
 
+    url(r'^plans/add-plans-nonbillable/$', plan.PlansNonBillableView.as_view(),
+        name='add-plans-nonbillable'),
     # # Envio de codigo de verificar al correo
     url(r'^send-code-password/$', actors.SendCodePassword.as_view(),
         name='send-code-password'),

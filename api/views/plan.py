@@ -22,6 +22,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from datetime import datetime
 from rest_framework import serializers
 from linkupapi.settings_secret import WEB_HOST
+from api.serializers.plan import PlansNonBillableSerializer
 
 
 class PlansView(APIView):
@@ -146,7 +147,7 @@ class ClientSharePlansView(APIView):
     subject = _("Share Plan Success")
     to_much_query_share = _("too many queries to share")
     already_exists_empower = _("Empower already exists")
-    
+
     def post(self, request):
         """Obtener la lista con todos los planes del cliente."""
         client = Operations.get_id(self, request)
@@ -688,3 +689,19 @@ class ClientShareEmpowerPlansView(ListCreateAPIView):
 
         serializer = QueryPlansManageSerializer(manage_data, many=True)
         return Response(serializer.data)
+
+
+class PlansNonBillableView(APIView):
+    """Vista para crear planes no facturables."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+
+    def post(self, request):
+        """Ingresar en plan no facturable."""
+        data = request.data
+        serializer = PlansNonBillableSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
