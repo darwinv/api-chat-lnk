@@ -8,9 +8,10 @@ from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquiredDetailSerializer
 from api.serializers.plan import QueryPlansSerializer, QueryPlansManageSerializer
 from api.models import QueryPlans, Client, QueryPlansManage
+from api.models import SellerNonBillablePlans
 from api.serializers.plan import QueryPlansTransfer, QueryPlansShare, QueryPlansEmpower
 from api.models import QueryPlansAcquired, QueryPlansClient
-from api.permissions import IsAdminOrClient
+from api.permissions import IsAdminOrClient, IsSeller
 from api.utils.validations import Operations
 from api.utils.querysets import get_query_set_plan
 from api.emails import BasicEmailAmazon
@@ -705,3 +706,17 @@ class PlansNonBillableView(APIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class PlansNonBillableSellerView(APIView):
+    """Vista para crear planes no facturables."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller)
+
+    def get(self, request):
+        """Devolver Planes."""
+        user_id = Operations.get_id(self, request)
+        q_plans = SellerNonBillablePlans.objects.filter(seller_id=user_id)
+        plans = PlansNonBillableSerializer(q_plans, many=True)
+        return Response(plans.data)
