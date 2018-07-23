@@ -158,6 +158,7 @@ class IsSeller(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return request.user and request.user.role_id == 4
 
+
 # En listado solo el admin
 class IsAdminOnList(permissions.BasePermission):
 
