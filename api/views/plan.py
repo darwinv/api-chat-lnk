@@ -725,9 +725,10 @@ class ClientCheckEmailOperationView(APIView):
             if plan_manage:
                 raise serializers.ValidationError({'email_receiver': [self.already_exists_empower]})
 
+        # Cliente no existe pero puede ser facultado, compartido, transferido
+        if receiver:
+            raise Http404
 
-
-        serializer = QueryPlansManageSerializer(data)
         return Response(response)
 
 
