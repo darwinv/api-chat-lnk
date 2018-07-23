@@ -42,6 +42,10 @@ urlpatterns = [
     url(r'^clients/plans-share-empower/(?P<pk>[0-9]+)$', plan.ClientShareEmpowerPlansView.as_view(),
         name='client-plans-share-empower'),
 
+    # Facultar plan de consultas
+    url(r'^clients/email-check-operation/$', plan.ClientCheckEmailOperationView.as_view(),
+        name='client-plans-empower'),
+
 
     url(r'^specialists-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$',
         actors.SpecialistDetailByUsername.as_view(),
