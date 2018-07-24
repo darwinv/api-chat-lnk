@@ -1029,7 +1029,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Validate."""
         if data["type_contact"] == 1:
-            if 'objection' not in data or 'other_reason' not in data:
+            if 'objection' not in data and 'other_reason' not in data:
                 raise serializers.ValidationError(
                     _("the objection is required"))
         return data

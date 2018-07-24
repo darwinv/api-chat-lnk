@@ -9,6 +9,7 @@ from api.models import QueryPlansAcquired
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
+
 class GetPlanByPIN(APITestCase):
     """Test module for GET plan deactive API."""
 
