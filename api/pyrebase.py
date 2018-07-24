@@ -48,7 +48,7 @@ def update_plan_choisen():
         try:
             plan_chosen = get_query_set_plan()
             plan_active = plan_chosen.filter(queryplansclient__client=client.id, is_active=True,
-                                             is_chosen=True)[:1].get()
+                                             queryplansclient__is_chosen=True)[:1].get()
 
             obj = QueryPlansAcquired.objects.get(pk=plan_active['id'])
             plan = QueryPlansAcquiredSerializer(obj)
