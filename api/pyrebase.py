@@ -48,14 +48,14 @@ def update_plan_choisen():
         try:
             plan_chosen = get_query_set_plan()
             plan_active = plan_chosen.filter(queryplansclient__client=client.id, is_active=True,
-                                             queryplansclient__is_chosen=True)[:1].get()
-
-            obj = QueryPlansAcquired.objects.get(pk=plan_active['id'])
-            plan = QueryPlansAcquiredSerializer(obj)
-            chosen_plan(client.id, plan.data)
-
+                                             queryplansclient__is_chosen=True)
+            if plan_active:
+                plan = QueryPlansAcquiredSerializer(plan_active[0])
+                chosen_plan(client.id, plan.data)
+                print("success")
+            print("empty")
         except Exception as e:
-            print("error")
+            print("error"+str(e))
 # FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
 
