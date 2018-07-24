@@ -778,7 +778,7 @@ class ClientShareEmpowerPlansView(ListCreateAPIView):
             business_name=F('receiver__business_name',),
             type_client=F('receiver__type_client',),
             photo=F('receiver__photo',)).filter(acquired_plan = pk)
-
+        
         # paginacion
         page = self.paginate_queryset(manage_data)
         if page is not None:
