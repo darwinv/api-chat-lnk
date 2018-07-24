@@ -2,7 +2,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers
 from api.views import actors, query, category, email, authorization
-from api.views import validations, plan, chat, oauth, static_data
+from api.views import validations, plan, chat, oauth, static_data, purchase
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
 router = routers.DefaultRouter()
@@ -219,4 +219,8 @@ urlpatterns = [
     # servicio exclusivo para cambiar clave, solo para equipo de desarrollo
     url(r'^password/(?P<pk>[0-9]+)/$', actors.UpdatePasswordView.as_view(),
         name='update-pass'),
+
+    # Compras
+    url(r'^purchase/$',
+        purchase.CreatePurchase.as_view(), name='purchase'),
 ]
