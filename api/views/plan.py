@@ -137,7 +137,7 @@ class ClientPlansView(ListCreateAPIView):
         """Obtener la lista con todos los planes del cliente."""
         pk = Operations.get_id(self, request)
         plan = self.get_object(pk)
-        
+
         # paginacion
         page = self.paginate_queryset(plan)
         if page is not None:
@@ -617,7 +617,7 @@ class ActivationPlanView(APIView):
                                             'client': client
                                             },
                                           partial=True)
-        
+
         if serializer.is_valid():
             serializer.save()
             if not has_chosen:
@@ -778,7 +778,7 @@ class ClientShareEmpowerPlansView(ListCreateAPIView):
             business_name=F('receiver__business_name',),
             type_client=F('receiver__type_client',),
             photo=F('receiver__photo',)).filter(acquired_plan = pk)
-        
+
         # paginacion
         page = self.paginate_queryset(manage_data)
         if page is not None:
