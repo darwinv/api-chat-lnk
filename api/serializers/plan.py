@@ -8,6 +8,7 @@ from datetime import datetime
 class PlanDetailSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
     price = serializers.CharField()
+    is_chosen = serializers.SerializerMethodField()
     class Meta:
         """Modelo del especialista y sus campos."""
 
@@ -15,6 +16,12 @@ class PlanDetailSerializer(serializers.ModelSerializer):
         fields = (
             'plan_name', 'query_quantity', 'available_queries', 'validity_months', 'expiration_date',
             'price','is_active', 'is_chosen')
+
+    def get_is_chosen(self, obj):
+        if type(obj) is dict and 'is_chosen' in obj:
+            return obj['is_chosen']
+        else:
+            return obj.is_chosen
 
 
 class ActivePlanSerializer(serializers.ModelSerializer):
@@ -24,7 +31,7 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         """Model Plan adquirido."""
 
         model = QueryPlansAcquired
-        fields = ('id', 'plan_name', 'is_chosen', 'is_active',
+        fields = ('id', 'plan_name', 'is_active',
                   'query_quantity', 'available_queries',
                   'validity_months', 'expiration_date')
         read_only_fields = ('id', 'plan_name', 'query_quantity',
@@ -33,19 +40,23 @@ class ActivePlanSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """Redefinido metodo actualizar."""
         is_chosen = self.context['is_chosen']
+        client = self.context['client']
 
         instance.is_active = True
-        instance.is_chosen = is_chosen
         instance.activation_date = datetime.now().date()
         instance.expiration_date = get_date_by_time(instance.validity_months)
-
         instance.save()
+
+        query_plan_client = QueryPlansClient.objects.get(client=client,acquired_plan=instance)
+        query_plan_client.is_chosen = is_chosen
+        query_plan_client.save()
+
         return instance
 
 
 class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
     """Plan Adquirido."""
-
+    is_chosen = serializers.SerializerMethodField()
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -66,13 +77,45 @@ class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+    def get_is_chosen(self, obj):
+        if type(obj) is dict and 'is_chosen' in obj:
+            return obj['is_chosen']
+        else:
+            try:
+                return obj.is_chosen
+            except Exception as e:
+                return False
+
+class QueryPlansClientSerializer(serializers.ModelSerializer):
+    """Plan Adquirido."""
+
+    class Meta:
+        """declaracion del modelo y sus campos."""
+
+        model = QueryPlansClient
+        fields = ('id','acquired_plan', 'client', 'owner', 'transfer',
+                  'share', 'empower',
+                  'status', 'is_chosen')
+
+        # extra_kwargs = {
+        #         'is_chosen': {'write_only': True},
+        #         'is_active': {'write_only': True}
+        # }
+
+    def update(self, instance, validated_data):
+        """Metodo actualizar redefinido."""
+        instance.is_chosen = validated_data.get(
+                               'is_chosen', instance.is_chosen)
+        instance.save()
+        return instance
+
 class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
     transfer = serializers.SerializerMethodField()
     share = serializers.SerializerMethodField()
     empower = serializers.SerializerMethodField()
     owner = serializers.SerializerMethodField()
-
+    is_chosen = serializers.SerializerMethodField()
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -100,6 +143,11 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
     def get_owner(self, obj):
         if 'queryplansclient__owner' in obj:
             return obj['queryplansclient__owner']
+        else:
+            return False
+    def get_is_chosen(self, obj):
+        if 'is_chosen' in obj:
+            return obj['is_chosen']
         else:
             return False
 
@@ -175,8 +223,8 @@ class QueryPlansShare(serializers.ModelSerializer):
         query_plans.plan_name = acquired_plan.plan_name
         query_plans.is_chosen = False
         query_plans.save()
-
-        acquired_plan.query_quantity = acquired_plan.query_quantity - count
+        
+        acquired_plan.available_queries = acquired_plan.available_queries - count
         acquired_plan.save()
 
         validated_data['new_acquired_plan'] = query_plans

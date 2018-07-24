@@ -244,6 +244,22 @@ class GetSpecialistQueryCount(APITestCase):
             reverse('specialist-query-count'), format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+class PutChosemPlanClient(APITestCase):
+    """Prueba para actualizar el plan elegido de un determinado cliente"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_put_chosenplan_token_clientWithPlans(self):
+        """Obtener resultado 200."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+        response = self.client.get(reverse('chosen-plan-edit', kwargs={'pk': 3}), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 class GetChosemPlanClient(APITestCase):
     """Prueba para devolver el plan activo y elegido de un determinado cliente"""
 

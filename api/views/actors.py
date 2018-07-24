@@ -394,8 +394,7 @@ def give_plan_new_client(client_id):
     queryPlansAcquired.query_plans_id = '1'
     queryPlansAcquired.sale_detail_id = saleDetail.id
     queryPlansAcquired.query_quantity = '500'
-    queryPlansAcquired.plan_name = 'TesterPack'
-    queryPlansAcquired.is_chosen = '1'
+    queryPlansAcquired.plan_name = 'TesterPack'    
     queryPlansAcquired.save()
 
     queryPlansClient.owner = True
@@ -405,10 +404,11 @@ def give_plan_new_client(client_id):
     queryPlansClient.status = 1
     queryPlansClient.acquired_plan_id = queryPlansAcquired.id
     queryPlansClient.client_id = client_id
+    queryPlansClient.is_chosen = True
     queryPlansClient.save()
 
     serializer = QueryPlansAcquiredSerializer(queryPlansAcquired)
-    chosen_plan('u'+str(client_id), serializer.data)
+    chosen_plan(client_id, serializer.data)
 
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):

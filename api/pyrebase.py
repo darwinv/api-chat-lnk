@@ -52,7 +52,7 @@ def update_plan_choisen():
 
             obj = QueryPlansAcquired.objects.get(pk=plan_active['id'])
             plan = QueryPlansAcquiredSerializer(obj)
-            chosen_plan(Params.PREFIX['client'] + str(client.id), plan.data)
+            chosen_plan(client.id, plan.data)
 
         except Exception as e:
             print("error")
@@ -340,10 +340,9 @@ def createListMessageClients(lista, query_id, status,
 
 
 def chosen_plan(client_id, data):
+    node = Params.PREFIX['client'] + str(client_id)
     """Actualizar el plan elegido por cliente."""
-    firebase = pyrebase.initialize_app(config)
-    db = firebase.database()
-    res = db.child("chosenPlans").child(client_id).update(data)
+    res = db.child("chosenPlans").child(node).update(data)
     return res
 
 

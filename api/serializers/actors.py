@@ -1310,7 +1310,7 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
 
     email_exact = serializers.EmailField(validators=[UniqueValidator(
         queryset=User.objects.all())])
-
+    invalid = _("invalid")
     class Meta:
         """Meta."""
         model = User
@@ -1318,9 +1318,8 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
         extra_kwargs = {'email_exact': {'required': True},'password': {'required': True,'write_only': True} }
 
     def validate_password(self, value):
-        invalid = _("not valid")
         if not self.instance.check_password(value):
-            raise serializers.ValidationError("errorrr")
+            raise serializers.ValidationError({"password":self.invalid})
 
         return value
 
