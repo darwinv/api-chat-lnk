@@ -200,15 +200,15 @@ class CreateQuery(APITestCase):
 
     def test_create_query(self):
         """Creacion Exitosa de la consulta."""
-        q = QueryPlansAcquired.objects.get(is_chosen=True, queryplansclient__client=5)
-        before_post_queries = q.available_queries
+        plan = QueryPlansAcquired.objects.get(queryplansclient__is_chosen=True, queryplansclient__client=5)
+        before_post_queries = plan.available_queries
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        qq = QueryPlansAcquired.objects.get(is_chosen=True, queryplansclient__client=5)
-        after_post_queries = qq.available_queries
+        query_plan = QueryPlansAcquired.objects.get(queryplansclient__is_chosen=True, queryplansclient__client=5)
+        after_post_queries = query_plan.available_queries
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(before_post_queries - 1, after_post_queries)
 

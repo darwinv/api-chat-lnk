@@ -23,7 +23,7 @@ def has_active_plan(client):
 def has_available_queries(client):
     """Verificar si el usuario tiene consultas disponibles."""
     # import pdb; pdb.set_trace()
-    q = QueryPlansAcquired.objects.get(is_chosen=True, queryplansclient__client=client)
+    q = QueryPlansAcquired.objects.get(queryplansclient__is_chosen=True, queryplansclient__client=client)
     return q.available_queries >= 1
 
 """ Planes de Consultas """
@@ -32,8 +32,7 @@ def get_query_set_plan():
     Funcion creada para instancia base de los planes de un cliente
     :return: QuerySet
     """
-    return QueryPlansAcquired.objects.values('id', 'is_chosen', 'is_active', 'plan_name',
+    return QueryPlansAcquired.objects.values('id', 'is_active', 'plan_name',
                                               'query_quantity', 'available_queries',
                                               'validity_months','expiration_date','sale_detail__price')\
-            .annotate(price=F('sale_detail__price'))
-
+            .annotate(price=F('sale_detail__price'), is_chosen=F('queryplansclient__is_chosen'))
