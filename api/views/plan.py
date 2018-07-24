@@ -216,7 +216,7 @@ class ClientSharePlansView(APIView):
 
         if acumulator > acquired_plan.available_queries:
             raise serializers.ValidationError({'count': [self.to_much_query_share]})
-
+        
         for client_data in clients:
             email_receiver = receiver = count = None
 
@@ -699,7 +699,6 @@ class ClientCheckEmailOperationView(APIView):
         client = Operations.get_id(self, request)
         data = request.query_params
         response = True
-
         if 'acquired_plan' in data:
             acquired_plan = data['acquired_plan']
         else:
@@ -719,7 +718,7 @@ class ClientCheckEmailOperationView(APIView):
         try:
             client_obj = Client.objects.get(pk=client)
         except Client.DoesNotExist:
-            raise Http404
+            raise serializers.ValidationError({'credentials': [self.invalid]})
 
         if email_receiver == client_obj.email_exact:
             raise serializers.ValidationError({'email_receiver': [self.invalid]})
