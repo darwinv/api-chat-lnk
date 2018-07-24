@@ -682,6 +682,79 @@ class ChosenPlanView(APIView):
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
 
+class ClientCheckEmailOperationView(APIView):
+    """Vista para checkar si un correo puede realizar operacion"""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
+
+    already_exists_empower = _("Empower already exists")
+    required = _("required")
+    invalid = _("invalid")
+    already_exists_empower_or_share = _("Empower or Share already exists")
+    def get(self, request):
+        client = Operations.get_id(self, request)
+        data = request.query_params
+        response = True
+
+        if 'acquired_plan' in data:
+            acquired_plan = data['acquired_plan']
+        else:
+            raise serializers.ValidationError({'acquired_plan': [self.required]})
+
+        if 'email_receiver' in data:
+            email_receiver = data['email_receiver']
+        else:
+            raise serializers.ValidationError({'email_receiver': [self.required]})
+
+        if 'type_operation' in data:
+            type_operation = int(data['type_operation'])
+        else:
+            raise serializers.ValidationError({'type_operation': [self.required]})
+
+        # No realizar operacion a sigo mismo
+        try:
+            client_obj = Client.objects.get(pk=client)
+        except Client.DoesNotExist:
+            raise Http404
+
+        if email_receiver == client_obj.email_exact:
+            raise serializers.ValidationError({'email_receiver': [self.invalid]})
+
+        # Traer cliente by email si existe!
+        try:
+            receiver = Client.objects.get(email_exact=email_receiver)
+            status_transfer = 1
+        except Client.DoesNotExist:
+            receiver = None
+            status_transfer = 3
+
+        if type_operation == 1 or type_operation == 3:
+            """Transferir"""
+            # No realizar operacion si tiene operacioens previas para este plan
+            plan_manage = QueryPlansManage.objects.filter(
+                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
+                acquired_plan=acquired_plan, sender=client)
+
+            if plan_manage:
+                raise serializers.ValidationError({'email_receiver': [self.already_exists_empower_or_share]})
+
+        if type_operation==2:
+            """compartir"""
+            # No realizar operacion si tiene operacioens previas para este plan
+            plan_manage = QueryPlansManage.objects.filter(
+                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
+                acquired_plan=acquired_plan, sender=client, type_operation=3)
+
+            if plan_manage:
+                raise serializers.ValidationError({'email_receiver': [self.already_exists_empower]})
+
+        # Cliente no existe pero puede ser facultado, compartido, transferido
+        if receiver:
+            raise Http404
+
+        return Response(response)
+
+
 class ClientShareEmpowerPlansView(ListCreateAPIView):
     """Vista para clientes Compartidos y facultados"""
 
