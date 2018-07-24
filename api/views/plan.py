@@ -717,6 +717,8 @@ class PlansNonBillableSellerView(APIView):
     def get(self, request):
         """Devolver Planes."""
         user_id = Operations.get_id(self, request)
-        q_plans = SellerNonBillablePlans.objects.filter(seller_id=user_id)
+        hoy = datetime.now()  # fecha de hoy
+        q_plans = SellerNonBillablePlans.objects.filter(seller_id=user_id,
+                                                        number_month=hoy.month)
         plans = PlansNonBillableSerializer(q_plans, many=True)
         return Response(plans.data)
