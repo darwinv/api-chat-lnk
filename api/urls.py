@@ -44,7 +44,7 @@ urlpatterns = [
 
     # Facultar plan de consultas
     url(r'^clients/email-check-operation/$', plan.ClientCheckEmailOperationView.as_view(),
-        name='client-plans-empower'),
+        name='client-email-check-operation'),
 
 
     url(r'^specialists-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$',

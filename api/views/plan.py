@@ -135,7 +135,7 @@ class ClientPlansView(ListCreateAPIView):
 
     def get(self, request):
         """Obtener la lista con todos los planes del cliente."""
-        pk = request.user.id
+        pk = Operations.get_id(self, request)
         plan = self.get_object(pk)
         
         # paginacion
@@ -753,7 +753,7 @@ class ClientCheckEmailOperationView(APIView):
                 raise serializers.ValidationError({'email_receiver': [self.already_exists_empower]})
 
         # Cliente no existe pero puede ser facultado, compartido, transferido
-        if receiver:
+        if not receiver:
             raise Http404
 
         return Response(response)

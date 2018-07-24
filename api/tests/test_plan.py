@@ -120,7 +120,7 @@ class GetClientPlansList(APITestCase):
 
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
-        response = self.client.get(reverse('client-plans'), format='json')
+        response = self.client.get(reverse('client-plans')+'?client_id=11', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -428,6 +428,7 @@ class MakeEmpowerPlan(APITestCase):
 
     def setUp(self):
         """Setup."""
+        self.client = APIClient()
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
 
@@ -444,6 +445,7 @@ class MakeEmpowerPlan(APITestCase):
                 }
             ]
         }
+        
         response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
