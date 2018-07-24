@@ -117,9 +117,9 @@ def chat_firebase_db(data, room):
     return res
 
 
-def node_query(data, id):
+def node_query(data, id, room):
     """Actualizar o crear nodos de consulta."""
-    node = "queries/{}".format(Params.PREFIX['query'] + str(id))
+    node = "queries/{}/{}".format(room, Params.PREFIX['query'] + str(id))
     if exist_node(node):
         res = db.child(node).update(data)
     else:
@@ -166,7 +166,7 @@ def categories_db(client_id, cat_id, time_now=None, read=False):
     return res
 
 
-def updateStatusQueryAccept(specialist_id, client_id, query_id):
+def updateStatusQueryAccept(specialist_id, client_id, query_id, room=None):
     """ Actualizacion query en listado y chat """
     data = {"status": 2}  # Query Aceptado por especialista
 
@@ -178,7 +178,7 @@ def updateStatusQueryAccept(specialist_id, client_id, query_id):
 
     # Actualizar estatus de los consulta en el nodo de query
     # data_msgs = Message.objects.filter(query=query_id)
-    update_status_query(query_id, data)
+    update_status_query(query_id, data, room)
 
 
 def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
@@ -194,6 +194,7 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     client_id = query.client.id
     query_id = query.id
     category_id = query.category.id
+    room = query.message_set.last().room
 
     # Remover query del listado de especialista actual
     removeQueryAcceptList(old_specialist_id, client_id, query_id)
@@ -207,7 +208,7 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
                                status, specialist_id)
 
     # Actualizar estatus de las consultas
-    update_status_query(query_id, data)
+    update_status_query(query_id, data, room)
 
 
 def removeQueryAcceptList(specialist_id, client_id, query_id):
@@ -266,10 +267,10 @@ def createCategoriesLisClients(client_id):
     return res
 
 
-def update_status_query(query_id, data):
+def update_status_query(query_id, data, room):
     """Actualizar query de los mensajes."""
     # print(data)
-    node_query(data=data, id=query_id)
+    node_query(data=data, id=query_id, room=room)
     # check_type_data('chats', 'chats/{}'.format(data_msgs[0].room))
 
 

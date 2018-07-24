@@ -9,9 +9,10 @@ from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquire
 from api.serializers.plan import QueryPlansSerializer, QueryPlansManageSerializer
 from api.serializers.plan import QueryPlansClientSerializer
 from api.models import QueryPlans, Client, QueryPlansManage
+from api.models import SellerNonBillablePlans
 from api.serializers.plan import QueryPlansTransfer, QueryPlansShare, QueryPlansEmpower
 from api.models import QueryPlansAcquired, QueryPlansClient
-from api.permissions import IsAdminOrClient
+from api.permissions import IsAdminOrClient, IsSeller
 from api.utils.validations import Operations
 from api.utils.querysets import get_query_set_plan
 from api.emails import BasicEmailAmazon
@@ -23,6 +24,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from datetime import datetime
 from rest_framework import serializers
 from linkupapi.settings_secret import WEB_HOST
+from api.serializers.plan import PlansNonBillableSerializer
 
 
 class PlansView(APIView):
@@ -176,6 +178,7 @@ class ClientSharePlansView(APIView):
     subject = _("Share Plan Success")
     to_much_query_share = _("too many queries to share")
     already_exists_empower = _("Empower already exists")
+
     def post(self, request):
         """Obtener la lista con todos los planes del cliente."""
         client = Operations.get_id(self, request)
@@ -188,7 +191,7 @@ class ClientSharePlansView(APIView):
             clients = data['client']
         else:
             raise serializers.ValidationError({'client': [self.required]})
-        
+
         try:
             acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
              queryplansclient__client=client, queryplansclient__share=True)
@@ -196,7 +199,7 @@ class ClientSharePlansView(APIView):
              client=client)
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
-        
+
         try:
             client_obj = Client.objects.get(pk=client)
         except Client.DoesNotExist:
@@ -295,13 +298,14 @@ class ClientSharePlansView(APIView):
 
                 # Ejecutamos el serializer
                 serializer_data[email_receiver].save()
-            
+
             if 'test' not in sys.argv:
                 if acquired_plan_client.is_chosen:
                     data_plan = {
                         'available_queries': acquired_plan.available_queries
                     }
                     pyrebase.chosen_plan(client, data_plan)
+
             return Response({})
 
 
@@ -783,3 +787,35 @@ class ClientShareEmpowerPlansView(ListCreateAPIView):
 
         serializer = QueryPlansManageSerializer(manage_data, many=True)
         return Response(serializer.data)
+
+
+class PlansNonBillableView(APIView):
+    """Vista para crear planes no facturables."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, permissions.IsAdminUser)
+
+    def post(self, request):
+        """Ingresar en plan no facturable."""
+        data = request.data
+        serializer = PlansNonBillableSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class PlansNonBillableSellerView(APIView):
+    """Vista para crear planes no facturables."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller)
+
+    def get(self, request):
+        """Devolver Planes."""
+        user_id = Operations.get_id(self, request)
+        hoy = datetime.now()  # fecha de hoy
+        q_plans = SellerNonBillablePlans.objects.filter(seller_id=user_id,
+                                                        number_month=hoy.month)
+        plans = PlansNonBillableSerializer(q_plans, many=True)
+        return Response(plans.data)

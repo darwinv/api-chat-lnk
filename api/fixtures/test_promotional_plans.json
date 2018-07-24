@@ -1,0 +1,127 @@
+[
+  {
+    "model": "api.address",
+    "pk": 1,
+    "fields": {
+      "street": "na",
+      "department": 6,
+      "province": 58,
+      "district": 601
+    }
+  },
+  {
+"model": "api.queryplans",
+"pk": 2,
+"fields": {
+  "name": "Minipack",
+  "query_quantity": 6,
+  "validity_months": 3,
+  "maximum_response_time": 24,
+  "price": "700.0000",
+  "created_at": "2018-02-08T14:37:27Z",
+  "is_active": false,
+  "product_type": 1,
+  "clasification": 1
+}
+},
+{
+"model": "api.queryplans",
+"pk": 3,
+"fields": {
+  "name": "Polypack",
+  "query_quantity": 6,
+  "validity_months": 3,
+  "maximum_response_time": 24,
+  "price": "900.0000",
+  "created_at": "2018-02-08T14:37:27Z",
+  "is_active": false,
+  "product_type": 1,
+  "clasification": 1
+}
+},
+{
+"model": "api.queryplans",
+"pk": 4,
+"fields": {
+  "name": "cuatripack",
+  "query_quantity": 6,
+  "validity_months": 3,
+  "maximum_response_time": 24,
+  "price": "100.0000",
+  "created_at": "2018-02-08T14:37:27Z",
+  "is_active": false,
+  "product_type": 1,
+  "clasification": 1
+}
+},
+{
+"model": "api.user",
+"pk": 19,
+"fields": {
+    "password": "pbkdf2_sha256$36000$zYNuNmVAEdJB$/YzAG8AR4SFu5puGwV2+pSOddhqPU2FRk9c/EDIz7dc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sky",
+    "first_name": "Celeste",
+    "last_name": "Rodr\u00edguez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-10-23T15:20:08.687Z",
+    "nick": "sky",
+    "email_exact": "celeste.sky@gmail.com",
+    "telephone": "1234567",
+    "cellphone": "123456789",
+    "photo": "preview.png",
+    "document_type": 1,
+    "document_number": "48464954",
+    "ruc": null,
+    "code": "c48464954",
+    "anonymous": true,
+    "updated_at": "2017-10-23T15:20:08.801Z",
+    "nationality": 1,
+    "residence_country": 1,
+    "role": 4,
+    "address": 1,
+    "groups": [],
+    "user_permissions": []
+}
+},
+{
+  "model": "api.seller",
+  "pk": 19,
+  "fields": {
+    "cv": null,
+    "zone": null,
+    "ciiu": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 19,
+  "fields": {
+    "user": 19,
+    "token": "kEphPGlavEforKavpDzuZSgK0zpoXS",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "",
+    "created": "2016-12-31T23:59:59Z",
+    "updated": "2017-10-02T22:27:09.173Z"
+  }
+},
+
+{
+  "model":"api.sellernonbillableplans",
+  "pk": 1,
+  "fields": {
+    "quantity": 5,
+    "number_month": 7,
+    "created_at": "2016-12-31T23:59:59Z",
+    "query_plans": 2,
+    "seller":19
+  }
+}
+
+]

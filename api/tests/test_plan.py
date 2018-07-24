@@ -469,7 +469,8 @@ class MakeEmpowerPlan(APITestCase):
                 }
             ]
         }
-        response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
+        response = self.client.post(reverse('client-plans-empower'),
+                                    format='json', data=data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -485,3 +486,75 @@ class MakeEmpowerPlan(APITestCase):
         }
         response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class CreatePlansNonBillable(APITestCase):
+    """Crearle planes no factuables a vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_plan']
+
+    def setUp(self):
+        """Setup."""
+        self.valid_payload = {
+            "quantity": 2,
+            "query_plans": 2,
+            "seller": 19,
+            "number_month": 6
+        }
+
+    def test_no_quantity(self):
+        """Sin Cantidad."""
+        data = self.valid_payload.copy()
+        data["quantity"] = ""
+        response = client.post(reverse('plans-nonbillable'),
+                               format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_query_plans(self):
+        """Sin plan de consulta."""
+        data = self.valid_payload.copy()
+        data["query_plans"] = ""
+        response = client.post(reverse('plans-nonbillable'),
+                               format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_seller(self):
+        """Sin vendedor."""
+        data = self.valid_payload.copy()
+        data["seller"] = ""
+        response = client.post(reverse('plans-nonbillable'),
+                               format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_number_month(self):
+        """Sin numero de mes."""
+        data = self.valid_payload.copy()
+        data["number_month"] = ""
+        response = client.post(reverse('plans-nonbillable'),
+                               format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_plans(self):
+        """Crearle planes no Facturables"""
+        data = self.valid_payload.copy()
+        response = client.post(reverse('plans-nonbillable'),
+                               format='json', data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class GetPromocionalPlans(APITestCase):
+    """Devolver  los  planes promocionales de un vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_promotional_plans']
+
+    def setUp(self):
+        """Setup."""
+        # credenciales de vendedor
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
+
+    def test_get_seller_plans(self):
+        """devolver todos los planes pertenecientes al vendedor."""
+        response = self.client.get(reverse('seller-plans-nonbillable'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
