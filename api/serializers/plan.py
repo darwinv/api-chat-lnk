@@ -224,7 +224,7 @@ class QueryPlansShare(serializers.ModelSerializer):
         query_plans.plan_name = acquired_plan.plan_name
         query_plans.is_chosen = False
         query_plans.save()
-        
+
         acquired_plan.available_queries = acquired_plan.available_queries - count
         acquired_plan.save()
 
@@ -321,3 +321,13 @@ class PlansNonBillableSerializer(serializers.ModelSerializer):
         model = SellerNonBillablePlans
         fields = ('seller', 'query_plans', 'quantity',
                   'number_month')
+
+    def to_representation(self, instance):
+        """representation."""
+        data = {
+            "name": instance.query_plans.name,
+            "query_quantity": instance.query_plans.query_quantity,
+            "validity_months": instance.query_plans.validity_months,
+            "price": instance.query_plans.price
+        }
+        return data
