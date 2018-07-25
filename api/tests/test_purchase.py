@@ -26,8 +26,7 @@ class PurchaseQueryPlans(APITestCase):
                 "plan_id": 1,
                 "description": "plan de consulta",
                 "discount": 0.00,
-               }
-            ]
+               }]
         }
 
     def test_purchase_succesfull(self):

@@ -21,6 +21,7 @@ class CreatePurchase(APIView):
         """metodo para crear compra."""
 
         user_id = Operations.get_id(self, request)
+        data = request.data
         serializer = SaleSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
