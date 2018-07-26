@@ -1014,7 +1014,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             "document_number": obj.document_number
             }
         # serializamos la lista de objeciones si es no efectivo
-        if obj.type_contact == 1:
+        if obj.type_contact == 2:
             objections = ListObjectionsSerializer(
                 obj.objectionslist_set.all(), many=True).data
             data["objections"] = objections
@@ -1028,7 +1028,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """Validate."""
-        if data["type_contact"] == 1:
+        if data["type_contact"] == 2:
             if 'objection' not in data and 'other_reason' not in data:
                 raise serializers.ValidationError(
                     _("the objection is required"))
@@ -1050,7 +1050,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         # import pdb; pdb.set_trace()
         # creo el listado de objeciones si es no efectivo
         instance.save()
-        if validated_data["type_contact"] == 1:
+        if validated_data["type_contact"] == 2:
             for objection in objection_list:
                 # objection_obj = Objection.objects.get(pk=objection)
                 ObjectionsList.objects.create(contact=instance,
