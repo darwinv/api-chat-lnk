@@ -563,3 +563,64 @@ class GetPromocionalPlans(APITestCase):
         response = self.client.get(reverse('seller-plans-nonbillable'))
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetPromocionalPlans(APITestCase):
+    """Devolver  los  planes promocionales de un vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_promotional_plans']
+
+    def setUp(self):
+        """Setup."""
+        # credenciales de vendedor
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
+
+    def test_get_seller_plans(self):
+        """devolver todos los planes pertenecientes al vendedor."""
+        response = self.client.get(reverse('seller-plans-nonbillable'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetCheckEmailForOperationPlans(APITestCase):
+    """Devolver 404 si no existe, devuelve 200 si existe y 400 status si 
+    no es valido para operacion."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        # credenciales de vendedor
+        self.valid_payload = {
+            "type_operation": 2,
+            "email_receiver": "jperez@mail.com",
+            "acquired_plan": 22,
+            'client_id':11
+        }    
+
+    def test_get_check_no_exist(self):
+        """Get check if client exist in operation manage 404"""
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_check_exist(self):
+        """Get check if client exist in operation manage 200"""
+        self.valid_payload["email_receiver"] = "jefeti@pympack.com.pe"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_check_allready_no_exist(self):
+        """Get check if client exist in operation manage 400 no creado pero ya existe"""
+        self.valid_payload["email_receiver"] = "cliente_no_existe@mail.com"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_check_allready_exist(self):
+        """Get check if client exist in operation manage 400 creado y ya existe"""
+        self.valid_payload["email_receiver"] = "cliente_extra@mail.com"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_check_myself(self):
+        """Get check if client exist in operation manage 400 creado y ya existe"""
+        self.valid_payload["email_receiver"] = "clientejosue@mail.com"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

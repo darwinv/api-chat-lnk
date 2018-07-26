@@ -8,9 +8,9 @@ from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquiredDetailSerializer
 from api.serializers.plan import QueryPlansSerializer, QueryPlansManageSerializer
 from api.serializers.plan import QueryPlansClientSerializer
+from api.serializers.plan import QueryPlansTransfer, QueryPlansShare, QueryPlansEmpower
 from api.models import QueryPlans, Client, QueryPlansManage
 from api.models import SellerNonBillablePlans
-from api.serializers.plan import QueryPlansTransfer, QueryPlansShare, QueryPlansEmpower
 from api.models import QueryPlansAcquired, QueryPlansClient
 from api.permissions import IsAdminOrClient, IsSeller
 from api.utils.validations import Operations
@@ -216,7 +216,7 @@ class ClientSharePlansView(APIView):
 
         if acumulator > acquired_plan.available_queries:
             raise serializers.ValidationError({'count': [self.to_much_query_share]})
-
+        
         for client_data in clients:
             email_receiver = receiver = count = None
 
@@ -392,7 +392,7 @@ class ClientEmpowerPlansView(APIView):
             data_context = {}
             data_context['client_receiver'] = {
                 'owner': False,
-                'transfer': True,
+                'transfer': False,
                 'share': True,
                 'empower': False,
                 'status': status_transfer,
@@ -431,7 +431,7 @@ class ClientTransferPlansView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     required = _("required")
-    subject = _("Transfer Plan Success")
+    subject = "Transfer Plan Success"
     invalid = _("invalid")
     already_exists = _("it already exists")
 
@@ -511,19 +511,11 @@ class ClientTransferPlansView(APIView):
 
         if serializer.is_valid():
             if 'test' not in sys.argv:
-                # Envio de correos notificacion
-                mail = BasicEmailAmazon(subject="Facultar Plan Exitoso", to=email_receiver,
-                            template='email/empower')
-                arguments = {'link': WEB_HOST}
-                mail.sendmail(args=arguments)
-
                 # Si el plan estaba escogido por el anterior cliente
                 if is_chosen_plan:
                     pyrebase.delete_actual_plan_client(client)
-
                     mail = BasicEmailAmazon(subject=self.subject, to=email_receiver,
                                 template='email/transfer')
-
                     args = {
                         'link': WEB_HOST
                     }
@@ -699,7 +691,6 @@ class ClientCheckEmailOperationView(APIView):
         client = Operations.get_id(self, request)
         data = request.query_params
         response = True
-
         if 'acquired_plan' in data:
             acquired_plan = data['acquired_plan']
         else:
@@ -719,7 +710,7 @@ class ClientCheckEmailOperationView(APIView):
         try:
             client_obj = Client.objects.get(pk=client)
         except Client.DoesNotExist:
-            raise Http404
+            raise serializers.ValidationError({'credentials': [self.invalid]})
 
         if email_receiver == client_obj.email_exact:
             raise serializers.ValidationError({'email_receiver': [self.invalid]})
