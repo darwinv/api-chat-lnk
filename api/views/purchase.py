@@ -1,7 +1,6 @@
 """Vista de Compras y Ventas."""
 from rest_framework.views import APIView
-from api.models import Category
-from api.serializers.category import CategorySerializer
+from api.serializers.sale import SaleSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
@@ -24,6 +23,7 @@ class CreatePurchase(APIView):
         data = request.data
         serializer = SaleSerializer(data=data)
         if serializer.is_valid():
+            import pdb; pdb.set_trace()
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

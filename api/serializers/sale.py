@@ -12,6 +12,10 @@ class ProductSerializer(serializers.Serializer):
 
     product_type = serializers.PrimaryKeyRelatedField(
         queryset=ProductType.objects.all(), required=True)
+    is_billable = serializers.BooleanField()
+    plan_id = serializers.PrimaryKeyRelatedField(
+        queryset=QueryPlans.objects.all(), required=False)
+    discount = serializers.FloatField(min_value=0.00)
 
 
 class SaleSerializer(serializers.Serializer):
@@ -22,3 +26,6 @@ class SaleSerializer(serializers.Serializer):
                                                 required=True)
     # listado de  productos que se agregaran en la venta
     products = serializers.ListField(child=ProductSerializer(), required=True)
+    is_fee = serializers.BooleanField(required=True)
+    place = serializers.CharField()
+    description = serializers.CharField()

@@ -12,6 +12,8 @@ client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 class PurchaseQueryPlans(APITestCase):
     """Caso de pruebas para Compras."""
 
+    fixtures = ['data', 'data2', 'data3']
+
     def setUp(self):
         """Setup."""
         self.valid_payload = {
@@ -24,13 +26,13 @@ class PurchaseQueryPlans(APITestCase):
                 "product_type": 1,
                 "is_billable": True,
                 "plan_id": 1,
-                "description": "plan de consulta",
                 "discount": 0.00,
                }]
         }
 
     def test_purchase_succesfull(self):
         """Compra exitosa."""
+        # import pdb; pdb.set_trace()
         response = client.post(reverse('purchase'),
                                data=json.dumps(self.valid_payload),
                                content_type='application/json')
