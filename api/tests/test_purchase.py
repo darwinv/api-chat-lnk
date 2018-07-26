@@ -35,3 +35,7 @@ class PurchaseQueryPlans(APITestCase):
                                data=json.dumps(self.valid_payload),
                                content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_purchase_with_fee(self):
+        """Compra exitosa."""
+        pass
