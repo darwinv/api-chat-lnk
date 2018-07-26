@@ -136,6 +136,7 @@ class QueryListClientView(ListCreateAPIView):
             # determino el total de consultas pendientes (status 1 o 2)
             badge_count = Query.objects.filter(specialist=specialist_id,
                                                status__lte=2).count()
+            # import pdb; pdb.set_trace()
             if 'test' not in sys.argv:
                 # crea data de notificacion push
                 body = get_body(lista[-1]["fileType"], lista[-1]["message"])
@@ -145,7 +146,7 @@ class QueryListClientView(ListCreateAPIView):
                     "sub_text": "",
                     "ticker": serializer.data["obj_query"]["title"],
                     "badge": badge_count,
-                    "icon": "https://images.pexels.com/photos/906024/pexels-photo-906024.jpeg",
+                    "icon": serializer_tmp.data[0]['photo'],
                     "client_id": user_id,
                     "category_id": category,
                     "query_id": serializer.data["query_id"]
