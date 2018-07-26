@@ -136,7 +136,7 @@ class QueryListClientView(ListCreateAPIView):
             # determino el total de consultas pendientes (status 1 o 2)
             badge_count = Query.objects.filter(specialist=specialist_id,
                                                status__lte=2).count()
-            # import pdb; pdb.set_trace()
+
             if 'test' not in sys.argv:
                 # crea data de notificacion push
                 body = get_body(lista[-1]["fileType"], lista[-1]["message"])
