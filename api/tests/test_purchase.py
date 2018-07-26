@@ -18,7 +18,7 @@ class PurchaseQueryPlans(APITestCase):
         """Setup."""
         self.valid_payload = {
             "place": "BCP",
-            "description_sale": "test",
+            "description": "test",
             "is_fee": True,
             "client": 5,
             "seller": 2,

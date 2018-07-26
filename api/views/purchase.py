@@ -23,7 +23,7 @@ class CreatePurchase(APIView):
         data = request.data
         serializer = SaleSerializer(data=data)
         if serializer.is_valid():
-            import pdb; pdb.set_trace()
             serializer.save()
+            import pdb; pdb.set_trace()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
