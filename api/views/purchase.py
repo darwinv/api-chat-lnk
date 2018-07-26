@@ -8,13 +8,13 @@ from api.utils.validations import Operations
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
-from api.permissions import IsAdmin, IsSeller
+from api.permissions import IsAdminOrSeller
 
 
 class CreatePurchase(APIView):
     """Vista para crear compra."""
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsAdmin, IsSeller]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrSeller]
 
     def post(self, request):
         """metodo para crear compra."""

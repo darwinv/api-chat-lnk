@@ -12,7 +12,7 @@ client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 class PurchaseQueryPlans(APITestCase):
     """Caso de pruebas para Compras."""
 
-    fixtures = ['data', 'data2', 'data3']
+    fixtures = ['data', 'data2', 'data3', 'test_purchase']
 
     def setUp(self):
         """Setup."""
@@ -20,12 +20,12 @@ class PurchaseQueryPlans(APITestCase):
             "place": "BCP",
             "description_sale": "test",
             "is_fee": True,
-            "client": 1,
-            "seller": 10,
+            "client": 5,
+            "seller": 2,
             "products": [{
                 "product_type": 1,
                 "is_billable": True,
-                "plan_id": 1,
+                "plan_id": 2,
                 "discount": 0.00,
                }]
         }
@@ -36,6 +36,7 @@ class PurchaseQueryPlans(APITestCase):
         response = client.post(reverse('purchase'),
                                data=json.dumps(self.valid_payload),
                                content_type='application/json')
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_purchase_with_fee(self):

@@ -561,10 +561,6 @@ class GetPromocionalPlans(APITestCase):
     def test_get_seller_plans(self):
         """devolver todos los planes pertenecientes al vendedor."""
         response = self.client.get(reverse('seller-plans-nonbillable'))
-<<<<<<< HEAD
-=======
-        # import pdb; pdb.set_trace()
->>>>>>> develop
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetPromocionalPlans(APITestCase):
@@ -584,7 +580,7 @@ class GetPromocionalPlans(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetCheckEmailForOperationPlans(APITestCase):
-    """Devolver 404 si no existe, devuelve 200 si existe y 400 status si 
+    """Devolver 404 si no existe, devuelve 200 si existe y 400 status si
     no es valido para operacion."""
 
     fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
@@ -597,7 +593,7 @@ class GetCheckEmailForOperationPlans(APITestCase):
             "email_receiver": "jperez@mail.com",
             "acquired_plan": 22,
             'client_id':11
-        }    
+        }
 
     def test_get_check_no_exist(self):
         """Get check if client exist in operation manage 404"""
