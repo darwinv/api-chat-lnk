@@ -34,6 +34,7 @@ def update_categories_detail():
         res = db.child("categories/categoryDetail").child(
             node_client).update({"description": categorie.description})
 
+
 def update_categories():
     """Cargar listado de categorias para todos los usuarios."""
     # SOLO USO PARA AMBIENTE EN DESARROLLO
@@ -48,14 +49,14 @@ def update_plan_choisen():
         try:
             plan_chosen = get_query_set_plan()
             plan_active = plan_chosen.filter(queryplansclient__client=client.id, is_active=True,
-                                             is_chosen=True)[:1].get()
-
-            obj = QueryPlansAcquired.objects.get(pk=plan_active['id'])
-            plan = QueryPlansAcquiredSerializer(obj)
-            chosen_plan(Params.PREFIX['client'] + str(client.id), plan.data)
-
+                                             queryplansclient__is_chosen=True)
+            if plan_active:
+                plan = QueryPlansAcquiredSerializer(plan_active[0])
+                chosen_plan(client.id, plan.data)
+                print("success")
+            print("empty")
         except Exception as e:
-            print("error")
+            print("error"+str(e))
 # FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
 
@@ -341,10 +342,9 @@ def createListMessageClients(lista, query_id, status,
 
 
 def chosen_plan(client_id, data):
+    node = Params.PREFIX['client'] + str(client_id)
     """Actualizar el plan elegido por cliente."""
-    firebase = pyrebase.initialize_app(config)
-    db = firebase.database()
-    res = db.child("chosenPlans").child(client_id).update(data)
+    res = db.child("chosenPlans").child(node).update(data)
     return res
 
 

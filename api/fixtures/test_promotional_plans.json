@@ -117,7 +117,7 @@
   "pk": 1,
   "fields": {
     "quantity": 5,
-    "number_month": 1,
+    "number_month": 7,
     "created_at": "2016-12-31T23:59:59Z",
     "query_plans": 2,
     "seller":19

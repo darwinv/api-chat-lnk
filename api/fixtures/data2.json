@@ -596,7 +596,7 @@
     "model": "api.objection",
     "pk": 4,
     "fields":{
-      "name":"otro motivo"
+      "name":"Tiene amigo que lo asesora"
     }
   }
 ]

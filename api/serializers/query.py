@@ -214,7 +214,7 @@ class QuerySerializer(serializers.ModelSerializer):
         # Buscamos el plan activo y elegido
 
         acq_plan = QueryPlansAcquired.objects.get(
-                            is_chosen=True, queryplansclient__client=validated_data["client"])
+                            queryplansclient__is_chosen=True, queryplansclient__client=validated_data["client"])
         validated_data["specialist"] = specialist
         validated_data["status"] = 1
         validated_data["acquired_plan"] = acq_plan
@@ -240,7 +240,7 @@ class QuerySerializer(serializers.ModelSerializer):
         acq_plan.available_queries = acq_plan.available_queries - 1
         acq_plan.save()
         pyrebase.chosen_plan(
-            Params.PREFIX['client']+str(validated_data["client"].id),
+            validated_data["client"].id,
             {"available_queries": acq_plan.available_queries})
         return query
 

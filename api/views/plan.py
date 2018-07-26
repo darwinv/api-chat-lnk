@@ -7,9 +7,10 @@ from rest_framework.response import Response
 from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquiredDetailSerializer
 from api.serializers.plan import QueryPlansSerializer, QueryPlansManageSerializer
+from api.serializers.plan import QueryPlansClientSerializer
+from api.serializers.plan import QueryPlansTransfer, QueryPlansShare, QueryPlansEmpower
 from api.models import QueryPlans, Client, QueryPlansManage
 from api.models import SellerNonBillablePlans
-from api.serializers.plan import QueryPlansTransfer, QueryPlansShare, QueryPlansEmpower
 from api.models import QueryPlansAcquired, QueryPlansClient
 from api.permissions import IsAdminOrClient, IsSeller
 from api.utils.validations import Operations
@@ -61,7 +62,7 @@ class QueryPlansAcquiredDetailView(APIView):
         return Response(plan.data)
 
     def put(self, request, pk):
-        """Activar el plan requrido y desactivar los demas."""
+        """Elegir el plan requrido y desactivar los demas."""
         client_id = Operations.get_id(self, request)
         data = request.data
         plan = self.get_object(pk)
@@ -74,18 +75,32 @@ class QueryPlansAcquiredDetailView(APIView):
         # valido el plan que se desea activar
         if (plan.is_active is True and plan_client.client_id == client_id and
                 plan.expiration_date >= datetime.now().date()):
-            serializer = QueryPlansAcquiredSerializer(plan, data, partial=True)
+
+            # Activar Plan
+            serializer = QueryPlansClientSerializer(plan_client, data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 # sincronizo en pyrebase
-                pyrebase.chosen_plan('u'+str(client_id), serializer.data)
-            # traigo todos los demas planes
-            plan_list = QueryPlansAcquired.objects.filter(
-                queryplansclient__client=client_id).exclude(pk=pk)
-            # actualizo el campo is_chosen
-            if plan_list.count() > 0:
-                plan_list.update(is_chosen=False)
-            return Response(serializer.data)
+                data_pyresabe = {
+                    'available_queries': plan.available_queries,
+                    'expiration_date': str(plan.expiration_date),
+                    'id': plan.id,
+                    'is_active': plan.is_active,
+                    'is_chosen': plan_client.is_chosen,
+                    'plan_name': plan.plan_name,
+                    'query_quantity': plan.query_quantity,
+                    'validity_months': plan.validity_months,
+                }
+                pyrebase.chosen_plan(client_id, data_pyresabe)
+                # traigo todos los demas planes
+                plan_list = QueryPlansClient.objects.filter(
+                    client=client_id).exclude(pk=pk)
+                # actualizo el campo is_chosen
+                if plan_list.count() > 0:
+                    plan_list.update(is_chosen=False)
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors, HTTP_400_BAD_REQUEST)
         raise Http404
 
 
@@ -96,26 +111,39 @@ class ClientPlansView(ListCreateAPIView):
 
     def get_object(self, pk):
         """Obtener lista de planes."""
-        try:
-            obj = QueryPlansAcquired.objects.filter(queryplansclient__client=pk,
-                                                    is_active=True,
-                                                    expiration_date__gte=datetime.now().date()).order_by('id')
-            self.check_object_permissions(self.request, obj)
-            return obj
-        except QueryPlansAcquired.DoesNotExist:
+        plan = QueryPlansAcquired.objects.filter(is_active=True, queryplansclient__client=pk,
+            expiration_date__gte=datetime.now().date()).order_by('id').values(
+                  'id', 'plan_name', 'is_active',
+                  'validity_months', 'query_quantity',
+                  'available_queries', 'expiration_date').annotate(
+                  is_chosen=F('queryplansclient__is_chosen')).order_by('id')
+        if plan:
+            return plan
+        else:
             raise Http404
+
+    # def get_object(self, pk):
+    #     """Obtener lista de planes."""
+    #     try:
+    #         obj = QueryPlansAcquired.objects.filter(queryplansclient__client=pk,
+    #                                                 is_active=True,
+    #                                                 expiration_date__gte=datetime.now().date()).order_by('id')
+    #         self.check_object_permissions(self.request, obj)
+    #         return obj
+    #     except QueryPlansAcquired.DoesNotExist:
+    #         raise Http404
 
     def get(self, request):
         """Obtener la lista con todos los planes del cliente."""
-        id = request.user.id
-        plan = self.get_object(id)
-        serializer = QueryPlansAcquiredSerializer(plan, many=True)
+        pk = Operations.get_id(self, request)
+        plan = self.get_object(pk)
+
         # paginacion
         page = self.paginate_queryset(plan)
         if page is not None:
             serializer = QueryPlansAcquiredSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-
+        serializer = QueryPlansAcquiredSerializer(plan, many=True)
         return Response(serializer.data)
 
 
@@ -127,10 +155,12 @@ class ClientPlansDetailView(ListCreateAPIView):
     def get(self, request, pk):
         """Obtener la lista con todos los planes del cliente."""
         client = Operations.get_id(self, request)
-        plan = QueryPlansAcquired.objects.filter(pk=pk, queryplansclient__client=client).values('id', 'plan_name', 'is_chosen', 'is_active',
+        plan = QueryPlansAcquired.objects.filter(pk=pk, queryplansclient__client=client).values(
+                  'id', 'plan_name', 'is_active',
                   'validity_months', 'query_quantity',
                   'available_queries', 'expiration_date', 'queryplansclient__transfer',
-                  'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner')
+                  'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner').annotate(
+                  is_chosen=F('queryplansclient__is_chosen'))
 
         if plan:
             serializer = QueryPlansAcquiredDetailSerializer(plan[0], partial=True)
@@ -165,6 +195,8 @@ class ClientSharePlansView(APIView):
         try:
             acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
              queryplansclient__client=client, queryplansclient__share=True)
+            acquired_plan_client = QueryPlansClient.objects.get(acquired_plan=acquired_plan,
+             client=client)
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
 
@@ -184,7 +216,7 @@ class ClientSharePlansView(APIView):
 
         if acumulator > acquired_plan.available_queries:
             raise serializers.ValidationError({'count': [self.to_much_query_share]})
-
+        
         for client_data in clients:
             email_receiver = receiver = count = None
 
@@ -253,8 +285,6 @@ class ClientSharePlansView(APIView):
 
         # Se retornan los errores que se acumularon
         if errors:
-            import pdb
-            pdb.set_trace()
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             # Para cada uno de los correos guardados
@@ -269,11 +299,13 @@ class ClientSharePlansView(APIView):
                 # Ejecutamos el serializer
                 serializer_data[email_receiver].save()
 
-            if acquired_plan.is_chosen:
-                data_plan = {
-                    'available_queries': acquired_plan.available_queries
-                }
-                pyrebase.chosen_plan(client, data_plan)
+            if 'test' not in sys.argv:
+                if acquired_plan_client.is_chosen:
+                    data_plan = {
+                        'available_queries': acquired_plan.available_queries
+                    }
+                    pyrebase.chosen_plan(client, data_plan)
+
             return Response({})
 
 
@@ -360,7 +392,7 @@ class ClientEmpowerPlansView(APIView):
             data_context = {}
             data_context['client_receiver'] = {
                 'owner': False,
-                'transfer': True,
+                'transfer': False,
                 'share': True,
                 'empower': False,
                 'status': status_transfer,
@@ -399,7 +431,7 @@ class ClientTransferPlansView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     required = _("required")
-    subject = _("Transfer Plan Success")
+    subject = "Transfer Plan Success"
     invalid = _("invalid")
     already_exists = _("it already exists")
 
@@ -419,6 +451,8 @@ class ClientTransferPlansView(APIView):
         try:
             acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
              queryplansclient__client=client, queryplansclient__transfer=True)
+            acquired_plan_client = QueryPlansClient.objects.get(acquired_plan=acquired_plan,
+             client=client)
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
 
@@ -465,30 +499,23 @@ class ClientTransferPlansView(APIView):
             'empower': True,
             'status': status_transfer,
             'acquired_plan': acquired_plan,
-            'client': receiver
+            'client': receiver,
+            'is_chosen': False
         }
         data_context['client_sender'] = {
             'acquired_plan': acquired_plan.id,
             'client': client
         }
-        is_chosen_plan = acquired_plan.is_chosen
+        is_chosen_plan = acquired_plan_client.is_chosen
         serializer = QueryPlansTransfer(data=data_transfer, context=data_context)
 
         if serializer.is_valid():
             if 'test' not in sys.argv:
-                # Envio de correos notificacion
-                mail = BasicEmailAmazon(subject="Facultar Plan Exitoso", to=email_receiver,
-                            template='email/empower')
-                arguments = {'link': WEB_HOST}
-                mail.sendmail(args=arguments)
-
                 # Si el plan estaba escogido por el anterior cliente
                 if is_chosen_plan:
                     pyrebase.delete_actual_plan_client(client)
-
                     mail = BasicEmailAmazon(subject=self.subject, to=email_receiver,
                                 template='email/transfer')
-
                     args = {
                         'link': WEB_HOST
                     }
@@ -508,11 +535,11 @@ class ClientAllPlansView(ListCreateAPIView):
         """Obtener lista de planes."""
         try:
             obj = QueryPlansAcquired.objects.filter(queryplansclient__client=pk).values('id',
-                'plan_name', 'is_chosen', 'is_active',
+                'plan_name', 'queryplansclient__is_chosen', 'is_active',
                 'validity_months', 'query_quantity',
                 'available_queries', 'expiration_date', 'queryplansclient__transfer',
                 'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner'
-                ).order_by('id')
+                ).annotate(is_chosen=F('queryplansclient__is_chosen')).order_by('id')
             self.check_object_permissions(self.request, obj)
             return obj
         except QueryPlansAcquired.DoesNotExist:
@@ -577,15 +604,18 @@ class ActivationPlanView(APIView):
         query_set = self.get_object(plan_acquired['id'])
 
         serializer = ActivePlanSerializer(query_set, data,
-                                          context={'is_chosen': is_chosen},
+                                          context={
+                                            'is_chosen': is_chosen,
+                                            'client': client
+                                            },
                                           partial=True)
-        # import pdb; pdb.set_trace()
+
         if serializer.is_valid():
             serializer.save()
             if not has_chosen:
                 # print('no deberia  de entrar')
                 if 'test' not in sys.argv:
-                    pyrebase.chosen_plan('u'+str(client), serializer.data)
+                    pyrebase.chosen_plan(client, serializer.data)
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -596,8 +626,8 @@ class ActivationPlanView(APIView):
             retorna False si el cliente no tiene plan seleccionado
         """
         try:
-            QueryPlansAcquired.objects.values('is_chosen')\
-                .filter(queryplansclient__client= client, is_active = True, is_chosen = True)[:1].get()
+            QueryPlansAcquired.objects.values('queryplansclient__is_chosen')\
+                .filter(queryplansclient__client=client, is_active = True, queryplansclient__is_chosen = True)[:1].get()
             return True
         except QueryPlansAcquired.DoesNotExist:
             return False
@@ -618,19 +648,6 @@ class ActivationPlanView(APIView):
             raise Http404
 
 
-    def get_some_chosen_plan(self, client):
-        """
-            retorna True si el cliente ya tiene plan seleccionado
-            retorna False si el cliente no tiene plan seleccionado
-        """
-        try:
-            QueryPlansAcquired.objects.values('is_chosen').filter(
-                queryplansclient__client=client, is_active=True, is_chosen=True)[:1].get()
-            return True
-        except QueryPlansAcquired.DoesNotExist:
-            return False
-
-
 class ChosenPlanView(APIView):
     """Devuelve plan principal del cliente que envia el token."""
 
@@ -641,7 +658,6 @@ class ChosenPlanView(APIView):
         client = request.user.id
 
         data = self.get_detail_plan(client)
-
         try:
             serializer = PlanDetailSerializer(data)
             return Response(serializer.data)
@@ -657,10 +673,82 @@ class ChosenPlanView(APIView):
         """
         try:
             plan_chosen = get_query_set_plan()
-            return plan_chosen.filter(queryplansclient__client= client, is_active = True, is_chosen = True)[:1].get()
+            return plan_chosen.filter(queryplansclient__client= client, is_active = True, queryplansclient__is_chosen = True)[:1].get()
 
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
+
+class ClientCheckEmailOperationView(APIView):
+    """Vista para checkar si un correo puede realizar operacion"""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
+
+    already_exists_empower = _("Empower already exists")
+    required = _("required")
+    invalid = _("invalid")
+    already_exists_empower_or_share = _("Empower or Share already exists")
+    def get(self, request):
+        client = Operations.get_id(self, request)
+        data = request.query_params
+        response = True
+        if 'acquired_plan' in data:
+            acquired_plan = data['acquired_plan']
+        else:
+            raise serializers.ValidationError({'acquired_plan': [self.required]})
+
+        if 'email_receiver' in data:
+            email_receiver = data['email_receiver']
+        else:
+            raise serializers.ValidationError({'email_receiver': [self.required]})
+
+        if 'type_operation' in data:
+            type_operation = int(data['type_operation'])
+        else:
+            raise serializers.ValidationError({'type_operation': [self.required]})
+
+        # No realizar operacion a sigo mismo
+        try:
+            client_obj = Client.objects.get(pk=client)
+        except Client.DoesNotExist:
+            raise serializers.ValidationError({'credentials': [self.invalid]})
+
+        if email_receiver == client_obj.email_exact:
+            raise serializers.ValidationError({'email_receiver': [self.invalid]})
+
+        # Traer cliente by email si existe!
+        try:
+            receiver = Client.objects.get(email_exact=email_receiver)
+            status_transfer = 1
+        except Client.DoesNotExist:
+            receiver = None
+            status_transfer = 3
+
+        if type_operation == 1 or type_operation == 3:
+            """Transferir"""
+            # No realizar operacion si tiene operacioens previas para este plan
+            plan_manage = QueryPlansManage.objects.filter(
+                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
+                acquired_plan=acquired_plan, sender=client)
+
+            if plan_manage:
+                raise serializers.ValidationError({'email_receiver': [self.already_exists_empower_or_share]})
+
+        if type_operation==2:
+            """compartir"""
+            # No realizar operacion si tiene operacioens previas para este plan
+            plan_manage = QueryPlansManage.objects.filter(
+                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
+                acquired_plan=acquired_plan, sender=client, type_operation=3)
+
+            if plan_manage:
+                raise serializers.ValidationError({'email_receiver': [self.already_exists_empower]})
+
+        # Cliente no existe pero puede ser facultado, compartido, transferido
+        if not receiver:
+            raise Http404
+
+        return Response(response)
+
 
 class ClientShareEmpowerPlansView(ListCreateAPIView):
     """Vista para clientes Compartidos y facultados"""
@@ -717,6 +805,8 @@ class PlansNonBillableSellerView(APIView):
     def get(self, request):
         """Devolver Planes."""
         user_id = Operations.get_id(self, request)
-        q_plans = SellerNonBillablePlans.objects.filter(seller_id=user_id)
+        hoy = datetime.now()  # fecha de hoy
+        q_plans = SellerNonBillablePlans.objects.filter(seller_id=user_id,
+                                                        number_month=hoy.month)
         plans = PlansNonBillableSerializer(q_plans, many=True)
         return Response(plans.data)

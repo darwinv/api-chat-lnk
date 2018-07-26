@@ -1,5 +1,4 @@
-[
-    {
+[{
     "model": "api.queryplans",
     "pk": 2,
     "fields": {
@@ -15,40 +14,9 @@
     }
   },
   {
-    "model": "api.queryplans",
-    "pk": 3,
-    "fields": {
-      "name": "Polypack",
-      "query_quantity": 6,
-      "validity_months": 3,
-      "maximum_response_time": 24,
-      "price": "900.0000",
-      "created_at": "2018-02-08T14:37:27Z",
-      "is_active": false,
-      "product_type": 1,
-      "clasification": 1
-    }
-  },
-  {
-    "model": "api.queryplans",
-    "pk": 4,
-    "fields": {
-      "name": "cuatripack",
-      "query_quantity": 6,
-      "validity_months": 3,
-      "maximum_response_time": 24,
-      "price": "100.0000",
-      "created_at": "2018-02-08T14:37:27Z",
-      "is_active": false,
-      "product_type": 1,
-      "clasification": 1
-    }
-  },
-  {
     "model": "api.queryplansacquired",
     "pk": 1,
     "fields": {
-      "is_chosen": false,
       "expiration_date": "2018-05-14",
       "validity_months": 3,
       "available_queries": 6,
@@ -68,6 +36,7 @@
     "pk": 1,
     "fields": {
       "acquired_plan": 1,
+      "is_chosen": false,
       "client": 15,
       "owner": true,
       "transfer": true,
@@ -76,6 +45,7 @@
       "status": 1
     }
   },
+
   {
     "model": "api.sale",
     "pk": 1,
@@ -159,8 +129,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 2,
     "fields": {
@@ -198,8 +167,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 3,
     "fields": {
@@ -237,8 +205,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 4,
     "fields": {
@@ -276,8 +243,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 5,
     "fields": {
@@ -315,8 +281,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 6,
     "fields": {
@@ -354,8 +319,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 7,
     "fields": {
@@ -393,8 +357,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 8,
     "fields": {
@@ -432,8 +395,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 9,
     "fields": {
@@ -471,8 +433,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 10,
     "fields": {
@@ -510,8 +471,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 11,
     "fields": {
@@ -549,8 +509,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 12,
     "fields": {
@@ -588,8 +547,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 13,
     "fields": {
@@ -627,8 +585,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 14,
     "fields": {
@@ -666,8 +623,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 15,
     "fields": {
@@ -705,8 +661,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 16,
     "fields": {
@@ -744,8 +699,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 17,
     "fields": {
@@ -783,8 +737,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.user",
     "pk": 18,
     "fields": {
@@ -848,8 +801,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 6,
     "fields": {
@@ -874,8 +826,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 7,
     "fields": {
@@ -900,8 +851,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 8,
     "fields": {
@@ -926,8 +876,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 9,
     "fields": {
@@ -952,8 +901,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 10,
     "fields": {
@@ -978,8 +926,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 11,
     "fields": {
@@ -1004,8 +951,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 12,
     "fields": {
@@ -1030,8 +976,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 13,
     "fields": {
@@ -1056,8 +1001,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 14,
     "fields": {
@@ -1082,8 +1026,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 15,
     "fields": {
@@ -1108,8 +1051,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 17,
     "fields": {
@@ -1134,8 +1076,7 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
+  }, {
     "model": "api.client",
     "pk": 18,
     "fields": {
@@ -1170,8 +1111,7 @@
       "province": 1,
       "district": 1
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 2,
     "fields": {
@@ -1180,8 +1120,7 @@
       "province": 3,
       "district": 30
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 3,
     "fields": {
@@ -1190,8 +1129,7 @@
       "province": 58,
       "district": 601
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 4,
     "fields": {
@@ -1200,8 +1138,7 @@
       "province": 46,
       "district": 466
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 5,
     "fields": {
@@ -1210,8 +1147,7 @@
       "province": 38,
       "district": 384
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 6,
     "fields": {
@@ -1220,8 +1156,7 @@
       "province": 66,
       "district": 669
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 7,
     "fields": {
@@ -1230,8 +1165,7 @@
       "province": 93,
       "district": 937
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 8,
     "fields": {
@@ -1240,8 +1174,7 @@
       "province": 93,
       "district": 937
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 9,
     "fields": {
@@ -1250,8 +1183,7 @@
       "province": 120,
       "district": 1193
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 10,
     "fields": {
@@ -1260,8 +1192,7 @@
       "province": 143,
       "district": 1472
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 11,
     "fields": {
@@ -1270,8 +1201,7 @@
       "province": 143,
       "district": 1471
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 12,
     "fields": {
@@ -1280,8 +1210,7 @@
       "province": 116,
       "district": 1158
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 13,
     "fields": {
@@ -1290,8 +1219,7 @@
       "province": 1,
       "district": 1
     }
-  },
-  {
+  }, {
     "model": "api.address",
     "pk": 14,
     "fields": {
@@ -1331,9 +1259,23 @@
     }
   },
   {
-  "model": "api.user",
-  "pk": 19,
-  "fields": {
+
+    "model": "oauth2_provider.accesstoken",
+    "pk": 22,
+    "fields": {
+      "user": 3,
+      "token": "user3GlavEforKavpDzuZSgK0zpoXS",
+      "application": 1,
+      "expires": "9999-12-31T23:59:59Z",
+      "scope": "",
+      "created": "2016-12-31T23:59:59Z",
+      "updated": "2017-10-02T22:27:09.173Z"
+    }
+  },
+  {
+    "model": "api.user",
+    "pk": 19,
+    "fields": {
       "password": "pbkdf2_sha256$36000$zYNuNmVAEdJB$/YzAG8AR4SFu5puGwV2+pSOddhqPU2FRk9c/EDIz7dc=",
       "last_login": null,
       "is_superuser": false,
@@ -1361,7 +1303,7 @@
       "address": 1,
       "groups": [],
       "user_permissions": []
-  }
+    }
   },
   {
     "model": "api.seller",

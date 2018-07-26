@@ -9,6 +9,7 @@ from api.models import QueryPlansAcquired
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
+
 class GetPlanByPIN(APITestCase):
     """Test module for GET plan deactive API."""
 
@@ -103,6 +104,7 @@ class GetPlans(APITestCase):
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
         response = self.client.get(reverse('plans'), format='json')
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -119,7 +121,7 @@ class GetClientPlansList(APITestCase):
 
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
-        response = self.client.get(reverse('client-plans'), format='json')
+        response = self.client.get(reverse('client-plans')+'?client_id=11', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -243,6 +245,22 @@ class GetSpecialistQueryCount(APITestCase):
         response = self.client.get(
             reverse('specialist-query-count'), format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+class PutChosemPlanClient(APITestCase):
+    """Prueba para actualizar el plan elegido de un determinado cliente"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_put_chosenplan_token_clientWithPlans(self):
+        """Obtener resultado 200."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+        response = self.client.get(reverse('chosen-plan-edit', kwargs={'pk': 3}), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetChosemPlanClient(APITestCase):
     """Prueba para devolver el plan activo y elegido de un determinado cliente"""
@@ -411,6 +429,7 @@ class MakeEmpowerPlan(APITestCase):
 
     def setUp(self):
         """Setup."""
+        self.client = APIClient()
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
 
@@ -427,6 +446,7 @@ class MakeEmpowerPlan(APITestCase):
                 }
             ]
         }
+
         response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -541,4 +561,69 @@ class GetPromocionalPlans(APITestCase):
     def test_get_seller_plans(self):
         """devolver todos los planes pertenecientes al vendedor."""
         response = self.client.get(reverse('seller-plans-nonbillable'))
+<<<<<<< HEAD
+=======
+        # import pdb; pdb.set_trace()
+>>>>>>> develop
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetPromocionalPlans(APITestCase):
+    """Devolver  los  planes promocionales de un vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_promotional_plans']
+
+    def setUp(self):
+        """Setup."""
+        # credenciales de vendedor
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
+
+    def test_get_seller_plans(self):
+        """devolver todos los planes pertenecientes al vendedor."""
+        response = self.client.get(reverse('seller-plans-nonbillable'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetCheckEmailForOperationPlans(APITestCase):
+    """Devolver 404 si no existe, devuelve 200 si existe y 400 status si 
+    no es valido para operacion."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        # credenciales de vendedor
+        self.valid_payload = {
+            "type_operation": 2,
+            "email_receiver": "jperez@mail.com",
+            "acquired_plan": 22,
+            'client_id':11
+        }    
+
+    def test_get_check_no_exist(self):
+        """Get check if client exist in operation manage 404"""
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_check_exist(self):
+        """Get check if client exist in operation manage 200"""
+        self.valid_payload["email_receiver"] = "jefeti@pympack.com.pe"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_check_allready_no_exist(self):
+        """Get check if client exist in operation manage 400 no creado pero ya existe"""
+        self.valid_payload["email_receiver"] = "cliente_no_existe@mail.com"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_check_allready_exist(self):
+        """Get check if client exist in operation manage 400 creado y ya existe"""
+        self.valid_payload["email_receiver"] = "cliente_extra@mail.com"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_check_myself(self):
+        """Get check if client exist in operation manage 400 creado y ya existe"""
+        self.valid_payload["email_receiver"] = "clientejosue@mail.com"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
