@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from api.models import QueryPlansAcquired
 from api.models import QueryPlans, Client, Seller, ProductType
-from api.models import SellerNonBillablePlans, Sale
+from api.models import SellerNonBillablePlans, Sale, SaleDetail
 from api.utils.tools import get_date_by_time
 from datetime import datetime
 
@@ -43,12 +43,32 @@ class SaleSerializer(serializers.Serializer):
     description = serializers.CharField(required=False)
     reference_number = serializers.CharField(default=increment_reference)
 
+    def to_representation(self, instance)
     def create(self, validated_data):
         """Metodo para guardar en venta."""
-        total_amount = self.get_total_amount(validated_data["products"])
-        print(validated_data["reference_number"])
-        import pdb; pdb.set_trace()
+        products = validated_data.pop("products")
+        total_amount = self.get_total_amount(products)
+        validated_data["total_amount"] = total_amount
         instance = Sale(**validated_data)
+        sale_detail = {}
+        for product in products:
+            if product["product_type"].id == 1:
+                sale_detail["description"] = product["product_type"].description
+                sale_detail["price"] = float(product["plan_id"].price)
+                # comparo si es promocional o no
+                if product["is_billable"]:
+                    sale_detail["discount"] = 0.0
+                else:
+                    sale_detail["discount"] = float(product["plan_id"].price)
+                sale_detail["product_type"] = product["product_type"]
+                sale_detail["sale"] = instance
+                SaleDetail(**sale_detail)
+        return instance
+        # for product in products:
+        #     if product["product_type"].id == 1:
+        #         if product["is_billable"]:
+        #             float(product["plan_id"].price)
+        # import pdb; pdb.set_trace()
         # return Comment(**validated_data)
 
     def get_total_amount(self, products):
@@ -60,4 +80,5 @@ class SaleSerializer(serializers.Serializer):
             if product["product_type"].id == 1:
                 if product["is_billable"]:
                     acum += float(product["plan_id"].price)
+
         return acum
