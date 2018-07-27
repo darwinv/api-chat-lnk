@@ -1310,7 +1310,8 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
 
     email_exact = serializers.EmailField(validators=[UniqueValidator(
         queryset=User.objects.all())])
-    invalid = _("invalid")
+    old_password = _("old password is invalid")
+
     class Meta:
         """Meta."""
         model = User
@@ -1319,7 +1320,7 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
 
     def validate_password(self, value):
         if not self.instance.check_password(value):
-            raise serializers.ValidationError({"password":self.invalid})
+            raise serializers.ValidationError(self.old_password)
 
         return value
 

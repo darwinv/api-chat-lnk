@@ -23,11 +23,12 @@ from api.serializers.query import QuerySerializer, QueryCustomSerializer
 from django.http import Http404
 from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrSpecialist
 from api.permissions import IsAdminOrClient
+from api.utils.querysets import get_query_set_plan
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 from django.utils.translation import ugettext_lazy as _
 import os
 import uuid
-import boto3
+import boto3, sys
 from datetime import datetime, date
 from django.utils import timezone
 from api.utils.validations import Operations
@@ -155,7 +156,7 @@ class ValidCodePassword(APIView):
             email = request.query_params["email"]
         else:
             raise serializers.ValidationError({'email': [self.required]})
-
+        
         user_filter = User.objects.filter(recoverypassword__code=code, email_exact=email, is_active=True).extra(where = ["DATEDIFF(NOW() ,created_at )<=1"])
         # print(user_filter.query)
         if user_filter:
@@ -407,7 +408,10 @@ def give_plan_new_client(client_id):
     queryPlansClient.is_chosen = True
     queryPlansClient.save()
 
-    serializer = QueryPlansAcquiredSerializer(queryPlansAcquired)
+    plan_chosen = get_query_set_plan()
+    plan_active = plan_chosen.filter(queryplansclient__client=client_id, is_active=True,
+                                             queryplansclient__is_chosen=True)
+    serializer = QueryPlansAcquiredSerializer(plan_active[0])
     chosen_plan(client_id, serializer.data)
 
 # Vista para Listar y Crear Clientes
@@ -425,11 +429,6 @@ class ClientListView(ListCreateAPIView):
     filter_backends = (filters.DjangoFilterBackend, searchfilters.SearchFilter,)
     filter_fields = ('nick',)
     search_fields = ('email_exact', 'first_name')
-
-    # def get(self, request):
-    #    clients = Client.objects.all()
-    #    serializer = ClientSerializer(clients, many=True)
-    #    return Response(serializer.data)
 
     # Metodo post redefinido
     def post(self, request):
@@ -451,8 +450,10 @@ class ClientListView(ListCreateAPIView):
         serializer = ClientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            # se le crea la lista de todas las categorias al cliente en firebase
-            pyrebase.createCategoriesLisClients(serializer.data['id'])
+
+            if 'test' not in sys.argv:
+                # se le crea la lista de todas las categorias al cliente en firebase
+                pyrebase.createCategoriesLisClients(serializer.data['id'])
 
             # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
             give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL

@@ -105,6 +105,14 @@ class QueryPlansClientSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Metodo actualizar redefinido."""
+        # traigo todos los demas planes
+        plan_list = QueryPlansClient.objects.filter(
+            client=instance.client).exclude(pk=instance.id)
+        # actualizo el campo is_chosen
+        if plan_list.count() > 0:
+            plan_list.update(is_chosen=False)
+
+        # Actualizamos el plan actual como elegido
         instance.is_chosen = validated_data.get(
                                'is_chosen', instance.is_chosen)
         instance.save()
@@ -208,33 +216,48 @@ class QueryPlansShare(serializers.ModelSerializer):
         count = self.context['count']
         receiver = self.context['client_receiver']
         acquired_plan = self.context['acquired_plan']
+        plan_manage = self.context['plan_manage']
 
-        query_plans = QueryPlansAcquired()
-        query_plans.available_queries = count
-        query_plans.query_quantity = count
-        query_plans.expiration_date = acquired_plan.expiration_date
-        query_plans.validity_months = acquired_plan.validity_months
-        query_plans.activation_date = acquired_plan.activation_date
-        query_plans.is_active = acquired_plan.is_active
-        query_plans.available_requeries = acquired_plan.available_requeries
-        query_plans.maximum_response_time = acquired_plan.maximum_response_time
-        query_plans.acquired_at = acquired_plan.acquired_at
-        query_plans.query_plans_id = acquired_plan.query_plans_id
-        query_plans.sale_detail_id = acquired_plan.sale_detail_id
-        query_plans.plan_name = acquired_plan.plan_name
-        query_plans.is_chosen = False
-        query_plans.save()
-        
+        if not plan_manage:
+            query_plans = QueryPlansAcquired()
+            query_plans.available_queries = count
+            query_plans.query_quantity = count
+            query_plans.expiration_date = acquired_plan.expiration_date
+            query_plans.validity_months = acquired_plan.validity_months
+            query_plans.activation_date = acquired_plan.activation_date
+            query_plans.is_active = acquired_plan.is_active
+            query_plans.available_requeries = acquired_plan.available_requeries
+            query_plans.maximum_response_time = acquired_plan.maximum_response_time
+            query_plans.acquired_at = acquired_plan.acquired_at
+            query_plans.query_plans_id = acquired_plan.query_plans_id
+            query_plans.sale_detail_id = acquired_plan.sale_detail_id
+            query_plans.plan_name = acquired_plan.plan_name
+            query_plans.is_chosen = False
+            query_plans.save()
+
+            validated_data['new_acquired_plan'] = query_plans
+            receiver['acquired_plan'] = query_plans
+
+            # Damos los permisos del plan al usuario
+            if 'client' in receiver and receiver['client']:
+                QueryPlansClient.objects.create(**receiver)
+
+        else:
+            # Si ya existe plan, se reutiliza el anterior
+            new_acquired_plan = plan_manage[0].new_acquired_plan
+            validated_data['new_acquired_plan'] = new_acquired_plan
+
+            # Aumento la cantidad de queries que comparto
+            new_acquired_plan.available_queries = new_acquired_plan.available_queries + count
+            new_acquired_plan.query_quantity = new_acquired_plan.query_quantity + count
+            new_acquired_plan.save()
+
+        # Actualizo cantidad de consultas
         acquired_plan.available_queries = acquired_plan.available_queries - count
         acquired_plan.save()
 
-        validated_data['new_acquired_plan'] = query_plans
-        receiver['acquired_plan'] = query_plans
-
-        instance = QueryPlansManage.objects.create(**validated_data)
-
-        if 'client' in receiver and receiver['client']:
-            QueryPlansClient.objects.create(**receiver)
+        # Crear manejo de plan
+        instance = QueryPlansManage.objects.create(**validated_data)        
 
         return instance
 

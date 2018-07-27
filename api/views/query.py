@@ -523,13 +523,15 @@ class QueryUploadFilesView(APIView):
         # Si no se ha subido se actualiza el estatus en firebase
 
         if resp is False:
-            pyrebase.mark_failed_file(room=ms.room, message_id=ms.id)
+            if 'test' not in sys.argv:
+                pyrebase.mark_failed_file(room=ms.room, message_id=ms.id)
         else:
-            # Actualizamos el status en firebase
-            data = {"uploaded": 2, "fileUrl": url, "filePreviewUrl": url_thumb}
-            r = pyrebase.mark_uploaded_file(room=ms.room, message_id=ms.id,
-                                            data=data)
-            print(r)
+            if 'test' not in sys.argv:
+                # Actualizamos el status en firebase
+                data = {"uploaded": 2, "fileUrl": url, "filePreviewUrl": url_thumb}
+                r = pyrebase.mark_uploaded_file(room=ms.room, message_id=ms.id,
+                                                data=data)
+                print(r)
 
 
 class QueryMessageView(APIView):
@@ -593,8 +595,9 @@ class DeclineRequeryView(APIView):
         for query in queries:
             msgs = query.message_set.all()
             # import pdb; pdb.set_trace()
-            pyrebase.update_status_query(query.id, {"status": 4},
-                                         msgs.last().room)
+            if 'test' not in sys.argv:
+                pyrebase.update_status_query(query.id, {"status": 4},
+                                             msgs.last().room)
             # import pdb; pdb.set_trace()
             for ms in msgs:
                 GroupMessage.objects.filter(message__id=ms.id).update(status=2)

@@ -1,5 +1,4 @@
 """Activacion, modificacion y listado de planes."""
-import sys
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
@@ -17,6 +16,7 @@ from api.utils.validations import Operations
 from api.utils.querysets import get_query_set_plan
 from api.emails import BasicEmailAmazon
 from api import pyrebase
+import sys
 from django.db.models import F,Q
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
@@ -78,26 +78,16 @@ class QueryPlansAcquiredDetailView(APIView):
 
             # Activar Plan
             serializer = QueryPlansClientSerializer(plan_client, data, partial=True)
-            if serializer.is_valid():
+            if serializer.is_valid():                
                 serializer.save()
-                # sincronizo en pyrebase
-                data_pyresabe = {
-                    'available_queries': plan.available_queries,
-                    'expiration_date': str(plan.expiration_date),
-                    'id': plan.id,
-                    'is_active': plan.is_active,
-                    'is_chosen': plan_client.is_chosen,
-                    'plan_name': plan.plan_name,
-                    'query_quantity': plan.query_quantity,
-                    'validity_months': plan.validity_months,
-                }
-                pyrebase.chosen_plan(client_id, data_pyresabe)
-                # traigo todos los demas planes
-                plan_list = QueryPlansClient.objects.filter(
-                    client=client_id).exclude(pk=pk)
-                # actualizo el campo is_chosen
-                if plan_list.count() > 0:
-                    plan_list.update(is_chosen=False)
+                if 'test' not in sys.argv:
+                    # sincronizo en pyrebase
+                    plan_chosen = get_query_set_plan()
+                    plan_active = plan_chosen.filter(queryplansclient__client=client_id, is_active=True,
+                                                             queryplansclient__is_chosen=True)
+                    serializer_plan_acquired = QueryPlansAcquiredSerializer(plan_active[0])
+                    pyrebase.chosen_plan(client_id, serializer_plan_acquired.data)                                    
+                
                 return Response(serializer.data)
             else:
                 return Response(serializer.errors, HTTP_400_BAD_REQUEST)
@@ -121,17 +111,6 @@ class ClientPlansView(ListCreateAPIView):
             return plan
         else:
             raise Http404
-
-    # def get_object(self, pk):
-    #     """Obtener lista de planes."""
-    #     try:
-    #         obj = QueryPlansAcquired.objects.filter(queryplansclient__client=pk,
-    #                                                 is_active=True,
-    #                                                 expiration_date__gte=datetime.now().date()).order_by('id')
-    #         self.check_object_permissions(self.request, obj)
-    #         return obj
-    #     except QueryPlansAcquired.DoesNotExist:
-    #         raise Http404
 
     def get(self, request):
         """Obtener la lista con todos los planes del cliente."""
@@ -175,6 +154,7 @@ class ClientSharePlansView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     required = _("required")
+    invalid = _("invalid")
     subject = _("Share Plan Success")
     to_much_query_share = _("too many queries to share")
     already_exists_empower = _("Empower already exists")
@@ -234,6 +214,11 @@ class ClientSharePlansView(APIView):
                 errors[email_receiver] = {'count': [self.required]}
                 continue
 
+            # Se valida que enviaron la cantidad
+            if int(client_data['count']) <= 0:
+                errors[email_receiver] = {'count': [self.invalid]}
+                continue
+
             # Traer cliente by email si existe!
             try:
                 receiver = Client.objects.get(email_exact=email_receiver)
@@ -249,11 +234,13 @@ class ClientSharePlansView(APIView):
             # No realizar operacion si tiene operacioens previas para este plan
             plan_manage = QueryPlansManage.objects.filter(
                 Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
-                acquired_plan=acquired_plan.id, sender=client, type_operation=3)
-
-            if plan_manage:
+                acquired_plan=acquired_plan.id, sender=client)
+            
+            if plan_manage and plan_manage[0].type_operation == 3:
                 errors[email_receiver] = {'email_receiver': [self.already_exists_empower]}
                 continue
+            elif not plan_manage:
+                plan_manage = None
 
             data_manage = {
                 'type_operation': 2,  # Compartir
@@ -266,8 +253,9 @@ class ClientSharePlansView(APIView):
             }
             data_context = {}
             data_context['client_receiver'] = {
-                'owner': True,
-                'transfer': True,
+                'is_chosen': False,
+                'owner': False,
+                'transfer': False,
                 'share': True,
                 'empower': True,
                 'status': status_transfer,
@@ -276,6 +264,8 @@ class ClientSharePlansView(APIView):
             }
             data_context['count'] = count
             data_context['acquired_plan'] = acquired_plan
+            data_context['plan_manage'] = plan_manage
+            
             serializer = QueryPlansShare(data=data_manage, context=data_context)
 
             if serializer.is_valid():
@@ -391,6 +381,7 @@ class ClientEmpowerPlansView(APIView):
             # Data de conexto para el cliente que recive plan
             data_context = {}
             data_context['client_receiver'] = {
+                'is_chosen': False,
                 'owner': False,
                 'transfer': False,
                 'share': True,
@@ -493,14 +484,14 @@ class ClientTransferPlansView(APIView):
         }
         data_context = {}
         data_context['client_receiver'] = {
+            'is_chosen': False,
             'owner': True,
             'transfer': True,
             'share': True,
             'empower': True,
             'status': status_transfer,
             'acquired_plan': acquired_plan,
-            'client': receiver,
-            'is_chosen': False
+            'client': receiver
         }
         data_context['client_sender'] = {
             'acquired_plan': acquired_plan.id,
@@ -768,8 +759,8 @@ class ClientShareEmpowerPlansView(ListCreateAPIView):
             last_name=F('receiver__last_name',),
             business_name=F('receiver__business_name',),
             type_client=F('receiver__type_client',),
-            photo=F('receiver__photo',)).filter(acquired_plan = pk)
-        
+            photo=F('receiver__photo',)).filter(acquired_plan = pk).distinct()
+
         # paginacion
         page = self.paginate_queryset(manage_data)
         if page is not None:

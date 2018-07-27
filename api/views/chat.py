@@ -6,7 +6,7 @@ from channels.sessions import channel_session
 from chat.models import Room
 import json
 import pyrebase
-
+import sys
 
 # @channel_session
 # Solo demostracion
@@ -21,19 +21,20 @@ def chat(request):
     firebase = pyrebase.initialize_app(config)
 
     if request.method == 'POST':
-        db = firebase.database()
-        data = {"title": request.data["title"], "message": request.data["message"], "type": request.data["type"]}
-        db.child("consulta").push(data)
-        label = 1  # request.data["room"]  # message.channel_session['room']
-        room = Room.objects.get(label=label)
-        m = room.messages.create(handle=request.data['title'], message=request.data['message'])
-        # data["text"] = data['message']
-        # result = obj_api.post(slug='chat/', token='', arg=data)
-        # print(result)
+        if 'test' not in sys.argv:
+            db = firebase.database()
+            data = {"title": request.data["title"], "message": request.data["message"], "type": request.data["type"]}
+            db.child("consulta").push(data)
+            label = 1  # request.data["room"]  # message.channel_session['room']
+            room = Room.objects.get(label=label)
+            m = room.messages.create(handle=request.data['title'], message=request.data['message'])
+            # data["text"] = data['message']
+            # result = obj_api.post(slug='chat/', token='', arg=data)
+            # print(result)
 
-        Group('chat-'+str(label)).send({'text': json.dumps(m.as_dict())})
-        # Code block for POST request
-        # print(request.data)
-        return Response("exit")
+            Group('chat-'+str(label)).send({'text': json.dumps(m.as_dict())})
+            # Code block for POST request
+            # print(request.data)
+            return Response("exit")
     # else:
         # Code block for GET request (will also match PUT, HEAD, DELETE, etc)

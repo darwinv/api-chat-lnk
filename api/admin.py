@@ -14,7 +14,7 @@ from .models import Clasification, ProductType, QueryPlans, SellerNonBillablePla
 from .models import SaleDetail, QueryPlansAcquired, PaymentType, Payment, MatchAcquired
 from .models import MatchAcquiredFiles, MatchAcquiredLog, MonthlyFee, LogPaymentsCreditCard
 from .models import Query, QueryLogs, Message, FeeMonthSeller, NotificationsBack
-from .models import Parameter
+from .models import Parameter, QueryPlansClient
 # Register your models here.
 
 class ClientNaturalAdmin(admin.ModelAdmin):
@@ -95,6 +95,7 @@ admin.site.register(Seller, SellerAdmin)
 admin.site.register(PaymentType)
 admin.site.register(QueryPlans)
 admin.site.register(QueryPlansAcquired)
+admin.site.register(QueryPlansClient)
 admin.site.register(Clasification)
 admin.site.register(SaleDetail)
 admin.site.register(Sale)
