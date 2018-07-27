@@ -37,7 +37,7 @@ class CreateNaturalContact(APITestCase):
             'sex': 'm',
             'document_type': '2',
             'document_number': '144013012',
-            'email': 'darwin.vasqz@gmail.com',
+            'email_exact': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
             'cellphone': '921471559',
             'activity_description': 'Loremp iptsum',
@@ -169,7 +169,7 @@ class CreateNaturalContact(APITestCase):
     def test_invalid_email(self):
         """Solicitud invalida por email incorrecto."""
         data = self.valid_payload
-        data['email'] = 'asdasd'
+        data['email_exact'] = 'asdasd'
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -180,13 +180,13 @@ class CreateNaturalContact(APITestCase):
     def test_no_email(self):
         """Solicitud invalida por no enviarl el email."""
         data = self.valid_payload
-        data["email"] = ""
+        data["email_exact"] = ""
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        del data["email"]
+        del data["email_exact"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -485,7 +485,7 @@ class CreateNaturalContact(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        data1["username"], data1["email"] = 'jesus', 'jesus@mail.com'
+        data1["username"], data1["email_exact"] = 'jesus', 'jesus@mail.com'
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data1),
@@ -547,7 +547,7 @@ class CreateBussinessContact(APITestCase):
             'type_client': 'b',
             'document_type': '2',
             'document_number': '144013012',
-            'email': 'darwin.vasqz@gmail.com',
+            'email_exact': 'darwin.vasqz@gmail.com',
             "ruc": "19231299",
             'economic_sector': 1,
             'activity_description': 'computers and programs',
@@ -667,14 +667,14 @@ class CreateBussinessContact(APITestCase):
     def test_no_email(self):
         """Solicitud invalida por no enviar el email o enviarlo vacio."""
         data = self.valid_payload
-        data['email'] = None
+        data['email_exact'] = None
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        del data["email"]
+        del data["email_exact"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -686,7 +686,7 @@ class CreateBussinessContact(APITestCase):
     def test_invalid_email(self):
         """Solicitud invalida por email incorrecto."""
         data = self.valid_payload
-        data['email'] = 'asdasd'
+        data['email_exact'] = 'asdasd'
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -834,7 +834,7 @@ class CreateBussinessContact(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        data1["username"], data1["email"] = 'jesus', 'jesus@mail.com'
+        data1["username"], data1["email_exact"] = 'jesus', 'jesus@mail.com'
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data1),
