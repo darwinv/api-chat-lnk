@@ -1018,7 +1018,6 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             objections = ListObjectionsSerializer(
                 obj.objectionslist_set.all(), many=True).data
             data["objections"] = objections
-            # import pdb; pdb.set_trace()
             if obj.other_objection:
                 other = OrderedDict()
                 other['name'] = obj.other_objection
@@ -1062,11 +1061,19 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             data_client["username"] = data_client["email"]
             data_client["role"] = Params.ROLE_CLIENT
             data_client['password'] = password
-            # import pdb; pdb.set_trace()
+            if data_client["type_client"] == 'b':
+                data_client['birthdate'] = '1900-01-01'
+                data_client['sex'] = ''
+                data_client['civil_state'] = ''
+                data_client['level_instruction'] = ''
+                data_client['profession'] = ''
+                data_client['ocupation'] = None
             serializer_client = ClientSerializer(data=data_client)
+            # import pdb; pdb.set_trace()
             if serializer_client.is_valid():
                 serializer_client.save()
             else:
+                # import pdb; pdb.set_trace()
                 raise serializers.ValidationError(serializer_client.errors)
         return instance
 

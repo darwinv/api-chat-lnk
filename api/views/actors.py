@@ -979,6 +979,9 @@ class ContactListView(ListCreateAPIView):
         not_valid = _("not valid")
         data = request.data
         data["seller"] = Operations.get_id(self, request)
+        if "email_exact" not in data or not data["email_exact"]:
+            raise serializers.ValidationError({'email_exact': [required]})
+            
         data["email"] = data["email_exact"]
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         if "type_client" not in data or not data["type_client"]:

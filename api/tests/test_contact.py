@@ -409,23 +409,23 @@ class CreateNaturalContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_seller(self):
-        """Solicitud invalida por no enviar vendedor."""
-        data = self.valid_payload
-        data["seller"] = ""
-        response1 = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        del data["seller"]
-        response = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    # def test_no_seller(self):
+    #     """Solicitud invalida por no enviar vendedor."""
+    #     data = self.valid_payload
+    #     data["seller"] = ""
+    #     response1 = self.client.post(
+    #         reverse('contacts'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     del data["seller"]
+    #     response = self.client.post(
+    #         reverse('contacts'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_objection(self):
         """Solicitud invalida por no enviar el tipo de objecion."""
@@ -907,24 +907,23 @@ class CreateBussinessContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_seller(self):
-        """Solicitud invalida por no enviar vendedor."""
-        data = self.valid_payload
-        data["seller"] = ""
-        response1 = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        del data["seller"]
-        response = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
+    # def test_no_seller(self):
+    #     """Solicitud invalida por no enviar vendedor."""
+    #     data = self.valid_payload
+    #     data["seller"] = ""
+    #     response1 = self.client.post(
+    #         reverse('contacts'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     del data["seller"]
+    #     response = self.client.post(
+    #         reverse('contacts'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_objection(self):
         """Solicitud invalida por no enviar el tipo de objecion."""
@@ -965,6 +964,7 @@ class CreateBussinessContact(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
