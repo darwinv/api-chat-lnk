@@ -19,11 +19,10 @@ class CreatePurchase(APIView):
     def post(self, request):
         """metodo para crear compra."""
 
-        user_id = Operations.get_id(self, request)
+        # user_id = Operations.get_id(self, request)
         data = request.data
         serializer = SaleSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            # import pdb; pdb.set_trace()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

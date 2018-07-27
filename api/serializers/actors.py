@@ -1018,7 +1018,6 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             objections = ListObjectionsSerializer(
                 obj.objectionslist_set.all(), many=True).data
             data["objections"] = objections
-            # import pdb; pdb.set_trace()
             if obj.other_objection:
                 other = OrderedDict()
                 other['name'] = obj.other_objection

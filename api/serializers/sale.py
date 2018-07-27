@@ -59,6 +59,8 @@ class SaleSerializer(serializers.Serializer):
         instance.save()
         sale_detail = {}
         for product in products:
+            plan_acquired = {}
+            # verificamos si el producto es plan de consultass
             if product["product_type"].id == 1:
                 sale_detail["description"] = product["product_type"].description
                 sale_detail["price"] = float(product["plan_id"].price)
@@ -69,7 +71,21 @@ class SaleSerializer(serializers.Serializer):
                     sale_detail["discount"] = float(product["plan_id"].price)
                 sale_detail["product_type"] = product["product_type"]
                 sale_detail["sale"] = instance
-                SaleDetail(**sale_detail)
+                # creamos la instancia de detalle
+                instance_sale = SaleDetail.objects.create(**sale_detail)
+                # llenamos data del plan adquirido
+                plan_acquired["validity_months"] = product["plan_id"].validity_months
+                plan_acquired["available_queries"] = product["plan_id"].query_quantity
+                plan_acquired["query_quantity"] = product["plan_id"].query_quantity
+                plan_acquired["is_active"] = False
+                plan_acquired["available_requeries"] = 10  # harcoded. CAMBIAR
+                plan_acquired["maximum_response_time"] = 24  # harcoded.CAMBIAR
+                plan_acquired["plan_name"] = product["plan_id"].name
+                plan_acquired["query_plans"] = product["plan_id"].id
+                plan_acquired["sale_detail"] = instance_sale
+                QueryPlansAcquired(**plan_acquired)
+
+
         return instance
         # for product in products:
         #     if product["product_type"].id == 1:
