@@ -479,7 +479,7 @@ class QueryPlansClient(models.Model):
     transfer = models.BooleanField(default=True)
     share = models.BooleanField(default=True)
     empower = models.BooleanField(default=True)
-    status = models.PositiveIntegerField(choices=Ch.queryplansclient_status)    
+    status = models.PositiveIntegerField(choices=Ch.queryplansclient_status)
     is_chosen = models.BooleanField(default=False)
 
 class QueryPlansManage(models.Model):
@@ -567,7 +567,7 @@ class MonthlyFee(models.Model):
     fee_order_number = models.PositiveIntegerField()  # El numero de cuota que se esta pagando
     fee_quantity = models.PositiveIntegerField()  # numero total de cuotas
     reference_number = models.CharField(max_length=20)
-    sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
+    sale = models.ForeignKey(Sale, on_delete=models.PROTECT)
     pay_before = models.DateField()
     status = models.PositiveIntegerField(choices=Ch.fee_status)
     payment = models.ForeignKey(Payment, null=True)

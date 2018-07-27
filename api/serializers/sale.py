@@ -18,7 +18,7 @@ class ProductSerializer(serializers.Serializer):
     discount = serializers.FloatField(min_value=0.00)
 
 
-def increment_reference_number():
+def increment_reference():
     """Campo autoincremental de numero de referencia."""
     last_invoice = Sale.objects.all().order_by('id').last()
     if not last_invoice:
@@ -41,14 +41,14 @@ class SaleSerializer(serializers.Serializer):
     is_fee = serializers.BooleanField(required=True)
     place = serializers.CharField()
     description = serializers.CharField(required=False)
-    reference_number = serializers.CharField(default=)
+    reference_number = serializers.CharField(default=increment_reference)
 
     def create(self, validated_data):
         """Metodo para guardar en venta."""
         total_amount = self.get_total_amount(validated_data["products"])
-        print(total_amount)
-        instance = Sale(**validated_data)
+        print(validated_data["reference_number"])
         import pdb; pdb.set_trace()
+        instance = Sale(**validated_data)
         # return Comment(**validated_data)
 
     def get_total_amount(self, products):
