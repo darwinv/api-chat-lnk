@@ -622,3 +622,24 @@ class GetCheckEmailForOperationPlans(APITestCase):
         self.valid_payload["email_receiver"] = "clientejosue@mail.com"
         response = client.get(reverse('client-email-check-operation'), self.valid_payload)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class UpdatePlanSelect(APITestCase):
+    """Prueba para actualizar el plan activo de un cliente"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+
+    def test_delete_plan_empower(self):
+        """Borrar empower."""
+        data = {'empower_id': 12}
+
+        response = self.client.delete(
+            reverse('plans-delete-empower',
+                    kwargs={'pk': 22}), data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

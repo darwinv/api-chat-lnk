@@ -37,6 +37,10 @@ urlpatterns = [
     # Facultar plan de consultas
     url(r'^clients/plans-empower/$', plan.ClientEmpowerPlansView.as_view(),
         name='client-plans-empower'),
+    
+    # Facultar plan de consultas
+    url(r'^clients/plans-delete-empower/(?P<pk>[0-9]+)$', plan.ClientDeleteEmpowerPlansView.as_view(),
+        name='plans-delete-empower'),
 
     # Facultar plan de consultas
     url(r'^clients/plans-share-empower/(?P<pk>[0-9]+)$', plan.ClientShareEmpowerPlansView.as_view(),
@@ -45,7 +49,6 @@ urlpatterns = [
     # Facultar plan de consultas
     url(r'^clients/email-check-operation/$', plan.ClientCheckEmailOperationView.as_view(),
         name='client-email-check-operation'),
-
 
     url(r'^specialists-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$',
         actors.SpecialistDetailByUsername.as_view(),

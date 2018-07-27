@@ -740,6 +740,34 @@ class ClientCheckEmailOperationView(APIView):
 
         return Response(response)
 
+class ClientDeleteEmpowerPlansView(ListCreateAPIView):
+    """Vista para clientes Compartidos y facultados"""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
+    not_permission = _("You don't have permissions")
+    def get_object(self, pk, empower):
+        try:
+            obj = QueryPlansClient.objects.get(client=empower, acquired_plan=pk)
+            return obj
+        except QueryPlansClient.DoesNotExist:
+            raise Http404
+
+    # borrado
+    def delete(self, request, pk):
+        client = Operations.get_id(self, request)
+        data = request.data
+
+        client_plan = QueryPlansClient.objects.filter(client=client, acquired_plan=pk, empower=True)
+        
+        if client_plan:
+            empower = data['empower_id']
+
+            empower_obj = self.get_object(pk, empower)
+            empower_obj.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            raise serializers.ValidationError({self.not_permission})
 
 class ClientShareEmpowerPlansView(ListCreateAPIView):
     """Vista para clientes Compartidos y facultados"""
