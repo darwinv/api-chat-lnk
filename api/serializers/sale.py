@@ -43,13 +43,20 @@ class SaleSerializer(serializers.Serializer):
     description = serializers.CharField(required=False)
     reference_number = serializers.CharField(default=increment_reference)
 
-    def to_representation(self, instance)
+    def to_representation(self, instance):
+        return {"id": instance.id,
+                "reference_number": instance.reference_number,
+                "total_amount": instance.total_amount
+                }
+
     def create(self, validated_data):
         """Metodo para guardar en venta."""
         products = validated_data.pop("products")
         total_amount = self.get_total_amount(products)
         validated_data["total_amount"] = total_amount
         instance = Sale(**validated_data)
+        # import pdb; pdb.set_trace()
+        instance.save()
         sale_detail = {}
         for product in products:
             if product["product_type"].id == 1:
