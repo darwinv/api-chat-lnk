@@ -1,10 +1,11 @@
 """Serializer de Venta"""
 from rest_framework import serializers
-from api.models import QueryPlansAcquired
+from api.models import QueryPlansAcquired, QueryPlansClient, MonthlyFee
 from api.models import QueryPlans, Client, Seller, ProductType
 from api.models import SellerNonBillablePlans, Sale, SaleDetail
 from api.utils.tools import get_date_by_time
-from datetime import datetime
+from datetime import datetime, date
+from dateutil.relativedelta import relativedelta
 
 
 class ProductSerializer(serializers.Serializer):
@@ -81,10 +82,28 @@ class SaleSerializer(serializers.Serializer):
                 plan_acquired["available_requeries"] = 10  # harcoded. CAMBIAR
                 plan_acquired["maximum_response_time"] = 24  # harcoded.CAMBIAR
                 plan_acquired["plan_name"] = product["plan_id"].name
-                plan_acquired["query_plans"] = product["plan_id"].id
+                plan_acquired["query_plans"] = product["plan_id"]
                 plan_acquired["sale_detail"] = instance_sale
-                QueryPlansAcquired(**plan_acquired)
+                ins_plan = QueryPlansAcquired.objects.create(**plan_acquired)
+                # Crear cuotas
+                if validated_data["is_fee"]:
+                    n_fees = product["plan_id"].validity_months
+                    fee_amount = float(product["plan_id"].price / n_fees)
+                else:
+                    n_fees = 1
+                    fee_amount = float(product["plan_id"].price)
+                for i in range(1, n_fees):
+                    pay_day = date.today() + relativedelta(days=3)  # Hardcoded cambiar la cantidad de dias
+                    sale_id = instance
+                    MonthlyFee.objects.create(fee_amount=fee_amount,
+                                              fee_order_number=i, status=1,
+                                              sale=sale_id,
+                                              pay_before=pay_day,
+                                              fee_quantity=n_fees)
 
+                QueryPlansClient.objects.create(
+                    acquired_plan=ins_plan, status=1,
+                    client=validated_data["client"])
 
         return instance
         # for product in products:
