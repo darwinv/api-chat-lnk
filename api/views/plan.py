@@ -87,8 +87,10 @@ class QueryPlansAcquiredDetailView(APIView):
                                                              queryplansclient__is_chosen=True)
                     serializer_plan_acquired = QueryPlansAcquiredSerializer(plan_active[0])
                     pyrebase.chosen_plan(client_id, serializer_plan_acquired.data)
-
-                return Response(serializer.data)
+                    result_data = serializer_plan_acquired.data
+                else:
+                    result_data = {}
+                return Response(result_data)
             else:
                 return Response(serializer.errors, HTTP_400_BAD_REQUEST)
         raise Http404

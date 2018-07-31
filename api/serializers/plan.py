@@ -118,6 +118,7 @@ class QueryPlansClientSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
     transfer = serializers.SerializerMethodField()
