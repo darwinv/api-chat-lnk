@@ -118,7 +118,7 @@ class ClientPlansView(ListCreateAPIView):
         """Obtener la lista con todos los planes del cliente."""
         pk = Operations.get_id(self, request)
         plan = self.get_object(pk)
-        
+
         # paginacion
         page = self.paginate_queryset(plan)
         if page is not None:
@@ -198,7 +198,7 @@ class ClientSharePlansView(APIView):
 
         if acumulator > acquired_plan.available_queries:
             raise serializers.ValidationError({'count': [self.to_much_query_share]})
-        
+
         for client_data in clients:
             email_receiver = receiver = count = None
 
@@ -237,7 +237,7 @@ class ClientSharePlansView(APIView):
             plan_manage = QueryPlansManage.objects.filter(
                 Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
                 acquired_plan=acquired_plan.id, sender=client)
-            
+
             if plan_manage and plan_manage[0].type_operation == 3:
                 errors[email_receiver] = {'email_receiver': [self.already_exists_empower]}
                 continue
@@ -270,7 +270,7 @@ class ClientSharePlansView(APIView):
             data_context['count'] = count
             data_context['acquired_plan'] = acquired_plan
             data_context['plan_manage'] = plan_manage
-            
+
             serializer = QueryPlansShareSerializer(data=data_manage, context=data_context)
 
             if serializer.is_valid():
@@ -605,7 +605,7 @@ class ActivationPlanView(APIView):
                                             'client': client
                                             },
                                           partial=True)
-        
+
         if serializer.is_valid():
             serializer.save()
             if not has_chosen:
@@ -768,12 +768,12 @@ class ClientDeleteEmpowerPlansView(ListCreateAPIView):
             raise serializers.ValidationError({'acquired_plan': [self.required]})
 
         client_plan = QueryPlansClient.objects.filter(client=client, acquired_plan=acquired_plan, empower=True)
-        
+
         if client_plan:
             # El correo si movimientos a realizar
-            query_manage = QueryPlansManage.objects.filter(email_receiver=email_receiver, 
+            query_manage = QueryPlansManage.objects.filter(email_receiver=email_receiver,
                 acquired_plan=acquired_plan, type_operation=3)
-            
+
             if query_manage:
                 # Borramos referencias a ese cliente
                 query_manage.delete()

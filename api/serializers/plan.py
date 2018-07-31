@@ -210,16 +210,16 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
         model = QueryPlansManage
         fields = ('type_operation','status','acquired_plan','new_acquired_plan',
             'sender','receiver','email_receiver', 'count_queries')
-    
+
     def update(self, instance, validated_data):
-        
+
         """Metodo actualizar transferencia de plan."""
         count = validated_data.get('count_queries')
         new_acquired_plan = self.process_plan_share(count)
 
         # Actualizar manejo de plan
         instance.new_acquired_plan = new_acquired_plan
-        
+
         instance.receiver = validated_data.get(
                                'receiver', instance.receiver)
         instance.status = validated_data.get(
@@ -258,7 +258,7 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
             query_plans.plan_name = acquired_plan.plan_name
             query_plans.is_chosen = False
             query_plans.save()
-            
+
             receiver['acquired_plan'] = query_plans
 
             # Damos los permisos del plan al usuario
@@ -268,7 +268,7 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
             return query_plans
 
     def create(self, validated_data):
-        
+
         """Transferir plan de consultas"""
         acquired_plan = self.context['acquired_plan']
         count = validated_data.get('count_queries')
@@ -368,3 +368,13 @@ class PlansNonBillableSerializer(serializers.ModelSerializer):
         model = SellerNonBillablePlans
         fields = ('seller', 'query_plans', 'quantity',
                   'number_month')
+
+    def to_representation(self, instance):
+        """representation."""
+        data = {
+            "name": instance.query_plans.name,
+            "query_quantity": instance.query_plans.query_quantity,
+            "validity_months": instance.query_plans.validity_months,
+            "price": instance.query_plans.price
+        }
+        return data

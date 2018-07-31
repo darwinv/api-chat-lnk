@@ -396,7 +396,7 @@ def give_plan_new_client(client_id):
     queryPlansAcquired.query_plans_id = '1'
     queryPlansAcquired.sale_detail_id = saleDetail.id
     queryPlansAcquired.query_quantity = '500'
-    queryPlansAcquired.plan_name = 'TesterPack'    
+    queryPlansAcquired.plan_name = 'TesterPack'
     queryPlansAcquired.save()
 
     queryPlansClient.owner = True
@@ -1019,6 +1019,11 @@ class ContactListView(ListCreateAPIView):
         required = _("required")
         not_valid = _("not valid")
         data = request.data
+        data["seller"] = Operations.get_id(self, request)
+        if "email_exact" not in data or not data["email_exact"]:
+            raise serializers.ValidationError({'email_exact': [required]})
+            
+        data["email"] = data["email_exact"]
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         if "type_client" not in data or not data["type_client"]:
             raise serializers.ValidationError({'type_client': [required]})
@@ -1078,7 +1083,7 @@ class PhotoUploadView(APIView):
         serializer = UserPhotoSerializer(user,
                                          data={'photo': name_photo},
                                          partial=True)
-        
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -1241,7 +1246,7 @@ class RucDetailView(APIView):
           "token": settings_secret.TOKEN_RUC,
           "ruc": pk
         }
-        
+
         try:
             response = requests.post(url, json=payload, timeout=2.5)
         except Exception as e:

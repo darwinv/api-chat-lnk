@@ -174,7 +174,7 @@ class ChoicesAPI:
     )
     # tipo de Contacto
     type_seller_contact = (
-        (1, _('Non-effective')),
-        (2, _('Effective to pay')),
-        (3, _('Effective')),
+        (1, _('Effective')),
+        (2, _('Non Effective')),
+        (3, _('Effective paid')),  # efectivo que ya ha pagado.
     )
