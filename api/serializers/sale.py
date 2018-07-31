@@ -55,11 +55,11 @@ class SaleSerializer(serializers.Serializer):
     def validate(self, data):
         """validaciones."""
         # compruebo si el cliente ya tuvo planes promocionales
-        sale = Sale.objects.filter(client_id=data["client"])
-        import pdb; pdb.set_trace()
-        if sale.set_saledetail.filter(is_billable=True).exists():
+        detail = SaleDetail.objects.filter(sale__client_id=data["client"])
+        if detail.filter(is_billable=False).exists():
             raise serializers.ValidationError(
                 _("client can no longer be given promotional plans"))
+        return data
 
     def create(self, validated_data):
         """Metodo para guardar en venta."""
@@ -71,11 +71,13 @@ class SaleSerializer(serializers.Serializer):
         instance.save()
         sale_detail = {}
         for product in products:
+            # import pdb; pdb.set_trace()
             plan_acquired = {}
             # verificamos si el producto es plan de consultass
             if product["product_type"].id == 1:
                 sale_detail["description"] = product["product_type"].description
                 sale_detail["price"] = float(product["plan_id"].price)
+                sale_detail["is_billable"] = product["is_billable"]
                 # comparo si es promocional o no
                 if product["is_billable"]:
                     sale_detail["discount"] = 0.0
