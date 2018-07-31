@@ -187,24 +187,6 @@ class QuerySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(_("You don't have available queries"))
         return data
 
-    # def update(self, instance, validated_data):
-    #     """Redefinido metodo actualizar."""
-    #     # no se puede agregar msjs de ningun tipo una vez hah sido absuelta
-    #     if int(instance.status) == 6 or int(instance.status) == 7:
-    #         raise serializers.ValidationError(u"Query Absolved - can'not add more messages")
-    #     data_message = validated_data.pop('message')
-    #     specialist = Specialist.objects.get(pk=instance.specialist_id)
-    #     data_message["specialist"] = specialist
-    #     # se compara si el status fue respondida, entonces debemos declarar
-    #     # que el tipo de mensaje es reconsulta, y que pasa a estatus 1,
-    #     # (pendiente de declinar o responder por el especialista)
-    #     if int(instance.status) == 4 or int(instance.status) == 5:
-    #         data_message["msg_type"] = 'r'
-    #         instance.status = 1
-    #     Message.objects.create(query=instance, **data_message)
-    #     instance.save()
-    #     return instance
-
     def create(self, validated_data):
         """Redefinido metodo create."""
         # Buscamos el especialista principal de la especialidad dada
