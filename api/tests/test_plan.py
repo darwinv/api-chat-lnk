@@ -636,10 +636,12 @@ class UpdatePlanSelect(APITestCase):
 
     def test_delete_plan_empower(self):
         """Borrar empower."""
-        data = {'empower_id': 12}
+        data = {
+            'email_receiver': "cliente_extra@mail.com",
+            'acquired_plan': '22'
+        }
 
-        response = self.client.delete(
-            reverse('plans-delete-empower',
-                    kwargs={'pk': 22}), data, format='json')
+        response = self.client.post(
+            reverse('plans-delete-empower'), data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

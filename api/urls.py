@@ -39,7 +39,7 @@ urlpatterns = [
         name='client-plans-empower'),
     
     # Facultar plan de consultas
-    url(r'^clients/plans-delete-empower/(?P<pk>[0-9]+)$', plan.ClientDeleteEmpowerPlansView.as_view(),
+    url(r'^clients/plans-delete-empower/$', plan.ClientDeleteEmpowerPlansView.as_view(),
         name='plans-delete-empower'),
 
     # Facultar plan de consultas
