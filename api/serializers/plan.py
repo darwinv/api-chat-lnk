@@ -105,6 +105,14 @@ class QueryPlansClientSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Metodo actualizar redefinido."""
+        # traigo todos los demas planes
+        plan_list = QueryPlansClient.objects.filter(
+            client=instance.client).exclude(pk=instance.id)
+        # actualizo el campo is_chosen
+        if plan_list.count() > 0:
+            plan_list.update(is_chosen=False)
+
+        # Actualizamos el plan actual como elegido
         instance.is_chosen = validated_data.get(
                                'is_chosen', instance.is_chosen)
         instance.save()
@@ -153,7 +161,7 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
             return False
 
 
-class QueryPlansTransfer(serializers.ModelSerializer):
+class QueryPlansTransferSerializer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
 
     class Meta:
@@ -192,7 +200,7 @@ class QueryPlansSerializer(serializers.ModelSerializer):
         model = QueryPlans
         fields = ('name', 'query_quantity', 'validity_months', 'price')
 
-class QueryPlansShare(serializers.ModelSerializer):
+class QueryPlansShareSerializer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
 
     class Meta:
@@ -200,45 +208,83 @@ class QueryPlansShare(serializers.ModelSerializer):
 
         model = QueryPlansManage
         fields = ('type_operation','status','acquired_plan','new_acquired_plan',
-            'sender','receiver','email_receiver')
+            'sender','receiver','email_receiver', 'count_queries')
 
-    def create(self, validated_data):
-        """Transferir plan de consultas"""
+    def update(self, instance, validated_data):
 
-        count = self.context['count']
+        """Metodo actualizar transferencia de plan."""
+        count = validated_data.get('count_queries')
+        new_acquired_plan = self.process_plan_share(count)
+
+        # Actualizar manejo de plan
+        instance.new_acquired_plan = new_acquired_plan
+
+        instance.receiver = validated_data.get(
+                               'receiver', instance.receiver)
+        instance.status = validated_data.get(
+                               'status', instance.status)
+        instance.new_acquired_plan = new_acquired_plan
+        instance.save()
+        return instance
+
+    def process_plan_share(self, count):
+        """Procesar compartir plan"""
         receiver = self.context['client_receiver']
         acquired_plan = self.context['acquired_plan']
+        plan_manage = self.context['plan_manage']  # Plan de Consulta Anterior
 
-        query_plans = QueryPlansAcquired()
-        query_plans.available_queries = count
-        query_plans.query_quantity = count
-        query_plans.expiration_date = acquired_plan.expiration_date
-        query_plans.validity_months = acquired_plan.validity_months
-        query_plans.activation_date = acquired_plan.activation_date
-        query_plans.is_active = acquired_plan.is_active
-        query_plans.available_requeries = acquired_plan.available_requeries
-        query_plans.maximum_response_time = acquired_plan.maximum_response_time
-        query_plans.acquired_at = acquired_plan.acquired_at
-        query_plans.query_plans_id = acquired_plan.query_plans_id
-        query_plans.sale_detail_id = acquired_plan.sale_detail_id
-        query_plans.plan_name = acquired_plan.plan_name
-        query_plans.is_chosen = False
-        query_plans.save()
+        if plan_manage:
+            # Si ya existe plan, se reutiliza el anterior
+            new_acquired_plan = plan_manage.new_acquired_plan
 
+            # Aumento la cantidad de queries que comparto
+            new_acquired_plan.available_queries = new_acquired_plan.available_queries + count
+            new_acquired_plan.query_quantity = new_acquired_plan.query_quantity + count
+            new_acquired_plan.save()
+        else:
+            query_plans = QueryPlansAcquired()
+            query_plans.available_queries = count
+            query_plans.query_quantity = count
+            query_plans.expiration_date = acquired_plan.expiration_date
+            query_plans.validity_months = acquired_plan.validity_months
+            query_plans.activation_date = acquired_plan.activation_date
+            query_plans.is_active = acquired_plan.is_active
+            query_plans.available_requeries = acquired_plan.available_requeries
+            query_plans.maximum_response_time = acquired_plan.maximum_response_time
+            query_plans.acquired_at = acquired_plan.acquired_at
+            query_plans.query_plans_id = acquired_plan.query_plans_id
+            query_plans.sale_detail_id = acquired_plan.sale_detail_id
+            query_plans.plan_name = acquired_plan.plan_name
+            query_plans.is_chosen = False
+            query_plans.save()
+
+            receiver['acquired_plan'] = query_plans
+
+            # Damos los permisos del plan al usuario
+            if 'client' in receiver and receiver['client']:
+                QueryPlansClient.objects.create(**receiver)
+
+            return query_plans
+
+    def create(self, validated_data):
+
+        """Transferir plan de consultas"""
+        acquired_plan = self.context['acquired_plan']
+        count = validated_data.get('count_queries')
+
+        query_plans = self.process_plan_share(count)
+
+        # Actualizo cantidad de consultas
         acquired_plan.available_queries = acquired_plan.available_queries - count
         acquired_plan.save()
 
+        # Crear manejo de plan
         validated_data['new_acquired_plan'] = query_plans
-        receiver['acquired_plan'] = query_plans
-
         instance = QueryPlansManage.objects.create(**validated_data)
-
-        if 'client' in receiver and receiver['client']:
-            QueryPlansClient.objects.create(**receiver)
 
         return instance
 
-class QueryPlansEmpower(serializers.ModelSerializer):
+class QueryPlansEmpowerSerializer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
 
     class Meta:

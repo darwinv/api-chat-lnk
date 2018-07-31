@@ -7,7 +7,7 @@ from api.api_choices_models import ChoicesAPI as c
 from api.utils import querysets
 from api.utils.parameters import Params
 from api import pyrebase
-
+import sys
 
 # Serializer de Mensajes
 class MessageSerializer(serializers.ModelSerializer):
@@ -239,9 +239,10 @@ class QuerySerializer(serializers.ModelSerializer):
         # restamos una consulta disponible al plan adquirido
         acq_plan.available_queries = acq_plan.available_queries - 1
         acq_plan.save()
-        pyrebase.chosen_plan(
-            validated_data["client"].id,
-            {"available_queries": acq_plan.available_queries})
+        if 'test' not in sys.argv:
+            pyrebase.chosen_plan(
+                validated_data["client"].id,
+                {"available_queries": acq_plan.available_queries})
         return query
 
     def to_representation(self, obj):
