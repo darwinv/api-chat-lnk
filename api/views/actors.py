@@ -20,6 +20,7 @@ from api.serializers.actors import SellerSerializer, SellerContactBusinessSerial
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
 from api.serializers.actors import ChangeEmailSerializer, ChangePassword
 from api.serializers.query import QuerySerializer, QueryCustomSerializer
+from api.serializers.plan import QueryPlansShareSerializer
 from django.http import Http404
 from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrSpecialist
 from api.permissions import IsAdminOrClient
@@ -457,8 +458,47 @@ class ClientListView(ListCreateAPIView):
 
             # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
             give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
+
+            client_id = serializer.data['id']
+            email = data['email_exact']
+            self.check_plans_operation_manage(client_id, email)
+
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+    def check_plans_operation_manage(self, receiver, email_receiver):
+
+        # No realizar operacion si tiene operacioens previas para este plan
+        plan_manages = QueryPlansManage.objects.filter(
+            email_receiver=email_receiver, status=3, type_operation=2)
+        
+        for plan_manage in plan_manages:
+            """Checar y otorgar planes a nuevo cliente"""
+            data = {
+                'receiver': receiver,
+                'status': 1,
+                'count_queries': plan_manage.count_queries
+            }
+            data_context = {}
+            data_context['client_receiver'] = {
+                'is_chosen': False,
+                'owner': False,
+                'transfer': False,
+                'share': True,
+                'empower': True,
+                'status': 1,
+                'acquired_plan': None,
+                'client': receiver
+            }
+            data_context['count'] = plan_manage.count_queries
+            data_context['acquired_plan'] = plan_manage.acquired_plan
+            data_context['plan_manage'] = None
+
+            serializer = QueryPlansShareSerializer(plan_manage, data, partial=True,
+                                          context=data_context)
+
+            if serializer.is_valid():
+                serializer.save()
 
 # Vista para Detalle del Cliente
 class ClientDetailView(APIView):

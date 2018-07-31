@@ -161,7 +161,7 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
             return False
 
 
-class QueryPlansTransfer(serializers.ModelSerializer):
+class QueryPlansTransferSerializer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
 
     class Meta:
@@ -200,7 +200,7 @@ class QueryPlansSerializer(serializers.ModelSerializer):
         model = QueryPlans
         fields = ('name', 'query_quantity', 'validity_months', 'price')
 
-class QueryPlansShare(serializers.ModelSerializer):
+class QueryPlansShareSerializer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
 
     class Meta:
@@ -208,17 +208,40 @@ class QueryPlansShare(serializers.ModelSerializer):
 
         model = QueryPlansManage
         fields = ('type_operation','status','acquired_plan','new_acquired_plan',
-            'sender','receiver','email_receiver')
+            'sender','receiver','email_receiver', 'count_queries')
+    
+    def update(self, instance, validated_data):
+        
+        """Metodo actualizar transferencia de plan."""
+        count = validated_data.get('count_queries')
+        new_acquired_plan = self.process_plan_share(count)
 
-    def create(self, validated_data):
-        """Transferir plan de consultas"""
+        # Actualizar manejo de plan
+        instance.new_acquired_plan = new_acquired_plan
+        
+        instance.receiver = validated_data.get(
+                               'receiver', instance.receiver)
+        instance.status = validated_data.get(
+                               'status', instance.status)
+        instance.new_acquired_plan = new_acquired_plan
+        instance.save()
+        return instance
 
-        count = self.context['count']
+    def process_plan_share(self, count):
+        """Procesar compartir plan"""
         receiver = self.context['client_receiver']
         acquired_plan = self.context['acquired_plan']
-        plan_manage = self.context['plan_manage']
+        plan_manage = self.context['plan_manage']  # Plan de Consulta Anterior
 
-        if not plan_manage:
+        if plan_manage:
+            # Si ya existe plan, se reutiliza el anterior
+            new_acquired_plan = plan_manage.new_acquired_plan
+
+            # Aumento la cantidad de queries que comparto
+            new_acquired_plan.available_queries = new_acquired_plan.available_queries + count
+            new_acquired_plan.query_quantity = new_acquired_plan.query_quantity + count
+            new_acquired_plan.save()
+        else:
             query_plans = QueryPlansAcquired()
             query_plans.available_queries = count
             query_plans.query_quantity = count
@@ -234,34 +257,34 @@ class QueryPlansShare(serializers.ModelSerializer):
             query_plans.plan_name = acquired_plan.plan_name
             query_plans.is_chosen = False
             query_plans.save()
-
-            validated_data['new_acquired_plan'] = query_plans
+            
             receiver['acquired_plan'] = query_plans
 
             # Damos los permisos del plan al usuario
             if 'client' in receiver and receiver['client']:
                 QueryPlansClient.objects.create(**receiver)
 
-        else:
-            # Si ya existe plan, se reutiliza el anterior
-            new_acquired_plan = plan_manage[0].new_acquired_plan
-            validated_data['new_acquired_plan'] = new_acquired_plan
+            return query_plans
 
-            # Aumento la cantidad de queries que comparto
-            new_acquired_plan.available_queries = new_acquired_plan.available_queries + count
-            new_acquired_plan.query_quantity = new_acquired_plan.query_quantity + count
-            new_acquired_plan.save()
+    def create(self, validated_data):
+        
+        """Transferir plan de consultas"""
+        acquired_plan = self.context['acquired_plan']
+        count = validated_data.get('count_queries')
+
+        query_plans = self.process_plan_share(count)
 
         # Actualizo cantidad de consultas
         acquired_plan.available_queries = acquired_plan.available_queries - count
         acquired_plan.save()
 
         # Crear manejo de plan
-        instance = QueryPlansManage.objects.create(**validated_data)        
+        validated_data['new_acquired_plan'] = query_plans
+        instance = QueryPlansManage.objects.create(**validated_data)
 
         return instance
 
-class QueryPlansEmpower(serializers.ModelSerializer):
+class QueryPlansEmpowerSerializer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
 
     class Meta:

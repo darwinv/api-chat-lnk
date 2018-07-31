@@ -7,7 +7,7 @@ from api.serializers.plan import PlanDetailSerializer, ActivePlanSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquiredDetailSerializer
 from api.serializers.plan import QueryPlansSerializer, QueryPlansManageSerializer
 from api.serializers.plan import QueryPlansClientSerializer
-from api.serializers.plan import QueryPlansTransfer, QueryPlansShare, QueryPlansEmpower
+from api.serializers.plan import QueryPlansTransferSerializer, QueryPlansShareSerializer, QueryPlansEmpowerSerializer
 from api.models import QueryPlans, Client, QueryPlansManage
 from api.models import SellerNonBillablePlans
 from api.models import QueryPlansAcquired, QueryPlansClient
@@ -241,6 +241,8 @@ class ClientSharePlansView(APIView):
                 continue
             elif not plan_manage:
                 plan_manage = None
+            else:
+                plan_manage = plan_manage[0]
 
             data_manage = {
                 'type_operation': 2,  # Compartir
@@ -249,7 +251,8 @@ class ClientSharePlansView(APIView):
                 'new_acquired_plan': None,
                 'sender': client,
                 'receiver': receiver,
-                'email_receiver': email_receiver
+                'email_receiver': email_receiver,
+                'count_queries': count
             }
             data_context = {}
             data_context['client_receiver'] = {
@@ -266,7 +269,7 @@ class ClientSharePlansView(APIView):
             data_context['acquired_plan'] = acquired_plan
             data_context['plan_manage'] = plan_manage
             
-            serializer = QueryPlansShare(data=data_manage, context=data_context)
+            serializer = QueryPlansShareSerializer(data=data_manage, context=data_context)
 
             if serializer.is_valid():
                 serializer_data[email_receiver] = serializer
@@ -391,7 +394,7 @@ class ClientEmpowerPlansView(APIView):
                 'client': receiver
             }
 
-            serializer = QueryPlansEmpower(data=data_manage, context=data_context)
+            serializer = QueryPlansEmpowerSerializer(data=data_manage, context=data_context)
 
             if serializer.is_valid():
                 serializer_data[email_receiver] = serializer
@@ -498,7 +501,7 @@ class ClientTransferPlansView(APIView):
             'client': client
         }
         is_chosen_plan = acquired_plan_client.is_chosen
-        serializer = QueryPlansTransfer(data=data_transfer, context=data_context)
+        serializer = QueryPlansTransferSerializer(data=data_transfer, context=data_context)
 
         if serializer.is_valid():
             if 'test' not in sys.argv:
@@ -740,6 +743,49 @@ class ClientCheckEmailOperationView(APIView):
 
         return Response(response)
 
+class ClientDeleteEmpowerPlansView(ListCreateAPIView):
+    """Vista para clientes Compartidos y facultados"""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
+    not_permission = _("You don't have permissions")
+    required = _("required")
+
+    # borrado
+    def post(self, request):
+        client = Operations.get_id(self, request)
+        data = request.data
+        if 'email_receiver' in data:
+            email_receiver = data['email_receiver']
+        else:
+            raise serializers.ValidationError({'email_receiver': [self.required]})
+
+        if 'acquired_plan' in data:
+            acquired_plan = data['acquired_plan']
+        else:
+            raise serializers.ValidationError({'acquired_plan': [self.required]})
+
+        client_plan = QueryPlansClient.objects.filter(client=client, acquired_plan=acquired_plan, empower=True)
+        
+        if client_plan:
+            # El correo si movimientos a realizar
+            query_manage = QueryPlansManage.objects.filter(email_receiver=email_receiver, 
+                acquired_plan=acquired_plan, type_operation=3)
+            
+            if query_manage:
+                # Borramos referencias a ese cliente
+                query_manage.delete()
+                empower_obj = QueryPlansClient.objects.filter(client__email_exact=email_receiver,
+                                    acquired_plan=acquired_plan)
+                empower_obj.delete()
+
+                #BORRAR DE PLAN CHOSEN FIREBASSE
+            else:
+                raise Http404
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            raise serializers.ValidationError({self.not_permission})
 
 class ClientShareEmpowerPlansView(ListCreateAPIView):
     """Vista para clientes Compartidos y facultados"""

@@ -493,6 +493,7 @@ class QueryPlansManage(models.Model):
                                       on_delete=models.PROTECT, null=True)
     type_operation = models.PositiveIntegerField(choices=Ch.queryplansmanage_type_operation)
     status = models.PositiveIntegerField(choices=Ch.queryplansmanage_status)
+    count_queries = models.PositiveIntegerField(null=True, default=None)
 
 
 class PaymentType(models.Model):
