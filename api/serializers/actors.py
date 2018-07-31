@@ -1031,6 +1031,9 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             if 'objection' not in data and 'other_reason' not in data:
                 raise serializers.ValidationError(
                     _("the objection is required"))
+        else:
+            if 'password' not in data:
+                raise serializers.ValidationError(_("password required"))
         return data
 
     def create(self, validated_data):
@@ -1048,8 +1051,9 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         instance = self.Meta.model(**validated_data)
         # import pdb; pdb.set_trace()
         # creo el listado de objeciones si es no efectivo
-        instance.save()
+
         if validated_data["type_contact"] == 2:
+            instance.save()
             for objection in objection_list:
                 # objection_obj = Objection.objects.get(pk=objection)
                 ObjectionsList.objects.create(contact=instance,
@@ -1071,6 +1075,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             serializer_client = ClientSerializer(data=data_client)
             # import pdb; pdb.set_trace()
             if serializer_client.is_valid():
+                instance.save()
                 serializer_client.save()
             else:
                 # import pdb; pdb.set_trace()
