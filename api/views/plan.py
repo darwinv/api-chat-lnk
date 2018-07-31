@@ -78,7 +78,7 @@ class QueryPlansAcquiredDetailView(APIView):
 
             # Activar Plan
             serializer = QueryPlansClientSerializer(plan_client, data, partial=True)
-            if serializer.is_valid():                
+            if serializer.is_valid():
                 serializer.save()
                 if 'test' not in sys.argv:
                     # sincronizo en pyrebase
@@ -86,7 +86,7 @@ class QueryPlansAcquiredDetailView(APIView):
                     plan_active = plan_chosen.filter(queryplansclient__client=client_id, is_active=True,
                                                              queryplansclient__is_chosen=True)
                     serializer_plan_acquired = QueryPlansAcquiredSerializer(plan_active[0])
-                    pyrebase.chosen_plan(client_id, serializer_plan_acquired.data)                                    
+                    pyrebase.chosen_plan(client_id, serializer_plan_acquired.data)
                     result_data = serializer_plan_acquired.data
                 else:
                     result_data = {}
