@@ -26,19 +26,37 @@ class PurchaseQueryPlans(APITestCase):
                 "product_type": 1,
                 "is_billable": True,
                 "plan_id": 2,
-                "discount": 0.00,
                }]
         }
 
     def test_purchase_succesfull(self):
         """Compra exitosa."""
-        # import pdb; pdb.set_trace()
         response = client.post(reverse('purchase'),
                                data=json.dumps(self.valid_payload),
                                content_type='application/json')
-        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_purchase_with_fee(self):
+    def test_purchase_promotional(self):
         """Compra exitosa."""
-        pass
+        self.valid_payload = {
+                "place": "BCP",
+                "description": "test",
+                "is_fee": True,
+                "client": 5,
+                "seller": 2,
+                "products": [{
+                    "product_type": 1,
+                    "is_billable": False,
+                    "plan_id": 2,
+                   }]
+            }
+        response = client.post(reverse('purchase'),
+                               data=json.dumps(self.valid_payload),
+                               content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        response2 = client.post(reverse('purchase'),
+                                data=json.dumps(self.valid_payload),
+                                content_type='application/json')
+
+        self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)

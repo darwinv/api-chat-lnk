@@ -1,5 +1,6 @@
 """Serializer de Venta"""
 from rest_framework import serializers
+from django.utils.translation import ugettext_lazy as _
 from api.models import QueryPlansAcquired, QueryPlansClient, MonthlyFee
 from api.models import QueryPlans, Client, Seller, ProductType
 from api.models import SellerNonBillablePlans, Sale, SaleDetail
@@ -16,7 +17,6 @@ class ProductSerializer(serializers.Serializer):
     is_billable = serializers.BooleanField()
     plan_id = serializers.PrimaryKeyRelatedField(
         queryset=QueryPlans.objects.all(), required=False)
-    discount = serializers.FloatField(min_value=0.00)
 
 
 def increment_reference():
@@ -47,8 +47,19 @@ class SaleSerializer(serializers.Serializer):
     def to_representation(self, instance):
         return {"id": instance.id,
                 "reference_number": instance.reference_number,
-                "total_amount": instance.total_amount
+                "total_amount": instance.total_amount,
+                "fees": instance.monthlyfee_set.all().count(),
+
                 }
+
+    def validate(self, data):
+        """validaciones."""
+        # compruebo si el cliente ya tuvo planes promocionales
+        sale = Sale.objects.filter(client_id=data["client"])
+        import pdb; pdb.set_trace()
+        if sale.set_saledetail.filter(is_billable=True).exists():
+            raise serializers.ValidationError(
+                _("client can no longer be given promotional plans"))
 
     def create(self, validated_data):
         """Metodo para guardar en venta."""
@@ -92,9 +103,10 @@ class SaleSerializer(serializers.Serializer):
                 else:
                     n_fees = 1
                     fee_amount = float(product["plan_id"].price)
-                for i in range(1, n_fees):
+                for i in range(1, n_fees+1):
                     pay_day = date.today() + relativedelta(days=3)  # Hardcoded cambiar la cantidad de dias
                     sale_id = instance
+                    # print(i)
                     MonthlyFee.objects.create(fee_amount=fee_amount,
                                               fee_order_number=i, status=1,
                                               sale=sale_id,
@@ -106,12 +118,6 @@ class SaleSerializer(serializers.Serializer):
                     client=validated_data["client"])
 
         return instance
-        # for product in products:
-        #     if product["product_type"].id == 1:
-        #         if product["is_billable"]:
-        #             float(product["plan_id"].price)
-        # import pdb; pdb.set_trace()
-        # return Comment(**validated_data)
 
     def get_total_amount(self, products):
         """obtener el precio total."""
