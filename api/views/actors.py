@@ -470,7 +470,7 @@ class ClientListView(ListCreateAPIView):
 
         # No realizar operacion si tiene operacioens previas para este plan
         plan_manages = QueryPlansManage.objects.filter(
-            email_receiver=email_receiver, status=3)
+            email_receiver=email_receiver, status=3, type_operation=2)
         
         for plan_manage in plan_manages:
             """Checar y otorgar planes a nuevo cliente"""
