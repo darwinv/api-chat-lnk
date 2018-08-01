@@ -30,6 +30,16 @@ class PurchaseQueryPlans(APITestCase):
                }]
         }
 
+    def test_no_seller(self):
+        """Sin Vendedor."""
+        data = self.valid_payload.copy()
+        del data["seller"]
+        response = client.post(reverse('purchase'),
+                               data=json.dumps(self.valid_payload),
+                               content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_purchase_succesfull(self):
         """Compra exitosa."""
         response = client.post(reverse('purchase'),
@@ -59,8 +69,20 @@ class PurchaseQueryPromotionalPlans(APITestCase):
 
     def test_unavailable_promotional(self):
         """planes de vendedor agotados."""
+        data = self.valid_payload.copy()
+        data["products"][0]["plan_id"] = 5
         response = client.post(reverse('purchase'),
                                data=json.dumps(self.valid_payload),
+                               content_type='application/json')
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_promotional_for_seller(self):
+        """no es un plan promocional para este vendedor."""
+        data = self.valid_payload.copy()
+        data["products"][0]["plan_id"] = 3
+        response = client.post(reverse('purchase'),
+                               data=json.dumps(data),
                                content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

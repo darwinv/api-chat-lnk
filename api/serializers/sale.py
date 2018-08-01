@@ -8,17 +8,6 @@ from api.utils.tools import get_date_by_time
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
-
-class ProductSerializer(serializers.Serializer):
-    """Serializer para compra de producto."""
-
-    product_type = serializers.PrimaryKeyRelatedField(
-        queryset=ProductType.objects.all(), required=True)
-    is_billable = serializers.BooleanField()
-    plan_id = serializers.PrimaryKeyRelatedField(
-        queryset=QueryPlans.objects.all(), required=False)
-
-
 def increment_reference():
     """Campo autoincremental de numero de referencia."""
     last_invoice = Sale.objects.all().order_by('id').last()
@@ -29,6 +18,35 @@ def increment_reference():
     new_invoice_int = invoice_int + 1
     new_invoice_no = 'CD' + str(new_invoice_int)
     return new_invoice_no
+
+
+class ProductSerializer(serializers.Serializer):
+    """Serializer para compra de producto."""
+
+    product_type = serializers.PrimaryKeyRelatedField(
+        queryset=ProductType.objects.all(), required=True)
+    is_billable = serializers.BooleanField()
+    plan_id = serializers.PrimaryKeyRelatedField(
+        queryset=QueryPlans.objects.all(), required=False)
+
+    def validate_plan_id(self, value):
+        """Validar plan"""
+        # data = self.get_initial()
+        hoy = date.today()
+        hoy.month
+        if 'seller' in self.context["data_extra"]:
+            seller = self.context["data_extra"]["seller"]
+            try:
+                obj = SellerNonBillablePlans.objects.get(query_plans=value,
+                                                         seller_id=seller,
+                                                         number_month=hoy.month)
+                if obj.quantity < 1:
+                    raise serializers.ValidationError(
+                        _("seller exceeds quantity for this promotional plan"))
+            except SellerNonBillablePlans.DoesNotExist:
+                raise serializers.ValidationError(
+                        _("this is not a promotional plan for this seller"))
+        return value
 
 
 class SaleSerializer(serializers.Serializer):
@@ -81,6 +99,10 @@ class SaleSerializer(serializers.Serializer):
                 # comparo si es promocional o no
                 if product["is_billable"]:
                     sale_detail["discount"] = 0.0
+                    # plan_promotionals = SellerNonBillablePlans.objects.get(
+                    #     query_plans=product["plan_id"],
+                    #     seller=validated_data["seller"])
+
                 else:
                     sale_detail["discount"] = float(product["plan_id"].price)
                 sale_detail["product_type"] = product["product_type"]

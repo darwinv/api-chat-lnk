@@ -211,5 +211,64 @@
     "product_type": 1,
     "clasification": 1
   }
+},
+{
+  "model": "api.queryplans",
+  "pk": 5,
+  "fields": {
+    "name": "Polypack",
+    "query_quantity": 6,
+    "validity_months": 3,
+    "maximum_response_time": 24,
+    "price": "800.00",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 1
+  }
+},
+{
+  "model": "api.sellernonbillableplans",
+  "pk": 1,
+  "fields": {
+    "seller": 2,
+    "query_plans": 2,
+    "quantity": 3,
+    "number_month": 8,
+    "created_at": "2018-07-31T15:31:02Z"
+  }
+},
+{
+  "model": "api.sellernonbillableplans",
+  "pk": 4,
+  "fields": {
+    "seller": 2,
+    "query_plans": 5,
+    "quantity": 0,
+    "number_month": 8,
+    "created_at": "2018-07-31T15:31:02Z"
+  }
+},
+{
+  "model": "api.sellernonbillableplans",
+  "pk": 2,
+  "fields": {
+    "seller": 2,
+    "query_plans": 2,
+    "quantity": 3,
+    "number_month": 9,
+    "created_at": "2018-07-31T15:31:02Z"
+  }
+},
+{
+  "model": "api.sellernonbillableplans",
+  "pk": 3,
+  "fields": {
+    "seller": 2,
+    "query_plans": 2,
+    "quantity": 3,
+    "number_month": 10,
+    "created_at": "2018-07-31T15:31:02Z"
+  }
 }
 ]
