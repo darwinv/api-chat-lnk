@@ -270,7 +270,6 @@ def createCategoriesLisClients(client_id):
 
 def update_status_query(query_id, data, room):
     """Actualizar query de los mensajes."""
-    # print(data)
     node_query(data=data, id=query_id, room=room)
     # check_type_data('chats', 'chats/{}'.format(data_msgs[0].room))
 
