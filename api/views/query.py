@@ -474,15 +474,15 @@ class QueryUploadFilesView(APIView):
         self.get_object(request, pk)
         # import pdb; pdb.set_trace()
         # Cargamos el listado de archivos adjuntos
-        msgs = request.data["message_id"].split(',')
+        # msgs = request.data["message_id"].split(',')
         files = request.FILES.getlist('file')
 
         # Empezamos a subir cada archivo por hilo separado
         threads = []
         i = 0
         for file in files:
-            print(msgs[i])
-            t = threading.Thread(target=self.upload, args=(file, msgs[i]))
+            # print(msgs[i])
+            t = threading.Thread(target=self.upload, args=(file,))
             threads.append(t)
             i = i + 1
         for x in threads:
@@ -493,7 +493,7 @@ class QueryUploadFilesView(APIView):
 
         return HttpResponse(status=200)
 
-    def upload(self, file, msg_id):
+    def upload(self, file):
         """Funcion para subir archivos."""
         resp = True  # variable bandera
         name_file, extension = os.path.splitext(file.name)
@@ -511,6 +511,7 @@ class QueryUploadFilesView(APIView):
             url_thumb = ""
 
         # devolvemos el mensaje con su id correspondiente
+        msg_id = name_file.split("_")[0]
         ms = Message.objects.get(pk=int(msg_id))
         ms.file_url = url
         ms.file_preview_url = url_thumb
