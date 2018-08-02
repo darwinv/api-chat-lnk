@@ -126,7 +126,9 @@ def node_query(data, id, room):
     else:
         print("creo")
         res = db.child(node).set(data)
-    # print(res)
+    if res:
+        if res["success"] != 1:
+            logger.error("actualizando node query fallo ".format(node))
     # pass
 
 
