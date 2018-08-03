@@ -427,7 +427,7 @@ class Sale(models.Model):
     """Venta."""
 
     created_at = models.DateTimeField(auto_now_add=True)
-    place = models.CharField(max_length=100)
+    place = models.CharField(max_length=100, default='por definir')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     reference_number = models.CharField(max_length=20)
     description = models.TextField()

@@ -69,13 +69,14 @@ class ProductSerializer(serializers.Serializer):
 class SaleSerializer(serializers.Serializer):
     """Serializer de venta."""
     # vendedor es  opcional, ya que puede comprar el cliente por su cuenta
-    seller = serializers.PrimaryKeyRelatedField(queryset=Seller.objects.all())
+    seller = serializers.PrimaryKeyRelatedField(queryset=Seller.objects.all(),
+                                                required=False)
     client = serializers.PrimaryKeyRelatedField(queryset=Client.objects.all(),
                                                 required=True)
     # listado de  productos que se agregaran en la venta
     products = serializers.ListField(child=ProductSerializer(), required=True)
     is_fee = serializers.BooleanField(required=True)
-    place = serializers.CharField()
+    place = serializers.CharField(allow_blank=True)
     description = serializers.CharField(required=False)
     reference_number = serializers.CharField(default=increment_reference)
 
@@ -154,11 +155,11 @@ class SaleSerializer(serializers.Serializer):
                 QueryPlansClient.objects.create(
                     acquired_plan=ins_plan, status=1,
                     client=validated_data["client"])
-                mail = BasicEmailAmazon(subject="Share Plan Success",
-                                        to=email_receiver,
-                                        template='email/share')
-                arguments = {'link': WEB_HOST}
-                mail.sendmail(args=arguments)
+                # mail = BasicEmailAmazon(subject="Share Plan Success",
+                #                         to=email_receiver,
+                #                         template='email/share')
+                # arguments = {'link': WEB_HOST}
+                # mail.sendmail(args=arguments)
 
         return instance
 
