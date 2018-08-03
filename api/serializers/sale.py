@@ -31,23 +31,24 @@ class ProductSerializer(serializers.Serializer):
     plan_id = serializers.PrimaryKeyRelatedField(
         queryset=QueryPlans.objects.all(), required=False)
 
-    # def validate_plan_id(self, value):
-    #     """Validar plan"""
-    #     # data = self.get_initial()
-    #     hoy.month
-    #     if 'seller' in self.context:
-    #         seller = self.context["seller"]
-    #         try:
-    #             obj = SellerNonBillablePlans.objects.get(query_plans=value,
-    #                                                      seller_id=seller,
-    #                                                      number_month=hoy.month)
-    #             if obj.quantity < 1:
-    #                 raise serializers.ValidationError(
-    #                     _("seller exceeds quantity for this promotional plan"))
-    #         except SellerNonBillablePlans.DoesNotExist:
-    #             raise serializers.ValidationError(
-    #                     _("this is not a promotional plan for this seller"))
-    #     return value
+    def validate(self, data):
+        """Validar producto."""
+        plan = data["plan_id"]
+        hoy.month
+        if data['is_billable'] is False:
+            if 'seller' in self.context:
+                seller = self.context["seller"]
+                try:
+                    obj = SellerNonBillablePlans.objects.get(
+                        query_plans=plan, seller_id=seller,
+                        number_month=hoy.month)
+                    if obj.quantity < 1:
+                        raise serializers.ValidationError(
+                            _("seller exceeds quantity for this promotional plan"))
+                except SellerNonBillablePlans.DoesNotExist:
+                    raise serializers.ValidationError(
+                        _("this is not a promotional plan for this seller"))
+        return data
 
 
 class SaleSerializer(serializers.Serializer):
