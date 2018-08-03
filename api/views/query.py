@@ -511,7 +511,7 @@ class QueryUploadFilesView(APIView):
             url_thumb = ""
 
         # devolvemos el mensaje con su id correspondiente
-        msg_id = name_file.split("_")[0]
+        msg_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)
         ms = Message.objects.get(pk=int(msg_id))
         ms.file_url = url
         ms.file_preview_url = url_thumb
