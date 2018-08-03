@@ -6,9 +6,13 @@ from api.models import QueryPlans, Client, Seller, ProductType
 from api.models import SellerNonBillablePlans, Sale, SaleDetail
 from api.utils.tools import get_date_by_time
 from datetime import datetime, date
+from api.emails import BasicEmailAmazon
 from dateutil.relativedelta import relativedelta
+import random
+import string
 
 hoy = date.today()
+
 
 def increment_reference():
     """Campo autoincremental de numero de referencia."""
@@ -20,6 +24,12 @@ def increment_reference():
     new_invoice_int = invoice_int + 1
     new_invoice_no = 'CD' + str(new_invoice_int)
     return new_invoice_no
+
+
+def generate_pin_code():
+    """Genera el codigo Pin."""
+    code = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+    return code
 
 
 class ProductSerializer(serializers.Serializer):
@@ -34,8 +44,13 @@ class ProductSerializer(serializers.Serializer):
     def validate(self, data):
         """Validar producto."""
         plan = data["plan_id"]
+        client = self.context["client"]
         hoy.month
         if data['is_billable'] is False:
+            detail = SaleDetail.objects.filter(sale__client_id=client)
+            if detail.filter(is_billable=False).exists():
+                raise serializers.ValidationError(
+                    _("client can no longer be given promotional plans"))
             if 'seller' in self.context:
                 seller = self.context["seller"]
                 try:
@@ -72,23 +87,6 @@ class SaleSerializer(serializers.Serializer):
 
                 }
 
-    def validate(self, data):
-        """validaciones."""
-        # compruebo si el cliente ya tuvo planes promocionales
-        products = data.get('products')
-        key, value = 'is_billable', False
-        for product in products:
-            flag = key in product and value == product[key]
-            if flag is False:
-                break
-            # comprobar si hay un producto
-        if flag:
-            detail = SaleDetail.objects.filter(sale__client_id=data["client"])
-            if detail.filter(is_billable=False).exists():
-                raise serializers.ValidationError(
-                    _("client can no longer be given promotional plans"))
-        return data
-
     def create(self, validated_data):
         """Metodo para guardar en venta."""
         products = validated_data.pop("products")
@@ -103,13 +101,18 @@ class SaleSerializer(serializers.Serializer):
             plan_acquired = {}
             # verificamos si el producto es plan de consultass
             if product["product_type"].id == 1:
+                sale_detail["pin_code"] = generate_pin_code()
                 sale_detail["description"] = product["product_type"].description
                 sale_detail["price"] = float(product["plan_id"].price)
                 sale_detail["is_billable"] = product["is_billable"]
                 # comparo si es promocional o no
                 if product["is_billable"]:
                     sale_detail["discount"] = 0.0
+                    plan_acquired["is_active"] = False
                 else:
+                    validated_data["is_fee"] = False
+                    # se activa automaticamente por ser promocional
+                    plan_acquired["is_active"] = True
                     plan_promotionals = SellerNonBillablePlans.objects.get(
                         query_plans=product["plan_id"],
                         seller=validated_data["seller"],
@@ -125,7 +128,6 @@ class SaleSerializer(serializers.Serializer):
                 plan_acquired["validity_months"] = product["plan_id"].validity_months
                 plan_acquired["available_queries"] = product["plan_id"].query_quantity
                 plan_acquired["query_quantity"] = product["plan_id"].query_quantity
-                plan_acquired["is_active"] = False
                 plan_acquired["available_requeries"] = 10  # harcoded. CAMBIAR
                 plan_acquired["maximum_response_time"] = 24  # harcoded.CAMBIAR
                 plan_acquired["plan_name"] = product["plan_id"].name
@@ -152,6 +154,11 @@ class SaleSerializer(serializers.Serializer):
                 QueryPlansClient.objects.create(
                     acquired_plan=ins_plan, status=1,
                     client=validated_data["client"])
+                mail = BasicEmailAmazon(subject="Share Plan Success",
+                                        to=email_receiver,
+                                        template='email/share')
+                arguments = {'link': WEB_HOST}
+                mail.sendmail(args=arguments)
 
         return instance
 
