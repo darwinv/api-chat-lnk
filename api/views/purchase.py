@@ -22,10 +22,8 @@ class CreatePurchase(APIView):
         # user_id = Operations.get_id(self, request)
         extra = {}
         data = request.data
-        if 'seller' in data:
-            extra["seller"] = data["seller"]
-            
-        serializer = SaleSerializer(data=data, context={'data_extra': extra})
+
+        serializer = SaleSerializer(data=data, context=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)

@@ -8,6 +8,8 @@ from api.utils.tools import get_date_by_time
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
+hoy = date.today()
+
 def increment_reference():
     """Campo autoincremental de numero de referencia."""
     last_invoice = Sale.objects.all().order_by('id').last()
@@ -29,24 +31,23 @@ class ProductSerializer(serializers.Serializer):
     plan_id = serializers.PrimaryKeyRelatedField(
         queryset=QueryPlans.objects.all(), required=False)
 
-    def validate_plan_id(self, value):
-        """Validar plan"""
-        # data = self.get_initial()
-        hoy = date.today()
-        hoy.month
-        if 'seller' in self.context["data_extra"]:
-            seller = self.context["data_extra"]["seller"]
-            try:
-                obj = SellerNonBillablePlans.objects.get(query_plans=value,
-                                                         seller_id=seller,
-                                                         number_month=hoy.month)
-                if obj.quantity < 1:
-                    raise serializers.ValidationError(
-                        _("seller exceeds quantity for this promotional plan"))
-            except SellerNonBillablePlans.DoesNotExist:
-                raise serializers.ValidationError(
-                        _("this is not a promotional plan for this seller"))
-        return value
+    # def validate_plan_id(self, value):
+    #     """Validar plan"""
+    #     # data = self.get_initial()
+    #     hoy.month
+    #     if 'seller' in self.context:
+    #         seller = self.context["seller"]
+    #         try:
+    #             obj = SellerNonBillablePlans.objects.get(query_plans=value,
+    #                                                      seller_id=seller,
+    #                                                      number_month=hoy.month)
+    #             if obj.quantity < 1:
+    #                 raise serializers.ValidationError(
+    #                     _("seller exceeds quantity for this promotional plan"))
+    #         except SellerNonBillablePlans.DoesNotExist:
+    #             raise serializers.ValidationError(
+    #                     _("this is not a promotional plan for this seller"))
+    #     return value
 
 
 class SaleSerializer(serializers.Serializer):
@@ -73,10 +74,18 @@ class SaleSerializer(serializers.Serializer):
     def validate(self, data):
         """validaciones."""
         # compruebo si el cliente ya tuvo planes promocionales
-        detail = SaleDetail.objects.filter(sale__client_id=data["client"])
-        if detail.filter(is_billable=False).exists():
-            raise serializers.ValidationError(
-                _("client can no longer be given promotional plans"))
+        products = data.get('products')
+        key, value = 'is_billable', False
+        for product in products:
+            flag = key in product and value == product[key]
+            if flag is False:
+                break
+            # comprobar si hay un producto
+        if flag:
+            detail = SaleDetail.objects.filter(sale__client_id=data["client"])
+            if detail.filter(is_billable=False).exists():
+                raise serializers.ValidationError(
+                    _("client can no longer be given promotional plans"))
         return data
 
     def create(self, validated_data):
@@ -99,11 +108,13 @@ class SaleSerializer(serializers.Serializer):
                 # comparo si es promocional o no
                 if product["is_billable"]:
                     sale_detail["discount"] = 0.0
-                    # plan_promotionals = SellerNonBillablePlans.objects.get(
-                    #     query_plans=product["plan_id"],
-                    #     seller=validated_data["seller"])
-
                 else:
+                    plan_promotionals = SellerNonBillablePlans.objects.get(
+                        query_plans=product["plan_id"],
+                        seller=validated_data["seller"],
+                        number_month=hoy.month)
+                    plan_promotionals.quantity = plan_promotionals.quantity - 1
+                    plan_promotionals.save()
                     sale_detail["discount"] = float(product["plan_id"].price)
                 sale_detail["product_type"] = product["product_type"]
                 sale_detail["sale"] = instance

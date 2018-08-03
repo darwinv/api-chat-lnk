@@ -57,7 +57,7 @@ class PurchaseQueryPromotionalPlans(APITestCase):
         self.valid_payload = {
             "place": "BCP",
             "description": "test",
-            "is_fee": True,
+            "is_fee": False,
             "client": 5,
             "seller": 2,
             "products": [{
