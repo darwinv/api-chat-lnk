@@ -126,7 +126,10 @@ def node_query(data, id, room):
     else:
         print("creo")
         res = db.child(node).set(data)
-    # print(res)
+    if res:
+        if "succes" in res:
+            if res["success"] != 1:
+                logger.error("actualizando node query fallo ".format(node))
     # pass
 
 
@@ -270,7 +273,6 @@ def createCategoriesLisClients(client_id):
 
 def update_status_query(query_id, data, room):
     """Actualizar query de los mensajes."""
-    # print(data)
     node_query(data=data, id=query_id, room=room)
     # check_type_data('chats', 'chats/{}'.format(data_msgs[0].room))
 

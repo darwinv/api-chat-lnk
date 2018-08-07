@@ -171,7 +171,7 @@ class Seller(User):
 class Objection(models.Model):
     """Objecion."""
 
-    name = models.CharField(max_length=65)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
         """Nombre."""
@@ -479,7 +479,7 @@ class QueryPlansClient(models.Model):
     transfer = models.BooleanField(default=True)
     share = models.BooleanField(default=True)
     empower = models.BooleanField(default=True)
-    status = models.PositiveIntegerField(choices=Ch.queryplansclient_status)    
+    status = models.PositiveIntegerField(choices=Ch.queryplansclient_status)
     is_chosen = models.BooleanField(default=False)
 
 class QueryPlansManage(models.Model):
