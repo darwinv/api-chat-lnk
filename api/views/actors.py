@@ -466,36 +466,48 @@ class ClientListView(ListCreateAPIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-    def check_plans_operation_manage(self, receiver, email_receiver):
+    def check_plans_operation_manage(self, receiver_id, email_receiver):
 
         # No realizar operacion si tiene operacioens previas para este plan
         plan_manages = QueryPlansManage.objects.filter(
             email_receiver=email_receiver, status=3, type_operation=2)
-        
+        receiver = Client.objects.get(pk=receiver_id)
         for plan_manage in plan_manages:
             """Checar y otorgar planes a nuevo cliente"""
             data = {
-                'receiver': receiver,
+                'receiver': receiver_id,
                 'status': 1,
                 'count_queries': plan_manage.count_queries
             }
+            
             data_context = {}
-            data_context['client_receiver'] = {
-                'is_chosen': False,
-                'owner': False,
-                'transfer': False,
-                'share': True,
-                'empower': True,
-                'status': 1,
-                'acquired_plan': None,
-                'client': receiver
-            }
-            data_context['count'] = plan_manage.count_queries
-            data_context['acquired_plan'] = plan_manage.acquired_plan
-            data_context['plan_manage'] = None
+            if plan_manage.type_operation == 2:
+            
+                data_context['client_receiver'] = {
+                    'is_chosen': False,
+                    'owner': False,
+                    'transfer': False,
+                    'share': True,
+                    'empower': True,
+                    'status': 1,
+                    'acquired_plan': None,
+                    'client': receiver
+                }
+                data_context['count'] = plan_manage.count_queries
+                data_context['acquired_plan'] = plan_manage.acquired_plan
+                data_context['plan_manage'] = None
 
-            serializer = QueryPlansShareSerializer(plan_manage, data, partial=True,
-                                          context=data_context)
+                serializer = QueryPlansShareSerializer(plan_manage, data, partial=True,
+                                              context=data_context)
+
+            if plan_manage.type_operation == 1:
+                # Transferir plan de consultas
+                serializer = None
+            if plan_manage.type_operation == 3:
+                # Facultar plan de consultas
+                serializer = None
+            else:
+                continue
 
             if serializer.is_valid():
                 serializer.save()

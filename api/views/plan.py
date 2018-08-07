@@ -200,7 +200,6 @@ class ClientSharePlansView(APIView):
             raise serializers.ValidationError({'count': [self.to_much_query_share]})
 
         for client_data in clients:
-            email_receiver = receiver = count = None
 
             # Validamos si enviar el correo del cliente
             if 'email_receiver' in client_data:
@@ -216,28 +215,18 @@ class ClientSharePlansView(APIView):
                 errors[email_receiver] = {'count': [self.required]}
                 continue
 
-            # Se valida que enviaron la cantidad
-            if int(client_data['count']) <= 0:
-                errors[email_receiver] = {'count': [self.invalid]}
-                continue
-
             # Traer cliente by email si existe!
             try:
                 receiver = Client.objects.get(email_exact=email_receiver)
                 status_transfer = 1
             except Client.DoesNotExist:
                 status_transfer = 3
-
-            # No realizar operacion a sigo mismo
-            if email_receiver == client_obj.email_exact:
-                errors[email_receiver] = {'email_receiver': [self.invalid]}
-                continue
+                receiver = None
 
             # No realizar operacion si tiene operacioens previas para este plan
             plan_manage = QueryPlansManage.objects.filter(
                 Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
                 acquired_plan=acquired_plan.id, sender=client)
-
             if plan_manage and plan_manage[0].type_operation == 3:
                 errors[email_receiver] = {'email_receiver': [self.already_exists_empower]}
                 continue
@@ -245,6 +234,11 @@ class ClientSharePlansView(APIView):
                 plan_manage = None
             else:
                 plan_manage = plan_manage[0]
+
+            checker = CheckEmailOperationPlan(2, email_receiver, acquired_plan, client_obj, receiver)
+            if not checker.is_valid():
+                errors[email_receiver] = checker.errors
+                continue
 
             data_manage = {
                 'type_operation': 2,  # Compartir
@@ -261,8 +255,8 @@ class ClientSharePlansView(APIView):
                 'is_chosen': False,
                 'owner': False,
                 'transfer': False,
-                'share': True,
-                'empower': True,
+                'share': False,
+                'empower': False,
                 'status': status_transfer,
                 'acquired_plan': None,
                 'client': receiver
@@ -355,22 +349,11 @@ class ClientEmpowerPlansView(APIView):
                 status_transfer = 1
             except Client.DoesNotExist:
                 status_transfer = 3
+                receiver = None
 
-            # No realizar operacion a sigo mismo
-            if email_receiver == client_obj.email_exact:
-                errors[email_receiver] = {'email_receiver': [self.invalid]}
-                continue
-
-            # No realizar operacion si tiene operacioens previas para este plan
-            plan_manage = QueryPlansManage.objects.filter(
-                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
-                acquired_plan=acquired_plan.id, sender=client)
-
-            if plan_manage:
-                if plan_manage[0].type_operation == 3:
-                    errors[email_receiver] = {'email_receiver': [self.already_exists_empower]}
-                elif plan_manage[0].type_operation == 2:
-                    errors[email_receiver] = {'email_receiver': [self.already_exists_share]}
+            checker = CheckEmailOperationPlan(3, email_receiver, acquired_plan, client_obj, receiver)
+            if not checker.is_valid():
+                errors[email_receiver] = checker.errors
                 continue
 
             # Data del plan a Manejar
@@ -439,11 +422,16 @@ class ClientTransferPlansView(APIView):
         if not 'acquired_plan' in data:
             raise serializers.ValidationError({'acquired_plan': [self.required]})
 
+        if not 'email_receiver' in data:
+            raise serializers.ValidationError({'email_receiver': [self.required]})
+       
+        # Traer al cliente
         try:
-            client_obj = Client.objects.get(pk=client)
+            sender = Client.objects.get(pk=client)
         except Client.DoesNotExist:
             raise Http404
 
+        # Traer informacion del plan y de los permisos del plan
         try:
             acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
              queryplansclient__client=client, queryplansclient__transfer=True)
@@ -452,31 +440,18 @@ class ClientTransferPlansView(APIView):
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
 
-        email_receiver = receiver = None
-        if 'email_receiver' in data:
-            email_receiver = data['email_receiver']
-
+        # Traemos a receptor si existe
+        email_receiver = data['email_receiver']
         try:
             receiver = Client.objects.get(email_exact=email_receiver)
             status_transfer = 1
         except Client.DoesNotExist:
+            receiver = None
             status_transfer = 3
 
-
-        if not email_receiver and not receiver:
-            raise serializers.ValidationError({'email_receiver': [self.required]})
-
-        # No realizar operacion a sigo mismo
-        if email_receiver == client_obj.email_exact:
-            raise serializers.ValidationError({'email_receiver': [self.invalid]})
-
-        # No realizar operacion si tiene operacioens previas para este plan
-        plan_manage = QueryPlansManage.objects.filter(
-            Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
-            acquired_plan=acquired_plan.id, sender=client)
-
-        if plan_manage:
-            raise serializers.ValidationError({'email_receiver': [self.already_exists]})
+        checker = CheckEmailOperationPlan(1, email_receiver, acquired_plan, sender, receiver)        
+        if not checker.is_valid():
+            raise serializers.ValidationError(checker.errors[0])
 
         data_transfer = {
             'type_operation': 1,  # transferencia
@@ -674,18 +649,130 @@ class ChosenPlanView(APIView):
         except QueryPlansAcquired.DoesNotExist:
             raise Http404
 
+
+    
+        
+class CheckEmailOperationPlan(object):
+    """clase para validar los movimientos de planes"""
+    invalid = _("invalid")
+    plan_previously_transferred = _("the plan was previously transferred for this user")
+    already_exists_empower = _("Has already been empowered")
+    already_exists_share = _("Has already been shared")
+
+    can_not_be_share = _("it can not be share")
+    can_not_be_empower = _("it can not be empower")
+    can_not_be_transfer = _("it can not be transfer")
+
+    cannot_share_yourself = _("you can not be shared by yourself")
+    cannot_empower_yourself = _("you can not be empowered by yourself")
+    cannot_transfer_yourself = _("you can not be transferred by yourself")
+
+
+    def __init__(self, type_operation, email_receiver, acquired_plan, sender, receiver, count=None):
+        """ """
+        self.errors = []
+        self.type_operation = type_operation
+        self.email_receiver = email_receiver
+        self.acquired_plan = acquired_plan
+        self.sender = sender
+        self.receiver = receiver
+        self.count = count
+
+    def is_valid(self):
+        """Funtion is valid"""
+        response = self.check_email(self.type_operation, self.email_receiver, self.acquired_plan,
+                         self.sender, self.receiver, self.count)
+
+        return response
+
+    def check_email(self, type_operation, email_receiver, acquired_plan, sender, receiver, count):
+        """
+            type_operation: Int, numero de operacion
+            email_receiver: Str, correo receptor
+            acquired_plan: Int or Obj, plan a ser descontado 
+            sender: Obj, el cliente que vendera 
+            receiver: Int or Obj or None, el cliente que recive el plan
+        """
+        # Compartir con sigo mismo
+        if email_receiver == sender.email_exact:
+            if type_operation == 1:
+                self.errors.append({'email_receiver': [self.cannot_transfer_yourself]})
+            if type_operation == 2:
+                self.errors.append({'email_receiver': [self.cannot_share_yourself]})
+            if type_operation == 3:
+                self.errors.append({'email_receiver': [self.cannot_empower_yourself]})            
+
+        if type_operation == 1:
+            """Transferir"""
+            # No realizar operacion si tiene operacioens previas para este plan
+            plan_manage = QueryPlansManage.objects.filter(
+                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
+                acquired_plan=acquired_plan, sender=sender)
+
+            if plan_manage:
+                if plan_manage[0].type_operation == 3:
+                    message_error  = "{} {}".format(self.already_exists_empower, self.can_not_be_transfer)
+                    self.errors.append({'email_receiver': [message_error]})
+
+                elif plan_manage[0].type_operation == 2:
+                    message_error  = "{} {}".format(self.already_exists_share, self.can_not_be_transfer)
+                    self.errors.append({'email_receiver': [message_error]})
+
+            plan_manage = QueryPlansManage.objects.filter(
+                acquired_plan=acquired_plan, sender=sender, type_operation= 1)
+
+            if plan_manage and plan_manage[0].type_operation == 1:
+                # Solo se puede transferir 1 vez
+                self.errors.append({'acquired_plan': [self.plan_previously_transferred]})
+                   
+        if type_operation == 2:
+            """Compartir"""
+
+            # Se valida que enviaron la cantidad mayor a 0
+            if count and count <= 0:
+                errors[email_receiver] = {'count': [self.invalid]}
+
+            # No realizar operacion si tiene operaciones previas para este plan
+            plan_manage = QueryPlansManage.objects.filter(
+                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
+                acquired_plan=acquired_plan, sender=sender, type_operation=3)
+
+            if plan_manage:
+                message_error  = "{} {}".format(self.already_exists_empower, self.can_not_be_share)
+                self.errors.append({'email_receiver': [message_error]})
+
+        if type_operation == 3:
+            """Facultar"""
+            plan_manage = QueryPlansManage.objects.filter(
+                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
+                acquired_plan=acquired_plan, sender=sender)
+            
+            if plan_manage:
+                if plan_manage[0].type_operation == 3:
+                    message_error  = "{} {}".format(self.already_exists_empower, self.can_not_be_empower)
+                    self.errors.append({'email_receiver': [self.already_exists_empower]})
+
+                elif plan_manage[0].type_operation == 2:
+                    message_error  = "{} {}".format(self.already_exists_share, self.can_not_be_empower)
+                    self.errors.append({'email_receiver': [self.already_exists_share]})
+        
+        # Actualizacion de estatus valido
+        if len(self.errors) > 0:
+            return False
+        else:
+            return True
+
 class ClientCheckEmailOperationView(APIView):
     """Vista para checkar si un correo puede realizar operacion"""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
 
-    already_exists_empower = _("Empower already exists")
-    required = _("required")
-    invalid = _("invalid")
-    already_exists_empower_or_share = _("Empower or Share already exists")
+    
     def get(self, request):
-        client = Operations.get_id(self, request)
+        client_id = Operations.get_id(self, request)
         data = request.query_params
+
+
         response = True
         if 'acquired_plan' in data:
             acquired_plan = data['acquired_plan']
@@ -704,40 +791,20 @@ class ClientCheckEmailOperationView(APIView):
 
         # No realizar operacion a sigo mismo
         try:
-            client_obj = Client.objects.get(pk=client)
+            sender = Client.objects.get(pk=client_id)
         except Client.DoesNotExist:
             raise serializers.ValidationError({'credentials': [self.invalid]})
-
-        if email_receiver == client_obj.email_exact:
-            raise serializers.ValidationError({'email_receiver': [self.invalid]})
 
         # Traer cliente by email si existe!
         try:
             receiver = Client.objects.get(email_exact=email_receiver)
-            status_transfer = 1
         except Client.DoesNotExist:
             receiver = None
-            status_transfer = 3
 
-        if type_operation == 1 or type_operation == 3:
-            """Transferir"""
-            # No realizar operacion si tiene operacioens previas para este plan
-            plan_manage = QueryPlansManage.objects.filter(
-                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
-                acquired_plan=acquired_plan, sender=client)
-
-            if plan_manage:
-                raise serializers.ValidationError({'email_receiver': [self.already_exists_empower_or_share]})
-
-        if type_operation==2:
-            """compartir"""
-            # No realizar operacion si tiene operacioens previas para este plan
-            plan_manage = QueryPlansManage.objects.filter(
-                Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
-                acquired_plan=acquired_plan, sender=client, type_operation=3)
-
-            if plan_manage:
-                raise serializers.ValidationError({'email_receiver': [self.already_exists_empower]})
+        checker = CheckEmailOperationPlan(type_operation, email_receiver, acquired_plan, sender, receiver)
+        
+        if not checker.is_valid():
+            raise serializers.ValidationError(checker.errors[0])
 
         # Cliente no existe pero puede ser facultado, compartido, transferido
         if not receiver:
@@ -807,7 +874,9 @@ class ClientShareEmpowerPlansView(ListCreateAPIView):
             last_name=F('receiver__last_name',),
             business_name=F('receiver__business_name',),
             type_client=F('receiver__type_client',),
-            photo=F('receiver__photo',)).filter(acquired_plan = pk).distinct()
+            photo=F('receiver__photo',)).filter(
+                Q(type_operation=2) | Q(type_operation=3)
+                ).filter(acquired_plan = pk).distinct()
 
         # paginacion
         page = self.paginate_queryset(manage_data)
