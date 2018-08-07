@@ -324,7 +324,7 @@ class CreateSeller(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):
@@ -368,7 +368,7 @@ class CreateSeller(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -422,7 +422,7 @@ class UpdateProfileSeller(APITestCase):
         response = client.put(reverse('seller-detail',
                               args=(8,)), data=json.dumps(self.valid_payload),
                               content_type='application/json')
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_update_telephone(self):
@@ -473,5 +473,5 @@ class UpdatePasswordSeller(APITestCase):
         response = client.put(reverse('update-password',
                               args=(8,)), data=json.dumps(self.data),
                               content_type='application/json')
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)

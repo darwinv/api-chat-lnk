@@ -54,7 +54,7 @@ class ListQueryMessagesByCategory(APITestCase):
         """Estatus 200."""
         category = 8
         response = self.client.get(reverse('query-chat-client', kwargs={'pk': category}))
-        # import pdb; pdb.set_trace()
+        
         # self.assertEqual(response.data['results'][0]['message']['viewed'], False)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -116,7 +116,7 @@ class CreateQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_category(self):
@@ -128,7 +128,7 @@ class CreateQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_message(self):
@@ -250,14 +250,14 @@ class PutFilesToQuery(APITestCase):
     #     # Uploading File Image
     #     dir_img = os.path.join(TEST_URL, 'image.png')
     #     # file = open(dir_img)   # str.encode(dir_img)
-    #     # import pdb; pdb.set_trace()
+    #     
     #     with open(dir_img, "rb") as fp:
     #         f = fp.read()
-    #     # import pdb; pdb.set_trace()
+    #     
     #     imgn = SimpleUploadedFile("image.png",
     #                               f, content_type="image/png")
     #
-    #     # import pdb; pdb.set_trace()
+    #     
     #     response1 = self.client.put(
     #         reverse('query-upload-files', kwargs={'pk': 1000}),
     #         data={'message_id': ms.id, 'file': imgn}, format='multipart')

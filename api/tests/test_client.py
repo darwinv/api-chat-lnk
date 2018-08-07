@@ -464,7 +464,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         del data["document_type"]
         response = self.client.post(
             reverse('clients'),
@@ -536,7 +536,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_null_nick(self):
@@ -548,7 +548,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     # def test_blank_optionals(self):
@@ -561,7 +561,7 @@ class CreateNaturalClient(APITestCase):
     #         data=json.dumps(data),
     #         content_type='application/json'
     #     )
-    #     # import pdb; pdb.set_trace()
+    #     
     #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):
@@ -580,7 +580,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_natural_client(self):
@@ -590,7 +590,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 class UpdateNaturalClient(APITestCase):
@@ -772,7 +772,7 @@ class CreateBusinessClient(APITestCase):
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
-        # import pdb; pdb.set_trace()
+        
         data["address"] = ""
         response1 = self.client.post(
             reverse('clients'),
@@ -785,7 +785,7 @@ class CreateBusinessClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -1086,7 +1086,7 @@ class CreateBusinessClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_foreign_code(self):
@@ -1341,9 +1341,9 @@ class CheckData(APITestCase):
     def test_check_ruc(self):
         """chequear si existe  el ruc."""
         data = {"ruc": "123456789", "role": 2}
-        # import pdb; pdb.set_trace()
+        
         response = client.get(reverse('check-data'), data)
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_check_no_role(self):
@@ -1357,7 +1357,7 @@ class CheckData(APITestCase):
         # data = {"role": 2, "email_exact": "darwinio_vasqz@gmail.com"}
         data = {"role": 2, "email_exact": "darwinio_vasqz@gmail.com"}
         response = client.get(reverse('check-data'), data)
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_check_DNI(self):
@@ -1365,14 +1365,14 @@ class CheckData(APITestCase):
         data = {"role": 2, "document_type": 1,
                 "document_number": "20122984"}
         response = client.get(reverse('check-data'), data)
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_check_passport(self):
         """chequera si existe el pasaporte."""
         data = {"role": 2, "document_type": 2,
                 "document_number": "20122984"}
-        # import pdb; pdb.set_trace()
+        
         response = client.get(reverse('check-data'), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -1381,7 +1381,7 @@ class CheckData(APITestCase):
         data = {"role": 2, "document_type": 3,
                 "document_number": "20122984"}
         response = client.get(reverse('check-data'), data)
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
@@ -1475,7 +1475,7 @@ class UpdatePasswordClientNatural(APITestCase):
         response = client.put(reverse('update-password',
                               args=(5,)), data=json.dumps(self.data),
                               content_type='application/json')
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
