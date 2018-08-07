@@ -172,6 +172,21 @@ class QueryPlansTransferSerializer(serializers.ModelSerializer):
         fields = ('type_operation','status','acquired_plan','new_acquired_plan',
             'sender','receiver','email_receiver')
 
+    def update(self, instance, validated_data):
+        receiver = self.context['client_receiver']
+
+        """Metodo actualizar transferencia de plan."""
+        if 'client' in receiver and receiver['client']:
+            QueryPlansClient.objects.create(**receiver)
+
+        instance.receiver = validated_data.get(
+                               'receiver', instance.receiver)
+        instance.status = validated_data.get(
+                               'status', instance.status)
+        
+        instance.save()
+        return instance
+
     def create(self, validated_data):
         """Transferir plan de consultas"""
         # manage = validated_data.pop('manage')
@@ -293,6 +308,21 @@ class QueryPlansEmpowerSerializer(serializers.ModelSerializer):
         model = QueryPlansManage
         fields = ('type_operation','status','acquired_plan','new_acquired_plan',
             'sender','receiver','email_receiver')
+
+    def update(self, instance, validated_data):
+        receiver = self.context['client_receiver']
+
+        """Metodo actualizar transferencia de plan."""
+        if 'client' in receiver and receiver['client']:
+            QueryPlansClient.objects.create(**receiver)
+
+        instance.receiver = validated_data.get(
+                               'receiver', instance.receiver)
+        instance.status = validated_data.get(
+                               'status', instance.status)
+        
+        instance.save()
+        return instance
 
     def create(self, validated_data):
         """Transferir plan de consultas"""
