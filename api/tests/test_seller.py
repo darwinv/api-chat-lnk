@@ -475,3 +475,15 @@ class UpdatePasswordSeller(APITestCase):
                               content_type='application/json')
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class GetSellerByUsername(APITestCase):
+    """Test module for GET all clients API."""
+    fixtures = ['data','data2','data3','test_seller']
+    def setUp(self):
+        pass
+
+    def test_gest_user(self):
+        # get API response
+        response = client.get(reverse('seller-detail-username', args=("darwinio_vasqz@gmail.com",)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -104,7 +104,7 @@ class GetPlans(APITestCase):
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
         response = self.client.get(reverse('plans'), format='json')
-        import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -335,6 +335,7 @@ class CreateTransferPlan(APITestCase):
             "acquired_plan": 22
         }
         response = self.client.post(reverse('client-plans-transfer'), format='json', data=data)
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_post_data_email_client(self):
@@ -344,6 +345,7 @@ class CreateTransferPlan(APITestCase):
             "acquired_plan": 22
         }
         response = self.client.post(reverse('client-plans-transfer'), format='json', data=data)
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

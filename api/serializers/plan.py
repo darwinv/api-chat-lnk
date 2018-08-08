@@ -248,7 +248,7 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
         receiver = self.context['client_receiver']
         acquired_plan = self.context['acquired_plan']
         plan_manage = self.context['plan_manage']  # Plan de Consulta Anterior
-
+        
         if plan_manage:
             # Si ya existe plan, se reutiliza el anterior
             new_acquired_plan = plan_manage.new_acquired_plan

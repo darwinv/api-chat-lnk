@@ -24,9 +24,6 @@ AUTH_USER_MODEL = 'api.User'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'y9_571a#34)lk3cevqq*c(1_#d+h6bum!v7t7_8@ascpzc-@u@'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = ['*']
 
 # Application definition
@@ -58,13 +55,12 @@ REST_FRAMEWORK = {
 }
 
 OAUTH2_PROVIDER = {
-    'ACCESS_TOKEN_EXPIRE_SECONDS': 432000,
+    'ACCESS_TOKEN_EXPIRE_SECONDS': 31104000,
     # this is the list of available scopes
     'SCOPES': {'read': 'Read scope',
                'write': 'Write scope',
                'groups': 'Access to your groups'}
 }
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -118,8 +114,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

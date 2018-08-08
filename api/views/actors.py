@@ -189,7 +189,7 @@ class UpdatePasswordRecoveryView(APIView):
             code = request.data["code"]
         else:
             raise serializers.ValidationError({'code': [self.required]})
-
+        
         user_filter = RecoveryPassword.objects.filter(code=code, user=pk, is_active=True).extra(where = ["DATEDIFF(NOW() ,created_at )<=1"])
 
         if user_filter:
@@ -434,6 +434,7 @@ class ClientListView(ListCreateAPIView):
 
     # Metodo post redefinido
     def post(self, request):
+
         """Redefinido metodo para crear clientes."""
         data = request.data
         if 'type_client' not in data or not data['type_client']:

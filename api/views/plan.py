@@ -707,8 +707,8 @@ class CheckEmailOperationPlan(object):
             # No realizar operacion si tiene operacioens previas para este plan
             plan_manage = QueryPlansManage.objects.filter(
                 Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
-                acquired_plan=acquired_plan, sender=sender)
-
+                acquired_plan=acquired_plan)
+            
             if plan_manage:
                 if plan_manage[0].type_operation == 3:
                     message_error  = "{} {}".format(self.already_exists_empower, self.can_not_be_transfer)
@@ -717,13 +717,10 @@ class CheckEmailOperationPlan(object):
                 elif plan_manage[0].type_operation == 2:
                     message_error  = "{} {}".format(self.already_exists_share, self.can_not_be_transfer)
                     self.errors.append({'email_receiver': [message_error]})
-
-            plan_manage = QueryPlansManage.objects.filter(
-                acquired_plan=acquired_plan, sender=sender, type_operation= 1)
-
-            if plan_manage and plan_manage[0].type_operation == 1:
-                # Solo se puede transferir 1 vez
-                self.errors.append({'acquired_plan': [self.plan_previously_transferred]})
+            
+                elif plan_manage[0].type_operation == 1:
+                    # Solo se puede transferir 1 vez
+                    self.errors.append({'email_receiver': [self.plan_previously_transferred]})
                    
         if type_operation == 2:
             """Compartir"""
@@ -735,7 +732,7 @@ class CheckEmailOperationPlan(object):
             # No realizar operacion si tiene operaciones previas para este plan
             plan_manage = QueryPlansManage.objects.filter(
                 Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
-                acquired_plan=acquired_plan, sender=sender, type_operation=3)
+                acquired_plan=acquired_plan, type_operation=3)
 
             if plan_manage:
                 message_error  = "{} {}".format(self.already_exists_empower, self.can_not_be_share)
@@ -745,7 +742,7 @@ class CheckEmailOperationPlan(object):
             """Facultar"""
             plan_manage = QueryPlansManage.objects.filter(
                 Q(receiver=receiver, status=1) | Q(email_receiver=email_receiver, status=3)).filter(
-                acquired_plan=acquired_plan, sender=sender)
+                acquired_plan=acquired_plan)
             
             if plan_manage:
                 if plan_manage[0].type_operation == 3:
@@ -868,15 +865,15 @@ class ClientShareEmpowerPlansView(ListCreateAPIView):
 
         manage_data = QueryPlansManage.objects.values('email_receiver',
             'status','type_operation', 'receiver', 'new_acquired_plan'
-            ).annotate(available_queries=F('new_acquired_plan__available_queries',),
-            query_quantity=F('new_acquired_plan__query_quantity',),
-            first_name=F('receiver__first_name',),
-            last_name=F('receiver__last_name',),
-            business_name=F('receiver__business_name',),
-            type_client=F('receiver__type_client',),
-            photo=F('receiver__photo',)).filter(
+            ).annotate(available_queries = F('new_acquired_plan__available_queries',),
+            query_quantity = F('new_acquired_plan__query_quantity',),
+            first_name = F('receiver__first_name',),
+            last_name = F('receiver__last_name',),
+            business_name = F('receiver__business_name',),
+            type_client = F('receiver__type_client',),
+            photo = F('receiver__photo',)).filter(
                 Q(type_operation=2) | Q(type_operation=3)
-                ).filter(acquired_plan = pk).distinct()
+                ).filter(acquired_plan = pk).distinct().order_by('-type_operation')
 
         # paginacion
         page = self.paginate_queryset(manage_data)

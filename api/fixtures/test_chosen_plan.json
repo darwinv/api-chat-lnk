@@ -84,7 +84,7 @@
     "password": "pbkdf2_sha256$36000$VOeT7PriDQ3N$u+QeTUC3lfrWf1E2RVXniMLrjF+rjhXGFwJMA11vIOU=",
     "last_login": null,
     "is_superuser": false,
-    "username": "teresa",
+    "username": "teresaq@tesla.com",
     "first_name": "teresa",
     "last_name": "garcia",
     "email": "",
@@ -938,6 +938,24 @@
   }
 },
 {
+  "model": "api.queryplansacquired",
+  "pk": 23,
+  "fields": {
+    "expiration_date": "2018-02-26",
+    "validity_months": 1,
+    "available_queries": 1,
+    "query_quantity": 1,
+    "activation_date": "2018-02-26",
+    "is_active": false,    
+    "available_requeries": 1,
+    "maximum_response_time": 12,
+    "acquired_at": "2018-02-26T22:17:05.963Z",
+    "plan_name": "test 23",
+    "query_plans": 1,
+    "sale_detail": 2
+  }
+},
+{
   "model": "api.queryplansclient",
   "pk": 2,
   "fields": {
@@ -1255,7 +1273,8 @@
     "acquired_plan": 22,
     "new_acquired_plan": null,
     "type_operation": 3,
-    "status": 3
+    "status": 3,
+    "count_queries": null
   }
 },
 {
@@ -1268,7 +1287,36 @@
     "acquired_plan": 22,
     "new_acquired_plan": null,
     "type_operation": 3,
-    "status": 1
+    "status": 1,
+    "count_queries": null
+  }
+},
+{
+  "model": "api.queryplansmanage",
+  "pk": 3,
+  "fields": {
+    "sender": 11,
+    "receiver": null,
+    "email_receiver": "cliente_no_existe_share@mail.com",
+    "acquired_plan": 22,
+    "new_acquired_plan": 23,
+    "type_operation": 2,
+    "status": 3,
+    "count_queries": 1
+  }
+},
+{
+  "model": "api.queryplansmanage",
+  "pk": 4,
+  "fields": {
+    "sender": 11,
+    "receiver": null,
+    "email_receiver": "cliente_no_existe_transfer@mail.com",
+    "acquired_plan": 22,
+    "new_acquired_plan": null,
+    "type_operation": 1,
+    "status": 3,
+    "count_queries": null
   }
 }
 ]

@@ -21,7 +21,7 @@ client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 class CreateNaturalClient(APITestCase):
     """Prueba de Registro de Cliente Natural."""
 
-    fixtures = ['data', 'data2']
+    fixtures = ['data', 'data2', 'test_chosen_plan']
 
     # Prueba para verificar la insercion de cliente natural
     def setUp(self):
@@ -550,6 +550,51 @@ class CreateNaturalClient(APITestCase):
         )
         
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+
+    def test_empower_plan(self):
+        """Create client con plan facultado."""
+        data = self.valid_payload
+        data["username"] = "cliente_no_existe@mail.com"
+        data["email_exact"] = "cliente_no_existe@mail.com"
+
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_transfer_plan(self):
+        """Create client con plan transferido."""
+        data = self.valid_payload        
+        data["username"] = "cliente_no_existe_transfer@mail.com"
+        data["email_exact"] = "cliente_no_existe_transfer@mail.com"
+
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_share_plan(self):
+        """Create client con plan compartido."""
+        data = self.valid_payload
+        data["username"] = "cliente_no_existe_share@mail.com"
+        data["email_exact"] = "cliente_no_existe_share@mail.com"
+
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+
 
     # def test_blank_optionals(self):
     #     """Solicitud valida ya que no valida campos opcionales."""
@@ -1413,6 +1458,20 @@ class GetUserByRecoverCode(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+class GetClientByUsername(APITestCase):
+    """Test module for GET all clients API."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'test_recovery_password']
+
+    def setUp(self):
+        pass
+
+    def test_gest_user(self):
+        # get API response
+        response = client.get(reverse('client-detail-username', args=("jefeti@pympack.com.pe",)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class UpdatePasswordByRecoverCode(APITestCase):
     """Test module for Update password user API."""
 
@@ -1423,6 +1482,7 @@ class UpdatePasswordByRecoverCode(APITestCase):
     def test_update_password_by_recovery(self):
         # get API response
         data = {'password':'123456', 'code':'WEY4D1'}
+        
         response = client.put(reverse('reset-password-recovery', args=(5,)), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], 5)
