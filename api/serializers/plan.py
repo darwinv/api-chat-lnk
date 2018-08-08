@@ -6,6 +6,22 @@ from api.utils.tools import get_date_by_time
 from datetime import datetime
 
 
+class PlanStatusSerializer(serializers.Serializer):
+
+    def to_representation(self, obj):
+        """representacion."""
+        if obj.exists():
+            if obj.filter(status=1).exists():
+                if obj.filter(is_chosen=True).exists():
+                    return {"code": 4, "message": "Si tiene plan seleccionado"}
+                else:
+                    return {"code": 3, "message": "No tiene plan seleccionado"}
+            else:
+                return {"code": 2, "message": "No tiene plan activo"}
+        else:
+            return {"code": 1, "message": "No tiene plan comprado"}
+
+
 class PlanDetailSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
     price = serializers.CharField()

@@ -37,7 +37,7 @@ urlpatterns = [
     # Facultar plan de consultas
     url(r'^clients/plans-empower/$', plan.ClientEmpowerPlansView.as_view(),
         name='client-plans-empower'),
-    
+
     # Facultar plan de consultas
     url(r'^clients/plans-delete-empower/$', plan.ClientDeleteEmpowerPlansView.as_view(),
         name='plans-delete-empower'),
@@ -61,6 +61,9 @@ urlpatterns = [
     # listado de planes a la venta
     url(r'^plans/$', plan.PlansView.as_view(),
         name='plans'),
+
+    url(r'^plans/check_status$', plan.PlansStatus.as_view(),
+        name='plans-status'),
 
     # crear planes no facturables
     url(r'^plans/plans-nonbillable/$', plan.PlansNonBillableView.as_view(),
