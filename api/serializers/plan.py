@@ -10,6 +10,7 @@ class PlanDetailSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
     price = serializers.CharField()
     is_chosen = serializers.SerializerMethodField()
+    
     class Meta:
         """Modelo del especialista y sus campos."""
 
