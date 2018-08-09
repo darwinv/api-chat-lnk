@@ -8,6 +8,7 @@ import boto3
 # paquetes de django
 from django.db.models import OuterRef, Subquery, F, Count
 from django.http import Http404, HttpResponse
+from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 # paquetes de terceros
 from api.models import Declinator
@@ -579,7 +580,13 @@ class QueryAcceptView(APIView):
                 pyrebase.updateStatusQueryAccept(specialist,
                                                  query.client.id, pk,
                                                  room)
-            return Response(serializer.data, status.HTTP_200_OK)
+
+            # Traemos todas las consultas pendientes por tomar accion por asignadas
+            # a este especialista
+            msgs_pendings = Query.objects.filter(status=1, specialist=specialist)
+        
+            return Response({'badge_number': len(msgs_pendings)}, status.HTTP_200_OK)
+
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
@@ -724,7 +731,7 @@ class ReadPendingAnswerView(APIView):
     """Vista de lectura de respuestas no vistos del cliente."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsClient]
-
+    required = _("required")
     def get_category(self, categ):
         """Obtener objeto."""
         try:
@@ -737,13 +744,25 @@ class ReadPendingAnswerView(APIView):
         """Enviar data."""
         data = request.data
         client_id = Operations.get_id(self, request)
-        category = self.get_category(data["category"])
+
+        if "category" in data:
+            category = int(data["category"])
+        else:
+            raise serializers.ValidationError({'category': [self.required]})
+
+        # Traer los mensajes que no han sido leidos y son respuestass del especialista
         mesgs_res = Message.objects.filter(
-            viewed=0, msg_type='a', query__client=client_id,
+            viewed=False, msg_type='a', query__client=client_id,
             query__category=category)
-        if 'test' not in sys.argv:
-            pyrebase.set_message_viewed(mesgs_res)
-        r = mesgs_res.update(viewed=1)
-        if 'test' not in sys.argv:
-            pyrebase.categories_db(client_id, category.id)
-        return Response({'resp': r}, status.HTTP_200_OK)
+        if mesgs_res:
+            mesgs_res.update(viewed=1)
+
+            # if 'test' not in sys.argv: #NO ACTUALIZAMOS CHAT
+            #     pyrebase.set_message_viewed(mesgs_res)
+            if 'test' not in sys.argv:
+                pyrebase.categories_db(client_id, category)
+
+        msgs_pendings = Message.objects.filter(
+            viewed=False, msg_type='a', query__client=client_id)
+        
+        return Response({'badge_number': len(msgs_pendings)}, status.HTTP_200_OK)
