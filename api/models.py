@@ -172,7 +172,7 @@ class Seller(User):
 class Objection(models.Model):
     """Objecion."""
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=300)
 
     def __str__(self):
         """Nombre."""
