@@ -918,8 +918,6 @@ class PlansStatus(APIView):
 
 
 
-
-
 class PlansNonBillableSellerView(APIView):
     """Vista para crear planes no facturables."""
 
