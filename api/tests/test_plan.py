@@ -581,7 +581,7 @@ class GetPromocionalPlans(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetCheckEmailForOperationPlans(APITestCase):
-    """Devolver 404 si no existe, devuelve 200 si existe y 400 status si 
+    """Devolver 404 si no existe, devuelve 200 si existe y 400 status si
     no es valido para operacion."""
 
     fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
@@ -594,7 +594,7 @@ class GetCheckEmailForOperationPlans(APITestCase):
             "email_receiver": "jperez@mail.com",
             "acquired_plan": 22,
             'client_id':11
-        }    
+        }
 
     def test_get_check_no_exist(self):
         """Get check if client exist in operation manage 404"""
@@ -647,3 +647,20 @@ class UpdatePlanSelect(APITestCase):
             reverse('plans-delete-empower'), data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class CheckPlanActive(APITestCase):
+    """Pruebas de chequear planes."""
+
+    fixtures = ['data', 'data2', 'data3', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ'
+        )
+
+    def test_check_status_plan(self):
+        """Chequea los estatus del plan."""
+        response = self.client.get(reverse('plans-status'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
