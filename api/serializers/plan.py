@@ -11,8 +11,8 @@ class PlanStatusSerializer(serializers.Serializer):
     def to_representation(self, obj):
         """representacion."""
         if obj.exists():
-            if obj.filter(status=1).exists():
-                if obj.filter(is_chosen=True).exists():
+            if obj.filter(is_active=True).exists():
+                if obj.filter(queryplansclient__is_chosen=True).exists():
                     return {"code": 4, "message": "Si tiene plan seleccionado"}
                 else:
                     return {"code": 3, "message": "No tiene plan seleccionado"}
@@ -26,7 +26,7 @@ class PlanDetailSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
     price = serializers.CharField()
     is_chosen = serializers.SerializerMethodField()
-    
+
     class Meta:
         """Modelo del especialista y sus campos."""
 
@@ -200,7 +200,7 @@ class QueryPlansTransferSerializer(serializers.ModelSerializer):
                                'receiver', instance.receiver)
         instance.status = validated_data.get(
                                'status', instance.status)
-        
+
         instance.save()
         return instance
 
@@ -265,7 +265,7 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
         receiver = self.context['client_receiver']
         acquired_plan = self.context['acquired_plan']
         plan_manage = self.context['plan_manage']  # Plan de Consulta Anterior
-        
+
         if plan_manage:
             # Si ya existe plan, se reutiliza el anterior
             new_acquired_plan = plan_manage.new_acquired_plan
@@ -289,7 +289,7 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
             new_acquired_plan.sale_detail_id = acquired_plan.sale_detail_id
             new_acquired_plan.plan_name = acquired_plan.plan_name
             new_acquired_plan.is_chosen = False
-            new_acquired_plan.save()            
+            new_acquired_plan.save()
 
             # Damos los permisos del plan al usuario
             if 'client' in receiver and receiver['client']:
@@ -337,7 +337,7 @@ class QueryPlansEmpowerSerializer(serializers.ModelSerializer):
                                'receiver', instance.receiver)
         instance.status = validated_data.get(
                                'status', instance.status)
-        
+
         instance.save()
         return instance
 

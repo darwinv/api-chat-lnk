@@ -477,6 +477,9 @@ class QueryUploadFilesView(APIView):
         # Cargamos el listado de archivos adjuntos
         # msgs = request.data["message_id"].split(',')
         files = request.FILES.getlist('file')
+        print(request)
+        print(request.__dict__.keys())
+        import pdb; pdb.set_trace()
 
         # Empezamos a subir cada archivo por hilo separado
         threads = []
@@ -501,6 +504,8 @@ class QueryUploadFilesView(APIView):
         # filename = str(uuid.uuid4())
         # name = filename + extension
         # lo subimos a Amazon S3
+        print(file.name)
+        print(name_file)
         url = s3_upload_file(file, file.name)
         # generamos la miniatura
         thumb = resize_img(file, 256)
@@ -584,7 +589,7 @@ class QueryAcceptView(APIView):
             # Traemos todas las consultas pendientes por tomar accion por asignadas
             # a este especialista
             msgs_pendings = Query.objects.filter(status=1, specialist=specialist)
-        
+
             return Response({'badge_number': len(msgs_pendings)}, status.HTTP_200_OK)
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -764,5 +769,5 @@ class ReadPendingAnswerView(APIView):
 
         msgs_pendings = Message.objects.filter(
             viewed=False, msg_type='a', query__client=client_id)
-        
+
         return Response({'badge_number': len(msgs_pendings)}, status.HTTP_200_OK)
