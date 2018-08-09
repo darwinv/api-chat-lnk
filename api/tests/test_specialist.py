@@ -335,7 +335,7 @@ class CreateSpecialist(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_specialist_foreign_without(self):
@@ -746,4 +746,18 @@ class UpdateProfileSpecialist(APITestCase):
             reverse('specialist-detail', kwargs={'pk': 3}),
             self.valid_payload, format='json'
         )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetSpecialistByUsername(APITestCase):
+    """Test module for GET all clients API."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_specialist']
+
+    def setUp(self):
+        pass
+
+    def test_gest_user(self):
+        # get API response
+        client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        response = client.get(reverse('specialist-detail-username', args=("teresaq@tesla.com",)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)

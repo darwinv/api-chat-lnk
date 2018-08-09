@@ -24,7 +24,7 @@ urlpatterns = [
 ]
 
 
-
+handler500 = 'api.server_errors.handler500'
 # from django.conf.urls.i18n import i18n_patterns
 # urlpatterns = i18n_patterns(
 #     url(r'^admin/', admin.site.urls),

@@ -17,7 +17,7 @@ class GetUsers(APITestCase):
         # get API response
 
         response = client.get(self.url,content_type='application/json')
-        # import pdb; pdb.set_trace()
+        
         # get data from db
         user = User.objects.all()
         # self.assertEqual(response.data, "ey")

@@ -57,7 +57,7 @@ class ChangeStatusClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         client = APIClient()
         client.credentials(
             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
@@ -66,7 +66,7 @@ class ChangeStatusClient(APITestCase):
                               data, format='json')
 
         c = Cliente.objects.get(pk=send.data["id"])
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["status"], int(c.status))
 
@@ -104,7 +104,7 @@ class ChangeStatusClient(APITestCase):
                               data, format='json')
 
         c = Cliente.objects.get(pk=send.data["id"])
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["status"], int(c.status))
 
