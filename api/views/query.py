@@ -171,7 +171,7 @@ class QueryListClientView(ListCreateAPIView):
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             return Response(serializer.data, status.HTTP_201_CREATED)
         else:
-            # print(serializer.errors)
+            print(serializer.errors)
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 

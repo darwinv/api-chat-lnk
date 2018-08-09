@@ -24,7 +24,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from datetime import datetime
 from rest_framework import serializers
 from linkupapi.settings_secret import WEB_HOST
-from api.serializers.plan import PlansNonBillableSerializer
+from api.serializers.plan import PlansNonBillableSerializer, PlanStatusSerializer
 
 
 class PlansView(APIView):
@@ -899,6 +899,25 @@ class PlansNonBillableView(APIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class PlansStatus(APIView):
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        """Devolver Planes."""
+        user_id = Operations.get_id(self, request)
+        qs = QueryPlansClient.objects.filter(client_id=user_id)
+        plans = PlanStatusSerializer(qs)
+        return Response(plans.data)
+
+
+
+
+
+
 
 
 class PlansNonBillableSellerView(APIView):
