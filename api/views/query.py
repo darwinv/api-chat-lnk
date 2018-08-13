@@ -502,8 +502,6 @@ class QueryUploadFilesView(APIView):
         # filename = str(uuid.uuid4())
         # name = filename + extension
         # lo subimos a Amazon S3
-        # print(file.name)
-        # print(name_file)
         url = s3_upload_file(file, file.name)
         # generamos la miniatura
         thumb = resize_img(file, 256)
