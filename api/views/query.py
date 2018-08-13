@@ -476,6 +476,7 @@ class QueryUploadFilesView(APIView):
         # import pdb; pdb.set_trace()
         # Cargamos el listado de archivos adjuntos
         # msgs = request.data["message_id"].split(',')
+        # print(request.data)
         files = request.FILES.getlist('file')
 
         # Empezamos a subir cada archivo por hilo separado
@@ -501,8 +502,8 @@ class QueryUploadFilesView(APIView):
         # filename = str(uuid.uuid4())
         # name = filename + extension
         # lo subimos a Amazon S3
-        print(file.name)
-        print(name_file)
+        # print(file.name)
+        # print(name_file)
         url = s3_upload_file(file, file.name)
         # generamos la miniatura
         thumb = resize_img(file, 256)
