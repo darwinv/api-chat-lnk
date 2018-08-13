@@ -370,7 +370,7 @@ class ClientSerializer(serializers.ModelSerializer):
                 self.context['temp_code'] = data["ruc"]
         elif self.context['request']._request.method == "PUT":
             self.validate_client_put(data)
-            
+
         else:
             raise serializers.ValidationError({"method": 'don\'t support'})
         return data
@@ -975,7 +975,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             "first_name": obj.first_name, "last_name": obj.last_name,
             "document_type": obj.document_type,
             "document_number": obj.document_number
-            }
+        }
         # serializamos la lista de objeciones si es no efectivo
         if obj.type_contact == 2:
             objections = ListObjectionsSerializer(
@@ -985,6 +985,12 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
                 other = OrderedDict()
                 other['name'] = obj.other_objection
                 data["objections"].append(other)
+
+        # Id de cliente creado
+        if 'client_id' in self.context:
+            data['client_id'] = self.context['client_id']
+        else:
+            data['client_id'] = None
 
         return data
 
@@ -1012,7 +1018,6 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         validated_data['address'] = address
 
         instance = self.Meta.model(**validated_data)
-        # import pdb; pdb.set_trace()
         # creo el listado de objeciones si es no efectivo
 
         if validated_data["type_contact"] == 2:
@@ -1036,12 +1041,12 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
                 data_client['profession'] = ''
                 data_client['ocupation'] = None
             serializer_client = ClientSerializer(data=data_client)
-            # import pdb; pdb.set_trace()
+            
             if serializer_client.is_valid():
-                instance.save()
                 serializer_client.save()
+                instance.save()
+                self.context['client_id'] = serializer_client.data['id']
             else:
-                # import pdb; pdb.set_trace()
                 raise serializers.ValidationError(serializer_client.errors)
         return instance
 
