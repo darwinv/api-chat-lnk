@@ -369,11 +369,8 @@ class ClientSerializer(serializers.ModelSerializer):
                 # el codigo sera el RUC
                 self.context['temp_code'] = data["ruc"]
         elif self.context['request']._request.method == "PUT":
-            if self.instance.type_client == 'n':
-                self.validate_natural_client_base(data)
-
-            if self.instance.type_client == 'b':
-                self.validate_bussines_client_base(data)
+            self.validate_client_put(data)
+            
         else:
             raise serializers.ValidationError({"method": 'don\'t support'})
         return data
@@ -409,16 +406,9 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Redefinido metodo de actualizar cliente."""
-        country_peru = Countries.objects.get(name="Peru")
+        country_peru = Countries.objects.get(name="Peru")        
 
-        if instance.type_client == "b":
-            # Persona juridica
-            instance.commercial_reason = validated_data.get('commercial_reason', instance.commercial_reason)
-        elif instance.type_client == "n":
-            # Persona Natural
-            instance.first_name = validated_data.get('first_name', instance.first_name)
-            instance.last_name = validated_data.get('last_name', instance.last_name)
-
+        instance.ciiu = validated_data.get('ciiu', instance.ciiu)
         instance.nick = validated_data.get('nick', instance.nick)
         instance.telephone = validated_data.get('telephone', instance.telephone)
         instance.cellphone = validated_data.get('cellphone', instance.cellphone)
@@ -439,15 +429,9 @@ class ClientSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-    def validate_natural_client_base(self, data):
+    def validate_client_put(self, data):
         """Validacion para cuando es natural."""
         required = _("required")
-        # obligatorio el nombre del cliente
-        if 'first_name' not in data or not data['first_name']:
-            raise serializers.ValidationError({"first_name": [required]})
-        # obligatorio el apellido del cliente
-        if 'last_name' not in data or not data['last_name']:
-            raise serializers.ValidationError({"last_name": [required]})
 
         # si reside en peru la direccion es obligatoria.
         if data["residence_country"] == Countries.objects.get(name="Peru"):
@@ -461,27 +445,6 @@ class ClientSerializer(serializers.ModelSerializer):
                          {"foreign_address": [required]})
         return
 
-    def validate_bussines_client_base(self, data):
-        """Validacion para cuando es juridico."""
-        required = _("required")
-        inf_fiscal = _("Tax Code")
-        country = Countries.objects.get(name="Peru")
-
-        # requerido el nombre de la empresa
-        if 'commercial_reason' not in data:
-            raise serializers.ValidationError(
-                      {"commercial_reason": [required]})
-
-        # si reside en peru la direccion es obligatoria.
-        if data["residence_country"] == country:
-            if "address" not in data or not data["address"]:
-                raise serializers.ValidationError({"address": [required]})
-        # sino, la direccion de extranjero es obligatoria
-        else:
-            if "foreign_address" not in data or not data["foreign_address"]:
-                raise serializers.ValidationError(
-                          {"foreign_address": [required]})
-        return
 
 
 class SpecialistSerializer(serializers.ModelSerializer):
