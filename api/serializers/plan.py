@@ -418,7 +418,7 @@ class PlansNonBillableSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         """representation."""
         data = {
-            "id": instance.id
+            "id": instance.id,
             "name": instance.query_plans.name,
             "query_quantity": instance.query_plans.query_quantity,
             "validity_months": instance.query_plans.validity_months,
