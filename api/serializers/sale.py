@@ -85,7 +85,6 @@ class SaleSerializer(serializers.Serializer):
                 "reference_number": instance.reference_number,
                 "total_amount": instance.total_amount,
                 "fees": instance.monthlyfee_set.all().count(),
-
                 }
 
     def create(self, validated_data):

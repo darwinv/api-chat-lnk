@@ -231,7 +231,7 @@ class QueryPlansSerializer(serializers.ModelSerializer):
     class Meta:
         """Modelo."""
         model = QueryPlans
-        fields = ('name', 'query_quantity', 'validity_months', 'price')
+        fields = ('id', 'name', 'query_quantity', 'validity_months', 'price')
 
 class QueryPlansShareSerializer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
@@ -418,6 +418,7 @@ class PlansNonBillableSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         """representation."""
         data = {
+            "id": instance.id
             "name": instance.query_plans.name,
             "query_quantity": instance.query_plans.query_quantity,
             "validity_months": instance.query_plans.validity_months,
