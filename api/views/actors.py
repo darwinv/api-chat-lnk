@@ -137,7 +137,9 @@ class SendCodePassword(APIView):
         recovery_password.is_active = True
         recovery_password.save()
         data = {'code':code}
-        mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña", to=email, template='email/send_code')
+        if 'test' not in sys.argv:
+            mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña", 
+                to=email, template='email/send_code')
         return Response(mail.sendmail(args=data))
 
 class ValidCodePassword(APIView):
@@ -568,7 +570,7 @@ class ClientDetailView(APIView):
         client = self.get_object(pk)
         data = request.data
 
-        valid_fields = ("commercial_reason", "first_name", "last_name", "nick",
+        valid_fields = ("commercial_reason", "ciiu", "nick",
                 "telephone", "cellphone", "residence_country", "address", "foreign_address")
 
         clear_data_no_valid(data, valid_fields)
