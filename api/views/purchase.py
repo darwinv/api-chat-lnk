@@ -22,7 +22,8 @@ class CreatePurchase(APIView):
         # user_id = Operations.get_id(self, request)
         extra = {}
         data = request.data
-
+        user_id = Operations.get_id(self, request)
+        data["seller_id"] = user_id
         serializer = SaleSerializer(data=data, context=data)
         if serializer.is_valid():
             serializer.save()
