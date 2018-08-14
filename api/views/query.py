@@ -486,9 +486,11 @@ class QueryUploadFilesView(APIView):
             t = threading.Thread(target=self.upload, args=(file,))
             threads.append(t)
             i = i + 1
+
         for x in threads:
             x.start()
-        # # Wait for all of them to finish
+
+        # Wait for all of them to finish
         for x in threads:
             x.join()
 
@@ -501,8 +503,6 @@ class QueryUploadFilesView(APIView):
         # filename = str(uuid.uuid4())
         # name = filename + extension
         # lo subimos a Amazon S3
-        print(file.name)
-        print(name_file)
         url = s3_upload_file(file, file.name)
         # generamos la miniatura
         thumb = resize_img(file, 256)
@@ -514,6 +514,7 @@ class QueryUploadFilesView(APIView):
             url_thumb = ""
 
         # devolvemos el mensaje con su id correspondiente
+        
         msg_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)
         ms = Message.objects.get(pk=int(msg_id))
         ms.file_url = url
