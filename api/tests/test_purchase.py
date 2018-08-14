@@ -7,7 +7,7 @@ from django.urls import reverse
 import json
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+client.credentials(HTTP_AUTHORIZATION='Bearer RCOM8gcbsOv56QFlcCJpgDENETGCLr')
 
 
 class PurchaseQueryPlans(APITestCase):
@@ -20,13 +20,13 @@ class PurchaseQueryPlans(APITestCase):
         self.valid_payload = {
             "place": "BCP",
             "description": "test",
-            "is_fee": True,
+            "is_fee": 0,
             "client": 5,
-            "seller": 2,
             "products": [{
                 "product_type": 1,
-                "is_billable": True,
+                "is_billable": 1,
                 "plan_id": 2,
+                "quantity": 1
                }]
         }
 
@@ -48,14 +48,6 @@ class PurchaseQueryPlans(APITestCase):
                                content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_seller(self):
-        """Sin Vendedor."""
-        data = self.valid_payload.copy()
-        del data["seller"]
-        response = client.post(reverse('purchase'),
-                               data=json.dumps(data),
-                               content_type='application/json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_purchase_succesfull(self):
         """Compra exitosa."""
@@ -76,11 +68,11 @@ class PurchaseQueryPromotionalPlans(APITestCase):
             "description": "test",
             "is_fee": False,
             "client": 5,
-            "seller": 2,
             "products": [{
                 "product_type": 1,
                 "is_billable": False,
                 "plan_id": 2,
+                "quantity": 1
                }]
         }
 
