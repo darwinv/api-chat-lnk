@@ -995,26 +995,6 @@ class SellerDetailByUsername(APIView):
         return Response(serializer.data)
 
 
-class SellerDetailByUsername2(APIView):
-    """Detalle de Vendedor por Nombre de Usuario."""
-
-    authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get_object(self, username):
-        """Obtener Objeto."""
-        try:
-            return Seller.objects.get(username=username)
-        except Seller.DoesNotExist:
-            raise Http404
-
-    def get(self, request, username):
-        """Obtener Vendedor."""
-        seller = self.get_object(username)
-        serializer = SellerSerializer(seller)
-        return Response(serializer.data)
-
-
 class SellerAccountView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAdminUser,)
