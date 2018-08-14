@@ -104,7 +104,6 @@ class GetPlans(APITestCase):
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
         response = self.client.get(reverse('plans'), format='json')
-        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -335,7 +334,7 @@ class CreateTransferPlan(APITestCase):
             "acquired_plan": 22
         }
         response = self.client.post(reverse('client-plans-transfer'), format='json', data=data)
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_post_data_email_client(self):
@@ -345,7 +344,7 @@ class CreateTransferPlan(APITestCase):
             "acquired_plan": 22
         }
         response = self.client.post(reverse('client-plans-transfer'), format='json', data=data)
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -549,22 +548,6 @@ class CreatePlansNonBillable(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-class GetPromocionalPlans(APITestCase):
-    """Devolver  los  planes promocionales de un vendedor."""
-
-    fixtures = ['data', 'data2', 'data3', 'test_promotional_plans']
-
-    def setUp(self):
-        """Setup."""
-        # credenciales de vendedor
-        self.client.credentials(
-            HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
-
-    def test_get_seller_plans(self):
-        """devolver todos los planes pertenecientes al vendedor."""
-        response = self.client.get(reverse('seller-plans-nonbillable'))
-        
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetPromocionalPlans(APITestCase):
     """Devolver  los  planes promocionales de un vendedor."""

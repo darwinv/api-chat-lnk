@@ -458,7 +458,7 @@ class CreateNaturalContact(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):
@@ -474,7 +474,7 @@ class CreateNaturalContact(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_unique_dni(self):
@@ -501,7 +501,7 @@ class CreateNaturalContact(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_send_other_objection(self):
@@ -735,7 +735,7 @@ class CreateBussinessContact(APITestCase):
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
-        
+
         data["address"] = ""
         response1 = self.client.post(
             reverse('contacts'),
@@ -950,7 +950,7 @@ class CreateBussinessContact(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_effective(self):

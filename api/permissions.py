@@ -85,6 +85,17 @@ class IsAdminOrClient(permissions.BasePermission):
         return False
 
 
+class IsAdminOrSeller(permissions.BasePermission):
+    """Solo Administradores o Vendedores."""
+
+    def has_permission(self, request, view):
+        """Permiso General."""
+        if request.user and request.user.is_staff:
+            return True
+        elif request.user and request.user.role_id == 4:
+            return True
+        return False
+
 class IsClientOrSpecialistAndOwner(permissions.BasePermission):
     """Solo Cliente y Dueño del objeto actual."""
 

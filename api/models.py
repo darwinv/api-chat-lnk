@@ -428,7 +428,7 @@ class Sale(models.Model):
     """Venta."""
 
     created_at = models.DateTimeField(auto_now_add=True)
-    place = models.CharField(max_length=100)
+    place = models.CharField(max_length=100, default='por definir')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     reference_number = models.CharField(max_length=20)
     description = models.TextField()
@@ -471,12 +471,13 @@ class QueryPlansAcquired(models.Model):
         """String."""
         return self.plan_name
 
+
 class QueryPlansClient(models.Model):
     """Planes asociados a clientes"""
     acquired_plan = models.ForeignKey(QueryPlansAcquired,
                                       on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
-    owner  = models.BooleanField(default=True)
+    owner = models.BooleanField(default=True)
     transfer = models.BooleanField(default=True)
     share = models.BooleanField(default=True)
     empower = models.BooleanField(default=True)
@@ -568,9 +569,8 @@ class MonthlyFee(models.Model):
     fee_amount = models.DecimalField(max_digits=10, decimal_places=2)  # total pagado para esta cuota
     fee_order_number = models.PositiveIntegerField()  # El numero de cuota que se esta pagando
     fee_quantity = models.PositiveIntegerField()  # numero total de cuotas
-    reference_number = models.CharField(max_length=20)
-    sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
-    pay_before = models.DateField()
+    sale = models.ForeignKey(Sale, on_delete=models.PROTECT)
+    pay_before = models.DateField(null=True)
     status = models.PositiveIntegerField(choices=Ch.fee_status)
     payment = models.ForeignKey(Payment, null=True)
 

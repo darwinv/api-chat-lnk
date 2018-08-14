@@ -476,6 +476,7 @@ class QueryUploadFilesView(APIView):
         # import pdb; pdb.set_trace()
         # Cargamos el listado de archivos adjuntos
         # msgs = request.data["message_id"].split(',')
+        # print(request.data)
         files = request.FILES.getlist('file')
 
         # Empezamos a subir cada archivo por hilo separado
