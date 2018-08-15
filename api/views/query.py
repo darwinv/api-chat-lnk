@@ -478,11 +478,16 @@ class QueryUploadFilesView(APIView):
         # msgs = request.data["message_id"].split(',')
         # print(request.data)
         files = request.FILES.getlist('file')
+        if files:
+            arch = files
+        else:
+            data = request.data.dict()
+            arch = list(data.values())
 
         # Empezamos a subir cada archivo por hilo separado
         threads = []
         i = 0
-        for file in files:
+        for file in arch:
             # print(msgs[i])
             t = threading.Thread(target=self.upload, args=(file,))
             threads.append(t)
@@ -515,7 +520,7 @@ class QueryUploadFilesView(APIView):
             url_thumb = ""
 
         # devolvemos el mensaje con su id correspondiente
-        
+
         msg_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)
         ms = Message.objects.get(pk=int(msg_id))
         ms.file_url = url

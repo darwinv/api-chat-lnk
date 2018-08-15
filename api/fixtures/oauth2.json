@@ -151,17 +151,5 @@
     "created": "2018-02-09T21:54:51.384Z",
     "updated": "2018-02-09T21:54:51.384Z"
   }
-},
-{
-  "model": "oauth2_provider.refreshtoken",
-  "pk": 61,
-  "fields": {
-    "user": 11,
-    "token": "Yg42XVqtOUrRGMWbnAelURq6STjy68",
-    "application": 1,
-    "access_token": 62,
-    "created": "2018-02-26T21:10:22.143Z",
-    "updated": "2018-02-26T21:10:22.143Z"
-  }
 }
 ]

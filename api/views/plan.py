@@ -66,9 +66,9 @@ class QueryPlansAcquiredDetailView(APIView):
         client_id = Operations.get_id(self, request)
         data = request.data
         plan = self.get_object(pk)
-
         try:
             plan_client = QueryPlansClient.objects.get(client=client_id, acquired_plan=plan.id)
+            # import pdb; pdb.set_trace()
         except QueryPlansClient.DoesNotExist:
             raise Http404
 
@@ -912,9 +912,6 @@ class PlansStatus(APIView):
         qs = QueryPlansAcquired.objects.filter(queryplansclient__client=user_id)
         plans = PlanStatusSerializer(qs)
         return Response(plans.data)
-
-
-
 
 
 

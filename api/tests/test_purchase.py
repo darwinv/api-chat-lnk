@@ -48,7 +48,6 @@ class PurchaseQueryPlans(APITestCase):
                                content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-
     def test_purchase_succesfull(self):
         """Compra exitosa."""
         response = client.post(reverse('purchase'),

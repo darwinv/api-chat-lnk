@@ -105,7 +105,7 @@ class SaleSerializer(serializers.Serializer):
                 n_fees = 1
                 fee_amount = float(product["plan_id"].price)
             for i in range(1, n_fees+1):
-                pay_day = date.today() + relativedelta(days=3)  # Hardcoded cambiar la cantidad de dias
+                pay_day = date.today() + relativedelta(days=3) # Hardcoded cambiar la cantidad de dias
                 sale_id = instance
                 # print(i)
                 MonthlyFee.objects.create(fee_amount=fee_amount,
@@ -154,11 +154,6 @@ class SaleSerializer(serializers.Serializer):
                     QueryPlansClient.objects.create(
                         acquired_plan=ins_plan, status=1,
                         client=validated_data["client"])
-                # mail = BasicEmailAmazon(subject="Share Plan Success",
-                #                         to=email_receiver,
-                #                         template='email/share')
-                # arguments = {'link': WEB_HOST}
-                # mail.sendmail(args=arguments)
 
         return instance
 
