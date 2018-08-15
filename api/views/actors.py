@@ -343,7 +343,7 @@ def give_plan_new_client(client_id):
         product_type = ProductType.objects.get(pk=1)
     except Exception as e:
         product_type = ProductType()
-        product_type.name = 'TesterType'
+        product_type.name = 'Plan Query'
         product_type.id = '1'
         product_type.save()
 
@@ -356,33 +356,34 @@ def give_plan_new_client(client_id):
         clasification.save()
 
     try:
-        query_plans = QueryPlans.objects.get(pk=1)
+        query_plans = QueryPlans.objects.get(pk=3)
     except Exception as e:
         query_plans = QueryPlans()
         query_plans.product_type = product_type
         query_plans.clasification = clasification
-        query_plans.id = '1'
-        query_plans.query_quantity = '0'
-        query_plans.validity_months = '0'
-        query_plans.maximum_response_time = '0'
-        query_plans.is_active = '0'
-        query_plans.price = '0.0000'
+        query_plans.id = 1
+        query_plans.query_quantity = 6
+        query_plans.validity_months = 3
+        query_plans.maximum_response_time = 24
+        query_plans.is_active = 1
+        query_plans.price = 900
+        query_plans.name = 'MiniPack'
         query_plans.save()
 
     sale.created_at = datetime.now()
     sale.place = 'BCP'
-    sale.total_amount = '1000.00'
+    sale.total_amount = query_plans.price
     sale.reference_number = 'CD1004'
     sale.description = 'Test Venta'
     sale.is_fee = '1'
     sale.client_id = client_id
     sale.save()
 
-    saleDetail.price = '1000.00'
+    saleDetail.price = query_plans.price
     saleDetail.description = 'Plan de Prueba'
     saleDetail.discount = '0.00'
     saleDetail.pin_code = tools.ramdon_generator(6)
-    saleDetail.is_billable = '0'
+    saleDetail.is_billable = True
     saleDetail.contract_id = None
     saleDetail.product_type_id = '1'
     saleDetail.sale_id = sale.id
@@ -390,16 +391,16 @@ def give_plan_new_client(client_id):
 
     queryPlansAcquired.expiration_date = '2019-04-09'
     queryPlansAcquired.validity_months = '6'
-    queryPlansAcquired.available_queries = '500'
+    queryPlansAcquired.available_queries = query_plans.query_quantity
     queryPlansAcquired.activation_date = None
-    queryPlansAcquired.is_active = '1'
-    queryPlansAcquired.available_requeries = '1'
-    queryPlansAcquired.maximum_response_time = '24'
+    queryPlansAcquired.is_active = True
+    queryPlansAcquired.available_requeries = 1
+    queryPlansAcquired.maximum_response_time = query_plans.maximum_response_time
     queryPlansAcquired.acquired_at = datetime.now()
-    queryPlansAcquired.query_plans_id = '1'
+    queryPlansAcquired.query_plans_id = query_plans.id
     queryPlansAcquired.sale_detail_id = saleDetail.id
-    queryPlansAcquired.query_quantity = '500'
-    queryPlansAcquired.plan_name = 'TesterPack'
+    queryPlansAcquired.query_quantity = query_plans.query_quantity
+    queryPlansAcquired.plan_name = query_plans.name
     queryPlansAcquired.save()
 
     queryPlansClient.owner = True
@@ -959,7 +960,7 @@ class SellerDetailView(APIView):
     def put(self, request, pk):
         data = request.data
 
-        seller = self.get_object(pk)
+        seller = self.get_object(pk) 
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         data['code'] = PREFIX_CODE_SELLER + request.data.get('document_number', seller.document_number)
         data['photo'] = request.data.get('photo', seller.photo)

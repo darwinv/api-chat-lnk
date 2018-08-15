@@ -31,7 +31,8 @@ from api.serializers.query import QuerySerializer, QueryListClientSerializer
 from api.serializers.query import QueryMessageSerializer
 from api.serializers.query import QueryDeriveSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
-
+from api.logger import manager
+logger = manager.setup_log(__name__)
 from api.serializers.query import ChatMessageSerializer, QueryDeclineSerializer
 from api.serializers.query import QueryResponseSerializer, ReQuerySerializer
 from api.serializers.query import QueryQualifySerializer
@@ -522,7 +523,12 @@ class QueryUploadFilesView(APIView):
         # devolvemos el mensaje con su id correspondiente
 
         msg_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)
-        ms = Message.objects.get(pk=int(msg_id))
+
+        try:
+            ms = Message.objects.get(pk=int(msg_id))
+        except Message.DoesNotExist:
+            logger.error("archivo mensaje no encontrado: {} ".format(msg_id))
+        
         ms.file_url = url
         ms.file_preview_url = url_thumb
         ms.save()
