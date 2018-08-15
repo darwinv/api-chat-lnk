@@ -40,6 +40,7 @@ class ProductSerializer(serializers.Serializer):
     is_billable = serializers.BooleanField()
     plan_id = serializers.PrimaryKeyRelatedField(
         queryset=QueryPlans.objects.all(), required=False)
+    quantity = serializers.IntegerField(max_value=99, min_value=1)
 
     def validate(self, data):
         """Validar producto."""
@@ -93,67 +94,66 @@ class SaleSerializer(serializers.Serializer):
         total_amount = self.get_total_amount(products)
         validated_data["total_amount"] = total_amount
         instance = Sale(**validated_data)
-        # import pdb; pdb.set_trace()
         instance.save()
         sale_detail = {}
         for product in products:
-            # import pdb; pdb.set_trace()
+            # Crear cuotas
+            if validated_data["is_fee"]:
+                n_fees = product["plan_id"].validity_months
+                fee_amount = float((product["plan_id"].price * product["quantity"])/n_fees )
+            else:
+                n_fees = 1
+                fee_amount = float(product["plan_id"].price)
+            for i in range(1, n_fees+1):
+                pay_day = date.today() + relativedelta(days=3)  # Hardcoded cambiar la cantidad de dias
+                sale_id = instance
+                # print(i)
+                MonthlyFee.objects.create(fee_amount=fee_amount,
+                                          fee_order_number=i, status=1,
+                                          sale=sale_id,
+                                          pay_before=pay_day,
+                                          fee_quantity=n_fees)
             plan_acquired = {}
-            # verificamos si el producto es plan de consultass
-            if product["product_type"].id == 1:
-                sale_detail["pin_code"] = generate_pin_code()
-                sale_detail["description"] = product["product_type"].description
-                sale_detail["price"] = float(product["plan_id"].price)
-                sale_detail["is_billable"] = product["is_billable"]
-                # comparo si es promocional o no
-                if product["is_billable"]:
-                    sale_detail["discount"] = 0.0
-                    plan_acquired["is_active"] = False
-                else:
-                    validated_data["is_fee"] = False
-                    # se activa automaticamente por ser promocional
-                    plan_acquired["is_active"] = True
-                    plan_promotionals = SellerNonBillablePlans.objects.get(
-                        query_plans=product["plan_id"],
-                        seller=validated_data["seller"],
-                        number_month=hoy.month)
-                    plan_promotionals.quantity = plan_promotionals.quantity - 1
-                    plan_promotionals.save()
-                    sale_detail["discount"] = float(product["plan_id"].price)
-                sale_detail["product_type"] = product["product_type"]
-                sale_detail["sale"] = instance
-                # creamos la instancia de detalle
-                instance_sale = SaleDetail.objects.create(**sale_detail)
-                # llenamos data del plan adquirido
-                plan_acquired["validity_months"] = product["plan_id"].validity_months
-                plan_acquired["available_queries"] = product["plan_id"].query_quantity
-                plan_acquired["query_quantity"] = product["plan_id"].query_quantity
-                plan_acquired["available_requeries"] = 10  # harcoded. CAMBIAR
-                plan_acquired["maximum_response_time"] = 24  # harcoded.CAMBIAR
-                plan_acquired["plan_name"] = product["plan_id"].name
-                plan_acquired["query_plans"] = product["plan_id"]
-                plan_acquired["sale_detail"] = instance_sale
-                ins_plan = QueryPlansAcquired.objects.create(**plan_acquired)
-                # Crear cuotas
-                if validated_data["is_fee"]:
-                    n_fees = product["plan_id"].validity_months
-                    fee_amount = float(product["plan_id"].price / n_fees)
-                else:
-                    n_fees = 1
-                    fee_amount = float(product["plan_id"].price)
-                for i in range(1, n_fees+1):
-                    pay_day = date.today() + relativedelta(days=3)  # Hardcoded cambiar la cantidad de dias
-                    sale_id = instance
-                    # print(i)
-                    MonthlyFee.objects.create(fee_amount=fee_amount,
-                                              fee_order_number=i, status=1,
-                                              sale=sale_id,
-                                              pay_before=pay_day,
-                                              fee_quantity=n_fees)
+            for prx in range(product["quantity"]):
+                # verificamos si el producto es plan de consultass
+                if product["product_type"].id == 1:
+                    sale_detail["pin_code"] = generate_pin_code()
+                    sale_detail["description"] = product["product_type"].description
+                    sale_detail["price"] = float(product["plan_id"].price)
+                    sale_detail["is_billable"] = product["is_billable"]
+                    # comparo si es promocional o no
+                    if product["is_billable"]:
+                        sale_detail["discount"] = 0.0
+                        plan_acquired["is_active"] = False
+                    else:
+                        validated_data["is_fee"] = False
+                        # se activa automaticamente por ser promocional
+                        plan_acquired["is_active"] = True
+                        plan_promotionals = SellerNonBillablePlans.objects.get(
+                            query_plans=product["plan_id"],
+                            seller=validated_data["seller"],
+                            number_month=hoy.month)
+                        plan_promotionals.quantity = plan_promotionals.quantity - 1
+                        plan_promotionals.save()
+                        sale_detail["discount"] = float(product["plan_id"].price)
+                    sale_detail["product_type"] = product["product_type"]
+                    sale_detail["sale"] = instance
+                    # creamos la instancia de detalle
+                    instance_sale = SaleDetail.objects.create(**sale_detail)
+                    # llenamos data del plan adquirido
+                    plan_acquired["validity_months"] = product["plan_id"].validity_months
+                    plan_acquired["available_queries"] = product["plan_id"].query_quantity
+                    plan_acquired["query_quantity"] = product["plan_id"].query_quantity
+                    plan_acquired["available_requeries"] = 10  # harcoded. CAMBIAR
+                    plan_acquired["maximum_response_time"] = 24  # harcoded.CAMBIAR
+                    plan_acquired["plan_name"] = product["plan_id"].name
+                    plan_acquired["query_plans"] = product["plan_id"]
+                    plan_acquired["sale_detail"] = instance_sale
+                    ins_plan = QueryPlansAcquired.objects.create(**plan_acquired)
 
-                QueryPlansClient.objects.create(
-                    acquired_plan=ins_plan, status=1,
-                    client=validated_data["client"])
+                    QueryPlansClient.objects.create(
+                        acquired_plan=ins_plan, status=1,
+                        client=validated_data["client"])
                 # mail = BasicEmailAmazon(subject="Share Plan Success",
                 #                         to=email_receiver,
                 #                         template='email/share')
