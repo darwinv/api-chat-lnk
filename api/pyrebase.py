@@ -353,12 +353,9 @@ def chosen_plan(client_id, data):
 def mark_failed_file(room, message_id):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + Params.PREFIX['message'] + str(message_id)
-    firebase = pyrebase.initialize_app(config)
-    # print(node)
-    db = firebase.database()
+    
     if exist_node(node):
-        db.child(node).update({"uploaded": 5, "fileUrl": "error",
-                               "filePreviewUrl": "error"})
+        db.child(node).update({"uploaded": 5})
         if DEBUG_FIREBASE:
             check_type_data('chats', node)
     else:

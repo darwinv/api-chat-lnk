@@ -503,46 +503,53 @@ class QueryUploadFilesView(APIView):
 
         return HttpResponse(status=200)
 
-    def upload(self, file):
+    def upload(self, file):    
         """Funcion para subir archivos."""
+
+        ms = None # Objeto mensajes
         resp = True  # variable bandera
         name_file, extension = os.path.splitext(file.name)
-        # filename = str(uuid.uuid4())
-        # name = filename + extension
-        # lo subimos a Amazon S3
-        url = s3_upload_file(file, file.name)
-        # generamos la miniatura
-        thumb = resize_img(file, 256)
-        if thumb:
-            name_file_thumb, extension_thumb = os.path.splitext(thumb.name)
-            url_thumb = s3_upload_file(thumb, name_file + '-thumb' + extension_thumb)
-            remove_file(thumb)
-        else:
-            url_thumb = ""
-
-        # devolvemos el mensaje con su id correspondiente
-
-        msg_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)
+        msg_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)            
 
         try:
-            ms = Message.objects.get(pk=int(msg_id))
-        except Message.DoesNotExist:
-            logger.error("archivo mensaje no encontrado: {} ".format(msg_id))
+            ms = Message.objects.get(pk=int(msg_id))            
+
+            # lo subimos a Amazon S3
+            url = s3_upload_file(file, file.name)
+            # generamos la miniatura
+            thumb = resize_img(file, 256)
+            if thumb:
+                name_file_thumb, extension_thumb = os.path.splitext(thumb.name)
+                url_thumb = s3_upload_file(thumb, name_file + '-thumb' + extension_thumb)
+                remove_file(thumb)
+            else:
+                url_thumb = ""
+
+            # Actualizamos el modelo mensaje
+            ms.file_url = url
+            ms.file_preview_url = url_thumb
+            ms.save()
+            s3 = boto3.client('s3')
+            # Evaluamos si el archivo se subio a S3
+            try:
+                s3.head_object(Bucket='linkup-photos', Key=file.name)
+            except ClientError as e:
+                resp = int(e.response['Error']['Code']) != 404
+
+        except Exception as e:
+            logger.error("subir archivo, error general, m_ID: {} - ERROR: {} ".format(msg_id, e))
+            resp = False
         
-        ms.file_url = url
-        ms.file_preview_url = url_thumb
-        ms.save()
-        s3 = boto3.client('s3')
-        # Evaluamos si el archivo se subio a S3
-        try:
-            s3.head_object(Bucket='linkup-photos', Key=file.name)
-        except ClientError as e:
-            resp = int(e.response['Error']['Code']) != 404
-        # Si no se ha subido se actualiza el estatus en firebase
 
         if resp is False:
             if 'test' not in sys.argv:
-                pyrebase.mark_failed_file(room=ms.room, message_id=ms.id)
+                if ms:
+                    pyrebase.mark_failed_file(room=ms.room, message_id=ms.id)
+                    logger.error("file dont put, room:{} -m:{} ".format(ms.room, ms.id))
+                    print("con objeto error")
+                else:
+                    logger.error("file dont put, message_ID:{} ".format(msg_id))
+                    print("sin objeto error")
         else:
             if 'test' not in sys.argv:
                 # Actualizamos el status en firebase
