@@ -503,16 +503,16 @@ class QueryUploadFilesView(APIView):
 
         return HttpResponse(status=200)
 
-    def upload(self, file):    
+    def upload(self, file):
         """Funcion para subir archivos."""
 
         ms = None # Objeto mensajes
         resp = True  # variable bandera
         name_file, extension = os.path.splitext(file.name)
-        msg_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)            
+        msg_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)
 
         try:
-            ms = Message.objects.get(pk=int(msg_id))            
+            ms = Message.objects.get(pk=int(msg_id))
 
             # lo subimos a Amazon S3
             url = s3_upload_file(file, file.name)
@@ -539,7 +539,7 @@ class QueryUploadFilesView(APIView):
         except Exception as e:
             logger.error("subir archivo, error general, m_ID: {} - ERROR: {} ".format(msg_id, e))
             resp = False
-        
+
 
         if resp is False:
             if 'test' not in sys.argv:
