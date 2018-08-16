@@ -21,7 +21,7 @@ client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 class CreateNaturalClient(APITestCase):
     """Prueba de Registro de Cliente Natural."""
 
-    fixtures = ['data', 'data2']
+    fixtures = ['data', 'data2', 'test_chosen_plan']
 
     # Prueba para verificar la insercion de cliente natural
     def setUp(self):
@@ -464,7 +464,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         del data["document_type"]
         response = self.client.post(
             reverse('clients'),
@@ -536,8 +536,65 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_null_nick(self):
+        """Nick es null."""
+        data = self.valid_payload
+        data["nick"] = None
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+
+    def test_empower_plan(self):
+        """Create client con plan facultado."""
+        data = self.valid_payload
+        data["username"] = "cliente_no_existe@mail.com"
+        data["email_exact"] = "cliente_no_existe@mail.com"
+
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_transfer_plan(self):
+        """Create client con plan transferido."""
+        data = self.valid_payload        
+        data["username"] = "cliente_no_existe_transfer@mail.com"
+        data["email_exact"] = "cliente_no_existe_transfer@mail.com"
+
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_share_plan(self):
+        """Create client con plan compartido."""
+        data = self.valid_payload
+        data["username"] = "cliente_no_existe_share@mail.com"
+        data["email_exact"] = "cliente_no_existe_share@mail.com"
+
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+
 
     # def test_blank_optionals(self):
     #     """Solicitud valida ya que no valida campos opcionales."""
@@ -549,7 +606,7 @@ class CreateNaturalClient(APITestCase):
     #         data=json.dumps(data),
     #         content_type='application/json'
     #     )
-    #     # import pdb; pdb.set_trace()
+    #     
     #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):
@@ -568,7 +625,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_natural_client(self):
@@ -578,7 +635,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 class UpdateNaturalClient(APITestCase):
@@ -685,21 +742,21 @@ class UpdateNaturalClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-    def test_nick_to_long(self):
-        """actualizacion datos con nick largo"""
-        data = self.valid_payload
-        data['nick'] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-
-        response = client.put(
-            reverse('client-detail', args=(5,)),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    # def test_nick_to_long(self):
+    #     """actualizacion datos con nick largo"""
+    #     data = self.valid_payload
+    #     data['nick'] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    #
+    #     response = client.put(
+    #         reverse('client-detail', args=(5,)),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 # Prueba para verificar la insercion de cliente juridico
-class CreateBussinessClient(APITestCase):
+class CreateBusinessClient(APITestCase):
     """Test Para Crear Persona juridica."""
 
     fixtures = ['data', 'data2']
@@ -760,7 +817,7 @@ class CreateBussinessClient(APITestCase):
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
-        # import pdb; pdb.set_trace()
+        
         data["address"] = ""
         response1 = self.client.post(
             reverse('clients'),
@@ -773,7 +830,7 @@ class CreateBussinessClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -1074,7 +1131,7 @@ class CreateBussinessClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_foreign_code(self):
@@ -1090,6 +1147,17 @@ class CreateBussinessClient(APITestCase):
         self.assertEqual(response.data["code"][:3],
                          Countries.objects.get(
                             pk=data["nationality"]).iso_code + "C")
+
+    def test_null_nick(self):
+        """Nick es null."""
+        data = self.valid_payload
+        data["nick"] = None
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_bussines_client(self):
         """Crea cliente juridico de manera exitosa."""
@@ -1201,17 +1269,17 @@ class UpdateBunissesClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-    def test_nick_to_long(self):
-        """actualizacion datos con nick largo"""
-        data = self.valid_payload
-        data['nick'] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-
-        response = client.put(
-            reverse('client-detail', args=(11,)),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    # def test_nick_to_long(self):
+    #     """actualizacion datos con nick largo"""
+    #     data = self.valid_payload
+    #     data['nick'] = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+    #
+    #     response = client.put(
+    #         reverse('client-detail', args=(11,)),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetDetailClient(APITestCase):
     """Detalle del Cliente."""
@@ -1307,10 +1375,66 @@ class SendRecoveryCode(APITestCase):
         response = client.post(reverse('send-code-password'), data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+
+class CheckData(APITestCase):
+    """Chequear si existe algun cliente con  esos datos"""
+    fixtures = ['data', 'data2', 'data3', 'test_client']
+
+    def setUp(self):
+        pass
+
+    def test_check_ruc(self):
+        """chequear si existe  el ruc."""
+        data = {"ruc": "123456789", "role": 2}
+        
+        response = client.get(reverse('check-data'), data)
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_check_no_role(self):
+        """chequear si no existe rol."""
+        data = {"ruc": "123456789"}
+        response = client.get(reverse('check-data'), data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_check_email(self):
+        """chequear si existe el correo."""
+        # data = {"role": 2, "email_exact": "darwinio_vasqz@gmail.com"}
+        data = {"role": 2, "email_exact": "darwinio_vasqz@gmail.com"}
+        response = client.get(reverse('check-data'), data)
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_check_DNI(self):
+        """chequera si existe el dni."""
+        data = {"role": 2, "document_type": 1,
+                "document_number": "20122984"}
+        response = client.get(reverse('check-data'), data)
+        
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_check_passport(self):
+        """chequera si existe el pasaporte."""
+        data = {"role": 2, "document_type": 2,
+                "document_number": "20122984"}
+        
+        response = client.get(reverse('check-data'), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_check_foreign_card(self):
+        """chequear si existe el carnet de extranjeria."""
+        data = {"role": 2, "document_type": 3,
+                "document_number": "20122984"}
+        response = client.get(reverse('check-data'), data)
+        
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
 class GetUserByRecoverCode(APITestCase):
     """Test module for GET all clients API."""
 
     fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'test_recovery_password']
+
     def setUp(self):
         pass
 
@@ -1334,6 +1458,20 @@ class GetUserByRecoverCode(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+class GetClientByUsername(APITestCase):
+    """Test module for GET all clients API."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'test_recovery_password']
+
+    def setUp(self):
+        pass
+
+    def test_gest_user(self):
+        # get API response
+        response = client.get(reverse('client-detail-username', args=("jefeti@pympack.com.pe",)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class UpdatePasswordByRecoverCode(APITestCase):
     """Test module for Update password user API."""
 
@@ -1344,6 +1482,7 @@ class UpdatePasswordByRecoverCode(APITestCase):
     def test_update_password_by_recovery(self):
         # get API response
         data = {'password':'123456', 'code':'WEY4D1'}
+        
         response = client.put(reverse('reset-password-recovery', args=(5,)), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], 5)
@@ -1359,64 +1498,110 @@ class UpdatePasswordByRecoverCode(APITestCase):
         response = client.put(reverse('reset-password-recovery', args=(111,)), data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+
+class UpdatePasswordClientNatural(APITestCase):
+    """Actualizar perfil del Cliente."""
+    fixtures = ['data', 'data2', 'data3', 'test_client']
+
+    def setUp(self):
+        self.data = {
+            "old_password": '123456',
+            "password": '123459'
+        }
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+
+    def test_invalid_permission(self):
+        """Credenciales no permitidas."""
+        client = APIClient()
+        client.credentials(
+            HTTP_AUTHORIZATION='ZZk2avXwe09l8lqS3zTc0Q3Qsl7yZZ')
+        response = client.put(reverse('update-password',
+                              args=(5,)), data=json.dumps(self.data),
+                              content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_invalid_old_password(self):
+            """Password actual invalida."""
+            self.data["old_password"] = '123468'
+            response = client.put(reverse('update-password',
+                                  args=(5,)), data=json.dumps(self.data),
+                                  content_type='application/json')
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_password(self):
+        """Actualizar contraseña."""
+        response = client.put(reverse('update-password',
+                              args=(5,)), data=json.dumps(self.data),
+                              content_type='application/json')
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+
+
 class UpdateEmail(APITestCase):
     """Test module for put email user API."""
 
     fixtures = ['data', 'data2', 'data3', 'test_plan']
     def setUp(self):
-        pass
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer user3GlavEforKavpDzuZSgK0zpoXS')
 
     def test_update_email(self):
         # put email
-        data = {
+        data = { 'client_id':3,
                 'email_exact':'olopez@mail.com',
                 'password':'123456'
             }
 
-        response = client.put(reverse('update-email', args=(3,)), data)
+        response = self.client.put(reverse('update-email', args=(3,)), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['email_exact'], data['email_exact'])
 
     def test_update_email_no_valid(self):
         # put email incorrecto
-        data = {
+        data = { 'client_id':3,
                 'email_exact':'olopmail.com',
                 'password':'123456'
             }
 
-        response = client.put(reverse('update-email', args=(3,)), data)
+        response = self.client.put(reverse('update-email', args=(3,)), data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_no_email(self):
         # put no email
-        data = {
+        data = { 'client_id':3,
                 'password':'123456'
             }
 
-        response = client.put(reverse('update-email', args=(3,)), data)
+        response = self.client.put(reverse('update-email', args=(3,)), data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_no_data(self):
         # put no data
-
-        response = client.put(reverse('update-email', args=(3,)))
+        data = { 'client_id':3
+            }
+        response = self.client.put(reverse('update-email', args=(3,)), data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_email_no_valid(self):
         # put email repeat
-        data = {
+        data = { 'client_id':3,
                 'email_exact':'jose@mail.com',
                 'password':'123456'
             }
-        response = client.put(reverse('update-email', args=(3,)), data)
+        response = self.client.put(reverse('update-email', args=(3,)), data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_email_bad_password(self):
         # put email bad password
-        data = {
+        data = { 'client_id':3,
                 'email_exact':'olopezdeveloper@mail.com',
                 'password':'654321'
             }
 
-        response = client.put(reverse('update-email', args=(3,)), data)
+        response = self.client.put(reverse('update-email', args=(3,)), data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

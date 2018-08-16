@@ -324,7 +324,7 @@ class CreateSeller(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):
@@ -368,7 +368,7 @@ class CreateSeller(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -390,4 +390,100 @@ class GetAllSellers(APITestCase):
         serializer = SellerSerializer(sellers, many=True)
         # print(response.data['results'])
         self.assertEqual(response.data['results'], serializer.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class UpdateProfileSeller(APITestCase):
+    """Actualizar perfil de vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_seller']
+
+    def setUp(self):
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        self.valid_payload = {
+            'nick': 'dar',
+            'first_name': 'darwin',
+            'last_name': 'vasquez',
+            "address": {
+                "street": "esteban camere",
+                "department": 1,
+                "province": 1,
+                "district": 1
+            },
+            'document_number': '144013012',
+            'telephone': '921471559',
+            'cellphone': '921471559',
+            "ciiu": 10,
+        }
+
+    def test_update_seller(self):
+        response = client.put(reverse('seller-detail',
+                              args=(8,)), data=json.dumps(self.valid_payload),
+                              content_type='application/json')
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_update_telephone(self):
+        "actualizar solo telefono."
+        data = {}
+        data["telephone"] = '12356789'
+        response = client.put(reverse('seller-detail',
+                              args=(8,)), data=json.dumps(data),
+                              content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["telephone"], data["telephone"])
+
+
+class UpdatePasswordSeller(APITestCase):
+    """Actualizar clave del vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_seller']
+
+    def setUp(self):
+        self.data = {
+            "old_password": '123456',
+            "password": '123459'
+        }
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+
+    def test_invalid_permission(self):
+        """Credenciales no permitidas."""
+        client = APIClient()
+        client.credentials(
+            HTTP_AUTHORIZATION='ZZk2avXwe09l8lqS3zTc0Q3Qsl7yZZ')
+        response = client.put(reverse('update-password',
+                              args=(8,)), data=json.dumps(self.data),
+                              content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_invalid_old_password(self):
+            """Password actual invalida."""
+            self.data["old_password"] = '123468'
+            response = client.put(reverse('update-password',
+                                  args=(8,)), data=json.dumps(self.data),
+                                  content_type='application/json')
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_password(self):
+        """Actualizar contraseña."""
+        response = client.put(reverse('update-password',
+                              args=(8,)), data=json.dumps(self.data),
+                              content_type='application/json')
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class GetSellerByUsername(APITestCase):
+    """Test module for GET all clients API."""
+    fixtures = ['data','data2','data3','test_seller']
+    def setUp(self):
+        pass
+
+    def test_gest_user(self):
+        # get API response
+        response = client.get(reverse('seller-detail-username', args=("darwinio_vasqz@gmail.com",)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -9,19 +9,17 @@ from django.contrib.auth.admin import UserAdmin
 # from .models import ContractType, Contract
 from .models import Countries, Ciiu, Department, Province, District, Address, Zone
 from .models import Permmission, Role, User, Seller, Objection, EconomicSector, LevelInstruction
-from .models import SellerContactNoEfective, Client, ContractType, Contract, Category, Bank, Specialist
+from .models import SellerContact, Client, ContractType, Contract, Category, Bank, Specialist
 from .models import Clasification, ProductType, QueryPlans, SellerNonBillablePlans, Match, Sale
 from .models import SaleDetail, QueryPlansAcquired, PaymentType, Payment, MatchAcquired
 from .models import MatchAcquiredFiles, MatchAcquiredLog, MonthlyFee, LogPaymentsCreditCard
 from .models import Query, QueryLogs, Message, FeeMonthSeller, NotificationsBack
-from .models import Parameter
+from .models import Parameter, QueryPlansClient
 # Register your models here.
-
-
 
 class ClientNaturalAdmin(admin.ModelAdmin):
     fields = ('first_name', 'last_name',
-     'sex', 'civil_state','birthdate',
+     'sex', 'civil_state', 'birthdate',
      'level_instruction', 'institute','profession',
      'ocupation')
 
@@ -73,8 +71,8 @@ class QueryAdmin(admin.ModelAdmin):
     """Consulta en el admin."""
 
     inlines = [MessageInline]
-    readonly_fields = ('calification',)
-    exclude = ('acq3uired_plan',)
+    readonly_fields = ('qualification',)
+    exclude = ('acquired_plan',)
 
 class SellerAdmin(admin.ModelAdmin):
     fields = ('zone','username', 'nick','password','first_name', 'last_name',
@@ -97,6 +95,7 @@ admin.site.register(Seller, SellerAdmin)
 admin.site.register(PaymentType)
 admin.site.register(QueryPlans)
 admin.site.register(QueryPlansAcquired)
+admin.site.register(QueryPlansClient)
 admin.site.register(Clasification)
 admin.site.register(SaleDetail)
 admin.site.register(Sale)
@@ -115,7 +114,7 @@ admin.site.register(User)
 admin.site.register(EconomicSector)
 admin.site.register(LevelInstruction)
 
-admin.site.register(SellerContactNoEfective)
+admin.site.register(SellerContact)
 admin.site.register(Bank)
 
 admin.site.register(ProductType)

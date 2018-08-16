@@ -48,57 +48,58 @@ def update_plan_choisen():
     for client in Client.objects.all():
         try:
             plan_chosen = get_query_set_plan()
-            plan_active = plan_chosen.filter(client=client.id, is_active=True,
-                                             is_chosen=True)[:1].get()
-
-            obj = QueryPlansAcquired.objects.get(pk=plan_active['id'])
-            plan = QueryPlansAcquiredSerializer(obj)
-            chosen_plan(Params.PREFIX['client'] + str(client.id), plan.data)
-
+            plan_active = plan_chosen.filter(queryplansclient__client=client.id, is_active=True,
+                                             queryplansclient__is_chosen=True)
+            if plan_active:
+                plan = QueryPlansAcquiredSerializer(plan_active[0])
+                chosen_plan(client.id, plan.data)
+                print("success")
+            print("empty")
         except Exception as e:
-            print("error")
+            print("error"+str(e))
 # FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
 
 def check_type_data(type_data, node):
     """Chequear tipos de datos en los nodos """
+    pass
 
-    data_chat_string = [
-        'codeUser', 'fileUrl', 'message', 'messageType', 'room',
-        ]
-
-    data_chat_int = [
-        'fileType', 'groupId', 'groupStatus', 'id',
-        'messageReference', 'uploaded', 'user_id']
-
-    # data_msgs_string = ['displayName', 'photo', ]
-    nodo = db.child(node).get()
-    ns = list(nodo.val().values())
-    if type_data == 'chats':
-        size = len(node.split('/'))
-        if size == 2:
-            new_str = ns[0]['query'].keys()
-        elif size == 3:
-            new_str = nodo.val().get('query').keys()
-
-        data_chat_int.extend(new_str)
-        if 'title' in data_chat_int:
-            data_chat_int.remove('title')
-        for n in nodo.val().values():
-            for l in data_chat_string:
-                if n['query'].get(l):
-                    if type(n['query'].get(l)) is not str:
-                            logger.error("{} - query/{} no es String".format(node, l))
-                if type(n.get(l)) is not str:
-                    logger.error("{} - {} no es String".format(node, l))
-            for k in data_chat_int:
-                # import pdb; pdb.set_trace()
-                if n['query'].get(k):
-                    if type(n['query'].get(k)) is not int:
-                            logger.error("{} - query/{} no es int".format(node, k))
-                else:
-                    if type(n.get(k)) is not int:
-                        logger.error("{} - {} no es int".format(node, k))
+    # data_chat_string = [
+    #     'codeUser', 'fileUrl', 'filePreviewUrl',
+    #     'message', 'messageType', 'room',
+    #     ]
+    #
+    # data_chat_int = [
+    #     'fileType', 'groupId', 'groupStatus', 'id',
+    #     'messageReference', 'uploaded', 'user_id']
+    #
+    # # data_msgs_string = ['displayName', 'photo', ]
+    # nodo = db.child(node).get()
+    # ns = list(nodo.val().values())
+    # if type_data == 'chats':
+    #     size = len(node.split('/'))
+    #     if size == 2:
+    #         new_str = ns[0]['query'].keys()
+    #     elif size == 3:
+    #         new_str = nodo.val().get('query').keys()
+    #
+    #     data_chat_int.extend(new_str)
+    #     if 'title' in data_chat_int:
+    #         data_chat_int.remove('title')
+    #     for n in nodo.val().values():
+    #         for l in data_chat_string:
+    #             if n['query'].get(l):
+    #                 if type(n['query'].get(l)) is not str:
+    #                         logger.error("{} - query/{} no es String".format(node, l))
+    #             if type(n.get(l)) is not str:
+    #                 logger.error("{} - {} no es String".format(node, l))
+    #         for k in data_chat_int:
+    #             if n['query'].get(k):
+    #                 if type(n['query'].get(k)) is not int:
+    #                         logger.error("{} - query/{} no es int".format(node, k))
+    #             else:
+    #                 if type(n.get(k)) is not int:
+    #                     logger.error("{} - {} no es int".format(node, k))
     # logger.info('chequeo de data realizada')
 
 
@@ -115,6 +116,21 @@ def chat_firebase_db(data, room):
     if DEBUG_FIREBASE:
         check_type_data('chats', room)
     return res
+
+
+def node_query(data, id, room):
+    """Actualizar o crear nodos de consulta."""
+    node = "queries/{}/{}".format(room, Params.PREFIX['query'] + str(id))
+    if exist_node(node):
+        res = db.child(node).update(data)
+    else:
+        print("creo")
+        res = db.child(node).set(data)
+    if res:
+        if "succes" in res:
+            if res["success"] != 1:
+                logger.error("actualizando node query fallo ".format(node))
+    # pass
 
 
 def exist_node(node):
@@ -143,7 +159,7 @@ def categories_db(client_id, cat_id, time_now=None, read=False):
     }
     if time_now:
         data["datetime"] = time_now
-
+    # print(data["id"])
     if exist_node(main_node):
         res = db.child("categories/clients").child(
             node_client).child(node_category).update(data)
@@ -154,7 +170,7 @@ def categories_db(client_id, cat_id, time_now=None, read=False):
     return res
 
 
-def updateStatusQueryAccept(specialist_id, client_id, query_id):
+def updateStatusQueryAccept(specialist_id, client_id, query_id, room=None):
     """ Actualizacion query en listado y chat """
     data = {"status": 2}  # Query Aceptado por especialista
 
@@ -164,9 +180,9 @@ def updateStatusQueryAccept(specialist_id, client_id, query_id):
     # Actualizar estatus de query actual
     update_status_query_current_list(specialist_id, client_id, data, query_id)
 
-    # Actualizar estatus de los mensajes del chat
-    data_msgs = Message.objects.filter(query=query_id)
-    update_status_querymessages(data_msgs, data)
+    # Actualizar estatus de los consulta en el nodo de query
+    # data_msgs = Message.objects.filter(query=query_id)
+    update_status_query(query_id, data, room)
 
 
 def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
@@ -182,6 +198,7 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     client_id = query.client.id
     query_id = query.id
     category_id = query.category.id
+    room = query.message_set.last().room
 
     # Remover query del listado de especialista actual
     removeQueryAcceptList(old_specialist_id, client_id, query_id)
@@ -194,10 +211,8 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     generateDataMessageClients(client_id, category_id, query_id,
                                status, specialist_id)
 
-    # Actualizar estatus de los mensajes del chat
-    # y especialista encargado
-    data_msgs = Message.objects.filter(query=query_id)
-    update_status_querymessages(data_msgs, data)
+    # Actualizar estatus de las consultas
+    update_status_query(query_id, data, room)
 
 
 def removeQueryAcceptList(specialist_id, client_id, query_id):
@@ -256,20 +271,9 @@ def createCategoriesLisClients(client_id):
     return res
 
 
-def update_status_querymessages(data_msgs, data):
+def update_status_query(query_id, data, room):
     """Actualizar query de los mensajes."""
-
-    for msgs in data_msgs:
-        node_msg = Params.PREFIX['message']+str(msgs.id)
-        node = 'chats/{}/{}/query/'.format(msgs.room, node_msg)
-
-        if exist_node(node):
-            db.child(node).update(data)
-        else:
-            logger.warning(
-                'update_status_querymsgs nodo no existe - chats/{}/{}/query'
-                .format(msgs.room, node_msg))
-
+    node_query(data=data, id=query_id, room=room)
     # check_type_data('chats', 'chats/{}'.format(data_msgs[0].room))
 
 
@@ -340,22 +344,18 @@ def createListMessageClients(lista, query_id, status,
 
 
 def chosen_plan(client_id, data):
+    node = Params.PREFIX['client'] + str(client_id)
     """Actualizar el plan elegido por cliente."""
-    firebase = pyrebase.initialize_app(config)
-    db = firebase.database()
-    res = db.child("chosenPlans").child(client_id).update(data)
+    res = db.child("chosenPlans").child(node).update(data)
     return res
 
 
 def mark_failed_file(room, message_id):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + Params.PREFIX['message'] + str(message_id)
-    firebase = pyrebase.initialize_app(config)
-    # print(node)
-    db = firebase.database()
+    
     if exist_node(node):
-        db.child(node).update({"uploaded": 5, "fileUrl": "error",
-                               "filePreviewUrl": "error"})
+        db.child(node).update({"uploaded": 5})
         if DEBUG_FIREBASE:
             check_type_data('chats', node)
     else:
@@ -415,3 +415,10 @@ def PendingQueriesList(client_id, specialist_id):
     query_pending = PendingQueriesSerializer(data_queries, many=True)
     queries_list = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
     return queries_list
+
+
+def delete_actual_plan_client(client_id):
+    """Elimina nodo de plan de clientes"""
+    node_client = Params.PREFIX['client'] + str(client_id)
+    res = db.child("chosenPlans").child(node_client).remove()
+    return res

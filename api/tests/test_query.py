@@ -54,7 +54,7 @@ class ListQueryMessagesByCategory(APITestCase):
         """Estatus 200."""
         category = 8
         response = self.client.get(reverse('query-chat-client', kwargs={'pk': category}))
-        # import pdb; pdb.set_trace()
+        
         # self.assertEqual(response.data['results'][0]['message']['viewed'], False)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -116,7 +116,7 @@ class CreateQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_category(self):
@@ -128,7 +128,7 @@ class CreateQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_message(self):
@@ -144,7 +144,7 @@ class CreateQuery(APITestCase):
 
     def test_no_activeplan(self):
         """No posee plan activo."""
-        QueryPlansAcquired.objects.filter(client_id=5).update(is_active=False)
+        QueryPlansAcquired.objects.filter(queryplansclient__client=5).update(is_active=False)
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
@@ -154,7 +154,8 @@ class CreateQuery(APITestCase):
 
     def test_no_availablequeries(self):
         """Solicitud Invalida, no posee consultas."""
-        QueryPlansAcquired.objects.filter(client_id=5).update(available_queries=0)
+        QueryPlansAcquired.objects.filter(queryplansclient__client=5).update(available_queries=0)
+        
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
@@ -199,15 +200,15 @@ class CreateQuery(APITestCase):
 
     def test_create_query(self):
         """Creacion Exitosa de la consulta."""
-        q = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)
-        before_post_queries = q.available_queries
+        plan = QueryPlansAcquired.objects.get(queryplansclient__is_chosen=True, queryplansclient__client=5)
+        before_post_queries = plan.available_queries
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        qq = QueryPlansAcquired.objects.get(is_chosen=True, client_id=5)
-        after_post_queries = qq.available_queries
+        query_plan = QueryPlansAcquired.objects.get(queryplansclient__is_chosen=True, queryplansclient__client=5)
+        after_post_queries = query_plan.available_queries
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(before_post_queries - 1, after_post_queries)
 
@@ -249,14 +250,14 @@ class PutFilesToQuery(APITestCase):
     #     # Uploading File Image
     #     dir_img = os.path.join(TEST_URL, 'image.png')
     #     # file = open(dir_img)   # str.encode(dir_img)
-    #     # import pdb; pdb.set_trace()
+    #     
     #     with open(dir_img, "rb") as fp:
     #         f = fp.read()
-    #     # import pdb; pdb.set_trace()
+    #     
     #     imgn = SimpleUploadedFile("image.png",
     #                               f, content_type="image/png")
     #
-    #     # import pdb; pdb.set_trace()
+    #     
     #     response1 = self.client.put(
     #         reverse('query-upload-files', kwargs={'pk': 1000}),
     #         data={'message_id': ms.id, 'file': imgn}, format='multipart')
@@ -601,6 +602,41 @@ class PutDeclineQuery(APITestCase):
                                    content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+class GetDeclineListQuery(APITestCase):
+    """Prueba para especialista deribar query"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_getspecialistmessages']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_query_decline(self):
+        """Obtener resultado 200."""
+        # obtiene mensajes de declinacion
+
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        
+        response = self.client.get(reverse('query-decline', kwargs={'pk': 3}),
+                                   content_type='application/json')
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+
+    def test_no_get_query_decline(self):
+        """Obtener resultado."""
+        # obtiene mensajes de query
+
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        
+        response = self.client.get(reverse('query-decline', kwargs={'pk': 333}),
+                                   content_type='application/json')
+        self.assertEqual(not response.data, True)
+
+
+
 
 class SetCalification(APITestCase):
     """Prueba para calificar consulta."""
@@ -611,16 +647,16 @@ class SetCalification(APITestCase):
         """SetUp."""
         self.client = APIClient()
         self.valid_payload = {
-            'calification': 5
+            'qualification': 5
         }
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
 
     def test_invalid_calification(self):
         """Numero de calificacion invalida."""
-        data = {"calification": 6}
+        data = {"qualification": 6}
         Query.objects.filter(pk=1000).update(status=4)
-        response = self.client.put(reverse('query-calification',
+        response = self.client.put(reverse('query-qualify',
                                            kwargs={'pk': 1000}),
                                    data=json.dumps(data),
                                    content_type='application/json')
@@ -630,7 +666,7 @@ class SetCalification(APITestCase):
         """Calificacion vacia."""
         data = {}
         Query.objects.filter(pk=1000).update(status=4)
-        response = self.client.put(reverse('query-calification',
+        response = self.client.put(reverse('query-qualify',
                                            kwargs={'pk': 1000}),
                                    data=json.dumps(data),
                                    content_type='application/json')
@@ -638,9 +674,9 @@ class SetCalification(APITestCase):
 
     def test_null_calification(self):
         """Calificacion vacia."""
-        data = {"calification": None}
+        data = {"qualification": None}
         Query.objects.filter(pk=1000).update(status=4)
-        response = self.client.put(reverse('query-calification',
+        response = self.client.put(reverse('query-qualify',
                                            kwargs={'pk': 1000}),
                                    data=json.dumps(data),
                                    content_type='application/json')
@@ -650,7 +686,7 @@ class SetCalification(APITestCase):
         """Calificacion de manera exitosa."""
         data = self.valid_payload
         Query.objects.filter(pk=1000).update(status=4)
-        response = self.client.put(reverse('query-calification',
+        response = self.client.put(reverse('query-qualify',
                                            kwargs={'pk': 1000}),
                                    data=json.dumps(data),
                                    content_type='application/json')
@@ -658,4 +694,4 @@ class SetCalification(APITestCase):
         q = Query.objects.get(pk=1000)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(q.status, 5)
-        self.assertEqual(q.calification, 5)
+        self.assertEqual(q.qualification, 5)

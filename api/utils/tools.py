@@ -3,9 +3,16 @@
     trabajar de forma estandar
     el manejo de variables, ejemplo: capitalizar el primer caracter
 """
-import datetime, string, random, boto3, threading, os
+import datetime, string, random, boto3, os
+import requests
+from django.urls import reverse
+from linkupapi.settings_secret import URL_HOST
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime as date_time, date, time, timedelta
+from linkupapi.settings import MEDIA_ROOT
+from moviepy.editor import *
 from PIL import Image
 from api.logger import manager
 logger = manager.setup_log(__name__)
@@ -67,6 +74,7 @@ def s3_upload_file(file, filename):
     # file.close()
     return 'https://s3.amazonaws.com/linkup-photos/' + filename
 
+
 def resize_img(file, size):
     """
         file type image
@@ -77,7 +85,7 @@ def resize_img(file, size):
     # pdb.set_trace()
 
     extension = file.name.split(".")[-1]
-    
+
     if extension == 'png' or extension == 'jpg' or extension == 'gif':
         pass
     elif extension == 'mp4':
@@ -95,7 +103,7 @@ def resize_img(file, size):
         factor = size / height
 
     thumb = image.resize((int(width * factor), int(height * factor)))
-    
+
     thumb.save(file.name,image.format, quality=95)
 
     data = open(file.name,'rb')
@@ -104,15 +112,24 @@ def resize_img(file, size):
 
     return data
 
+
 def thumb_video(file, size):
-    from shutil import copyfile
-    src = 'api/thumb-video.jpg'
-    dst = 'api/thumb-video-copy.jpg'
-    copyfile(src, dst)
-
-    data = open(dst,'rb')
+    # from shutil import copyfile
+    # fn = os.path.basename(file.name)
+    arch = default_storage.save(name=MEDIA_ROOT + file.name, content=file)
+    # import pdb; pdb.set_trace()
+    clip = VideoFileClip(arch)
+    name = file.name.split(".")[0]
+    # import pdb; pdb.set_trace()
+    thumb = os.path.join(MEDIA_ROOT, "th_%s.jpg" % name)
+    clip.save_frame(thumb, t=random.uniform(0.1, clip.duration))
+    # dst = '{api}/th_{}.jpg'.format(name)
+    # copyfile(src, dst)
+    data = open(thumb, 'rb')
     data.content_type = 'image/jpg'
-
+    # clip.__del__()
+    # video = open(arch, 'rb')
+    # remove_file(video)
     return data
 
 def remove_file(file):
@@ -136,3 +153,22 @@ def clear_data_no_valid(data,valid_fields):
     for field in data_auxiliar:
         if not field in valid_fields:
             data.pop(field, None)
+
+
+def get_body(file_type, message):
+    """obtengo el valor del body dependiendo el tipo de mensaje."""
+    if file_type == 1:
+        return message
+    if file_type == 2:
+        return "\uD83D\uDCF7 Foto"
+    elif file_type == 3:
+        return "\uD83C\uDFA5 Vídeo"
+    elif file_type == 4:
+        return "\uD83C\uDFA4 Mensaje de voz"
+    else:
+        return "\uD83D\uDCC4 Documento"
+
+
+def send_api(url_name, token='', arg=None, files=None):
+    r = requests.post(URL_HOST + url_name, json=arg)
+    return r

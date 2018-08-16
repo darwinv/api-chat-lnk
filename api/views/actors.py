@@ -4,8 +4,8 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Query
-from api.models import SellerContactNoEfective, SpecialistMessageList, SpecialistMessageList_sp
-from api.models import RecoveryPassword, Declinator
+from api.models import SellerContact, SpecialistMessageList, SpecialistMessageList_sp
+from api.models import RecoveryPassword, Declinator, QueryPlansManage
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
@@ -18,22 +18,26 @@ from api.serializers.actors import ClientSerializer, UserPhotoSerializer, KeySer
 from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
-from api.serializers.actors import ChangeEmailSerializer
+from api.serializers.actors import ChangeEmailSerializer, ChangePassword
 from api.serializers.query import QuerySerializer, QueryCustomSerializer
+from api.serializers.plan import QueryPlansShareSerializer, QueryPlansTransferSerializer
+from api.serializers.plan import QueryPlansEmpowerSerializer
 from django.http import Http404
 from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrSpecialist
 from api.permissions import IsAdminOrClient
+from api.utils.querysets import get_query_set_plan
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 from django.utils.translation import ugettext_lazy as _
 import os
 import uuid
-import boto3
+import boto3, sys
 from datetime import datetime, date
 from django.utils import timezone
 from api.utils.validations import Operations
 from api.utils.tools import clear_data_no_valid
 from api import pyrebase
 from api.emails import BasicEmailAmazon
+from api.utils.parameters import Params
 from api.api_choices_models import ChoicesAPI as c
 
 # Constantes
@@ -48,6 +52,32 @@ DATE_FAKE = '1900-01-01'
 
 #obtener el logger con la configuracion para actors
 # loggerActor = manager.setup_log(__name__)
+
+
+class UpdateUserPassword(APIView):
+    """Actualizar contraseña de Usuario."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrOwner)
+
+    def get_object(self, pk):
+        """Devolver objeto."""
+        try:
+            obj = User.objects.get(pk=pk)
+            return obj
+        except User.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Funcion put."""
+        data = request.data
+        user = self.get_object(pk)
+        serializer = ChangePassword(user, data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UpdatePasswordView(APIView):
     """Actualizar Contraseña de Usuario (uso para dev)."""
@@ -107,7 +137,9 @@ class SendCodePassword(APIView):
         recovery_password.is_active = True
         recovery_password.save()
         data = {'code':code}
-        mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña", to=email, template='send_code')
+        if 'test' not in sys.argv:
+            mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña", 
+                to=email, template='email/send_code')
         return Response(mail.sendmail(args=data))
 
 class ValidCodePassword(APIView):
@@ -128,7 +160,7 @@ class ValidCodePassword(APIView):
             email = request.query_params["email"]
         else:
             raise serializers.ValidationError({'email': [self.required]})
-
+        
         user_filter = User.objects.filter(recoverypassword__code=code, email_exact=email, is_active=True).extra(where = ["DATEDIFF(NOW() ,created_at )<=1"])
         # print(user_filter.query)
         if user_filter:
@@ -159,7 +191,7 @@ class UpdatePasswordRecoveryView(APIView):
             code = request.data["code"]
         else:
             raise serializers.ValidationError({'code': [self.required]})
-
+        
         user_filter = RecoveryPassword.objects.filter(code=code, user=pk, is_active=True).extra(where = ["DATEDIFF(NOW() ,created_at )<=1"])
 
         if user_filter:
@@ -215,6 +247,9 @@ class UpdatePasswordUserView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+
+
+
 class UpdateEmailUserView(APIView):
     """Actualizar Contraseña de Usuario Recuperado."""
     required = _("required")
@@ -234,13 +269,22 @@ class UpdateEmailUserView(APIView):
     def put(self, request, pk):
         """Funcion put."""
         data = request.data
+        pk = Operations.get_id(self, request)
         user = self.get_object(pk)
+        last_email = user.email_exact
         serializer = ChangeEmailSerializer(user, data, partial=True)
         if serializer.is_valid():
             serializer.save()
+
+            # Actualizamos Email si existe en el manejo de planes
+            plan_manages = QueryPlansManage.objects.filter(email_receiver=last_email)
+            if plan_manages:
+                success = plan_manages.update(email_receiver=data['email_exact'])
+
             return Response(serializer.data)
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 
 class ViewKey(APIView):
@@ -277,7 +321,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     filter_fields = ('username',)
 
 
-from api.models import QueryPlansAcquired, SaleDetail, Sale
+from api.models import QueryPlansAcquired, SaleDetail, Sale, QueryPlansClient
 from api.models import Clasification, QueryPlans, ProductType
 from datetime import datetime
 from api.utils import tools
@@ -291,12 +335,14 @@ def give_plan_new_client(client_id):
     sale = Sale()
     saleDetail = SaleDetail()
     queryPlansAcquired = QueryPlansAcquired()
+    queryPlansClient = QueryPlansClient()
+
 
     try:
         product_type = ProductType.objects.get(pk=1)
     except Exception as e:
         product_type = ProductType()
-        product_type.name = 'TesterType'
+        product_type.name = 'Plan Query'
         product_type.id = '1'
         product_type.save()
 
@@ -309,33 +355,34 @@ def give_plan_new_client(client_id):
         clasification.save()
 
     try:
-        query_plans = QueryPlans.objects.get(pk=1)
+        query_plans = QueryPlans.objects.get(pk=3)
     except Exception as e:
         query_plans = QueryPlans()
         query_plans.product_type = product_type
         query_plans.clasification = clasification
-        query_plans.id = '1'
-        query_plans.query_quantity = '0'
-        query_plans.validity_months = '0'
-        query_plans.maximum_response_time = '0'
-        query_plans.is_active = '0'
-        query_plans.price = '0.0000'
+        query_plans.id = 1
+        query_plans.query_quantity = 6
+        query_plans.validity_months = 3
+        query_plans.maximum_response_time = 24
+        query_plans.is_active = 1
+        query_plans.price = 900
+        query_plans.name = 'MiniPack'
         query_plans.save()
 
     sale.created_at = datetime.now()
     sale.place = 'BCP'
-    sale.total_amount = '1000.00'
+    sale.total_amount = query_plans.price
     sale.reference_number = 'CD1004'
     sale.description = 'Test Venta'
     sale.is_fee = '1'
     sale.client_id = client_id
     sale.save()
 
-    saleDetail.price = '1000.00'
+    saleDetail.price = query_plans.price
     saleDetail.description = 'Plan de Prueba'
     saleDetail.discount = '0.00'
     saleDetail.pin_code = tools.ramdon_generator(6)
-    saleDetail.is_billable = '0'
+    saleDetail.is_billable = True
     saleDetail.contract_id = None
     saleDetail.product_type_id = '1'
     saleDetail.sale_id = sale.id
@@ -343,22 +390,33 @@ def give_plan_new_client(client_id):
 
     queryPlansAcquired.expiration_date = '2019-04-09'
     queryPlansAcquired.validity_months = '6'
-    queryPlansAcquired.available_queries = '500'
+    queryPlansAcquired.available_queries = query_plans.query_quantity
     queryPlansAcquired.activation_date = None
-    queryPlansAcquired.is_active = '1'
-    queryPlansAcquired.available_requeries = '1'
-    queryPlansAcquired.maximum_response_time = '24'
+    queryPlansAcquired.is_active = True
+    queryPlansAcquired.available_requeries = 1
+    queryPlansAcquired.maximum_response_time = query_plans.maximum_response_time
     queryPlansAcquired.acquired_at = datetime.now()
-    queryPlansAcquired.client_id = client_id
-    queryPlansAcquired.query_plans_id = '1'
+    queryPlansAcquired.query_plans_id = query_plans.id
     queryPlansAcquired.sale_detail_id = saleDetail.id
-    queryPlansAcquired.query_quantity = '500'
-    queryPlansAcquired.plan_name = 'TesterPack'
-    queryPlansAcquired.is_chosen = '1'
+    queryPlansAcquired.query_quantity = query_plans.query_quantity
+    queryPlansAcquired.plan_name = query_plans.name
     queryPlansAcquired.save()
 
-    serializer = QueryPlansAcquiredSerializer(queryPlansAcquired)
-    chosen_plan('u'+str(client_id), serializer.data)
+    queryPlansClient.owner = True
+    queryPlansClient.transfer = True
+    queryPlansClient.share = True
+    queryPlansClient.empower = True
+    queryPlansClient.status = 1
+    queryPlansClient.acquired_plan_id = queryPlansAcquired.id
+    queryPlansClient.client_id = client_id
+    queryPlansClient.is_chosen = True
+    queryPlansClient.save()
+
+    plan_chosen = get_query_set_plan()
+    plan_active = plan_chosen.filter(queryplansclient__client=client_id, is_active=True,
+                                             queryplansclient__is_chosen=True)
+    serializer = QueryPlansAcquiredSerializer(plan_active[0])
+    chosen_plan(client_id, serializer.data)
 
 # Vista para Listar y Crear Clientes
 class ClientListView(ListCreateAPIView):
@@ -376,13 +434,9 @@ class ClientListView(ListCreateAPIView):
     filter_fields = ('nick',)
     search_fields = ('email_exact', 'first_name')
 
-    # def get(self, request):
-    #    clients = Client.objects.all()
-    #    serializer = ClientSerializer(clients, many=True)
-    #    return Response(serializer.data)
-
     # Metodo post redefinido
     def post(self, request):
+
         """Redefinido metodo para crear clientes."""
         data = request.data
         if 'type_client' not in data or not data['type_client']:
@@ -401,14 +455,91 @@ class ClientListView(ListCreateAPIView):
         serializer = ClientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            # se le crea la lista de todas las categorias al cliente en firebase
-            pyrebase.createCategoriesLisClients(serializer.data['id'])
 
+            if 'test' not in sys.argv:
+                # se le crea la lista de todas las categorias al cliente en firebase
+                pyrebase.createCategoriesLisClients(serializer.data['id'])
 
             # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
             give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
+
+            client_id = serializer.data['id']
+            email = data['email_exact']
+            self.check_plans_operation_manage(client_id, email)
+
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+    def check_plans_operation_manage(self, receiver_id, email_receiver):
+
+        # No realizar operacion si tiene operacioens previas para este plan
+        plan_manages = QueryPlansManage.objects.filter(
+            email_receiver=email_receiver, status=3)
+        receiver = Client.objects.get(pk=receiver_id)
+        
+        for plan_manage in plan_manages:
+            """Checar y otorgar planes a nuevo cliente"""
+            data = {
+                'receiver': receiver_id,
+                'status': 1,
+                'count_queries': plan_manage.count_queries
+            }
+            
+            data_context = {}
+            if plan_manage.type_operation == 2:
+            
+                data_context['client_receiver'] = {
+                    'is_chosen': False,
+                    'owner': False,
+                    'transfer': False,
+                    'share': False,
+                    'empower': False,
+                    'status': 1,
+                    'acquired_plan': None,
+                    'client': receiver
+                }
+                data_context['count'] = plan_manage.count_queries
+                data_context['acquired_plan'] = plan_manage.acquired_plan
+                data_context['plan_manage'] = None
+
+                serializer = QueryPlansShareSerializer(plan_manage, data, partial=True,
+                                              context=data_context)
+
+            elif plan_manage.type_operation == 1:
+                # Transferir plan de consultas
+                data_context['client_receiver'] = {
+                    'is_chosen': False,
+                    'owner': True,
+                    'transfer': False,
+                    'share': True,
+                    'empower': True,
+                    'status': 1,
+                    'acquired_plan': plan_manage.acquired_plan,
+                    'client': receiver
+                }
+                serializer = QueryPlansTransferSerializer(plan_manage, data, partial=True,
+                                              context=data_context)
+
+            elif plan_manage.type_operation == 3:
+                # Facultar plan de consultas
+                data_context['client_receiver'] = {
+                    'is_chosen': False,
+                    'owner': False,
+                    'transfer': False,
+                    'share': True,
+                    'empower': False,
+                    'status': 1,
+                    'acquired_plan': plan_manage.acquired_plan,
+                    'client': receiver
+                }
+                serializer = QueryPlansEmpowerSerializer(plan_manage, data, partial=True,
+                                              context=data_context)
+                
+            else:
+                continue
+
+            if serializer.is_valid():
+                serializer.save()
 
 # Vista para Detalle del Cliente
 class ClientDetailView(APIView):
@@ -438,11 +569,11 @@ class ClientDetailView(APIView):
         """Detalle."""
         client = self.get_object(pk)
         data = request.data
-        valid_fields = ("commercial_reason", "first_name", "last_name", "nick",
-                "telephone", "cellphone","residence_country", "address")
 
-        clear_data_no_valid(data,valid_fields)
+        valid_fields = ("commercial_reason", "ciiu", "nick",
+                "telephone", "cellphone", "residence_country", "address", "foreign_address")
 
+        clear_data_no_valid(data, valid_fields)
 
         serializer = ClientSerializer(client, data, partial=True,
                                           context={'request': request})
@@ -450,7 +581,6 @@ class ClientDetailView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Vista para detalle del cliente segun su username
@@ -829,7 +959,7 @@ class SellerDetailView(APIView):
     def put(self, request, pk):
         data = request.data
 
-        seller = self.get_object(pk)
+        seller = self.get_object(pk) 
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         data['code'] = PREFIX_CODE_SELLER + request.data.get('document_number', seller.document_number)
         data['photo'] = request.data.get('photo', seller.photo)
@@ -846,26 +976,6 @@ class SellerDetailView(APIView):
 
 
 class SellerDetailByUsername(APIView):
-    """Detalle de Vendedor por Nombre de Usuario."""
-
-    authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get_object(self, username):
-        """Obtener Objeto."""
-        try:
-            return Seller.objects.get(username=username)
-        except Seller.DoesNotExist:
-            raise Http404
-
-    def get(self, request, username):
-        """Obtener Vendedor."""
-        seller = self.get_object(username)
-        serializer = SellerSerializer(seller)
-        return Response(serializer.data)
-
-
-class SellerDetailByUsername2(APIView):
     """Detalle de Vendedor por Nombre de Usuario."""
 
     authentication_classes = (OAuth2Authentication,)
@@ -920,26 +1030,31 @@ class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (IsSeller,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller,)
     # aca se debe colocar el serializer para listar todos
     serializer_class = SellerContactNaturalSerializer
-    queryset = SellerContactNoEfective.objects.all()
+    queryset = SellerContact.objects.all()
 
     def post(self, request):
         """Redefinido funcion para crear vendedor."""
         required = _("required")
         not_valid = _("not valid")
         data = request.data
+        data["seller"] = Operations.get_id(self, request)
+        if "email_exact" not in data or not data["email_exact"]:
+            raise serializers.ValidationError({'email_exact': [required]})
+        
+        data["email"] = data["email_exact"]
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
-        if "type_contact" not in data or not data["type_contact"]:
-            raise serializers.ValidationError({'type_contact': [required]})
+        if "type_client" not in data or not data["type_client"]:
+            raise serializers.ValidationError({'type_client': [required]})
 
-        if data["type_contact"] == 'n':
+        if data["type_client"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
-        elif data["type_contact"] == 'b':
+        elif data["type_client"] == 'b':
             serializer = SellerContactBusinessSerializer(data=data)
         else:
-            raise serializers.ValidationError({'type_contact': [not_valid]})
+            raise serializers.ValidationError({'type_client': [not_valid]})
 
         if serializer.is_valid():
             serializer.save()
@@ -989,6 +1104,7 @@ class PhotoUploadView(APIView):
         serializer = UserPhotoSerializer(user,
                                          data={'photo': name_photo},
                                          partial=True)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -1126,3 +1242,65 @@ def upload_photo_s3(filename):
     )
     # devolviendo ruta al archivo
     return 'https://s3.amazonaws.com/linkup-photos/' + filename;
+
+class RucDetailView(APIView):
+    """
+        Traer informacion de RUC
+    """
+    permission_classes = (IsAdminOrOwner,)
+    queryset = User.objects.all()
+    parser_classes = (JSONParser, MultiPartParser)
+
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        import requests
+        from api.serializers.actors import RucApiDetailSerializer
+        from linkupapi import settings_secret
+
+        url = "https://ruc.com.pe/api/v1/ruc"
+        payload = {
+          "token": settings_secret.TOKEN_RUC,
+          "ruc": pk
+        }
+
+        try:
+            response = requests.post(url, json=payload, timeout=2.5)
+        except Exception as e:
+            response = None
+
+        try:
+            url_sunat = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
+            response2 = requests.get(url_sunat, timeout=2.5)
+        except Exception as e:
+            response2 = response
+
+        # Se evaluan las 2 respuestas
+        if response and response.status_code == 200 and response2.status_code == 200:
+            data = {'ruc': str(pk)}
+            # Convinamos los diccionarios
+            data = dict(data, **response.json())
+
+
+            data['cellphone'] = data['telephone'] = ""
+            if 'telefono' in response2.json():
+                telefonos = response2.json()['telefono']
+                phones = telefonos.split('|')
+                for phone in phones:
+                    if phone[0]=='9':
+                        data['cellphone'] = phone
+                    else:
+                        data['telephone'] = phone
+
+            if 'nombre_comercial' in response2.json():
+                data['commercial_reason'] = response2.json()['nombre_comercial']
+            else:
+                data['commercial_reason'] = ""
+
+            serializer = RucApiDetailSerializer(data, partial=True)
+            return Response(serializer.data)
+        raise Http404

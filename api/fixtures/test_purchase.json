@@ -1,0 +1,274 @@
+[
+
+{
+    "model": "api.address",
+    "pk": 1,
+    "fields": {
+        "street": "esteban camere",
+        "department": 1,
+        "province": 1,
+        "district": 1
+    }
+},
+{
+  "model": "api.user",
+  "pk": 5,
+  "fields": {
+      "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "darwinio_vasqz@gmail.com",
+      "first_name": "darwin",
+      "last_name": "vasquez",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2018-02-05T23:10:23.879Z",
+      "nick": "dar",
+      "email_exact": "darwinio_vasqz@gmail.com",
+      "telephone": "921471559",
+      "cellphone": "921471559",
+      "code_telephone": null,
+      "code_cellphone": null,
+      "photo": null,
+      "document_type": "2",
+      "document_number": "20122984",
+      "img_document_number": null,
+      "ruc": "123456789",
+      "code": "C20122984",
+      "anonymous": true,
+      "updated_at": "2018-02-05T23:10:24.020Z",
+      "nationality": 1,
+      "role": 2,
+      "address": 1,
+      "residence_country": 1,
+      "foreign_address": null,
+      "key": null,
+      "status": 1,
+      "groups": [],
+      "user_permissions": []
+    }
+},
+{
+  "model": "api.user",
+  "pk": 6,
+  "fields": {
+      "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "mariintosh@gmail.com",
+      "first_name": "marin",
+      "last_name": "vasquez",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2018-02-05T23:10:23.879Z",
+      "nick": "dar",
+      "email_exact": "mariintosh@gmail.com",
+      "telephone": "921471559",
+      "cellphone": "921471559",
+      "code_telephone": null,
+      "code_cellphone": null,
+      "photo": null,
+      "document_type": "2",
+      "document_number": "201229841",
+      "img_document_number": null,
+      "ruc": "123456780",
+      "code": "C201229841",
+      "anonymous": true,
+      "updated_at": "2018-02-05T23:10:24.020Z",
+      "nationality": 1,
+      "role": 2,
+      "address": 1,
+      "residence_country": 1,
+      "foreign_address": null,
+      "key": null,
+      "status": 1,
+      "groups": [],
+      "user_permissions": []
+    }
+},
+{
+  "model": "api.client",
+  "pk": 5,
+  "fields": {
+      "type_client": "n",
+      "sex": "m",
+      "commercial_reason": null,
+      "civil_state": "s",
+      "birthdate": "2017-09-19",
+      "ciiu": 10,
+      "activity_description": "Loremp iptsum",
+      "institute": "UNEFA",
+      "ocupation": 1,
+      "about": "iptsum aabout",
+      "business_name": null,
+      "agent_firstname": null,
+      "agent_lastname": null,
+      "position": null,
+      "profession": "Administrador",
+      "economic_sector": null,
+      "level_instruction": 1,
+      "seller_asigned": null,
+      "groups": [],
+      "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 6,
+  "fields": {
+      "type_client": "n",
+      "sex": "m",
+      "commercial_reason": null,
+      "civil_state": "s",
+      "birthdate": "1991-09-19",
+      "ciiu": 10,
+      "activity_description": "Loremp iptsum",
+      "institute": "UNEFA",
+      "ocupation": 1,
+      "about": "iptsum aabout",
+      "business_name": null,
+      "agent_firstname": null,
+      "agent_lastname": null,
+      "position": null,
+      "profession": "Administrador",
+      "economic_sector": null,
+      "level_instruction": 1,
+      "seller_asigned": null,
+      "groups": [],
+      "user_permissions": []
+  }
+},
+{
+"model": "api.user",
+"pk": 2,
+"fields": {
+    "password": "pbkdf2_sha256$36000$zYNuNmVAEdJB$/YzAG8AR4SFu5puGwV2+pSOddhqPU2FRk9c/EDIz7dc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sky",
+    "first_name": "Celeste",
+    "last_name": "Rodr\u00edguez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-10-23T15:20:08.687Z",
+    "nick": "sky",
+    "email_exact": "celeste.sky@gmail.com",
+    "telephone": "1234567",
+    "cellphone": "123456789",
+    "photo": "preview.png",
+    "document_type": 1,
+    "document_number": "48464954",
+    "ruc": null,
+    "code": "c48464954",
+    "anonymous": true,
+    "updated_at": "2017-10-23T15:20:08.801Z",
+    "nationality": 1,
+    "residence_country": 1,
+    "role": 4,
+    "address": 1,
+    "groups": [],
+    "user_permissions": []
+}
+},
+{
+  "model": "api.seller",
+  "pk": 2,
+  "fields": {
+    "cv": null,
+    "zone": null,
+    "ciiu": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "token": "RCOM8gcbsOv56QFlcCJpgDENETGCLr",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "",
+    "created": "2016-12-31T23:59:59Z",
+    "updated": "2017-10-02T22:27:09.173Z"
+  }
+},
+{
+  "model": "api.queryplans",
+  "pk": 2,
+  "fields": {
+    "name": "Minipack",
+    "query_quantity": 6,
+    "validity_months": 3,
+    "maximum_response_time": 24,
+    "price": "700.00",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 1
+  }
+},
+{
+  "model": "api.queryplans",
+  "pk": 5,
+  "fields": {
+    "name": "Polypack",
+    "query_quantity": 6,
+    "validity_months": 3,
+    "maximum_response_time": 24,
+    "price": "800.00",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 1
+  }
+},
+{
+  "model": "api.sellernonbillableplans",
+  "pk": 1,
+  "fields": {
+    "seller": 2,
+    "query_plans": 2,
+    "quantity": 3,
+    "number_month": 8,
+    "created_at": "2018-07-31T15:31:02Z"
+  }
+},
+{
+  "model": "api.sellernonbillableplans",
+  "pk": 4,
+  "fields": {
+    "seller": 2,
+    "query_plans": 5,
+    "quantity": 0,
+    "number_month": 8,
+    "created_at": "2018-07-31T15:31:02Z"
+  }
+},
+{
+  "model": "api.sellernonbillableplans",
+  "pk": 2,
+  "fields": {
+    "seller": 2,
+    "query_plans": 2,
+    "quantity": 3,
+    "number_month": 9,
+    "created_at": "2018-07-31T15:31:02Z"
+  }
+},
+{
+  "model": "api.sellernonbillableplans",
+  "pk": 3,
+  "fields": {
+    "seller": 2,
+    "query_plans": 2,
+    "quantity": 3,
+    "number_month": 10,
+    "created_at": "2018-07-31T15:31:02Z"
+  }
+}
+]

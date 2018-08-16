@@ -1,12 +1,32 @@
 [
   {
+      "model": "api.address",
+      "pk": 1,
+      "fields": {
+          "street": "esteban camere",
+          "department": 1,
+          "province": 1,
+          "district": 1
+      }
+  },
+  {
+      "model": "api.address",
+      "pk": 2,
+      "fields": {
+          "street": "esteban camere",
+          "department": 1,
+          "province": 1,
+          "district": 1
+      }
+  },
+  {
       "model": "api.user",
       "pk": 3,
       "fields": {
-        "password": "pbkdf2_sha256$36000$14YfOVmemcYB$tnxgkqzPH9rlaL+5U0rQuTtMFTA5d4+bczB34X51Fis=",
+        "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
         "last_login": null,
         "is_superuser": false,
-        "username": "teresa",
+        "username": "teresaq@tesla.com",
         "last_name": "garcia",
         "email": "",
         "is_staff": false,
@@ -164,7 +184,7 @@
     "model": "oauth2_provider.accesstoken",
     "pk": 33,
     "fields": {
-      "user": 4,
+      "user": 3,
       "token": "vvP8pKMAULMa2qQtaTnJpx2l87nWc2",
       "application": 1,
       "expires": "9999-12-31T23:59:59Z",

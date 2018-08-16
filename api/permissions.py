@@ -37,7 +37,7 @@ class IsOwner(permissions.BasePermission):
 
 
 class IsAdminOrOwner(permissions.BasePermission):
-    """Solo el administrador el mismo usuario."""
+    """Solo el administrador o el mismo usuario."""
 
     def has_object_permission(self, request, view, obj):
         """Metodo redefinido."""
@@ -84,6 +84,17 @@ class IsAdminOrClient(permissions.BasePermission):
             return True
         return False
 
+
+class IsAdminOrSeller(permissions.BasePermission):
+    """Solo Administradores o Vendedores."""
+
+    def has_permission(self, request, view):
+        """Permiso General."""
+        if request.user and request.user.is_staff:
+            return True
+        elif request.user and request.user.role_id == 4:
+            return True
+        return False
 
 class IsClientOrSpecialistAndOwner(permissions.BasePermission):
     """Solo Cliente y Dueño del objeto actual."""
@@ -155,7 +166,9 @@ class IsSeller(permissions.BasePermission):
         """Solo el vendedor puede crear."""
         if request.method == "POST":
             return request.user and request.user.role_id == 4
-        return True
+        if request.method in permissions.SAFE_METHODS:
+            return request.user and request.user.role_id == 4
+
 
 # En listado solo el admin
 class IsAdminOnList(permissions.BasePermission):

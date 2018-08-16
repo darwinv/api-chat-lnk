@@ -7,7 +7,7 @@ from api.api_choices_models import ChoicesAPI as c
 from api.utils import querysets
 from api.utils.parameters import Params
 from api import pyrebase
-
+import sys
 
 # Serializer de Mensajes
 class MessageSerializer(serializers.ModelSerializer):
@@ -99,7 +99,7 @@ class QueryDetailSerializer(serializers.ModelSerializer):
         model = Query
         fields = (
             'id', 'title', 'status', 'messages', 'last_modified', 'client', 'code_client', 'specialist', 'category',
-            'category_name', 'calification')
+            'category_name', 'qualification')
         read_only_fields = ('status', 'last_modified')
 
         # Traer por consulta relacionada
@@ -133,7 +133,7 @@ class QueryDetailLastMsgSerializer(serializers.ModelSerializer):
         model = Query
         fields = (
             'id', 'title', 'status', 'last_msg', 'last_modified', 'client', 'code_client', 'specialist', 'category',
-            'category_name', 'calification')
+            'category_name', 'qualification')
         read_only_fields = ('status', 'last_modified')
 
         # Traer por consulta relacionada
@@ -180,29 +180,12 @@ class QuerySerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Validaciones Generales."""
         # Valido si posee un plan activo
-        if not querysets.has_active_plan(data["client"]):
+
+        if not querysets.has_active_plan(data["client"].id):
             raise serializers.ValidationError(_("You need to have an active plan"))
-        if not querysets.has_available_queries(data["client"]):
+        if not querysets.has_available_queries(data["client"].id):
             raise serializers.ValidationError(_("You don't have available queries"))
         return data
-
-    # def update(self, instance, validated_data):
-    #     """Redefinido metodo actualizar."""
-    #     # no se puede agregar msjs de ningun tipo una vez hah sido absuelta
-    #     if int(instance.status) == 6 or int(instance.status) == 7:
-    #         raise serializers.ValidationError(u"Query Absolved - can'not add more messages")
-    #     data_message = validated_data.pop('message')
-    #     specialist = Specialist.objects.get(pk=instance.specialist_id)
-    #     data_message["specialist"] = specialist
-    #     # se compara si el status fue respondida, entonces debemos declarar
-    #     # que el tipo de mensaje es reconsulta, y que pasa a estatus 1,
-    #     # (pendiente de declinar o responder por el especialista)
-    #     if int(instance.status) == 4 or int(instance.status) == 5:
-    #         data_message["msg_type"] = 'r'
-    #         instance.status = 1
-    #     Message.objects.create(query=instance, **data_message)
-    #     instance.save()
-    #     return instance
 
     def create(self, validated_data):
         """Redefinido metodo create."""
@@ -211,8 +194,9 @@ class QuerySerializer(serializers.ModelSerializer):
             type_specialist="m", category_id=validated_data["category"])
         data_messages = validated_data.pop('message')
         # Buscamos el plan activo y elegido
+
         acq_plan = QueryPlansAcquired.objects.get(
-                            is_chosen=True, client=validated_data["client"])
+                            queryplansclient__is_chosen=True, queryplansclient__client=validated_data["client"])
         validated_data["specialist"] = specialist
         validated_data["status"] = 1
         validated_data["acquired_plan"] = acq_plan
@@ -237,9 +221,10 @@ class QuerySerializer(serializers.ModelSerializer):
         # restamos una consulta disponible al plan adquirido
         acq_plan.available_queries = acq_plan.available_queries - 1
         acq_plan.save()
-        pyrebase.chosen_plan(
-            Params.PREFIX['client']+str(validated_data["client"].id),
-            {"available_queries": acq_plan.available_queries})
+        if 'test' not in sys.argv:
+            pyrebase.chosen_plan(
+                validated_data["client"].id,
+                {"available_queries": acq_plan.available_queries})
         return query
 
     def to_representation(self, obj):
@@ -254,19 +239,21 @@ class QuerySerializer(serializers.ModelSerializer):
             else:
                 message['uploaded'] = 2
             av_reqs = obj.available_requeries
-            message["query"] = {"id": obj.id, "title": obj.title,
-                                "status": obj.status,
-                                "calification": obj.calification,
-                                "availableRequeries": av_reqs,
-                                "specialist_id": obj.specialist.id
-                                }
+            message["query_id"] = obj.id
 
             key_message = Params.PREFIX['message']+str(message["id"])
             chat.update({key_message: dict(message)})
 
+        # devuelvo el objeto query para actualizar en su nodo de firebase
+        obj_query = {"id": obj.id, "title": obj.title, "status": obj.status,
+                     "qualification": obj.qualification,
+                     "availableRequeries": av_reqs,
+                     "specialist_id": obj.specialist.id}
+
         return {'room': ms[0]["room"], "message": chat,
                 "message_files_id": messages_files, 'status': obj.status,
-                "category": obj.category.id, "query_id": obj.id}
+                "category": obj.category.id, "query_id": obj.id,
+                "obj_query": obj_query}
 
 
 class BaseQueryResponseSerializer(serializers.ModelSerializer):
@@ -289,20 +276,20 @@ class BaseQueryResponseSerializer(serializers.ModelSerializer):
                 message['uploaded'] = 2
 
             av_reqs = obj.available_requeries
-            message["query"] = {"id": obj.id, "title": obj.title,
-                                "status": obj.status,
-                                "calification": obj.calification,
-                                "availableRequeries": av_reqs,
-                                "specialist_id": obj.specialist.id
-                                }
+            message["query_id"] = obj.id
             key_message = Params.PREFIX['message']+str(message["id"])
             chat.update({key_message: dict(message)})
+
+        obj_query = {"id": obj.id, "title": obj.title, "status": obj.status,
+                     "qualification": obj.qualification,
+                     "availableRequeries": av_reqs,
+                     "specialist_id": obj.specialist.id}
 
         return {'room': ms[0]["room"], "message": chat,
                 "message_files_id": messages_files,
                 "category": obj.category.id, 'status': obj.status,
                 "query_id": obj.id, "client_id": obj.client.id,
-                "specialist_id": obj.specialist.id}
+                "specialist_id": obj.specialist.id, "obj_query": obj_query}
 
 
 class QueryResponseSerializer(BaseQueryResponseSerializer):
@@ -337,7 +324,12 @@ class QueryResponseSerializer(BaseQueryResponseSerializer):
                 ms_ref = data_message['message_reference'].id
             Message.objects.create(query=instance, group=group, **data_message)
 
-        instance.status = 3  # actualizo status
+
+        # Actualizo status dependiendo de cantidad de reconsultas
+        if instance.available_requeries >= 1:
+            instance.status = 3
+        else:
+            instance.status = 4
         # actualizo el estado del grupo al cual se le responde
         gp = GroupMessage.objects.get(message__id=ms_ref)
         gp.status = 2
@@ -405,7 +397,7 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
         """Meta."""
 
         model = Query
-        fields = ('id', 'title', 'status', 'calification')
+        fields = ('id', 'title', 'status', 'qualification')
         read_only_fields = ('title',)
 
     def update(self, instance, validated_data):
@@ -420,20 +412,20 @@ class QueryUpdateStatusSerializer(serializers.ModelSerializer):
 
             instance.status = validated_data["status"]
 
-        # se comprueba si hay calification en data
+        # se comprueba si hay qualification en data
         # si se quiere calificar la respuesta debe estar absuelta primero
-        if 'calification' in validated_data:
-            if int(validated_data["calification"]) > 5:
-                raise serializers.ValidationError(u"Invalid calification.")
+        if 'qualification' in validated_data:
+            if int(validated_data["qualification"]) > 5:
+                raise serializers.ValidationError(u"Invalid qualification.")
             if int(instance.status) < 6:
                 raise serializers.ValidationError(u"to qualify, it must be absolved first.")
-            instance.calification = validated_data["calification"]
+            instance.qualification = validated_data["qualification"]
         instance.save()
         return instance
 
     def to_representation(self, obj):
         """Redefinido metodo de representación."""
-        return {"calification": obj.calification, "status": obj.status}
+        return {"qualification": obj.qualification, "status": obj.status}
 
 
 class QueryListClientSerializer(serializers.ModelSerializer):
@@ -490,7 +482,7 @@ class QueryListSpecialistSerializer(serializers.ModelSerializer):
         model = Query
         fields = (
             'id', 'title', 'last_msg', 'status', 'last_modified', 'category', 'category_name', 'client', 'specialist',
-            'calification')
+            'qualification')
         read_only_fields = ('specialist', 'id', 'last_time')
 
     # Devuelvo la hora y minuto separados
@@ -575,7 +567,7 @@ class QueryChatClientSerializer(serializers.ModelSerializer):
     class Meta:
         """Meta."""
         model = Query
-        fields = ('title', 'category_id', 'calification', 'status', 'query_id')
+        fields = ('title', 'category_id', 'qualification', 'status', 'query_id')
 
 
     def get_query_id(self, obj):
@@ -658,21 +650,21 @@ class QueryDeriveSerializer(serializers.ModelSerializer):
         return instance
 
 
-class QueryCalificationSerializer(serializers.ModelSerializer):
+class QueryQualifySerializer(serializers.ModelSerializer):
     """Calificar Consulta."""
 
-    calification = serializers.IntegerField(max_value=5, min_value=1)
+    qualification = serializers.IntegerField(max_value=5, min_value=1)
 
     class Meta:
         """Meta."""
         model = Query
-        fields = ('status', 'calification')
+        fields = ('status', 'qualification')
         read_only_fields = ('status',)
 
     def update(self, instance, validated_data):
         """Redefinir update."""
         instance.status = 5
-        instance.calification = validated_data["calification"]
+        instance.qualification = validated_data["qualification"]
         instance.save()
         return instance
 
@@ -680,10 +672,13 @@ class QueryCalificationSerializer(serializers.ModelSerializer):
 class QueryDeclineSerializer(QueryDeriveSerializer):
     """Cambiar clave de usuario."""
 
+    name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+
     class Meta:
         """Meta."""
         model = Declinator
-        fields = ('message',)
+        fields = ('message', 'name', 'last_name')
 
     def update(self, instance, validated_data):
         validated_data['status'] = self.context['status']
@@ -696,3 +691,14 @@ class QueryDeclineSerializer(QueryDeriveSerializer):
         specialist = self.context['specialist_declined']
         data_declinator["specialist"] = Specialist.objects.get(pk=specialist)
         return Declinator.objects.create(**data_declinator)
+
+    def get_name(self, obj):
+        if type(obj) is dict and 'specialist__first_name' in obj:
+            return obj['specialist__first_name']
+        return ""
+
+
+    def get_last_name(self, obj):
+        if type(obj) is dict and 'specialist__last_name' in obj:
+            return obj['specialist__last_name']
+        return ""

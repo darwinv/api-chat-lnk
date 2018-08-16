@@ -9,6 +9,7 @@ from api.models import QueryPlansAcquired
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
+
 class GetPlanByPIN(APITestCase):
     """Test module for GET plan deactive API."""
 
@@ -89,12 +90,11 @@ class UpdatePlanActiveByAPI(APITestCase):
         response = client.put(reverse('activation-plan', args=(code,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-class GetClientPlansList(APITestCase):
-    """Prueba para devolver listado de planes al cliente"""
-    # fixtures = ['data', 'data2', 'data3']
 
-    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+class GetPlans(APITestCase):
+    """Devolver el listado de todos los planes."""
 
+    fixtures = ['data', 'data2', 'data3']
 
     def setUp(self):
         """Setup."""
@@ -103,11 +103,76 @@ class GetClientPlansList(APITestCase):
 
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
-        response = self.client.get(reverse('client-plans'), format='json')
+        response = self.client.get(reverse('plans'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class GetClientPlansList(APITestCase):
+    """Prueba para devolver listado de planes al cliente"""
+    # fixtures = ['data', 'data2', 'data3']
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+
+    def test_get_list(self):
+        """Obtener resultado 200 de la lista."""
+        response = self.client.get(reverse('client-plans')+'?client_id=11', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-class UpdatePlanSelect (APITestCase):
+class GetDetailPlan(APITestCase):
+    """Prueba para devolver informacion de un plan"""
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+
+    def test_get_list(self):
+        """Obtener resultado 200 de la lista."""
+        response = self.client.get(reverse('client-plans-detail', args=(3,))+'?client_id=11', format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetClientPlansAllList(APITestCase):
+    """Prueba para devolver listado de planes al cliente"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+
+    def test_get_list(self):
+        """Obtener resultado 200 de la lista."""
+        response = self.client.get(reverse('client-plans-all'), format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetClientPlansShareEmpowerList(APITestCase):
+    """Prueba para devolver listado de clientes compartidos facultados"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+
+    def test_get_list(self):
+        """Obtener resultado 200 de la lista."""
+        response = self.client.get(reverse('client-plans-share-empower',
+            kwargs={'pk': 22}), format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class UpdatePlanSelect(APITestCase):
     """Prueba para actualizar el plan activo de un cliente"""
 
     fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
@@ -180,6 +245,22 @@ class GetSpecialistQueryCount(APITestCase):
             reverse('specialist-query-count'), format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+class PutChosemPlanClient(APITestCase):
+    """Prueba para actualizar el plan elegido de un determinado cliente"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_put_chosenplan_token_clientWithPlans(self):
+        """Obtener resultado 200."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+        response = self.client.get(reverse('chosen-plan-edit', kwargs={'pk': 3}), format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 class GetChosemPlanClient(APITestCase):
     """Prueba para devolver el plan activo y elegido de un determinado cliente"""
 
@@ -235,4 +316,336 @@ class GetChosemPlanClient(APITestCase):
         response = self.client.get(reverse('chosen-plan'), format='json')
 
         self.assertNotEqual(response.data, self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class CreateTransferPlan(APITestCase):
+    """Prueba para transferir un plan"""
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+
+    def test_post_data_email_not_client(self):
+        """Obtener resultado 200."""
+        data = {
+            "email_receiver": "test.user23@mail.com",
+            "acquired_plan": 22
+        }
+        response = self.client.post(reverse('client-plans-transfer'), format='json', data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_post_data_email_client(self):
+        """Obtener resultado 200."""
+        data = {
+            "email_receiver": "jefeti@pympack.com.pe",
+            "acquired_plan": 22
+        }
+        response = self.client.post(reverse('client-plans-transfer'), format='json', data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class MakeSharePlan(APITestCase):
+    """Prueba para compartir un plan"""
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+
+    def test_post_data_email_success(self):
+        """Obtener resultado 200."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "jefeti@pympack.com.pe",
+                    "count": 1
+                },
+                {
+                    "email_receiver": "jefeti2@pympack.com.pe",
+                    "count": 2
+                }
+            ]
+
+        }
+        response = self.client.post(reverse('client-plans-share'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_post_data_to_many_query(self):
+        """Obtener resultado 400 demasiadas consultas."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "jefeti2@pympack.com.pe",
+                    "count": 10000
+                }
+            ]
+
+        }
+        response = self.client.post(reverse('client-plans-share'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_data_to_many_query2(self):
+        """Obtener resultado 400 demasiadas consultas x2."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "jefeti@pympack.com.pe",
+                    "count": 5
+                },
+                {
+                    "email_receiver": "jefeti2@pympack.com.pe",
+                    "count": 5
+                }
+            ]
+
+        }
+        response = self.client.post(reverse('client-plans-share'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_data_email_myself(self):
+        """Obtener resultado 200."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "clientejosue@mail.com",
+                    "count": 2
+                }
+            ]
+        }
+        response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class MakeEmpowerPlan(APITestCase):
+    """Prueba para facultar un plan"""
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+
+    def test_post_data_email(self):
+        """Obtener resultado 200."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "jefeti@pympack.com.pe",
+                },
+                {
+                    "email_receiver": "jefeti2@pympack.com.pe"
+                }
+            ]
+        }
+
+        response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_post_data_email_myself(self):
+        """Obtener resultado 200."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "clientejosue@mail.com"
+                }
+            ]
+        }
+        response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_data_email_already(self):
+        """email ya esta siento facultado con este plan."""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "cliente_no_existe@mail.com"
+                }
+            ]
+        }
+        response = self.client.post(reverse('client-plans-empower'),
+                                    format='json', data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_data_email_exists_already(self):
+        """email ya esta siento facultado con este plan. (cliente no existe)"""
+        data = {
+            "acquired_plan": 22,
+            "client":[
+                {
+                    "email_receiver": "cliente_extra@mail.com"
+                }
+            ]
+        }
+        response = self.client.post(reverse('client-plans-empower'), format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class CreatePlansNonBillable(APITestCase):
+    """Crearle planes no factuables a vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_plan']
+
+    def setUp(self):
+        """Setup."""
+        self.valid_payload = {
+            "quantity": 2,
+            "query_plans": 2,
+            "seller": 19,
+            "number_month": 6
+        }
+
+    def test_no_quantity(self):
+        """Sin Cantidad."""
+        data = self.valid_payload.copy()
+        data["quantity"] = ""
+        response = client.post(reverse('plans-nonbillable'),
+                               format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_query_plans(self):
+        """Sin plan de consulta."""
+        data = self.valid_payload.copy()
+        data["query_plans"] = ""
+        response = client.post(reverse('plans-nonbillable'),
+                               format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_seller(self):
+        """Sin vendedor."""
+        data = self.valid_payload.copy()
+        data["seller"] = ""
+        response = client.post(reverse('plans-nonbillable'),
+                               format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_number_month(self):
+        """Sin numero de mes."""
+        data = self.valid_payload.copy()
+        data["number_month"] = ""
+        response = client.post(reverse('plans-nonbillable'),
+                               format='json', data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_plans(self):
+        """Crearle planes no Facturables"""
+        data = self.valid_payload.copy()
+        response = client.post(reverse('plans-nonbillable'),
+                               format='json', data=data)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+
+class GetPromocionalPlans(APITestCase):
+    """Devolver  los  planes promocionales de un vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_promotional_plans']
+
+    def setUp(self):
+        """Setup."""
+        # credenciales de vendedor
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
+
+    def test_get_seller_plans(self):
+        """devolver todos los planes pertenecientes al vendedor."""
+        response = self.client.get(reverse('seller-plans-nonbillable'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetCheckEmailForOperationPlans(APITestCase):
+    """Devolver 404 si no existe, devuelve 200 si existe y 400 status si
+    no es valido para operacion."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        # credenciales de vendedor
+        self.valid_payload = {
+            "type_operation": 2,
+            "email_receiver": "jperez@mail.com",
+            "acquired_plan": 22,
+            'client_id':11
+        }
+
+    def test_get_check_no_exist(self):
+        """Get check if client exist in operation manage 404"""
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_check_exist(self):
+        """Get check if client exist in operation manage 200"""
+        self.valid_payload["email_receiver"] = "jefeti@pympack.com.pe"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_check_allready_no_exist(self):
+        """Get check if client exist in operation manage 400 no creado pero ya existe"""
+        self.valid_payload["email_receiver"] = "cliente_no_existe@mail.com"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_check_allready_exist(self):
+        """Get check if client exist in operation manage 400 creado y ya existe"""
+        self.valid_payload["email_receiver"] = "cliente_extra@mail.com"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_check_myself(self):
+        """Get check if client exist in operation manage 400 creado y ya existe"""
+        self.valid_payload["email_receiver"] = "clientejosue@mail.com"
+        response = client.get(reverse('client-email-check-operation'), self.valid_payload)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class UpdatePlanSelect(APITestCase):
+    """Prueba para actualizar el plan activo de un cliente"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ')
+
+    def test_delete_plan_empower(self):
+        """Borrar empower."""
+        data = {
+            'email_receiver': "cliente_extra@mail.com",
+            'acquired_plan': '22'
+        }
+
+        response = self.client.post(
+            reverse('plans-delete-empower'), data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
+class CheckPlanActive(APITestCase):
+    """Pruebas de chequear planes."""
+
+    fixtures = ['data', 'data2', 'data3', 'oauth2']
+
+    def setUp(self):
+        """Setup."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer OPwVhxW656ASCPCjjGwgrSTXcjzzUJ'
+        )
+
+    def test_check_status_plan(self):
+        """Chequea los estatus del plan."""
+        response = self.client.get(reverse('plans-status'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)

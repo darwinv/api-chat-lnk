@@ -3,12 +3,15 @@
 import json
 import threading
 import os
+import sys
 import boto3
-import uuid
 # paquetes de django
 from django.db.models import OuterRef, Subquery, F, Count
 from django.http import Http404, HttpResponse
+from django.utils.translation import ugettext_lazy as _
+from rest_framework import serializers
 # paquetes de terceros
+from api.models import Declinator
 from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, ListAPIView
@@ -28,16 +31,17 @@ from api.serializers.query import QuerySerializer, QueryListClientSerializer
 from api.serializers.query import QueryMessageSerializer
 from api.serializers.query import QueryDeriveSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
-
+from api.logger import manager
+logger = manager.setup_log(__name__)
 from api.serializers.query import ChatMessageSerializer, QueryDeclineSerializer
 from api.serializers.query import QueryResponseSerializer, ReQuerySerializer
-from api.serializers.query import QueryCalificationSerializer
+from api.serializers.query import QueryQualifySerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
-from api.utils.tools import s3_upload_file, remove_file, resize_img
+from api.utils.tools import s3_upload_file, remove_file, resize_img, get_body
 from api.utils.parameters import Params
-import sys
+from fcm.fcm import Notification
 
 
 class QueryListClientView(ListCreateAPIView):
@@ -91,9 +95,13 @@ class QueryListClientView(ListCreateAPIView):
             lista = list(serializer.data['message'].values())
             # Se actualiza la base de datos de firebase para el mensaje
             if 'test' not in sys.argv:
+                pyrebase.node_query(serializer.data["obj_query"],
+                                    serializer.data["query_id"],
+                                    serializer.data["room"])
+
                 pyrebase.chat_firebase_db(serializer.data["message"],
                                           serializer.data["room"])
-            # Se actualiza la base de datos de firebase listado
+            #  Se actualiza la base de datos de firebase listado
             # de sus especialidades
             if 'test' not in sys.argv:
                 pyrebase.categories_db(user_id, category,
@@ -111,6 +119,7 @@ class QueryListClientView(ListCreateAPIView):
             mess = Message.objects.filter(query=OuterRef("pk"))\
                                   .order_by('-created_at')[:1]
             # Luego se busca el titulo y su id de la consulta
+            specialist_id = serializer_tmp.data[0]['specialist']
 
             data_queries = Query.objects.values('id', 'title', 'status', 'specialist')\
                                         .annotate(
@@ -120,21 +129,42 @@ class QueryListClientView(ListCreateAPIView):
                                             date_at=Subquery(
                                                 mess.values('created_at')))\
                                         .filter(client=user_id,
-                                                specialist=serializer_tmp.data[0]['specialist'],
+                                                specialist=specialist_id,
                                                 status=1)\
                                         .annotate(count=Count('id'))\
                                         .order_by('-message__created_at')
-
             query_pending = PendingQueriesSerializer(data_queries, many=True)
             lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
+            # determino el total de consultas pendientes (status 1 o 2)
+            badge_count = Query.objects.filter(specialist=specialist_id,
+                                               status__lte=2).count()
+
             if 'test' not in sys.argv:
+                # crea data de notificacion push
+                body = get_body(lista[-1]["fileType"], lista[-1]["message"])
+                data_notif_push = {
+                    "title": serializer_tmp.data[0]['displayName'],
+                    "body": body,
+                    "sub_text": "",
+                    "ticker": serializer.data["obj_query"]["title"],
+                    "badge": badge_count,
+                    "icon": serializer_tmp.data[0]['photo'],
+                    "client_id": user_id,
+                    "category_id": category,
+                    "query_id": serializer.data["query_id"]
+
+                }
+                # crea nodo de listado de mensajes
                 pyrebase.createListMessageClients(serializer_tmp.data,
                                                   serializer.data["query_id"],
                                                   serializer.data["status"],
                                                   user_id,
-                                                  serializer_tmp.data[0]['specialist'],
+                                                  specialist_id,
                                                   queries_list=lista_d
                                                   )
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=specialist_id,
+                                           data=data_notif_push)
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
@@ -142,7 +172,7 @@ class QueryListClientView(ListCreateAPIView):
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             return Response(serializer.data, status.HTTP_201_CREATED)
         else:
-            # print(serializer.errors)
+            print(serializer.errors)
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
@@ -178,41 +208,64 @@ class QueryDetailSpecialistView(APIView):
                                              context={'specialist': spec})
         if serializer.is_valid():
             serializer.save()
+
             lista = list(serializer.data['message'].values())
             client_id = serializer.data["client_id"]
             category_id = serializer.data["category"]
-            # Actualizamos el nodo de mensajes segun su sala
+            cat = Category.objects.get(pk=category_id)
+
             if 'test' not in sys.argv:
+                # Actualizamos el nodo de mensajes segun su sala
                 pyrebase.chat_firebase_db(serializer.data["message"],
                                           serializer.data["room"])
                 # Actualizamos el listado de especialidades en Firebase
                 pyrebase.categories_db(client_id,
                                        category_id, lista[-1]["timeMessage"])
+
             # sala es el cliente_id y su la categoria del especialista
             sala = str(query.client.id) + '-' + str(category_id)
 
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
-            for li in lista:
-                if li['messageReference'] is not None and li['messageReference'] != 0:
-                    ms_ref = li['messageReference']
+            for row in lista:
+                if row['messageReference'] is not None and row['messageReference'] != 0:
+                    ms_ref = row['messageReference']
 
-            gp = GroupMessage.objects.get(message__id=ms_ref)
-            msgs = gp.message_set.all()
+            group = GroupMessage.objects.get(message__id=ms_ref)
+            msgs = group.message_set.all()
 
             if 'test' not in sys.argv:
-                pyrebase.update_status_group_messages(msgs, gp.status)
-            msgs_query = query.message_set.all()
+                pyrebase.update_status_group_messages(msgs, group.status)
+
+                pending_badge = Message.objects.filter(
+                    query__status=3, viewed=0,
+                    msg_type='a', query__client=client_id).count()
+                body = get_body(lista[-1]["fileType"], lista[-1]["message"])
+                data_fcm = {
+                    "title": cat.name,
+                    "body": body,
+                    "sub_text": cat.name,
+                    "ticker": query.title,
+                    "icon": cat.image,
+                    "badge": pending_badge,  # mensajes por ver
+                    "client_id":  query.client.id,
+                    "category_id": category_id,
+                    "query_id": query.id
+                }
+                Notification.fcm_send_data(user_id=client_id, data=data_fcm)
+
             requeries = query.available_requeries
             data_update = {
                 "status": query.status,
                 "availableRequeries": requeries
-                }
+            }
 
             if 'test' not in sys.argv:
-                pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                                     data=data_update)
+                pyrebase.update_status_query(query_id=query.id,
+                                             data=data_update,
+                                             room=serializer.data["room"])
+
             # actualizo el querycurrent del listado de mensajes
-            data = {'status': 3,
+            data = {'status': query.status,
                     'date': lista[-1]["timeMessage"],
                     'message': lista[-1]["message"]}
 
@@ -277,16 +330,16 @@ class QueryDetailClientView(APIView):
 
             if 'test' not in sys.argv:
                 pyrebase.update_status_group_messages(msgs, gp.status)
-            msgs_query = query.message_set.all()
-            requeries = lista[0]['query']['availableRequeries']
+            # import pdb; pdb.set_trace()
+            requeries = serializer.data['obj_query']['availableRequeries']
 
             data_update = {
                 "status": query.status,
                 "availableRequeries": requeries
                 }
             if 'test' not in sys.argv:
-                pyrebase.update_status_querymessages(data_msgs=msgs_query,
-                                                     data=data_update)
+                pyrebase.update_status_query(query.id, data_update,
+                                             serializer.data["room"])
             data = {'status': 2,
                     'date': lista[-1]["timeMessage"],
                     'message': lista[-1]["message"]
@@ -342,7 +395,7 @@ class QueryChatSpecialistView(ListAPIView):
         queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
                                           'query_id', 'query__client_id', 'message_reference', 'specialist_id', 'content_type', 'file_url')\
                           .annotate(title=F('query__title',), status=F('query__status',),
-                                    calification=F('query__calification',),
+                                    qualification=F('query__qualification',),
                                     category_id=F('query__category_id',))\
                           .filter(query__client_id=client, query__specialist_id=specialist)\
                           .order_by('-created_at')
@@ -382,7 +435,7 @@ class QueryChatClientView(ListCreateAPIView):
         queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
                                           'query_id', 'query__client_id', 'message_reference', 'specialist_id', 'content_type', 'file_url')\
                           .annotate(title=F('query__title',), status=F('query__status',),\
-                                    calification=F('query__calification',),\
+                                    qualification=F('query__qualification',),\
                            category_id=F('query__category_id',))\
                            .filter(query__client_id=client, query__category_id=category)\
                            .order_by('-created_at')
@@ -423,68 +476,87 @@ class QueryUploadFilesView(APIView):
         self.get_object(request, pk)
         # import pdb; pdb.set_trace()
         # Cargamos el listado de archivos adjuntos
-        msgs = request.data["message_id"].split(',')
+        # msgs = request.data["message_id"].split(',')
+        # print(request.data)
         files = request.FILES.getlist('file')
-        
+        if files:
+            arch = files
+        else:
+            data = request.data.dict()
+            arch = list(data.values())
+
         # Empezamos a subir cada archivo por hilo separado
         threads = []
         i = 0
-        for file in files:
-            print(msgs[i])
-            t = threading.Thread(target=self.upload, args=(file, msgs[i]))
+        for file in arch:
+            # print(msgs[i])
+            t = threading.Thread(target=self.upload, args=(file,))
             threads.append(t)
             i = i + 1
+
         for x in threads:
             x.start()
-        # # Wait for all of them to finish
+
+        # Wait for all of them to finish
         for x in threads:
             x.join()
 
         return HttpResponse(status=200)
 
-    def upload(self, file, msg_id):
+    def upload(self, file):    
         """Funcion para subir archivos."""
+
+        ms = None # Objeto mensajes
         resp = True  # variable bandera
         name_file, extension = os.path.splitext(file.name)
-        filename = str(uuid.uuid4())
-        name = filename + extension
-        # lo subimos a Amazon S3
-        url = s3_upload_file(file, name)
+        msg_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)            
 
-        if extension == '.mp4':
-            url_thumb = 'https://s3.amazonaws.com/linkup-photos/api/thumb-video-copy-thumb.jpg'
-            thumb = None
-        else:
+        try:
+            ms = Message.objects.get(pk=int(msg_id))            
+
+            # lo subimos a Amazon S3
+            url = s3_upload_file(file, file.name)
+            # generamos la miniatura
             thumb = resize_img(file, 256)
-
             if thumb:
-                name_file_thumb, extension_thumb = os.path.splitext(thumb.name)            
-                url_thumb = s3_upload_file(thumb, filename + '-thumb' + extension_thumb)
-                remove_file(thumb)            
+                name_file_thumb, extension_thumb = os.path.splitext(thumb.name)
+                url_thumb = s3_upload_file(thumb, name_file + '-thumb' + extension_thumb)
+                remove_file(thumb)
             else:
                 url_thumb = ""
 
-        # devolvemos el mensaje con su id correspondiente
-        ms = Message.objects.get(pk=int(msg_id))
-        ms.file_url = url
-        ms.file_preview_url = url_thumb
-        ms.save()
-        s3 = boto3.client('s3')
-        # Evaluamos si el archivo se subio a S3
-        try:
-            s3.head_object(Bucket='linkup-photos', Key=name)
-        except ClientError as e:
-            resp = int(e.response['Error']['Code']) != 404
-        # Si no se ha subido se actualiza el estatus en firebase
+            # Actualizamos el modelo mensaje
+            ms.file_url = url
+            ms.file_preview_url = url_thumb
+            ms.save()
+            s3 = boto3.client('s3')
+            # Evaluamos si el archivo se subio a S3
+            try:
+                s3.head_object(Bucket='linkup-photos', Key=file.name)
+            except ClientError as e:
+                resp = int(e.response['Error']['Code']) != 404
+
+        except Exception as e:
+            logger.error("subir archivo, error general, m_ID: {} - ERROR: {} ".format(msg_id, e))
+            resp = False
+        
 
         if resp is False:
-            pyrebase.mark_failed_file(room=ms.room, message_id=ms.id)
+            if 'test' not in sys.argv:
+                if ms:
+                    pyrebase.mark_failed_file(room=ms.room, message_id=ms.id)
+                    logger.error("file dont put, room:{} -m:{} ".format(ms.room, ms.id))
+                    print("con objeto error")
+                else:
+                    logger.error("file dont put, message_ID:{} ".format(msg_id))
+                    print("sin objeto error")
         else:
-            # Actualizamos el status en firebase
-            data = {"uploaded": 2, "fileUrl": url, "filePreviewUrl": url_thumb}
-            r = pyrebase.mark_uploaded_file(room=ms.room, message_id=ms.id,
-                                            data=data)
-            print(r)
+            if 'test' not in sys.argv:
+                # Actualizamos el status en firebase
+                data = {"uploaded": 2, "fileUrl": url, "filePreviewUrl": url_thumb}
+                r = pyrebase.mark_uploaded_file(room=ms.room, message_id=ms.id,
+                                                data=data)
+                print(r)
 
 
 class QueryMessageView(APIView):
@@ -526,14 +598,22 @@ class QueryAcceptView(APIView):
         if serializer.is_valid():
             serializer.save()
             if 'test' not in sys.argv:
+                room = query.message_set.last().room
                 pyrebase.updateStatusQueryAccept(specialist,
-                                                 query.client.id, pk)
-            return Response(serializer.data, status.HTTP_200_OK)
+                                                 query.client.id, pk,
+                                                 room)
+
+            # Traemos todas las consultas pendientes por tomar accion por asignadas
+            # a este especialista
+            msgs_pendings = Query.objects.filter(status=1, specialist=specialist)
+
+            return Response({'badge_number': len(msgs_pendings)}, status.HTTP_200_OK)
+
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class DeclineRequeryView(APIView):
-    """Vista Declinar Reconsulta"""
+    """Vista Declinar Reconsulta."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsClient]
 
@@ -546,7 +626,9 @@ class DeclineRequeryView(APIView):
         for query in queries:
             msgs = query.message_set.all()
             # import pdb; pdb.set_trace()
-            pyrebase.update_status_querymessages(msgs, {"status": 4})
+            if 'test' not in sys.argv:
+                pyrebase.update_status_query(query.id, {"status": 4},
+                                             msgs.last().room)
             # import pdb; pdb.set_trace()
             for ms in msgs:
                 GroupMessage.objects.filter(message__id=ms.id).update(status=2)
@@ -588,7 +670,7 @@ class QueryDeriveView(APIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
-class QueryDeclineView(APIView):
+class QueryDeclineView(ListAPIView):
     """Vista Derivar Query"""
 
     authentication_classes = (OAuth2Authentication,)
@@ -615,6 +697,7 @@ class QueryDeclineView(APIView):
         context["status"] = 1
         context["specialist"] = main_specialist
         context["specialist_declined"] = specialist
+
         serializer = QueryDeclineSerializer(query, data=request.data,
                                             context=context)
 
@@ -628,8 +711,18 @@ class QueryDeclineView(APIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
-class SetCalificationView(APIView):
-    """Vista colocar calification."""
+    def get(self, request, pk):
+        """Obtener la lista con todos los planes del cliente."""
+        declinators = Declinator.objects.filter(query=pk).values('message',
+            'specialist__first_name','specialist__last_name')
+
+        serializer = QueryDeclineSerializer(declinators, many=True)
+
+        return Response(serializer.data)
+
+
+class SetQualificationView(APIView):
+    """Vista colocar calificacion ."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsClient]
 
@@ -646,12 +739,12 @@ class SetCalificationView(APIView):
         """Actualizar consulta."""
         query = self.get_object(pk)
         data = request.data
-        serializer = QueryCalificationSerializer(query, data=data)
+        serializer = QueryQualifySerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
-            msgs = query.message_set.all()
             if 'test' not in sys.argv:
-                pyrebase.update_status_querymessages(msgs, serializer.data)
+                room = query.message_set.last().room
+                pyrebase.update_status_query(query.id, serializer.data, room)
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -660,17 +753,38 @@ class ReadPendingAnswerView(APIView):
     """Vista de lectura de respuestas no vistos del cliente."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsClient]
+    required = _("required")
+    def get_category(self, categ):
+        """Obtener objeto."""
+        try:
+            obj = Category.objects.get(pk=categ)
+            return obj
+        except Category.DoesNotExist:
+            raise serializers.ValidationError({"category": [str(categ)+' no existe']})
 
     def post(self, request):
         """Enviar data."""
         data = request.data
         client_id = Operations.get_id(self, request)
+
+        if "category" in data:
+            category = int(data["category"])
+        else:
+            raise serializers.ValidationError({'category': [self.required]})
+
+        # Traer los mensajes que no han sido leidos y son respuestass del especialista
         mesgs_res = Message.objects.filter(
-            viewed=0, msg_type='a', query__client=client_id,
-            query__category=data["category"])
-        if 'test' not in sys.argv:
-            pyrebase.set_message_viewed(mesgs_res)
-        r = mesgs_res.update(viewed=1)
-        if 'test' not in sys.argv:
-            pyrebase.categories_db(client_id, data["category"])
-        return Response({'resp': r}, status.HTTP_200_OK)
+            viewed=False, msg_type='a', query__client=client_id,
+            query__category=category)
+        if mesgs_res:
+            mesgs_res.update(viewed=1)
+
+            # if 'test' not in sys.argv: #NO ACTUALIZAMOS CHAT
+            #     pyrebase.set_message_viewed(mesgs_res)
+            if 'test' not in sys.argv:
+                pyrebase.categories_db(client_id, category)
+
+        msgs_pendings = Message.objects.filter(
+            viewed=False, msg_type='a', query__client=client_id)
+
+        return Response({'badge_number': len(msgs_pendings)}, status.HTTP_200_OK)

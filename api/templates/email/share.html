@@ -1,0 +1,12 @@
+{% extends 'email/base.html' %}
+{% load i18n %}
+{% block content_mail %}
+  <h1>{% trans "LinkUp Give you Congratulations!"|title %}</h1>
+  <div style="text-align: justify;">
+    <p>
+      {% trans "Please click the next link for get your plan share" %} 
+      <br>
+      <strong>{{link}}</strong>
+    </p>
+  </div>
+{% endblock content_mail %}

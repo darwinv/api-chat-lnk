@@ -510,5 +510,289 @@
       "description": "Contratacion de especialista",
       "created_at": "2018-02-26T23:13:47.490Z"
     }
+  },
+  {
+    "model": "api.clasification",
+    "pk": 1,
+    "fields": {
+      "name": "Regulares",
+      "created_at": "2018-02-08T14:39:12Z"
+    }
+  },
+  {
+    "model": "api.clasification",
+    "pk": 2,
+    "fields": {
+      "name": "Corporativos",
+      "created_at": "2018-02-08T14:39:12Z"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 1,
+    "fields":{
+      "name":"Nunca ha tenido ningún problema"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 2,
+    "fields":{
+      "name":"Resuelve sus problemas sin ayuda de nadie"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 3,
+    "fields":{
+      "name":"Desconfía de la autenticidad de los Especialistas de LinkUp"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 4,
+    "fields":{
+      "name":"Requiere conocer la identidad del Especialista con el que trate"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 5,
+    "fields":{
+      "name":"Solicita conocer de manera presencial al Especialista antes de efectuarle consultas y/o contratar sus servicios"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 6,
+    "fields":{
+      "name":"Se le hace difícil el uso de dispositivos móviles"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 7,
+    "fields":{
+      "name":"Desconfía de la veracidad de los servicios que ofrece LinkUp"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 8,
+    "fields":{
+      "name":"El servicio le parece caro"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 9,
+    "fields":{
+      "name":"El tiempo de respuesta de consultas le parece largo"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 10,
+    "fields":{
+      "name":"Prefiere aplicaciones OnLine"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 11,
+    "fields":{
+      "name":"Ha tenido mala experiencia con este tipo de servicios"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 12,
+    "fields":{
+      "name":"Va a pedir referencias de LinkUp antes de tomar una decisión"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 13,
+    "fields":{
+      "name":"Considera necesario consultar la utilidad de los servicios que le ofrece LinkUp antes de decidir"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 14,
+    "fields":{
+      "name":"Tiene un Estudio de Abogados que lo asesora"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 15,
+    "fields":{
+      "name":"Se asesora para todo con un Abogado de su confianza"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 16,
+    "fields":{
+      "name":"Resuelve los problemas que se le presentan con su Contador"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 17,
+    "fields":{
+      "name":"Solicita a familiar o amigo le recomiende un Profesional cuando tiene un problema puntual"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 18,
+    "fields":{
+      "name":"No encuentra las Especialidades que le gustarían"
+    }
+  },
+  {
+    "model": "api.objection",
+    "pk": 19,
+    "fields":{
+      "name":"Solicita visita más adelante"
+    }
+  },
+  {
+  "model": "api.queryplans",
+  "pk": 1,
+  "fields": {
+    "name": "Express",
+    "query_quantity": 1,
+    "validity_months": 1,
+    "maximum_response_time": 24,
+    "price": "150.0000",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 1
   }
+},
+{
+  "model": "api.queryplans",
+  "pk": 2,
+  "fields": {
+    "name": "Express Duo",
+    "query_quantity": 2,
+    "validity_months": 2,
+    "maximum_response_time": 24,
+    "price": "300.0000",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 1
+  }
+},
+{
+  "model": "api.queryplans",
+  "pk": 3,
+  "fields": {
+    "name": "Minipack",
+    "query_quantity": 6,
+    "validity_months": 2,
+    "maximum_response_time": 24,
+    "price": "900.0000",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 1
+  }
+},
+{
+  "model": "api.queryplans",
+  "pk": 4,
+  "fields": {
+    "name": "Polypack",
+    "query_quantity": 12,
+    "validity_months": 3,
+    "maximum_response_time": 24,
+    "price": "1500.0000",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 1
+  }
+},
+{
+  "model": "api.queryplans",
+  "pk": 5,
+  "fields": {
+    "name": "Multipack",
+    "query_quantity": 20,
+    "validity_months": 4,
+    "maximum_response_time": 24,
+    "price": "2500.0000",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 1
+  }
+},
+{
+  "model": "api.queryplans",
+  "pk": 6,
+  "fields": {
+    "name": "Fullpack",
+    "query_quantity": 36,
+    "validity_months": 6,
+    "maximum_response_time": 24,
+    "price": "4500.0000",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 1
+  }
+},
+{
+  "model": "api.queryplans",
+  "pk": 7,
+  "fields": {
+    "name": "Emprendedor",
+    "query_quantity": 150,
+    "validity_months": 6,
+    "maximum_response_time": 24,
+    "price": "15000.0000",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 2
+  }
+},
+{
+  "model": "api.queryplans",
+  "pk": 8,
+  "fields": {
+    "name": "Lider",
+    "query_quantity": 300,
+    "validity_months": 6,
+    "maximum_response_time": 24,
+    "price": "30000.0000",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 2
+  }
+},
+{
+  "model": "api.queryplans",
+  "pk": 9,
+  "fields": {
+    "name": "Emperador",
+    "query_quantity": 900,
+    "validity_months": 12,
+    "maximum_response_time": 24,
+    "price": "90000.0000",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": true,
+    "product_type": 1,
+    "clasification": 2
+  }
+}
 ]

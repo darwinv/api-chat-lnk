@@ -12,7 +12,7 @@ client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
 
 class CreateNaturalContact(APITestCase):
-    """Prueba de Registro de Contacto Natural."""
+    """Prueba de Registro de Contacto Natural No Efectivo."""
 
     fixtures = ['data', 'data2', 'data3', 'test_contact']
 
@@ -24,9 +24,10 @@ class CreateNaturalContact(APITestCase):
         self.valid_payload = {
             'first_name': 'darwin',
             'last_name': 'vasquez',
-            'type_contact': 'n',
+            'type_contact': 2,
+            'type_client': 'n',
             'civil_state': 's',
-            'birthdate': '2017-09-19',
+            'birthdate': '1990-09-19',
             "address": {
                 "street": "esteban camere",
                 "department": 1,
@@ -36,7 +37,7 @@ class CreateNaturalContact(APITestCase):
             'sex': 'm',
             'document_type': '2',
             'document_number': '144013012',
-            'email': 'darwin.vasqz@gmail.com',
+            'email_exact': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
             'cellphone': '921471559',
             'activity_description': 'Loremp iptsum',
@@ -44,12 +45,13 @@ class CreateNaturalContact(APITestCase):
             'institute': 'UNEFA',
             'profession': "Administrador",
             'ocupation': 1,
+            "objection": [1,2],
             "latitude": "-77.0282400",
             "longitude": "-12.0431800",
             'about': 'iptsum aabout',
-            'objection': 1,
             'seller': 2,
-            'nationality': 1
+            'nationality': 1,
+            'residence_country': 1
         }
 
     def test_no_firstname(self):
@@ -167,7 +169,7 @@ class CreateNaturalContact(APITestCase):
     def test_invalid_email(self):
         """Solicitud invalida por email incorrecto."""
         data = self.valid_payload
-        data['email'] = 'asdasd'
+        data['email_exact'] = 'asdasd'
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -178,13 +180,13 @@ class CreateNaturalContact(APITestCase):
     def test_no_email(self):
         """Solicitud invalida por no enviarl el email."""
         data = self.valid_payload
-        data["email"] = ""
+        data["email_exact"] = ""
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        del data["email"]
+        del data["email_exact"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -407,23 +409,23 @@ class CreateNaturalContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_seller(self):
-        """Solicitud invalida por no enviar vendedor."""
-        data = self.valid_payload
-        data["seller"] = ""
-        response1 = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        del data["seller"]
-        response = self.client.post(
-            reverse('contacts'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    # def test_no_seller(self):
+    #     """Solicitud invalida por no enviar vendedor."""
+    #     data = self.valid_payload
+    #     data["seller"] = ""
+    #     response1 = self.client.post(
+    #         reverse('contacts'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     del data["seller"]
+    #     response = self.client.post(
+    #         reverse('contacts'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_objection(self):
         """Solicitud invalida por no enviar el tipo de objecion."""
@@ -456,7 +458,7 @@ class CreateNaturalContact(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):
@@ -472,7 +474,7 @@ class CreateNaturalContact(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_unique_dni(self):
@@ -483,7 +485,7 @@ class CreateNaturalContact(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        data1["username"], data1["email"] = 'jesus', 'jesus@mail.com'
+        data1["username"], data1["email_exact"] = 'jesus', 'jesus@mail.com'
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data1),
@@ -492,15 +494,40 @@ class CreateNaturalContact(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_natural_contact(self):
-        """Solicitud valida."""
+    def test_create_non_effective(self):
+        """Crear conctacto no efectivo."""
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_send_other_objection(self):
+        """Enviar otra razon."""
+        data = self.valid_payload
+        data["other_objection"] = "Otra  razon"
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_effective(self):
+        """Crear conctacto efectivo."""
+        self.valid_payload.pop('objection')
+        self.valid_payload["type_contact"] = 1
+        # registro como usuario tambien
+        self.valid_payload["password"] = '123456'
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
 
 
 # Prueba para verificar la insercion de cliente juridico
@@ -516,10 +543,11 @@ class CreateBussinessContact(APITestCase):
         self.valid_payload = {
             "business_name": 'Alpanet',
             "commercial_reason": "Alpanet CA",
-            'type_contact': 'b',
+            'type_contact': 2,
+            'type_client': 'b',
             'document_type': '2',
             'document_number': '144013012',
-            'email': 'darwin.vasqz@gmail.com',
+            'email_exact': 'darwin.vasqz@gmail.com',
             "ruc": "19231299",
             'economic_sector': 1,
             'activity_description': 'computers and programs',
@@ -535,12 +563,13 @@ class CreateBussinessContact(APITestCase):
             "latitude": "-77.0282400",
             "longitude": "-12.0431800",
             "seller": 2,
+            "objection": [1, 2],
             "agent_firstname": "Daniel",
             "agent_lastname": "Molina",
             'position': 'manager',
             'ciiu': 2,
             'nationality': 1,
-            'objection': 1
+            'residence_country': 1
         }
 
     def test_no_business_name(self):
@@ -638,14 +667,14 @@ class CreateBussinessContact(APITestCase):
     def test_no_email(self):
         """Solicitud invalida por no enviar el email o enviarlo vacio."""
         data = self.valid_payload
-        data['email'] = None
+        data['email_exact'] = None
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
-        del data["email"]
+        del data["email_exact"]
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -657,7 +686,7 @@ class CreateBussinessContact(APITestCase):
     def test_invalid_email(self):
         """Solicitud invalida por email incorrecto."""
         data = self.valid_payload
-        data['email'] = 'asdasd'
+        data['email_exact'] = 'asdasd'
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(data),
@@ -706,7 +735,7 @@ class CreateBussinessContact(APITestCase):
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
-        # import pdb; pdb.set_trace()
+
         data["address"] = ""
         response1 = self.client.post(
             reverse('contacts'),
@@ -805,7 +834,7 @@ class CreateBussinessContact(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        data1["username"], data1["email"] = 'jesus', 'jesus@mail.com'
+        data1["username"], data1["email_exact"] = 'jesus', 'jesus@mail.com'
         response1 = self.client.post(
             reverse('contacts'),
             data=json.dumps(data1),
@@ -842,11 +871,111 @@ class CreateBussinessContact(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_create_busines_client(self):
+    def test_no_latitude(self):
+        """Solicitud invalida por no enviar latitud del contacto."""
+        data = self.valid_payload
+        data["latitude"] = ""
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["latitude"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_longitude(self):
+        """Solicitud invalida por no enviar longitud del contacto."""
+        data = self.valid_payload
+        data["longitude"] = ""
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["longitude"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    # def test_no_seller(self):
+    #     """Solicitud invalida por no enviar vendedor."""
+    #     data = self.valid_payload
+    #     data["seller"] = ""
+    #     response1 = self.client.post(
+    #         reverse('contacts'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     del data["seller"]
+    #     response = self.client.post(
+    #         reverse('contacts'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_objection(self):
+        """Solicitud invalida por no enviar el tipo de objecion."""
+        data = self.valid_payload
+        data["objection"] = ""
+        response1 = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data["objection"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_busines_non_effective(self):
         """Crea cliente juridico de manera exitosa."""
         response = self.client.post(
             reverse('contacts'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_effective(self):
+        """Crear conctacto efectivo."""
+        self.valid_payload.pop('objection')
+        self.valid_payload["type_contact"] = 1
+        # registro como usuario tambien
+        self.valid_payload["password"] = '123456'
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class GetObjections(APITestCase):
+    """Devolver listado de objeciones."""
+
+    fixtures = ['data', 'data2', 'data3']
+
+    def setUp(self):
+        pass
+
+    def test_get_all_objectios(self):
+        """Get objections."""
+        response = client.get(reverse('objections'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
