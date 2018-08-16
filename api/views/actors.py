@@ -329,7 +329,7 @@ from api.utils import tools
 from api.pyrebase import chosen_plan
 from api.serializers.plan import QueryPlansAcquiredSerializer
 
-def give_plan_new_client(client_id):
+def give_plan_new_client(client_id, is_chosen = True):
     """OJO."""
     """FUNCION CREADA PARA OTORGAR PLANES A CLIENTES NUEVOS"""
     """ESTA FUNCION DEBE SER BORRADA DESPUES DE TENER EL MODULO DE COMPRAS"""
@@ -375,7 +375,7 @@ def give_plan_new_client(client_id):
     sale.total_amount = query_plans.price
     sale.reference_number = 'CD1004'
     sale.description = 'Test Venta'
-    sale.is_fee = '1'
+    sale.is_fee = False
     sale.client_id = client_id
     sale.save()
 
@@ -385,14 +385,14 @@ def give_plan_new_client(client_id):
     saleDetail.pin_code = tools.ramdon_generator(6)
     saleDetail.is_billable = True
     saleDetail.contract_id = None
-    saleDetail.product_type_id = '1'
+    saleDetail.product_type_id = product_type.id
     saleDetail.sale_id = sale.id
     saleDetail.save()
 
     queryPlansAcquired.expiration_date = '2019-04-09'
-    queryPlansAcquired.validity_months = '6'
+    queryPlansAcquired.validity_months = query_plans.validity_months
     queryPlansAcquired.available_queries = query_plans.query_quantity
-    queryPlansAcquired.activation_date = None
+    queryPlansAcquired.activation_date = datetime.now()
     queryPlansAcquired.is_active = True
     queryPlansAcquired.available_requeries = 1
     queryPlansAcquired.maximum_response_time = query_plans.maximum_response_time
@@ -410,7 +410,7 @@ def give_plan_new_client(client_id):
     queryPlansClient.status = 1
     queryPlansClient.acquired_plan_id = queryPlansAcquired.id
     queryPlansClient.client_id = client_id
-    queryPlansClient.is_chosen = True
+    queryPlansClient.is_chosen = is_chosen
     queryPlansClient.save()
 
     plan_chosen = get_query_set_plan()

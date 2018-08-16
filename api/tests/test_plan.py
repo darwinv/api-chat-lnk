@@ -637,7 +637,7 @@ class UpdatePlanSelect(APITestCase):
 class CheckPlanActive(APITestCase):
     """Pruebas de chequear planes."""
 
-    fixtures = ['data', 'data2', 'data3', 'oauth2']
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
 
     def setUp(self):
         """Setup."""
