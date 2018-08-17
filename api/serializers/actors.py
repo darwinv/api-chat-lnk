@@ -363,7 +363,6 @@ class ClientSerializer(serializers.ModelSerializer):
                 self.validate_natural_client(data)
                 # el codigo sera el numero de documento
                 self.context["temp_code"] = data["document_number"]
-
             if data['type_client'] == 'b':
                 self.validate_bussines_client(data)
                 # el codigo sera el RUC
@@ -379,7 +378,6 @@ class ClientSerializer(serializers.ModelSerializer):
         """Redefinido metodo de crear cliente."""
         CODE_CLIENT = "C"
         country_peru = Countries.objects.get(name="Peru")
-        # import pdb; pdb.set_trace()
         validated_data['code'] = CODE_CLIENT + str(
                                                 self.context.get('temp_code'))
         # Verificamos si reside en el extranjero, se elimina direccion
@@ -406,7 +404,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """Redefinido metodo de actualizar cliente."""
-        country_peru = Countries.objects.get(name="Peru")        
+        country_peru = Countries.objects.get(name="Peru")
 
         instance.ciiu = validated_data.get('ciiu', instance.ciiu)
         instance.nick = validated_data.get('nick', instance.nick)
@@ -996,6 +994,18 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """Validate."""
+        required = _("required")
+        # si reside en peru la direccion es obligatoria.
+        if data["residence_country"] == Countries.objects.get(name="Peru"):
+            if "address" not in data or not data["address"]:
+                raise serializers.ValidationError({"address": [required]})
+        else:
+            if ("foreign_address" not in data or
+                not data["foreign_address"] or
+                    data["foreign_address"] is None):
+                raise serializers.ValidationError(
+                         {"foreign_address": [required]})
+
         if data["type_contact"] == 2:
             if 'objection' not in data and 'other_reason' not in data:
                 raise serializers.ValidationError(
@@ -1007,15 +1017,21 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Redefinido metodo de crear contacto."""
-        data_address = validated_data.pop('address')
+        country_peru = Countries.objects.get(name="Peru")
+        # Verificamos si reside en el extranjero, se elimina direccion
+        if validated_data["residence_country"] == country_peru:
+            data_address = validated_data.pop('address')
+            address = Address.objects.create(**data_address)
+            validated_data['address'] = address
+        else:
+            if 'address' in validated_data:
+                del validated_data['address']
+
         if 'objection' in validated_data:
             objection_list = validated_data.pop('objection')
 
         if 'password' in validated_data:
             password = validated_data.pop('password')
-
-        address = Address.objects.create(**data_address)
-        validated_data['address'] = address
 
         instance = self.Meta.model(**validated_data)
         # creo el listado de objeciones si es no efectivo
@@ -1041,7 +1057,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
                 data_client['profession'] = ''
                 data_client['ocupation'] = None
             serializer_client = ClientSerializer(data=data_client)
-            
+
             if serializer_client.is_valid():
                 serializer_client.save()
                 instance.save()
@@ -1071,7 +1087,7 @@ class SellerContactNaturalSerializer(BaseSellerContactSerializer):
     sex_name = serializers.SerializerMethodField()
     ocupation = serializers.ChoiceField(choices=c.client_ocupation)
     ocupation_name = serializers.SerializerMethodField()
-    address = AddressSerializer()
+    address = AddressSerializer(required=False)
     birthdate = serializers.DateField(required=True)
     photo = serializers.CharField(read_only=True)
     objection_name = serializers.SerializerMethodField()
@@ -1100,7 +1116,8 @@ class SellerContactNaturalSerializer(BaseSellerContactSerializer):
                   'profession', 'address', 'level_instruction', 'latitude',
                   'longitude', 'seller', 'objection_name', 'nationality',
                   'nationality_name', 'level_instruction_name', 'photo',
-                  'residence_country', 'password', 'other_objection'
+                  "foreign_address", 'residence_country',
+                  'password', 'other_objection'
                   )
         # extra_kwargs = {
         #         'objection': {'write_only': True},
@@ -1151,7 +1168,7 @@ class SellerContactBusinessSerializer(BaseSellerContactSerializer):
                                               allow_blank=False,
                                               allow_null=False)
     email = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContact.objects.all())])
-    address = AddressSerializer()
+    address = AddressSerializer(required=False)
     ruc = serializers.CharField(required=True, validators=[UniqueValidator(queryset=SellerContact.objects.filter(type_client='b'))])
     latitude = serializers.CharField(required=True, allow_blank=False)
     longitude = serializers.CharField(required=True, allow_blank=False)
@@ -1188,7 +1205,7 @@ class SellerContactBusinessSerializer(BaseSellerContactSerializer):
                   'objection_name', 'nationality', 'type_contact_name',
                   'nationality_name', 'photo', 'agent_firstname', 'objection',
                   'agent_lastname', 'residence_country', 'password', 'ciiu',
-                  'other_objection'
+                  'other_objection', "foreign_address"
                   )
 
     def get_nationality_name(self, obj):

@@ -247,6 +247,7 @@ class SellerContact(models.Model):
                                           on_delete=models.PROTECT, null=True)
     nationality = models.ForeignKey(Countries, on_delete=models.PROTECT,
                                     default=1)
+    foreign_address = models.CharField(max_length=200, blank=True, null=True)
     residence_country = models.ForeignKey(Countries, null=True,
                                           on_delete=models.PROTECT,
                                           related_name="residence_contact",

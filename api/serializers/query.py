@@ -544,10 +544,9 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 
     def get_message_reference(self, obj):
         if obj['message_reference']:
-            ref = Message.objects.get(pk = obj['message_reference'])
+            ref = Message.objects.get(pk=obj['message_reference'])
             message = ChatMessageReferenceSerializer(ref)
             return message.data
-
         return None
 
 
