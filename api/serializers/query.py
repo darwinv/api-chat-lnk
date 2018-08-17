@@ -82,7 +82,7 @@ class ListMessageSerializer(serializers.ModelSerializer):
                 "message": obj.message, "messageType": obj.msg_type,
                 "messageReference": reference_id,
                 "groupStatus": obj.group.status, "groupId": obj.group.id,
-                "timeMessage": time, "read": obj.viewed, "user_id": user_id
+                "timeMessage": time, "user_id": user_id
                 }
 
 # Serializer para detalle de consulta
@@ -351,10 +351,9 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
 
     def update(self, instance, validated_data):
         """Update."""
-        # import pdb; pdb.set_trace()
         if instance.available_requeries == 0:
             raise serializers.ValidationError(
-                {"non_field_errors":_("You don't have available requeries")})
+                {"non_field_errors": _("You don't have available requeries")})
 
         data_messages = validated_data.pop('message')
         self.context["size_msgs"] = len(data_messages)

@@ -54,7 +54,7 @@ class ListQueryMessagesByCategory(APITestCase):
         """Estatus 200."""
         category = 8
         response = self.client.get(reverse('query-chat-client', kwargs={'pk': category}))
-        
+
         # self.assertEqual(response.data['results'][0]['message']['viewed'], False)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -116,7 +116,7 @@ class CreateQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_category(self):
@@ -128,7 +128,7 @@ class CreateQuery(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_message(self):
@@ -155,7 +155,7 @@ class CreateQuery(APITestCase):
     def test_no_availablequeries(self):
         """Solicitud Invalida, no posee consultas."""
         QueryPlansAcquired.objects.filter(queryplansclient__client=5).update(available_queries=0)
-        
+
         response = self.client.post(
             reverse('queries-client'),
             data=json.dumps(self.valid_payload),
@@ -250,14 +250,14 @@ class PutFilesToQuery(APITestCase):
     #     # Uploading File Image
     #     dir_img = os.path.join(TEST_URL, 'image.png')
     #     # file = open(dir_img)   # str.encode(dir_img)
-    #     
+    #
     #     with open(dir_img, "rb") as fp:
     #         f = fp.read()
-    #     
+    #
     #     imgn = SimpleUploadedFile("image.png",
     #                               f, content_type="image/png")
     #
-    #     
+    #
     #     response1 = self.client.put(
     #         reverse('query-upload-files', kwargs={'pk': 1000}),
     #         data={'message_id': ms.id, 'file': imgn}, format='multipart')
@@ -451,8 +451,8 @@ class ReQuery(APITestCase):
     def test_no_requeries(self):
         """No reconsultas disponibles."""
         query = Query.objects.get(pk=1000)
-        query.acquired_plan.available_requeries = 0
-        query.acquired_plan.save()
+        query.available_requeries = 0
+        query.save()
         response = self.client.put(reverse('query-client',
                                            kwargs={'pk': 1000}),
                                    data=json.dumps(self.valid_payload),
@@ -617,12 +617,12 @@ class GetDeclineListQuery(APITestCase):
 
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
-        
+
         response = self.client.get(reverse('query-decline', kwargs={'pk': 3}),
                                    content_type='application/json')
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
 
     def test_no_get_query_decline(self):
         """Obtener resultado."""
@@ -630,7 +630,7 @@ class GetDeclineListQuery(APITestCase):
 
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
-        
+
         response = self.client.get(reverse('query-decline', kwargs={'pk': 333}),
                                    content_type='application/json')
         self.assertEqual(not response.data, True)

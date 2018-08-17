@@ -776,6 +776,7 @@ class ReadPendingAnswerView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsClient]
     required = _("required")
+    
     def get_category(self, categ):
         """Obtener objeto."""
         try:
