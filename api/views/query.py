@@ -21,7 +21,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from channels import Group
 # llamadas de nuestro propio proyecto
 from api import pyrebase
-from api.models import Query, Message, Category, Specialist, Client
+from api.models import Query, Message, Category, Specialist, Client, User
 from api.models import GroupMessage, SpecialistMessageList_sp
 from api.permissions import IsAdminOrClient, IsAdminOrSpecialist, IsSpecialist
 from api.permissions import IsAdminReadOrSpecialistOwner, IsClient
@@ -152,7 +152,6 @@ class QueryListClientView(ListCreateAPIView):
                     "client_id": user_id,
                     "category_id": category,
                     "query_id": serializer.data["query_id"]
-
                 }
                 # crea nodo de listado de mensajes
                 pyrebase.createListMessageClients(serializer_tmp.data,
@@ -299,6 +298,7 @@ class QueryDetailClientView(APIView):
         if not user_id:
             raise Http404
         data = request.data
+        # import pdb; pdb.set_trace()
         # No utilizamos partial=True, ya que solo actualizamos mensaje
         serializer = ReQuerySerializer(query, data)
         if serializer.is_valid():
@@ -327,9 +327,31 @@ class QueryDetailClientView(APIView):
 
             gp = GroupMessage.objects.get(message__id=ms_ref)
             msgs = gp.message_set.all()
-
             if 'test' not in sys.argv:
+                us = User.objects.get(pk=user_id)
+                if us.nick == '':
+                    displayname = us.first_name + ' ' + us.last_name
+                else:
+                    displayname = us.nick
+
+                badge_count = Query.objects.filter(specialist=specialist_id, status__lte=2).count()
+                # crea data de notificacion push
+                body = get_body(lista[-1]["fileType"], lista[-1]["message"])
+                data_notif_push = {
+                    "title": displayname,
+                    "body": body,
+                    "sub_text": "",
+                    "ticker": serializer.data["obj_query"]["title"],
+                    "badge": badge_count,
+                    "icon": us.photo,
+                    "client_id": user_id,
+                    "category_id": category_id,
+                    "query_id": serializer.data["query_id"]
+                }
                 pyrebase.update_status_group_messages(msgs, gp.status)
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=specialist_id,
+                                           data=data_notif_push)
             # import pdb; pdb.set_trace()
             requeries = serializer.data['obj_query']['availableRequeries']
 
