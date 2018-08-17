@@ -351,9 +351,10 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
 
     def update(self, instance, validated_data):
         """Update."""
-        if instance.acquired_plan.available_requeries == 0:
+        # import pdb; pdb.set_trace()
+        if instance.available_requeries == 0:
             raise serializers.ValidationError(
-                _("You don't have available reconsults"))
+                {"non_field_errors":_("You don't have available requeries")})
 
         data_messages = validated_data.pop('message')
         self.context["size_msgs"] = len(data_messages)
