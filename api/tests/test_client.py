@@ -1205,6 +1205,7 @@ class UpdateBunissesClient(APITestCase):
         data = self.valid_payload
         data["country"] = "2"
         data["foreign_address"] = "San antonio del Tachira"
+        
         response = client.put(
             reverse('client-detail', args=(11,)),
             data=json.dumps(data),
@@ -1360,7 +1361,7 @@ class SendRecoveryCode(APITestCase):
 
     def test_gest_user_by_code_recovery(self):
         # get API response
-        data = {'email':'jefeti@pympack.com.pe'}
+        data = {'email':'jefeti@pympack.com.pe'}        
         response = client.post(reverse('send-code-password'), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

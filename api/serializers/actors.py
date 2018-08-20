@@ -434,7 +434,9 @@ class ClientSerializer(serializers.ModelSerializer):
         required = _("required")
 
         # si reside en peru la direccion es obligatoria.
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
+        if not "residence_country" in data:
+            raise serializers.ValidationError({"residence_country": [required]})
+        elif data["residence_country"] == Countries.objects.get(name="Peru"):
             if "address" not in data or not data["address"]:
                 raise serializers.ValidationError({"address": [required]})
         else:
