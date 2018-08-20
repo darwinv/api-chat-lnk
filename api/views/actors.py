@@ -140,7 +140,10 @@ class SendCodePassword(APIView):
         if 'test' not in sys.argv:
             mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña", 
                 to=email, template='email/send_code')
-        return Response(mail.sendmail(args=data))
+            response = mail.sendmail(args=data)
+        else:
+            response = None
+        return Response(response)
 
 class ValidCodePassword(APIView):
     """Actualizar Contraseña de Usuario (uso para dev)."""
@@ -245,7 +248,6 @@ class UpdatePasswordUserView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
@@ -337,7 +339,6 @@ def give_plan_new_client(client_id, is_chosen = True):
     saleDetail = SaleDetail()
     queryPlansAcquired = QueryPlansAcquired()
     queryPlansClient = QueryPlansClient()
-
 
     try:
         product_type = ProductType.objects.get(pk=1)

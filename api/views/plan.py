@@ -908,11 +908,11 @@ class PlansStatus(APIView):
 
     def get(self, request):
         """Devolver Planes."""
+
         user_id = Operations.get_id(self, request)
         qs = QueryPlansAcquired.objects.filter(queryplansclient__client=user_id)
         plans = PlanStatusSerializer(qs)
         return Response(plans.data)
-
 
 
 class PlansNonBillableSellerView(APIView):
