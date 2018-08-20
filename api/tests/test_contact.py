@@ -90,6 +90,20 @@ class CreateNaturalContact(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_foreign_address(self):
+        """Solicitud valida con dirrecion de otro pais."""
+        data = self.valid_payload
+        data["residence_country"] = 4
+        del data["address"]
+        # se agrega la direccion para ese pais
+        data["foreign_address"] = "lorem pias ipmasjdn kjajsdk iasjd"
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_no_type_contact(self):
         """Solicitud invalida por no enviar el tipo de documento."""
         data = self.valid_payload
