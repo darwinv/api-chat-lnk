@@ -464,7 +464,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        
+
         del data["document_type"]
         response = self.client.post(
             reverse('clients'),
@@ -536,7 +536,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_null_nick(self):
@@ -548,10 +548,8 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-
 
     def test_empower_plan(self):
         """Create client con plan facultado."""
@@ -568,7 +566,7 @@ class CreateNaturalClient(APITestCase):
 
     def test_transfer_plan(self):
         """Create client con plan transferido."""
-        data = self.valid_payload        
+        data = self.valid_payload
         data["username"] = "cliente_no_existe_transfer@mail.com"
         data["email_exact"] = "cliente_no_existe_transfer@mail.com"
 
@@ -577,7 +575,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_share_plan(self):
@@ -606,7 +604,7 @@ class CreateNaturalClient(APITestCase):
     #         data=json.dumps(data),
     #         content_type='application/json'
     #     )
-    #     
+    #
     #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_empty_optionals(self):
@@ -625,7 +623,7 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_natural_client(self):
@@ -635,8 +633,10 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
 
 class UpdateNaturalClient(APITestCase):
     """Prueba de Actualizacion de Cliente Natural."""
@@ -674,13 +674,14 @@ class UpdateNaturalClient(APITestCase):
     def test_from_external_country(self):
         """actualizacion datos residente internacional"""
         data = self.valid_payload
-        data["country"] = "2"
+        data["residence_country"] = 2
         data["foreign_address"] = "San antonio del Tachira"
         response = client.put(
             reverse('client-detail', args=(5,)),
             data=json.dumps(data),
             content_type='application/json'
         )
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_only_field_required(self):
@@ -817,7 +818,7 @@ class CreateBusinessClient(APITestCase):
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
-        
+
         data["address"] = ""
         response1 = self.client.post(
             reverse('clients'),
@@ -830,7 +831,7 @@ class CreateBusinessClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -1131,7 +1132,7 @@ class CreateBusinessClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_foreign_code(self):
@@ -1386,9 +1387,9 @@ class CheckData(APITestCase):
     def test_check_ruc(self):
         """chequear si existe  el ruc."""
         data = {"ruc": "123456789", "role": 2}
-        
+
         response = client.get(reverse('check-data'), data)
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_check_no_role(self):
@@ -1402,7 +1403,7 @@ class CheckData(APITestCase):
         # data = {"role": 2, "email_exact": "darwinio_vasqz@gmail.com"}
         data = {"role": 2, "email_exact": "darwinio_vasqz@gmail.com"}
         response = client.get(reverse('check-data'), data)
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_check_DNI(self):
@@ -1410,14 +1411,14 @@ class CheckData(APITestCase):
         data = {"role": 2, "document_type": 1,
                 "document_number": "20122984"}
         response = client.get(reverse('check-data'), data)
-        
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_check_passport(self):
         """chequera si existe el pasaporte."""
         data = {"role": 2, "document_type": 2,
                 "document_number": "20122984"}
-        
+
         response = client.get(reverse('check-data'), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -1426,7 +1427,7 @@ class CheckData(APITestCase):
         data = {"role": 2, "document_type": 3,
                 "document_number": "20122984"}
         response = client.get(reverse('check-data'), data)
-        
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
@@ -1482,7 +1483,7 @@ class UpdatePasswordByRecoverCode(APITestCase):
     def test_update_password_by_recovery(self):
         # get API response
         data = {'password':'123456', 'code':'WEY4D1'}
-        
+
         response = client.put(reverse('reset-password-recovery', args=(5,)), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['id'], 5)
@@ -1535,7 +1536,7 @@ class UpdatePasswordClientNatural(APITestCase):
         response = client.put(reverse('update-password',
                               args=(5,)), data=json.dumps(self.data),
                               content_type='application/json')
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

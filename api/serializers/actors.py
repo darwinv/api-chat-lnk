@@ -413,13 +413,15 @@ class ClientSerializer(serializers.ModelSerializer):
         instance.residence_country = validated_data.get('residence_country', instance.residence_country)
 
         # Verificamos si reside en el extranjero, se elimina direccion
-        if validated_data["residence_country"] == country_peru:
-            data_address = validated_data.pop('address')
-            address = Address.objects.create(**data_address)
-            validated_data['address'] = address
-        else:
-            if 'address' in validated_data:
-                del validated_data['address']
+        if 'residence_country' in validated_data:
+            if validated_data["residence_country"] == country_peru:
+                data_address = validated_data.pop('address')
+                address = Address.objects.create(**data_address)
+                validated_data['address'] = address
+            else:
+                instance.address = None
+                if 'address' in validated_data:
+                    del validated_data['address']
 
         instance.address = validated_data.get('address', instance.address)
         instance.foreign_address = validated_data.get('foreign_address', instance.foreign_address)
@@ -432,7 +434,9 @@ class ClientSerializer(serializers.ModelSerializer):
         required = _("required")
 
         # si reside en peru la direccion es obligatoria.
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
+        if "residence_country" not in data:
+            raise serializers.ValidationError({"residence_country": [required]})
+        elif data["residence_country"] == Countries.objects.get(name="Peru"):
             if "address" not in data or not data["address"]:
                 raise serializers.ValidationError({"address": [required]})
         else:
