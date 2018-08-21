@@ -6,6 +6,7 @@ from api.utils.tools import get_date_by_time
 from datetime import datetime, date
 from api.emails import BasicEmailAmazon
 from dateutil.relativedelta import relativedelta
+from rest_framework.validators import UniqueValidator
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -13,6 +14,9 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     monthly_fee = serializers.PrimaryKeyRelatedField(
         queryset=MonthlyFee.objects.all(), required=True)
+
+    operation_number = serializers.CharField(validators=[UniqueValidator(
+        queryset=Payment.objects.all())], required=True)
 
     class Meta:
         """Modelo."""
