@@ -527,11 +527,11 @@ class Payment(models.Model):
 
     amount = models.FloatField()
     operation_number = models.CharField(max_length=12)
-    authorized_by = models.ForeignKey(User, on_delete=models.PROTECT)
-    authorization_date = models.DateTimeField()
+    authorized_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
+    authorization_date = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.PositiveIntegerField(choices=Ch.payment_status)
-    observations = models.CharField(max_length=255)
+    status = models.PositiveIntegerField(choices=Ch.payment_status, default=1)
+    observations = models.CharField(max_length=255, null=True)
     bank = models.ForeignKey(Bank, on_delete=models.PROTECT)
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
     monthly_fee = models.ForeignKey(MonthlyFee, on_delete=models.PROTECT,

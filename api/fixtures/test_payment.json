@@ -9,6 +9,16 @@
           "district": 1
       }
   },
+
+  {
+    "model": "api.bank",
+    "pk": 1,
+    "fields": {
+      "name": "BCP",
+      "code": "001"
+    }
+  },
+
   {
     "model": "api.user",
     "pk": 5,

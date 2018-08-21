@@ -13,7 +13,9 @@ from api.permissions import IsAdminOrSeller
 
 class CreatePayment(APIView):
     """Vista para crear pago."""
-
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.AllowAny,)
+    
     def post(self, request):
         """crear compra."""
         data = request.data
