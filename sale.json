@@ -1,0 +1,240 @@
+[
+{
+  "model": "api.sale",
+  "pk": 1,
+  "fields": {
+    "created_at": "2018-02-08T14:28:25Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1000",
+    "description": "Test",
+    "is_fee": true,
+    "client": 3,
+    "seller": null
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 2,
+  "fields": {
+    "created_at": "2018-02-15T14:28:25Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1001",
+    "description": "Test2",
+    "is_fee": true,
+    "client": 3,
+    "seller": null
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 3,
+  "fields": {
+    "created_at": "2018-02-08T14:28:25Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1002",
+    "description": "Test3",
+    "is_fee": true,
+    "client": 3,
+    "seller": null
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 4,
+  "fields": {
+    "created_at": "2018-02-08T14:28:25Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1003",
+    "description": "Test4",
+    "is_fee": true,
+    "client": 3,
+    "seller": null
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 5,
+  "fields": {
+    "created_at": "2018-08-14T15:48:15.505Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1004",
+    "description": "test",
+    "is_fee": false,
+    "client": 3,
+    "seller": null
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 6,
+  "fields": {
+    "created_at": "2018-08-14T15:48:45.943Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1005",
+    "description": "test",
+    "is_fee": false,
+    "client": 3,
+    "seller": null
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 7,
+  "fields": {
+    "created_at": "2018-08-14T15:54:26.337Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1006",
+    "description": "test",
+    "is_fee": false,
+    "client": 3,
+    "seller": null
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 8,
+  "fields": {
+    "created_at": "2018-08-14T16:03:53.415Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1007",
+    "description": "test",
+    "is_fee": false,
+    "client": 3,
+    "seller": 6
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 9,
+  "fields": {
+    "created_at": "2018-08-14T16:03:55.414Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1008",
+    "description": "test",
+    "is_fee": false,
+    "client": 3,
+    "seller": 6
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 10,
+  "fields": {
+    "created_at": "2018-08-14T16:07:11.736Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1009",
+    "description": "test",
+    "is_fee": false,
+    "client": 3,
+    "seller": 6
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 11,
+  "fields": {
+    "created_at": "2018-08-14T16:12:01.367Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1010",
+    "description": "test",
+    "is_fee": true,
+    "client": 3,
+    "seller": 6
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 12,
+  "fields": {
+    "created_at": "2018-08-14T17:33:19.332Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1011",
+    "description": "test",
+    "is_fee": true,
+    "client": 3,
+    "seller": 6
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 13,
+  "fields": {
+    "created_at": "2018-08-14T17:43:34.651Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1012",
+    "description": "test",
+    "is_fee": true,
+    "client": 3,
+    "seller": 6
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 14,
+  "fields": {
+    "created_at": "2018-08-14T19:15:10.524Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1013",
+    "description": "test",
+    "is_fee": true,
+    "client": 3,
+    "seller": 6
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 15,
+  "fields": {
+    "created_at": "2018-08-15T20:39:30.209Z",
+    "place": "BCP",
+    "total_amount": "300.00",
+    "reference_number": "CD1014",
+    "description": "test",
+    "is_fee": true,
+    "client": 3,
+    "seller": 6
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 16,
+  "fields": {
+    "created_at": "2018-08-15T22:01:52.962Z",
+    "place": "BCP",
+    "total_amount": "1000.00",
+    "reference_number": "CD1004",
+    "description": "Test Venta",
+    "is_fee": true,
+    "client": 59,
+    "seller": null
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 17,
+  "fields": {
+    "created_at": "2018-08-15T22:04:07.203Z",
+    "place": "BCP",
+    "total_amount": "1000.00",
+    "reference_number": "CD1004",
+    "description": "Test Venta",
+    "is_fee": true,
+    "client": 60,
+    "seller": null
+  }
+}
+]
