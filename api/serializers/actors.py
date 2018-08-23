@@ -1388,7 +1388,6 @@ class RucApiDetailSerializer(serializers.Serializer):
         else:
             return None
 
-
     def get_business_name(self, obj):
         if 'nombre_o_razon_social' in obj:
             return obj['nombre_o_razon_social']
