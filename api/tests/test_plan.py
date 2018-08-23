@@ -4,7 +4,8 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.urls import reverse
 from api.utils.tools import get_date_by_time
-from api.models import QueryPlansAcquired
+from api.models import QueryPlansAcquired, QueryPlansClient
+from datetime import datetime, date, time, timedelta
 
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
@@ -649,3 +650,111 @@ class CheckPlanActive(APITestCase):
         """Chequea los estatus del plan."""
         response = self.client.get(reverse('plans-status'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_status_1(self):
+        """no tiene plan comprado."""
+        QueryPlansClient.objects.filter(client=11).update(client=12)
+        response = self.client.get(reverse('plans-status'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["code"], 1)
+
+    def test_status_2(self):
+        """no tiene plan activo."""
+        qs = QueryPlansAcquired.objects.filter(queryplansclient__client=11)
+        qs.filter(is_active=True).update(is_active=False)
+        response = self.client.get(reverse('plans-status'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["code"], 2)
+
+    def test_status_3(self):
+        """no tiene plan elegido."""
+        qs = QueryPlansClient.objects.filter(client=11)
+        qs.filter(is_chosen=True).update(is_chosen=False)
+        response = self.client.get(reverse('plans-status'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["code"], 3)
+
+    def test_status_4(self):
+        """tiene plan seleccionado y operativo."""
+        # qs = QueryPlansClient.objects.filter(client=11)
+        response = self.client.get(reverse('plans-status'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["code"], 4)
+
+    def test_status_5(self):
+        """tiene plan seleccionado, expiro, hay otros planes activos."""
+        qs = QueryPlansAcquired.objects.filter(queryplansclient__client=11,
+                                               queryplansclient__is_chosen=True)
+        qactive = QueryPlansAcquired.objects.filter(
+            queryplansclient__client=11, is_active=True,
+            queryplansclient__is_chosen=False)
+        qactive.update(is_active=False)
+        hoy = date.today()
+        ayer = hoy - timedelta(days=1)
+        qs.update(expiration_date=ayer)
+        response = self.client.get(reverse('plans-status'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["code"], 5)
+
+    def test_status_6(self):
+        """tiene plan seleccionado, expiro, hay otros planes activos."""
+        qs = QueryPlansAcquired.objects.filter(queryplansclient__client=11,
+                                               queryplansclient__is_chosen=True)
+        hoy = date.today()
+        ayer = hoy - timedelta(days=1)
+        qs.update(expiration_date=ayer)
+        response = self.client.get(reverse('plans-status'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["code"], 6)
+
+    def test_status_7(self):
+        """tiene plan seleccionado, expiro, hay otros planes por activar."""
+        qs = QueryPlansAcquired.objects.filter(queryplansclient__client=11,
+                                               queryplansclient__is_chosen=True)
+
+        qactive = QueryPlansAcquired.objects.filter(
+            queryplansclient__client=11, is_active=True)
+
+        qactive.update(is_active=False, activation_date=None)
+        hoy = date.today()
+        ayer = hoy - timedelta(days=1)
+        qs.update(expiration_date=ayer)
+        response = self.client.get(reverse('plans-status'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["code"], 7)
+
+    def test_status_8(self):
+        """plan seleccionado, no le quedan consultas, el unico que tiene."""
+        qs = QueryPlansAcquired.objects.filter(queryplansclient__client=11,
+                                               queryplansclient__is_chosen=True)
+        qs.update(available_queries=0)
+        qactive = QueryPlansAcquired.objects.filter(
+            queryplansclient__client=11, is_active=True,
+            queryplansclient__is_chosen=False)
+        qactive.update(is_active=False)
+        response = self.client.get(reverse('plans-status'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["code"], 8)
+
+    def test_status_9(self):
+        """Plan seleccionado, no le quedan consultas, hay otros planes activos."""
+        qs = QueryPlansAcquired.objects.filter(queryplansclient__client=11,
+                                               queryplansclient__is_chosen=True)
+        qs.update(available_queries=0)
+        response = self.client.get(reverse('plans-status'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["code"], 9)
+
+    def test_status_10(self):
+        """Plan seleccionado, no le quedan consultas, hay otros por activar."""
+        qs = QueryPlansAcquired.objects.filter(queryplansclient__client=11,
+                                               queryplansclient__is_chosen=True)
+
+        qactive = QueryPlansAcquired.objects.filter(
+            queryplansclient__client=11, is_active=True)
+
+        qactive.update(is_active=False, activation_date=None)
+        qs.update(available_queries=0)
+        response = self.client.get(reverse('plans-status'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["code"], 10)
