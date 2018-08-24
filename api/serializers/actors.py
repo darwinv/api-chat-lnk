@@ -557,7 +557,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
         password = ''.join(
               random.SystemRandom().choice(
                 string.ascii_uppercase + string.digits) for _ in range(10))
-        validated_data['key'] = password
+        # validated_data['key'] = password
+        validated_data['key'] = "123456"
         validated_data['status'] = 1
         instance = self.Meta.model(**validated_data)
         # "ruc {}".format(required)
@@ -568,17 +569,19 @@ class SpecialistSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"type_specialist": [valid_spec]})
         if password is not None:
-            instance.set_password(password)
+            # instance.set_password(password)
+            instance.set_password("123456")
         instance.save()
 
-        subject = cap(_('send credencials'))
-        mail = BasicEmailAmazon(subject=subject,
+        mail = BasicEmailAmazon(subject='Envio Credenciales',
                                 to=validated_data["email_exact"],
                                 template='email/send_credentials')
+
+
         credentials = {}
         credentials["user"] = validated_data["username"]
         credentials["pass"] = password
-        Response(mail.sendmail(args=credentials))
+        # Response(mail.sendmail(args=credentials))
         return instance
 
     def update(self, instance, validated_data):
@@ -837,11 +840,13 @@ class SellerSerializer(serializers.ModelSerializer):
             if not validated_data['ruc'] or validated_data['ruc'] is None:
                 del validated_data['ruc']
         password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
-        validated_data['key'] = password
+        # validated_data['key'] = password
+        validated_data['key'] = "123456"
         validated_data['status'] = 1
         instance = self.Meta.model(**validated_data)
         if password is not None:
-            instance.set_password(password)
+            # instance.set_password(password)
+            instance.set_password("123456")
         instance.save()
         mail = BasicEmailAmazon(subject='Envio Credenciales', to=validated_data["email_exact"],
                                 template='email/send_credentials')

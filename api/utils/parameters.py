@@ -135,7 +135,7 @@ class Payloads:
             "datetime": "",
             "id": 20,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-22-1.png",
-            "name": "Electronics",
+            "name": "Electronica",
             "read": read
         }, "c21": {
             "datetime": "",
