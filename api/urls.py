@@ -1,7 +1,7 @@
 """Urls de API Rest."""
 from django.conf.urls import url, include
 from rest_framework import routers
-from api.views import actors, query, category, email, authorization
+from api.views import actors, query, category, email, authorization, payment
 from api.views import validations, plan, chat, oauth, static_data, purchase
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
@@ -235,4 +235,7 @@ urlpatterns = [
     # Compras
     url(r'^purchase/$',
         purchase.CreatePurchase.as_view(), name='purchase'),
+    # Pagos
+    url(r'^payment/$',
+        payment.CreatePayment.as_view(), name='payment'),
 ]

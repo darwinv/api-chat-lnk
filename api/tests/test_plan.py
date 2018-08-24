@@ -549,7 +549,6 @@ class CreatePlansNonBillable(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-
 class GetPromocionalPlans(APITestCase):
     """Devolver  los  planes promocionales de un vendedor."""
 
@@ -564,6 +563,7 @@ class GetPromocionalPlans(APITestCase):
     def test_get_seller_plans(self):
         """devolver todos los planes pertenecientes al vendedor."""
         response = self.client.get(reverse('seller-plans-nonbillable'))
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetCheckEmailForOperationPlans(APITestCase):

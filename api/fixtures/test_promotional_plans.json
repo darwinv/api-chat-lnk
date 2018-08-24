@@ -117,9 +117,20 @@
   "pk": 1,
   "fields": {
     "quantity": 5,
-    "number_month": 7,
+    "number_month": 8,
     "created_at": "2016-12-31T23:59:59Z",
     "query_plans": 2,
+    "seller":19
+  }
+},
+{
+  "model":"api.sellernonbillableplans",
+  "pk": 2,
+  "fields": {
+    "quantity": 0,
+    "number_month": 8,
+    "created_at": "2016-12-31T23:59:59Z",
+    "query_plans": 4,
     "seller":19
   }
 }

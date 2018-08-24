@@ -511,24 +511,31 @@ class PaymentType(models.Model):
         return self.name
 
 
+class MonthlyFee(models.Model):
+    """Cuota Mensual."""
+
+    fee_amount = models.DecimalField(max_digits=10, decimal_places=2)  # total pagado para esta cuota
+    fee_order_number = models.PositiveIntegerField()  # El numero de cuota que se esta pagando
+    fee_quantity = models.PositiveIntegerField()  # numero total de cuotas
+    sale = models.ForeignKey(Sale, on_delete=models.PROTECT)
+    pay_before = models.DateField(null=True)
+    status = models.PositiveIntegerField(choices=Ch.fee_status)
+
+
 class Payment(models.Model):
     """Pagos."""
 
     amount = models.FloatField()
     operation_number = models.CharField(max_length=12)
-    agency_code = models.CharField(max_length=10)
-    account_number_drawer = models.CharField(max_length=50)
-    check_number = models.CharField(max_length=50)
-    credit_cart_number = models.CharField(max_length=30)
-    credit_card_cvc = models.CharField(max_length=3)
-    credit_card_exp_date = models.DateField()
-    authorized_by = models.ForeignKey(User, on_delete=models.PROTECT)
-    authorization_date = models.DateTimeField()
+    authorized_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
+    authorization_date = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    status = models.PositiveIntegerField(choices=Ch.payment_status)
-    observations = models.CharField(max_length=255)
+    status = models.PositiveIntegerField(choices=Ch.payment_status, default=1)
+    observations = models.CharField(max_length=255, null=True)
     bank = models.ForeignKey(Bank, on_delete=models.PROTECT)
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
+    monthly_fee = models.ForeignKey(MonthlyFee, on_delete=models.PROTECT,
+                                    null=True)
 
 
 class MatchAcquired(models.Model):
@@ -562,19 +569,6 @@ class MatchAcquiredLog(models.Model):
     declined = models.NullBooleanField()
     declined_motive = models.CharField(max_length=255, null=True)
     match_acquired = models.ForeignKey(MatchAcquired, on_delete=models.PROTECT)
-
-
-class MonthlyFee(models.Model):
-    """Cuota Mensual."""
-
-    fee_amount = models.DecimalField(max_digits=10, decimal_places=2)  # total pagado para esta cuota
-    fee_order_number = models.PositiveIntegerField()  # El numero de cuota que se esta pagando
-    fee_quantity = models.PositiveIntegerField()  # numero total de cuotas
-    sale = models.ForeignKey(Sale, on_delete=models.PROTECT)
-    pay_before = models.DateField(null=True)
-    status = models.PositiveIntegerField(choices=Ch.fee_status)
-    payment = models.ForeignKey(Payment, null=True)
-
 
 class LogPaymentsCreditCard(models.Model):
     """Log Pagos Pasarela."""
