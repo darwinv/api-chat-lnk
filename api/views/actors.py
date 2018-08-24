@@ -729,7 +729,7 @@ class SpecialistListView(ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SpecialistAsociateListView(APIView):
+class SpecialistAsociateListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrSpecialist)
 
@@ -737,14 +737,19 @@ class SpecialistAsociateListView(APIView):
         pk = Operations.get_id(self, request)
 
         try:
-            obj = Specialist.objects.get(pk=pk)
+            obj = Specialist.objects.get(pk=pk, type_specialist='m')
         except Specialist.DoesNotExist:
             raise Http404
 
         specialists = Specialist.objects.filter(category=obj.category, type_specialist="a")
-
+        
+        page = self.paginate_queryset(specialists)
+        if page is not None:
+            serializer = SpecialistSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         serializer = SpecialistSerializer(specialists, many=True)
         return Response(serializer.data)
+
 
 class SpecialistAsociateListByQueryView(APIView):
     authentication_classes = (OAuth2Authentication,)
