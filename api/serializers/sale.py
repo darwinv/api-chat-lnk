@@ -48,6 +48,7 @@ class ProductSerializer(serializers.Serializer):
         client = self.context["client"]
         hoy.month
         if data['is_billable'] is False:
+            # import pdb; pdb.set_trace()
             detail = SaleDetail.objects.filter(sale__client_id=client)
             if detail.filter(is_billable=False).exists():
                 raise serializers.ValidationError(
