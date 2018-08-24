@@ -118,6 +118,10 @@ urlpatterns = [
         actors.SpecialistQueryCountView.as_view(),
         name='specialist-query-count'),
 
+    url(r'^specialists/associate/$',
+        actors.SpecialistAsociateListView.as_view(),
+        name='specialists-associate-category'),
+
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$',
         actors.SpecialistAccountView.as_view(),
         name='specialist-account-status'),
