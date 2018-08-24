@@ -490,7 +490,7 @@
   "model": "api.user",
   "pk": 1,
   "fields": {
-    "password": "pbkdf2_sha256$36000$ZoKwG4C5uFXR$IDtDvqi2/fH+4Jw4NfiZd0JW13TJ2ARQM4FhAfWZn5g=",
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
     "last_login": "2017-10-02T22:26:08.423Z",
     "is_superuser": true,
     "username": "admin@mail.com",
