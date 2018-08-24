@@ -18,13 +18,13 @@ class PlanStatusSerializer(serializers.Serializer):
                                         expiration_date__gte=datetime.now().date(),
                                         activation_date=None)
             try:
-                chosen = obj.get(queryplansclient__is_chosen=True)
+                chosen_filt = obj.filter(queryplansclient__is_chosen=True).distinct()
+                chosen = chosen_filt.get()
             except QueryPlansAcquired.DoesNotExist:
                 return {"code": 3, "message": "No tiene plan seleccionado"}
 
             qs = obj.filter(queryplansclient__is_chosen=True,
                             expiration_date__lte=datetime.now().date())
-
             if qs_active_plans.exists():
                 if obj.filter(queryplansclient__is_chosen=True).exists():
                     # qs, si el seleccionado expiro
