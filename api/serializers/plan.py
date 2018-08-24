@@ -53,23 +53,6 @@ class PlanStatusSerializer(serializers.Serializer):
         else:
             return {"code": 1, "message": "No tiene plan comprado"}
 
-    # def to_representation(self, obj):
-    #     """representacion."""
-    #     if obj.exists():
-    #         if obj.filter(is_active=True).exists():
-    #             if obj.filter(queryplansclient__is_chosen=True).exists():
-    #                 qs = obj.filter(queryplansclient__is_chosen=True,
-    #                                 expiration_date__lte=datetime.now().date())
-    #                 if qs.exists():
-    #                 return {"code": 4, "message": "Si tiene plan seleccionado"}
-    #             else:
-    #                 return {"code": 3, "message": "No tiene plan seleccionado"}
-    #         else:
-    #             return {"code": 2, "message": "No tiene plan activo"}
-    #     else:
-    #         return {"code": 1, "message": "No tiene plan comprado"}
-
-
 class PlanDetailSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
     price = serializers.CharField()

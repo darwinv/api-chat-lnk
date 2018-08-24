@@ -1,0 +1,333 @@
+[
+
+  {
+    "model": "api.address",
+    "pk": 8,
+    "fields": {
+      "street": "na",
+      "department": 7,
+      "province": 66,
+      "district": 669
+    }
+  },
+  {
+    "model": "api.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "clientoscar@mail.com",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2018-02-07T17:09:39.233Z",
+      "nick": "TheClient",
+      "email_exact": "clientoscar@mail.com",
+      "telephone": "9213223131231",
+      "cellphone": "1231231",
+      "code_telephone": null,
+      "code_cellphone": null,
+      "photo": "",
+      "document_type": 1,
+      "document_number": "98482831251464424",
+      "img_document_number": "",
+      "ruc": "234234233252",
+      "code": "C98482831251464424",
+      "anonymous": true,
+      "updated_at": "2018-02-07T17:09:39.466Z",
+      "nationality": 1,
+      "role": 2,
+      "address": 8,
+      "residence_country": 1,
+      "foreign_address": "",
+      "key": "",
+      "status": 1,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "api.client",
+    "pk": 3,
+    "fields": {
+      "type_client": "b",
+      "sex": "m",
+      "commercial_reason": "alpaneted",
+      "civil_state": "c",
+      "birthdate": "1991-02-05",
+      "ciiu": 5,
+      "activity_description": "123131232321",
+      "institute": "",
+      "ocupation": 7,
+      "about": "1231231231231232123",
+      "business_name": "alpanet",
+      "agent_firstname": "Oscar",
+      "agent_lastname": "Lopez",
+      "position": "Gerente en Ventas",
+      "profession": "",
+      "economic_sector": 5,
+      "level_instruction": null,
+      "seller_asigned": null,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "api.user",
+    "pk": 20,
+    "fields": {
+      "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "informationtechnology@mail.com",
+      "first_name": "Carlos",
+      "last_name": "Lopez",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2018-03-08T21:02:15.150Z",
+      "nick": "informationtechnology ML",
+      "email_exact": "informationtechnology@mail.com",
+      "telephone": "00023123",
+      "cellphone": "0001231",
+      "code_telephone": null,
+      "code_cellphone": null,
+      "photo": null,
+      "document_type": 1,
+      "document_number": "32145678",
+      "img_document_number": "",
+      "ruc": "32145678",
+      "code": "E3145678",
+      "anonymous": true,
+      "updated_at": "2018-03-08T21:02:15.238Z",
+      "nationality": 1,
+      "role": 3,
+      "address": 8,
+      "residence_country": 1,
+      "foreign_address": "",
+      "key": "123456",
+      "status": 1,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "api.specialist",
+    "pk": 20,
+    "fields": {
+      "business_name": "PYMPACK",
+      "type_specialist": "m",
+      "star_rating": null,
+      "cv": "",
+      "payment_per_answer": "3.20",
+      "category": 8,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "api.queryplansacquired",
+    "pk": 30,
+    "fields": {
+      "expiration_date": "2018-12-28",
+      "validity_months": 3,
+      "available_queries": 2,
+      "query_quantity": 6,
+      "activation_date": null,
+      "is_active": true,
+      "available_requeries": 10,
+      "maximum_response_time": 24,
+      "acquired_at": "2018-08-14T15:48:46.178Z",
+      "plan_name": "Minipack",
+      "query_plans": 2,
+      "sale_detail": 30
+    }
+  },
+  {
+    "model": "api.queryplansclient",
+    "pk": 30,
+    "fields": {
+      "acquired_plan": 30,
+      "client": 3,
+      "owner": true,
+      "transfer": true,
+      "share": true,
+      "empower": true,
+      "status": 1,
+      "is_chosen": true
+    }
+  },
+{
+  "model": "api.query",
+  "pk": 1,
+  "fields": {
+    "title": "Donde",
+    "status": 1,
+    "created_at": "2018-08-15T16:23:09.954Z",
+    "last_modified": "2018-08-15T16:23:09.954Z",
+    "qualification": null,
+    "available_requeries": 10,
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "acquired_plan": 30,
+    "changed_on": "2018-08-15T16:23:09.954Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 2,
+  "fields": {
+    "title": "Ksdkks",
+    "status": 2,
+    "created_at": "2018-08-15T16:28:29.079Z",
+    "last_modified": "2018-08-16T22:58:01.100Z",
+    "qualification": null,
+    "available_requeries": 10,
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "acquired_plan": 30,
+    "changed_on": "2018-08-16T22:58:01.100Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 3,
+  "fields": {
+    "title": "Djjdjsj",
+    "status": 1,
+    "created_at": "2018-08-15T17:05:33.865Z",
+    "last_modified": "2018-08-15T17:05:33.865Z",
+    "qualification": null,
+    "available_requeries": 10,
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "acquired_plan": 30,
+    "changed_on": "2018-08-15T17:05:33.865Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 4,
+  "fields": {
+    "title": "Shags",
+    "status": 1,
+    "created_at": "2018-08-15T17:09:13.331Z",
+    "last_modified": "2018-08-15T17:09:13.331Z",
+    "qualification": null,
+    "available_requeries": 10,
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "acquired_plan": 30,
+    "changed_on": "2018-08-15T17:09:13.331Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 5,
+  "fields": {
+    "title": "Imagenes",
+    "status": 1,
+    "created_at": "2018-08-15T17:10:43.036Z",
+    "last_modified": "2018-08-15T17:10:43.036Z",
+    "qualification": null,
+    "available_requeries": 10,
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "acquired_plan": 30,
+    "changed_on": "2018-08-15T17:10:43.036Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 6,
+  "fields": {
+    "title": "Documento",
+    "status": 1,
+    "created_at": "2018-08-15T17:34:45.735Z",
+    "last_modified": "2018-08-15T17:34:45.735Z",
+    "qualification": null,
+    "available_requeries": 10,
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "acquired_plan": 30,
+    "changed_on": "2018-08-15T17:34:45.735Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 7,
+  "fields": {
+    "title": "Subiendo imagen",
+    "status": 1,
+    "created_at": "2018-08-15T17:37:49.869Z",
+    "last_modified": "2018-08-15T17:37:49.869Z",
+    "qualification": null,
+    "available_requeries": 10,
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "acquired_plan": 30,
+    "changed_on": "2018-08-15T17:37:49.869Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 8,
+  "fields": {
+    "title": "Imagen 13",
+    "status": 1,
+    "created_at": "2018-08-15T17:42:31.540Z",
+    "last_modified": "2018-08-15T17:42:31.540Z",
+    "qualification": null,
+    "available_requeries": 10,
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "acquired_plan": 30,
+    "changed_on": "2018-08-15T17:42:31.540Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 9,
+  "fields": {
+    "title": "Audio",
+    "status": 2,
+    "created_at": "2018-08-15T17:44:32.326Z",
+    "last_modified": "2018-08-16T22:59:19.256Z",
+    "qualification": null,
+    "available_requeries": 10,
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "acquired_plan": 30,
+    "changed_on": "2018-08-16T22:59:19.256Z"
+  }
+},
+{
+  "model": "api.query",
+  "pk": 10,
+  "fields": {
+    "title": "Video de libros",
+    "status": 2,
+    "created_at": "2018-08-15T17:45:14.979Z",
+    "last_modified": "2018-08-17T21:42:32.249Z",
+    "qualification": null,
+    "available_requeries": 0,
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "acquired_plan": 30,
+    "changed_on": "2018-08-17T21:42:32.249Z"
+  }
+}
+]
