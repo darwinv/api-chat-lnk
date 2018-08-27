@@ -279,7 +279,9 @@ class QueryPlansSerializer(serializers.ModelSerializer):
     class Meta:
         """Modelo."""
         model = QueryPlans
-        fields = ('id', 'name', 'query_quantity', 'validity_months', 'price')
+        fields = ('id', 'name', 'query_quantity', 'validity_months',
+                  'clasification', 'price')
+
 
 class QueryPlansShareSerializer(serializers.ModelSerializer):
     """Plan Adquirido Detail."""
