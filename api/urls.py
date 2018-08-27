@@ -3,6 +3,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from api.views import actors, query, category, email, authorization, payment
 from api.views import validations, plan, chat, oauth, static_data, purchase
+from api.views import account
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
 router = routers.DefaultRouter()
@@ -118,12 +119,15 @@ urlpatterns = [
         actors.SpecialistQueryCountView.as_view(),
         name='specialist-query-count'),
 
-    url(r'^account_status/specialists/(?P<pk>[0-9]+)/$',
-        actors.SpecialistAccountView.as_view(),
-        name='specialist-account-status'),
     # Especialistas Asociados
     url(r'^specialists-asociate/$', actors.SpecialistAsociateListByQueryView.as_view(),
         name='specialists-asociate'),
+
+    # Estados de Cuenta
+
+    url(r'^account_status/specialist/(?P<pk>[0-9]+)/$',
+        account.SpecialistAccountView.as_view(),
+        name='specialists-account'),
     # Consultas
     # Listado de Consultas por especialista
     # url(r'^specialist-queries/$', query.QueryListSpecialistView.as_view(),
