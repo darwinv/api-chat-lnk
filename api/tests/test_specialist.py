@@ -654,7 +654,7 @@ class DeleteSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
-class GetAsociateSpecialist(APITestCase):
+class GetAsociateSpecialistByQuery(APITestCase):
     """Devolver Especialistas asociados"""
 
     fixtures = ['data', 'data2', 'data3', 'test_getspecialistmessages']
@@ -671,6 +671,24 @@ class GetAsociateSpecialist(APITestCase):
         data = {'query':1}
         response = client.get(reverse('specialists-asociate'), data=data)
 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetAsociateSpecialist(APITestCase):
+    """Devolver Especialistas asociados"""
+
+    fixtures = ['data', 'data2', 'data3', 'test_getspecialistmessages']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_specialists(self):
+        """Obtener resultado 200."""
+        #obtiene especialistas asociados
+
+        client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
+        response = client.get(reverse('specialists-associate-category'))
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
