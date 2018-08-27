@@ -563,6 +563,10 @@ class GetPromocionalPlans(APITestCase):
     def test_get_seller_plans(self):
         """devolver todos los planes pertenecientes al vendedor."""
         response = self.client.get(reverse('seller-plans-nonbillable'))
+<<<<<<< HEAD
+=======
+        
+>>>>>>> a04c87ed325d20fe7bcbcdaaf122a92643cb6ff8
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetCheckEmailForOperationPlans(APITestCase):
