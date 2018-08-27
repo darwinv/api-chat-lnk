@@ -138,7 +138,7 @@ class SendCodePassword(APIView):
         recovery_password.save()
         data = {'code':code}
         if 'test' not in sys.argv:
-            mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña", 
+            mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña",
                 to=email, template='email/send_code')
             response = mail.sendmail(args=data)
         else:
@@ -163,7 +163,7 @@ class ValidCodePassword(APIView):
             email = request.query_params["email"]
         else:
             raise serializers.ValidationError({'email': [self.required]})
-        
+
         user_filter = User.objects.filter(recoverypassword__code=code, email_exact=email, is_active=True).extra(where = ["DATEDIFF(NOW() ,created_at )<=1"])
         # print(user_filter.query)
         if user_filter:
@@ -194,7 +194,7 @@ class UpdatePasswordRecoveryView(APIView):
             code = request.data["code"]
         else:
             raise serializers.ValidationError({'code': [self.required]})
-        
+
         user_filter = RecoveryPassword.objects.filter(code=code, user=pk, is_active=True).extra(where = ["DATEDIFF(NOW() ,created_at )<=1"])
 
         if user_filter:
@@ -478,7 +478,7 @@ class ClientListView(ListCreateAPIView):
         plan_manages = QueryPlansManage.objects.filter(
             email_receiver=email_receiver, status=3)
         receiver = Client.objects.get(pk=receiver_id)
-        
+
         for plan_manage in plan_manages:
             """Checar y otorgar planes a nuevo cliente"""
             data = {
@@ -486,10 +486,10 @@ class ClientListView(ListCreateAPIView):
                 'status': 1,
                 'count_queries': plan_manage.count_queries
             }
-            
+
             data_context = {}
             if plan_manage.type_operation == 2:
-            
+
                 data_context['client_receiver'] = {
                     'is_chosen': False,
                     'owner': False,
@@ -536,7 +536,7 @@ class ClientListView(ListCreateAPIView):
                 }
                 serializer = QueryPlansEmpowerSerializer(plan_manage, data, partial=True,
                                               context=data_context)
-                
+
             else:
                 continue
 
@@ -853,20 +853,7 @@ class SpecialistDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# Vista para estado de cuenta de especialista
-class SpecialistAccountView(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get_object(self, pk):
-        try:
-            return Specialist.objects.get(pk=pk)
-        except Specialist.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk):
-        specialist = self.get_object(pk)
-        serializer = SpecialistAccountSerializer(specialist)
-        return Response(serializer.data)
 
 
 # ------------ Fin de Especialistas -----------------
@@ -961,7 +948,7 @@ class SellerDetailView(APIView):
     def put(self, request, pk):
         data = request.data
 
-        seller = self.get_object(pk) 
+        seller = self.get_object(pk)
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         data['code'] = PREFIX_CODE_SELLER + request.data.get('document_number', seller.document_number)
         data['photo'] = request.data.get('photo', seller.photo)
@@ -1045,7 +1032,7 @@ class ContactListView(ListCreateAPIView):
         data["seller"] = Operations.get_id(self, request)
         if "email_exact" not in data or not data["email_exact"]:
             raise serializers.ValidationError({'email_exact': [required]})
-        
+
         data["email"] = data["email_exact"]
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         if "type_client" not in data or not data["type_client"]:

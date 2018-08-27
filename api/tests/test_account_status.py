@@ -8,7 +8,7 @@ from api.serializers.actors import SpecialistSerializer
 
 
 client = APIClient()
-client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+client.credentials(HTTP_AUTHORIZATION='Bearer SPsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
 
 class AccountSpecialist(APITestCase):
@@ -23,9 +23,5 @@ class AccountSpecialist(APITestCase):
 
     def test_get_data_month(self):
         # """Solicitud invalida por no tener el username."""
-        # response = self.client.post(
-        #     reverse('specialists-account'),
-        #     data=json.dumps(data),
-        #     content_type='application/json'
-        # )
-        # self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = client.get(reverse('specialists-account'))
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
