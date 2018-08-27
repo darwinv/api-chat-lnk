@@ -82,7 +82,7 @@ class PurchaseQueryPromotionalPlans(APITestCase):
         response = client.post(reverse('purchase'),
                                data=json.dumps(self.valid_payload),
                                content_type='application/json')
-        # import pdb; pdb.set_trace()
+        
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_promotional_for_seller(self):
@@ -96,7 +96,7 @@ class PurchaseQueryPromotionalPlans(APITestCase):
 
     def test_promotional_repeat_client(self):
         """Compra exitosa promocional."""
-        # import pdb; pdb.set_trace()
+        
         response = client.post(reverse('purchase'),
                                data=json.dumps(self.valid_payload),
                                content_type='application/json')
