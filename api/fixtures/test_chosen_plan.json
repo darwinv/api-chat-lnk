@@ -381,7 +381,8 @@
     "description": "descripcion venta",
     "is_fee": false,
     "client": 11,
-    "seller": 3
+    "seller": 3,
+    "status": 1
   }
 },
 {
@@ -395,7 +396,8 @@
     "description": "test venta",
     "is_fee": false,
     "client": 11,
-    "seller": 3
+    "seller": 3,
+    "status": 1
   }
 },
 {

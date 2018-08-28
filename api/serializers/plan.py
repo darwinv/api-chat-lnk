@@ -25,6 +25,7 @@ class PlanStatusSerializer(serializers.Serializer):
 
             qs = obj.filter(queryplansclient__is_chosen=True,
                             expiration_date__lte=datetime.now().date())
+            # import pdb; pdb.set_trace()
             if qs_active_plans.exists():
                 if obj.filter(queryplansclient__is_chosen=True).exists():
                     # qs, si el seleccionado expiro

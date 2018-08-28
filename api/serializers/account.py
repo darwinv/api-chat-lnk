@@ -6,12 +6,10 @@ from datetime import datetime
 
 
 class SpecialistAccountSerializer(serializers.ModelSerializer):
-    """Serializer de Especialidades."""
-
-    name = serializers.SerializerMethodField()
+    """Serializer de estado de cuenta Especialista"""
 
     class Meta:
-        """Modelo Category y sus campos."""
+        """Modelo."""
 
         model = Specialist
         fields = ('id')
@@ -37,3 +35,21 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
                 "month_queries_pending": month_queries_pending,
                 "queries_absolved": queries_absolved
                 }
+
+
+class SellerAccountSerializer(serializers.Serializer):
+    """Serializer de estado de cuenta Vendedor."""
+
+    def to_representation(self, obj):
+        """To Representation."""
+        hoy = datetime.now()  # fecha de hoy
+        # fecha de primer  dia del mes
+        primer = datetime(hoy.year, hoy.month, 1, 0, 0, 0)
+        # calculó de los planes vendidos del mes
+        month_sold_plans = obj.filter(
+            status__range=(2, 3),  # 2 ya pago al menos una parte, 3 se pago completo
+            created_at__range=(primer, hoy),
+            saledetail__is_billable=True,
+            saledetail__product_type=1).count()
+
+        return {"month_sold_plans": month_sold_plans}
