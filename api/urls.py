@@ -129,7 +129,6 @@ urlpatterns = [
         name='specialists-asociate'),
 
     # Estados de Cuenta
-
     url(r'^account_status/specialist/(?P<pk>[0-9]+)/$',
         account.SpecialistAccountView.as_view(),
         name='specialists-account'),
