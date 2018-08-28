@@ -39,7 +39,7 @@ class PaymentPendingView(ListCreateAPIView):
     def get(self, request):
         """get compra pendinetes"""
         data = request.query_params
-
+        
         if not 'document_number' in data:
             raise serializers.ValidationError({'document_number': [self.required]})
 

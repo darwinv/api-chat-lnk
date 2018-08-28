@@ -108,7 +108,7 @@ class PaymentPendig(APITestCase):
         
         response = self.client.get(
             reverse('payment-pending'),
-            data=json.dumps(data),
+            {'document_number': '24612582'},
             content_type='application/json'
         )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
