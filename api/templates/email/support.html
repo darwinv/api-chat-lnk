@@ -1,0 +1,22 @@
+{% extends 'email/base.html' %}
+{% load i18n %}
+{% block content_mail %}
+  <h1>{{title}}</h1>
+  <div style="text-align: justify;">
+    <p>
+      <strong>{% trans "name" %}</strong>: {{name}}
+      <br>
+
+      <strong>{% trans "email" %}</strong>: {{email}}
+      <br>
+
+      <strong>{% trans "phone" %}</strong>: {{phone}}
+      <br>
+
+      <strong>{% trans "query" %}</strong>: {{query}}
+      <br>
+      <strong>{% trans "message" %}</strong>: {{message}}
+      <br>
+    </p>
+  </div>
+{% endblock content_mail %}

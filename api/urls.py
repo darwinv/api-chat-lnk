@@ -119,12 +119,12 @@ urlpatterns = [
         actors.SpecialistQueryCountView.as_view(),
         name='specialist-query-count'),
 
-    url(r'^specialists/associate/$',
-        actors.SpecialistAsociateListView.as_view(),
-        name='specialists-associate-category'),
+    # url(r'^specialists/associate/$',
+    #     actors.SpecialistAsociateListView.as_view(),
+    #     name='specialists-associate-category'),
 
     url(r'^account_status/specialists/(?P<pk>[0-9]+)/$',
-        actors.SpecialistAccountView.as_view(),
+        account.SpecialistAccountView.as_view(),
         name='specialist-account-status'),
     # Especialistas Asociados
     url(r'^specialists-asociate/$', actors.SpecialistAsociateListByQueryView.as_view(),
@@ -205,9 +205,11 @@ urlpatterns = [
 
     # chat (prueba con channels)
     url(r'^chat/$', chat.chat, name='chat'),
+
     # email
     url(r'^mail/$', email.mail, name='mails'),
-
+    # Soporte
+    url(r'^support/$', actors.SupportActorsView.as_view(), name='support'),
 
     # autorizacion para cliente
     url(r'^authorizations/clients/$', authorization.ClientListView.as_view(),
