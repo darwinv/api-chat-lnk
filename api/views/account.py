@@ -24,6 +24,7 @@ class SpecialistAccountView(APIView):
 
     def get(self, request, pk):
         specialist = self.get_object(pk)
-        queryset = Query.objects.filter(specialist=specialist)
+        queryset = Query.objects.filter(specialist=specialist,
+                                        context={'category': specialist.category})
         serializer = SpecialistAccountSerializer(queryset)
         return Response(serializer.data)
