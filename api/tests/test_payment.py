@@ -93,3 +93,22 @@ class MakePayment(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+class PaymentPendig(APITestCase):
+    """Prueba de Traer Pagos Pendientes."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_payment']
+
+    def setUp(self):
+        """SetUp."""
+        pass
+
+    def test_get_payment_pending(self):
+        """Crear pago."""
+        
+        response = self.client.get(
+            reverse('payment-pending'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)

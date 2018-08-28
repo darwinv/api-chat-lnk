@@ -123,15 +123,12 @@ urlpatterns = [
     #     actors.SpecialistAsociateListView.as_view(),
     #     name='specialists-associate-category'),
 
-    url(r'^account_status/specialists/(?P<pk>[0-9]+)/$',
-        account.SpecialistAccountView.as_view(),
-        name='specialist-account-status'),
+
     # Especialistas Asociados
     url(r'^specialists-asociate/$', actors.SpecialistAsociateListByQueryView.as_view(),
         name='specialists-asociate'),
 
     # Estados de Cuenta
-
     url(r'^account_status/specialist/(?P<pk>[0-9]+)/$',
         account.SpecialistAccountView.as_view(),
         name='specialists-account'),
@@ -244,7 +241,12 @@ urlpatterns = [
     # Compras
     url(r'^purchase/$',
         purchase.CreatePurchase.as_view(), name='purchase'),
+
     # Pagos
     url(r'^payment/$',
         payment.CreatePayment.as_view(), name='payment'),
+
+    url(r'^payment-pending/$',
+        payment.PaymentPendingView.as_view(), name='payment-pending'),
+
 ]
