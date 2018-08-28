@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from api.models import User, Client, Specialist, Seller, Query
 from api.models import SellerContact, SpecialistMessageList, SpecialistMessageList_sp
-from api.models import RecoveryPassword, Declinator, QueryPlansManage
+from api.models import RecoveryPassword, Declinator, QueryPlansManage, Parameter
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
@@ -39,6 +39,8 @@ from api import pyrebase
 from api.emails import BasicEmailAmazon
 from api.utils.parameters import Params
 from api.api_choices_models import ChoicesAPI as c
+from api.logger import manager
+logger = manager.setup_log(__name__)
 
 # Constantes
 PREFIX_CODE_CLIENT = 'C'
@@ -136,8 +138,9 @@ class SendCodePassword(APIView):
         recovery_password.code = code = tools.ramdon_generator(6)
         recovery_password.is_active = True
         recovery_password.save()
-        data = {'code':code}
+        
         if 'test' not in sys.argv:
+            data = {'code':code}
             mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña",
                 to=email, template='email/send_code')
             response = mail.sendmail(args=data)
@@ -1298,3 +1301,53 @@ class RucDetailView(APIView):
             serializer = RucApiDetailSerializer(data, partial=True)
             return Response(serializer.data)
         raise Http404
+
+class SupportActorsView(APIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    required = _("required")
+    def post(self, request):
+        data = request.data
+        subject = ''
+
+        if not 'query' in data:
+            serializers.ValidationError({'query': [self.required]})
+
+        if not 'message' in data:
+            serializers.ValidationError({'message': [self.required]})
+
+        if request.user.role.id == ROLE_CLIENT:
+            subject = 'Atención al Cliente'
+        elif request.user.role.id == ROLE_SPECIALIST:
+            subject = 'Soporte - Especialista'
+        elif request.user.role.id == ROLE_SELLER:
+            subject = 'Soporte - Vendedor'        
+
+        if 'test' not in sys.argv:
+
+            name = "{} {}".format(request.user.first_name, request.user.last_name)
+            phone = "{} | {}".format(request.user.cellphone, request.user.photo)
+
+            data_email = {
+                        'title':subject,
+                        'name': name,
+                        'email':request.user.email_exact,
+                        'phone':phone,
+                        'query': data['query'],
+                        'message': data['message'],
+                    }
+            
+            try:
+                parameter = Parameter.objects.get(parameter="support")
+            except Parameter.DoesNotExist:
+                logger.error("support no existe en tabla parametros")
+                raise Http404
+
+            mail = BasicEmailAmazon(subject=subject,
+                to=parameter.value, template='email/support')
+
+            response = mail.sendmail(args=data_email)
+        
+
+        return Response({})
