@@ -911,6 +911,7 @@ class PlansStatus(APIView):
 
         user_id = Operations.get_id(self, request)
         qs = QueryPlansAcquired.objects.filter(queryplansclient__client=user_id)
+        # import pdb; pdb.set_trace()
         plans = PlanStatusSerializer(qs)
         return Response(plans.data)
 

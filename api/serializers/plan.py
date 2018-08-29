@@ -10,49 +10,40 @@ class PlanStatusSerializer(serializers.Serializer):
     """Chequeo de Status."""
     def to_representation(self, obj):
         """repr."""
-        if obj.exists() is False:
+        qs_to_activate = obj.filter(is_active=False,
+                                    expiration_date__gte=datetime.now().date(),
+                                    activation_date=None)
+
+        qs_active_plans = obj.filter(is_active=True)
+
+        qs = obj.filter(queryplansclient__is_chosen=True,
+                        expiration_date__lte=datetime.now().date())
+        # import pdb; pdb.set_trace()
+        if obj.exists() is False:  # No hay comprado
             return {"code": 1, "message": "No tiene plan comprado"}
-        #     # planes activos
-        #     qs_active_plans = obj.filter(is_active=True)
-        #     # planes  por activar
-        #     qs_to_activate = obj.filter(is_active=False,
-        #                                 expiration_date__gte=datetime.now().date(),
-        #                                 activation_date=None)
-        #     try:
-        #         chosen_filt = obj.filter(queryplansclient__is_chosen=True).distinct()
-        #         chosen = chosen_filt.get()
-        #     except QueryPlansAcquired.DoesNotExist:
-        #         return {"code": 3, "message": "No tiene plan seleccionado"}
-        #
-        #     qs = obj.filter(queryplansclient__is_chosen=True,
-        #                     expiration_date__lte=datetime.now().date())
-        #     if qs_active_plans.exists():
-        #         if obj.filter(queryplansclient__is_chosen=True).exists():
-        #             # qs, si el seleccionado expiro
-        #             if qs.exists():
-        #                 if qs_active_plans.count() == 1:
-        #                     return {"code": 5, "message": "plan seleccionado expiro, unico que tiene"}
-        #                 if qs_active_plans.count() > 1:
-        #                     return {"code": 6, "message": "plan seleccionado expiro, hay otros planes activos"}
-        #             else:
-        #                 if chosen.available_queries < 1:
-        #                     if qs_active_plans.count() == 1:
-        #                         return {"code": 8, "message": "plan seleccionado, no tiene consultas, es el unico que tiene"}
-        #                     if qs_active_plans.count() > 1:
-        #                         return {"code": 9, "message": "plan seleccionado, no tiene consultas, es el unico que tiene"}
-        #                 else:
-        #                     return {"code": 4, "message": "plan seleccionado y operativo"}
-        #     else:
-        #         if qs.exists():
-        #             if qs_to_activate.exists():
-        #                 return {"code": 7, "message": "plan seleccionado expiro, hay otros por activar"}
-        #         elif chosen.available_queries < 1:
-        #             if qs_to_activate.exists():
-        #                 return {"code": 10, "message": "plan seleccionado, no tiene consultas, hay otros por activar"}
-        #         else:
-        #             return {"code": 2, "message": "No tiene plan activo"}
-        # else:
-        #     return {"code": 1, "message": "No tiene plan comprado"}
+        else:
+            if qs_active_plans.exists():  # tiene activos
+                if obj.filter(queryplansclient__is_chosen=True).exists():  # tiene seleccionado
+                    if qs.exists():
+                        return {"code": 6, "message": "seleccionado expiro, tiene activos"}
+                    elif obj.filter(queryplansclient__is_chosen=True, available_queries__lt=1).exists():
+                        if qs_active_plans.count() > 1:
+                            return {"code": 9, "message": "seleccionado, sin consultas, otros activos"}
+                        if qs_to_activate.exists():  # tiene otros por activar
+                            return {"code": 10, "message": "seleccionado, sin consultas, otros por activar"}
+                        if qs_active_plans.count() == 1:
+                            return {"code": 8, "message": "seleccionado, sin consultas, unico que tiene"}
+                    return {"code": 4, "message": "seleccionado y operativo"}
+                else:
+                    return {"code": 3, "message": "No tiene plan seleccionado"}
+            else:  # no tiene activos
+                if qs.exists():  # plan elegido expiro
+                    if qs_to_activate.exists():  # tiene por activar
+                        return {"code": 7, "message": "seleccionado expiro, no tiene activos, tiene por activar"}
+                    else:
+                        return {"code": 5, "message": "seleccionado expiro, no tiene activos, ni por activar"}
+                return {"code": 2, "message": "No tiene plan activo"}
+
 
 class PlanDetailSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
