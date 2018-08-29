@@ -119,16 +119,16 @@ urlpatterns = [
         actors.SpecialistQueryCountView.as_view(),
         name='specialist-query-count'),
 
-    url(r'^specialists/associate/$',
-        actors.SpecialistAsociateListView.as_view(),
-        name='specialists-associate-category'),
+    # url(r'^specialists/associate/$',
+    #     actors.SpecialistAsociateListView.as_view(),
+    #     name='specialists-associate-category'),
+
 
     # Especialistas Asociados
     url(r'^specialists-asociate/$', actors.SpecialistAsociateListByQueryView.as_view(),
         name='specialists-asociate'),
 
     # Estados de Cuenta
-
     url(r'^account_status/specialist/(?P<pk>[0-9]+)/$',
         account.SpecialistAccountView.as_view(),
         name='specialists-account'),
@@ -206,9 +206,11 @@ urlpatterns = [
 
     # chat (prueba con channels)
     url(r'^chat/$', chat.chat, name='chat'),
+
     # email
     url(r'^mail/$', email.mail, name='mails'),
-
+    # Soporte
+    url(r'^support/$', actors.SupportActorsView.as_view(), name='support'),
 
     # autorizacion para cliente
     url(r'^authorizations/clients/$', authorization.ClientListView.as_view(),
@@ -243,7 +245,12 @@ urlpatterns = [
     # Compras
     url(r'^purchase/$',
         purchase.CreatePurchase.as_view(), name='purchase'),
+
     # Pagos
     url(r'^payment/$',
         payment.CreatePayment.as_view(), name='payment'),
+
+    url(r'^payment-pending/$',
+        payment.PaymentPendingView.as_view(), name='payment-pending'),
+
 ]

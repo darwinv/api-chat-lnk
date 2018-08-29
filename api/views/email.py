@@ -13,3 +13,6 @@ def mail(request):
         return Response(mail.sendmail(args=request.data))
     #     return Response({"message": "Got some data!", "data": request.data})
     # return Response({"message": "Hello, world!"})
+
+
+
