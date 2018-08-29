@@ -23,7 +23,8 @@ class AccountSpecialist(APITestCase):
         }
 
     def test_get_data_month(self):
-        # """Solicitud invalida por no tener el username."""
+        """Traer data del mes del Especialista."""
+
         response = client.get(reverse('specialists-account',
                                       args=(self.specialist,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -33,3 +34,20 @@ class AccountSpecialist(APITestCase):
         self.assertEqual(response.data["month_queries_pending"], 4)
         # absueltos historico de especialidad
         self.assertEqual(response.data["queries_absolved_category"], 5)
+
+
+class AccountSeller(APITestCase):
+    """Estado de cuenta del Vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_account_seller']
+
+    def setUp(self):
+        """SetUp."""
+        self.seller = 6
+
+    def test_get_data_month(self):
+        """Traer data del mes del Vendedor."""
+        response = client.get(reverse('sellers-account',
+                                      args=(self.seller,)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["month_sold_plans"], 2)

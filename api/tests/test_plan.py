@@ -563,10 +563,7 @@ class GetPromocionalPlans(APITestCase):
     def test_get_seller_plans(self):
         """devolver todos los planes pertenecientes al vendedor."""
         response = self.client.get(reverse('seller-plans-nonbillable'))
-<<<<<<< HEAD
-=======
-        
->>>>>>> a04c87ed325d20fe7bcbcdaaf122a92643cb6ff8
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetCheckEmailForOperationPlans(APITestCase):
@@ -663,8 +660,12 @@ class CheckPlanActive(APITestCase):
 
     def test_status_2(self):
         """no tiene plan activo."""
+        # pasa cuando no se ha activado un  plan aun, pero tiene comprados
         qs = QueryPlansAcquired.objects.filter(queryplansclient__client=11)
+        # desactivo todos los planes
         qs.filter(is_active=True).update(is_active=False)
+        # el elegido lo paso a otro cliente
+        QueryPlansClient.objects.filter(is_chosen=True).update(client=12)
         response = self.client.get(reverse('plans-status'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["code"], 2)
@@ -689,8 +690,7 @@ class CheckPlanActive(APITestCase):
         qs = QueryPlansAcquired.objects.filter(queryplansclient__client=11,
                                                queryplansclient__is_chosen=True)
         qactive = QueryPlansAcquired.objects.filter(
-            queryplansclient__client=11, is_active=True,
-            queryplansclient__is_chosen=False)
+            queryplansclient__client=11, is_active=True)
         qactive.update(is_active=False)
         hoy = date.today()
         ayer = hoy - timedelta(days=1)
@@ -705,7 +705,7 @@ class CheckPlanActive(APITestCase):
                                                queryplansclient__is_chosen=True)
         hoy = date.today()
         ayer = hoy - timedelta(days=1)
-        qs.update(expiration_date=ayer)
+        qs.update(expiration_date=ayer, is_active=False)
         response = self.client.get(reverse('plans-status'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["code"], 6)
@@ -754,7 +754,8 @@ class CheckPlanActive(APITestCase):
                                                queryplansclient__is_chosen=True)
 
         qactive = QueryPlansAcquired.objects.filter(
-            queryplansclient__client=11, is_active=True)
+            queryplansclient__client=11, is_active=True,
+            queryplansclient__is_chosen=False)
 
         qactive.update(is_active=False, activation_date=None)
         qs.update(available_queries=0)
