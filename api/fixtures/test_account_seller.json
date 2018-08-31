@@ -1,5 +1,24 @@
 [
-
+  {
+    "model": "api.address",
+    "pk": 1,
+    "fields": {
+      "street": "na",
+      "department": 7,
+      "province": 66,
+      "district": 669
+    }
+  },
+  {
+    "model": "api.address",
+    "pk": 9,
+    "fields": {
+      "street": "na",
+      "department": 7,
+      "province": 66,
+      "district": 669
+    }
+  },
     {
       "model": "api.address",
       "pk": 8,
@@ -8,6 +27,71 @@
         "department": 7,
         "province": 66,
         "district": 669
+      }
+    },
+    {
+      "model": "api.user",
+      "pk": 2,
+      "fields": {
+        "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "clientar@mail.com",
+        "first_name": "",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-02-07T17:09:39.233Z",
+        "nick": "TheClient",
+        "email_exact": "clientar@mail.com",
+        "telephone": "9213223131231",
+        "cellphone": "1231231",
+        "code_telephone": null,
+        "code_cellphone": null,
+        "photo": "",
+        "document_type": 1,
+        "document_number": "11",
+        "img_document_number": "",
+        "ruc": "22",
+        "code": "C98482831251464424",
+        "anonymous": true,
+        "updated_at": "2018-02-07T17:09:39.466Z",
+        "nationality": 1,
+        "role": 2,
+        "address": 8,
+        "residence_country": 1,
+        "foreign_address": "",
+        "key": "",
+        "status": 1,
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "api.client",
+      "pk": 2,
+      "fields": {
+        "type_client": "b",
+        "sex": "m",
+        "commercial_reason": "alpaneteda",
+        "civil_state": "c",
+        "birthdate": "1991-02-05",
+        "ciiu": 5,
+        "activity_description": "123131232321",
+        "institute": "",
+        "ocupation": 7,
+        "about": "1231231231231232123",
+        "business_name": "alpanet",
+        "agent_firstname": "juia",
+        "agent_lastname": "amaisa",
+        "position": "Gerente en Ventas",
+        "profession": "",
+        "economic_sector": 5,
+        "level_instruction": null,
+        "seller_asigned": null,
+        "groups": [],
+        "user_permissions": []
       }
     },
     {
@@ -156,6 +240,36 @@
   }
 },
 {
+"model": "api.sale",
+"pk": 3,
+"fields": {
+  "created_at": "2018-08-14T16:03:53.415Z",
+  "place": "BCP",
+  "total_amount": "700.00",
+  "reference_number": "CD1007",
+  "description": "test",
+  "is_fee": false,
+  "client": 3,
+  "seller": 6,
+  "status": 2
+}
+},
+{
+"model": "api.sale",
+"pk": 4,
+"fields": {
+  "created_at": "2018-08-14T16:03:53.415Z",
+  "place": "BCP",
+  "total_amount": "700.00",
+  "reference_number": "CD1007",
+  "description": "test",
+  "is_fee": false,
+  "client": 2,
+  "seller": 6,
+  "status": 3
+}
+},
+{
   "model": "api.saledetail",
   "pk": 1,
   "fields": {
@@ -197,4 +311,186 @@
     "sale": 2
   }
 },
+{
+  "model": "api.saledetail",
+  "pk": 4,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL123458",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 5,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL123458",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 6,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL123458",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 7,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL123458",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 4
+  }
+},
+{
+  "model": "api.sellercontact",
+  "pk": 1,
+  "fields": {
+    "first_name": "Kajshd",
+    "last_name": "Jjdkdj",
+    "type_contact": 3,
+    "type_client": "n",
+    "document_type": 1,
+    "document_number": "457312222",
+    "email": "aaaaa@mail.com",
+    "civil_state": "d",
+    "birthdate": "1993-08-15",
+    "institute": "",
+    "ciiu": null,
+    "activity_description": "",
+    "photo": null,
+    "about": "",
+    "cellphone": "",
+    "telephone": "",
+    "ocupation": 3,
+    "profession": "Jsjsbdv",
+    "business_name": null,
+    "commercial_reason": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "sex": "f",
+    "latitude": "-12.1001781",
+    "longitude": "-76.9700853",
+    "created_at": "2018-08-15T23:02:44.355Z",
+    "position": null,
+    "ruc": null,
+    "other_objection": null,
+    "seller": 6,
+    "economic_sector": null,
+    "address": 1,
+    "level_instruction": 4,
+    "nationality": 1,
+    "foreign_address": null,
+    "residence_country": 1
+  }
+},
+{
+  "model": "api.sellercontact",
+  "pk": 2,
+  "fields": {
+    "first_name": "jsjsjs",
+    "last_name": "ksisuss",
+    "type_contact": 3,
+    "type_client": "n",
+    "document_type": 1,
+    "document_number": "64342222",
+    "email": "aaaaaaaaaa@mail.com",
+    "civil_state": "d",
+    "birthdate": "1993-08-23",
+    "institute": "jwjsjwj",
+    "ciiu": null,
+    "activity_description": "",
+    "photo": null,
+    "about": "",
+    "cellphone": "",
+    "telephone": "",
+    "ocupation": 4,
+    "profession": "jajsj",
+    "business_name": null,
+    "commercial_reason": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "sex": "f",
+    "latitude": "-12.1001452",
+    "longitude": "-76.970088",
+    "created_at": "2018-08-20T23:40:26.808Z",
+    "position": null,
+    "ruc": null,
+    "other_objection": null,
+    "seller": 6,
+    "economic_sector": null,
+    "address": 1,
+    "level_instruction": 4,
+    "nationality": 1,
+    "foreign_address": null,
+    "residence_country": 1
+  }
+},
+{
+  "model": "api.sellercontact",
+  "pk": 3,
+  "fields": {
+    "first_name": "jsjdjsjs",
+    "last_name": "kskska",
+    "type_contact": 1,
+    "type_client": "n",
+    "document_type": 1,
+    "document_number": "124375555",
+    "email": "ccccc@mail.com",
+    "civil_state": "w",
+    "birthdate": "1993-08-23",
+    "institute": "",
+    "ciiu": null,
+    "activity_description": "",
+    "photo": null,
+    "about": "",
+    "cellphone": "",
+    "telephone": "",
+    "ocupation": 2,
+    "profession": "bsbs",
+    "business_name": null,
+    "commercial_reason": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "sex": "m",
+    "latitude": "-12.100139",
+    "longitude": "-76.9700847",
+    "created_at": "2018-08-23T23:45:36.231Z",
+    "position": null,
+    "ruc": null,
+    "other_objection": null,
+    "seller": 6,
+    "economic_sector": null,
+    "address": 1,
+    "level_instruction": 4,
+    "nationality": 1,
+    "foreign_address": null,
+    "residence_country": 1
+  }
+}
 ]
