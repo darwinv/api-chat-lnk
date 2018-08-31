@@ -1,9 +1,10 @@
 """Estados de cuenta."""
 from rest_framework import serializers
-from api.models import Specialist, Query, SellerContact
+from api.models import Specialist, Query, SellerContact, ParameterSeller
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 from django.db.models import Count
+
 
 class SpecialistAccountSerializer(serializers.ModelSerializer):
     """Serializer de estado de cuenta Especialista"""
@@ -65,10 +66,16 @@ class SellerAccountSerializer(serializers.Serializer):
                         status__range=(2, 3)).values('client_id')
 
         people_purchase = qs.annotate(client_count=Count('client_id')).count()
+
+        seller_param = ParameterSeller.objects.filter(seller=seller,
+                                                      number_month=hoy.month).get()
+
         return {"month_clients": new_clients,
                 "month_contacts": contacts,
                 "month_promotionals": promotional_plans,
-                "month_people_purchase": people_purchase}
+                "month_people_purchase": people_purchase,
+                "month_contacts_goal": seller_param.contacts_goal,
+                "month_new_clients_goal": seller_param.new_clients_goal}
 
 
 # Cantidad de personas que me compraron este mes

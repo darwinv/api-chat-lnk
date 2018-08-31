@@ -69,3 +69,15 @@ class AccountSeller(APITestCase):
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_people_purchase"], 2)
+
+    def test_month_contacts_goal(self):
+        """Traer meta de contactos del mes."""
+        response = client.get(reverse('sellers-account',
+                                      args=(self.seller,)))
+        self.assertEqual(response.data["month_contacts_goal"], 10)
+
+    def test_month_new_clients_goal(self):
+        """Traer meta de clientes nuevos del mes."""
+        response = client.get(reverse('sellers-account',
+                                      args=(self.seller,)))
+        self.assertEqual(response.data["month_new_clients_goal"], 10)

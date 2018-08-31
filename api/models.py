@@ -716,6 +716,15 @@ class RecoveryPassword(models.Model):
     code = models.CharField(max_length=6)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
 
+
+class ParameterSeller(models.Model):
+    """Parametro mensuales de Vendedores."""
+    number_month = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    contacts_goal = models.PositiveIntegerField()
+    new_clients_goal = models.PositiveIntegerField()
+    seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
+
 # Ingresar en parametros number_requery
 # language
 # tax
@@ -726,6 +735,9 @@ class RecoveryPassword(models.Model):
 # available_requeries
 # medium_payment
 # place_payment
+# next_month_seller_promotionals
+# next_month_seller_contacts
+# next_month_seller_new_client
 
 class Parameter(models.Model):
     """Parametros Generales."""
