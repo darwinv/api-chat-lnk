@@ -45,9 +45,27 @@ class AccountSeller(APITestCase):
         """SetUp."""
         self.seller = 6
 
-    def test_get_data_month(self):
-        """Traer data del mes del Vendedor."""
+    def test_month_new_clients(self):
+        """Traer clientes nuevos del  mes."""
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["month_sold_plans"], 2)
+        self.assertEqual(response.data["month_clients"], 2)
+
+    def test_month_new_contacts(self):
+        """Traer contactos  nuevos del mes."""
+        response = client.get(reverse('sellers-account',
+                                      args=(self.seller,)))
+        self.assertEqual(response.data["month_contacts"], 3)
+
+    def test_month_promotionals(self):
+        """Traer planes promocionales entregados del mes."""
+        response = client.get(reverse('sellers-account',
+                                      args=(self.seller,)))
+        self.assertEqual(response.data["month_promotionals"], 2)
+
+    def test_month_people_purchase(self):
+        """Traer cantidad de gente que compro."""
+        response = client.get(reverse('sellers-account',
+                                      args=(self.seller,)))
+        self.assertEqual(response.data["month_people_purchase"], 2)

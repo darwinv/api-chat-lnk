@@ -45,5 +45,6 @@ class SellerAccountView(APIView):
     def get(self, request, pk):
         seller = self.get_object(pk)
         queryset = Sale.objects.filter(seller=seller)
-        serializer = SellerAccountSerializer(queryset)
+        serializer = SellerAccountSerializer(queryset,
+                                             context={"seller": seller})
         return Response(serializer.data)

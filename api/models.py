@@ -436,7 +436,7 @@ class Sale(models.Model):
     is_fee = models.BooleanField(default=False)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     seller = models.ForeignKey(Seller, null=True, on_delete=models.PROTECT)
-    status = models.PositiveIntegerField(choices=Ch.sale_status)
+    status = models.PositiveIntegerField(choices=Ch.sale_status, default=1)
 
 
 class SaleDetail(models.Model):
