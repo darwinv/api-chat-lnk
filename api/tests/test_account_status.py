@@ -81,3 +81,9 @@ class AccountSeller(APITestCase):
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_new_clients_goal"], 10)
+
+    def test_month_available_promotional(self):
+        """Traer planes promocionales disponibles."""
+        response = client.get(reverse('sellers-account',
+                                      args=(self.seller,)))
+        self.assertEqual(response.data["mont_available_promotional"], 6)
