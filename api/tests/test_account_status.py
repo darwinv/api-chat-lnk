@@ -2,10 +2,10 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 import json
-from ..models import Specialist, Countries
+from ..models import ParameterSeller, SellerNonBillablePlans
 from rest_framework import status
 from api.serializers.actors import SpecialistSerializer
-
+from datetime import datetime
 
 client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer SPsnU4Cz3Mx50UCuLrc20mup10s0Gz')
@@ -44,9 +44,15 @@ class AccountSeller(APITestCase):
     def setUp(self):
         """SetUp."""
         self.seller = 6
+        self.hoy = datetime.now()
 
     def test_month_new_clients(self):
         """Traer clientes nuevos del  mes."""
+        ParameterSeller.objects.all().update(
+            number_month=self.hoy.month)
+
+        SellerNonBillablePlans.objects.all().update(
+            number_month=self.hoy.month)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -54,36 +60,70 @@ class AccountSeller(APITestCase):
 
     def test_month_new_contacts(self):
         """Traer contactos  nuevos del mes."""
+        ParameterSeller.objects.all().update(
+            number_month=self.hoy.month)
+
+        SellerNonBillablePlans.objects.all().update(
+            number_month=self.hoy.month)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
+
         self.assertEqual(response.data["month_contacts"], 3)
 
     def test_month_promotionals(self):
         """Traer planes promocionales entregados del mes."""
+        ParameterSeller.objects.all().update(
+            number_month=self.hoy.month)
+
+        SellerNonBillablePlans.objects.all().update(
+            number_month=self.hoy.month)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_promotionals"], 2)
 
     def test_month_people_purchase(self):
         """Traer cantidad de gente que compro."""
+        ParameterSeller.objects.all().update(
+            number_month=self.hoy.month)
+
+        SellerNonBillablePlans.objects.all().update(
+            number_month=self.hoy.month)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_people_purchase"], 2)
 
     def test_month_contacts_goal(self):
         """Traer meta de contactos del mes."""
+        ParameterSeller.objects.all().update(
+            number_month=self.hoy.month)
+
+        SellerNonBillablePlans.objects.all().update(
+            number_month=self.hoy.month)
+
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_contacts_goal"], 10)
 
     def test_month_new_clients_goal(self):
         """Traer meta de clientes nuevos del mes."""
+        ParameterSeller.objects.all().update(
+            number_month=self.hoy.month)
+
+        SellerNonBillablePlans.objects.all().update(
+            number_month=self.hoy.month)
+
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_new_clients_goal"], 10)
 
     def test_month_available_promotional(self):
         """Traer planes promocionales disponibles."""
+
+        ParameterSeller.objects.all().update(
+            number_month=self.hoy.month)
+
+        SellerNonBillablePlans.objects.all().update(
+            number_month=self.hoy.month)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["mont_available_promotional"], 6)

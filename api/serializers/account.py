@@ -65,7 +65,7 @@ class SellerAccountSerializer(serializers.Serializer):
                         saledetail__is_billable=True,
                         created_at__range=(primer, hoy),
                         status__range=(2, 3)).values('client_id')
-
+        # Cantidad de personas  que compraron este mes
         people_purchase = qs.annotate(client_count=Count('client_id')).count()
         # instancia parametro de vendedor
         seller_param = ParameterSeller.objects.filter(seller=seller,
