@@ -107,7 +107,7 @@ class PaymentPendig(APITestCase):
         """Crear pago."""
         
         response = self.client.get(
-            reverse('payment-pending'),
+            reverse('sale-payment-pending'),
             {'document_number': '24612582'},
             content_type='application/json'
         )
