@@ -2,12 +2,14 @@
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
 from api.models import Payment, MonthlyFee, Sale, SaleDetail
+from api.models import QueryPlansAcquired
 from api.utils.tools import get_date_by_time
 from datetime import datetime, date
 from api.emails import BasicEmailAmazon
 from dateutil.relativedelta import relativedelta
 from rest_framework.validators import UniqueValidator
 from api.serializers.actors import ClientSerializer
+from api.serializers.plan import QueryPlansAcquiredSerializer
 
 class PaymentSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
@@ -30,9 +32,9 @@ class PaymentSerializer(serializers.ModelSerializer):
 class PaymentSaleSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
 
-    client__first_name = serializers.CharField()
-    client__last_name = serializers.CharField()
-    client__business_name = serializers.CharField()
+    client__first_name = serializers.SerializerMethodField()
+    client__last_name = serializers.SerializerMethodField()
+    client__business_name = serializers.SerializerMethodField()
     created_at = serializers.SerializerMethodField()
     class Meta:
         """Modelo."""
@@ -48,8 +50,28 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
             return str(obj['created_at'])
         return str(obj.created_at)
 
+    def get_client__first_name(self, obj):
+        """Devuelve client__first_name."""
+        if type(obj) is dict:
+            return str(obj['client__first_name'])
+        return str(obj.client.first_name)
+
+    def get_client__last_name(self, obj):
+        """Devuelve client__last_name."""
+        if type(obj) is dict:
+            return str(obj['client__last_name'])
+        return str(obj.client.last_name)
+
+    def get_client__business_name(self, obj):
+        """Devuelve client__business_name."""
+        if type(obj) is dict:
+            return str(obj['client__business_name'])
+        return str(obj.client.business_name)
+
+
 class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
+    attribute_product = serializers.SerializerMethodField()
 
     class Meta:
         """Modelo."""
@@ -57,8 +79,17 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
         model = SaleDetail
         fields = (
             'price', 'description', 'discount', 'pin_code', 'is_billable',
-            'contract','product_type', 'sale')
+            'contract','product_type', 'sale', 'attribute_product')
 
+    def get_attribute_product(self, obj):
+        """Devuelve client."""
+        
+        if obj.product_type.id == 1:
+            plan = QueryPlansAcquired.objects.get(sale_detail=obj.id)
+            sale = QueryPlansAcquiredSerializer(plan)
+            return sale.data
+        else:
+            return None
 
 class SaleWithFeeSerializer(serializers.Serializer):
     """serializador para detalle de venta"""
@@ -66,23 +97,18 @@ class SaleWithFeeSerializer(serializers.Serializer):
     detail = serializers.SerializerMethodField()
     products = serializers.SerializerMethodField()
 
-    fields = ('detail', 'products')
-
     def get_detail(self, obj):
         """Devuelve client."""
-        return ""
-        # sale = PaymentSaleSerializer(obj)
-        # return sale.data
+        sale = PaymentSaleSerializer(obj)
+        return sale.data
 
     def get_products(self, obj):
         """Devuelve sale detail."""
-        return ""
-        # sale_detail = SaleDetail.objects.filter(sale=obj.id)
-        # serializer = PaymentSaleDetailSerializer(sale_detail, many=True)
+        sale_detail = SaleDetail.objects.filter(sale=obj.id)
+        serializer = PaymentSaleDetailSerializer(sale_detail, many=True)
+        return serializer.data
 
-        # return serializer.data
-
-class PaymentSaleDetailSerializer(serializers.ModelSerializer):
+class PaymentSalePendingDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
 
     client = serializers.SerializerMethodField()
@@ -102,6 +128,7 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
 
     def get_sale(self, obj):
         """Devuelve sale."""
-        return ""
+        
         serializer = SaleWithFeeSerializer(obj.sale)
+        
         return serializer.data

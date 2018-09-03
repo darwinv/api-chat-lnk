@@ -112,3 +112,21 @@ class PaymentPendig(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetFeePaymentPendig(APITestCase):
+    """Prueba de Traer Pagos Pendientes."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_payment']
+
+    def setUp(self):
+        """SetUp."""
+        pass
+
+    def test_get_payment_pending(self):
+        """Crear pago."""
+        
+        response = self.client.get(
+            reverse('fee-payment-pending-detail', kwargs={'pk': 1}),
+             format='json')
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

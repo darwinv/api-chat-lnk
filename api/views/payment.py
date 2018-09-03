@@ -1,7 +1,7 @@
 """Vista de Pagos."""
 from rest_framework.views import APIView
 from api.serializers.payment import PaymentSerializer, PaymentSaleSerializer
-from api.serializers.payment import PaymentSaleDetailSerializer
+from api.serializers.payment import PaymentSalePendingDetailSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
@@ -73,6 +73,7 @@ class PaymentPendingDetailView(APIView):
         """Detalle."""
         fee = MonthlyFee.objects.get(pk=pk)
 
-        serializer = PaymentSaleDetailSerializer(fee)
+        serializer = PaymentSalePendingDetailSerializer(fee)
         
         return Response(serializer.data)
+        

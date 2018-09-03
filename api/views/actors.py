@@ -1282,7 +1282,6 @@ class RucDetailView(APIView):
             # Convinamos los diccionarios
             data = dict(data, **response.json())
 
-
             data['cellphone'] = data['telephone'] = ""
             if 'telefono' in response2.json():
                 telefonos = response2.json()['telefono']
@@ -1311,18 +1310,22 @@ class SupportActorsView(APIView):
         data = request.data
         subject = ''
 
-        if not 'query' in data:
-            serializers.ValidationError({'query': [self.required]})
+        if 'query' in request.data:
+            pass
+        else:
+            raise serializers.ValidationError({'query': [self.required]})
 
-        if not 'message' in data:
-            serializers.ValidationError({'message': [self.required]})
+        if 'message' in request.data:
+            pass
+        else:
+            raise serializers.ValidationError({'message': [self.required]})
 
         if request.user.role.id == ROLE_CLIENT:
             subject = 'Atención al Cliente'
         elif request.user.role.id == ROLE_SPECIALIST:
             subject = 'Soporte - Especialista'
         elif request.user.role.id == ROLE_SELLER:
-            subject = 'Soporte - Vendedor'        
+            subject = 'Soporte - Vendedor'
 
         if 'test' not in sys.argv:
 
