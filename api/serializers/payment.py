@@ -119,7 +119,7 @@ class PaymentSalePendingDetailSerializer(serializers.ModelSerializer):
         model = MonthlyFee
         fields = (
             'fee_amount', 'fee_order_number', 'fee_quantity', 'pay_before',
-            'status', 'client', 'sale')
+            'status', 'client', 'sale', 'id')
 
     def get_client(self, obj):
         """Devuelve client."""

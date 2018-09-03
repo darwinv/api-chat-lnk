@@ -71,9 +71,10 @@ class PaymentPendingDetailView(APIView):
 
     def get(self, request, pk):
         """Detalle."""
-        fee = MonthlyFee.objects.get(pk=pk)
-
-        serializer = PaymentSalePendingDetailSerializer(fee)
+        fee = MonthlyFee.objects.filter(sale=pk, status=1).order_by('pay_before')[0]
         
-        return Response(serializer.data)
-        
+        if fee:
+            serializer = PaymentSalePendingDetailSerializer(fee)        
+            return Response(serializer.data)
+        else:
+            raise Http404

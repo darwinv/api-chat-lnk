@@ -119,9 +119,9 @@ urlpatterns = [
         actors.SpecialistQueryCountView.as_view(),
         name='specialist-query-count'),
 
-    # url(r'^specialists/associate/$',
-    #     actors.SpecialistAsociateListView.as_view(),
-    #     name='specialists-associate-category'),
+    url(r'^specialists/associate/$',
+        actors.SpecialistAsociateListView.as_view(),
+        name='specialists-associate-category'),
 
 
     # Especialistas Asociados
