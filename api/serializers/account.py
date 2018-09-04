@@ -106,6 +106,12 @@ class SellerAccountBackendSerializer(serializers.Serializer):
                                 created_at__range=(primer, hoy),
                                 status__range=(2, 3)).count()
 
+        queries_sold = obj.filter(saledetail__product_type=1,
+                                  saledetail__is_billable=True,
+                                  created_at__range=(primer, hoy),
+                                  status__range=(2, 3)).aggregate(Sum('queryplansacquired__query_quantity'))
+
+        print(queries_sold)
         return {"month_sold_plans": plans_sold}
 
 
@@ -119,3 +125,5 @@ class SellerAccountBackendSerializer(serializers.Serializer):
 # api_saledetail.is_billable =  1 AND
 # api_sale.seller_id =  6 AND
 # api_saledetail.product_type_id =  1
+# api_sale.status between 2 3
+# api_sale.created_at
