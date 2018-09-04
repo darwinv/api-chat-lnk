@@ -127,3 +127,23 @@ class AccountSeller(APITestCase):
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["mont_available_promotional"], 6)
+
+
+class AccountBackendSeller(APITestCase):
+    """Estado de cuenta Backend del Vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_account_seller']
+
+    def setUp(self):
+        """SetUp."""
+        self.seller = 6
+        self.hoy = datetime.now()
+
+    def test_month_sold_plans(self):
+        """Planes vendidos en el mes."""
+        ParameterSeller.objects.all().update(
+            number_month=self.hoy.month)
+
+        response = client.get(reverse('sellers-account-back',
+                                      args=(self.seller,)))
+        self.assertEqual(response.data["month_sold_plans"], 4)

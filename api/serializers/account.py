@@ -70,6 +70,14 @@ class SellerAccountSerializer(serializers.Serializer):
         # instancia parametro de vendedor
         seller_param = ParameterSeller.objects.filter(seller=seller,
                                                       number_month=hoy.month).get()
+        # instancia parametro de vendedor
+        try:
+            seller_param = ParameterSeller.objects.get(seller=seller,
+                                                       number_month=hoy.month)
+            contacts_goal = seller_param.contacts_goal
+            new_clients_goal = seller_param.new_clients_goal
+        except ParameterSeller.DoesNotExist:
+            contacts_goal = new_clients_goal = None
         # suma de promocionales disponibles
         quant_dic = SellerNonBillablePlans.objects.filter(
             number_month=hoy.month, seller=seller).aggregate(Sum('quantity'))
@@ -78,19 +86,38 @@ class SellerAccountSerializer(serializers.Serializer):
                 "month_contacts": contacts,
                 "month_promotionals": promotional_plans,
                 "month_people_purchase": people_purchase,
-                "month_contacts_goal": seller_param.contacts_goal,
-                "month_new_clients_goal": seller_param.new_clients_goal,
+                "month_contacts_goal": contacts_goal,
+                "month_new_clients_goal": new_clients_goal,
                 "mont_available_promotional": quant_dic["quantity__sum"]}
 
 
-# Cantidad de personas que me compraron este mes
+class SellerAccountBackendSerializer(serializers.Serializer):
+    """Serializer de estado de cuenta Vendedor."""
+
+    def to_representation(self, obj):
+        """To Representation."""
+        seller = self.context["seller"]
+        hoy = datetime.now()  # fecha de hoy
+        # fecha de primer  dia del mes
+        primer = datetime(hoy.year, hoy.month, 1, 0, 0, 0)
+        # planes vendidos en este mes
+        plans_sold = obj.filter(saledetail__product_type=1,
+                                saledetail__is_billable=True,
+                                created_at__range=(primer, hoy),
+                                status__range=(2, 3)).count()
+
+        return {"month_sold_plans": plans_sold}
+
+
 # SELECT
-# DISTINCT api_sale.client_id
+# api_saledetail.id,
+# api_saledetail.sale_id
 # FROM
-# api_sale
-# Inner Join api_saledetail ON api_saledetail.sale_id = api_sale.id
+# api_saledetail
+# Inner Join api_sale ON api_sale.id = api_saledetail.sale_id
 # WHERE
 # api_sale.seller_id =  6 AND
 # api_saledetail.product_type_id =  1 AND
 # api_saledetail.is_billable =  1 AND
-# api_sale.created_at BETWEEN  '2018-08-01' AND
+# api_sale.status BETWEEN  2 AND 3 AND
+# api_sale.created_at =  ''"
