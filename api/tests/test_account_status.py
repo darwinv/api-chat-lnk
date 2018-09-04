@@ -147,3 +147,4 @@ class AccountBackendSeller(APITestCase):
         response = client.get(reverse('sellers-account-back',
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_sold_plans"], 4)
+        self

@@ -88,7 +88,7 @@ class SellerAccountSerializer(serializers.Serializer):
                 "month_people_purchase": people_purchase,
                 "month_contacts_goal": contacts_goal,
                 "month_new_clients_goal": new_clients_goal,
-                "mont_available_promotional": quant_dic["quantity__sum"]}
+                "month_available_promotional": quant_dic["quantity__sum"]}
 
 
 class SellerAccountBackendSerializer(serializers.Serializer):
@@ -110,14 +110,12 @@ class SellerAccountBackendSerializer(serializers.Serializer):
 
 
 # SELECT
-# api_saledetail.id,
-# api_saledetail.sale_id
+# SUM(api_queryplansacquired.query_quantity) AS consultas_vendidas
 # FROM
 # api_saledetail
-# Inner Join api_sale ON api_sale.id = api_saledetail.sale_id
+# Inner Join api_sale ON api_saledetail.sale_id = api_sale.id
+# Inner Join api_queryplansacquired ON api_queryplansacquired.sale_detail_id = api_saledetail.id
 # WHERE
-# api_sale.seller_id =  6 AND
-# api_saledetail.product_type_id =  1 AND
 # api_saledetail.is_billable =  1 AND
-# api_sale.status BETWEEN  2 AND 3 AND
-# api_sale.created_at =  ''"
+# api_sale.seller_id =  6 AND
+# api_saledetail.product_type_id =  1
