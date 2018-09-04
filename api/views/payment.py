@@ -1,6 +1,7 @@
 """Vista de Pagos."""
 from rest_framework.views import APIView
 from api.serializers.payment import PaymentSerializer, PaymentSaleSerializer
+from api.serializers.payment import PaymentSalePendingDetailSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
@@ -62,3 +63,18 @@ class PaymentPendingView(ListCreateAPIView):
 
         serializer = PaymentSaleSerializer(manage_data, many=True)
         return Response(serializer.data)
+
+class PaymentPendingDetailView(APIView):
+    """Vista para traer pagos pendientes."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (IsAdmin,)
+
+    def get(self, request, pk):
+        """Detalle."""
+        fee = MonthlyFee.objects.filter(sale=pk, status=1).order_by('pay_before')[0]
+        
+        if fee:
+            serializer = PaymentSalePendingDetailSerializer(fee)        
+            return Response(serializer.data)
+        else:
+            raise Http404

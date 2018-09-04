@@ -119,9 +119,9 @@ urlpatterns = [
         actors.SpecialistQueryCountView.as_view(),
         name='specialist-query-count'),
 
-    # url(r'^specialists/associate/$',
-    #     actors.SpecialistAsociateListView.as_view(),
-    #     name='specialists-associate-category'),
+    url(r'^specialists/associate/$',
+        actors.SpecialistAsociateListView.as_view(),
+        name='specialists-associate-category'),
 
 
     # Especialistas Asociados
@@ -250,7 +250,10 @@ urlpatterns = [
     url(r'^payment/$',
         payment.CreatePayment.as_view(), name='payment'),
 
-    url(r'^payment-pending/$',
-        payment.PaymentPendingView.as_view(), name='payment-pending'),
+    url(r'^sales/payment-pending/$',
+        payment.PaymentPendingView.as_view(), name='sale-payment-pending'),
+
+    url(r'^fees/payment-pending/(?P<pk>[0-9]+)/$',
+        payment.PaymentPendingDetailView.as_view(), name='fee-payment-pending-detail'),
 
 ]

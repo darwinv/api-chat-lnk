@@ -3,11 +3,11 @@ from botocore.exceptions import ClientError
 
 # Replace sender@example.com with your "From" address.
 # This address must be verified with Amazon SES.
-SENDER = "amunoz@pympack.com.pe"
+SENDER = "jefeti@pympack.com.pe"
 
 # Replace recipient@example.com with a "To" address. If your account
 # is still in the sandbox, this address must be verified.
-RECIPIENT = "dvasquez@pympack.com.pe"
+RECIPIENT = "web1@pympack.com.pe"
 
 # Specify a configuration set. If you do not want to use a configuration
 # set, comment the following variable, and the
