@@ -68,19 +68,29 @@ class SellerAccountSerializer(serializers.Serializer):
         # Cantidad de personas  que compraron este mes
         people_purchase = qs.annotate(client_count=Count('client_id')).count()
         # instancia parametro de vendedor
-        seller_param = ParameterSeller.objects.filter(seller=seller,
-                                                      number_month=hoy.month).get()
+        try:
+            seller_param = ParameterSeller.objects.get(seller=seller,
+                                                       number_month=hoy.month)
+            contacts_goal = seller_param.contacts_goal
+            new_clients_goal = seller_param.new_clients_goal
+            people_purchase_goal = seller_param.people_purchase_goal
+        except ParameterSeller.DoesNotExist:
+            contacts_goal = new_clients_goal = None
         # suma de promocionales disponibles
         quant_dic = SellerNonBillablePlans.objects.filter(
             number_month=hoy.month, seller=seller).aggregate(Sum('quantity'))
+        # todos los promocionales de ese mes
+        all_promo = quant_dic["quantity__sum"] + promotional_plans
 
         return {"month_clients": new_clients,
                 "month_contacts": contacts,
                 "month_promotionals": promotional_plans,
                 "month_people_purchase": people_purchase,
-                "month_contacts_goal": seller_param.contacts_goal,
-                "month_new_clients_goal": seller_param.new_clients_goal,
-                "mont_available_promotional": quant_dic["quantity__sum"]}
+                "month_people_purchase_goal": people_purchase_goal,
+                "month_contacts_goal": contacts_goal,
+                "month_new_clients_goal": new_clients_goal,
+                "month_all_promotionals": all_promo}
+
 
 
 # Cantidad de personas que me compraron este mes

@@ -708,6 +708,7 @@ class NotificationsBack(models.Model):
     code = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
 
+
 class RecoveryPassword(models.Model):
     """Modelo Token para Recuperacion de Contraseñas"""
 
@@ -723,6 +724,7 @@ class ParameterSeller(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     contacts_goal = models.PositiveIntegerField()
     new_clients_goal = models.PositiveIntegerField()
+    people_purchase_goal = models.PositiveIntegerField()
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
 
 # Ingresar en parametros number_requery
