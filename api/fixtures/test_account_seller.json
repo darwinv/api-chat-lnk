@@ -1,5 +1,35 @@
 [
   {
+  "model": "api.queryplans",
+  "pk": 2,
+    "fields": {
+    "name": "Minipack",
+    "query_quantity": 6,
+    "validity_months": 3,
+    "maximum_response_time": 24,
+    "price": "700.0000",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": false,
+    "product_type": 1,
+    "clasification": 1
+    }
+  },
+  {
+  "model": "api.queryplans",
+  "pk": 3,
+    "fields": {
+    "name": "Polypack",
+    "query_quantity": 6,
+    "validity_months": 3,
+    "maximum_response_time": 24,
+    "price": "900.0000",
+    "created_at": "2018-02-08T14:37:27Z",
+    "is_active": false,
+    "product_type": 1,
+    "clasification": 1
+    }
+  },
+  {
     "model": "api.address",
     "pk": 1,
     "fields": {
@@ -368,6 +398,132 @@
   }
 },
 {
+  "model": "api.queryplansacquired",
+  "pk": 1,
+  "fields": {
+    "expiration_date": "2019-05-29",
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 2,
+  "fields": {
+    "expiration_date": "2019-09-03",
+    "validity_months": 6,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": "2018-03-05",
+    "is_active": false,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 2
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 3,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 3
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 4,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 4
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 5,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 5
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 6,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "Polypack",
+    "query_plans": 3,
+    "sale_detail": 6
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 7,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "Polypack",
+    "query_plans": 3,
+    "sale_detail": 7
+  }
+},
+{
   "model": "api.sellercontact",
   "pk": 1,
   "fields": {
@@ -503,36 +659,6 @@
     "new_clients_goal": 10,
     "people_purchase_goal": 12,
     "seller":6
-  }
-},
-{
-"model": "api.queryplans",
-"pk": 2,
-  "fields": {
-  "name": "Minipack",
-  "query_quantity": 6,
-  "validity_months": 3,
-  "maximum_response_time": 24,
-  "price": "700.0000",
-  "created_at": "2018-02-08T14:37:27Z",
-  "is_active": false,
-  "product_type": 1,
-  "clasification": 1
-  }
-},
-{
-"model": "api.queryplans",
-"pk": 3,
-  "fields": {
-  "name": "Polypack",
-  "query_quantity": 6,
-  "validity_months": 3,
-  "maximum_response_time": 24,
-  "price": "900.0000",
-  "created_at": "2018-02-08T14:37:27Z",
-  "is_active": false,
-  "product_type": 1,
-  "clasification": 1
   }
 },
 {
