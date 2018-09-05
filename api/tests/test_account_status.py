@@ -36,7 +36,7 @@ class AccountSpecialist(APITestCase):
         self.assertEqual(response.data["queries_absolved_category"], 5)
 
 
-class AccountSeller(APITestCase):
+class AccountProfileSeller(APITestCase):
     """Estado de cuenta del Vendedor."""
 
     fixtures = ['data', 'data2', 'data3', 'test_account_seller']
@@ -140,7 +140,7 @@ class AccountSeller(APITestCase):
         self.assertEqual(response.data["month_all_promotionals"], 8)
 
 
-class AccountBackendSeller(APITestCase):
+class AccountStatusSeller(APITestCase):
     """Estado de cuenta Backend del Vendedor."""
 
     fixtures = ['data', 'data2', 'data3', 'test_account_seller']
@@ -152,10 +152,19 @@ class AccountBackendSeller(APITestCase):
 
     def test_month_sold_plans(self):
         """Planes vendidos en el mes."""
+        SellerNonBillablePlans.objects.all().update(
+            number_month=self.hoy.month)
+
         ParameterSeller.objects.all().update(
             number_month=self.hoy.month)
 
         response = client.get(reverse('sellers-account-back',
                                       args=(self.seller,)))
+        
         self.assertEqual(response.data["month_sold_plans"], 4)
+        self.assertEqual(response.data["sold_plans"], 5)
         self.assertEqual(response.data["month_sold_queries"], 24)
+        self.assertEqual(response.data["sold_queries"], 29)
+        self.assertEqual(response.data["month_all_promotionals"], 8)
+        self.assertEqual(response.data["month_promotionals"], 2)
+        self.assertEqual(response.data["promotionals"], 2)

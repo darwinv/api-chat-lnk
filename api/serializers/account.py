@@ -68,23 +68,14 @@ class SellerAccountSerializer(serializers.Serializer):
         # Cantidad de personas  que compraron este mes
         people_purchase = qs.annotate(client_count=Count('client_id')).count()
         # instancia parametro de vendedor
-<<<<<<< HEAD
-=======
-        seller_param = ParameterSeller.objects.filter(seller=seller,
-                                                      number_month=hoy.month).get()
-        # instancia parametro de vendedor
->>>>>>> feature/backend_account_seller
         try:
             seller_param = ParameterSeller.objects.get(seller=seller,
                                                        number_month=hoy.month)
             contacts_goal = seller_param.contacts_goal
             new_clients_goal = seller_param.new_clients_goal
-<<<<<<< HEAD
             people_purchase_goal = seller_param.people_purchase_goal
-=======
->>>>>>> feature/backend_account_seller
         except ParameterSeller.DoesNotExist:
-            contacts_goal = new_clients_goal = None
+            contacts_goal = new_clients_goal = people_purchase_goal = None
         # suma de promocionales disponibles
         quant_dic = SellerNonBillablePlans.objects.filter(
             number_month=hoy.month, seller=seller).aggregate(Sum('quantity'))
@@ -100,10 +91,6 @@ class SellerAccountSerializer(serializers.Serializer):
                 "month_new_clients_goal": new_clients_goal,
                 "month_all_promotionals": all_promo}
 
-                "month_contacts_goal": contacts_goal,
-                "month_new_clients_goal": new_clients_goal,
-                "month_available_promotional": quant_dic["quantity__sum"]}
-
 
 class SellerAccountBackendSerializer(serializers.Serializer):
     """Serializer de estado de cuenta Vendedor."""
@@ -114,19 +101,56 @@ class SellerAccountBackendSerializer(serializers.Serializer):
         hoy = datetime.now()  # fecha de hoy
         # fecha de primer  dia del mes
         primer = datetime(hoy.year, hoy.month, 1, 0, 0, 0)
+        # planes promocionales entregados en el mes
+        promotional_plans = obj.filter(saledetail__product_type=1,
+                                       saledetail__is_billable=False,
+                                       created_at__range=(primer, hoy)).count()
+
+        promotional_history = obj.filter(saledetail__product_type=1,
+                                         saledetail__is_billable=False,
+                                         ).count()
+        # suma de promocionales disponibles
+        quant_dic = SellerNonBillablePlans.objects.filter(
+            number_month=hoy.month, seller=seller).aggregate(Sum('quantity'))
+        # todos los promocionales de ese mes
+        all_promo = quant_dic["quantity__sum"] + promotional_plans
+
         # planes vendidos en este mes
         plans_sold = obj.filter(saledetail__product_type=1,
                                 saledetail__is_billable=True,
                                 created_at__range=(primer, hoy),
                                 status__range=(2, 3)).count()
-
+        # planes vendidos todo los tiempos
+        all_plans_sold = obj.filter(saledetail__product_type=1,
+                                    saledetail__is_billable=True,
+                                    status__range=(2, 3)).count()
+        # consultas vendidas historico
         queries_sold = obj.filter(saledetail__product_type=1,
                                   saledetail__is_billable=True,
                                   created_at__range=(primer, hoy),
-                                  status__range=(2, 3)).aggregate(Sum('queryplansacquired__query_quantity'))
+                                  status__range=(2, 3)).aggregate(queries=Sum('saledetail__queryplansacquired__query_quantity'))
+        # consultas vendidas equivalentes historico
+        all_queries_sold = obj.filter(saledetail__product_type=1,
+                                      saledetail__is_billable=True,
+                                      status__range=(2, 3)).aggregate(queries=Sum('saledetail__queryplansacquired__query_quantity'))
 
-        print(queries_sold)
-        return {"month_sold_plans": plans_sold}
+        # instancia parametro de vendedor
+        try:
+            seller_param = ParameterSeller.objects.get(seller=seller,
+                                                       number_month=hoy.month)
+            new_clients_goal = seller_param.new_clients_goal
+        except ParameterSeller.DoesNotExist:
+            new_clients_goal = None
+
+        return {"month_sold_plans": plans_sold,
+                "month_sold_queries": queries_sold["queries"],
+                "sold_plans": all_plans_sold,
+                "sold_queries": all_queries_sold["queries"],
+                "month_new_clients_goal": new_clients_goal,
+                "month_all_promotionals": all_promo,
+                "month_promotionals": promotional_plans,
+                "promotionals": promotional_history
+                }
 
 
 # SELECT

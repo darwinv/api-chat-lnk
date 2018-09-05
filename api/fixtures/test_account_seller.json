@@ -300,6 +300,21 @@
 }
 },
 {
+"model": "api.sale",
+"pk": 5,
+"fields": {
+  "created_at": "2018-08-01T16:03:53.415Z",
+  "place": "BCP",
+  "total_amount": "700.00",
+  "reference_number": "CD1007",
+  "description": "test",
+  "is_fee": false,
+  "client": 2,
+  "seller": 6,
+  "status": 3
+}
+},
+{
   "model": "api.saledetail",
   "pk": 1,
   "fields": {
@@ -395,6 +410,20 @@
     "contract": null,
     "product_type": 1,
     "sale": 4
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 8,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL123458",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 5
   }
 },
 {
@@ -521,6 +550,24 @@
     "plan_name": "Polypack",
     "query_plans": 3,
     "sale_detail": 7
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 8,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 6,
+    "query_quantity": 5,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "Polypack",
+    "query_plans": 3,
+    "sale_detail": 8
   }
 },
 {
