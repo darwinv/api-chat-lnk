@@ -3,7 +3,8 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 import json
-# from ..models import Client as Cliente
+from datetime import datetime
+from ..models import SellerContact
 from rest_framework import status
 # from api.serializers.actors import ClientSerializer
 
@@ -979,6 +980,25 @@ class CreateBussinessContact(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class GetContacts(APITestCase):
+    """Devolver data de contactos."""
+    fixtures = ['data', 'data2', 'data3', 'test_contact']
+
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer RCOM8gcbsOv56QFlcCJpgDENETGCLr')
+
+    def test_get_contacts(self):
+        """Devolver Contactos."""
+        hoy = datetime.today()
+        SellerContact.objects.filter(seller=2).update(created_at=hoy)
+        response = self.client.get(reverse('contacts'))
+        import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class GetObjections(APITestCase):

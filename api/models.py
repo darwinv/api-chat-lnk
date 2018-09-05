@@ -253,9 +253,9 @@ class SellerContact(models.Model):
                                           related_name="residence_contact",
                                           verbose_name=_('residence country contact'))
 
-    def __str__(self):
-        """Nombre del Contacto."""
-        return self.first_name
+    # def __str__(self):
+    #     """Nombre del Contacto."""
+    #     return self.first_name
 
 
 class ObjectionsList(models.Model):

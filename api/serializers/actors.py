@@ -982,6 +982,17 @@ class ListObjectionsSerializer(serializers.ModelSerializer):
         return _(str(obj.objection))
 
 
+class SellerContactSerializer(serializers.ModelSerializer):
+    """Serializer Contacto."""
+
+    class Meta:
+        """ Model Contacto."""
+        model = SellerContact
+        fields = ('id', 'first_name', 'last_name', 'photo',
+                  'type_contact', 'latitude', 'longitude',
+                  'commercial_reason')
+
+
 class BaseSellerContactSerializer(serializers.ModelSerializer):
     """Base para contacto."""
 

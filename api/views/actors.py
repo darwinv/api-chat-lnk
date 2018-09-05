@@ -16,7 +16,8 @@ from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from api.serializers.actors import KeySerializer, ContactPhotoSerializer
-from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
+from api.serializers.actors import UserSerializer, SpecialistSerializer
+from api.serializers.actors import SellerContactSerializer, SellerContactNaturalSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
 from api.serializers.actors import ChangeEmailSerializer, ChangePassword
@@ -1032,6 +1033,14 @@ class ContactListView(ListCreateAPIView):
     # aca se debe colocar el serializer para listar todos
     serializer_class = SellerContactNaturalSerializer
     queryset = SellerContact.objects.all()
+
+    def get(self, request):
+        """Devolver contactos del vendedor."""
+        seller = Operations.get_id(self, request)
+        contacts = SellerContact.objects.filter(seller=seller,
+                                                created_at__startswith=date.today())
+        serializer = SellerContactSerializer(contacts, many=True)
+        return Response(serializer.data)
 
     def post(self, request):
         """Redefinido funcion para crear vendedor."""
