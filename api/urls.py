@@ -198,9 +198,16 @@ urlpatterns = [
 
     # Contacto no efectivo
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
-    # url para subir imagen
-    url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(), name='upload-photo'),
+    # url para subir imagen de usuario
+    url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(),
+        name='upload-photo'),
+
+    # url para subir imagen de contacto
+    url(r'^upload_photo/contact/(?P<pk>[0-9]+)/$',
+        actors.PhotoContactUploadView.as_view(), name='upload-photo-contact'),
+
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
+
     url(r'^upload_document/(?P<pk>[0-9]+)/$', actors.DocumentUploadView.as_view(), name='upload-document'),
     # cambiar clave de usuario
     url(r'^change/password/(?P<pk>[0-9]+)/$',

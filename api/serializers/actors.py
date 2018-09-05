@@ -83,12 +83,22 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = User
-        fields = ('id', 'username','img_document_number','role','code','document_number','email_exact')
+        fields = ('id', 'username', 'img_document_number', 'role',
+                  'code', 'document_number', 'email_exact')
+
 
 class UserPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('photo',)
+
+
+class ContactPhotoSerializer(serializers.ModelSerializer):
+    "Actualizar foto de contacto"
+    class Meta:
+        model = SellerContact
+        fields = ('photo',)
+
 
 class CommonValidation():
     def validate_img(self, photo):
