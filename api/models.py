@@ -269,7 +269,7 @@ class Client(User):
 
     type_client = models.CharField(max_length=1, choices=Ch.client_type_client)
     sex = models.CharField(max_length=1, choices=Ch.client_sex, blank=True)
-    commercial_reason = models.CharField(max_length=45, null=True)
+    commercial_reason = models.CharField(max_length=100, null=True)
     civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state,
                                    null=True)
     birthdate = models.DateField(null=True)
@@ -281,11 +281,11 @@ class Client(User):
     ocupation = models.PositiveIntegerField(null=True,
                                             choices=Ch.client_ocupation)
     about = models.CharField(max_length=255, null=True, blank=True)
-    business_name = models.CharField(max_length=45, null=True)
-    agent_firstname = models.CharField(max_length=45, null=True)
-    agent_lastname = models.CharField(max_length=45, null=True)
-    position = models.CharField(max_length=45, null=True)
-    profession = models.CharField(max_length=45, null=True)
+    business_name = models.CharField(max_length=100, null=True)
+    agent_firstname = models.CharField(max_length=100, null=True)
+    agent_lastname = models.CharField(max_length=100, null=True)
+    position = models.CharField(max_length=100, null=True)
+    profession = models.CharField(max_length=100, null=True)
     economic_sector = models.ForeignKey(EconomicSector,
                                         on_delete=models.PROTECT, null=True)
     level_instruction = models.ForeignKey(LevelInstruction,
