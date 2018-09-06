@@ -997,7 +997,6 @@ class GetContacts(APITestCase):
         hoy = datetime.today()
         SellerContact.objects.filter(seller=2).update(created_at=hoy)
         response = self.client.get(reverse('contacts'))
-        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

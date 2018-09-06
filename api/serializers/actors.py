@@ -984,6 +984,7 @@ class ListObjectionsSerializer(serializers.ModelSerializer):
 
 class SellerContactSerializer(serializers.ModelSerializer):
     """Serializer Contacto."""
+    type_contact = serializers.SerializerMethodField()
 
     class Meta:
         """ Model Contacto."""
@@ -992,6 +993,13 @@ class SellerContactSerializer(serializers.ModelSerializer):
                   'type_contact', 'latitude', 'longitude',
                   'commercial_reason')
 
+    def get_type_contact(self, obj):
+        """Contacto efectivo y no efectivo."""
+        # 1 efectivo, 2 no efectivo
+        if obj.type_contact == 2:
+            return 2
+        else:
+            return 1
 
 class BaseSellerContactSerializer(serializers.ModelSerializer):
     """Base para contacto."""

@@ -208,7 +208,8 @@ urlpatterns = [
 
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
 
-    url(r'^upload_document/(?P<pk>[0-9]+)/$', actors.DocumentUploadView.as_view(), name='upload-document'),
+    url(r'^upload_document/(?P<pk>[0-9]+)/$',
+        actors.DocumentUploadView.as_view(), name='upload-document'),
     # cambiar clave de usuario
     url(r'^change/password/(?P<pk>[0-9]+)/$',
         actors.UpdateUserPassword.as_view(),
