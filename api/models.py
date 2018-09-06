@@ -338,9 +338,7 @@ class Category(models.Model):
 
 class Bank(models.Model):
     """Bancos del Peru."""
-
     name = models.CharField(_('Bank'), max_length=200)
-    code = models.CharField(max_length=10)
 
     def __str__(self):
         """Representacion String."""

@@ -186,6 +186,8 @@ class ClientSerializer(serializers.ModelSerializer):
 
     photo = serializers.CharField(read_only=True)
     code = serializers.CharField(read_only=True)
+    seller_asigned = serializers.PrimaryKeyRelatedField(
+        queryset=Seller.objects.all(), required=False, allow_null=True)
 
     class Meta:
         """declaracion del modelo y sus campos."""
@@ -204,7 +206,7 @@ class ClientSerializer(serializers.ModelSerializer):
             'ocupation_name', 'about', 'nationality', 'nationality_name',
             "residence_country", "commercial_reason", "foreign_address",
             "residence_country_name", "status", "code_cellphone",
-            "code_telephone", "role")
+            "code_telephone", "role", "seller_asigned")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -389,6 +391,12 @@ class ClientSerializer(serializers.ModelSerializer):
             if 'address' in validated_data:
                 del validated_data['address']
 
+        if "seller_asigned" in validated_data and validated_data["seller_asigned"]:
+            pass
+        else:
+            parameter = Parameters.objects.get(parameter="platform_seller")
+            validated_data["seller_asigned"] = parameter.value
+            
         # Si nacionalidad no es peruana, el codigo de usuario se antecede por
         # el iso del pais al que pertenece
         if validated_data["nationality"] != country_peru:

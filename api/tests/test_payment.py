@@ -125,7 +125,7 @@ class GetFeePaymentPendig(APITestCase):
     def test_get_payment_pending(self):
         """Crear pago."""
         
-        response = self.client.get(
+        response = client.get(
             reverse('fee-payment-pending-detail', kwargs={'pk': 1}),
              format='json')
         
