@@ -997,7 +997,24 @@ class GetContacts(APITestCase):
         hoy = datetime.today()
         SellerContact.objects.filter(seller=2).update(created_at=hoy)
         response = self.client.get(reverse('contacts'))
-        import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class GetContactsFilterDate(APITestCase):
+    """Devolver data de contactos."""
+    fixtures = ['data', 'data2', 'data3', 'test_contact']
+
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer RCOM8gcbsOv56QFlcCJpgDENETGCLr')
+
+    def test_get_filter_contacts(self):
+        """Devolver Contactos."""
+        # hoy = datetime.today()
+        # SellerContact.objects.filter(seller=2).update(created_at=hoy)
+        response = self.client.get(reverse('contacts'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
