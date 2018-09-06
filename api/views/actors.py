@@ -1117,9 +1117,11 @@ class PhotoContactUploadView(APIView):
                                                   data={'photo': name_photo},
                                                   partial=True)
 
-        if serializer.is_valid() and serializer_user.is_valid():
+        if serializer.is_valid():
             serializer.save()
-            serializer_user.save()
+            if serializer_user:
+                if serializer_user.is_valid():
+                    serializer_user.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

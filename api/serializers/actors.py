@@ -984,22 +984,31 @@ class ListObjectionsSerializer(serializers.ModelSerializer):
 
 class SellerContactSerializer(serializers.ModelSerializer):
     """Serializer Contacto."""
-    type_contact = serializers.SerializerMethodField()
+
+    name = serializers.SerializerMethodField()
+    document = serializers.SerializerMethodField()
 
     class Meta:
         """ Model Contacto."""
         model = SellerContact
-        fields = ('id', 'first_name', 'last_name', 'photo',
+        fields = ('id', 'photo', 'name', 'document_type',
                   'type_contact', 'latitude', 'longitude',
-                  'commercial_reason')
+                  'type_client', 'document')
 
-    def get_type_contact(self, obj):
-        """Contacto efectivo y no efectivo."""
-        # 1 efectivo, 2 no efectivo
-        if obj.type_contact == 2:
-            return 2
+    def get_name(self, obj):
+        """Devuelve nombre del cliente."""
+        if obj.type_client == 'n':
+            return obj.first_name + ' ' + obj.last_name
         else:
-            return 1
+            return obj.agent_firstname + ' ' + obj.agent_lastname
+
+    def get_document(self, obj):
+        """Devuelvo el documento."""
+        if obj.type_client == 'b':
+            return obj.ruc
+        else:
+            return obj.document_number
+
 
 class BaseSellerContactSerializer(serializers.ModelSerializer):
     """Base para contacto."""
