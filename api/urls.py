@@ -132,10 +132,14 @@ urlpatterns = [
     url(r'^account_status/specialist/(?P<pk>[0-9]+)/$',
         account.SpecialistAccountView.as_view(),
         name='specialists-account'),
-
+    # Estado de cuenta perfil vendedor
     url(r'^account_status/seller/(?P<pk>[0-9]+)/$',
         account.SellerAccountView.as_view(),
         name='sellers-account'),
+    # Estado de cuenta del vendedor
+    url(r'^account_status/backend/seller/(?P<pk>[0-9]+)/$',
+        account.SellerAccountBackendView.as_view(),
+        name='sellers-account-back'),
     # Consultas
     # Listado de Consultas por especialista
     # url(r'^specialist-queries/$', query.QueryListSpecialistView.as_view(),

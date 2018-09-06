@@ -1,0 +1,2468 @@
+[
+{
+  "model": "api.queryplansacquired",
+  "pk": 1,
+  "fields": {
+    "expiration_date": "2019-05-29",
+    "validity_months": 3,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 2,
+  "fields": {
+    "expiration_date": "2019-09-03",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": "2018-03-05",
+    "is_active": false,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack2",
+    "query_plans": 2,
+    "sale_detail": 2
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 3,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 3
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 4,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 4
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 5,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 5
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 6,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 6
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 7,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 7
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 8,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 64,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 8
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 9,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 9
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 10,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 10
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 11,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 11
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 12,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 12
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 13,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 13
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 14,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 14
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 15,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 15
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 16,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 16
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 17,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 17
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 18,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 18
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 19,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack19",
+    "query_plans": 2,
+    "sale_detail": 19
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 20,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack20",
+    "query_plans": 2,
+    "sale_detail": 20
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 21,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack21",
+    "query_plans": 2,
+    "sale_detail": 21
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 22,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 22
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 23,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 23
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 24,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack",
+    "query_plans": 2,
+    "sale_detail": 24
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 25,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPackLast25",
+    "query_plans": 2,
+    "sale_detail": 25
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 26,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack26",
+    "query_plans": 2,
+    "sale_detail": 26
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 27,
+  "fields": {
+    "expiration_date": "2019-05-15",
+    "validity_months": 6,
+    "available_queries": 72,
+    "query_quantity": 72,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPack27",
+    "query_plans": 2,
+    "sale_detail": 27
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 28,
+  "fields": {
+    "expiration_date": "2018-09-12",
+    "validity_months": 6,
+    "available_queries": 2,
+    "query_quantity": 172,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 2,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-02-08T14:48:37Z",
+    "plan_name": "PlusPackCore",
+    "query_plans": 2,
+    "sale_detail": 28
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 29,
+  "fields": {
+    "expiration_date": "2018-09-19",
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T15:48:15.565Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 29
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 30,
+  "fields": {
+    "expiration_date": "2018-12-28",
+    "validity_months": 3,
+    "available_queries": 2,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T15:48:46.178Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 30
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 31,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T15:54:26.395Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 31
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 32,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T16:07:11.806Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 32
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 33,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T16:07:11.994Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 33
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 34,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T16:12:01.494Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 34
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 35,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T16:12:01.771Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 35
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 36,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T17:33:19.417Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 36
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 37,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T17:33:19.526Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 37
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 38,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T17:43:35.158Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 38
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 39,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T17:43:35.903Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 39
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 40,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T19:15:11.283Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 40
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 41,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 3,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-14T19:15:11.431Z",
+    "plan_name": "Minipack",
+    "query_plans": 2,
+    "sale_detail": 41
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 42,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-15T20:39:30.515Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 42
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 43,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-15T20:39:30.879Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 43
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 44,
+  "fields": {
+    "expiration_date": "2019-04-09",
+    "validity_months": 6,
+    "available_queries": 500,
+    "query_quantity": 500,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-15T22:01:53.095Z",
+    "plan_name": "TesterPack",
+    "query_plans": 1,
+    "sale_detail": 44
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 45,
+  "fields": {
+    "expiration_date": "2019-04-09",
+    "validity_months": 6,
+    "available_queries": 500,
+    "query_quantity": 500,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-15T22:04:07.561Z",
+    "plan_name": "TesterPack",
+    "query_plans": 1,
+    "sale_detail": 45
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 46,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T16:21:50.912Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 46
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 47,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T16:21:51.183Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 47
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 48,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T16:58:57.018Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 48
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 49,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T16:58:57.184Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 49
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 50,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:13:55.150Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 50
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 51,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:13:55.276Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 51
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 52,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:14:35.879Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 52
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 53,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:14:36.065Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 53
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 54,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:31:39.252Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 54
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 55,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:31:39.366Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 55
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 56,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:32:24.342Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 56
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 57,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:32:24.448Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 57
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 58,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:34:10.524Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 58
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 59,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:34:10.619Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 59
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 60,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:37:25.201Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 60
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 61,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:37:25.368Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 61
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 62,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:52:40.011Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 62
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 63,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:52:40.115Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 63
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 64,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:52:46.933Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 64
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 65,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T17:52:47.314Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 65
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 66,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:06.685Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 66
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 67,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:06.790Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 67
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 68,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:06.906Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 68
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 69,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:07.077Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 69
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 70,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:07.371Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 70
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 71,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:07.500Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 71
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 72,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:07.604Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 72
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 73,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:07.710Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 73
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 74,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:07.837Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 74
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 75,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:08.041Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 75
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 76,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:08.190Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 76
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 77,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T19:27:08.329Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 77
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 78,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:17:58.585Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 78
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 79,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:17:58.937Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 79
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 80,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:17:59.042Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 80
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 81,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:17:59.182Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 81
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 82,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:17:59.297Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 82
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 83,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:17:59.446Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 83
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 84,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:17:59.595Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 84
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 85,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:17:59.723Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 85
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 86,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:17:59.855Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 86
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 87,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:17:59.963Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 87
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 88,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:00.161Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 88
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 89,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:00.267Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 89
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 90,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:32.456Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 90
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 91,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:32.663Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 91
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 92,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:32.756Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 92
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 93,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:32.863Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 93
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 94,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:33.166Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 94
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 95,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:33.382Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 95
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 96,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:33.615Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 96
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 97,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:33.814Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 97
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 98,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:33.918Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 98
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 99,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:34.033Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 99
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 100,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:34.200Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 100
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 101,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:18:34.422Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 101
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 102,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-23T22:38:07.051Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 102
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 103,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T14:18:02.669Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 103
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 104,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T14:18:02.881Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 104
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 105,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:04.780Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 105
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 106,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:04.953Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 106
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 107,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:05.056Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 107
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 108,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:05.162Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 108
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 109,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:05.289Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 109
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 110,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:05.609Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 110
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 111,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:05.726Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 111
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 112,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:05.842Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 112
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 113,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:05.959Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 113
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 114,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:06.214Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 114
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 115,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:06.445Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 115
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 116,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:06.606Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 116
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 117,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:06.849Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 117
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 118,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:07.004Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 118
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 119,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:07.182Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 119
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 120,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:07.326Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 120
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 121,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:07.469Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 121
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 122,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:07.603Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 122
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 123,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:07.757Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 123
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 124,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:07.890Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 124
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 125,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:08.045Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 125
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 126,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:08.224Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 126
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 127,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:08.377Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 127
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 128,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T16:41:08.521Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 128
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 129,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 300,
+    "query_quantity": 300,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T17:04:07.627Z",
+    "plan_name": "Lider",
+    "query_plans": 8,
+    "sale_detail": 129
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 130,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T17:04:10.531Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 130
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 131,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 6,
+    "available_queries": 150,
+    "query_quantity": 150,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T17:39:05.753Z",
+    "plan_name": "Emprendedor",
+    "query_plans": 7,
+    "sale_detail": 131
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 132,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 1,
+    "available_queries": 1,
+    "query_quantity": 1,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T17:39:06.007Z",
+    "plan_name": "Express",
+    "query_plans": 1,
+    "sale_detail": 132
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 133,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 4,
+    "available_queries": 20,
+    "query_quantity": 20,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T20:58:15.953Z",
+    "plan_name": "Multipack",
+    "query_plans": 5,
+    "sale_detail": 133
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 134,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 4,
+    "available_queries": 20,
+    "query_quantity": 20,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T20:58:16.092Z",
+    "plan_name": "Multipack",
+    "query_plans": 5,
+    "sale_detail": 134
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 135,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-24T20:58:16.310Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 135
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 136,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-31T19:57:42.777Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 136
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 137,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-31T19:57:43.967Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 137
+  }
+}
+]

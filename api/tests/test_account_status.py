@@ -36,7 +36,7 @@ class AccountSpecialist(APITestCase):
         self.assertEqual(response.data["queries_absolved_category"], 5)
 
 
-class AccountSeller(APITestCase):
+class AccountProfileSeller(APITestCase):
     """Estado de cuenta del Vendedor."""
 
     fixtures = ['data', 'data2', 'data3', 'test_account_seller']
@@ -92,6 +92,17 @@ class AccountSeller(APITestCase):
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_people_purchase"], 2)
 
+    def test_month_people_purchase_goal(self):
+        """Meta de cantidad de gente que debe comprar."""
+        ParameterSeller.objects.all().update(
+            number_month=self.hoy.month)
+
+        SellerNonBillablePlans.objects.all().update(
+            number_month=self.hoy.month)
+        response = client.get(reverse('sellers-account',
+                                      args=(self.seller,)))
+        self.assertEqual(response.data["month_people_purchase_goal"], 12)
+
     def test_month_contacts_goal(self):
         """Traer meta de contactos del mes."""
         ParameterSeller.objects.all().update(
@@ -116,7 +127,7 @@ class AccountSeller(APITestCase):
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_new_clients_goal"], 10)
 
-    def test_month_available_promotional(self):
+    def test_month_all_promotionals(self):
         """Traer planes promocionales disponibles."""
 
         ParameterSeller.objects.all().update(
@@ -126,4 +137,34 @@ class AccountSeller(APITestCase):
             number_month=self.hoy.month)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
-        self.assertEqual(response.data["mont_available_promotional"], 6)
+        self.assertEqual(response.data["month_all_promotionals"], 8)
+
+
+class AccountStatusSeller(APITestCase):
+    """Estado de cuenta Backend del Vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_account_seller']
+
+    def setUp(self):
+        """SetUp."""
+        self.seller = 6
+        self.hoy = datetime.now()
+
+    def test_month_sold_plans(self):
+        """Planes vendidos en el mes."""
+        SellerNonBillablePlans.objects.all().update(
+            number_month=self.hoy.month)
+
+        ParameterSeller.objects.all().update(
+            number_month=self.hoy.month)
+
+        response = client.get(reverse('sellers-account-back',
+                                      args=(self.seller,)))
+        
+        self.assertEqual(response.data["month_sold_plans"], 4)
+        self.assertEqual(response.data["sold_plans"], 5)
+        self.assertEqual(response.data["month_sold_queries"], 24)
+        self.assertEqual(response.data["sold_queries"], 29)
+        self.assertEqual(response.data["month_all_promotionals"], 8)
+        self.assertEqual(response.data["month_promotionals"], 2)
+        self.assertEqual(response.data["promotionals"], 2)

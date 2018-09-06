@@ -2,6 +2,7 @@
 from rest_framework.views import APIView
 from api.serializers.account import SpecialistAccountSerializer
 from api.serializers.account import SellerAccountSerializer
+from api.serializers.account import SellerAccountBackendSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
@@ -47,4 +48,22 @@ class SellerAccountView(APIView):
         queryset = Sale.objects.filter(seller=seller)
         serializer = SellerAccountSerializer(queryset,
                                              context={"seller": seller})
+        return Response(serializer.data)
+
+
+class SellerAccountBackendView(APIView):
+    """Vista para estado de cuenta del backend vendedor."""
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_object(self, pk):
+        try:
+            return Seller.objects.get(pk=pk)
+        except Seller.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        seller = self.get_object(pk)
+        queryset = Sale.objects.filter(seller=seller)
+        serializer = SellerAccountBackendSerializer(queryset,
+                                                    context={"seller": seller})
         return Response(serializer.data)
