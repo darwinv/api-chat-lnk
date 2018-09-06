@@ -197,11 +197,12 @@ urlpatterns = [
 
     # Contactos crear y listar en mapa
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
-    url(r'^seller/contacts/$', actors.ContactView.as_view(), name='contacts-filter'),
+    # filtrar contactos por efectivo, no efectivo, y fecha desde hasta
+    url(r'^seller/contacts/$', actors.ContactFilterView.as_view(),
+        name='contacts-filter'),
     # url para subir imagen de usuario
     url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(),
         name='upload-photo'),
-
     # url para subir imagen de contacto
     url(r'^upload_photo/contact/(?P<pk>[0-9]+)/$',
         actors.PhotoContactUploadView.as_view(), name='upload-photo-contact'),

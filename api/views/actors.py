@@ -3,15 +3,15 @@
 
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
+from rest_framework.generics import ListAPIView
 from api.models import User, Client, Specialist, Seller, Query
 from api.models import SellerContact, SpecialistMessageList, SpecialistMessageList_sp
 from api.models import RecoveryPassword, Declinator, QueryPlansManage, Parameter
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
-from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
-from django.db.models import Sum, Manager
-from django.db.models import OuterRef, Subquery
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
+from django.db.models import OuterRef, Subquery, Q, Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
@@ -1067,6 +1067,23 @@ class ContactListView(ListCreateAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ContactFilterView(ListAPIView):
+    """Listado de contactos."""
+    # Listado de contactos pertenecientes al vendedor
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller,)
+    serializer_class = SellerContactSerializer
+
+    def get_queryset(self):
+        queryset = SellerContact.objects.all()
+        type_contact = self.request.query_params.get('type_contact', None)
+        if type_contact == 1:
+            queryset = queryset.filter(Q(type_contact=1) | Q(type_contact=3))
+        elif type_contact == 2:
+            queryset = queryset.filter(type_contact=2)
+
 
 
 # ------------ Fin de Vendedores -----------------
