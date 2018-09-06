@@ -1113,8 +1113,9 @@ class PhotoContactUploadView(APIView):
 
         if contact.type_contact == 1 or contact.type_contact == 3:
             user = User.objects.get(username=contact.email)
-        serializer_user = UserPhotoSerializer(user, data={'photo': name_photo},
-                                              partial=True)
+            serializer_user = UserPhotoSerializer(user,
+                                                  data={'photo': name_photo},
+                                                  partial=True)
 
         if serializer.is_valid() and serializer_user.is_valid():
             serializer.save()
