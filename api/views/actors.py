@@ -1080,7 +1080,7 @@ class ContactFilterView(ListAPIView):
 
     def get_queryset(self):
         seller = Operations.get_id(self, self.request)
-        queryset = SellerContact.objects.filter(seller)
+        queryset = SellerContact.objects.filter(seller=seller)
         type_contact = self.request.query_params.get('type_contact', None)
         if type_contact is not None:
             if int(type_contact) == 1:

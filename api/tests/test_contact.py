@@ -1002,6 +1002,7 @@ class GetContacts(APITestCase):
 
 class GetContactsFilterDate(APITestCase):
     """Devolver data de contactos."""
+    
     fixtures = ['data', 'data2', 'data3', 'test_contact']
 
     def setUp(self):
