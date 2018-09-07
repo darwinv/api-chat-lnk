@@ -447,6 +447,7 @@ class PlansNonBillableSerializer(serializers.ModelSerializer):
             "name": instance.query_plans.name,
             "query_quantity": instance.query_plans.query_quantity,
             "validity_months": instance.query_plans.validity_months,
-            "price": instance.query_plans.price
+            "price": instance.query_plans.price,
+            "clasification": instance.query_plans.clasification.id
         }
         return data
