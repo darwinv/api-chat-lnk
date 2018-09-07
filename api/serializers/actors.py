@@ -1010,6 +1010,15 @@ class SellerContactSerializer(serializers.ModelSerializer):
             return obj.document_number
 
 
+class SellerFilterContactSerializer(serializers.ModelSerializer):
+    """Serializer de contacto filtrado."""
+
+    class Meta:
+        """ Model Contacto."""
+        model = SellerContact
+        fields = '__all__'
+
+
 class BaseSellerContactSerializer(serializers.ModelSerializer):
     """Base para contacto."""
 

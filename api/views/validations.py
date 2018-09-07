@@ -17,7 +17,6 @@ class CheckData(APIView):
     def get(self, request):
         """Funcion get."""
         # print("hey")
-        # import pdb; pdb.set_trace()
         queryset = User.objects.all()
         # rol debe ser obligatorio
         if 'role' in request.query_params:

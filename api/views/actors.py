@@ -3,21 +3,23 @@
 
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
+from rest_framework.generics import ListAPIView
 from api.models import User, Client, Specialist, Seller, Query
 from api.models import SellerContact, SpecialistMessageList, SpecialistMessageList_sp
 from api.models import RecoveryPassword, Declinator, QueryPlansManage, Parameter
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
-from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
-from django.db.models import Sum, Manager
-from django.db.models import OuterRef, Subquery
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
+from django.db.models import OuterRef, Subquery, Q, Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from api.serializers.actors import KeySerializer, ContactPhotoSerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer
-from api.serializers.actors import SellerContactSerializer, SellerContactNaturalSerializer
+from api.serializers.actors import SellerContactSerializer
+from api.serializers.actors import SellerContactNaturalSerializer
+from api.serializers.actors import SellerFilterContactSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
 from api.serializers.actors import ChangeEmailSerializer, ChangePassword
@@ -1069,6 +1071,31 @@ class ContactListView(ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class ContactFilterView(ListAPIView):
+    """Listado de contactos."""
+    # Listado de contactos pertenecientes al vendedor
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller,)
+    serializer_class = SellerFilterContactSerializer
+
+    def get_queryset(self):
+        seller = Operations.get_id(self, self.request)
+        queryset = SellerContact.objects.filter(seller)
+        type_contact = self.request.query_params.get('type_contact', None)
+        if type_contact is not None:
+            if int(type_contact) == 1:
+                queryset = queryset.filter(Q(type_contact=1) | Q(type_contact=3))
+            elif int(type_contact) == 2:
+                queryset = queryset.filter(type_contact=2)
+        date_start = self.request.query_params.get('date_start', None)
+        date_end = self.request.query_params.get('date_end', None)
+        if date_start is not None or date_end is not None:
+            queryset = queryset.filter(
+                created_at__range=(date_start, date_end))
+        return queryset
+
+
+
 # ------------ Fin de Vendedores -----------------
 
 # Subir la foto de un contacto
@@ -1117,11 +1144,9 @@ class PhotoContactUploadView(APIView):
                                                   data={'photo': name_photo},
                                                   partial=True)
 
-        if serializer.is_valid():
+        if serializer.is_valid() and serializer_user.is_valid():
             serializer.save()
-            if serializer_user:
-                if serializer_user.is_valid():
-                    serializer_user.save()
+            serializer_user.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
