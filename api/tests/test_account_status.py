@@ -32,8 +32,10 @@ class AccountSpecialist(APITestCase):
         self.assertEqual(response.data["month_queries_absolved"], 2)
         # pendientes por absolver por el mes
         self.assertEqual(response.data["month_queries_pending"], 4)
+        # pendientes declinadas por el mes
+        self.assertEqual(response.data["month_queries_declined"], 1)
         # absueltos historico de especialidad
-        self.assertEqual(response.data["queries_absolved_category"], 5)
+        self.assertEqual(response.data["queries_absolved_category"], 6)
 
 
 class AccountProfileSeller(APITestCase):
@@ -160,7 +162,7 @@ class AccountStatusSeller(APITestCase):
 
         response = client.get(reverse('sellers-account-back',
                                       args=(self.seller,)))
-        
+
         self.assertEqual(response.data["month_sold_plans"], 4)
         self.assertEqual(response.data["sold_plans"], 5)
         self.assertEqual(response.data["month_sold_queries"], 24)

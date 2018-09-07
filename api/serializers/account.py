@@ -1,7 +1,7 @@
 """Estados de cuenta."""
 from rest_framework import serializers
 from api.models import Specialist, Query, SellerContact, ParameterSeller
-from api.models import SellerNonBillablePlans
+from api.models import SellerNonBillablePlans, Declinator
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 from django.db.models import Count, Sum
@@ -20,8 +20,13 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
         """To Representation."""
         hoy = datetime.now()  # fecha de hoy
         category_id = self.context["category"]
+        specialist = self.context["specialist"]
         # fecha de primer  dia del mes
         primer = datetime(hoy.year, hoy.month, 1, 0, 0, 0)
+        # consultas declinadas del mes
+        month_queries_declined = Declinator.objects.filter(
+            specialist=specialist,
+            query__created_at__range=(primer, hoy)).count()
         # calculó de las consultas absueltas del mes
         month_queries = obj.filter(
             status__range=(4, 5),
@@ -36,7 +41,8 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
 
         return {"month_queries_absolved": month_queries,
                 "month_queries_pending": month_queries_pending,
-                "queries_absolved_category": queries_absolved
+                "queries_absolved_category": queries_absolved,
+                "month_queries_declined": month_queries_declined
                 }
 
 
