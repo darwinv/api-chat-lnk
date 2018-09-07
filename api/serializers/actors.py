@@ -83,12 +83,22 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = User
-        fields = ('id', 'username','img_document_number','role','code','document_number','email_exact')
+        fields = ('id', 'username', 'img_document_number', 'role',
+                  'code', 'document_number', 'email_exact')
+
 
 class UserPhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('photo',)
+
+
+class ContactPhotoSerializer(serializers.ModelSerializer):
+    "Actualizar foto de contacto"
+    class Meta:
+        model = SellerContact
+        fields = ('photo',)
+
 
 class CommonValidation():
     def validate_img(self, photo):
@@ -977,6 +987,43 @@ class ListObjectionsSerializer(serializers.ModelSerializer):
     def get_name(self, obj):
         """Devuelve nacionalidad del cliente."""
         return _(str(obj.objection))
+
+
+class SellerContactSerializer(serializers.ModelSerializer):
+    """Serializer Contacto."""
+
+    name = serializers.SerializerMethodField()
+    document = serializers.SerializerMethodField()
+
+    class Meta:
+        """ Model Contacto."""
+        model = SellerContact
+        fields = ('id', 'photo', 'name', 'document_type',
+                  'type_contact', 'latitude', 'longitude',
+                  'type_client', 'document')
+
+    def get_name(self, obj):
+        """Devuelve nombre del cliente."""
+        if obj.type_client == 'n':
+            return obj.first_name + ' ' + obj.last_name
+        else:
+            return obj.agent_firstname + ' ' + obj.agent_lastname
+
+    def get_document(self, obj):
+        """Devuelvo el documento."""
+        if obj.type_client == 'b':
+            return obj.ruc
+        else:
+            return obj.document_number
+
+
+class SellerFilterContactSerializer(serializers.ModelSerializer):
+    """Serializer de contacto filtrado."""
+
+    class Meta:
+        """ Model Contacto."""
+        model = SellerContact
+        fields = '__all__'
 
 
 class BaseSellerContactSerializer(serializers.ModelSerializer):

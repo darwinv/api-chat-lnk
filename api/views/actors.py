@@ -3,19 +3,23 @@
 
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
+from rest_framework.generics import ListAPIView
 from api.models import User, Client, Specialist, Seller, Query
 from api.models import SellerContact, SpecialistMessageList, SpecialistMessageList_sp
 from api.models import RecoveryPassword, Declinator, QueryPlansManage, Parameter
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, generics
 from rest_framework import serializers
-from oauth2_provider.contrib.rest_framework import OAuth2Authentication, TokenHasReadWriteScope, TokenHasScope
-from django.db.models import Sum, Manager
-from django.db.models import OuterRef, Subquery
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
+from django.db.models import OuterRef, Subquery, Q, Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
-from api.serializers.actors import ClientSerializer, UserPhotoSerializer, KeySerializer
-from api.serializers.actors import UserSerializer, SpecialistSerializer, SellerContactNaturalSerializer
+from api.serializers.actors import ClientSerializer, UserPhotoSerializer
+from api.serializers.actors import KeySerializer, ContactPhotoSerializer
+from api.serializers.actors import UserSerializer, SpecialistSerializer
+from api.serializers.actors import SellerContactSerializer
+from api.serializers.actors import SellerContactNaturalSerializer
+from api.serializers.actors import SellerFilterContactSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
 from api.serializers.actors import ChangeEmailSerializer, ChangePassword
@@ -23,8 +27,10 @@ from api.serializers.query import QuerySerializer, QueryCustomSerializer
 from api.serializers.plan import QueryPlansShareSerializer, QueryPlansTransferSerializer
 from api.serializers.plan import QueryPlansEmpowerSerializer
 from django.http import Http404
+
 from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrSpecialist, IsAdminOrSeller
 from api.permissions import IsAdminOrClient
+
 from api.utils.querysets import get_query_set_plan
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
 from django.utils.translation import ugettext_lazy as _
@@ -138,7 +144,7 @@ class SendCodePassword(APIView):
         recovery_password.code = code = tools.ramdon_generator(6)
         recovery_password.is_active = True
         recovery_password.save()
-        
+
         if 'test' not in sys.argv:
             data = {'code':code}
             mail = BasicEmailAmazon(subject="Codigo de cambio de contraseña",
@@ -744,7 +750,7 @@ class SpecialistAsociateListView(ListCreateAPIView):
             raise Http404
 
         specialists = Specialist.objects.filter(category=obj.category, type_specialist="a")
-        
+
         page = self.paginate_queryset(specialists)
         if page is not None:
             serializer = SpecialistSerializer(page, many=True)
@@ -1067,6 +1073,14 @@ class ContactListView(ListCreateAPIView):
     serializer_class = SellerContactNaturalSerializer
     queryset = SellerContact.objects.all()
 
+    def get(self, request):
+        """Devolver contactos del vendedor."""
+        seller = Operations.get_id(self, request)
+        contacts = SellerContact.objects.filter(seller=seller,
+                                                created_at__startswith=date.today())
+        serializer = SellerContactSerializer(contacts, many=True)
+        return Response(serializer.data)
+
     def post(self, request):
         """Redefinido funcion para crear vendedor."""
         required = _("required")
@@ -1094,7 +1108,85 @@ class ContactListView(ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class ContactFilterView(ListAPIView):
+    """Listado de contactos."""
+    # Listado de contactos pertenecientes al vendedor
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller,)
+    serializer_class = SellerFilterContactSerializer
+
+    def get_queryset(self):
+        seller = Operations.get_id(self, self.request)
+        queryset = SellerContact.objects.filter(seller=seller)
+        type_contact = self.request.query_params.get('type_contact', None)
+        if type_contact is not None:
+            if int(type_contact) == 1:
+                queryset = queryset.filter(Q(type_contact=1) | Q(type_contact=3))
+            elif int(type_contact) == 2:
+                queryset = queryset.filter(type_contact=2)
+        date_start = self.request.query_params.get('date_start', None)
+        date_end = self.request.query_params.get('date_end', None)
+        if date_start is not None or date_end is not None:
+            queryset = queryset.filter(
+                created_at__range=(date_start, date_end))
+        return queryset
+
+
+
 # ------------ Fin de Vendedores -----------------
+
+# Subir la foto de un contacto
+class PhotoContactUploadView(APIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrSeller)
+    queryset = SellerContact.objects.all()
+    parser_classes = (JSONParser, MultiPartParser)
+
+    # localizo el usuario segun su id
+    def get_object(self, pk):
+        try:
+            obj = SellerContact.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except SellerContact.DoesNotExist:
+            raise Http404
+
+    # metodo para actualizar
+    def put(self, request, pk):
+        data = request.data
+        contact = self.get_object(pk)
+        media_serializer = MediaSerializer(
+            data=data,
+            partial=True
+        )
+        # creando nombre de archivo
+        filename = str(uuid.uuid4())
+        filename = filename + '.png'
+        if media_serializer.is_valid():
+            destination = open(filename, 'wb+')
+            for chunk in data['photo'].chunks():
+                destination.write(chunk)
+            destination.close()
+        else:
+            raise serializers.ValidationError(media_serializer.errors)
+        # se sube el archivo a amazon
+        name_photo = upload_photo_s3(filename)
+        os.remove(filename)  # se elimina del server local
+        serializer = ContactPhotoSerializer(contact, data={'photo': name_photo},
+                                            partial=True)
+
+        if contact.type_contact == 1 or contact.type_contact == 3:
+            user = User.objects.get(username=contact.email)
+            serializer_user = UserPhotoSerializer(user,
+                                                  data={'photo': name_photo},
+                                                  partial=True)
+
+        if serializer.is_valid() and serializer_user.is_valid():
+            serializer.save()
+            serializer_user.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # Subir la foto de un usuario
 class PhotoUploadView(APIView):
@@ -1375,7 +1467,7 @@ class SupportActorsView(APIView):
                         'query': data['query'],
                         'message': data['message'],
                     }
-            
+
             try:
                 parameter = Parameter.objects.get(parameter="support")
             except Parameter.DoesNotExist:
@@ -1386,6 +1478,6 @@ class SupportActorsView(APIView):
                 to=parameter.value, template='email/support')
 
             response = mail.sendmail(args=data_email)
-        
+
 
         return Response({})

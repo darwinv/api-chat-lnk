@@ -61,6 +61,7 @@ def update_plan_choisen():
 def update_specialist_client():
     """Cargar listado de categorias para todos los usuarios."""
     # SOLO USO PARA AMBIENTE EN DESARROLLO
+    # ESTA FUNCION NO ESTA OPTIMIZADA O SEGURA
     for specialist in Specialist.objects.all():
 
         for query in Query.objects.filter(specialist=specialist):

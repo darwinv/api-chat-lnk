@@ -202,8 +202,8 @@ class LevelInstruction(models.Model):
 class SellerContact(models.Model):
     """Contacto de Vendedor."""
 
-    first_name = models.CharField(max_length=45, null=True)
-    last_name = models.CharField(max_length=55, null=True)
+    first_name = models.CharField(max_length=150, null=True)
+    last_name = models.CharField(max_length=150, null=True)
     # tipo de contacto
     type_contact = models.PositiveIntegerField(choices=Ch.type_seller_contact)
     # tipo de cliente
@@ -226,19 +226,18 @@ class SellerContact(models.Model):
 
     ocupation = models.PositiveIntegerField(choices=Ch.client_ocupation,
                                             null=True, default=7)
-
-    profession = models.CharField(max_length=45, null=True)
-    business_name = models.CharField(max_length=45, null=True)
-    commercial_reason = models.CharField(max_length=45, null=True)
-    agent_firstname = models.CharField(max_length=45, null=True)
-    agent_lastname = models.CharField(max_length=45, null=True)
+    profession = models.CharField(max_length=150, null=True)
+    business_name = models.CharField(max_length=150, null=True)
+    commercial_reason = models.CharField(max_length=150, null=True)
+    agent_firstname = models.CharField(max_length=150, null=True)
+    agent_lastname = models.CharField(max_length=150, null=True)
     sex = models.CharField(max_length=1, choices=Ch.client_sex, blank=True)
     latitude = models.CharField(max_length=45, blank=True)
     longitude = models.CharField(max_length=45, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    position = models.CharField(max_length=45, null=True)
+    position = models.CharField(max_length=150, null=True)
     ruc = models.CharField(max_length=40, null=True, blank=True)
-    other_objection = models.CharField(max_length=120, null=True, blank=True)
+    other_objection = models.CharField(max_length=150, null=True, blank=True)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
     economic_sector = models.ForeignKey(EconomicSector,
                                         on_delete=models.PROTECT, null=True)
@@ -247,15 +246,15 @@ class SellerContact(models.Model):
                                           on_delete=models.PROTECT, null=True)
     nationality = models.ForeignKey(Countries, on_delete=models.PROTECT,
                                     default=1)
-    foreign_address = models.CharField(max_length=200, blank=True, null=True)
+    foreign_address = models.CharField(max_length=250, blank=True, null=True)
     residence_country = models.ForeignKey(Countries, null=True,
                                           on_delete=models.PROTECT,
                                           related_name="residence_contact",
                                           verbose_name=_('residence country contact'))
 
-    def __str__(self):
-        """Nombre del Contacto."""
-        return self.first_name
+    # def __str__(self):
+    #     """Nombre del Contacto."""
+    #     return self.first_name
 
 
 class ObjectionsList(models.Model):

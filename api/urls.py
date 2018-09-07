@@ -15,6 +15,9 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     # Clientes
     url(r'^clients/$', actors.ClientListView.as_view(), name='clients'),
+    # detalle de cliente
+    url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(),
+        name='client-detail'),
     # Servicio para logueo de clientes
     url(r'^clients-users/(?P<username>[^@]+@[^@]+\.[^@]+)/$',
         actors.ClientDetailByUsername.as_view(),
@@ -95,10 +98,6 @@ urlpatterns = [
     # chequear data de filtrado
     url(r'^check-data/$',
         validations.CheckData.as_view(), name='check-data'),
-
-    # detalle de cliente
-    url(r'^clients/(?P<pk>[0-9]+)/$', actors.ClientDetailView.as_view(),
-        name='client-detail'),
 
     url(r'^objections/$', static_data.ObjectionsListView.as_view(),
         name='objections'),
@@ -201,12 +200,22 @@ urlpatterns = [
     url(r'^specialist/queries/(?P<pk>[0-9]+)/$',
         query.QueryDetailSpecialistView.as_view(), name='query-specialist'),
 
-    # Contacto no efectivo
+    # Contactos crear y listar en mapa
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
-    # url para subir imagen
-    url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(), name='upload-photo'),
+    # filtrar contactos por efectivo, no efectivo, y fecha desde hasta
+    url(r'^seller/contacts/$', actors.ContactFilterView.as_view(),
+        name='contacts-filter'),
+    # url para subir imagen de usuario
+    url(r'^upload_photo/(?P<pk>[0-9]+)/$', actors.PhotoUploadView.as_view(),
+        name='upload-photo'),
+    # url para subir imagen de contacto
+    url(r'^upload_photo/contact/(?P<pk>[0-9]+)/$',
+        actors.PhotoContactUploadView.as_view(), name='upload-photo-contact'),
+
     url(r'^upload/$', actors.FileUploadView.as_view(), name='upload'),
-    url(r'^upload_document/(?P<pk>[0-9]+)/$', actors.DocumentUploadView.as_view(), name='upload-document'),
+
+    url(r'^upload_document/(?P<pk>[0-9]+)/$',
+        actors.DocumentUploadView.as_view(), name='upload-document'),
     # cambiar clave de usuario
     url(r'^change/password/(?P<pk>[0-9]+)/$',
         actors.UpdateUserPassword.as_view(),
