@@ -347,8 +347,7 @@ def createListMessageClients(lista, query_id, status,
     del data_obj['title']
     del data_obj['date']
     del data_obj['id']
-    import pdb
-    pdb.set_trace()
+    
     main_node = "messagesList/specialist/{}/{}"
     if exist_node(main_node):
         db.child("messagesList/specialist/").child(
