@@ -59,7 +59,7 @@
   "fields": {
     "first_name": "Kajshd",
     "last_name": "Jjdkdj",
-    "type_contact": 1,
+    "type_contact": 2,
     "type_client": "n",
     "document_type": 1,
     "document_number": "457312222",
@@ -101,7 +101,7 @@
   "fields": {
     "first_name": "jsjsjs",
     "last_name": "ksisuss",
-    "type_contact": 1,
+    "type_contact": 2,
     "type_client": "n",
     "document_type": 1,
     "document_number": "64342222",
@@ -208,7 +208,7 @@
     "sex": "m",
     "latitude": "-12.1001269",
     "longitude": "-76.9700894",
-    "created_at": "2018-08-24T14:17:35.995Z",
+    "created_at": "2018-08-25T14:17:35.995Z",
     "position": null,
     "ruc": null,
     "other_objection": null,

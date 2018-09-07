@@ -17,7 +17,9 @@ from rest_framework import filters as searchfilters
 from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from api.serializers.actors import KeySerializer, ContactPhotoSerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer
-from api.serializers.actors import SellerContactSerializer, SellerContactNaturalSerializer
+from api.serializers.actors import SellerContactSerializer
+from api.serializers.actors import SellerContactNaturalSerializer
+from api.serializers.actors import SellerFilterContactSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
 from api.serializers.actors import ChangeEmailSerializer, ChangePassword
@@ -1074,15 +1076,23 @@ class ContactFilterView(ListAPIView):
     # Listado de contactos pertenecientes al vendedor
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsSeller,)
-    serializer_class = SellerContactSerializer
+    serializer_class = SellerFilterContactSerializer
 
     def get_queryset(self):
-        queryset = SellerContact.objects.all()
+        seller = Operations.get_id(self, self.request)
+        queryset = SellerContact.objects.filter(seller)
         type_contact = self.request.query_params.get('type_contact', None)
-        if type_contact == 1:
-            queryset = queryset.filter(Q(type_contact=1) | Q(type_contact=3))
-        elif type_contact == 2:
-            queryset = queryset.filter(type_contact=2)
+        if type_contact is not None:
+            if int(type_contact) == 1:
+                queryset = queryset.filter(Q(type_contact=1) | Q(type_contact=3))
+            elif int(type_contact) == 2:
+                queryset = queryset.filter(type_contact=2)
+        date_start = self.request.query_params.get('date_start', None)
+        date_end = self.request.query_params.get('date_end', None)
+        if date_start is not None or date_end is not None:
+            queryset = queryset.filter(
+                created_at__range=(date_start, date_end))
+        return queryset
 
 
 

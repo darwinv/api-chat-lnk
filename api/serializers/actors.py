@@ -985,13 +985,39 @@ class ListObjectionsSerializer(serializers.ModelSerializer):
 class SellerContactSerializer(serializers.ModelSerializer):
     """Serializer Contacto."""
 
+    name = serializers.SerializerMethodField()
+    document = serializers.SerializerMethodField()
+
     class Meta:
         """ Model Contacto."""
         model = SellerContact
-        fields = ('id', 'first_name', 'last_name', 'photo',
+        fields = ('id', 'photo', 'name', 'document_type',
                   'type_contact', 'latitude', 'longitude',
-                  'commercial_reason')
+                  'type_client', 'document')
 
+    def get_name(self, obj):
+        """Devuelve nombre del cliente."""
+        if obj.type_client == 'n':
+            return obj.first_name + ' ' + obj.last_name
+        else:
+            return obj.agent_firstname + ' ' + obj.agent_lastname
+
+    def get_document(self, obj):
+        """Devuelvo el documento."""
+        if obj.type_client == 'b':
+            return obj.ruc
+        else:
+            return obj.document_number
+
+
+class SellerFilterContactSerializer(serializers.ModelSerializer):
+    """Serializer de contacto filtrado."""
+
+    class Meta:
+        """ Model Contacto."""
+        model = SellerContact
+        fields = '__all__'
+        
 
 class BaseSellerContactSerializer(serializers.ModelSerializer):
     """Base para contacto."""
