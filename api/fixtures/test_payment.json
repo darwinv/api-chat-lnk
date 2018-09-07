@@ -14,8 +14,7 @@
     "model": "api.bank",
     "pk": 1,
     "fields": {
-      "name": "BCP",
-      "code": "001"
+      "name": "BCP"
     }
   },
 

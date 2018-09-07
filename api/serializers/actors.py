@@ -6,7 +6,7 @@ import string
 from rest_framework.validators import UniqueValidator
 from api.models import User, Client, Countries, SellerContact
 from api.models import Address, Department, EconomicSector
-from api.models import Province, District, Specialist, Ciiu
+from api.models import Province, District, Specialist, Ciiu, Parameter
 from api.models import Seller, LevelInstruction, ObjectionsList, Objection
 from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
@@ -196,6 +196,8 @@ class ClientSerializer(serializers.ModelSerializer):
 
     photo = serializers.CharField(read_only=True)
     code = serializers.CharField(read_only=True)
+    seller_asigned = serializers.PrimaryKeyRelatedField(
+        queryset=Seller.objects.all(), required=False, allow_null=True)
 
     class Meta:
         """declaracion del modelo y sus campos."""
@@ -214,7 +216,7 @@ class ClientSerializer(serializers.ModelSerializer):
             'ocupation_name', 'about', 'nationality', 'nationality_name',
             "residence_country", "commercial_reason", "foreign_address",
             "residence_country_name", "status", "code_cellphone",
-            "code_telephone", "role")
+            "code_telephone", "role", "seller_asigned")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -399,6 +401,12 @@ class ClientSerializer(serializers.ModelSerializer):
             if 'address' in validated_data:
                 del validated_data['address']
 
+        if "seller_asigned" in validated_data and validated_data["seller_asigned"]:
+            pass
+        else:
+            parameter = Parameter.objects.get(parameter="platform_seller")
+            validated_data["seller_asigned"] = Seller.objects.get(pk=parameter.value)
+            
         # Si nacionalidad no es peruana, el codigo de usuario se antecede por
         # el iso del pais al que pertenece
         if validated_data["nationality"] != country_peru:
@@ -1105,6 +1113,8 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             data_client["username"] = data_client["email"]
             data_client["role"] = Params.ROLE_CLIENT
             data_client['password'] = password
+            data_client['seller_asigned'] = data_client['seller']
+            
             if data_client["type_client"] == 'b':
                 data_client['birthdate'] = '1900-01-01'
                 data_client['sex'] = ''

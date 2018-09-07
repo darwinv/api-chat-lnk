@@ -72,14 +72,15 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
 class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
     attribute_product = serializers.SerializerMethodField()
-
+    product_type_name = serializers.SerializerMethodField()
     class Meta:
         """Modelo."""
 
         model = SaleDetail
         fields = (
             'price', 'description', 'discount', 'pin_code', 'is_billable',
-            'contract','product_type', 'sale', 'attribute_product')
+            'contract','product_type', 'sale', 'attribute_product',
+            'product_type_name')
 
     def get_attribute_product(self, obj):
         """Devuelve client."""
@@ -90,6 +91,10 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
             return sale.data
         else:
             return None
+
+    def get_product_type_name(self, obj):
+        """Devuelve product_type."""
+        return _(str(obj.product_type))
 
 class SaleWithFeeSerializer(serializers.Serializer):
     """serializador para detalle de venta"""
