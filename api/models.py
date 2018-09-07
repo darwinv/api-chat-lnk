@@ -226,7 +226,6 @@ class SellerContact(models.Model):
 
     ocupation = models.PositiveIntegerField(choices=Ch.client_ocupation,
                                             null=True, default=7)
-
     profession = models.CharField(max_length=150, null=True)
     business_name = models.CharField(max_length=150, null=True)
     commercial_reason = models.CharField(max_length=150, null=True)
