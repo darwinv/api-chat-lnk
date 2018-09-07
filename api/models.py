@@ -668,7 +668,8 @@ class Declinator(models.Model):
         """Str."""
         return self.message
 
-#Modelo para usar con una vista existente en la base de datos
+
+# Modelo para usar con una vista existente en la base de datos
 class SpecialistMessageList(models.Model):
     id = models.IntegerField(primary_key=True)
     photo = models.CharField(max_length=240, blank=True)
