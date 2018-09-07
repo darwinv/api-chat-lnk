@@ -33,9 +33,9 @@ class AccountSpecialist(APITestCase):
         # pendientes por absolver por el mes
         self.assertEqual(response.data["month_queries_pending"], 4)
         # pendientes declinadas por el mes
-        self.assertEqual(response.data["month_queries_declined"], 4)
+        self.assertEqual(response.data["month_queries_declined"], 1)
         # absueltos historico de especialidad
-        self.assertEqual(response.data["queries_absolved_category"], 5)
+        self.assertEqual(response.data["queries_absolved_category"], 6)
 
 
 class AccountProfileSeller(APITestCase):
