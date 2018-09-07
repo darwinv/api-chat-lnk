@@ -65,10 +65,9 @@ def update_specialist_client():
     for specialist in Specialist.objects.all():
 
         for query in Query.objects.filter(specialist=specialist):
-            if query.client.id==12 and specialist.id==16:
-                # Generar nodos de listado para nuevo especialista
-                generateDataMessageClients(query.client.id, query.category.id, query.id,
-                                       query.status, specialist.id)
+            # Generar nodos de listado para nuevo especialista
+            generateDataMessageClients(query.client.id, query.category.id, query.id,
+                                   query.status, specialist.id)
 
 # FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
