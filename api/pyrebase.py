@@ -2,7 +2,7 @@
 import pyrebase
 
 from api.models import Client, QueryPlansAcquired, Category, Message, Query
-from api.models import SpecialistMessageList_sp
+from api.models import SpecialistMessageList_sp, Specialist
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from django.db.models import OuterRef, Subquery, Count
@@ -57,6 +57,18 @@ def update_plan_choisen():
             print("empty")
         except Exception as e:
             print("error"+str(e))
+
+def update_specialist_client():
+    """Cargar listado de categorias para todos los usuarios."""
+    # SOLO USO PARA AMBIENTE EN DESARROLLO
+    for specialist in Specialist.objects.all():
+
+        for query in Query.objects.filter(specialist=specialist):
+            if query.client.id==12 and specialist.id==16:
+                # Generar nodos de listado para nuevo especialista
+                generateDataMessageClients(query.client.id, query.category.id, query.id,
+                                       query.status, specialist.id)
+
 # FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
 
@@ -334,7 +346,8 @@ def createListMessageClients(lista, query_id, status,
     del data_obj['title']
     del data_obj['date']
     del data_obj['id']
-
+    import pdb
+    pdb.set_trace()
     main_node = "messagesList/specialist/{}/{}"
     if exist_node(main_node):
         db.child("messagesList/specialist/").child(

@@ -478,7 +478,7 @@ class UpdatePasswordSeller(APITestCase):
 
 
 class GetSellerByUsername(APITestCase):
-    """Test module for GET all clients API."""
+    """Test module for GET seller info"""
     fixtures = ['data','data2','data3','test_seller']
     def setUp(self):
         pass
@@ -487,3 +487,28 @@ class GetSellerByUsername(APITestCase):
         # get API response
         response = client.get(reverse('seller-detail-username', args=("darwinio_vasqz@gmail.com",)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetSellerByID(APITestCase):
+    """Test module for GET seller info"""
+    fixtures = ['data','data2','data3','test_seller']
+    def setUp(self):
+        pass
+
+    def test_gest_user(self):
+        # get API response
+        response = client.get(reverse('seller-detail-id', args=(8,)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetClientBySeller(APITestCase):
+    """Test module for GET all clients API."""
+    fixtures = ['data','data2','data3','test_seller']
+    def setUp(self):
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+
+    def test_gest_user(self):
+        # get API response
+        response = client.get(reverse('sellers-clients'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+

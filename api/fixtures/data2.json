@@ -458,30 +458,6 @@
       "user_permissions": []
     }
   },
-  {
-    "model": "api.Parameter",
-    "pk": 1,
-    "fields": {
-      "parameter": "time_delay_response",
-      "value": 24
-    }
-  },
-  {
-    "model": "api.Parameter",
-    "pk": 2,
-    "fields": {
-      "parameter": "support",
-      "value": "jefeti@pympack.com.pe"
-    }
-  },
-  {
-    "model": "api.Parameter",
-    "pk": 3,
-    "fields": {
-      "parameter": "platform_seller",
-      "value": 6
-    }
-  },
 
   {
     "model": "api.paymenttype",

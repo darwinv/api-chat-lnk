@@ -23,7 +23,7 @@ from api.serializers.query import QuerySerializer, QueryCustomSerializer
 from api.serializers.plan import QueryPlansShareSerializer, QueryPlansTransferSerializer
 from api.serializers.plan import QueryPlansEmpowerSerializer
 from django.http import Http404
-from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrSpecialist
+from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrSpecialist, IsAdminOrSeller
 from api.permissions import IsAdminOrClient
 from api.utils.querysets import get_query_set_plan
 from rest_framework.parsers import JSONParser, MultiPartParser, FileUploadParser
@@ -441,7 +441,6 @@ class ClientListView(ListCreateAPIView):
 
     # Metodo post redefinido
     def post(self, request):
-
         """Redefinido metodo para crear clientes."""
         data = request.data
         if 'type_client' not in data or not data['type_client']:
@@ -938,6 +937,23 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class SellerClientListView(ListCreateAPIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrSeller)
+
+    def list(self, request):
+        seller = Operations.get_id(self, request)
+
+        queryset = Client.objects.filter(seller_assigned=seller)
+        serializer = ClientSerializer(queryset, many=True)
+
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
+
+
 class SellerDetailView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -1009,7 +1025,6 @@ class SellerDetailByID(APIView):
         seller = self.get_object(pk)
         serializer = SellerSerializer(seller)
         return Response(serializer.data)
-
 
 
 class SellerAccountView(ListCreateAPIView):

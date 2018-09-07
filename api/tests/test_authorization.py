@@ -61,6 +61,7 @@ class ChangeStatusClient(APITestCase):
         client = APIClient()
         client.credentials(
             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        
         response = client.put(reverse('auth-clients',
                               kwargs={'pk': send.data["id"]}),
                               data, format='json')

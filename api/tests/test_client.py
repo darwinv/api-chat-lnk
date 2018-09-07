@@ -21,7 +21,7 @@ client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 class CreateNaturalClient(APITestCase):
     """Prueba de Registro de Cliente Natural."""
 
-    fixtures = ['data', 'data2', 'test_chosen_plan']
+    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan']
 
     # Prueba para verificar la insercion de cliente natural
     def setUp(self):
@@ -759,7 +759,7 @@ class UpdateNaturalClient(APITestCase):
 class CreateBusinessClient(APITestCase):
     """Test Para Crear Persona juridica."""
 
-    fixtures = ['data', 'data2']
+    fixtures = ['data', 'data2', 'data3']
 
     def setUp(self):
         """Setup."""

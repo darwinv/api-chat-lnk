@@ -59,9 +59,9 @@ urlpatterns = [
         actors.SellerDetailByUsername.as_view(),
         name='seller-detail-username'),
 
-    url(r'^sellers-users/(?P<pk>[0-9]+)$',
+    url(r'^sellers-users-id/(?P<pk>[0-9]+)/$',
         actors.SellerDetailByID.as_view(),
-        name='seller-detail-username'),
+        name='seller-detail-id'),
 
     # listado de planes a la venta
     url(r'^plans/$', plan.PlansView.as_view(),
@@ -195,6 +195,7 @@ urlpatterns = [
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(),
         name='seller-detail'),
     url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(), name='seller-account-status'),
+    url(r'^sellers/clients/$', actors.SellerClientListView.as_view(), name='sellers-clients'),
 
     # Actualizar Consulta por detalle (Responder)
     url(r'^specialist/queries/(?P<pk>[0-9]+)/$',
