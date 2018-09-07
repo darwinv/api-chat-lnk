@@ -65,7 +65,7 @@ class ClientListView(ListCreateAPIView):
                         api_user
                     INNER JOIN api_role ON api_user.role_id = api_role.id
                     INNER JOIN api_client ON api_client.user_ptr_id = api_user.id
-                    LEFT JOIN api_user AS seller ON api_client.seller_asigned_id = seller.id
+                    LEFT JOIN api_user AS seller ON api_client.seller_assigned_id = seller.id
                     WHERE
                         api_user.role_id = 2 {condition}
                     ORDER BY

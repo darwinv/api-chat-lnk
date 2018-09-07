@@ -290,7 +290,7 @@ class Client(User):
                                         on_delete=models.PROTECT, null=True)
     level_instruction = models.ForeignKey(LevelInstruction,
                                           on_delete=models.PROTECT, null=True)
-    seller_asigned = models.ForeignKey(Seller, on_delete=models.PROTECT,
+    seller_assigned = models.ForeignKey(Seller, on_delete=models.PROTECT,
                                        null=True)
 
     class Meta:

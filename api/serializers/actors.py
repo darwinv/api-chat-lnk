@@ -186,7 +186,7 @@ class ClientSerializer(serializers.ModelSerializer):
 
     photo = serializers.CharField(read_only=True)
     code = serializers.CharField(read_only=True)
-    seller_asigned = serializers.PrimaryKeyRelatedField(
+    seller_assigned = serializers.PrimaryKeyRelatedField(
         queryset=Seller.objects.all(), required=False, allow_null=True)
 
     class Meta:
@@ -206,7 +206,7 @@ class ClientSerializer(serializers.ModelSerializer):
             'ocupation_name', 'about', 'nationality', 'nationality_name',
             "residence_country", "commercial_reason", "foreign_address",
             "residence_country_name", "status", "code_cellphone",
-            "code_telephone", "role", "seller_asigned")
+            "code_telephone", "role", "seller_assigned")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -391,11 +391,11 @@ class ClientSerializer(serializers.ModelSerializer):
             if 'address' in validated_data:
                 del validated_data['address']
 
-        if "seller_asigned" in validated_data and validated_data["seller_asigned"]:
+        if "seller_assigned" in validated_data and validated_data["seller_assigned"]:
             pass
         else:
             parameter = Parameter.objects.get(parameter="platform_seller")
-            validated_data["seller_asigned"] = Seller.objects.get(pk=parameter.value)
+            validated_data["seller_assigned"] = Seller.objects.get(pk=parameter.value)
             
         # Si nacionalidad no es peruana, el codigo de usuario se antecede por
         # el iso del pais al que pertenece
@@ -1066,7 +1066,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             data_client["username"] = data_client["email"]
             data_client["role"] = Params.ROLE_CLIENT
             data_client['password'] = password
-            data_client['seller_asigned'] = data_client['seller']
+            data_client['seller_assigned'] = data_client['seller']
             
             if data_client["type_client"] == 'b':
                 data_client['birthdate'] = '1900-01-01'

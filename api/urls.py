@@ -59,6 +59,10 @@ urlpatterns = [
         actors.SellerDetailByUsername.as_view(),
         name='seller-detail-username'),
 
+    url(r'^sellers-users/(?P<pk>[0-9]+)$',
+        actors.SellerDetailByID.as_view(),
+        name='seller-detail-username'),
+
     # listado de planes a la venta
     url(r'^plans/$', plan.PlansView.as_view(),
         name='plans'),
