@@ -45,7 +45,7 @@ class ClientBase(admin.ModelAdmin):
      'level_instruction', 'institute','profession',
      'ocupation',
      'business_name','economic_sector','agent_firstname', 'agent_lastname',
-     'position','seller_asigned')
+     'position','seller_assigned')
 
 class SpecialistAdmin(admin.ModelAdmin):
     fields = ('username', 'nick','password','photo','first_name', 'last_name',

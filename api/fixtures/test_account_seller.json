@@ -119,7 +119,7 @@
         "profession": "",
         "economic_sector": 5,
         "level_instruction": null,
-        "seller_asigned": null,
+        "seller_assigned": null,
         "groups": [],
         "user_permissions": []
       }
@@ -184,7 +184,7 @@
         "profession": "",
         "economic_sector": 5,
         "level_instruction": null,
-        "seller_asigned": null,
+        "seller_assigned": null,
         "groups": [],
         "user_permissions": []
       }

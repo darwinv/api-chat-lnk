@@ -587,7 +587,7 @@
 			"profession": "35",
 			"economic_sector": null,
 			"level_instruction": 1,
-			"seller_asigned": null,
+			"seller_assigned": null,
 			"groups": [],
 			"user_permissions": []
 		}
@@ -613,7 +613,7 @@
 			"profession": "Vendedor",
 			"economic_sector": 3,
 			"level_instruction": 1,
-			"seller_asigned": 8,
+			"seller_assigned": 8,
 			"groups": [],
 			"user_permissions": []
 		}
@@ -639,7 +639,7 @@
 			"profession": "21",
 			"economic_sector": null,
 			"level_instruction": 3,
-			"seller_asigned": null,
+			"seller_assigned": null,
 			"groups": [],
 			"user_permissions": []
 		}
