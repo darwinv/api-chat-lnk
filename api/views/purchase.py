@@ -14,7 +14,7 @@ from api.permissions import IsAdminOrSeller
 class CreatePurchase(APIView):
     """Vista para crear compra."""
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrSeller]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         """metodo para crear compra."""
@@ -23,7 +23,9 @@ class CreatePurchase(APIView):
         extra = {}
         data = request.data
         user_id = Operations.get_id(self, request)
-        data["seller"] = user_id
+        # import pdb; pdb.set_trace()
+        if request.user.role_id == 4:
+            data["seller"] = user_id
         serializer = SaleSerializer(data=data, context=data)
         if serializer.is_valid():
             serializer.save()
