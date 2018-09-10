@@ -406,7 +406,7 @@ class ClientSerializer(serializers.ModelSerializer):
         else:
             parameter = Parameter.objects.get(parameter="platform_seller")
             validated_data["seller_assigned"] = Seller.objects.get(pk=parameter.value)
-            
+
         # Si nacionalidad no es peruana, el codigo de usuario se antecede por
         # el iso del pais al que pertenece
         if validated_data["nationality"] != country_peru:
@@ -1019,6 +1019,7 @@ class SellerContactSerializer(serializers.ModelSerializer):
 
 class SellerFilterContactSerializer(serializers.ModelSerializer):
     """Serializer de contacto filtrado."""
+    address = AddressSerializer(required=False)
 
     class Meta:
         """ Model Contacto."""
@@ -1113,7 +1114,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             data_client["role"] = Params.ROLE_CLIENT
             data_client['password'] = password
             data_client['seller_assigned'] = data_client['seller']
-            
+
             if data_client["type_client"] == 'b':
                 data_client['birthdate'] = '1900-01-01'
                 data_client['sex'] = ''
