@@ -900,3 +900,11 @@ msgstr "Zambia"
 
 msgid "Zimbabwe"
 msgstr "Zimbabue"
+
+#: --------------------
+#: Tipo de productos
+msgid "Query Plans"
+msgstr "Planes de Consulta"
+
+msgid "Match"
+msgstr "Match"
