@@ -394,7 +394,7 @@ msgstr "contraseña requerida"
 
 #: .\api\serializers\actors.py:1330 .\api\serializers\actors.py:1375
 msgid "old password is invalid"
-msgstr "pasword anterior es invalidad"
+msgstr "contraseña anterior es invalidad"
 
 #: .\api\serializers\query.py:185
 msgid "You need to have an active plan"
