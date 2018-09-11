@@ -1026,6 +1026,22 @@ class SellerFilterContactSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ObjectionsContactSerializer(serializers.ModelSerializer):
+    """Lista de objeciones del serializer del contacto."""
+
+    def to_representation(self, obj):
+        data = {}
+        if obj.type_contact == 2:
+            objections = ListObjectionsSerializer(
+                obj.objectionslist_set.all(), many=True).data
+            data["objections"] = objections
+            if obj.other_objection:
+                other = OrderedDict()
+                other['name'] = obj.other_objection
+                data["objections"].append(other)
+        return data
+
+
 class BaseSellerContactSerializer(serializers.ModelSerializer):
     """Base para contacto."""
 

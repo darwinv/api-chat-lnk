@@ -222,19 +222,6 @@
   }
 },
 {
-  "model": "oauth2_provider.accesstoken",
-  "pk": 2,
-  "fields": {
-    "user": 2,
-    "token": "RCOM8gcbsOv56QFlcCJpgDENETGCLr",
-    "application": 1,
-    "expires": "9999-12-31T23:59:59Z",
-    "scope": "",
-    "created": "2016-12-31T23:59:59Z",
-    "updated": "2017-10-02T22:27:09.173Z"
-  }
-},
-{
   "model": "api.objectionslist",
   "pk": 1,
   "fields": {
@@ -247,7 +234,7 @@
   "pk": 2,
   "fields": {
     "objection": 16,
-    "contact": 1
+    "contact": 2
   }
 },
 {
@@ -255,14 +242,20 @@
   "pk": 3,
   "fields": {
     "objection": 6,
-    "contact": 2
+    "contact": 3
   }
 },
 {
-  "model": "api.objection",
-  "pk": 1,
+  "model": "oauth2_provider.accesstoken",
+  "pk": 2,
   "fields": {
-    "name": "has an accountant who advises him"
+    "user": 2,
+    "token": "RCOM8gcbsOv56QFlcCJpgDENETGCLr",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "",
+    "created": "2016-12-31T23:59:59Z",
+    "updated": "2017-10-02T22:27:09.173Z"
   }
 }
 ]

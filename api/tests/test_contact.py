@@ -1063,24 +1063,26 @@ class GetContactsFilterDate(APITestCase):
         self.assertEqual(response.data["count"], 1)
 
 
-class DetailContact(APITestCase):
+class DetailObjectionsNotEfecctive(APITestCase):
     """Detalle de Contacto."""
 
     fixtures = ['data', 'data2', 'data3', 'test_contact']
 
     def setUp(self):
         """Setup."""
-        self.specialist = 3
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer RCOM8gcbsOv56QFlcCJpgDENETGCLr')
+        self.contact = 1
 
     def test_get_detail(self):
         """Obtener detalle de manera exitosa."""
-        client.credentials(
-            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
-        response = client.get(reverse('specialist-detail',
-                              kwargs={'pk': self.specialist}), format='json')
-
+        response = self.client.get(reverse('objections-contact',
+                                           kwargs={'pk': self.contact}),
+                                   format='json')
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
 
 class GetObjections(APITestCase):
     """Devolver listado de objeciones."""
