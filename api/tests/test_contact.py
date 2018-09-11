@@ -1002,7 +1002,7 @@ class GetContacts(APITestCase):
 
 class GetContactsFilterDate(APITestCase):
     """Devolver data de contactos."""
-    
+
     fixtures = ['data', 'data2', 'data3', 'test_contact']
 
     def setUp(self):
@@ -1061,6 +1061,26 @@ class GetContactsFilterDate(APITestCase):
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
+
+
+class DetailContact(APITestCase):
+    """Detalle de Contacto."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_contact']
+
+    def setUp(self):
+        """Setup."""
+        self.specialist = 3
+
+    def test_get_detail(self):
+        """Obtener detalle de manera exitosa."""
+        client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        response = client.get(reverse('specialist-detail',
+                              kwargs={'pk': self.specialist}), format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
 
 class GetObjections(APITestCase):
     """Devolver listado de objeciones."""
