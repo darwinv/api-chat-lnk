@@ -466,7 +466,6 @@ class ClientSerializer(serializers.ModelSerializer):
         return
 
 
-
 class SpecialistSerializer(serializers.ModelSerializer):
     """Serializer del especialista."""
 

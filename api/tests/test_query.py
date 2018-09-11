@@ -695,3 +695,27 @@ class SetCalification(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(q.status, 5)
         self.assertEqual(q.qualification, 5)
+
+    def test_avg_calification(self):
+        """Promedio de calificacion de especialista."""
+        data = self.valid_payload
+        Query.objects.filter(pk=1000).update(status=4)
+        response = self.client.put(reverse('query-qualify',
+                                           kwargs={'pk': 1000}),
+                                   data=json.dumps(data),
+                                   content_type='application/json')
+
+        q = Query.objects.get(pk=1000)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(q.status, 5)
+        self.assertEqual(q.qualification, 5)
+        data["qualification"] = 3
+        response1 = self.client.put(reverse('query-qualify',
+                                            kwargs={'pk': 1001}),
+                                    data=json.dumps(data),
+                                    content_type='application/json')
+        q = Query.objects.get(pk=1001)
+        self.assertEqual(response1.status_code, status.HTTP_200_OK)
+        self.assertEqual(q.status, 5)
+        self.assertEqual(q.qualification, 3)
+        self.assertEqual(int(q.specialist.star_rating), 4)

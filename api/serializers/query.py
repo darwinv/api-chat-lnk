@@ -1,5 +1,6 @@
 """Consultas."""
 from django.utils.translation import ugettext_lazy as _
+from django.db.models import Avg
 from rest_framework import serializers
 from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
 from api.models import User, GroupMessage, Declinator
@@ -665,6 +666,11 @@ class QueryQualifySerializer(serializers.ModelSerializer):
         instance.status = 5
         instance.qualification = validated_data["qualification"]
         instance.save()
+        rating = Query.objects.filter(
+            specialist=instance.specialist).aggregate(Avg('qualification'))
+        Specialist.objects.filter(
+            pk=instance.specialist).update(
+                star_rating=int(rating["qualification__avg"]))
         return instance
 
 
