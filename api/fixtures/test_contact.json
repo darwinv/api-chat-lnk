@@ -222,6 +222,30 @@
   }
 },
 {
+  "model": "api.objectionslist",
+  "pk": 1,
+  "fields": {
+    "objection": 18,
+    "contact": 1
+  }
+},
+{
+  "model": "api.objectionslist",
+  "pk": 2,
+  "fields": {
+    "objection": 16,
+    "contact": 2
+  }
+},
+{
+  "model": "api.objectionslist",
+  "pk": 3,
+  "fields": {
+    "objection": 6,
+    "contact": 3
+  }
+},
+{
   "model": "oauth2_provider.accesstoken",
   "pk": 2,
   "fields": {
@@ -232,13 +256,6 @@
     "scope": "",
     "created": "2016-12-31T23:59:59Z",
     "updated": "2017-10-02T22:27:09.173Z"
-  }
-},
-{
-  "model": "api.objection",
-  "pk": 1,
-  "fields": {
-    "name": "has an accountant who advises him"
   }
 }
 ]
