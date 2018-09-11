@@ -37,6 +37,15 @@ class AccountSpecialist(APITestCase):
         # absueltos historico de especialidad
         self.assertEqual(response.data["queries_absolved_category"], 6)
 
+    def test_data_footer(self):
+        """data del footer del especialista."""
+        response = client.get(reverse('footer-specialist'))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # absuelto por el mes
+        self.assertEqual(response.data["month_queries_absolved"], 2)
+        self.assertEqual(response.data["queries_absolved"], 5)
+
 
 class AccountProfileSeller(APITestCase):
     """Estado de cuenta del Vendedor."""

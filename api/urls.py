@@ -128,13 +128,19 @@ urlpatterns = [
 
 
     # Especialistas Asociados
-    url(r'^specialists-asociate/$', actors.SpecialistAsociateListByQueryView.as_view(),
+    url(r'^specialists-asociate/$',
+        actors.SpecialistAsociateListByQueryView.as_view(),
         name='specialists-asociate'),
 
     # Estados de Cuenta
     url(r'^account_status/specialist/(?P<pk>[0-9]+)/$',
         account.SpecialistAccountView.as_view(),
         name='specialists-account'),
+    # footer especialista
+    url(r'^footer/specialist/$',
+        account.SpecialistFooterView.as_view(),
+        name='footer-specialist'),
+
     # Estado de cuenta perfil vendedor
     url(r'^account_status/seller/(?P<pk>[0-9]+)/$',
         account.SellerAccountView.as_view(),

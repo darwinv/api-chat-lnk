@@ -1,6 +1,7 @@
 """Vista de Estado de Cuenta."""
 from rest_framework.views import APIView
 from api.serializers.account import SpecialistAccountSerializer
+from api.serializers.account import SpecialistFooterSerializer
 from api.serializers.account import SellerAccountSerializer
 from api.serializers.account import SellerAccountBackendSerializer
 from rest_framework.response import Response
@@ -11,7 +12,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django.http import Http404
 from api.models import Specialist, Query, Seller, Sale
 from rest_framework.pagination import PageNumberPagination
-from api.permissions import IsAdminOrSeller
+from api.permissions import IsSpecialist
 
 
 # Vista para estado de cuenta de especialista
@@ -33,6 +34,28 @@ class SpecialistAccountView(APIView):
                                                  context={'category': specialist.category,
                                                           'specialist': specialist
                                                           })
+        return Response(serializer.data)
+
+
+class SpecialistFooterView(APIView):
+    """Vista para footer del specialista."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsSpecialist]
+
+    def get_object(self, pk):
+        try:
+            return Specialist.objects.get(pk=pk)
+        except Specialist.DoesNotExist:
+            raise Http404
+
+    def get(self, request):
+        pk = Operations.get_id(self, request)
+        specialist = self.get_object(pk)
+        queryset = Query.objects.filter(specialist=specialist)
+        serializer = SpecialistFooterSerializer(queryset,
+                                                context={'category': specialist.category,
+                                                         'specialist': specialist
+                                                         })
         return Response(serializer.data)
 
 

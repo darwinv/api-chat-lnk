@@ -35,15 +35,40 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
         month_queries_pending = obj.filter(
             status__range=(1, 3),
             created_at__range=(primer, hoy)).count()
-        # calculó el numero de consultas absueltas historico
+        # calculó el numero de consultas absueltas historico por especialidad
         queries_absolved = Query.objects.filter(
             status__range=(4, 5), category=category_id).count()
+        # consultas por especialista
+        # queries_specialist = obj.filter(status__range=(4, 5)).count()
 
         return {"month_queries_absolved": month_queries,
                 "month_queries_pending": month_queries_pending,
                 "queries_absolved_category": queries_absolved,
-                "month_queries_declined": month_queries_declined
+                "month_queries_declined": month_queries_declined,
                 }
+
+
+class SpecialistFooterSerializer(serializers.ModelSerializer):
+    """Serializer para datos del footer del especialista."""
+
+    class Meta:
+        """Modelo."""
+
+        model = Specialist
+        fields = ('id')
+
+    def to_representation(self, obj):
+        hoy = datetime.now()  # fecha de hoy
+        # fecha de primer  dia del mes
+        primer = datetime(hoy.year, hoy.month, 1, 0, 0, 0)
+        # calculó de las consultas absueltas del mes
+        month_queries = obj.filter(status__range=(4, 5),
+                                   created_at__range=(primer, hoy)).count()
+
+        queries_absolved = obj.filter(status__range=(4, 5)).count()
+
+        return {"month_queries_absolved": month_queries,
+                "queries_absolved": queries_absolved}
 
 
 class SellerAccountSerializer(serializers.Serializer):
