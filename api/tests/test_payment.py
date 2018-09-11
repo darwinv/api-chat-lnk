@@ -130,3 +130,22 @@ class GetFeePaymentPendig(APITestCase):
              format='json')
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class GetContactsEfectiveSale(APITestCase):
+    """Devolver data de contactos."""
+    
+    fixtures = ['data', 'data2', 'data3', 'test_contact']
+
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer RCOM8gcbsOv56QFlcCJpgDENETGCLr')
+
+    def test_get_contact_sale(self):
+        """Devolver Ventas Contacto."""
+        data = {"email": "ccccc@mail.com"}
+        response = self.client.get(reverse('payment-pending-by-client-detail'), data)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)

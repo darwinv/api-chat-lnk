@@ -948,6 +948,7 @@ class SellerClientListView(ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated, IsAdminOrSeller)
 
     def list(self, request):
+
         seller = Operations.get_id(self, request)
 
         queryset = Client.objects.filter(seller_assigned=seller)
@@ -1111,8 +1112,8 @@ class ContactListView(ListCreateAPIView):
 class ContactFilterView(ListAPIView):
     """Listado de contactos."""
     # Listado de contactos pertenecientes al vendedor
-    authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated, IsSeller,)
+    # authentication_classes = (OAuth2Authentication,)
+    # permission_classes = (permissions.IsAuthenticated, IsSeller,)
     serializer_class = SellerFilterContactSerializer
 
     def get_queryset(self):

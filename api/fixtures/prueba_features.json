@@ -3382,8 +3382,8 @@
   "fields": {
     "expiration_date": "2019-05-29",
     "validity_months": 3,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": false,
     
@@ -3401,8 +3401,8 @@
   "fields": {
     "expiration_date": "2019-09-03",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": "2018-03-05",
     "is_active": false,
     
@@ -3420,8 +3420,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": false,
     
@@ -3439,8 +3439,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": false,
     
@@ -3458,8 +3458,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": false,
     
@@ -3477,8 +3477,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3496,8 +3496,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3515,8 +3515,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3534,8 +3534,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3553,8 +3553,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3572,8 +3572,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3591,8 +3591,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3610,8 +3610,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3629,8 +3629,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3648,8 +3648,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3667,8 +3667,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3686,8 +3686,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3705,8 +3705,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3724,8 +3724,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3743,8 +3743,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3762,8 +3762,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3781,8 +3781,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3800,8 +3800,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3819,8 +3819,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3838,8 +3838,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3857,8 +3857,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     
@@ -3876,8 +3876,8 @@
   "fields": {
     "expiration_date": "2019-05-15",
     "validity_months": 6,
-    "available_queries": 72,
-    "query_quantity": 72,
+    "available_queries": 6,
+    "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
     

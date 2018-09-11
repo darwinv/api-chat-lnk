@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from api.models import Payment, MonthlyFee, Sale, SaleDetail
 from api.models import QueryPlansAcquired
 from api.utils.tools import get_date_by_time
+from api.utils.querysets import get_next_fee_to_pay
 from datetime import datetime, date
 from api.emails import BasicEmailAmazon
 from dateutil.relativedelta import relativedelta
@@ -68,6 +69,16 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
             return str(obj['client__business_name'])
         return str(obj.client.business_name)
 
+class FeeSerializer(serializers.ModelSerializer):
+    """Serializer del pago."""
+
+    class Meta:
+        """Modelo."""
+
+        model = MonthlyFee
+        fields = (
+            'fee_amount', 'fee_order_number', 'fee_quantity', 'pay_before',
+            'status', 'id')
 
 class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
@@ -137,3 +148,30 @@ class PaymentSalePendingDetailSerializer(serializers.ModelSerializer):
         serializer = SaleWithFeeSerializer(obj.sale)
         
         return serializer.data
+
+class SaleContactoDetailSerializer(serializers.ModelSerializer):
+    """Serializer del pago."""
+
+    products = serializers.SerializerMethodField()
+    fee = serializers.SerializerMethodField()
+    class Meta:
+        """Modelo."""
+
+        model = Sale
+        fields = (
+            'created_at', 'total_amount', 'reference_number', 'is_fee', 'id',
+            'products', 'fee')
+
+
+    def get_products(self, obj):
+        """Devuelve sale detail."""
+        sale_detail = SaleDetail.objects.filter(sale=obj.id)
+        serializer = PaymentSaleDetailSerializer(sale_detail, many=True)
+        return serializer.data
+
+    def get_fee(self, obj):
+        """Devuelve sale detail."""
+        fee = get_next_fee_to_pay(obj.id)
+        serializer = FeeSerializer(fee)
+        return serializer.data
+

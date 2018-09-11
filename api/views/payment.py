@@ -1,9 +1,11 @@
 """Vista de Pagos."""
 from api.serializers.payment import PaymentSerializer, PaymentSaleSerializer
 from api.serializers.payment import PaymentSalePendingDetailSerializer
+from api.serializers.payment import SaleContactoDetailSerializer
 from api.utils.validations import Operations
-from api.permissions import IsAdminOrSeller, IsAdmin
-from api.models import Sale, MonthlyFee
+from api.utils.querysets import get_next_fee_to_pay
+from api.permissions import IsAdminOrSeller, IsAdmin, IsAdminOrClient
+from api.models import Sale, MonthlyFee, Client
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 from rest_framework.views import APIView
@@ -70,10 +72,41 @@ class PaymentPendingDetailView(APIView):
 
     def get(self, request, pk):
         """Detalle."""
-        fee = MonthlyFee.objects.filter(sale=pk, status=1).order_by('pay_before')[0]
-        
+        fee = get_next_fee_to_pay(pk)
+
         if fee:
-            serializer = PaymentSalePendingDetailSerializer(fee)        
+            serializer = PaymentSalePendingDetailSerializer(fee)
             return Response(serializer.data)
         else:
             raise Http404
+
+class PaymentDetailContactView(ListCreateAPIView):
+    """Vista para traer pagos pendientes."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrSeller)
+    required = _("required")
+
+    def get(self, request):
+        """Detalle."""
+        """Detalle de venta para contacto efectivo, devuelve ventas con
+        paginacion para un cliente dado"""
+        data = request.query_params
+        if not 'email' in data:
+            raise serializers.ValidationError({'email': [self.required]})
+
+        email = data['email']
+        try:
+            client = Client.objects.get(email_exact=email)
+        except Client.DoesNotExist:
+            raise Http404
+
+        sale = Sale.objects.filter(client=client)
+
+        # paginacion
+        page = self.paginate_queryset(sale)
+        if page is not None:
+            serializer = SaleContactoDetailSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = SaleContactoDetailSerializer(sale, many=True)
+        return Response(serializer.data)
