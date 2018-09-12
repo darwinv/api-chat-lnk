@@ -151,6 +151,30 @@ class AccountProfileSeller(APITestCase):
         self.assertEqual(response.data["month_all_promotionals"], 8)
 
 
+class AccountStatusClient(APITestCase):
+    """Estado de cuenta del cliente."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_account_client']
+
+    def setUp(self):
+        """SetUp."""
+        self.cliente = 3
+        self.hoy = datetime.now()
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer dfsdf')
+
+    def test_account_client(self):
+        """Cliente estado de cuenta."""
+
+        response = client.get(reverse('clients-account',
+                                      args=(self.cliente,)))
+
+        self.assertEqual(response.data["queries_acquired"], 6)
+        self.assertEqual(response.data["queries_absolved"], 6)
+        self.assertEqual(response.data["queries_pending"], 5)
+        self.assertEqual(response.data["available_queries"], 2)
+
+
 class AccountStatusSeller(APITestCase):
     """Estado de cuenta Backend del Vendedor."""
 
