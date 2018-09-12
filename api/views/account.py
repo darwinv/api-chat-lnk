@@ -4,6 +4,7 @@ from api.serializers.account import SpecialistAccountSerializer
 from api.serializers.account import SpecialistFooterSerializer
 from api.serializers.account import SellerAccountSerializer
 from api.serializers.account import SellerAccountBackendSerializer
+from api.serializers.account import SellerFooterSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
@@ -12,7 +13,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django.http import Http404
 from api.models import Specialist, Query, Seller, Sale
 from rest_framework.pagination import PageNumberPagination
-from api.permissions import IsSpecialist
+from api.permissions import IsSpecialist, IsSeller
 
 
 # Vista para estado de cuenta de especialista
@@ -92,4 +93,24 @@ class SellerAccountBackendView(APIView):
         queryset = Sale.objects.filter(seller=seller)
         serializer = SellerAccountBackendSerializer(queryset,
                                                     context={"seller": seller})
+        return Response(serializer.data)
+
+
+class SellerFooterView(APIView):
+    """Vista del footer del vendedor."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsSeller]
+
+    def get_object(self, pk):
+        try:
+            return Seller.objects.get(pk=pk)
+        except Seller.DoesNotExist:
+            raise Http404
+
+    def get(self, request):
+        pk = Operations.get_id(self, request)
+        seller = self.get_object(pk)
+        queryset = Sale.objects.filter(seller=seller)
+        serializer = SellerFooterSerializer(queryset,
+                                            context={'seller': seller})
         return Response(serializer.data)

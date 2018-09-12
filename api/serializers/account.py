@@ -4,7 +4,7 @@ from api.models import Specialist, Query, SellerContact, ParameterSeller
 from api.models import SellerNonBillablePlans, Declinator
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 
 
 class SpecialistAccountSerializer(serializers.ModelSerializer):
@@ -187,6 +187,31 @@ class SellerAccountBackendSerializer(serializers.Serializer):
                 }
 
 
+class SellerFooterSerializer(serializers.Serializer):
+    """Serializer para datos del footer del vendedor."""
+
+    def to_representation(self, obj):
+        """To Representation."""
+        seller = self.context["seller"]
+        hoy = datetime.now()  # fecha de hoy
+        # fecha de primer  dia del mes
+        primer = datetime(hoy.year, hoy.month, 1, 0, 0, 0)
+        # planes promocionales entregados en el mes
+        promotional_plans = obj.filter(saledetail__product_type=1,
+                                       saledetail__is_billable=False,
+                                       created_at__range=(primer, hoy)).count()
+        # contactos no efectivos
+        contacts_not_effective = SellerContact.objects.filter(
+            seller=seller, type_contact=2,
+            created_at__range=(primer, hoy)).count()
+        # contactos efectivos
+        contacts_effective = SellerContact.objects.filter(
+            Q(type_contact=1) | Q(type_contact=3),
+            seller=seller, created_at__range=(primer, hoy)).count()
+
+        return {"month_promotionals": promotional_plans,
+                "month_not_effective": contacts_not_effective,
+                "month_effective": contacts_effective}
 # SELECT
 # SUM(api_queryplansacquired.query_quantity) AS consultas_vendidas
 # FROM

@@ -149,6 +149,11 @@ urlpatterns = [
     url(r'^account_status/backend/seller/(?P<pk>[0-9]+)/$',
         account.SellerAccountBackendView.as_view(),
         name='sellers-account-back'),
+
+    # footer seller
+    url(r'^footer/seller/$',
+        account.SellerFooterView.as_view(),
+        name='footer-seller'),
     # Consultas
     # Listado de Consultas por especialista
     # url(r'^specialist-queries/$', query.QueryListSpecialistView.as_view(),
