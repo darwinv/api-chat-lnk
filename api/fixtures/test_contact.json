@@ -222,6 +222,30 @@
   }
 },
 {
+  "model": "api.objectionslist",
+  "pk": 1,
+  "fields": {
+    "objection": 18,
+    "contact": 1
+  }
+},
+{
+  "model": "api.objectionslist",
+  "pk": 2,
+  "fields": {
+    "objection": 16,
+    "contact": 2
+  }
+},
+{
+  "model": "api.objectionslist",
+  "pk": 3,
+  "fields": {
+    "objection": 6,
+    "contact": 3
+  }
+},
+{
   "model": "oauth2_provider.accesstoken",
   "pk": 2,
   "fields": {
@@ -269,7 +293,7 @@
     "updated_at": "2017-10-23T15:20:08.801Z",
     "nationality": 1,
     "residence_country": 1,
-    "role": 4,
+    "role": 2,
     "address": 1,
     "groups": [],
     "user_permissions": []

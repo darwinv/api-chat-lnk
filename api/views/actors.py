@@ -23,6 +23,7 @@ from api.serializers.actors import SellerFilterContactSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
 from api.serializers.actors import ChangeEmailSerializer, ChangePassword
+from api.serializers.actors import ObjectionsContactSerializer
 from api.serializers.query import QuerySerializer, QueryCustomSerializer
 from api.serializers.plan import QueryPlansShareSerializer, QueryPlansTransferSerializer
 from api.serializers.plan import QueryPlansEmpowerSerializer
@@ -1069,7 +1070,7 @@ class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated, IsSeller,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller)
     # aca se debe colocar el serializer para listar todos
     serializer_class = SellerContactNaturalSerializer
     queryset = SellerContact.objects.all()
@@ -1109,11 +1110,31 @@ class ContactListView(ListCreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class ContactObjectionsDetailView(APIView):
+    """Detalle de Contacto."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller)
+
+    def get_object(self, pk):
+        """Obtener Objeto."""
+        try:
+            return SellerContact.objects.get(pk=pk)
+        except SellerContact.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        """Obtener Vendedor."""
+        seller = self.get_object(pk)
+        serializer = ObjectionsContactSerializer(seller)
+        return Response(serializer.data)
+
+
 class ContactFilterView(ListAPIView):
     """Listado de contactos."""
     # Listado de contactos pertenecientes al vendedor
-    # authentication_classes = (OAuth2Authentication,)
-    # permission_classes = (permissions.IsAuthenticated, IsSeller,)
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller)
     serializer_class = SellerFilterContactSerializer
 
     def get_queryset(self):

@@ -837,7 +837,7 @@ class SellerSerializer(serializers.ModelSerializer):
             prefix_country = Countries.objects.get(pk=validated_data["nationality"].id).iso_code
             validated_data['code'] = prefix_country + validated_data['code']
 
-        if 'ruc' in validated_data:
+        if 'ruc' in validated_data and validated_data['ruc']:
             if ruc_exists(residence_country=validated_data["residence_country"],
                           role=validated_data["role"],
                           ruc=validated_data["ruc"]):
@@ -1024,6 +1024,22 @@ class SellerFilterContactSerializer(serializers.ModelSerializer):
         """ Model Contacto."""
         model = SellerContact
         fields = '__all__'
+
+
+class ObjectionsContactSerializer(serializers.ModelSerializer):
+    """Lista de objeciones del serializer del contacto."""
+
+    def to_representation(self, obj):
+        data = {}
+        if obj.type_contact == 2:
+            objections = ListObjectionsSerializer(
+                obj.objectionslist_set.all(), many=True).data
+            data["objections"] = objections
+            if obj.other_objection:
+                other = OrderedDict()
+                other['name'] = obj.other_objection
+                data["objections"].append(other)
+        return data
 
 
 class BaseSellerContactSerializer(serializers.ModelSerializer):

@@ -128,13 +128,19 @@ urlpatterns = [
 
 
     # Especialistas Asociados
-    url(r'^specialists-asociate/$', actors.SpecialistAsociateListByQueryView.as_view(),
+    url(r'^specialists-asociate/$',
+        actors.SpecialistAsociateListByQueryView.as_view(),
         name='specialists-asociate'),
 
     # Estados de Cuenta
     url(r'^account_status/specialist/(?P<pk>[0-9]+)/$',
         account.SpecialistAccountView.as_view(),
         name='specialists-account'),
+    # footer especialista
+    url(r'^footer/specialist/$',
+        account.SpecialistFooterView.as_view(),
+        name='footer-specialist'),
+
     # Estado de cuenta perfil vendedor
     url(r'^account_status/seller/(?P<pk>[0-9]+)/$',
         account.SellerAccountView.as_view(),
@@ -202,6 +208,10 @@ urlpatterns = [
 
     # Contactos crear y listar en mapa
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
+    # detalle de contacto
+    url(r'^objections/contacts/(?P<pk>[0-9]+)/$',
+        actors.ContactObjectionsDetailView.as_view(),
+        name='objections-contact'),
     # filtrar contactos por efectivo, no efectivo, y fecha desde hasta
     url(r'^seller/contacts/$', actors.ContactFilterView.as_view(),
         name='contacts-filter'),
@@ -272,7 +282,8 @@ urlpatterns = [
         payment.PaymentPendingView.as_view(), name='sale-payment-pending'),
 
     url(r'^fees/payment-pending/(?P<pk>[0-9]+)/$',
-        payment.PaymentPendingDetailView.as_view(), name='fee-payment-pending-detail'),
+        payment.PaymentPendingDetailView.as_view(),
+        name='fee-payment-pending-detail'),
 
     url(r'^fees/payment-pending-by-client/$',
         payment.PaymentDetailContactView.as_view(), name='payment-pending-by-client-detail'),    
