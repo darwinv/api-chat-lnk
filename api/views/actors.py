@@ -38,7 +38,7 @@ from django.utils.translation import ugettext_lazy as _
 import os
 import uuid
 import boto3, sys
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from django.utils import timezone
 from api.utils.validations import Operations
 from api.utils.tools import clear_data_no_valid
@@ -1148,6 +1148,8 @@ class ContactFilterView(ListAPIView):
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
         if date_start is not None or date_end is not None:
+            fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
+            date_end = fecha_end + timedelta(days=1)
             queryset = queryset.filter(
                 created_at__range=(date_start, date_end))
         return queryset
