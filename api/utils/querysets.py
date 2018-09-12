@@ -1,6 +1,6 @@
 """Funciones Varias."""
 from api.models import Specialist
-from api.models import QueryPlansAcquired
+from api.models import QueryPlansAcquired, MonthlyFee
 from django.http import Http404
 from django.db.models import F
 
@@ -41,3 +41,12 @@ def get_query_set_plan():
                                               'query_quantity', 'available_queries',
                                               'validity_months','expiration_date','sale_detail__price')\
             .annotate(price=F('sale_detail__price'), is_chosen=F('queryplansclient__is_chosen'))
+
+
+""" Cuotas de Venta """
+def get_next_fee_to_pay(sale):
+    """
+    Funcion creada para traer la proxima cuota a pagar
+    :return: QuerySet
+    """
+    return MonthlyFee.objects.filter(sale=sale, status=1).order_by('pay_before')[0]

@@ -837,7 +837,7 @@ class SellerSerializer(serializers.ModelSerializer):
             prefix_country = Countries.objects.get(pk=validated_data["nationality"].id).iso_code
             validated_data['code'] = prefix_country + validated_data['code']
 
-        if 'ruc' in validated_data:
+        if 'ruc' in validated_data and validated_data['ruc']:
             if ruc_exists(residence_country=validated_data["residence_country"],
                           role=validated_data["role"],
                           ruc=validated_data["ruc"]):
