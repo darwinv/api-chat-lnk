@@ -105,15 +105,17 @@ class SaleSerializer(serializers.Serializer):
             else:
                 n_fees = 1
                 fee_amount = float(product["plan_id"].price)
+
             for i in range(1, n_fees+1):
                 pay_day = date.today() + relativedelta(days=3) # Hardcoded cambiar la cantidad de dias
                 sale_id = instance
-                # print(i)
+                
                 MonthlyFee.objects.create(fee_amount=fee_amount,
                                           fee_order_number=i, status=1,
                                           sale=sale_id,
                                           pay_before=pay_day,
                                           fee_quantity=n_fees)
+
             plan_acquired = {}
             for prx in range(product["quantity"]):
                 # verificamos si el producto es plan de consultass
