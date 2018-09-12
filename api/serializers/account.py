@@ -71,6 +71,31 @@ class SpecialistFooterSerializer(serializers.ModelSerializer):
                 "queries_absolved": queries_absolved}
 
 
+class ClientAccountSerializer(serializers.Serializer):
+    """Serializer de estado de cuenta de Cliente."""
+
+    def to_representation(self, obj):
+        """Representacion."""
+
+        client = self.context["client"]
+        # calculó de las consultas adquiridas
+        resp = obj.aggregate(queries=Sum('acquired_plan__query_quantity'),
+                             av_queries=Sum('acquired_plan__available_queries'))
+        # calculó de las consultas absueltas
+        queries = Query.objects.filter(client=client,
+                                       status__range=(4, 5)).count()
+
+        # calculó de las consultas absueltas
+        queries_pending = Query.objects.filter(client=client,
+                                               status__range=(1, 3)).count()
+
+        return {"queries_acquired": resp["queries"],
+                "queries_absolved": queries,
+                "queries_pending": queries_pending,
+                "available_queries": resp["av_queries"]
+                }
+
+
 class SellerAccountSerializer(serializers.Serializer):
     """Serializer de estado de cuenta Vendedor."""
 
@@ -212,6 +237,18 @@ class SellerFooterSerializer(serializers.Serializer):
         return {"month_promotionals": promotional_plans,
                 "month_not_effective": contacts_not_effective,
                 "month_effective": contacts_effective}
+
+
+
+
+# SELECT
+# Sum(api_queryplansacquired.query_quantity) AS consultas_adquiridas
+# FROM
+# api_queryplansclient
+# Inner Join api_queryplansacquired ON api_queryplansclient.acquired_plan_id = api_queryplansacquired.id
+# WHERE
+# api_queryplansclient.client_id =  4
+
 # SELECT
 # SUM(api_queryplansacquired.query_quantity) AS consultas_vendidas
 # FROM
