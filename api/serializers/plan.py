@@ -166,6 +166,8 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
     empower = serializers.SerializerMethodField()
     owner = serializers.SerializerMethodField()
     is_chosen = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
+
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -173,7 +175,7 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
         fields = ('id', 'plan_name', 'is_chosen', 'is_active',
                   'validity_months', 'query_quantity',
                   'available_queries', 'expiration_date', 'transfer',
-                  'share', 'empower', 'owner')
+                  'share', 'empower', 'owner', 'price')
 
     def get_transfer(self, obj):
         if 'queryplansclient__transfer' in obj:
@@ -198,6 +200,11 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
     def get_is_chosen(self, obj):
         if 'is_chosen' in obj:
             return obj['is_chosen']
+        else:
+            return False
+    def get_price(self, obj):
+        if 'price' in obj:
+            return obj['price']
         else:
             return False
 

@@ -510,7 +510,8 @@ class ClientAllPlansView(ListCreateAPIView):
                 'validity_months', 'query_quantity',
                 'available_queries', 'expiration_date', 'queryplansclient__transfer',
                 'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner'
-                ).annotate(is_chosen=F('queryplansclient__is_chosen')).order_by('id')
+                ).annotate(is_chosen=F('queryplansclient__is_chosen'),
+                price=F('sale_detail__price')).order_by('id')
             self.check_object_permissions(self.request, obj)
             return obj
         except QueryPlansAcquired.DoesNotExist:
@@ -518,9 +519,9 @@ class ClientAllPlansView(ListCreateAPIView):
 
     def get(self, request):
         """Obtener la lista con todos los planes del cliente."""
-        id = request.user.id
-        plan = self.get_object(id)
-        serializer = QueryPlansAcquiredDetailSerializer(plan, many=True)
+        client_id = request.user.id
+        plan = self.get_object(client_id)
+        
         # paginacion
         page = self.paginate_queryset(plan)
         if page is not None:
