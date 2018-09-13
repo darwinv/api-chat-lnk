@@ -13,6 +13,8 @@ class Params:
     }
 
     ROLE_CLIENT = 2
+
+    TIME_ZONE = ""
     
 class Payloads:
     read = True
@@ -135,7 +137,7 @@ class Payloads:
             "datetime": "",
             "id": 20,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-22-1.png",
-            "name": "Electronica",
+            "name": "Electrónica",
             "read": read
         }, "c21": {
             "datetime": "",
