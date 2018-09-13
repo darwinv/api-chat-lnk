@@ -1042,7 +1042,7 @@ class GetContactsFilterDate(APITestCase):
         response = self.client.get(reverse('contacts-filter'), data)
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 2)
+        self.assertEqual(response.data["count"], 3)
 
     def test_get_filter_with_date_contacts_e(self):
         """Devolver Contactos No efectivos."""
@@ -1051,7 +1051,7 @@ class GetContactsFilterDate(APITestCase):
         response = self.client.get(reverse('contacts-filter'), data)
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.data["count"], 2)
 
     def test_get_filter_with_date_contacts_ne(self):
         """Devolver Contactos No efectivos."""

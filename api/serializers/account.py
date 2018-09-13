@@ -4,7 +4,7 @@ from api.models import Specialist, Query, SellerContact, ParameterSeller
 from api.models import SellerNonBillablePlans, Declinator
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 
 
 class SpecialistAccountSerializer(serializers.ModelSerializer):
@@ -69,6 +69,31 @@ class SpecialistFooterSerializer(serializers.ModelSerializer):
 
         return {"month_queries_absolved": month_queries,
                 "queries_absolved": queries_absolved}
+
+
+class ClientAccountSerializer(serializers.Serializer):
+    """Serializer de estado de cuenta de Cliente."""
+
+    def to_representation(self, obj):
+        """Representacion."""
+
+        client = self.context["client"]
+        # calculó de las consultas adquiridas
+        resp = obj.aggregate(queries=Sum('acquired_plan__query_quantity'),
+                             av_queries=Sum('acquired_plan__available_queries'))
+        # calculó de las consultas absueltas
+        queries = Query.objects.filter(client=client,
+                                       status__range=(4, 5)).count()
+
+        # calculó de las consultas absueltas
+        queries_pending = Query.objects.filter(client=client,
+                                               status__range=(1, 3)).count()
+
+        return {"queries_acquired": resp["queries"],
+                "queries_absolved": queries,
+                "queries_pending": queries_pending,
+                "available_queries": resp["av_queries"]
+                }
 
 
 class SellerAccountSerializer(serializers.Serializer):
@@ -186,6 +211,43 @@ class SellerAccountBackendSerializer(serializers.Serializer):
                 "promotionals": promotional_history
                 }
 
+
+class SellerFooterSerializer(serializers.Serializer):
+    """Serializer para datos del footer del vendedor."""
+
+    def to_representation(self, obj):
+        """To Representation."""
+        seller = self.context["seller"]
+        hoy = datetime.now()  # fecha de hoy
+        # fecha de primer  dia del mes
+        primer = datetime(hoy.year, hoy.month, 1, 0, 0, 0)
+        # planes promocionales entregados en el mes
+        promotional_plans = obj.filter(saledetail__product_type=1,
+                                       saledetail__is_billable=False,
+                                       created_at__range=(primer, hoy)).count()
+        # contactos no efectivos
+        contacts_not_effective = SellerContact.objects.filter(
+            seller=seller, type_contact=2,
+            created_at__range=(primer, hoy)).count()
+        # contactos efectivos
+        contacts_effective = SellerContact.objects.filter(
+            Q(type_contact=1) | Q(type_contact=3),
+            seller=seller, created_at__range=(primer, hoy)).count()
+
+        return {"month_promotionals": promotional_plans,
+                "month_not_effective": contacts_not_effective,
+                "month_effective": contacts_effective}
+
+
+
+
+# SELECT
+# Sum(api_queryplansacquired.query_quantity) AS consultas_adquiridas
+# FROM
+# api_queryplansclient
+# Inner Join api_queryplansacquired ON api_queryplansclient.acquired_plan_id = api_queryplansacquired.id
+# WHERE
+# api_queryplansclient.client_id =  4
 
 # SELECT
 # SUM(api_queryplansacquired.query_quantity) AS consultas_vendidas

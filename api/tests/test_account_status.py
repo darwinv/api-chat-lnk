@@ -151,6 +151,30 @@ class AccountProfileSeller(APITestCase):
         self.assertEqual(response.data["month_all_promotionals"], 8)
 
 
+class AccountStatusClient(APITestCase):
+    """Estado de cuenta del cliente."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_account_client']
+
+    def setUp(self):
+        """SetUp."""
+        self.cliente = 3
+        self.hoy = datetime.now()
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer dfsdf')
+
+    def test_account_client(self):
+        """Cliente estado de cuenta."""
+
+        response = client.get(reverse('clients-account',
+                                      args=(self.cliente,)))
+
+        self.assertEqual(response.data["queries_acquired"], 6)
+        self.assertEqual(response.data["queries_absolved"], 6)
+        self.assertEqual(response.data["queries_pending"], 5)
+        self.assertEqual(response.data["available_queries"], 2)
+
+
 class AccountStatusSeller(APITestCase):
     """Estado de cuenta Backend del Vendedor."""
 
@@ -160,6 +184,8 @@ class AccountStatusSeller(APITestCase):
         """SetUp."""
         self.seller = 6
         self.hoy = datetime.now()
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer SellerPsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
     def test_month_sold_plans(self):
         """Planes vendidos en el mes."""
@@ -179,3 +205,16 @@ class AccountStatusSeller(APITestCase):
         self.assertEqual(response.data["month_all_promotionals"], 8)
         self.assertEqual(response.data["month_promotionals"], 2)
         self.assertEqual(response.data["promotionals"], 2)
+
+    def test_data_footer(self):
+        """footer de Vendedor."""
+        SellerNonBillablePlans.objects.all().update(
+            number_month=self.hoy.month)
+
+        ParameterSeller.objects.all().update(
+            number_month=self.hoy.month)
+
+        response = self.client.get(reverse('footer-seller'))
+        self.assertEqual(response.data["month_promotionals"], 2)
+        self.assertEqual(response.data["month_not_effective"], 0)
+        self.assertEqual(response.data["month_effective"], 3)
