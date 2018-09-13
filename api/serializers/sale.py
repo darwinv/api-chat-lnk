@@ -97,26 +97,12 @@ class SaleSerializer(serializers.Serializer):
         instance = Sale(**validated_data)
         instance.save()
         sale_detail = {}
+
+
+        max_fee_product = 0
         for product in products:
-            # Crear cuotas
-            if validated_data["is_fee"]:
-                n_fees = product["plan_id"].validity_months
-                fee_amount = float((product["plan_id"].price * product["quantity"])/n_fees )
-            else:
-                n_fees = 1
-                fee_amount = float(product["plan_id"].price)
-
-            for i in range(1, n_fees+1):
-                pay_day = date.today() + relativedelta(days=3) # Hardcoded cambiar la cantidad de dias
-                sale_id = instance
-                
-                MonthlyFee.objects.create(fee_amount=fee_amount,
-                                          fee_order_number=i, status=1,
-                                          sale=sale_id,
-                                          pay_before=pay_day,
-                                          fee_quantity=n_fees)
-
             plan_acquired = {}
+
             for prx in range(product["quantity"]):
                 # verificamos si el producto es plan de consultass
                 if product["product_type"].id == 1:
@@ -143,8 +129,15 @@ class SaleSerializer(serializers.Serializer):
                     sale_detail["sale"] = instance
                     # creamos la instancia de detalle
                     instance_sale = SaleDetail.objects.create(**sale_detail)
+    
+
+                    # Calculamos la mayor cantidad de vigencias para el descuento
+                    validity_months = product["plan_id"].validity_months
+                    if validity_months > max_fee_product:
+                        max_fee_product = validity_months
+
                     # llenamos data del plan adquirido
-                    plan_acquired["validity_months"] = product["plan_id"].validity_months
+                    plan_acquired["validity_months"] = validity_months
                     plan_acquired["available_queries"] = product["plan_id"].query_quantity
                     plan_acquired["query_quantity"] = product["plan_id"].query_quantity
                     plan_acquired["available_requeries"] = 10  # harcoded. CAMBIAR
@@ -157,6 +150,38 @@ class SaleSerializer(serializers.Serializer):
                     QueryPlansClient.objects.create(
                         acquired_plan=ins_plan, status=1,
                         client=validated_data["client"])
+
+        # Crear cuotas
+        if validated_data["is_fee"]:
+            n_fees = max_fee_product
+        else:
+            n_fees = 1
+
+        for i in range(1, n_fees+1):
+
+            if n_fees==1:
+                # Si la venta es de una sola cuota
+                fee_amount = float(instance.total_amount)
+            else:
+                # Calcular el monto a pagar
+                fee_amount = 0
+                for product in products:
+                    price = float(product["plan_id"].price)
+                    validity_months = int(product["plan_id"].validity_months)
+                    quantity = int(product["quantity"])
+
+                    # Se Toman en cuenta solo planes con cuotas
+                    if validity_months >= i:
+                        fee_amount = (price/validity_months)*quantity + fee_amount
+
+            pay_day = date.today() + relativedelta(days=3, months=i) # Hardcoded cambiar la cantidad de dias
+        
+            sale_id = instance
+            MonthlyFee.objects.create(fee_amount=fee_amount,
+                                      fee_order_number=i, status=1,
+                                      sale=sale_id,
+                                      pay_before=pay_day,
+                                      fee_quantity=n_fees)
 
         return instance
 
