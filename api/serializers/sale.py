@@ -58,7 +58,7 @@ class ProductSerializer(serializers.Serializer):
                 try:
                     obj = SellerNonBillablePlans.objects.get(
                         query_plans=plan, seller_id=seller,
-                        number_month=hoy.month)
+                        number_month=hoy.month, number_year=hoy.year)
                     if obj.quantity < 1:
                         raise serializers.ValidationError(
                             _("seller exceeds quantity for this promotional plan"))
@@ -121,7 +121,7 @@ class SaleSerializer(serializers.Serializer):
                         plan_promotionals = SellerNonBillablePlans.objects.get(
                             query_plans=product["plan_id"],
                             seller=validated_data["seller"],
-                            number_month=hoy.month)
+                            number_month=hoy.month, number_year=hoy.year)
                         plan_promotionals.quantity = plan_promotionals.quantity - 1
                         plan_promotionals.save()
                         sale_detail["discount"] = float(product["plan_id"].price)

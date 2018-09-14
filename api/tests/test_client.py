@@ -264,7 +264,7 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["code"][:3],
                          Countries.objects.get(
-                            pk=data["nationality"]).iso_code + "C")
+                            pk=data["nationality"]).iso_code + "1")
 
     def test_no_foreign_address(self):
         """Solicitud invalida al borrar la direccion pero enviar residencia de otro pais."""
@@ -1146,7 +1146,7 @@ class CreateBusinessClient(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["code"][:3],
                          Countries.objects.get(
-                            pk=data["nationality"]).iso_code + "C")
+                            pk=data["nationality"]).iso_code + "1")
 
     def test_null_nick(self):
         """Nick es null."""

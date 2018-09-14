@@ -235,6 +235,7 @@
     "query_plans": 2,
     "quantity": 3,
     "number_month": 8,
+    "number_year": 2018,
     "created_at": "2018-07-31T15:31:02Z"
   }
 },
@@ -246,6 +247,7 @@
     "query_plans": 5,
     "quantity": 0,
     "number_month": 8,
+    "number_year": 2018,
     "created_at": "2018-07-31T15:31:02Z"
   }
 },
@@ -257,6 +259,7 @@
     "query_plans": 2,
     "quantity": 3,
     "number_month": 9,
+    "number_year": 2018,
     "created_at": "2018-07-31T15:31:02Z"
   }
 },
@@ -268,6 +271,7 @@
     "query_plans": 2,
     "quantity": 3,
     "number_month": 10,
+    "number_year": 2018,
     "created_at": "2018-07-31T15:31:02Z"
   }
 }

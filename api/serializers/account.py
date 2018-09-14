@@ -135,7 +135,7 @@ class SellerAccountSerializer(serializers.Serializer):
             contacts_goal = new_clients_goal = people_purchase_goal = None
         # suma de promocionales disponibles
         quant_dic = SellerNonBillablePlans.objects.filter(
-            number_month=hoy.month, seller=seller).aggregate(Sum('quantity'))
+            number_month=hoy.month, number_year=hoy.year, seller=seller).aggregate(Sum('quantity'))
         # todos los promocionales de ese mes
         all_promo = quant_dic["quantity__sum"] + promotional_plans
 
@@ -168,7 +168,7 @@ class SellerAccountBackendSerializer(serializers.Serializer):
                                          ).count()
         # suma de promocionales disponibles
         quant_dic = SellerNonBillablePlans.objects.filter(
-            number_month=hoy.month, seller=seller).aggregate(Sum('quantity'))
+            number_month=hoy.month, number_year=hoy.year, seller=seller).aggregate(Sum('quantity'))
         # todos los promocionales de ese mes
         all_promo = quant_dic["quantity__sum"] + promotional_plans
 

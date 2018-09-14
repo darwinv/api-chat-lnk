@@ -445,7 +445,7 @@ class PlansNonBillableSerializer(serializers.ModelSerializer):
         """Modelo."""
         model = SellerNonBillablePlans
         fields = ('seller', 'query_plans', 'quantity',
-                  'number_month')
+                  'number_month', 'number_year')
 
     def to_representation(self, instance):
         """representation."""

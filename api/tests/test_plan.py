@@ -505,7 +505,8 @@ class CreatePlansNonBillable(APITestCase):
             "quantity": 2,
             "query_plans": 2,
             "seller": 19,
-            "number_month": 6
+            "number_month": 6,
+            "number_year": 2018
         }
 
     def test_no_quantity(self):
@@ -545,7 +546,6 @@ class CreatePlansNonBillable(APITestCase):
         data = self.valid_payload.copy()
         response = client.post(reverse('plans-nonbillable'),
                                format='json', data=data)
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 

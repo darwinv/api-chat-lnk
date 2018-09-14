@@ -60,10 +60,10 @@ class AccountProfileSeller(APITestCase):
     def test_month_new_clients(self):
         """Traer clientes nuevos del  mes."""
         ParameterSeller.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         SellerNonBillablePlans.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -72,10 +72,10 @@ class AccountProfileSeller(APITestCase):
     def test_month_new_contacts(self):
         """Traer contactos  nuevos del mes."""
         ParameterSeller.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         SellerNonBillablePlans.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
 
@@ -84,10 +84,10 @@ class AccountProfileSeller(APITestCase):
     def test_month_promotionals(self):
         """Traer planes promocionales entregados del mes."""
         ParameterSeller.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         SellerNonBillablePlans.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_promotionals"], 2)
@@ -95,10 +95,10 @@ class AccountProfileSeller(APITestCase):
     def test_month_people_purchase(self):
         """Traer cantidad de gente que compro."""
         ParameterSeller.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         SellerNonBillablePlans.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_people_purchase"], 2)
@@ -106,10 +106,10 @@ class AccountProfileSeller(APITestCase):
     def test_month_people_purchase_goal(self):
         """Meta de cantidad de gente que debe comprar."""
         ParameterSeller.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         SellerNonBillablePlans.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_people_purchase_goal"], 12)
@@ -117,10 +117,10 @@ class AccountProfileSeller(APITestCase):
     def test_month_contacts_goal(self):
         """Traer meta de contactos del mes."""
         ParameterSeller.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         SellerNonBillablePlans.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
@@ -129,10 +129,10 @@ class AccountProfileSeller(APITestCase):
     def test_month_new_clients_goal(self):
         """Traer meta de clientes nuevos del mes."""
         ParameterSeller.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         SellerNonBillablePlans.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
@@ -142,10 +142,10 @@ class AccountProfileSeller(APITestCase):
         """Traer planes promocionales disponibles."""
 
         ParameterSeller.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         SellerNonBillablePlans.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
         response = client.get(reverse('sellers-account',
                                       args=(self.seller,)))
         self.assertEqual(response.data["month_all_promotionals"], 8)
@@ -190,10 +190,10 @@ class AccountStatusSeller(APITestCase):
     def test_month_sold_plans(self):
         """Planes vendidos en el mes."""
         SellerNonBillablePlans.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         ParameterSeller.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         response = client.get(reverse('sellers-account-back',
                                       args=(self.seller,)))
@@ -209,10 +209,10 @@ class AccountStatusSeller(APITestCase):
     def test_data_footer(self):
         """footer de Vendedor."""
         SellerNonBillablePlans.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         ParameterSeller.objects.all().update(
-            number_month=self.hoy.month)
+            number_month=self.hoy.month, number_year=self.hoy.year)
 
         response = self.client.get(reverse('footer-seller'))
         self.assertEqual(response.data["month_promotionals"], 2)

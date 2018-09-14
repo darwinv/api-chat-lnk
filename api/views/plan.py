@@ -929,6 +929,7 @@ class PlansNonBillableSellerView(APIView):
         hoy = datetime.now()  # fecha de hoy
         q_plans = SellerNonBillablePlans.objects.filter(seller_id=user_id,
                                                         number_month=hoy.month,
+                                                        number_year=hoy.year,
                                                         quantity__gt=0)
         plans = PlansNonBillableSerializer(q_plans, many=True)
         return Response(plans.data)
