@@ -3,7 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from django.urls import reverse
 import json
-from ..models import Payment
+from ..models import SellerContact, MonthlyFee, User, Sale, QueryPlansAcquired
 from rest_framework import status
 
 client = APIClient()
@@ -40,14 +40,89 @@ class MakePayment(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_make_payment(self):
-        """Crear pago."""
+    def test_invalid_permissions(self):
+        """Permiso invalido."""
+        data = self.valid_payload.copy()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer CLIENTEFEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        response = self.client.post(
+            reverse('payment'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_one_product_no_fee_success(self):
+        """Crear pago con un producto, con una cuota exitosa."""
         data = self.valid_payload
         response = self.client.post(
             reverse('payment'),
             data=json.dumps(data),
             content_type='application/json'
         )
+        mfee = MonthlyFee.objects.get(pk=data["monthly_fee"])
+        user = User.objects.get(pk=5)
+        contact = SellerContact.objects.get(pk=2)
+        q_acqd = QueryPlansAcquired.objects.get(pk=1)
+        sale = Sale.objects.get(pk=1)
+        # compruebo si el tipo de contacto paso a 3
+        self.assertEqual(3, contact.type_contact)
+        # compruebo el estado de la cuota a  2
+        self.assertEqual(2, mfee.status)
+        # compruebo el cambio de  codigo
+        self.assertEqual(user.code, 'C20521663147')
+        # estado de la  venta debe estar pagado
+        self.assertEqual(sale.status, 3)
+        # estado de la adquirida por pagar
+        self.assertEqual(q_acqd.queries_to_pay, 0)
+        # disponibles
+        self.assertEqual(q_acqd.available_queries, 2)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+class MakePaymentWithFee(APITestCase):
+    """Prueba de Crear Pagos."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_payment2']
+
+    def setUp(self):
+        """SetUp."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.valid_payload = {
+            "amount": 450,
+            "operation_number": "123123-ERT",
+            "observations": "opcional",
+            "monthly_fee": 2,
+            "payment_type": 2,
+            "bank": 1
+        }
+
+    def test_one_product_fee_success(self):
+        """Crear pago con un producto, con una cuota exitosa."""
+        data = self.valid_payload
+        response = self.client.post(
+            reverse('payment'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        mfee = MonthlyFee.objects.get(pk=data["monthly_fee"])
+        user = User.objects.get(pk=5)
+        contact = SellerContact.objects.get(pk=2)
+        q_acqd = QueryPlansAcquired.objects.get(pk=1)
+        sale = Sale.objects.get(pk=2)
+        # compruebo si el tipo de contacto paso a 3
+        self.assertEqual(3, contact.type_contact)
+        # compruebo el estado de la cuota a  2
+        self.assertEqual(2, mfee.status)
+        # compruebo el cambio de  codigo
+        self.assertEqual(user.code, 'C20521663147')
+        # estado de la  venta debe estar en progreso
+        self.assertEqual(sale.status, 2)
+        # estado de la adquirida por pagar
+        self.assertEqual(q_acqd.queries_to_pay, 3)
+        # disponibles
+        self.assertEqual(q_acqd.available_queries, 3)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     #
     # def test_no_monthly_fee(self):

@@ -12,6 +12,8 @@ from rest_framework.validators import UniqueValidator
 from api.serializers.actors import ClientSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from api.utils.parameters import Params
+import sys
+from api import pyrebase
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -43,7 +45,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Metodo para confirmar pago."""
-        fee = MonthlyFee.objects.get(pk=validated_data["monthly_fee"])
+        fee = validated_data["monthly_fee"]
         # cambio el estatus de la cuota a pago
         # 2 PAID
         fee.status = 2
@@ -51,7 +53,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         # buscar contacto efectivo para acualitzar estado a efectivo cliente
         # filtar por el correo del id del cliente
         SellerContact.objects.filter(
-            email=fee.sale.client.username).update(status=3)
+            email=fee.sale.client.username).update(type_contact=3)
         # compruebo si no hay mas cuotas pendientes por pagar
         if MonthlyFee.objects.filter(sale=fee.sale, status=1).exists():
             # cambio el estatus de la ventas
@@ -63,38 +65,44 @@ class PaymentSerializer(serializers.ModelSerializer):
 
         qsetdetail = SaleDetail.objects.filter(sale=fee.sale)
 
-        # debo chequear si es por cuotas o no
-        if fee.sale.is_fee:
-            for detail in qsetdetail:
-                qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
+        for detail in qsetdetail:
+            qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
+            qpclient = qacd.queryplansclient_set.get()
+            # debo chequear si es por cuotas o no
+            if fee.sale.is_fee:
                 # libero el numero de consultas que corresponde
                 qacd.available_queries = qacd.query_plans.query_quantity / qacd.query_plans.validity_months
                 # actualizo cuantas consultas faltan por pagar
                 qacd.queries_to_pay = qacd.query_plans.query_quantity - qacd.available_queries
-        else:
-            for detail in qsetdetail:
-                qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
+            else:
                 # libero el numero de consultas que corresponde
                 qacd.available_queries = qacd.query_plans.query_quantity
                 # actualizo cuantas consultas faltan por pagar
                 qacd.queries_to_pay = 0
+            qacd.save()
+            # actualizo a pyrebase si es el elegido
+            if 'test' not in sys.argv:
+                if qpclient.is_chosen:
+                    pyrebase.chosen_plan(
+                        fee.sale.client.id,
+                        {"available_queries": qacd.available_queries})
 
         data = {'qset': qsetdetail}
         # cambio el codigo del usuario
         user = User.objects.get(pk=fee.sale.client_id)
-
         if fee.sale.client.type_client == 'b':
-            user.code = Params["client"] + user.ruc
+            user.code = Params.CODE_PREFIX["client"] + user.ruc
         else:
-            user.code = Params["client"] + user.document_number
+            user.code = Params.CODE_PREFIX["client"] + user.document_number
         user.save()
-
         # envio codigo pin por correo
         mail = BasicEmailAmazon(
             subject="Confirmación de pago. Productos comprados",
             to=fee.sale.client.username, template='email/pin_code')
 
-        mail.sendmail(args=data)
+        if 'test' not in sys.argv:
+            mail.sendmail(args=data)
+            
         validated_data["status"] = 2
         instance = Payment(**validated_data)
         instance.save()

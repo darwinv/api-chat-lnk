@@ -25,7 +25,6 @@ class CreatePayment(APIView):
 
     def post(self, request):
         """crear compra."""
-        # import pdb; pdb.set_trace()
         data = request.data
         user_id = Operations.get_id(self, request)
         serializer = PaymentSerializer(data=data)
