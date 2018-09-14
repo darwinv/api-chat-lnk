@@ -1,0 +1,1948 @@
+[
+{
+  "model": "api.saledetail",
+  "pk": 1,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas",
+    "discount": "0.00",
+    "pin_code": "INTEL12345",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 2,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL123452",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 2
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 3,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL123453",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 4,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas",
+    "discount": "0.00",
+    "pin_code": "INTEL123454",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 5,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL123455",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 2
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 6,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL123456",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 7,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas",
+    "discount": "0.00",
+    "pin_code": "INTEL123457",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 8,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL123458",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 2
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 9,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL123459",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 10,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas",
+    "discount": "0.00",
+    "pin_code": "INTEL1234510",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 11,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL1234511",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 2
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 12,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL1234512",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 13,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas",
+    "discount": "0.00",
+    "pin_code": "INTEL1234513",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 14,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL1234514",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 2
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 15,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL1234515",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 16,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas",
+    "discount": "0.00",
+    "pin_code": "INTEL1234516",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 17,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL1234517",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 2
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 18,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL1234518",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 19,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas",
+    "discount": "0.00",
+    "pin_code": "INTEL1234519",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 20,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL1234520",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 2
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 21,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL1234521",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 22,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas",
+    "discount": "0.00",
+    "pin_code": "INTEL1234522",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 23,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas2",
+    "discount": "0.00",
+    "pin_code": "INTEL1234523",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 2
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 24,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL1234524",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 25,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL1234525",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 26,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL1234525",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 27,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL1234525",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 28,
+  "fields": {
+    "price": "700.00",
+    "description": "plan de consultas3",
+    "discount": "0.00",
+    "pin_code": "INTEL1234528",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 3
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 29,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "NE344H",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 5
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 30,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "NG5HZ2",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 6
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 31,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "1KIRJB",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 7
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 32,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "8RFLHF",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 10
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 33,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "QRVZIX",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 10
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 34,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "HI7ZEI",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 11
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 35,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "UPSXWQ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 11
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 36,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "VCMF3M",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 12
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 37,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "KSNBBJ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 12
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 38,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "6AHMY4",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 13
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 39,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "PFYB9V",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 13
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 40,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "06Q4U4",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 14
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 41,
+  "fields": {
+    "price": "700.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "VZZ0JE",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 14
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 42,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "9657T8",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 15
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 43,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "B2NMD5",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 15
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 44,
+  "fields": {
+    "price": "1000.00",
+    "description": "Plan de Prueba",
+    "discount": "0.00",
+    "pin_code": "YUT3TG",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 16
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 45,
+  "fields": {
+    "price": "1000.00",
+    "description": "Plan de Prueba",
+    "discount": "0.00",
+    "pin_code": "OBP48H",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 17
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 46,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "AHJ53H",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 22
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 47,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "6EXORE",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 22
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 48,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "EHU9V2",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 23
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 49,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "TAMNSA",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 23
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 50,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "SJ24WC",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 24
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 51,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "TSZH7V",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 24
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 52,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "GUA6J3",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 25
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 53,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "YEISO8",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 25
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 54,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "EPYQDN",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 26
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 55,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "SCET3H",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 26
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 56,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "GPQGWS",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 27
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 57,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "DKZ5F1",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 27
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 58,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "IRIGIJ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 28
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 59,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "FBI0GZ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 28
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 60,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "8NMDHZ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 29
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 61,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "DUKP3G",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 29
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 62,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "VXCH3L",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 30
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 63,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "I3TIMB",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 30
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 64,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "300.00",
+    "pin_code": "5FURH1",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 31
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 65,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "300.00",
+    "pin_code": "ZE4N63",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 31
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 66,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "9S1DPG",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 67,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "KQAMMQ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 68,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "HPP2C4",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 69,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "4C1XFD",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 70,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "674CHX",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 71,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "5T2EZ4",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 72,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "34UL9Z",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 73,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "DVXENU",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 74,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "1BR974",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 75,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "1MAZFZ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 76,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "BZP4QM",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 77,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "9518D0",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 33
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 78,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "B23R7P",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 79,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "ZX9K12",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 80,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "JRAYBE",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 81,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "74TVZQ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 82,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "U0Y213",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 83,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "33WA8L",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 84,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "SU90B8",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 85,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "AVZQ47",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 86,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "ECABXK",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 87,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "YQPIR4",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 88,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "5EFFRO",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 89,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "FI8611",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 34
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 90,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "UU9ZN4",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 91,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "4O562J",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 92,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "9G1E4O",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 93,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "SRQUSX",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 94,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "UA1O2W",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 95,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "34LE2Z",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 96,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "DWUKQJ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 97,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "IWM50J",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 98,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "BMG4Q0",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 99,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "3DO5RN",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 100,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "H7P1ZU",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 101,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "SMVXP6",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 35
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 102,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "5PC9BS",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 36
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 103,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "300.00",
+    "pin_code": "VC64DZ",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 37
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 104,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "300.00",
+    "pin_code": "5B188O",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 37
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 105,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "LU3TMB",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 106,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "LZCP9E",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 107,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "ZBU4M0",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 108,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "RRNFWO",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 109,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "GN5UBK",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 110,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "GHEER9",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 111,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "YQE98B",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 112,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "ECD8W6",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 113,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "SWC6XP",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 114,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "7WG5MQ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 115,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "Y2UWWQ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 116,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "Y4NHFS",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 117,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "A78U8L",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 118,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "CA5R66",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 119,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "NO8ET9",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 120,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "Q595QK",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 121,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "LLCB6K",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 122,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "7T7LI2",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 123,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "IEX0H8",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 124,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "MF5D04",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 125,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "AXHIPG",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 126,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "DND29G",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 127,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "CUENJ9",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 128,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "3MSS6G",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 38
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 129,
+  "fields": {
+    "price": "30000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "V3D72F",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 39
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 130,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "900.00",
+    "pin_code": "F0R7HR",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 39
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 131,
+  "fields": {
+    "price": "15000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "FHNAN8",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 40
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 132,
+  "fields": {
+    "price": "150.00",
+    "description": "Description",
+    "discount": "150.00",
+    "pin_code": "HECDUA",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 40
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 133,
+  "fields": {
+    "price": "2500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "JX8J4R",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 41
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 134,
+  "fields": {
+    "price": "2500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "IWSOSB",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 41
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 135,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "300.00",
+    "pin_code": "KMUN4Q",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 41
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 136,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "VXJZ55",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 42
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 137,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "NT3FA8",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 42
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 138,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "DI50Z2",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 43
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 139,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "H7XOTN",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 44
+  }
+}
+]

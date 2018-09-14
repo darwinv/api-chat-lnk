@@ -1,0 +1,13 @@
+[
+{
+  "model": "api.seller",
+  "pk": 6,
+  "fields": {
+    "cv": null,
+    "zone": null,
+    "ciiu": 14,
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

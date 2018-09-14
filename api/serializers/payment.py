@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
 from api.models import Payment, MonthlyFee, Sale, SaleDetail
-from api.models import QueryPlansAcquired, SellerContact
+from api.models import QueryPlansAcquired, SellerContact, User
 from api.utils.tools import get_date_by_time
 from api.utils.querysets import get_next_fee_to_pay
 from datetime import datetime, date
@@ -11,6 +11,7 @@ from dateutil.relativedelta import relativedelta
 from rest_framework.validators import UniqueValidator
 from api.serializers.actors import ClientSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer
+from api.utils.parameters import Params
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -30,50 +31,74 @@ class PaymentSerializer(serializers.ModelSerializer):
             'amount', 'operation_number', 'monthly_fee', 'payment_type',
             'observations', 'bank', 'id')
 
+    def validate_amount(self, value):
+        """Validacion de amount."""
+        data = self.get_initial()
+        mfee = MonthlyFee.objects.get(pk=data["monthly_fee"])
+        # si el monto es menor que el pago, devuelvo un error
+        if float(value) < float(mfee.fee_amount):
+            raise serializers.ValidationError(
+                'This field must not be lesser than the corresponding.')
+        return value
+
     def create(self, validated_data):
         """Metodo para confirmar pago."""
         fee = MonthlyFee.objects.get(pk=validated_data["monthly_fee"])
-        # valido que el monto confirmado es exacto
-        if float(fee.fee_amount) == float(validated_data["amount"]):
-            # cambio el estatus de la cuota a pago
-            # 2 PAID
-            fee.status = 2
-            fee.save()
-            # buscar contacto efectivo para acualitzar estado a efectivo cliente
-            # filtar por el correo del id del cliente
-            SellerContact.objects.filter(
-                email=fee.sale.client.username).update(status=3)
-            # compruebo si no hay mas cuotas pendientes por pagar
-            if MonthlyFee.objects.filter(sale=fee.sale, status=1).exists():
-                # cambio el estatus de la ventas
-                # 2 Progreso
-                Sale.objects.filter(pk=fee.sale_id).update(status=2)
-            else:
-                # 3 pagada
-                Sale.objects.filter(pk=fee.sale_id).update(status=3)
-            qsetdetail = SaleDetail.objects.filter(sale=fee.sale)
+        # cambio el estatus de la cuota a pago
+        # 2 PAID
+        fee.status = 2
+        fee.save()
+        # buscar contacto efectivo para acualitzar estado a efectivo cliente
+        # filtar por el correo del id del cliente
+        SellerContact.objects.filter(
+            email=fee.sale.client.username).update(status=3)
+        # compruebo si no hay mas cuotas pendientes por pagar
+        if MonthlyFee.objects.filter(sale=fee.sale, status=1).exists():
+            # cambio el estatus de la ventas
+            # 2 Progreso
+            Sale.objects.filter(pk=fee.sale_id).update(status=2)
+        else:
+            # 3 pagada
+            Sale.objects.filter(pk=fee.sale_id).update(status=3)
 
-            # debo chequear si es por cuotas o no
-            if fee.sale.is_fee:
-                for detail in qsetdetail:
-                    qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
-                    # libero el numero de consultas que corresponde
-                    qacd.available_queries = qacd.query_plans.query_quantity / qacd.query_plans.validity_months
-                    # actualizo cuantas consultas faltan por pagar
-                    qacd.queries_to_pay = qacd.query_plans.query_quantity - qacd.available_queries
-            else:
-                pass
+        qsetdetail = SaleDetail.objects.filter(sale=fee.sale)
 
-            data = {'qset': qsetdetail}
+        # debo chequear si es por cuotas o no
+        if fee.sale.is_fee:
+            for detail in qsetdetail:
+                qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
+                # libero el numero de consultas que corresponde
+                qacd.available_queries = qacd.query_plans.query_quantity / qacd.query_plans.validity_months
+                # actualizo cuantas consultas faltan por pagar
+                qacd.queries_to_pay = qacd.query_plans.query_quantity - qacd.available_queries
+        else:
+            for detail in qsetdetail:
+                qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
+                # libero el numero de consultas que corresponde
+                qacd.available_queries = qacd.query_plans.query_quantity
+                # actualizo cuantas consultas faltan por pagar
+                qacd.queries_to_pay = 0
 
-            mail = BasicEmailAmazon(
-                subject="Confirmación de pago. Productos comprados",
-                to=fee.sale.client.username, template='email/pin_code')
+        data = {'qset': qsetdetail}
+        # cambio el codigo del usuario
+        user = User.objects.get(pk=fee.sale.client_id)
 
-            mail.sendmail(args=data)
-            validated_data["status"] = 2
-            instance = Payment(**validated_data)
-            instance.save()
+        if fee.sale.client.type_client == 'b':
+            user.code = Params["client"] + user.ruc
+        else:
+            user.code = Params["client"] + user.document_number
+        user.save()
+
+        # envio codigo pin por correo
+        mail = BasicEmailAmazon(
+            subject="Confirmación de pago. Productos comprados",
+            to=fee.sale.client.username, template='email/pin_code')
+
+        mail.sendmail(args=data)
+        validated_data["status"] = 2
+        instance = Payment(**validated_data)
+        instance.save()
+        return instance
 
 
 class PaymentSaleSerializer(serializers.ModelSerializer):

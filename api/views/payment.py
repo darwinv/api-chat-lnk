@@ -4,7 +4,7 @@ from api.serializers.payment import PaymentSalePendingDetailSerializer
 from api.serializers.payment import SaleContactoDetailSerializer
 from api.utils.validations import Operations
 from api.utils.querysets import get_next_fee_to_pay
-from api.permissions import IsAdminOrSeller, IsAdmin, IsAdminOrClient
+from api.permissions import IsAdminOrSeller, IsAdmin, isAdminBackWrite
 from api.models import Sale, MonthlyFee, Client
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
@@ -21,10 +21,11 @@ import django_filters.rest_framework
 class CreatePayment(APIView):
     """Vista para crear pago."""
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (isAdminBackWrite,)
 
     def post(self, request):
         """crear compra."""
+        # import pdb; pdb.set_trace()
         data = request.data
         user_id = Operations.get_id(self, request)
         serializer = PaymentSerializer(data=data)
