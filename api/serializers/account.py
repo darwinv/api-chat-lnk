@@ -126,7 +126,8 @@ class SellerAccountSerializer(serializers.Serializer):
         # instancia parametro de vendedor
         try:
             seller_param = ParameterSeller.objects.get(seller=seller,
-                                                       number_month=hoy.month)
+                                                       number_month=hoy.month,
+                                                       number_year=hoy.year)
             contacts_goal = seller_param.contacts_goal
             new_clients_goal = seller_param.new_clients_goal
             people_purchase_goal = seller_param.people_purchase_goal
@@ -193,7 +194,8 @@ class SellerAccountBackendSerializer(serializers.Serializer):
         # instancia parametro de vendedor
         try:
             seller_param = ParameterSeller.objects.get(seller=seller,
-                                                       number_month=hoy.month)
+                                                       number_month=hoy.month,
+                                                       number_year=hoy.year)
             new_clients_goal = seller_param.new_clients_goal
         except ParameterSeller.DoesNotExist:
             new_clients_goal = None
@@ -201,14 +203,15 @@ class SellerAccountBackendSerializer(serializers.Serializer):
         if queries_sold["queries"] is None:
             queries_sold["queries"] = 0
 
-        return {"month_sold_plans": plans_sold,
-                "month_sold_queries": queries_sold["queries"],
-                "sold_plans": all_plans_sold,
-                "sold_queries": all_queries_sold["queries"],
-                "month_new_clients_goal": new_clients_goal,
-                "month_all_promotionals": all_promo,
-                "month_promotionals": promotional_plans,
-                "promotionals": promotional_history
+        return {
+                    "month_sold_plans": plans_sold,
+                    "month_sold_queries": queries_sold["queries"],
+                    "sold_plans": all_plans_sold,
+                    "sold_queries": all_queries_sold["queries"],
+                    "month_new_clients_goal": new_clients_goal,
+                    "month_all_promotionals": all_promo,
+                    "month_promotionals": promotional_plans,
+                    "promotionals": promotional_history
                 }
 
 

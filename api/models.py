@@ -411,6 +411,7 @@ class SellerNonBillablePlans(models.Model):
     query_plans = models.ForeignKey(QueryPlans, on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField()
     number_month = models.PositiveIntegerField()
+    number_year = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -718,6 +719,7 @@ class RecoveryPassword(models.Model):
 class ParameterSeller(models.Model):
     """Parametro mensuales de Vendedores."""
     number_month = models.PositiveIntegerField()
+    number_year = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     contacts_goal = models.PositiveIntegerField()
     new_clients_goal = models.PositiveIntegerField()

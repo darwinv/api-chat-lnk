@@ -387,11 +387,9 @@ class ClientSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        """Redefinido metodo de crear cliente."""
-        CODE_CLIENT = "C"
+        """Redefinido metodo de crear cliente."""        
         country_peru = Countries.objects.get(name="Peru")
-        validated_data['code'] = CODE_CLIENT + str(
-                                                self.context.get('temp_code'))
+        validated_data['code'] = str(self.context.get('temp_code')) # El codigo no comienza con C hasta no comprar
         # Verificamos si reside en el extranjero, se elimina direccion
         if validated_data["residence_country"] == country_peru:
             data_address = validated_data.pop('address')
@@ -537,6 +535,10 @@ class SpecialistSerializer(serializers.ModelSerializer):
         """Validar Numero de Documento."""
         data = self.get_initial()
         document_type = data.get('document_type', '0')
+        
+        if self.instance and self.instance.document_number == value:
+            return value
+
         if document_exists(type_doc=document_type, role=data["role"],
                            document_number=data["document_number"]):
                 raise serializers.ValidationError(
@@ -631,6 +633,8 @@ class SpecialistSerializer(serializers.ModelSerializer):
                         'residence_country', instance.residence_country)
         instance.nationality = validated_data.get('nationality',
                                                   instance.nationality)
+        instance.code = validated_data.get('code',
+                                                instance.code)
 
         if (instance.type_specialist == "m"
             and Specialist.objects.filter(type_specialist="m",

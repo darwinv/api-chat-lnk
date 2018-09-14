@@ -101,5 +101,29 @@
       "parameter": "platform_seller",
       "value": 6
     }
+  },
+  {
+    "model": "api.Parameter",
+    "pk": 4,
+    "fields": {
+      "parameter": "contacts_goal",
+      "value": 100
+    }
+  },
+  {
+    "model": "api.Parameter",
+    "pk": 5,
+    "fields": {
+      "parameter": "new_clients_goal",
+      "value": 10
+    }
+  },
+  {
+    "model": "api.Parameter",
+    "pk": 6,
+    "fields": {
+      "parameter": "people_purchase_goal",
+      "value": 10
+    }
   }
 ]

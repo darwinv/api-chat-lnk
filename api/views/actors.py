@@ -42,6 +42,8 @@ from datetime import datetime, date, timedelta
 from django.utils import timezone
 from api.utils.validations import Operations
 from api.utils.tools import clear_data_no_valid
+from api.utils.functions import generate_seller_goals
+
 from api import pyrebase
 from api.emails import BasicEmailAmazon
 from api.utils.parameters import Params
@@ -55,6 +57,7 @@ ROLE_CLIENT = 2
 ROLE_SPECIALIST = 3
 ROLE_SELLER = 4
 PREFIX_CODE_SPECIALIST = 'E'
+PREFIX_CODE_SPECIALIST_ASSOCIATE = 'EA'
 PREFIX_CODE_SELLER = 'V'
 DATE_FAKE = '1900-01-01'
 # Fin de constantes
@@ -728,7 +731,12 @@ class SpecialistListView(ListCreateAPIView):
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         if "document_number" not in data:
             raise serializers.ValidationError({'document_number': [required]})
-        data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number')
+
+        if request.data.get("type_specialist") == "m":
+            data['code'] = PREFIX_CODE_SPECIALIST + request.data.get('document_number')
+        else:
+            data['code'] = PREFIX_CODE_SPECIALIST_ASSOCIATE + request.data.get('document_number')
+
         data['role'] = ROLE_SPECIALIST
         serializer = SpecialistSerializer(
             data=data, context={'request': request})
@@ -844,9 +852,15 @@ class SpecialistDetailView(APIView):
         """Actualizar."""
         data = request.data
         specialist = self.get_object(pk)
-        # codigo de usuario se crea con su prefijo de especialista y su numero de documento
-        data['code'] = PREFIX_CODE_SPECIALIST + request.data.get(
-            'document_number', specialist.document_number)
+        # codigo de usuario se crea con su prefijo de especialista y su numero de documento       
+
+        if request.data.get("type_specialist") == "m":
+            data['code'] = PREFIX_CODE_SPECIALIST + request.data.get(
+                'document_number', specialist.document_number)
+        else:
+            data['code'] = PREFIX_CODE_SPECIALIST_ASSOCIATE + request.data.get(
+                'document_number', specialist.document_number)
+
         data['photo'] = request.data.get('photo', specialist.photo)
         data['username'] = specialist.username
         data['role'] = ROLE_SPECIALIST
@@ -940,6 +954,8 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
         serializer = SellerSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            generate_seller_goals(serializer.data['id'])
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1106,6 +1122,14 @@ class ContactListView(ListCreateAPIView):
 
         if serializer.is_valid():
             serializer.save()
+
+            # Registrar nodos para contacto efectivo
+            if 'test' not in sys.argv:
+                if data['type_contact'] == 1:
+                    # se le crea la lista de todas las categorias al cliente en firebase
+                    pyrebase.createCategoriesLisClients(serializer.data['client_id'])
+
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -1,3 +1,9 @@
+""" Archivo creado para generar fixtures de ciertos datos"""
+"""Forma de uso:
+    python db.py
+
+    # Elegir tablas y siga instrucciones
+"""
 import os, sys
 import subprocess
 import MySQLdb
