@@ -17,11 +17,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models import Subquery, Q
 import django_filters.rest_framework
 
+
 class CreatePayment(APIView):
     """Vista para crear pago."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.AllowAny,)
-    
+
     def post(self, request):
         """crear compra."""
         data = request.data
@@ -41,7 +42,7 @@ class PaymentPendingView(ListCreateAPIView):
     def get(self, request):
         """get compra pendinetes"""
         data = request.query_params
-        
+
         if not 'document_number' in data:
             raise serializers.ValidationError({'document_number': [self.required]})
 

@@ -85,7 +85,7 @@ class ClientAccountSerializer(serializers.Serializer):
         queries = Query.objects.filter(client=client,
                                        status__range=(4, 5)).count()
 
-        # calculó de las consultas absueltas
+        # calculó de las consultas pendientes
         queries_pending = Query.objects.filter(client=client,
                                                status__range=(1, 3)).count()
 

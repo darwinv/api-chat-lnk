@@ -5,10 +5,12 @@
   <h1> {% trans "Your pin code!"|title %} </h1>
 
   <div style="text-align: justify;">
+{% for record in qset %}
     <p>
       {% trans "" %}
       <br>
-      <strong>{{link}}</strong>
+      <strong>{{qset.pin_code}}</strong>
     </p>
+{% endfor %}
   </div>
 {% endblock content_mail %}
