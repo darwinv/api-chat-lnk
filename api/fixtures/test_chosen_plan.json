@@ -550,6 +550,7 @@
     "query_quantity": 2,
     "activation_date": "2018-02-13",
     "is_active": true,
+    "queries_to_pay": 0,
     "available_requeries": 23,
     "maximum_response_time": 23,
     "acquired_at": "2018-02-15T23:09:23.626Z",
@@ -568,6 +569,7 @@
     "query_quantity": 2,
     "activation_date": "2018-02-16",
     "is_active": true,
+    "queries_to_pay": 0,
     "available_requeries": 23,
     "maximum_response_time": 23,
     "acquired_at": "2018-02-16T17:49:14.106Z",
@@ -586,6 +588,7 @@
     "query_quantity": 4,
     "activation_date": "2018-02-19",
     "is_active": true,
+    "queries_to_pay": 0,
     "available_requeries": 123,
     "maximum_response_time": 123,
     "acquired_at": "2018-02-19T20:29:12.399Z",
@@ -604,7 +607,7 @@
     "query_quantity": 3,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 23,
     "maximum_response_time": 32,
     "acquired_at": "2018-02-26T15:55:55.940Z",
@@ -623,7 +626,7 @@
     "query_quantity": 5,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 34,
     "maximum_response_time": 435,
     "acquired_at": "2018-02-26T21:58:39.709Z",
@@ -642,7 +645,7 @@
     "query_quantity": 2,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 2,
     "acquired_at": "2018-02-26T21:59:03.628Z",
@@ -661,7 +664,7 @@
     "query_quantity": 1,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 1,
     "acquired_at": "2018-02-26T21:59:24.673Z",
@@ -680,7 +683,7 @@
     "query_quantity": 1,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 1,
     "maximum_response_time": 1,
     "acquired_at": "2018-02-26T21:59:41.322Z",
@@ -699,7 +702,7 @@
     "query_quantity": 2,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 2,
     "acquired_at": "2018-02-26T22:00:15.227Z",
@@ -718,7 +721,7 @@
     "query_quantity": 2,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 3,
     "acquired_at": "2018-02-26T22:00:57.006Z",
@@ -737,7 +740,7 @@
     "query_quantity": 5,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 4,
     "maximum_response_time": 5,
     "acquired_at": "2018-02-26T22:01:17.499Z",
@@ -756,7 +759,7 @@
     "query_quantity": 3,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 4,
     "maximum_response_time": 2,
     "acquired_at": "2018-02-26T22:01:35.056Z",
@@ -775,7 +778,7 @@
     "query_quantity": 4,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 3,
     "maximum_response_time": 2,
     "acquired_at": "2018-02-26T22:01:53.756Z",
@@ -794,7 +797,7 @@
     "query_quantity": 3,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 3,
     "maximum_response_time": 4,
     "acquired_at": "2018-02-26T22:02:11.042Z",
@@ -813,7 +816,7 @@
     "query_quantity": 4,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 7,
     "maximum_response_time": 8,
     "acquired_at": "2018-02-26T22:08:04.971Z",
@@ -832,7 +835,7 @@
     "query_quantity": 4,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 4,
     "maximum_response_time": 3,
     "acquired_at": "2018-02-26T22:10:48.155Z",
@@ -851,7 +854,7 @@
     "query_quantity": 4,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 3,
     "maximum_response_time": 3,
     "acquired_at": "2018-02-26T22:14:17.141Z",
@@ -870,7 +873,7 @@
     "query_quantity": 5,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay": 0,
     "available_requeries": 10,
     "maximum_response_time": 11,
     "acquired_at": "2018-02-26T22:14:48.116Z",
@@ -889,7 +892,7 @@
     "query_quantity": 4,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+     "queries_to_pay": 0,
     "available_requeries": 4,
     "maximum_response_time": 4,
     "acquired_at": "2018-02-26T22:15:18.376Z",
@@ -908,7 +911,7 @@
     "query_quantity": 5,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+     "queries_to_pay": 0,
     "available_requeries": 5,
     "maximum_response_time": 8,
     "acquired_at": "2018-02-26T22:16:33.238Z",
@@ -925,6 +928,7 @@
     "validity_months": 10,
     "available_queries": 6,
     "query_quantity": 7,
+    "queries_to_pay": 0,
     "activation_date": "2018-02-26",
     "is_active": false,
     "available_requeries": 8,
@@ -945,6 +949,7 @@
     "query_quantity": 1,
     "activation_date": "2018-02-26",
     "is_active": false,
+    "queries_to_pay": 0,
     "available_requeries": 1,
     "maximum_response_time": 12,
     "acquired_at": "2018-02-26T22:17:05.963Z",

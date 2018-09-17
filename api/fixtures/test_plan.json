@@ -21,6 +21,7 @@
       "validity_months": 3,
       "available_queries": 6,
       "query_quantity": 6,
+      "queries_to_pay": 0,
       "activation_date": null,
       "is_active": false,
       "available_requeries": 1,

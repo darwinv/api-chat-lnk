@@ -410,6 +410,7 @@ def give_plan_new_client(client_id, is_chosen = True):
     queryPlansAcquired.expiration_date = '2019-04-09'
     queryPlansAcquired.validity_months = query_plans.validity_months
     queryPlansAcquired.available_queries = query_plans.query_quantity
+    queryPlansAcquired.queries_to_pay = 0
     queryPlansAcquired.activation_date = datetime.now()
     queryPlansAcquired.is_active = True
     queryPlansAcquired.available_requeries = 1

@@ -213,7 +213,7 @@
     "query_quantity": 6,
     "activation_date": "2018-02-26",
     "is_active": true,
-
+    "queries_to_pay":0,
     "available_requeries": 3,
     "maximum_response_time": 3,
     "acquired_at": "2018-02-26T23:24:28.136Z",

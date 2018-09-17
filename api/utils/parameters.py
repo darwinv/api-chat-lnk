@@ -11,11 +11,16 @@ class Params:
         "query": "q",
         "message": "m"
     }
-
+    CODE_PREFIX = {
+        "client": "C",
+        "specialist": "E",
+        "specialist_associate": "EA",
+        "seller": "V"
+    }
     ROLE_CLIENT = 2
 
     TIME_ZONE = ""
-    
+
 class Payloads:
     read = True
     categoriesList = {

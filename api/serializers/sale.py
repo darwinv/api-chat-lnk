@@ -129,7 +129,7 @@ class SaleSerializer(serializers.Serializer):
                     sale_detail["sale"] = instance
                     # creamos la instancia de detalle
                     instance_sale = SaleDetail.objects.create(**sale_detail)
-    
+
 
                     # Calculamos la mayor cantidad de vigencias para el descuento
                     validity_months = product["plan_id"].validity_months
@@ -137,8 +137,9 @@ class SaleSerializer(serializers.Serializer):
                         max_fee_product = validity_months
 
                     # llenamos data del plan adquirido
-                    plan_acquired["validity_months"] = validity_months
-                    plan_acquired["available_queries"] = product["plan_id"].query_quantity
+                    plan_acquired["validity_months"] = product["plan_id"].validity_months
+                    plan_acquired["available_queries"] = 0
+                    plan_acquired["queries_to_pay"] = product["plan_id"].query_quantity
                     plan_acquired["query_quantity"] = product["plan_id"].query_quantity
                     plan_acquired["available_requeries"] = 10  # harcoded. CAMBIAR
                     plan_acquired["maximum_response_time"] = 24  # harcoded.CAMBIAR
@@ -175,7 +176,7 @@ class SaleSerializer(serializers.Serializer):
                         fee_amount = (price/validity_months)*quantity + fee_amount
 
             pay_day = date.today() + relativedelta(days=3, months=i) # Hardcoded cambiar la cantidad de dias
-        
+
             sale_id = instance
             MonthlyFee.objects.create(fee_amount=fee_amount,
                                       fee_order_number=i, status=1,

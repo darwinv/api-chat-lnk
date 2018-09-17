@@ -52,6 +52,15 @@ class IsAdmin(permissions.BasePermission):
         return request.user and request.user.is_staff
 
 
+class isAdminBackWrite(permissions.BasePermission):
+    """Administrador Rol 1."""
+
+    def has_permission(self, request, view):
+        """Permiso general."""
+        if request.method == "POST":
+            return request.user and request.user.role_id == 1
+
+
 class IsClient(permissions.BasePermission):
     """Permiso solo para el rol cliente."""
 

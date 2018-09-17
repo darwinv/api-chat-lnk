@@ -231,6 +231,7 @@
     "query_quantity": 6,
     "activation_date": null,
     "is_active": true,
+    "queries_to_pay": 0,
     "available_requeries": 10,
     "maximum_response_time": 24,
     "acquired_at": "2018-08-14T15:48:46.178Z",

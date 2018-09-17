@@ -11,21 +11,6 @@
   },
   {
     "model": "api.queryplans",
-    "pk": 2,
-    "fields": {
-      "name": "Express Duo",
-      "query_quantity": 2,
-      "validity_months": 2,
-      "maximum_response_time": 24,
-      "price": "300.0000",
-      "created_at": "2018-02-08T14:37:27Z",
-      "is_active": true,
-      "product_type": 1,
-      "clasification": 1
-    }
-  },
-  {
-    "model": "api.queryplans",
     "pk": 3,
     "fields": {
       "name": "Minipack",
@@ -40,6 +25,21 @@
     }
   },
   {
+    "model": "api.queryplans",
+    "pk": 4,
+    "fields": {
+      "name": "Polypack",
+      "query_quantity": 12,
+      "validity_months": 3,
+      "maximum_response_time": 24,
+      "price": "1500.0000",
+      "created_at": "2018-02-08T14:37:27Z",
+      "is_active": true,
+      "product_type": 1,
+      "clasification": 1
+    }
+  },
+    {
     "model": "api.bank",
     "pk": 1,
     "fields": {
@@ -202,52 +202,88 @@
   },
   {
     "model": "api.monthlyfee",
-    "pk": 1,
-    "fields": {
-      "fee_amount": "300.0000",
-      "fee_order_number": 1,
-      "fee_quantity": 1,
-      "sale": 1,
-      "pay_before": "2018-08-17",
-      "status": 1
-    }
-  },
-  {
-    "model": "api.monthlyfee",
     "pk": 2,
     "fields": {
-      "fee_amount": "1200.0000",
+      "fee_amount": "450.0000",
       "fee_order_number": 1,
-      "fee_quantity": 1,
+      "fee_quantity": 2,
       "sale": 2,
       "pay_before": "2018-08-17",
       "status": 1
     }
   },
   {
+    "model": "api.monthlyfee",
+    "pk": 3,
+    "fields": {
+      "fee_amount": "450.0000",
+      "fee_order_number": 2,
+      "fee_quantity": 2,
+      "sale": 2,
+      "pay_before": "2018-08-17",
+      "status": 1
+    }
+  },
+  {
+    "model": "api.monthlyfee",
+    "pk": 4,
+    "fields": {
+      "fee_amount": "800.0000",
+      "fee_order_number": 1,
+      "fee_quantity": 3,
+      "sale": 3,
+      "pay_before": "2018-08-17",
+      "status": 1
+    }
+  },
+  {
+    "model": "api.monthlyfee",
+    "pk": 5,
+    "fields": {
+      "fee_amount": "800.0000",
+      "fee_order_number": 2,
+      "fee_quantity": 3,
+      "sale": 3,
+      "pay_before": "2018-08-17",
+      "status": 1
+    }
+  },
+  {
+    "model": "api.monthlyfee",
+    "pk": 6,
+    "fields": {
+      "fee_amount": "800.0000",
+      "fee_order_number": 3,
+      "fee_quantity": 3,
+      "sale": 3,
+      "pay_before": "2018-08-17",
+      "status": 1
+    }
+  },
+  {
     "model": "api.sale",
-    "pk": 1,
+    "pk": 2,
     "fields": {
       "created_at": "2018-02-08T14:28:25Z",
       "place": "BCP",
-      "total_amount": "300.0000",
+      "total_amount": "900.0000",
       "reference_number": "CD1000",
       "description": "Test",
-      "is_fee": false,
+      "is_fee": true,
       "client": 5,
       "seller": 6
     }
   },
   {
     "model": "api.sale",
-    "pk": 2,
+    "pk": 3,
     "fields": {
       "created_at": "2018-02-08T14:28:25Z",
       "place": "BCP",
-      "total_amount": "1200.0000",
-      "reference_number": "CD2000",
+      "total_amount": "2400.0000",
+      "reference_number": "CD1000",
       "description": "Test",
-      "is_fee": false,
+      "is_fee": true,
       "client": 5,
       "seller": 6
     }
@@ -255,34 +291,6 @@
   {
     "model": "api.saledetail",
     "pk": 1,
-    "fields": {
-      "price": "300.0000",
-      "description": "plan de consultas",
-      "discount": "0.00",
-      "pin_code": "INTEL12345",
-      "is_billable": true,
-      "contract": null,
-      "product_type": 1,
-      "sale": 1
-    }
-  },
-  {
-    "model": "api.saledetail",
-    "pk": 2,
-    "fields": {
-      "price": "300.0000",
-      "description": "plan de consultas",
-      "discount": "0.00",
-      "pin_code": "INTEL12345",
-      "is_billable": true,
-      "contract": null,
-      "product_type": 1,
-      "sale": 2
-    }
-  },
-  {
-    "model": "api.saledetail",
-    "pk": 3,
     "fields": {
       "price": "900.0000",
       "description": "plan de consultas",
@@ -295,46 +303,36 @@
     }
   },
   {
-    "model": "api.queryplansacquired",
-    "pk": 1,
-    "fields": {
-      "expiration_date": null,
-      "validity_months": 2,
-      "available_queries": 0,
-      "queries_to_pay": 2,
-      "query_quantity": 2,
-      "activation_date": null,
-      "is_active": false,
-      "available_requeries": 10,
-      "maximum_response_time": 24,
-      "acquired_at": "2018-09-13T15:20:10.925Z",
-      "plan_name": "Express Duo",
-      "query_plans": 2,
-      "sale_detail": 1
-    }
-  },
-  {
-    "model": "api.queryplansacquired",
+    "model": "api.saledetail",
     "pk": 2,
     "fields": {
-      "expiration_date": null,
-      "validity_months": 2,
-      "available_queries": 0,
-      "queries_to_pay": 2,
-      "query_quantity": 2,
-      "activation_date": null,
-      "is_active": false,
-      "available_requeries": 10,
-      "maximum_response_time": 24,
-      "acquired_at": "2018-09-13T15:20:10.925Z",
-      "plan_name": "Express Duo",
-      "query_plans": 2,
-      "sale_detail": 2
+      "price": "900.0000",
+      "description": "plan de consultas",
+      "discount": "0.00",
+      "pin_code": "INTEL12345",
+      "is_billable": true,
+      "contract": null,
+      "product_type": 1,
+      "sale": 3
+    }
+  },
+  {
+    "model": "api.saledetail",
+    "pk": 3,
+    "fields": {
+      "price": "1500.0000",
+      "description": "plan de consultas",
+      "discount": "0.00",
+      "pin_code": "INTEL12345",
+      "is_billable": true,
+      "contract": null,
+      "product_type": 1,
+      "sale": 3
     }
   },
   {
     "model": "api.queryplansacquired",
-    "pk": 3,
+    "pk": 1,
     "fields": {
       "expiration_date": null,
       "validity_months": 2,
@@ -348,6 +346,44 @@
       "acquired_at": "2018-09-13T15:20:10.925Z",
       "plan_name": "Minipack",
       "query_plans": 3,
+      "sale_detail": 1
+    }
+  },
+  {
+    "model": "api.queryplansacquired",
+    "pk": 2,
+    "fields": {
+      "expiration_date": null,
+      "validity_months": 2,
+      "available_queries": 0,
+      "queries_to_pay": 6,
+      "query_quantity": 6,
+      "activation_date": null,
+      "is_active": false,
+      "available_requeries": 10,
+      "maximum_response_time": 24,
+      "acquired_at": "2018-09-13T15:20:10.925Z",
+      "plan_name": "Minipack",
+      "query_plans": 3,
+      "sale_detail": 2
+    }
+  },
+  {
+    "model": "api.queryplansacquired",
+    "pk": 3,
+    "fields": {
+      "expiration_date": null,
+      "validity_months": 3,
+      "available_queries": 0,
+      "queries_to_pay": 6,
+      "query_quantity": 12,
+      "activation_date": null,
+      "is_active": false,
+      "available_requeries": 10,
+      "maximum_response_time": 24,
+      "acquired_at": "2018-09-13T15:20:10.925Z",
+      "plan_name": "Polypack",
+      "query_plans": 4,
       "sale_detail": 3
     }
   },
