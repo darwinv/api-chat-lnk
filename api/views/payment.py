@@ -21,7 +21,7 @@ import django_filters.rest_framework
 class CreatePayment(APIView):
     """Vista para crear pago."""
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (isAdminBackWrite,)
+    permission_classes = (permissions.IsAuthenticated, isAdminBackWrite,)
 
     def post(self, request):
         """crear compra."""
