@@ -507,14 +507,15 @@ class ClientAllPlansView(ListCreateAPIView):
     def get_object(self, pk):
         """Obtener lista de planes."""
         try:
-                  
             obj = QueryPlansAcquired.objects.filter(queryplansclient__client=pk).values('id',
                 'plan_name', 'queryplansclient__is_chosen', 'is_active',
                 'validity_months', 'query_quantity', 'queries_to_pay',
                 'available_queries', 'expiration_date', 'queryplansclient__transfer',
                 'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner'
                 ).annotate(is_chosen=F('queryplansclient__is_chosen'),
-                price=F('sale_detail__price')).order_by('id')
+                    price=F('sale_detail__price'),
+                    sale=F('sale_detail__sale')).order_by('id')
+
             self.check_object_permissions(self.request, obj)
             return obj
         except QueryPlansAcquired.DoesNotExist:
