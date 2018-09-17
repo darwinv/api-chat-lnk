@@ -219,7 +219,7 @@
       "fee_amount": "1200.0000",
       "fee_order_number": 1,
       "fee_quantity": 1,
-      "sale": 1,
+      "sale": 2,
       "pay_before": "2018-08-17",
       "status": 1
     }

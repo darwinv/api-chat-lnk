@@ -81,7 +81,14 @@ class MakePaymentNoFee(APITestCase):
 
     def test_two_product_no_fee_success(self):
         """Crear pago con 2 productos, con una cuota (contado) exitosa."""
-        data = self.valid_payload
+        data = {
+            "amount": 1200,
+            "operation_number": "123423-ERT",
+            "observations": "opcional",
+            "monthly_fee": 2,
+            "payment_type": 2,
+            "bank": 1
+        }
         response = self.client.post(
             reverse('payment'),
             data=json.dumps(data),
@@ -90,8 +97,9 @@ class MakePaymentNoFee(APITestCase):
         mfee = MonthlyFee.objects.get(pk=data["monthly_fee"])
         user = User.objects.get(pk=5)
         contact = SellerContact.objects.get(pk=2)
-        q_acqd = QueryPlansAcquired.objects.get(pk=1)
-        sale = Sale.objects.get(pk=1)
+        q_acqd = QueryPlansAcquired.objects.get(pk=2)
+        q_acqd_2 = QueryPlansAcquired.objects.get(pk=3)
+        sale = Sale.objects.get(pk=2)
         # compruebo si el tipo de contacto paso a 3
         self.assertEqual(3, contact.type_contact)
         # compruebo el estado de la cuota a  2
@@ -104,7 +112,9 @@ class MakePaymentNoFee(APITestCase):
         self.assertEqual(q_acqd.queries_to_pay, 0)
         # disponibles
         self.assertEqual(q_acqd.available_queries, 2)
+        self.assertEqual(q_acqd_2.available_queries, 6)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
 
 class MakePaymentWithFee(APITestCase):
     """Prueba de Crear Pagos."""
@@ -151,6 +161,46 @@ class MakePaymentWithFee(APITestCase):
         # disponibles
         self.assertEqual(q_acqd.available_queries, 3)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_two_product_fee_success(self):
+        """Crear pago con 2 productos producto, en 2 cuotas exitosa."""
+        data = {
+            "amount": 800,
+            "operation_number": "123123-ERT",
+            "observations": "opcional",
+            "monthly_fee": 4,
+            "payment_type": 2,
+            "bank": 1
+        }
+        response = self.client.post(
+            reverse('payment'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        mfee = MonthlyFee.objects.get(pk=data["monthly_fee"])
+        user = User.objects.get(pk=5)
+        contact = SellerContact.objects.get(pk=2)
+        q_acqd = QueryPlansAcquired.objects.get(pk=3)
+        q_acqd_2 = QueryPlansAcquired.objects.get(pk=2)
+        sale = Sale.objects.get(pk=3)
+        # compruebo si el tipo de contacto paso a 3
+        self.assertEqual(3, contact.type_contact)
+        # compruebo el estado de la cuota a  2
+        self.assertEqual(2, mfee.status)
+        # compruebo el cambio de  codigo
+        self.assertEqual(user.code, 'C20521663147')
+        # estado de la  venta debe estar en progreso
+        self.assertEqual(sale.status, 2)
+        # estado de la adquirida por pagar
+        self.assertEqual(q_acqd.queries_to_pay, 8)
+        # disponibles
+        self.assertEqual(q_acqd.available_queries, 4)
+        # cambio
+        self.assertEqual(q_acqd_2.queries_to_pay, 3)
+        # disponibles
+        self.assertEqual(q_acqd_2.available_queries, 3)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     #
     # def test_no_monthly_fee(self):
     #     """cuota mensual no existe."""
