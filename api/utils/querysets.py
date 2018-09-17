@@ -49,4 +49,9 @@ def get_next_fee_to_pay(sale):
     Funcion creada para traer la proxima cuota a pagar
     :return: QuerySet
     """
-    return MonthlyFee.objects.filter(sale=sale, status=1).order_by('pay_before')[0]
+    try:
+        return MonthlyFee.objects.filter(sale=sale, status=1).order_by('pay_before')[0]
+    except IndexError:
+        return None
+
+    
