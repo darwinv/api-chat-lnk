@@ -525,7 +525,7 @@ class ClientAllPlansView(ListCreateAPIView):
         """Obtener la lista con todos los planes del cliente."""
         client_id = request.user.id
         plan = self.get_object(client_id)
-        
+
         # paginacion
         page = self.paginate_queryset(plan)
         if page is not None:
