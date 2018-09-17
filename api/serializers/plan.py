@@ -304,6 +304,7 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
             new_acquired_plan.available_queries = count
             new_acquired_plan.query_quantity = count
             new_acquired_plan.expiration_date = acquired_plan.expiration_date
+            new_acquired_plan.queries_to_pay = 0  # siempre es cero
             new_acquired_plan.validity_months = acquired_plan.validity_months
             new_acquired_plan.activation_date = acquired_plan.activation_date
             new_acquired_plan.is_active = acquired_plan.is_active

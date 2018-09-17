@@ -71,13 +71,14 @@
         "model": "api.queryplansacquired",
         "pk": 1,
         "fields": {
-            
+
             "expiration_date": "2018-05-14",
             "validity_months": 3,
             "available_queries": 6,
             "query_quantity": 6,
             "activation_date": null,
             "is_active": false,
+            "queries_to_pay": 0,
             "available_requeries": 1,
             "maximum_response_time": 24,
             "acquired_at": "2018-02-08T14:48:37Z",
@@ -101,7 +102,7 @@
         "status": 1
       }
     },
-    
+
     {
         "model": "api.sale",
         "pk": 1,
