@@ -55,7 +55,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         # buscar contacto efectivo para acualitzar estado a efectivo cliente
         # filtar por el correo del id del cliente
         SellerContact.objects.filter(
-            email=fee.sale.client.username).update(type_contact=3)
+            email_exact=fee.sale.client.username).update(type_contact=3)
         # compruebo si no hay mas cuotas pendientes por pagar
         if MonthlyFee.objects.filter(sale=fee.sale, status=1).exists():
             # cambio el estatus de la ventas
@@ -104,7 +104,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
         if 'test' not in sys.argv:
             mail.sendmail(args=data)
-            
+
         validated_data["status"] = 2
         instance = Payment(**validated_data)
         instance.save()
