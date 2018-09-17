@@ -4,7 +4,8 @@ from api.models import QueryPlans, Client
 from api.models import SellerNonBillablePlans
 from api.utils.tools import get_date_by_time
 from datetime import datetime
-
+from api.utils.querysets import get_next_fee_to_pay
+from api.serializers.fee import FeeSerializer
 
 class PlanStatusSerializer(serializers.Serializer):
     """Chequeo de Status."""
@@ -167,7 +168,7 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
     owner = serializers.SerializerMethodField()
     is_chosen = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
-
+    fee = serializers.SerializerMethodField()
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -175,7 +176,7 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
         fields = ('id', 'plan_name', 'is_chosen', 'is_active',
                   'validity_months', 'query_quantity', 'queries_to_pay',
                   'available_queries', 'expiration_date', 'transfer',
-                  'share', 'empower', 'owner', 'price')
+                  'share', 'empower', 'owner', 'price', 'fee')
 
     def get_transfer(self, obj):
         if 'queryplansclient__transfer' in obj:
@@ -202,11 +203,18 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
             return obj['is_chosen']
         else:
             return False
+
     def get_price(self, obj):
         if 'price' in obj:
             return obj['price']
         else:
-            return False
+            return None
+
+    def get_fee(self, obj):
+        """Devuelve sale detail."""
+        fee = get_next_fee_to_pay(obj['sale'])
+        serializer = FeeSerializer(fee)
+        return serializer.data
 
 
 class QueryPlansTransferSerializer(serializers.ModelSerializer):

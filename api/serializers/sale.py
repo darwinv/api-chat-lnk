@@ -176,7 +176,7 @@ class SaleSerializer(serializers.Serializer):
                     if validity_months >= i:
                         fee_amount = (price/validity_months)*quantity + fee_amount
 
-            pay_day = date.today() + relativedelta(days=3, months=i) # Hardcoded cambiar la cantidad de dias
+            pay_day = date.today() + relativedelta(days=3, months=i-1) # Hardcoded cambiar la cantidad de dias
 
             sale_id = instance
             MonthlyFee.objects.create(fee_amount=fee_amount,
