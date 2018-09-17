@@ -1128,8 +1128,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         else:
             # registro de cliente si es efectivo
             data_client = self.get_initial()
-            data_client["email_exact"] = data_client["email"]
-            data_client["username"] = data_client["email"]
+            data_client["username"] = data_client["email_exact"]
             data_client["role"] = Params.ROLE_CLIENT
             data_client['password'] = password
             data_client['seller_assigned'] = data_client['seller']
@@ -1165,7 +1164,7 @@ class SellerContactNaturalSerializer(BaseSellerContactSerializer):
     document_type = serializers.ChoiceField(choices=c.user_document_type)
     document_number = serializers.CharField(validators=[UniqueValidator(queryset=SellerContact.objects.filter(type_client='n'))])
     document_type_name = serializers.SerializerMethodField()
-    email = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContact.objects.all())])
+    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContact.objects.all())])
     civil_state = serializers.ChoiceField(choices=c.client_civil_state)
     civil_state_name = serializers.SerializerMethodField()
     sex = serializers.ChoiceField(choices=c.client_sex)
@@ -1194,7 +1193,7 @@ class SellerContactNaturalSerializer(BaseSellerContactSerializer):
         model = SellerContact
         fields = ('id', 'first_name', 'last_name', 'type_contact',
                   'type_contact_name', 'document_type', 'document_type_name',
-                  'document_number', 'email', 'type_client', 'civil_state',
+                  'document_number', 'email_exact', 'type_client', 'civil_state',
                   'civil_state_name', 'birthdate', 'institute', 'objection',
                   'sex', 'sex_name', 'ocupation_name', 'activity_description',
                   'photo', 'about', 'cellphone', 'telephone', 'ocupation',
@@ -1252,7 +1251,7 @@ class SellerContactBusinessSerializer(BaseSellerContactSerializer):
     commercial_reason = serializers.CharField(required=True,
                                               allow_blank=False,
                                               allow_null=False)
-    email = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContact.objects.all())])
+    email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContact.objects.all())])
     address = AddressSerializer(required=False)
     ruc = serializers.CharField(required=True, validators=[UniqueValidator(queryset=SellerContact.objects.filter(type_client='b'))])
     latitude = serializers.CharField(required=True, allow_blank=False)
@@ -1286,7 +1285,7 @@ class SellerContactBusinessSerializer(BaseSellerContactSerializer):
                   'document_type', 'document_type_name', 'document_number',
                   'ruc', 'economic_sector', 'activity_description', 'about',
                   'cellphone', 'telephone', 'address', 'latitude', 'position',
-                  'type_client', 'longitude', 'seller', 'objection', 'email',
+                  'type_client', 'longitude', 'seller', 'objection', 'email_exact',
                   'objection_name', 'nationality', 'type_contact_name',
                   'nationality_name', 'photo', 'agent_firstname', 'objection',
                   'agent_lastname', 'residence_country', 'password', 'ciiu',

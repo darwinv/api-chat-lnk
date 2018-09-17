@@ -297,6 +297,10 @@ class UpdateEmailUserView(APIView):
             if plan_manages:
                 success = plan_manages.update(email_receiver=data['email_exact'])
 
+            seller_contact = SellerContact.objects.filter(email_exact=last_email)
+            if seller_contact:
+                success = seller_contact.update(email=data['email_exact'])
+
             return Response(serializer.data)
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -1108,7 +1112,6 @@ class ContactListView(ListCreateAPIView):
         if "email_exact" not in data or not data["email_exact"]:
             raise serializers.ValidationError({'email_exact': [required]})
 
-        data["email"] = data["email_exact"]
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         if "type_client" not in data or not data["type_client"]:
             raise serializers.ValidationError({'type_client': [required]})
