@@ -1055,15 +1055,15 @@ class SellerDetailByID(APIView):
         return Response(serializer.data)
 
 
-class SellerAccountView(ListCreateAPIView):
-    authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAdminUser,)
+# class SellerAccountView(ListCreateAPIView):
+#     authentication_classes = (OAuth2Authentication,)
+#     permission_classes = (permissions.IsAdminUser,)
 
-    def get_object(self, pk):
-        try:
-            return Specialist.objects.get(pk=pk)
-        except Specialist.DoesNotExist:
-            raise Http404
+#     def get_object(self, pk):
+#         try:
+#             return Specialist.objects.get(pk=pk)
+#         except Specialist.DoesNotExist:
+#             raise Http404
 
     # def get(self, request, pk):
     #     creacion de QuerySet para listadaos

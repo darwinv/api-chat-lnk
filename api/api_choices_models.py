@@ -78,12 +78,6 @@ class ChoicesAPI:
     )
 
     # Purchase Model
-    purchase_status = (
-        (1, _('Pending')),
-        (2, _('Paid')),
-    )
-
-    # Purchase Model
     fee_status = (
         (1, _('Pending')),
         (2, _('Paid')),
@@ -93,12 +87,6 @@ class ChoicesAPI:
         (1, _('Unpaid')),  # no se ha pagado
         (2, _('Progress')),  # al menos una cuota la pagaron
         (3, _('Paid')),  # ya se pago
-    )
-
-    # Sale Model
-    sale_status = (
-        (1, _('Pending')),
-        (2, _('Paid')),
     )
 
     # CulqiPayment Model

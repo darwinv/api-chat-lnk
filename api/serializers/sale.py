@@ -137,8 +137,10 @@ class SaleSerializer(serializers.Serializer):
                         max_fee_product = validity_months
 
                     # llenamos data del plan adquirido
+
                     plan_acquired["validity_months"] = validity_months
-                    plan_acquired["available_queries"] = product["plan_id"].query_quantity
+                    plan_acquired["available_queries"] = 0
+                    plan_acquired["queries_to_pay"] = product["plan_id"].query_quantity
                     plan_acquired["query_quantity"] = product["plan_id"].query_quantity
                     plan_acquired["available_requeries"] = 10  # harcoded. CAMBIAR
                     plan_acquired["maximum_response_time"] = 24  # harcoded.CAMBIAR

@@ -83,6 +83,8 @@ class ClientAccountView(APIView):
 class SellerAccountView(APIView):
     """Vista para estado de cuenta de vendedor."""
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = (OAuth2Authentication,)
+    queryset = Seller.objects.all()
 
     def get_object(self, pk):
         try:
@@ -109,11 +111,12 @@ class SellerAccountBackendView(APIView):
             raise Http404
 
     def get(self, request, pk):
-        seller = self.get_object(pk)
-        queryset = Sale.objects.filter(seller=seller)
-        serializer = SellerAccountBackendSerializer(queryset,
-                                                    context={"seller": seller})
-        return Response(serializer.data)
+        return Response({})
+        # seller = self.get_object(pk)
+        # queryset = Sale.objects.filter(seller=seller)
+        # serializer = SellerAccountBackendSerializer(queryset,
+        #                                             context={"seller": seller})
+        # return Response(serializer.data)
 
 
 class SellerFooterView(APIView):

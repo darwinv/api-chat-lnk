@@ -455,6 +455,7 @@ class QueryPlansAcquired(models.Model):
     expiration_date = models.DateField(null=True)
     validity_months = models.PositiveIntegerField()
     available_queries = models.PositiveIntegerField()
+    queries_to_pay = models.PositiveIntegerField()
     query_quantity = models.PositiveIntegerField()
     activation_date = models.DateField(null=True)
     is_active = models.BooleanField(default=False)

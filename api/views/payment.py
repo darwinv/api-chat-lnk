@@ -4,7 +4,7 @@ from api.serializers.payment import PaymentSalePendingDetailSerializer
 from api.serializers.payment import SaleContactoDetailSerializer
 from api.utils.validations import Operations
 from api.utils.querysets import get_next_fee_to_pay
-from api.permissions import IsAdminOrSeller, IsAdmin, IsAdminOrClient
+from api.permissions import IsAdminOrSeller, IsAdmin, isAdminBackWrite
 from api.models import Sale, MonthlyFee, Client
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
@@ -17,11 +17,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models import Subquery, Q
 import django_filters.rest_framework
 
+
 class CreatePayment(APIView):
     """Vista para crear pago."""
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.AllowAny,)
-    
+    permission_classes = (isAdminBackWrite,)
+
     def post(self, request):
         """crear compra."""
         data = request.data
@@ -41,7 +42,7 @@ class PaymentPendingView(ListCreateAPIView):
     def get(self, request):
         """get compra pendinetes"""
         data = request.query_params
-        
+
         if not 'document_number' in data:
             raise serializers.ValidationError({'document_number': [self.required]})
 

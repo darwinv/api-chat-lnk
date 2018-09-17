@@ -106,9 +106,11 @@ class ClientPlansView(ListCreateAPIView):
         plan = QueryPlansAcquired.objects.filter(is_active=True, queryplansclient__client=pk,
             expiration_date__gte=datetime.now().date()).order_by('id').values(
                   'id', 'plan_name', 'is_active',
-                  'validity_months', 'query_quantity',
+                  'validity_months', 'query_quantity', 'queries_to_pay',
                   'available_queries', 'expiration_date').annotate(
-                  is_chosen=F('queryplansclient__is_chosen')).order_by('id')
+                  is_chosen=F('queryplansclient__is_chosen'),
+                  price=F('sale_detail__price'),
+                  sale=F('sale_detail__sale')).order_by('id')
         if plan:
             return plan
         else:
