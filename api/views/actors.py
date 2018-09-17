@@ -1118,7 +1118,8 @@ class ContactListView(ListCreateAPIView):
             raise serializers.ValidationError({'type_client': [required]})
 
         # eliminamos contraseña para contacto no efectivo en caso de envio
-        del data["password"]
+        if data['type_contact'] == 1:
+            del data["password"]
 
         if data["type_client"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
