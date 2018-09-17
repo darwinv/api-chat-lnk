@@ -1128,7 +1128,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         else:
             # registro de cliente si es efectivo
             data_client = self.get_initial()
-            data_client["username"] = data_client["email"]
+            data_client["username"] = data_client["email_exact"]
             data_client["role"] = Params.ROLE_CLIENT
             data_client['password'] = password
             data_client['seller_assigned'] = data_client['seller']
