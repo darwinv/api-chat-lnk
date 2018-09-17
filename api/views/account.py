@@ -111,12 +111,11 @@ class SellerAccountBackendView(APIView):
             raise Http404
 
     def get(self, request, pk):
-        return Response({})
-        # seller = self.get_object(pk)
-        # queryset = Sale.objects.filter(seller=seller)
-        # serializer = SellerAccountBackendSerializer(queryset,
-        #                                             context={"seller": seller})
-        # return Response(serializer.data)
+        seller = self.get_object(pk)
+        queryset = Sale.objects.filter(seller=seller)
+        serializer = SellerAccountBackendSerializer(queryset,
+                                                    context={"seller": seller})
+        return Response(serializer.data)
 
 
 class SellerFooterView(APIView):
