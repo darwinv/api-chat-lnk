@@ -10,7 +10,7 @@ client = APIClient()
 client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
 
 
-class MakePayment(APITestCase):
+class MakePaymentNoFee(APITestCase):
     """Prueba de Crear Pagos."""
 
     fixtures = ['data', 'data2', 'data3', 'test_payment']
@@ -54,6 +54,33 @@ class MakePayment(APITestCase):
 
     def test_one_product_no_fee_success(self):
         """Crear pago con un producto, con una cuota exitosa."""
+        data = self.valid_payload
+        response = self.client.post(
+            reverse('payment'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        mfee = MonthlyFee.objects.get(pk=data["monthly_fee"])
+        user = User.objects.get(pk=5)
+        contact = SellerContact.objects.get(pk=2)
+        q_acqd = QueryPlansAcquired.objects.get(pk=1)
+        sale = Sale.objects.get(pk=1)
+        # compruebo si el tipo de contacto paso a 3
+        self.assertEqual(3, contact.type_contact)
+        # compruebo el estado de la cuota a  2
+        self.assertEqual(2, mfee.status)
+        # compruebo el cambio de  codigo
+        self.assertEqual(user.code, 'C20521663147')
+        # estado de la  venta debe estar pagado
+        self.assertEqual(sale.status, 3)
+        # estado de la adquirida por pagar
+        self.assertEqual(q_acqd.queries_to_pay, 0)
+        # disponibles
+        self.assertEqual(q_acqd.available_queries, 2)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_two_product_no_fee_success(self):
+        """Crear pago con 2 productos, con una cuota (contado) exitosa."""
         data = self.valid_payload
         response = self.client.post(
             reverse('payment'),
