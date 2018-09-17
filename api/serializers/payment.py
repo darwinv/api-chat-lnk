@@ -11,6 +11,8 @@ from dateutil.relativedelta import relativedelta
 from rest_framework.validators import UniqueValidator
 from api.serializers.actors import ClientSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer
+from api.serializers.fee import FeeSerializer
+
 from api.utils.parameters import Params
 import sys
 from api import pyrebase
@@ -148,16 +150,7 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
             return str(obj['client__business_name'])
         return str(obj.client.business_name)
 
-class FeeSerializer(serializers.ModelSerializer):
-    """Serializer del pago."""
 
-    class Meta:
-        """Modelo."""
-
-        model = MonthlyFee
-        fields = (
-            'fee_amount', 'fee_order_number', 'fee_quantity', 'pay_before',
-            'status', 'id')
 
 class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""

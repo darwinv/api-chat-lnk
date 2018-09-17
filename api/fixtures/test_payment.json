@@ -403,7 +403,7 @@
       "type_client": "b",
       "document_type": 1,
       "document_number": "78467222",
-      "email": "darwin.vasqz@gmail.com",
+      "email_exact": "darwin.vasqz@gmail.com",
       "civil_state": null,
       "birthdate": null,
       "institute": null,
