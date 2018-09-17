@@ -211,7 +211,7 @@ class SellerContact(models.Model):
                                    choices=Ch.client_type_client)
     document_type = models.PositiveIntegerField(choices=Ch.user_document_type)
     document_number = models.CharField(max_length=45)
-    email = models.CharField(max_length=150, null=True)
+    email_exact = models.CharField(max_length=150, null=True)
     civil_state = models.CharField(max_length=1,
                                    choices=Ch.client_civil_state, null=True)
     birthdate = models.DateField(null=True)
