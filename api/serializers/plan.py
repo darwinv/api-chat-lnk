@@ -173,7 +173,7 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
 
         model = QueryPlansAcquired
         fields = ('id', 'plan_name', 'is_chosen', 'is_active',
-                  'validity_months', 'query_quantity', 'queries_to_pay'
+                  'validity_months', 'query_quantity', 'queries_to_pay',
                   'available_queries', 'expiration_date', 'transfer',
                   'share', 'empower', 'owner', 'price')
 

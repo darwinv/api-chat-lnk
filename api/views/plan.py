@@ -138,7 +138,7 @@ class ClientPlansDetailView(ListCreateAPIView):
         client = Operations.get_id(self, request)
         plan = QueryPlansAcquired.objects.filter(pk=pk, queryplansclient__client=client).values(
                   'id', 'plan_name', 'is_active',
-                  'validity_months', 'query_quantity',
+                  'validity_months', 'query_quantity', 'queries_to_pay',
                   'available_queries', 'expiration_date', 'queryplansclient__transfer',
                   'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner').annotate(
                   is_chosen=F('queryplansclient__is_chosen'))
@@ -521,7 +521,7 @@ class ClientAllPlansView(ListCreateAPIView):
         """Obtener la lista con todos los planes del cliente."""
         client_id = request.user.id
         plan = self.get_object(client_id)
-        
+
         # paginacion
         page = self.paginate_queryset(plan)
         if page is not None:
