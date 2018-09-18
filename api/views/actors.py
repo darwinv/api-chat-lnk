@@ -1117,6 +1117,10 @@ class ContactListView(ListCreateAPIView):
         if "type_client" not in data or not data["type_client"]:
             raise serializers.ValidationError({'type_client': [required]})
 
+        # eliminamos contraseña para contacto no efectivo en caso de envio
+        if data['type_contact'] == 2:
+            del data["password"]
+
         if data["type_client"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
         elif data["type_client"] == 'b':
@@ -1447,7 +1451,6 @@ class RucDetailView(APIView):
             response = requests.post(url, json=payload, timeout=2.5)
         except Exception as e:
             response = None
-
         try:
             url_sunat = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
             response2 = requests.get(url_sunat, timeout=2.5)

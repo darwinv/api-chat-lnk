@@ -143,7 +143,8 @@ class ClientPlansDetailView(ListCreateAPIView):
                   'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner').annotate(
                   is_chosen=F('queryplansclient__is_chosen'),
                   price=F('sale_detail__price'),
-                  sale=F('sale_detail__sale'))
+                  sale=F('sale_detail__sale'),
+                  is_fee=F('sale_detail__sale__is_fee'))
 
         if plan:
             serializer = QueryPlansAcquiredDetailSerializer(plan[0], partial=True)
@@ -514,8 +515,9 @@ class ClientAllPlansView(ListCreateAPIView):
                 'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner'
                 ).annotate(is_chosen=F('queryplansclient__is_chosen'),
                     price=F('sale_detail__price'),
-                    sale=F('sale_detail__sale')).order_by('id')
-
+                    sale=F('sale_detail__sale'),
+                  is_fee=F('sale_detail__sale__is_fee')).order_by('id')
+            
             self.check_object_permissions(self.request, obj)
             return obj
         except QueryPlansAcquired.DoesNotExist:
