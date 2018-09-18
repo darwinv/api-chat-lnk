@@ -115,6 +115,60 @@ class MakePaymentNoFee(APITestCase):
         self.assertEqual(q_acqd_2.available_queries, 6)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    # def test_no_monthly_fee(self):
+    #     """cuota mensual no existe."""
+    #     data = self.valid_payload.copy()
+    #     del data["monthly_fee"]
+    #     response = self.client.post(
+    #         reverse('payment'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    #
+    # def test_optional_observations(self):
+    #     """Observaciones son opcionales."""
+    #     data = self.valid_payload.copy()
+    #     del data["observations"]
+    #     response = self.client.post(
+    #         reverse('payment'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    #
+    # def test_invalid_monthly_fee(self):
+    #     """cuota mensual no existe."""
+    #     data = self.valid_payload.copy()
+    #     data["monthly_fee"] = 2
+    #     response = self.client.post(
+    #         reverse('payment'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    #
+    # def test_no_operation_number(self):
+    #     """No envia numero de operacion."""
+    #     data = self.valid_payload.copy()
+    #     del data["operation_number"]
+    #     response = self.client.post(
+    #         reverse('payment'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    #
+    # def test_no_amount(self):
+    #     """No envia numero de operacion."""
+    #     data = self.valid_payload.copy()
+    #     del data["amount"]
+    #     response = self.client.post(
+    #         reverse('payment'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 class MakePaymentWithFee(APITestCase):
     """Prueba de Crear Pagos."""
@@ -201,61 +255,61 @@ class MakePaymentWithFee(APITestCase):
         self.assertEqual(q_acqd_2.available_queries, 3)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    #
-    # def test_no_monthly_fee(self):
-    #     """cuota mensual no existe."""
-    #     data = self.valid_payload.copy()
-    #     del data["monthly_fee"]
-    #     response = self.client.post(
-    #         reverse('payment'),
-    #         data=json.dumps(data),
-    #         content_type='application/json'
-    #     )
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    #
-    # def test_optional_observations(self):
-    #     """Observaciones son opcionales."""
-    #     data = self.valid_payload.copy()
-    #     del data["observations"]
-    #     response = self.client.post(
-    #         reverse('payment'),
-    #         data=json.dumps(data),
-    #         content_type='application/json'
-    #     )
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    #
-    # def test_invalid_monthly_fee(self):
-    #     """cuota mensual no existe."""
-    #     data = self.valid_payload.copy()
-    #     data["monthly_fee"] = 2
-    #     response = self.client.post(
-    #         reverse('payment'),
-    #         data=json.dumps(data),
-    #         content_type='application/json'
-    #     )
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    #
-    # def test_no_operation_number(self):
-    #     """No envia numero de operacion."""
-    #     data = self.valid_payload.copy()
-    #     del data["operation_number"]
-    #     response = self.client.post(
-    #         reverse('payment'),
-    #         data=json.dumps(data),
-    #         content_type='application/json'
-    #     )
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    #
-    # def test_no_amount(self):
-    #     """No envia numero de operacion."""
-    #     data = self.valid_payload.copy()
-    #     del data["amount"]
-    #     response = self.client.post(
-    #         reverse('payment'),
-    #         data=json.dumps(data),
-    #         content_type='application/json'
-    #     )
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    def test_two_product_fee_success_2nd_payment(self):
+        """Crear pago 2da cuota, de 2 productos, en 2 cuotas exitosa."""
+        data = {
+            "amount": 800,
+            "operation_number": "123123-ERT",
+            "observations": "opcional",
+            "monthly_fee": 4,
+            "payment_type": 2,
+            "bank": 1
+        }
+        data2 = {
+            "amount": 800,
+            "operation_number": "123124-ERT",
+            "observations": "opcional",
+            "monthly_fee": 5,
+            "payment_type": 2,
+            "bank": 1
+        }
+        response = self.client.post(
+            reverse('payment'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        response2 = self.client.post(
+            reverse('payment'),
+            data=json.dumps(data2),
+            content_type='application/json'
+        )
+        mfee = MonthlyFee.objects.get(pk=data["monthly_fee"])
+        mfee2 = MonthlyFee.objects.get(pk=data2["monthly_fee"])
+        user = User.objects.get(pk=5)
+        contact = SellerContact.objects.get(pk=2)
+        q_acqd = QueryPlansAcquired.objects.get(pk=3)
+        q_acqd_2 = QueryPlansAcquired.objects.get(pk=2)
+        sale = Sale.objects.get(pk=3)
+        # compruebo si el tipo de contacto paso a 3
+        self.assertEqual(3, contact.type_contact)
+        # compruebo el estado de la cuota a  2
+        self.assertEqual(2, mfee.status)
+        self.assertEqual(2, mfee2.status)
+        # compruebo el cambio de  codigo
+        self.assertEqual(user.code, 'C20521663147')
+        # estado de la  venta debe estar en progreso
+        self.assertEqual(sale.status, 2)
+        # estado de la adquirida por pagar
+        self.assertEqual(q_acqd.queries_to_pay, 4)
+        # disponibles
+        self.assertEqual(q_acqd.available_queries, 8)
+        # estado de la adquirida por pagar
+        self.assertEqual(q_acqd_2.queries_to_pay, 0)
+        # disponibles
+        self.assertEqual(q_acqd_2.available_queries, 6)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
+
 
 
 class PaymentPendig(APITestCase):

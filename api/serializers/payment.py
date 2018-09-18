@@ -67,13 +67,14 @@ class PaymentSerializer(serializers.ModelSerializer):
 
         qsetdetail = SaleDetail.objects.filter(sale=fee.sale)
 
+        # import pdb; pdb.set_trace()
         for detail in qsetdetail:
             qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
             qpclient = qacd.queryplansclient_set.get()
             # debo chequear si es por cuotas o no
             if fee.sale.is_fee:
                 # libero el numero de consultas que corresponde
-                qacd.available_queries = qacd.query_plans.query_quantity / qacd.query_plans.validity_months
+                qacd.available_queries = qacd.available_queries + (qacd.query_plans.query_quantity / qacd.query_plans.validity_months)
                 # actualizo cuantas consultas faltan por pagar
                 qacd.queries_to_pay = qacd.query_plans.query_quantity - qacd.available_queries
             else:
