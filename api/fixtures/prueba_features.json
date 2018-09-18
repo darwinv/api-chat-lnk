@@ -23,20 +23,240 @@
   "model": "api.address",
   "pk": 8,
   "fields": {
-    "street": "na",
-    "department": 7,
-    "province": 66,
-    "district": 669
+    "street": "jr esteban camere 390. piso 5to",
+    "department": 15,
+    "province": 127,
+    "district": 1290
   }
 },
 {
   "model": "api.address",
   "pk": 9,
   "fields": {
-    "street": "na",
-    "department": 7,
-    "province": 66,
-    "district": 669
+    "street": "alfonso ugarte 762",
+    "department": 15,
+    "province": 127,
+    "district": 1255
+  }
+},
+{
+  "model": "api.address",
+  "pk": 10,
+  "fields": {
+    "street": "Calle El Incario N\u00b0 284 Depto. 301 - El Derby",
+    "department": 15,
+    "province": 127,
+    "district": 1290
+  }
+},
+{
+  "model": "api.address",
+  "pk": 11,
+  "fields": {
+    "street": "Jir\u00f3n Unamuno 248",
+    "department": 15,
+    "province": 127,
+    "district": 1286
+  }
+},
+{
+  "model": "api.address",
+  "pk": 12,
+  "fields": {
+    "street": "ben",
+    "department": 5,
+    "province": 47,
+    "district": 473
+  }
+},
+{
+  "model": "api.address",
+  "pk": 13,
+  "fields": {
+    "street": "Calle boulevaed",
+    "department": 5,
+    "province": 49,
+    "district": 506
+  }
+},
+{
+  "model": "api.address",
+  "pk": 14,
+  "fields": {
+    "street": "Calle boulevaed",
+    "department": 10,
+    "province": 96,
+    "district": 952
+  }
+},
+{
+  "model": "api.address",
+  "pk": 15,
+  "fields": {
+    "street": "Calle boulevaed",
+    "department": 3,
+    "province": 29,
+    "district": 262
+  }
+},
+{
+  "model": "api.address",
+  "pk": 16,
+  "fields": {
+    "street": "Calle boulevaed",
+    "department": 11,
+    "province": 100,
+    "district": 990
+  }
+},
+{
+  "model": "api.address",
+  "pk": 17,
+  "fields": {
+    "street": "jsjsjs",
+    "department": 5,
+    "province": 46,
+    "district": 467
+  }
+},
+{
+  "model": "api.address",
+  "pk": 18,
+  "fields": {
+    "street": "ajha",
+    "department": 5,
+    "province": 46,
+    "district": 465
+  }
+},
+{
+  "model": "api.address",
+  "pk": 19,
+  "fields": {
+    "street": "ajha",
+    "department": 5,
+    "province": 46,
+    "district": 465
+  }
+},
+{
+  "model": "api.address",
+  "pk": 20,
+  "fields": {
+    "street": "Surco",
+    "department": 15,
+    "province": 131,
+    "district": 1316
+  }
+},
+{
+  "model": "api.address",
+  "pk": 21,
+  "fields": {
+    "street": "CAL. RAMAL 2 LT. 9 MZ. I URB. PROP.PORTALES DE NIEVERIA",
+    "department": 15,
+    "province": 127,
+    "district": 1268
+  }
+},
+{
+  "model": "api.address",
+  "pk": 22,
+  "fields": {
+    "street": "CAL. RAMAL 2 LT. 9 MZ. I URB. PROP.PORTALES DE NIEVERIA",
+    "department": 15,
+    "province": 127,
+    "district": 1268
+  }
+},
+{
+  "model": "api.address",
+  "pk": 23,
+  "fields": {
+    "street": "CAL. CARRETERA CENTRAL LT. 8 MZ. A KM. 2.5 ---- VILLA SANTA ISABEL",
+    "department": 15,
+    "province": 127,
+    "district": 1253
+  }
+},
+{
+  "model": "api.address",
+  "pk": 24,
+  "fields": {
+    "street": "CAL. CARRETERA CENTRAL LT. 8 MZ. A KM. 2.5 ---- VILLA SANTA ISABEL",
+    "department": 15,
+    "province": 127,
+    "district": 1253
+  }
+},
+{
+  "model": "api.address",
+  "pk": 25,
+  "fields": {
+    "street": "Embajada de Estados Unidos",
+    "department": 15,
+    "province": 127,
+    "district": 1290
+  }
+},
+{
+  "model": "api.address",
+  "pk": 26,
+  "fields": {
+    "street": "los girasoles 189",
+    "department": 15,
+    "province": 127,
+    "district": 1290
+  }
+},
+{
+  "model": "api.address",
+  "pk": 27,
+  "fields": {
+    "street": "tupac amaru 836",
+    "department": 15,
+    "province": 127,
+    "district": 1256
+  }
+},
+{
+  "model": "api.address",
+  "pk": 28,
+  "fields": {
+    "street": "los girasoles 189",
+    "department": 15,
+    "province": 127,
+    "district": 1290
+  }
+},
+{
+  "model": "api.address",
+  "pk": 29,
+  "fields": {
+    "street": "surco bulevard",
+    "department": 15,
+    "province": 133,
+    "district": 1353
+  }
+},
+{
+  "model": "api.address",
+  "pk": 30,
+  "fields": {
+    "street": "surco bulevard",
+    "department": 15,
+    "province": 133,
+    "district": 1353
+  }
+},
+{
+  "model": "api.address",
+  "pk": 31,
+  "fields": {
+    "street": "Calle el Blvd. 183 oficina 402",
+    "department": 15,
+    "province": 130,
+    "district": 1305
   }
 },
 {
@@ -431,7 +651,311 @@
     "sale": 3
   }
 },
-
+{
+  "model": "api.saledetail",
+  "pk": 29,
+  "fields": {
+    "price": "700.00",
+    "description": "Plan de Prueba",
+    "discount": "0.00",
+    "pin_code": "N5M4EK",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 5
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 30,
+  "fields": {
+    "price": "700.00",
+    "description": "Plan de Prueba",
+    "discount": "0.00",
+    "pin_code": "R5BR1C",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 6
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 31,
+  "fields": {
+    "price": "700.00",
+    "description": "Plan de Prueba",
+    "discount": "0.00",
+    "pin_code": "K3ZXQY",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 7
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 32,
+  "fields": {
+    "price": "700.00",
+    "description": "Plan de Prueba",
+    "discount": "0.00",
+    "pin_code": "PUI5L2",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 8
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 33,
+  "fields": {
+    "price": "700.00",
+    "description": "Plan de Prueba",
+    "discount": "0.00",
+    "pin_code": "Y2I83X",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 9
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 34,
+  "fields": {
+    "price": "700.00",
+    "description": "Plan de Prueba",
+    "discount": "0.00",
+    "pin_code": "Q6ETDC",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 10
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 35,
+  "fields": {
+    "price": "150.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "DPLVAQ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 11
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 36,
+  "fields": {
+    "price": "1500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "KRKLT1",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 12
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 37,
+  "fields": {
+    "price": "2500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "WO287P",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 12
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 38,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "01J5R2",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 13
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 39,
+  "fields": {
+    "price": "1500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "16Z36A",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 13
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 40,
+  "fields": {
+    "price": "90000.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "06QKIQ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 14
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 41,
+  "fields": {
+    "price": "1500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "R1OCQH",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 15
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 42,
+  "fields": {
+    "price": "900.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "N2LZJJ",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 16
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 43,
+  "fields": {
+    "price": "2500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "O8LG6J",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 17
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 44,
+  "fields": {
+    "price": "150.00",
+    "description": "Description",
+    "discount": "150.00",
+    "pin_code": "PDI6AT",
+    "is_billable": false,
+    "contract": null,
+    "product_type": 1,
+    "sale": 17
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 45,
+  "fields": {
+    "price": "900.00",
+    "description": "Plan de Prueba",
+    "discount": "0.00",
+    "pin_code": "K34ZMO",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 18
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 46,
+  "fields": {
+    "price": "2500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "XIKUTO",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 19
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 47,
+  "fields": {
+    "price": "1500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "3S3ER2",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 20
+  }
+},
+{
+  "model": "api.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": "2017-10-02T22:26:08.423Z",
+    "is_superuser": true,
+    "username": "admin@mail.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2017-10-02T21:17:37.995Z",
+    "nick": " ",
+    "email_exact": "admin@mail.com",
+    "telephone": "",
+    "cellphone": "",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "preview.png",
+    "document_type": 1,
+    "document_number": "00",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "00",
+    "anonymous": true,
+    "updated_at": "2017-10-02T21:17:38.226Z",
+    "nationality": 1,
+    "role": 1,
+    "address": null,
+    "residence_country": null,
+    "foreign_address": null,
+    "key": null,
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
 {
   "model": "api.user",
   "pk": 3,
@@ -446,7 +970,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-02-07T17:09:39.233Z",
-    "nick": "TheClient",
+    "nick": "Victor Agama Anduaga",
     "email_exact": "clientoscar@mail.com",
     "telephone": "9213223131231",
     "cellphone": "1231231",
@@ -462,7 +986,7 @@
     "updated_at": "2018-02-07T17:09:39.466Z",
     "nationality": 1,
     "role": 2,
-    "address": 6,
+    "address": 27,
     "residence_country": 1,
     "foreign_address": "",
     "key": "",
@@ -485,7 +1009,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:34:36.604Z",
-    "nick": "cmorannick",
+    "nick": "Winner Agurto Marchan",
     "email_exact": "cmoran@mail.com",
     "telephone": "921471559",
     "cellphone": "921471559",
@@ -510,8 +1034,45 @@
     "user_permissions": []
   }
 },
-
-
+{
+  "model": "api.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "impuestos@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Alfaro Canterac",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "Carlos Alfaro Canterac",
+    "email_exact": "impuestos@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://media.licdn.com/dms/image/C4D03AQHsGnu-OWHkdA/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=M6naZAU0nJaF99CQUkBD7fkrIJg7esFaLWul0zaKpuE",
+    "document_type": 1,
+    "document_number": "246125822",
+    "img_document_number": null,
+    "ruc": "316674344",
+    "code": "E246125822",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": "QHDLZI8E5R",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
 {
   "model": "api.user",
   "pk": 6,
@@ -526,13 +1087,13 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:27.538Z",
-    "nick": "vendedornick",
+    "nick": "Juan Alcarraz Contreras",
     "email_exact": "vendedor@mail.com",
     "telephone": "9214715593",
     "cellphone": "9214715592",
     "code_telephone": null,
     "code_cellphone": null,
-    "photo": "https://media.licdn.com/dms/image/C5603AQGhy6Um3CWGRA/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=h0IN0Y_mzyHY_82RtffRVax7rQG5TVFrZsHTTMO7fqg",
+    "photo": "https://s3.amazonaws.com/linkup-photos/2e270284-0f34-4efb-900b-c7bb3f391e32.png",
     "document_type": 2,
     "document_number": "246123423",
     "img_document_number": null,
@@ -565,7 +1126,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-08T20:11:50.434Z",
-    "nick": "Bob32",
+    "nick": "Luis Alejandro Laurente",
     "email_exact": "test.user@mail.com",
     "telephone": "921471559",
     "cellphone": "921471559",
@@ -581,7 +1142,7 @@
     "updated_at": "2018-03-08T20:11:50.465Z",
     "nationality": 1,
     "role": 2,
-    "address": 8,
+    "address": 28,
     "residence_country": 1,
     "foreign_address": "",
     "key": "",
@@ -590,49 +1151,6 @@
     "user_permissions": []
   }
 },
-
-
-
-{
-  "model": "api.user",
-  "pk": 5,
-  "fields": {
-    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "impuestos@mail.com",
-    "first_name": "Carlos",
-    "last_name": "Alfaro Canterac",
-    "email": "",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "emoranNick",
-    "email_exact": "impuestos@mail.com",
-    "telephone": "000231123",
-    "cellphone": "00012231",
-    "code_telephone": null,
-    "code_cellphone": null,
-    "photo": "https://media.licdn.com/dms/image/C4D03AQHsGnu-OWHkdA/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=M6naZAU0nJaF99CQUkBD7fkrIJg7esFaLWul0zaKpuE",
-    "document_type": 1,
-    "document_number": "246125822",
-    "img_document_number": null,
-    "ruc": "316674344",
-    "code": "E246125822",
-    "anonymous": true,
-    "updated_at": "2018-03-05T21:35:01.071Z",
-    "nationality": 1,
-    "role": 3,
-    "address": 8,
-    "residence_country": 1,
-    "foreign_address": null,
-    "key": "QHDLZI8E5R",
-    "status": 1,
-    "groups": [],
-    "user_permissions": []
-  }
-},
-
 {
   "model": "api.user",
   "pk": 14,
@@ -647,13 +1165,13 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-02-07T17:09:39.233Z",
-    "nick": "accounting ML",
+    "nick": "Oscar Aller Rojas",
     "email_exact": "contabilidad@mail.com",
     "telephone": "9213223131231",
     "cellphone": "1231231",
     "code_telephone": null,
     "code_cellphone": null,
-    "photo": "https://media.licdn.com/dms/image/C4E03AQFOTVopBhh_DQ/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=GsdX_ftvbFYVcfkTWuQhzR4bNyZJLb_31URhXdEywAw",
+    "photo": "https://s3.amazonaws.com/linkup-photos/96468a39-c5b1-4542-bd73-1b612d956b29.png",
     "document_type": 1,
     "document_number": "32145672",
     "img_document_number": "",
@@ -686,7 +1204,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:34:36.604Z",
-    "nick": "taxlaw ML",
+    "nick": "Eduardo Alvarez Abanto",
     "email_exact": "derechotributario@mail.com",
     "telephone": "921471559",
     "cellphone": "921471559",
@@ -719,19 +1237,19 @@
     "last_login": null,
     "is_superuser": false,
     "username": "finanzas@mail.com",
-    "first_name": "Luisa",
+    "first_name": "Luis",
     "last_name": "Alvarez Benaute",
     "email": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Luis Alvarez Benaute",
     "email_exact": "finanzas@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
     "code_telephone": null,
     "code_cellphone": null,
-    "photo": "https://media.licdn.com/dms/image/C4D03AQGNIW06tSfMJw/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=eE2CS2Ji-rPIUjqHALh41BN7KzO3oVb45WpqjSiNMic",
+    "photo": "https://s3.amazonaws.com/linkup-photos/45e6302c-76bb-4f85-9a42-f6cfd6607894.png",
     "document_type": 1,
     "document_number": "41908170",
     "img_document_number": "",
@@ -764,7 +1282,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:27.538Z",
-    "nick": "insurance ML",
+    "nick": "Patricia Amado Alviz",
     "email_exact": "seguros@mail.com",
     "telephone": "9214715593",
     "cellphone": "9214715592",
@@ -803,7 +1321,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-02-07T17:09:39.233Z",
-    "nick": "corporatelaw ML",
+    "nick": "Julio Anchiraico Trujillo",
     "email_exact": "derechocorporativo@mail.com",
     "telephone": "9213223131231",
     "cellphone": "1231231",
@@ -842,7 +1360,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "foreigntrade ML",
+    "nick": "Leidiluz Aparicio Arcondo",
     "email_exact": "comercioexterior@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -881,7 +1399,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-08T21:02:15.150Z",
-    "nick": "informationtechnology ML",
+    "nick": "Lenny Araca Quispe",
     "email_exact": "tecnologiadelainformacion@mail.com",
     "telephone": "00023123",
     "cellphone": "0001231",
@@ -920,7 +1438,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2017-10-02T21:17:37.995Z",
-    "nick": "intellectualproperty ML",
+    "nick": "Wilmer Arana Ccencho",
     "email_exact": "propiedadintelectual@mail.com",
     "telephone": "",
     "cellphone": "",
@@ -959,7 +1477,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-02-07T17:09:39.233Z",
-    "nick": "advertising ML",
+    "nick": "Elizabeth Arce Araujo",
     "email_exact": "publicidad@mail.com",
     "telephone": "9213223131231",
     "cellphone": "1231231",
@@ -998,7 +1516,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:34:36.604Z",
-    "nick": "organizationalpsychology ML",
+    "nick": "Dangelo Ardiles Aybar",
     "email_exact": "psicologiaorganizacional@mail.com",
     "telephone": "921471559",
     "cellphone": "921471559",
@@ -1037,7 +1555,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "contractingwiththestate ML",
+    "nick": "Milos Arevalo Najar",
     "email_exact": "contratacionesconelestado@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -1076,7 +1594,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:27.538Z",
-    "nick": "marketing ML",
+    "nick": "Joel Arias Enriquez",
     "email_exact": "marketing@mail.com",
     "telephone": "9214715593",
     "cellphone": "9214715592",
@@ -1115,7 +1633,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-02-07T17:09:39.233Z",
-    "nick": "mechanics ML",
+    "nick": "Jorge Armas Valdivia",
     "email_exact": "mecanica@mail.com",
     "telephone": "9213223131231",
     "cellphone": "1231231",
@@ -1154,7 +1672,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "notaryandregistrylaw ML",
+    "nick": "Angel Arones Cisneros",
     "email_exact": "derechonotarialyregistral@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -1193,7 +1711,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-08T21:02:15.150Z",
-    "nick": "projectmanagement ML",
+    "nick": "Jimmy Aroni Huaman",
     "email_exact": "gestiondeproyectos@mail.com",
     "telephone": "00023123",
     "cellphone": "0001231",
@@ -1232,7 +1750,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2017-10-02T21:17:37.995Z",
-    "nick": "electricity ML",
+    "nick": "Hector Aroquipa Velasquez",
     "email_exact": "electricidad@mail.com",
     "telephone": "",
     "cellphone": "",
@@ -1271,7 +1789,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-02-07T17:09:39.233Z",
-    "nick": "civilprocedurallaw ML",
+    "nick": "Javier Arostegui Ortiz",
     "email_exact": "derechoprocesalcivil@mail.com",
     "telephone": "9213223131231",
     "cellphone": "1231231",
@@ -1310,13 +1828,13 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:34:36.604Z",
-    "nick": "agroindustry ML",
+    "nick": "Waldo Arteaga Flores",
     "email_exact": "agroindustria@mail.com",
     "telephone": "921471559",
     "cellphone": "921471559",
     "code_telephone": 18,
     "code_cellphone": 1,
-    "photo": "https://media.licdn.com/dms/image/C4E03AQGc9dgidAHyiA/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=GCVgCmWBsFCsF98MMbnMukWc78ztfuD1lFq3HBMYYKQ",
+    "photo": "https://s3.amazonaws.com/linkup-photos/ccac3f6f-7878-4168-b3b2-f8bfb7bd710e.png",
     "document_type": 2,
     "document_number": "321456719",
     "img_document_number": "",
@@ -1349,7 +1867,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "electronics ML",
+    "nick": "Victor Ascue Morales",
     "email_exact": "electronica@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -1383,12 +1901,12 @@
     "is_superuser": false,
     "username": "derechopenal@mail.com",
     "first_name": "Elizabeth",
-    "last_name": "AstupiÑA Figueroa",
+    "last_name": "Astupi\u00d1A Figueroa",
     "email": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:27.538Z",
-    "nick": "criminallaw ML",
+    "nick": "Elizabeth Astupi\u00d1A Figueroa",
     "email_exact": "derechopenal@mail.com",
     "telephone": "9214715593",
     "cellphone": "9214715592",
@@ -1427,13 +1945,13 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-02-07T17:09:39.233Z",
-    "nick": "food ML",
+    "nick": "Margot Ayala Barreto",
     "email_exact": "alimentaria@mail.com",
     "telephone": "9213223131231",
     "cellphone": "1231231",
     "code_telephone": null,
     "code_cellphone": null,
-    "photo": "https://media.licdn.com/dms/image/C4E03AQHsytz_hIHfyA/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=yERkMwv1qNBzVVLb1qoudCBNj1pmatLbOLAUhDlC4jQ",
+    "photo": "https://s3.amazonaws.com/linkup-photos/bdc6b535-9f2f-4956-84ff-b7819b782189.png",
     "document_type": 1,
     "document_number": "321456722",
     "img_document_number": "",
@@ -1466,13 +1984,13 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "automation ML",
+    "nick": "Jose Barboza Delgado",
     "email_exact": "automatizacion@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
     "code_telephone": null,
     "code_cellphone": null,
-    "photo": "https://media.licdn.com/dms/image/C5603AQF-Rej6azdzMw/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=uVkQ9x8zUB4Li2--brlb4A8G_T_lrkp-_jTV8-C3ywQ",
+    "photo": "https://s3.amazonaws.com/linkup-photos/14ee77a5-836f-4840-a82c-d57a20b5c3f6.png",
     "document_type": 1,
     "document_number": "321456723",
     "img_document_number": "",
@@ -1505,7 +2023,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-08T21:02:15.150Z",
-    "nick": "laborlaw ML",
+    "nick": "Patricia Barinotto Roncal",
     "email_exact": "derecholaboral@mail.com",
     "telephone": "00023123",
     "cellphone": "0001231",
@@ -1544,13 +2062,13 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-02-07T17:09:39.233Z",
-    "nick": "gastronomy ML",
+    "nick": "Jose Behr Montesinos",
     "email_exact": "gastronomia@mail.com",
     "telephone": "9213223131231",
     "cellphone": "1231231",
     "code_telephone": null,
     "code_cellphone": null,
-    "photo": "https://media.licdn.com/dms/image/C4E03AQEzILuE2rn8yA/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=FCZIayMO_5rX2Yw2Z9bzhgd3Xp4Js2Q8jq6TitUgkOc",
+    "photo": "https://s3.amazonaws.com/linkup-photos/bd22a3a8-1999-4f18-bfd7-377cc22762d9.png",
     "document_type": 1,
     "document_number": "321456725",
     "img_document_number": "",
@@ -1583,7 +2101,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "plastics ML",
+    "nick": "Isabel Bejarano Alva",
     "email_exact": "plasticos@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -1622,7 +2140,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-08T21:02:15.150Z",
-    "nick": "mininglaw ML",
+    "nick": "Ivan Beltran Ccama",
     "email_exact": "derechominero@mail.com",
     "telephone": "00023123",
     "cellphone": "0001231",
@@ -1661,7 +2179,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:34:36.604Z",
-    "nick": "cteresanick",
+    "nick": "Juan Bengoa Seminario",
     "email_exact": "cgarcia@mail.com",
     "telephone": "9214715593",
     "cellphone": "9214715593",
@@ -1700,7 +2218,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "eteresaNick",
+    "nick": "Jorge Benites Salazar",
     "email_exact": "egarcia@mail.com",
     "telephone": "0002311233",
     "cellphone": "0002311233",
@@ -1739,7 +2257,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:27.538Z",
-    "nick": "vteresanick",
+    "nick": "Edgard Bermejo Lopez",
     "email_exact": "vgarcia@mail.com",
     "telephone": "92147155933",
     "cellphone": "92147155933",
@@ -1772,13 +2290,13 @@
     "last_login": null,
     "is_superuser": false,
     "username": "finanzas2@mail.com",
-    "first_name": "Angela",
+    "first_name": "Angel",
     "last_name": "Berrocal Pomalima",
     "email": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Angel Berrocal Pomalima",
     "email_exact": "finanzas2@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -1811,13 +2329,13 @@
     "last_login": null,
     "is_superuser": false,
     "username": "finanzas3@mail.com",
-    "first_name": "ZezÉ",
+    "first_name": "Zez\u00c9",
     "last_name": "Bravo Gutierrez",
     "email": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Zez\u00c9 Bravo Gutierrez",
     "email_exact": "finanzas3@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -1850,13 +2368,13 @@
     "last_login": null,
     "is_superuser": false,
     "username": "finanzas4@mail.com",
-    "first_name": "Katherine",
+    "first_name": "Karl",
     "last_name": "Briones Gutierrez",
     "email": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Karl Briones Gutierrez",
     "email_exact": "finanzas4@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -1890,12 +2408,12 @@
     "is_superuser": false,
     "username": "finanzas5@mail.com",
     "first_name": "Gloria",
-    "last_name": "Bustamante CÁRdenas",
+    "last_name": "Bustamante C\u00c1Rdenas",
     "email": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Gloria Bustamante C\u00c1Rdenas",
     "email_exact": "finanzas5@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -1934,7 +2452,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Jorge Cabrejos Hurtado",
     "email_exact": "finanzas1@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -1973,7 +2491,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Geovana Calisaya Quispe",
     "email_exact": "finanzas6@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2006,13 +2524,13 @@
     "last_login": null,
     "is_superuser": false,
     "username": "finanzas7@mail.com",
-    "first_name": "Cristy",
+    "first_name": "Cris",
     "last_name": "Calla Alarcon",
     "email": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Cris Calla Alarcon",
     "email_exact": "finanzas7@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2045,13 +2563,13 @@
     "last_login": null,
     "is_superuser": false,
     "username": "finanzas8@mail.com",
-    "first_name": "Jhonatan",
+    "first_name": "Yenifer",
     "last_name": "Calle Cardenas",
     "email": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Yenifer Calle Cardenas",
     "email_exact": "finanzas8@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2084,13 +2602,13 @@
     "last_login": null,
     "is_superuser": false,
     "username": "finanzas9@mail.com",
-    "first_name": "Diana",
+    "first_name": "Diego",
     "last_name": "Cancho Bautista",
     "email": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Diego Cancho Bautista",
     "email_exact": "finanzas9@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2123,13 +2641,13 @@
     "last_login": null,
     "is_superuser": false,
     "username": "finanzas10@mail.com",
-    "first_name": "Carlos",
-    "last_name": "Canto BalbÍN",
+    "first_name": "Carla",
+    "last_name": "Canto Balb\u00cdN",
     "email": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Carla Canto Balb\u00cdN",
     "email_exact": "finanzas10@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2168,7 +2686,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Cesar Cardenas Lino",
     "email_exact": "finanzas11@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2207,7 +2725,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Pezo Carlos Del",
     "email_exact": "finanzas12@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2231,27 +2749,241 @@
     "groups": [],
     "user_permissions": []
   }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-,
+},
+{
+  "model": "api.user",
+  "pk": 59,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$YtJX9YmYhpc4$pYsmJu42LWbRNMx+CUeMOEN1c+bWLMCOdj4p7qvj+T8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sebastian@mail.com",
+    "first_name": "sebastian",
+    "last_name": "suntur",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-08-16T15:34:50.685Z",
+    "nick": "sebastian suntur",
+    "email_exact": "sebastian@mail.com",
+    "telephone": "9211559",
+    "cellphone": "9214759",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "1.amazonaws.com/static/frontend/img/users/pmoran.jpg",
+    "document_type": 2,
+    "document_number": "230019976",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C230019976",
+    "anonymous": true,
+    "updated_at": "2018-08-16T15:34:50.721Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 10,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 60,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$ykhUqDEIHVPK$oV3Cwbi1xpS+5e2WMVyAJEpOyAWmx/NHfepH0T4Uvoo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "pmoran2102@gmail.com",
+    "first_name": "Pedro Fernando Ernesto",
+    "last_name": "Mor\u00e1n Fiorini",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-27T00:58:44.901Z",
+    "nick": "Pedro Fernando Ernesto Mor\u00e1n Fiorini",
+    "email_exact": "pmoran2102@gmail.com",
+    "telephone": "14356727",
+    "cellphone": "998227096",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "http://ec2-34-236-250-113.compute-1.amazonaws.com/static/frontend/img/users/pmoran.jpg",
+    "document_type": 1,
+    "document_number": "07834119",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C07834119",
+    "anonymous": true,
+    "updated_at": "2018-03-27T00:58:44.937Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 10,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 61,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$dOcVoizxt5g1$abv09uMIlPz1etI8bKPwN9NJFentlq6G34CII+nAOCA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "tgarciagamero@gmail.com",
+    "first_name": "Mar\u00eda Teresa",
+    "last_name": "Garc\u00eda Gamero",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-28T16:30:24.336Z",
+    "nick": "Mar\u00eda Teresa Garc\u00eda Gamero",
+    "email_exact": "tgarciagamero@gmail.com",
+    "telephone": "",
+    "cellphone": "938117111",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "http://ec2-34-236-250-113.compute-1.amazonaws.com/static/frontend/img/users/tgarcia.jpg",
+    "document_type": 1,
+    "document_number": "71995174",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C71995174",
+    "anonymous": true,
+    "updated_at": "2018-03-28T16:30:24.370Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 11,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": null,
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 62,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$HWsu2FgygJ3j$Awmk3neS51VWUDNsBSu0bi2VY2P8waCPNznFy4gEBc8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ben@mail.com",
+    "first_name": "ben",
+    "last_name": "torres",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-08-17T15:05:30.447Z",
+    "nick": "ben ben",
+    "email_exact": "ben@mail.com",
+    "telephone": "",
+    "cellphone": "",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://s3.amazonaws.com/linkup-photos/e36d9d4e-4972-4395-a640-4f86154f85ef.png",
+    "document_type": 1,
+    "document_number": "00000012",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C00000012",
+    "anonymous": true,
+    "updated_at": "2018-08-17T15:05:30.484Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 12,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 63,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$tABcchoZGWMM$n+AyhXUCbLHgExBsB/tYqs6LL2brEHfYQhy8jZlmWj8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "pruebas@mail.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "pruebas@mail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-08-17T15:06:12.442Z",
+    "nick": " ",
+    "email_exact": "pruebas@mail.com",
+    "telephone": "",
+    "cellphone": "",
+    "code_telephone": 4,
+    "code_cellphone": 4,
+    "photo": "https://s3.amazonaws.com/linkup-photos/e5f7dbb2-d0e1-4ae3-86a0-0dcea2a47ccd.png",
+    "document_type": 2,
+    "document_number": "9469619492",
+    "img_document_number": null,
+    "ruc": "2961956",
+    "code": "C2961956",
+    "anonymous": true,
+    "updated_at": "2018-08-17T15:06:12.476Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 16,
+    "residence_country": 1,
+    "foreign_address": "Calle boulevaed",
+    "key": null,
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 64,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$YBukjNaxZve8$jaGsbZ8Vm5Rc0bI/Y6OleQVKpPvTEqzUN9QJi7zx2Eg=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "aaaa@mail.com",
+    "first_name": "jose",
+    "last_name": "gamero",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-08-17T16:03:23.638Z",
+    "nick": "jsjsjs jwjsjw",
+    "email_exact": "aaaa@mail.com",
+    "telephone": "",
+    "cellphone": "",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://s3.amazonaws.com/linkup-photos/c3d66cd8-6fef-4e5d-9d0a-1af2f2c19bb3.png",
+    "document_type": 1,
+    "document_number": "12455555",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "C12455555",
+    "anonymous": true,
+    "updated_at": "2018-08-17T16:03:23.672Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 19,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
 {
   "model": "api.user",
   "pk": 65,
@@ -2266,7 +2998,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Ysabel Carmin Isidro",
     "email_exact": "oscar@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2300,12 +3032,12 @@
     "is_superuser": false,
     "username": "darwin@mail.com",
     "first_name": "Flor",
-    "last_name": "CastaÑEda Alfonso",
+    "last_name": "Casta\u00d1Eda Alfonso",
     "email": "",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Flor Casta\u00d1Eda Alfonso",
     "email_exact": "darwin@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2344,7 +3076,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Mayra Castro Correa",
     "email_exact": "jose@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2383,7 +3115,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Alberto Castro Jara",
     "email_exact": "juan@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2422,7 +3154,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Edgar Ccanchi Condori",
     "email_exact": "benito@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2461,7 +3193,7 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2018-03-05T21:35:00.992Z",
-    "nick": "finance ML",
+    "nick": "Reynaldo Cervantes Bravo",
     "email_exact": "ana@mail.com",
     "telephone": "000231123",
     "cellphone": "00012231",
@@ -2485,195 +3217,202 @@
     "groups": [],
     "user_permissions": []
   }
-}
-
-
-
-
-,
+},
 {
-  "model": "api.client",
-  "pk": 65,
+  "model": "api.user",
+  "pk": 71,
   "fields": {
-    "type_client": "n",
-    "sex": "m",
-    "commercial_reason": "",
-    "civil_state": "s",
-    "birthdate": "1992-09-19",
-    "ciiu": 2,
-    "activity_description": "Loremp iptsum",
-    "institute": "UPC",
-    "ocupation": 1,
-    "about": "iptsum aabout",
-    "business_name": "",
-    "agent_firstname": "",
-    "agent_lastname": "",
-    "position": "",
-    "profession": "Gerente de Ventas",
-    "economic_sector": null,
-    "level_instruction": 1,
-    "seller_assigned": null,
+    "password": "pbkdf2_sha256$36000$3axk64KOSIVE$2CI3f8s1Tde2zm3A8iQRA+2mguB4aFj3Bf71PhN/p9k=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "cardsilplast@mail.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-09-10T20:01:50.205Z",
+    "nick": " ",
+    "email_exact": "cardsilplast@mail.com",
+    "telephone": "97846666",
+    "cellphone": "67549999",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://s3.amazonaws.com/linkup-photos/5c9719c9-ea44-4036-a0e7-baa246a3628f.png",
+    "document_type": 1,
+    "document_number": "7423111",
+    "img_document_number": null,
+    "ruc": "20521663147",
+    "code": "C20521663147",
+    "anonymous": true,
+    "updated_at": "2018-09-10T20:01:50.243Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 22,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
 },
 {
-  "model": "api.client",
-  "pk": 66,
+  "model": "api.user",
+  "pk": 72,
   "fields": {
-    "type_client": "n",
-    "sex": "m",
-    "commercial_reason": "",
-    "civil_state": "s",
-    "birthdate": "1992-09-19",
-    "ciiu": 2,
-    "activity_description": "Loremp iptsum",
-    "institute": "UPC",
-    "ocupation": 1,
-    "about": "iptsum aabout",
-    "business_name": "",
-    "agent_firstname": "",
-    "agent_lastname": "",
-    "position": "",
-    "profession": "Gerente de Ventas",
-    "economic_sector": null,
-    "level_instruction": 1,
-    "seller_assigned": null,
+    "password": "pbkdf2_sha256$36000$lTNV4yD25oAv$+Sm/7hC/WUvocfWGS3/dX92A/u7Rl76Vex/G/kDBtMI=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "efrctivo@mail.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-09-10T21:09:12.435Z",
+    "nick": " ",
+    "email_exact": "efrctivo@mail.com",
+    "telephone": "",
+    "cellphone": "",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://s3.amazonaws.com/linkup-photos/09651ad4-a880-42a9-902f-61a2ce67ece1.png",
+    "document_type": 1,
+    "document_number": "00151463",
+    "img_document_number": null,
+    "ruc": "10752040011",
+    "code": "C10752040011",
+    "anonymous": true,
+    "updated_at": "2018-09-10T21:09:12.469Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 24,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
 },
 {
-  "model": "api.client",
-  "pk": 67,
+  "model": "api.user",
+  "pk": 73,
   "fields": {
-    "type_client": "n",
-    "sex": "m",
-    "commercial_reason": "",
-    "civil_state": "s",
-    "birthdate": "1992-09-19",
-    "ciiu": 2,
-    "activity_description": "Loremp iptsum",
-    "institute": "UPC",
-    "ocupation": 1,
-    "about": "iptsum aabout",
-    "business_name": "",
-    "agent_firstname": "",
-    "agent_lastname": "",
-    "position": "",
-    "profession": "Gerente de Ventas",
-    "economic_sector": null,
-    "level_instruction": 1,
-    "seller_assigned": null,
+    "password": "pbkdf2_sha256$36000$sQWQOY0AVeaV$+zPT97uDlM4LO9Uqizwute30zcJhB94MvTAKiFQZV2o=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ana.marquez.n@mail.com",
+    "first_name": "Ana",
+    "last_name": "Marquez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-09-10T21:12:37.819Z",
+    "nick": "Ana Marquez",
+    "email_exact": "ana.marquez.n@mail.com",
+    "telephone": "nil",
+    "cellphone": "nil",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://s3.amazonaws.com/linkup-photos/a28409bc-032c-486e-824b-ea372741b304.png",
+    "document_type": 2,
+    "document_number": "453645",
+    "img_document_number": null,
+    "ruc": null,
+    "code": "VEC453645",
+    "anonymous": true,
+    "updated_at": "2018-09-10T21:12:37.853Z",
+    "nationality": 241,
+    "role": 2,
+    "address": 25,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": null,
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
 },
 {
-  "model": "api.client",
-  "pk": 68,
+  "model": "api.user",
+  "pk": 74,
   "fields": {
-    "type_client": "n",
-    "sex": "m",
-    "commercial_reason": "",
-    "civil_state": "s",
-    "birthdate": "1992-09-19",
-    "ciiu": 2,
-    "activity_description": "Loremp iptsum",
-    "institute": "UPC",
-    "ocupation": 1,
-    "about": "iptsum aabout",
-    "business_name": "",
-    "agent_firstname": "",
-    "agent_lastname": "",
-    "position": "",
-    "profession": "Gerente de Ventas",
-    "economic_sector": null,
-    "level_instruction": 1,
-    "seller_assigned": null,
+    "password": "pbkdf2_sha256$36000$O5jlasrkH9GR$zcXQzXvNwemc6Ri1+Fv4SKYz2qRJAHA7MC7ARF/xtj8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "oscarjos32elopez26@gmail.com",
+    "first_name": "Oscar",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-09-18T17:15:28.256Z",
+    "nick": null,
+    "email_exact": "oscarjos32elopez26@gmail.com",
+    "telephone": null,
+    "cellphone": "931833282",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": 2,
+    "document_number": "143769516",
+    "img_document_number": null,
+    "ruc": "143769516",
+    "code": "E143769516",
+    "anonymous": true,
+    "updated_at": "2018-09-18T17:15:28.293Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 30,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
 },
 {
-  "model": "api.client",
-  "pk": 69,
+  "model": "api.user",
+  "pk": 75,
   "fields": {
-    "type_client": "n",
-    "sex": "m",
-    "commercial_reason": "",
-    "civil_state": "s",
-    "birthdate": "1992-09-19",
-    "ciiu": 2,
-    "activity_description": "Loremp iptsum",
-    "institute": "UPC",
-    "ocupation": 1,
-    "about": "iptsum aabout",
-    "business_name": "",
-    "agent_firstname": "",
-    "agent_lastname": "",
-    "position": "",
-    "profession": "Gerente de Ventas",
-    "economic_sector": null,
-    "level_instruction": 1,
-    "seller_assigned": null,
+    "password": "pbkdf2_sha256$36000$pq4bBZAbFIVX$NV+C7U4i+We0YONA2tA1T1IVKhdajOrtWjTts/qtjAY=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "osca3333rjoselopez26@gmail.com",
+    "first_name": "Oscar",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-09-18T17:16:20.292Z",
+    "nick": "123123",
+    "email_exact": "osca3333rjoselopez26@gmail.com",
+    "telephone": null,
+    "cellphone": "931833282",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": 2,
+    "document_number": "14376951633",
+    "img_document_number": null,
+    "ruc": "143769516333",
+    "code": "E14376951633",
+    "anonymous": true,
+    "updated_at": "2018-09-18T17:16:20.326Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 31,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
     "groups": [],
     "user_permissions": []
   }
 },
-{
-  "model": "api.client",
-  "pk": 70,
-  "fields": {
-    "type_client": "n",
-    "sex": "m",
-    "commercial_reason": "",
-    "civil_state": "s",
-    "birthdate": "1992-09-19",
-    "ciiu": 2,
-    "activity_description": "Loremp iptsum",
-    "institute": "UPC",
-    "ocupation": 1,
-    "about": "iptsum aabout",
-    "business_name": "",
-    "agent_firstname": "",
-    "agent_lastname": "",
-    "position": "",
-    "profession": "Gerente de Ventas",
-    "economic_sector": null,
-    "level_instruction": 1,
-    "seller_assigned": null,
-    "groups": [],
-    "user_permissions": []
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-,
 {
   "model": "api.seller",
   "pk": 6,
@@ -2685,17 +3424,6 @@
     "user_permissions": []
   }
 },
-
-
-
-
-
-
-
-
-
-
-
 {
   "model": "api.specialist",
   "pk": 5,
@@ -3241,137 +3969,31 @@
     "groups": [],
     "user_permissions": []
   }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-,
-{
-  "model": "api.client",
-  "pk": 3,
-  "fields": {
-    "type_client": "b",
-    "sex": "m",
-    "commercial_reason": "alpaneted",
-    "civil_state": "c",
-    "birthdate": "1991-02-05",
-    "ciiu": 5,
-    "activity_description": "123131232321",
-    "institute": "",
-    "ocupation": 7,
-    "about": "1231231231231232123",
-    "business_name": "alpanet",
-    "agent_firstname": "Oscar",
-    "agent_lastname": "Lopez",
-    "position": "Gerente en Ventas",
-    "profession": "",
-    "economic_sector": 5,
-    "level_instruction": null,
-    "seller_assigned": null,
-    "groups": [],
-    "user_permissions": []
-  }
 },
 {
-  "model": "api.client",
-  "pk": 4,
+  "model": "api.specialist",
+  "pk": 74,
   "fields": {
-    "type_client": "n",
-    "sex": "m",
-    "commercial_reason": null,
-    "civil_state": "s",
-    "birthdate": "1992-09-19",
-    "ciiu": 2,
-    "activity_description": "Loremp iptsum",
-    "institute": "UPC",
-    "ocupation": 1,
-    "about": "iptsum aabout",
-    "business_name": null,
-    "agent_firstname": null,
-    "agent_lastname": null,
-    "position": null,
-    "profession": "Gerente de Ventas",
-    "economic_sector": null,
-    "level_instruction": 1,
-    "seller_assigned": null,
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "api.client",
-  "pk": 12,
-  "fields": {
-    "type_client": "n",
-    "sex": "m",
-    "commercial_reason": "",
-    "civil_state": "s",
-    "birthdate": "1992-09-19",
-    "ciiu": 2,
-    "activity_description": "Loremp iptsum",
-    "institute": "UPC",
-    "ocupation": 1,
-    "about": "iptsum aabout",
-    "business_name": "",
-    "agent_firstname": "",
-    "agent_lastname": "",
-    "position": "",
-    "profession": "Gerente de Ventas",
-    "economic_sector": null,
-    "level_instruction": 1,
-    "seller_assigned": null,
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{  "model": "api.seller",
-  "pk": 6,
-  "fields": {
+    "business_name": "obz",
+    "type_specialist": "a",
+    "star_rating": null,
     "cv": null,
-    "zone": null,
-    "ciiu": 14,
+    "payment_per_answer": "1.00",
+    "category": 1,
     "groups": [],
     "user_permissions": []
   }
 },
 {
-  "model": "api.client",
-  "pk": 42,
+  "model": "api.specialist",
+  "pk": 75,
   "fields": {
-    "type_client": "n",
-    "sex": "f",
-    "commercial_reason": "",
-    "civil_state": "s",
-    "birthdate": "1992-09-19",
-    "ciiu": 2,
-    "activity_description": "Loremp iptsum",
-    "institute": "UPC",
-    "ocupation": 1,
-    "about": "iptsum aabout",
-    "business_name": "",
-    "agent_firstname": "",
-    "agent_lastname": "",
-    "position": "",
-    "profession": "",
-    "economic_sector": null,
-    "level_instruction": 1,
-    "seller_assigned": null,
+    "business_name": "obz",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": null,
+    "payment_per_answer": "1.00",
+    "category": 1,
     "groups": [],
     "user_permissions": []
   }
@@ -3381,16 +4003,16 @@
   "pk": 1,
   "fields": {
     "expiration_date": "2019-05-29",
-    "validity_months": 3,
-    "available_queries": 6,
-    "query_quantity": 6,
-    "activation_date": null,
-    "is_active": false,
     "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": true,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 1
   }
@@ -3400,16 +4022,16 @@
   "pk": 2,
   "fields": {
     "expiration_date": "2019-09-03",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": "2018-03-05",
     "is_active": false,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 2
   }
@@ -3419,16 +4041,16 @@
   "pk": 3,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": false,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 3
   }
@@ -3438,16 +4060,16 @@
   "pk": 4,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": false,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 4
   }
@@ -3457,16 +4079,16 @@
   "pk": 5,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": false,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 5
   }
@@ -3476,16 +4098,16 @@
   "pk": 6,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-  "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 6
   }
@@ -3495,16 +4117,16 @@
   "pk": 7,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 7
   }
@@ -3514,16 +4136,16 @@
   "pk": 8,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 1,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 8
   }
@@ -3533,16 +4155,16 @@
   "pk": 9,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 9
   }
@@ -3552,16 +4174,16 @@
   "pk": 10,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-  "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 10
   }
@@ -3571,16 +4193,16 @@
   "pk": 11,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 11
   }
@@ -3590,16 +4212,16 @@
   "pk": 12,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 12
   }
@@ -3609,16 +4231,16 @@
   "pk": 13,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-      "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 13
   }
@@ -3628,16 +4250,16 @@
   "pk": 14,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 14
   }
@@ -3647,16 +4269,16 @@
   "pk": 15,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 15
   }
@@ -3666,16 +4288,16 @@
   "pk": 16,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 16
   }
@@ -3685,16 +4307,16 @@
   "pk": 17,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 17
   }
@@ -3704,16 +4326,16 @@
   "pk": 18,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-      "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 18
   }
@@ -3723,16 +4345,16 @@
   "pk": 19,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-  "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 19
   }
@@ -3742,16 +4364,16 @@
   "pk": 20,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 20
   }
@@ -3761,16 +4383,16 @@
   "pk": 21,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 21
   }
@@ -3780,16 +4402,16 @@
   "pk": 22,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-  "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 22
   }
@@ -3799,16 +4421,16 @@
   "pk": 23,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 23
   }
@@ -3818,16 +4440,16 @@
   "pk": 24,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-  "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 24
   }
@@ -3837,16 +4459,16 @@
   "pk": 25,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 25
   }
@@ -3856,16 +4478,16 @@
   "pk": 26,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-  "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 26
   }
@@ -3875,16 +4497,16 @@
   "pk": 27,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 6,
-    "query_quantity": 6,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 27
   }
@@ -3894,489 +4516,398 @@
   "pk": 28,
   "fields": {
     "expiration_date": "2019-05-15",
-    "validity_months": 6,
-    "available_queries": 172,
-    "query_quantity": 172,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
     "activation_date": null,
     "is_active": true,
-    "queries_to_pay": 0,
     "available_requeries": 2,
     "maximum_response_time": 24,
     "acquired_at": "2018-02-08T14:48:37Z",
-    "plan_name": "Minipack",
+    "plan_name": "Express Duo",
     "query_plans": 2,
     "sale_detail": 28
   }
 },
-
-
-
-
 {
-  "model": "api.queryplansclient",
-  "pk": 1,
+  "model": "api.queryplansacquired",
+  "pk": 29,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 1,
-    "client": 3,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": "2019-04-09",
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-16T15:34:50.903Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 29
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 2,
+  "model": "api.queryplansacquired",
+  "pk": 30,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 2,
-    "client": 3,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": "2019-04-09",
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": "2018-08-17",
+    "is_active": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-17T15:05:30.711Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 30
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 3,
+  "model": "api.queryplansacquired",
+  "pk": 31,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 3,
-    "client": 4,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": "2019-04-09",
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": "2018-08-17",
+    "is_active": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-17T15:06:12.628Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 31
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 4,
+  "model": "api.queryplansacquired",
+  "pk": 32,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 4,
-    "client": 4,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": "2019-04-09",
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": "2018-08-17",
+    "is_active": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-17T15:41:42.595Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 30
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 5,
+  "model": "api.queryplansacquired",
+  "pk": 33,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 5,
-    "client": 4,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": "2019-04-09",
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": "2018-08-20",
+    "is_active": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-20T18:03:34.973Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 32
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 6,
+  "model": "api.queryplansacquired",
+  "pk": 34,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 6,
-    "client": 4,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": "2019-04-09",
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": "2018-08-20",
+    "is_active": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-20T19:48:08.013Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 33
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 7,
+  "model": "api.queryplansacquired",
+  "pk": 35,
   "fields": {
-    "is_chosen": true,
-    "acquired_plan": 7,
-    "client": 4,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": "2019-04-09",
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": "2018-08-20",
+    "is_active": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-08-20T19:52:46.909Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 34
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 8,
+  "model": "api.queryplansacquired",
+  "pk": 36,
   "fields": {
-    "is_chosen": true,
-    "acquired_plan": 8,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 1,
+    "available_queries": 1,
+    "query_quantity": 1,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T19:37:08.579Z",
+    "plan_name": "Express",
+    "query_plans": 1,
+    "sale_detail": 35
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 9,
+  "model": "api.queryplansacquired",
+  "pk": 37,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 9,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 3,
+    "available_queries": 12,
+    "query_quantity": 12,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T20:03:59.686Z",
+    "plan_name": "Polypack",
+    "query_plans": 4,
+    "sale_detail": 36
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 10,
+  "model": "api.queryplansacquired",
+  "pk": 38,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 10,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 4,
+    "available_queries": 20,
+    "query_quantity": 20,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T20:03:59.700Z",
+    "plan_name": "Multipack",
+    "query_plans": 5,
+    "sale_detail": 37
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 11,
+  "model": "api.queryplansacquired",
+  "pk": 39,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 11,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 2,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T20:18:01.012Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 38
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 12,
+  "model": "api.queryplansacquired",
+  "pk": 40,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 12,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 3,
+    "available_queries": 12,
+    "query_quantity": 12,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T20:18:01.022Z",
+    "plan_name": "Polypack",
+    "query_plans": 4,
+    "sale_detail": 39
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 13,
+  "model": "api.queryplansacquired",
+  "pk": 41,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 13,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 12,
+    "available_queries": 900,
+    "query_quantity": 900,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T20:35:14.279Z",
+    "plan_name": "Emperador",
+    "query_plans": 9,
+    "sale_detail": 40
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 14,
+  "model": "api.queryplansacquired",
+  "pk": 42,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 14,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 3,
+    "available_queries": 12,
+    "query_quantity": 12,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T20:37:30.507Z",
+    "plan_name": "Polypack",
+    "query_plans": 4,
+    "sale_detail": 41
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 15,
+  "model": "api.queryplansacquired",
+  "pk": 43,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 15,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 6,
+    "query_quantity": 6,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T20:39:06.192Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 42
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 16,
+  "model": "api.queryplansacquired",
+  "pk": 44,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 16,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 4,
+    "available_queries": 20,
+    "query_quantity": 20,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T21:09:44.967Z",
+    "plan_name": "Multipack",
+    "query_plans": 5,
+    "sale_detail": 43
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 17,
+  "model": "api.queryplansacquired",
+  "pk": 45,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 17,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 1,
+    "available_queries": 1,
+    "query_quantity": 1,
+    "activation_date": null,
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T21:09:44.983Z",
+    "plan_name": "Express",
+    "query_plans": 1,
+    "sale_detail": 44
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 18,
+  "model": "api.queryplansacquired",
+  "pk": 46,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 18,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": "2019-04-09",
+    "queries_to_pay": 0,
+    "validity_months": 2,
+    "available_queries": 5,
+    "query_quantity": 6,
+    "activation_date": "2018-09-10",
+    "is_active": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T21:12:38.076Z",
+    "plan_name": "Minipack",
+    "query_plans": 3,
+    "sale_detail": 45
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 19,
+  "model": "api.queryplansacquired",
+  "pk": 47,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 19,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 4,
+    "available_queries": 20,
+    "query_quantity": 20,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T21:19:04.198Z",
+    "plan_name": "Multipack",
+    "query_plans": 5,
+    "sale_detail": 46
   }
 },
 {
-  "model": "api.queryplansclient",
-  "pk": 20,
+  "model": "api.queryplansacquired",
+  "pk": 48,
   "fields": {
-    "is_chosen": false,
-    "acquired_plan": 20,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
-  }
-},
-{
-  "model": "api.queryplansclient",
-  "pk": 21,
-  "fields": {
-    "is_chosen": false,
-    "acquired_plan": 21,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
-  }
-},
-{
-  "model": "api.queryplansclient",
-  "pk": 22,
-  "fields": {
-    "is_chosen": false,
-    "acquired_plan": 22,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
-  }
-},
-{
-  "model": "api.queryplansclient",
-  "pk": 23,
-  "fields": {
-    "is_chosen": false,
-    "acquired_plan": 23,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
-  }
-},
-{
-  "model": "api.queryplansclient",
-  "pk": 24,
-  "fields": {
-    "is_chosen": false,
-    "acquired_plan": 24,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
-  }
-},
-{
-  "model": "api.queryplansclient",
-  "pk": 25,
-  "fields": {
-    "is_chosen": false,
-    "acquired_plan": 25,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
-  }
-},
-{
-  "model": "api.queryplansclient",
-  "pk": 26,
-  "fields": {
-    "is_chosen": false,
-    "acquired_plan": 26,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
-  }
-},
-{
-  "model": "api.queryplansclient",
-  "pk": 27,
-  "fields": {
-    "is_chosen": false,
-    "acquired_plan": 27,
-    "client": 12,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
-  }
-},
-{
-  "model": "api.queryplansclient",
-  "pk": 28,
-  "fields": {
-    "is_chosen": true,
-    "acquired_plan": 28,
-    "client": 42,
-    "owner": true,
-    "transfer": true,
-    "share": true,
-    "empower": true,
-    "status": 1
-  }
-},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{
-  "model": "api.sale",
-  "pk": 1,
-  "fields": {
-    "created_at": "2018-02-08T14:28:25Z",
-    "place": "BCP",
-    "total_amount": "700.00",
-    "reference_number": "CD1000",
-    "description": "Test",
-    "is_fee": true,
-    "client": 3,
-    "seller": null
-  }
-},
-{
-  "model": "api.sale",
-  "pk": 2,
-  "fields": {
-    "created_at": "2018-02-15T14:28:25Z",
-    "place": "BCP",
-    "total_amount": "700.00",
-    "reference_number": "CD1001",
-    "description": "Test2",
-    "is_fee": true,
-    "client": 3,
-    "seller": null
-  }
-},
-{
-  "model": "api.sale",
-  "pk": 3,
-  "fields": {
-    "created_at": "2018-02-08T14:28:25Z",
-    "place": "BCP",
-    "total_amount": "700.00",
-    "reference_number": "CD1002",
-    "description": "Test3",
-    "is_fee": true,
-    "client": 3,
-    "seller": null
-  }
-},
-{
-  "model": "api.sale",
-  "pk": 4,
-  "fields": {
-    "created_at": "2018-02-08T14:28:25Z",
-    "place": "BCP",
-    "total_amount": "700.00",
-    "reference_number": "CD1003",
-    "description": "Test4",
-    "is_fee": true,
-    "client": 3,
-    "seller": null
+    "expiration_date": null,
+    "queries_to_pay": 0,
+    "validity_months": 3,
+    "available_queries": 12,
+    "query_quantity": 12,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T21:21:21.664Z",
+    "plan_name": "Polypack",
+    "query_plans": 4,
+    "sale_detail": 47
   }
 },
 {
@@ -4406,6 +4937,812 @@
   }
 },
 {
+  "model": "oauth2_provider.accesstoken",
+  "pk": 3,
+  "fields": {
+    "user": 62,
+    "token": "EO8mu86jE863zk5g2SkXH25T5oW10u",
+    "application": 1,
+    "expires": "2019-08-12T15:05:51.120Z",
+    "scope": "write groups read",
+    "created": "2018-08-17T15:05:51.120Z",
+    "updated": "2018-08-17T15:05:51.120Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 5,
+  "fields": {
+    "user": 29,
+    "token": "6r8KEZV8Pedj6WzZV8yuuv4QitwuV1",
+    "application": 1,
+    "expires": "2019-08-12T15:11:16.119Z",
+    "scope": "write groups read",
+    "created": "2018-08-17T15:11:16.120Z",
+    "updated": "2018-08-17T15:11:16.120Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 6,
+  "fields": {
+    "user": 57,
+    "token": "1UjLOAkyQv0Y7iZ9I53OnSVlXhUtq1",
+    "application": 1,
+    "expires": "2019-08-12T15:16:04.129Z",
+    "scope": "write groups read",
+    "created": "2018-08-17T15:16:04.130Z",
+    "updated": "2018-08-17T15:16:04.130Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 7,
+  "fields": {
+    "user": 12,
+    "token": "wozYZ28w2eloi1erzr0sKCIz3WOxLa",
+    "application": 1,
+    "expires": "2019-08-12T15:50:59.469Z",
+    "scope": "write groups read",
+    "created": "2018-08-17T15:50:59.469Z",
+    "updated": "2018-08-17T15:50:59.469Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 8,
+  "fields": {
+    "user": 6,
+    "token": "5Pq4A5BE4zPmH3DnG5yFmIGGVp2rAg",
+    "application": 1,
+    "expires": "2019-08-12T15:55:01.576Z",
+    "scope": "write groups read",
+    "created": "2018-08-17T15:55:01.577Z",
+    "updated": "2018-08-17T15:55:01.577Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 20,
+  "fields": {
+    "user": 65,
+    "token": "M912IIPqLx0cvDu6xefDlihG6IRpc7",
+    "application": 1,
+    "expires": "2019-08-15T20:02:04.348Z",
+    "scope": "read groups write",
+    "created": "2018-08-20T20:02:04.349Z",
+    "updated": "2018-08-20T20:02:04.349Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 32,
+  "fields": {
+    "user": 12,
+    "token": "tb8VaixRTOXPmLrIKzAqNUId1NYN9S",
+    "application": 1,
+    "expires": "2019-08-18T15:01:28.159Z",
+    "scope": "read write groups",
+    "created": "2018-08-23T15:01:28.159Z",
+    "updated": "2018-08-23T15:01:28.159Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 33,
+  "fields": {
+    "user": 16,
+    "token": "nvmvd1GFZ1aOTjIN83FQAlNLHb6PxF",
+    "application": 1,
+    "expires": "2019-08-18T16:04:49.320Z",
+    "scope": "read write groups",
+    "created": "2018-08-23T16:04:49.320Z",
+    "updated": "2018-08-23T16:04:49.320Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 37,
+  "fields": {
+    "user": 16,
+    "token": "99XSFBwug3h0CQSVmPGSdLT6skdRy6",
+    "application": 1,
+    "expires": "2019-08-18T17:31:49.457Z",
+    "scope": "read write groups",
+    "created": "2018-08-23T17:31:49.458Z",
+    "updated": "2018-08-23T17:31:49.458Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 40,
+  "fields": {
+    "user": 6,
+    "token": "xMovMFVQijAH85nxqlewWyc3Ybw0LF",
+    "application": 1,
+    "expires": "2019-08-18T21:12:46.570Z",
+    "scope": "read write groups",
+    "created": "2018-08-23T21:12:46.570Z",
+    "updated": "2018-08-23T21:12:46.570Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 42,
+  "fields": {
+    "user": 6,
+    "token": "gMNke0M4QvLeGBpaz9aqXD58ERy4KT",
+    "application": 1,
+    "expires": "2019-08-18T21:18:01.833Z",
+    "scope": "read write groups",
+    "created": "2018-08-23T21:18:01.834Z",
+    "updated": "2018-08-23T21:18:01.834Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 48,
+  "fields": {
+    "user": 12,
+    "token": "qMtMdf4S1VxmV4AmVcyB8PlLR46tpp",
+    "application": 1,
+    "expires": "2019-08-29T20:33:14.925Z",
+    "scope": "read write groups",
+    "created": "2018-09-03T20:33:14.926Z",
+    "updated": "2018-09-03T20:33:14.926Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 50,
+  "fields": {
+    "user": 12,
+    "token": "cF17lFV7ieqGoH9oBJhjH8AdhWib5d",
+    "application": 1,
+    "expires": "2019-09-02T21:49:08.270Z",
+    "scope": "write read groups",
+    "created": "2018-09-07T21:49:08.270Z",
+    "updated": "2018-09-07T21:49:08.270Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 51,
+  "fields": {
+    "user": 6,
+    "token": "XKpSIVHmPP6nLBxMNHzhNnHlQMpp4R",
+    "application": 1,
+    "expires": "2019-09-02T22:02:10.122Z",
+    "scope": "write read groups",
+    "created": "2018-09-07T22:02:10.122Z",
+    "updated": "2018-09-07T22:02:10.122Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 52,
+  "fields": {
+    "user": 16,
+    "token": "NSk8kl6WfXCCUwtLkX0mhNAi8E43kI",
+    "application": 1,
+    "expires": "2019-09-02T22:06:29.724Z",
+    "scope": "write read groups",
+    "created": "2018-09-07T22:06:29.724Z",
+    "updated": "2018-09-07T22:06:29.724Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 53,
+  "fields": {
+    "user": 16,
+    "token": "J4BfB24vPZoNRk9iQLuZ56wNPHwkNh",
+    "application": 1,
+    "expires": "2019-09-02T22:06:33.378Z",
+    "scope": "write read groups",
+    "created": "2018-09-07T22:06:33.378Z",
+    "updated": "2018-09-07T22:06:33.378Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 56,
+  "fields": {
+    "user": 6,
+    "token": "NFF1hKs4kSusinjCxJLpCWbTxGJVN8",
+    "application": 1,
+    "expires": "2019-09-05T19:20:51.507Z",
+    "scope": "groups write read",
+    "created": "2018-09-10T19:20:51.508Z",
+    "updated": "2018-09-10T19:20:51.508Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 57,
+  "fields": {
+    "user": 6,
+    "token": "N8Ma4QmofgfOnpR5EN984vloviqUjX",
+    "application": 1,
+    "expires": "2019-09-05T19:44:43.393Z",
+    "scope": "read groups write",
+    "created": "2018-09-10T19:44:43.394Z",
+    "updated": "2018-09-10T19:44:43.394Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 59,
+  "fields": {
+    "user": 12,
+    "token": "UfayV9lREeg2qpL0qyEIxgwQ5r9yH9",
+    "application": 1,
+    "expires": "2019-09-05T19:59:01.962Z",
+    "scope": "read groups write",
+    "created": "2018-09-10T19:59:01.963Z",
+    "updated": "2018-09-10T19:59:01.963Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 60,
+  "fields": {
+    "user": 6,
+    "token": "VTlhs83qTJGDVrwSHey8H34j2fQooZ",
+    "application": 1,
+    "expires": "2019-09-05T20:06:19.854Z",
+    "scope": "read groups write",
+    "created": "2018-09-10T20:06:19.854Z",
+    "updated": "2018-09-10T20:06:19.854Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 62,
+  "fields": {
+    "user": 1,
+    "token": "ek7glv0R8BBfP1yoQIE1IVBvU38IrA",
+    "application": 1,
+    "expires": "2019-09-05T20:13:03.732Z",
+    "scope": "read groups write",
+    "created": "2018-09-10T20:13:03.733Z",
+    "updated": "2018-09-10T20:13:03.733Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 68,
+  "fields": {
+    "user": 6,
+    "token": "IkaSMKQ6xaDYkxOoYlkagDua0LJOwU",
+    "application": 1,
+    "expires": "2019-09-05T21:07:07.332Z",
+    "scope": "read groups write",
+    "created": "2018-09-10T21:07:07.332Z",
+    "updated": "2018-09-10T21:07:07.332Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 70,
+  "fields": {
+    "user": 73,
+    "token": "BLnnBfuM0qHBXp5xbv2j9cYbOrFYHH",
+    "application": 1,
+    "expires": "2019-09-05T21:18:34.555Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T21:18:34.556Z",
+    "updated": "2018-09-10T21:18:34.556Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 72,
+  "fields": {
+    "user": 12,
+    "token": "AY1ihCZ1nQ92D0x16TlGyVARetVpr9",
+    "application": 1,
+    "expires": "2019-09-05T21:19:27.351Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T21:19:27.351Z",
+    "updated": "2018-09-10T21:19:27.351Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 73,
+  "fields": {
+    "user": 12,
+    "token": "EeEbeNTyqnP0Sxz1DsvVhvrJwbqkt7",
+    "application": 1,
+    "expires": "2019-09-05T21:20:24.398Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T21:20:24.399Z",
+    "updated": "2018-09-10T21:20:24.399Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 76,
+  "fields": {
+    "user": 6,
+    "token": "elRDA0oCSpQulzbEGpBuMf6zXhLClQ",
+    "application": 1,
+    "expires": "2019-09-05T21:43:48.832Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T21:43:48.832Z",
+    "updated": "2018-09-10T21:43:48.832Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 78,
+  "fields": {
+    "user": 6,
+    "token": "2rv6yGyFx3hAe7kDfLJs4Pe7Yf2h8G",
+    "application": 1,
+    "expires": "2019-09-05T22:12:58.059Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T22:12:58.060Z",
+    "updated": "2018-09-10T22:12:58.060Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 81,
+  "fields": {
+    "user": 3,
+    "token": "0U7fFH3q6lztn3rsSgk95anLMqs7o0",
+    "application": 1,
+    "expires": "2019-09-05T22:16:54.809Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T22:16:54.809Z",
+    "updated": "2018-09-10T22:16:54.809Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 82,
+  "fields": {
+    "user": 37,
+    "token": "AOn8OHq4UPYz1UCXDL0iWQNRqWNCrN",
+    "application": 1,
+    "expires": "2019-09-05T22:27:12.483Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T22:27:12.483Z",
+    "updated": "2018-09-10T22:27:12.483Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 83,
+  "fields": {
+    "user": 3,
+    "token": "PceHOLujMrOgOD76sh7NXg5ASkyEEM",
+    "application": 1,
+    "expires": "2019-09-05T22:27:38.991Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T22:27:38.992Z",
+    "updated": "2018-09-10T22:27:38.992Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 86,
+  "fields": {
+    "user": 60,
+    "token": "KsPwM4H07tFLa61wC9U8Tte8aMtJvG",
+    "application": 1,
+    "expires": "2019-09-05T22:39:50.413Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T22:39:50.413Z",
+    "updated": "2018-09-10T22:39:50.413Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 87,
+  "fields": {
+    "user": 16,
+    "token": "SUKhTDMJrUY53jaYIkkZYGv8TL50u6",
+    "application": 1,
+    "expires": "2019-09-05T22:42:01.381Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T22:42:01.381Z",
+    "updated": "2018-09-10T22:42:01.381Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 88,
+  "fields": {
+    "user": 6,
+    "token": "J8KxNLfAB6plSlIpvsretFmJ00jYFJ",
+    "application": 1,
+    "expires": "2019-09-05T22:43:04.140Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T22:43:04.141Z",
+    "updated": "2018-09-10T22:43:04.141Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 91,
+  "fields": {
+    "user": 16,
+    "token": "nAhlR8bu9xIPnzIyaCsjlYrpT3unLB",
+    "application": 1,
+    "expires": "2019-09-05T22:48:27.906Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T22:48:27.906Z",
+    "updated": "2018-09-10T22:48:27.906Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 92,
+  "fields": {
+    "user": 6,
+    "token": "Mnpb23Cbbw74YNPOhGwIXnEX7VGKav",
+    "application": 1,
+    "expires": "2019-09-05T22:49:46.181Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T22:49:46.181Z",
+    "updated": "2018-09-10T22:49:46.181Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 93,
+  "fields": {
+    "user": 6,
+    "token": "2SFBVdP8qsKMoSzctcxyPqvfmplmml",
+    "application": 1,
+    "expires": "2019-09-05T22:49:53.932Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T22:49:53.932Z",
+    "updated": "2018-09-10T22:49:53.932Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 95,
+  "fields": {
+    "user": 6,
+    "token": "bfWsMGXYqbDT0sUWXJ8FR7DiqJ68aU",
+    "application": 1,
+    "expires": "2019-09-05T22:52:13.200Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T22:52:13.200Z",
+    "updated": "2018-09-10T22:52:13.200Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 103,
+  "fields": {
+    "user": 16,
+    "token": "j5Pz1g3vBVqZWv3yvREhCFhJZfJxwI",
+    "application": 1,
+    "expires": "2019-09-05T23:06:29.677Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T23:06:29.678Z",
+    "updated": "2018-09-10T23:06:29.678Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 106,
+  "fields": {
+    "user": 6,
+    "token": "Ez2w145BfdTPhYYNNy6jq6bivJnN15",
+    "application": 1,
+    "expires": "2019-09-05T23:08:45.728Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T23:08:45.729Z",
+    "updated": "2018-09-10T23:08:45.729Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 107,
+  "fields": {
+    "user": 16,
+    "token": "HqcYicnCYMBG7Wf4keUSTIdlClfDIb",
+    "application": 1,
+    "expires": "2019-09-05T23:19:52.170Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T23:19:52.171Z",
+    "updated": "2018-09-10T23:19:52.171Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 108,
+  "fields": {
+    "user": 73,
+    "token": "UCWxz6M88iPSLqGB2czQl90nGBsVRt",
+    "application": 1,
+    "expires": "2019-09-05T23:20:01.849Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T23:20:01.849Z",
+    "updated": "2018-09-10T23:20:01.849Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 109,
+  "fields": {
+    "user": 16,
+    "token": "CWrplRGRgV6PRN4tEPScfRys7YKwic",
+    "application": 1,
+    "expires": "2019-09-05T23:21:28.564Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T23:21:28.565Z",
+    "updated": "2018-09-10T23:21:28.565Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 110,
+  "fields": {
+    "user": 73,
+    "token": "YE6BquiAiCv5eowXs49fuMlMzWE28M",
+    "application": 1,
+    "expires": "2019-09-05T23:49:45.575Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T23:49:45.575Z",
+    "updated": "2018-09-10T23:49:45.575Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 111,
+  "fields": {
+    "user": 6,
+    "token": "cSNUtlnZeDqOjpnkQJsJYUto1db4Gg",
+    "application": 1,
+    "expires": "2019-09-05T23:55:23.733Z",
+    "scope": "write read groups",
+    "created": "2018-09-10T23:55:23.733Z",
+    "updated": "2018-09-10T23:55:23.733Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 112,
+  "fields": {
+    "user": 6,
+    "token": "381rUemG5zBxljVYHIsFNdUwq7b6cm",
+    "application": 1,
+    "expires": "2019-09-06T14:32:13.855Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T14:32:13.855Z",
+    "updated": "2018-09-11T14:32:13.855Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 113,
+  "fields": {
+    "user": 6,
+    "token": "WDSNzVe0HYny6WAG4ngEktsE2gdiQ9",
+    "application": 1,
+    "expires": "2019-09-06T14:49:11.222Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T14:49:11.223Z",
+    "updated": "2018-09-11T14:49:11.223Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 114,
+  "fields": {
+    "user": 6,
+    "token": "gxi7O919UUl8Vuen4vQfm1KBGj5Zn0",
+    "application": 1,
+    "expires": "2019-09-06T15:30:17.012Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T15:30:17.012Z",
+    "updated": "2018-09-11T15:30:17.012Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 115,
+  "fields": {
+    "user": 6,
+    "token": "RgItcWAVXiDPQEEnDj6YaXsheo2tWB",
+    "application": 1,
+    "expires": "2019-09-06T16:27:48.072Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T16:27:48.074Z",
+    "updated": "2018-09-11T16:27:48.074Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 116,
+  "fields": {
+    "user": 60,
+    "token": "crIX1IX8mzgxkwZ3h6fGCZzaFYjSuL",
+    "application": 1,
+    "expires": "2019-09-06T16:30:41.573Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T16:30:41.574Z",
+    "updated": "2018-09-11T16:30:41.574Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 117,
+  "fields": {
+    "user": 6,
+    "token": "Y2Viry3Aav3xpOmbd8jlSPUBakDJzY",
+    "application": 1,
+    "expires": "2019-09-06T16:31:18.043Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T16:31:18.043Z",
+    "updated": "2018-09-11T16:31:18.043Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 119,
+  "fields": {
+    "user": 6,
+    "token": "90BqS7uiGMRfwp9ucw7AP4KXw0UKph",
+    "application": 1,
+    "expires": "2019-09-06T16:52:40.074Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T16:52:40.074Z",
+    "updated": "2018-09-11T16:52:40.074Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 120,
+  "fields": {
+    "user": 6,
+    "token": "umrjnQpa4BoxrIXfQjyAFklsRwbUp7",
+    "application": 1,
+    "expires": "2019-09-06T17:25:30.391Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T17:25:30.392Z",
+    "updated": "2018-09-11T17:25:30.392Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 121,
+  "fields": {
+    "user": 6,
+    "token": "iNXxttOOBkCh31ZcI6FTlvO1X2E3cs",
+    "application": 1,
+    "expires": "2019-09-06T19:38:06.718Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T19:38:06.718Z",
+    "updated": "2018-09-11T19:38:06.718Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 123,
+  "fields": {
+    "user": 6,
+    "token": "duWn4AShoQsHXcFSBN6syCQZvnj1uX",
+    "application": 1,
+    "expires": "2019-09-06T20:06:20.047Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T20:06:20.047Z",
+    "updated": "2018-09-11T20:06:20.047Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 124,
+  "fields": {
+    "user": 16,
+    "token": "r4emStGeRoqeKYw1o8svrk2wOYyDIZ",
+    "application": 1,
+    "expires": "2019-09-06T21:29:21.444Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T21:29:21.444Z",
+    "updated": "2018-09-11T21:29:21.444Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 125,
+  "fields": {
+    "user": 6,
+    "token": "lvGm20hfKkn3SsJEQ62je4spIGpCRX",
+    "application": 1,
+    "expires": "2019-09-06T23:27:07.475Z",
+    "scope": "write read groups",
+    "created": "2018-09-11T23:27:07.475Z",
+    "updated": "2018-09-11T23:27:07.475Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 126,
+  "fields": {
+    "user": 73,
+    "token": "0PX8dyCYKRlGKuAiuFHppOMNasWSYP",
+    "application": 1,
+    "expires": "2019-09-07T16:32:39.589Z",
+    "scope": "write read groups",
+    "created": "2018-09-12T16:32:39.589Z",
+    "updated": "2018-09-12T16:32:39.589Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 127,
+  "fields": {
+    "user": 6,
+    "token": "MVfrDEljXpXJ5Thd3T5wOVcb2InvGX",
+    "application": 1,
+    "expires": "2019-09-07T21:13:16.797Z",
+    "scope": "write read groups",
+    "created": "2018-09-12T21:13:16.798Z",
+    "updated": "2018-09-12T21:13:16.798Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 135,
+  "fields": {
+    "user": 16,
+    "token": "QWSRB6zKMht5mp2bCJPRfjEvthSEap",
+    "application": 1,
+    "expires": "2019-09-11T10:35:33.953Z",
+    "scope": "write read groups",
+    "created": "2018-09-16T10:35:33.953Z",
+    "updated": "2018-09-16T10:35:33.953Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 136,
+  "fields": {
+    "user": 12,
+    "token": "t92WwSYyiKipozWgyWZIh0GMVGOCsL",
+    "application": 1,
+    "expires": "2019-09-11T10:38:00.763Z",
+    "scope": "write read groups",
+    "created": "2018-09-16T10:38:00.764Z",
+    "updated": "2018-09-16T10:38:00.764Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 137,
+  "fields": {
+    "user": 6,
+    "token": "i8AFgqfsFdUYlqY4FTjxlJjt7tpGcJ",
+    "application": 1,
+    "expires": "2019-09-11T10:39:32.434Z",
+    "scope": "write read groups",
+    "created": "2018-09-16T10:39:32.435Z",
+    "updated": "2018-09-16T10:39:32.435Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 140,
+  "fields": {
+    "user": 1,
+    "token": "SaRQJpIkOQDmgEujr4HdNzAkjDcDX2",
+    "application": 1,
+    "expires": "2019-09-13T17:14:58.144Z",
+    "scope": "write read groups",
+    "created": "2018-09-18T17:14:58.145Z",
+    "updated": "2018-09-18T17:14:58.145Z"
+  }
+},
+{
   "model": "oauth2_provider.application",
   "pk": 1,
   "fields": {
@@ -4419,6 +5756,1486 @@
     "skip_authorization": false,
     "created": "2017-10-02T21:19:16.205Z",
     "updated": "2017-10-02T21:19:16.205Z"
+  }
+},
+{
+  "model": "api.client",
+  "pk": 3,
+  "fields": {
+    "type_client": "b",
+    "sex": "m",
+    "commercial_reason": "alpaneted",
+    "civil_state": "c",
+    "birthdate": "1991-02-05",
+    "ciiu": 5,
+    "activity_description": "123131232321",
+    "institute": "",
+    "ocupation": 7,
+    "about": "1231231231231232123",
+    "business_name": "alpanet",
+    "agent_firstname": "Oscar",
+    "agent_lastname": "Lopez",
+    "position": "Gerente en Ventas",
+    "profession": "",
+    "economic_sector": 5,
+    "level_instruction": null,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 4,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "1992-09-19",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UPC",
+    "ocupation": 1,
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Gerente de Ventas",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 12,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": "",
+    "civil_state": "s",
+    "birthdate": "1992-09-19",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UPC",
+    "ocupation": 1,
+    "about": "iptsum aabout",
+    "business_name": "",
+    "agent_firstname": "",
+    "agent_lastname": "",
+    "position": "",
+    "profession": "Gerente de Ventas",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 42,
+  "fields": {
+    "type_client": "n",
+    "sex": "f",
+    "commercial_reason": "",
+    "civil_state": "s",
+    "birthdate": "1992-09-19",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UPC",
+    "ocupation": 1,
+    "about": "iptsum aabout",
+    "business_name": "",
+    "agent_firstname": "",
+    "agent_lastname": "",
+    "position": "",
+    "profession": "",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 59,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "1999-09-19",
+    "ciiu": 10,
+    "activity_description": "Loremp iptsum",
+    "institute": "UNEFA",
+    "ocupation": 1,
+    "about": "iptsum aabout",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Administrador",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 60,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": "",
+    "civil_state": "m",
+    "birthdate": "1957-02-21",
+    "ciiu": 329,
+    "activity_description": "Emprendiendo la primera Plataforma de Teleconsultor\u00eda Personalizada para Negocios del Per\u00fa desarroll\u00e1ndose en una Aplicaci\u00f3n M\u00f3vil App/Web",
+    "institute": "Universidad de Lima",
+    "ocupation": 1,
+    "about": "Obsesionado por la calidad de los productos y servicios que adquiero",
+    "business_name": "",
+    "agent_firstname": "",
+    "agent_lastname": "",
+    "position": "",
+    "profession": "Economista",
+    "economic_sector": null,
+    "level_instruction": 10,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 61,
+  "fields": {
+    "type_client": "n",
+    "sex": "f",
+    "commercial_reason": "",
+    "civil_state": "s",
+    "birthdate": "1993-12-20",
+    "ciiu": null,
+    "activity_description": "",
+    "institute": "isil",
+    "ocupation": 2,
+    "about": "Administraci\u00f3n en pyme.",
+    "business_name": "",
+    "agent_firstname": "",
+    "agent_lastname": "",
+    "position": "",
+    "profession": "Comunicaciones",
+    "economic_sector": null,
+    "level_instruction": 6,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 62,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "d",
+    "birthdate": "1993-08-17",
+    "ciiu": 2,
+    "activity_description": "",
+    "institute": "ben",
+    "ocupation": 3,
+    "about": "",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "ben",
+    "economic_sector": null,
+    "level_instruction": 3,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 63,
+  "fields": {
+    "type_client": "b",
+    "sex": "",
+    "commercial_reason": "Jruueb",
+    "civil_state": "",
+    "birthdate": "1900-01-01",
+    "ciiu": 7,
+    "activity_description": "",
+    "institute": null,
+    "ocupation": null,
+    "about": "Bruru",
+    "business_name": "Jj4uu",
+    "agent_firstname": "Ejelece",
+    "agent_lastname": "Jaime",
+    "position": "Ufurb",
+    "profession": "",
+    "economic_sector": 5,
+    "level_instruction": null,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 64,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": null,
+    "civil_state": "w",
+    "birthdate": "1993-08-17",
+    "ciiu": null,
+    "activity_description": "",
+    "institute": "",
+    "ocupation": 5,
+    "about": "",
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "jq",
+    "economic_sector": null,
+    "level_instruction": 4,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 65,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": "",
+    "civil_state": "s",
+    "birthdate": "1992-09-19",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UPC",
+    "ocupation": 1,
+    "about": "iptsum aabout",
+    "business_name": "",
+    "agent_firstname": "",
+    "agent_lastname": "",
+    "position": "",
+    "profession": "Gerente de Ventas",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 66,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": "",
+    "civil_state": "s",
+    "birthdate": "1992-09-19",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UPC",
+    "ocupation": 1,
+    "about": "iptsum aabout",
+    "business_name": "",
+    "agent_firstname": "",
+    "agent_lastname": "",
+    "position": "",
+    "profession": "Gerente de Ventas",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 67,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": "",
+    "civil_state": "s",
+    "birthdate": "1992-09-19",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UPC",
+    "ocupation": 1,
+    "about": "iptsum aabout",
+    "business_name": "",
+    "agent_firstname": "",
+    "agent_lastname": "",
+    "position": "",
+    "profession": "Gerente de Ventas",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 68,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": "",
+    "civil_state": "s",
+    "birthdate": "1992-09-19",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UPC",
+    "ocupation": 1,
+    "about": "iptsum aabout",
+    "business_name": "",
+    "agent_firstname": "",
+    "agent_lastname": "",
+    "position": "",
+    "profession": "Gerente de Ventas",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 69,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": "",
+    "civil_state": "s",
+    "birthdate": "1992-09-19",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UPC",
+    "ocupation": 1,
+    "about": "iptsum aabout",
+    "business_name": "",
+    "agent_firstname": "",
+    "agent_lastname": "",
+    "position": "",
+    "profession": "Gerente de Ventas",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 70,
+  "fields": {
+    "type_client": "n",
+    "sex": "m",
+    "commercial_reason": "",
+    "civil_state": "s",
+    "birthdate": "1992-09-19",
+    "ciiu": 2,
+    "activity_description": "Loremp iptsum",
+    "institute": "UPC",
+    "ocupation": 1,
+    "about": "iptsum aabout",
+    "business_name": "",
+    "agent_firstname": "",
+    "agent_lastname": "",
+    "position": "",
+    "profession": "Gerente de Ventas",
+    "economic_sector": null,
+    "level_instruction": 1,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 71,
+  "fields": {
+    "type_client": "b",
+    "sex": "",
+    "commercial_reason": "-",
+    "civil_state": "",
+    "birthdate": "1900-01-01",
+    "ciiu": 1,
+    "activity_description": "Cada mes",
+    "institute": null,
+    "ocupation": null,
+    "about": "Ingeniero",
+    "business_name": "CARDSILPLAST S.A.C.",
+    "agent_firstname": "Freddy",
+    "agent_lastname": "Cardenas",
+    "position": "Gerente General",
+    "profession": "",
+    "economic_sector": 3,
+    "level_instruction": null,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 72,
+  "fields": {
+    "type_client": "b",
+    "sex": "",
+    "commercial_reason": "-",
+    "civil_state": "",
+    "birthdate": "1900-01-01",
+    "ciiu": 3,
+    "activity_description": "",
+    "institute": null,
+    "ocupation": null,
+    "about": "",
+    "business_name": "BENITO BALDEON DERLYS HECTOR",
+    "agent_firstname": "Derlys",
+    "agent_lastname": "Benito",
+    "position": "Jefe ti",
+    "profession": "",
+    "economic_sector": 2,
+    "level_instruction": null,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 73,
+  "fields": {
+    "type_client": "n",
+    "sex": "f",
+    "commercial_reason": null,
+    "civil_state": "s",
+    "birthdate": "1995-06-26",
+    "ciiu": 300,
+    "activity_description": null,
+    "institute": "UCAB",
+    "ocupation": 3,
+    "about": null,
+    "business_name": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "position": null,
+    "profession": "Desarrollador iOS",
+    "economic_sector": null,
+    "level_instruction": 9,
+    "seller_assigned": 6,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 1,
+  "fields": {
+    "acquired_plan": 1,
+    "client": 3,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 2,
+  "fields": {
+    "acquired_plan": 2,
+    "client": 3,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 3,
+  "fields": {
+    "acquired_plan": 3,
+    "client": 4,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 4,
+  "fields": {
+    "acquired_plan": 4,
+    "client": 4,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 5,
+  "fields": {
+    "acquired_plan": 5,
+    "client": 4,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 6,
+  "fields": {
+    "acquired_plan": 6,
+    "client": 4,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 7,
+  "fields": {
+    "acquired_plan": 7,
+    "client": 4,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 8,
+  "fields": {
+    "acquired_plan": 8,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 9,
+  "fields": {
+    "acquired_plan": 9,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 10,
+  "fields": {
+    "acquired_plan": 10,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 11,
+  "fields": {
+    "acquired_plan": 11,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 12,
+  "fields": {
+    "acquired_plan": 12,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 13,
+  "fields": {
+    "acquired_plan": 13,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 14,
+  "fields": {
+    "acquired_plan": 14,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 15,
+  "fields": {
+    "acquired_plan": 15,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 16,
+  "fields": {
+    "acquired_plan": 16,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 17,
+  "fields": {
+    "acquired_plan": 17,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 18,
+  "fields": {
+    "acquired_plan": 18,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 19,
+  "fields": {
+    "acquired_plan": 19,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 20,
+  "fields": {
+    "acquired_plan": 20,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 21,
+  "fields": {
+    "acquired_plan": 21,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 22,
+  "fields": {
+    "acquired_plan": 22,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 23,
+  "fields": {
+    "acquired_plan": 23,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 24,
+  "fields": {
+    "acquired_plan": 24,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 25,
+  "fields": {
+    "acquired_plan": 25,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 26,
+  "fields": {
+    "acquired_plan": 26,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 27,
+  "fields": {
+    "acquired_plan": 27,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 28,
+  "fields": {
+    "acquired_plan": 28,
+    "client": 42,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 29,
+  "fields": {
+    "acquired_plan": 29,
+    "client": 59,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 31,
+  "fields": {
+    "acquired_plan": 31,
+    "client": 63,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 32,
+  "fields": {
+    "acquired_plan": 32,
+    "client": 63,
+    "owner": false,
+    "transfer": false,
+    "share": false,
+    "empower": false,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 33,
+  "fields": {
+    "acquired_plan": 31,
+    "client": 62,
+    "owner": false,
+    "transfer": false,
+    "share": true,
+    "empower": false,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 34,
+  "fields": {
+    "acquired_plan": 30,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 35,
+  "fields": {
+    "acquired_plan": 33,
+    "client": 60,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 36,
+  "fields": {
+    "acquired_plan": 34,
+    "client": 61,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 37,
+  "fields": {
+    "acquired_plan": 35,
+    "client": 65,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 38,
+  "fields": {
+    "acquired_plan": 36,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 39,
+  "fields": {
+    "acquired_plan": 37,
+    "client": 63,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 40,
+  "fields": {
+    "acquired_plan": 38,
+    "client": 63,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 41,
+  "fields": {
+    "acquired_plan": 39,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 42,
+  "fields": {
+    "acquired_plan": 40,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 43,
+  "fields": {
+    "acquired_plan": 41,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 44,
+  "fields": {
+    "acquired_plan": 42,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 45,
+  "fields": {
+    "acquired_plan": 43,
+    "client": 12,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 46,
+  "fields": {
+    "acquired_plan": 44,
+    "client": 72,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 47,
+  "fields": {
+    "acquired_plan": 45,
+    "client": 72,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 48,
+  "fields": {
+    "acquired_plan": 46,
+    "client": 73,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 49,
+  "fields": {
+    "acquired_plan": 47,
+    "client": 73,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 50,
+  "fields": {
+    "acquired_plan": 48,
+    "client": 73,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 1,
+  "fields": {
+    "created_at": "2018-02-08T14:28:25Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1000",
+    "description": "Test",
+    "is_fee": true,
+    "client": 3,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 2,
+  "fields": {
+    "created_at": "2018-02-15T14:28:25Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1001",
+    "description": "Test2",
+    "is_fee": true,
+    "client": 3,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 3,
+  "fields": {
+    "created_at": "2018-02-08T14:28:25Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1002",
+    "description": "Test3",
+    "is_fee": true,
+    "client": 3,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 4,
+  "fields": {
+    "created_at": "2018-02-08T14:28:25Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1003",
+    "description": "Test4",
+    "is_fee": true,
+    "client": 3,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 5,
+  "fields": {
+    "created_at": "2018-08-16T15:34:50.897Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1004",
+    "description": "Test Venta",
+    "is_fee": true,
+    "client": 59,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 6,
+  "fields": {
+    "created_at": "2018-08-17T15:05:30.695Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1004",
+    "description": "Test Venta",
+    "is_fee": false,
+    "client": 62,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 7,
+  "fields": {
+    "created_at": "2018-08-17T15:06:12.619Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1004",
+    "description": "Test Venta",
+    "is_fee": false,
+    "client": 63,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 8,
+  "fields": {
+    "created_at": "2018-08-20T18:03:34.961Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1004",
+    "description": "Test Venta",
+    "is_fee": false,
+    "client": 60,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 9,
+  "fields": {
+    "created_at": "2018-08-20T19:48:08.003Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1004",
+    "description": "Test Venta",
+    "is_fee": false,
+    "client": 61,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 10,
+  "fields": {
+    "created_at": "2018-08-20T19:52:46.902Z",
+    "place": "BCP",
+    "total_amount": "700.00",
+    "reference_number": "CD1004",
+    "description": "Test Venta",
+    "is_fee": false,
+    "client": 65,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 11,
+  "fields": {
+    "created_at": "2018-09-10T19:37:08.570Z",
+    "place": "BCP",
+    "total_amount": "150.00",
+    "reference_number": "CD1005",
+    "description": "-",
+    "is_fee": false,
+    "client": 12,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 12,
+  "fields": {
+    "created_at": "2018-09-10T20:03:59.670Z",
+    "place": "BCP",
+    "total_amount": "4000.00",
+    "reference_number": "CD1006",
+    "description": "-",
+    "is_fee": true,
+    "client": 63,
+    "seller": 6,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 13,
+  "fields": {
+    "created_at": "2018-09-10T20:18:01.001Z",
+    "place": "BCP",
+    "total_amount": "1800.00",
+    "reference_number": "CD1007",
+    "description": "test",
+    "is_fee": false,
+    "client": 12,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 14,
+  "fields": {
+    "created_at": "2018-09-10T20:35:14.247Z",
+    "place": "BCP",
+    "total_amount": "90000.00",
+    "reference_number": "CD1008",
+    "description": "test",
+    "is_fee": true,
+    "client": 12,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 15,
+  "fields": {
+    "created_at": "2018-09-10T20:37:30.499Z",
+    "place": "BCP",
+    "total_amount": "1500.00",
+    "reference_number": "CD1009",
+    "description": "test",
+    "is_fee": false,
+    "client": 12,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 16,
+  "fields": {
+    "created_at": "2018-09-10T20:39:06.181Z",
+    "place": "BCP",
+    "total_amount": "900.00",
+    "reference_number": "CD1010",
+    "description": "test",
+    "is_fee": false,
+    "client": 12,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 17,
+  "fields": {
+    "created_at": "2018-09-10T21:09:44.959Z",
+    "place": "BCP",
+    "total_amount": "2500.00",
+    "reference_number": "CD1011",
+    "description": "-",
+    "is_fee": false,
+    "client": 72,
+    "seller": 6,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 18,
+  "fields": {
+    "created_at": "2018-09-10T21:12:38.068Z",
+    "place": "BCP",
+    "total_amount": "900.00",
+    "reference_number": "CD1004",
+    "description": "Test Venta",
+    "is_fee": false,
+    "client": 73,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 19,
+  "fields": {
+    "created_at": "2018-09-10T21:19:04.188Z",
+    "place": "BCP",
+    "total_amount": "2500.00",
+    "reference_number": "CD1005",
+    "description": "test",
+    "is_fee": false,
+    "client": 73,
+    "seller": null,
+    "status": 1
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 20,
+  "fields": {
+    "created_at": "2018-09-10T21:21:21.657Z",
+    "place": "BCP",
+    "total_amount": "1500.00",
+    "reference_number": "CD1006",
+    "description": "test",
+    "is_fee": false,
+    "client": 73,
+    "seller": null,
+    "status": 1
   }
 }
 ]

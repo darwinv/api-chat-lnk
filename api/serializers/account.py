@@ -174,7 +174,11 @@ class SellerAccountBackendSerializer(serializers.Serializer):
         quant_dic = SellerNonBillablePlans.objects.filter(
             number_month=hoy.month, number_year=hoy.year, seller=seller).aggregate(Sum('quantity'))
         # todos los promocionales de ese mes
-        all_promo = quant_dic["quantity__sum"] + promotional_plans
+
+        if quant_dic["quantity__sum"]:
+            all_promo = quant_dic["quantity__sum"] + promotional_plans
+        else:
+            all_promo = 0 + promotional_plans
 
         # planes vendidos en este mes
         plans_sold = obj.filter(saledetail__product_type=1,
@@ -202,10 +206,13 @@ class SellerAccountBackendSerializer(serializers.Serializer):
                                                        number_year=hoy.year)
             new_clients_goal = seller_param.new_clients_goal
         except ParameterSeller.DoesNotExist:
-            new_clients_goal = None
+            new_clients_goal = 0
 
         if queries_sold["queries"] is None:
             queries_sold["queries"] = 0
+
+        if all_queries_sold["queries"] is None:
+            all_queries_sold["queries"] = 0
 
         return {
                     "month_sold_plans": plans_sold,
