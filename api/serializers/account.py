@@ -208,19 +208,19 @@ class SellerAccountBackendSerializer(serializers.Serializer):
         except ParameterSeller.DoesNotExist:
             new_clients_goal = 0
 
-        if not queries_sold["queries"]:
+        if queries_sold["queries"] is None:
             queries_sold["queries"] = 0
+
+        if all_queries_sold["queries"] is None:
+            all_queries_sold["queries"] = 0
 
         return {
                     "month_sold_plans": plans_sold,
                     "month_sold_queries": queries_sold["queries"],
-
                     "sold_plans": all_plans_sold,
                     "sold_queries": all_queries_sold["queries"],
-
                     "month_new_clients_goal": new_clients_goal,
                     "month_all_promotionals": all_promo,
-
                     "month_promotionals": promotional_plans,
                     "promotionals": promotional_history
                 }
