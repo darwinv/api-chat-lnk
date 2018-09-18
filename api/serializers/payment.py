@@ -67,6 +67,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
         qsetdetail = SaleDetail.objects.filter(sale=fee.sale)
 
+        # import pdb; pdb.set_trace()
         for detail in qsetdetail:
             qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
             qpclient = qacd.queryplansclient_set.get()
