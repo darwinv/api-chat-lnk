@@ -27,12 +27,12 @@ class CreatePayment(APIView):
         """crear compra."""
         data = request.data
         user_id = Operations.get_id(self, request)
-        import pdb; pdb.set_trace()
         serializer = PaymentSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class PaymentPendingView(ListCreateAPIView):
     """Vista para traer pagos pendientes."""
@@ -41,7 +41,7 @@ class PaymentPendingView(ListCreateAPIView):
     required = _("required")
 
     def get(self, request):
-        """get compra pendinetes"""
+        """get compra pendientes"""
         data = request.query_params
 
         if not 'document_number' in data:
@@ -63,9 +63,9 @@ class PaymentPendingView(ListCreateAPIView):
         if page is not None:
             serializer = PaymentSaleSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-
         serializer = PaymentSaleSerializer(manage_data, many=True)
         return Response(serializer.data)
+
 
 class PaymentPendingDetailView(APIView):
     """Vista para traer pagos pendientes."""
