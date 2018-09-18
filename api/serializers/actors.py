@@ -1440,33 +1440,37 @@ class RucApiDetailSerializer(serializers.Serializer):
 
     def get_address(self, obj):
         address = {}
-        if 'departamento' in obj:
-            department = Department.objects.get(name=obj['departamento'])
-            address['department'] = department
-        else:
-            address['department'] = None
+        try:
+            if 'departamento' in obj:
+                department = Department.objects.get(name=obj['departamento'])
+                address['department'] = department
+            else:
+                address['department'] = None
 
-        if 'provincia' in obj:
-            province = Province.objects.get(name=obj['provincia'], department=department)
-            address['province'] = province
-        else:
-            address['province'] = None
+            if 'provincia' in obj:
+                province = Province.objects.get(name=obj['provincia'], department=department)
+                address['province'] = province
+            else:
+                address['province'] = None
+            
+            if 'distrito' in obj:
+                district = District.objects.get(name=obj['distrito'], province=province)
+                address['district'] = district
+            else:
+                address['district'] = None
 
-        if 'distrito' in obj:
-            district = District.objects.get(name=obj['distrito'], province=province)
-            address['district'] = district
-        else:
-            address['district'] = None
+            if 'direccion' in obj:
+                address['street'] = obj['direccion']
+            else:
+                address['street'] = ""
 
-        if 'direccion' in obj:
-            address['street'] = obj['direccion']
-        else:
-            address['street'] = ""
-
-        if address:
-            return AddressSerializer(address).data
-        else:
+            if address:
+                return AddressSerializer(address).data
+            else:
+                return None
+        except Exception as e:
             return None
+        
 
     def get_business_name(self, obj):
         if 'nombre_o_razon_social' in obj:
