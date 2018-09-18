@@ -206,7 +206,7 @@ class SellerAccountBackendSerializer(serializers.Serializer):
                                                        number_year=hoy.year)
             new_clients_goal = seller_param.new_clients_goal
         except ParameterSeller.DoesNotExist:
-            new_clients_goal = None
+            new_clients_goal = 0
 
         if queries_sold["queries"] is None:
             queries_sold["queries"] = 0
@@ -214,10 +214,13 @@ class SellerAccountBackendSerializer(serializers.Serializer):
         return {
                     "month_sold_plans": plans_sold,
                     "month_sold_queries": queries_sold["queries"],
+                    
                     "sold_plans": all_plans_sold,
                     "sold_queries": all_queries_sold["queries"],
+
                     "month_new_clients_goal": new_clients_goal,
                     "month_all_promotionals": all_promo,
+
                     "month_promotionals": promotional_plans,
                     "promotionals": promotional_history
                 }
