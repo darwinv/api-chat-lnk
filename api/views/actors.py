@@ -973,12 +973,14 @@ class SellerClientListView(ListCreateAPIView):
 
         seller = Operations.get_id(self, request)
 
-        queryset = Client.objects.filter(seller_assigned=seller)
+        queryset = Client.objects.filter(seller_assigned=seller,
+                                         sale__status__range=(2, 3))
         serializer = ClientSerializer(queryset, many=True)
 
         # pagination
         page = self.paginate_queryset(queryset)
         if page is not None:
+            serializer = ClientSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
 
