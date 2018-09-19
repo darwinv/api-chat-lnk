@@ -41,10 +41,10 @@ def generate_seller_goals(seller_id, day=None):
 
 
 
-def generate_message_code_user(client, is_billable):
+def generate_message_code_user(client, acquired_plan):
     """
         client: Objeto cliente
-        is_billable: Bolean plan facturable
+        acquired_plan: Objeto acquired_plan
         retorna string para cada mensaje de la consulta
         return str 
     """
@@ -55,19 +55,22 @@ def generate_message_code_user(client, is_billable):
     else:
         document_number = client.document_number
 
-    if is_billable:
+    if acquired_plan.sale_detail.is_billable:
         role = "C"
     else:
         role = "U"
 
-    ManageObj = QueryPlansManage.objects.filter(receiver=client)
+    ManageObj = QueryPlansManage.objects.get(receiver=client, acquired_plan=acquired_plan)
     if ManageObj:
-        if ManageObj[0]['type_operation'] == 1:
+        if ManageObj[0].type_operation == 1:
             prefix = 'T'
-        if ManageObj[0]['type_operation'] == 2:
-            prefix = 'C'
-        if ManageObj[0]['type_operation'] == 3:
+        if ManageObj[0].type_operation == 3:
             prefix = 'F'
+    else:
+        ManageObj = QueryPlansManage.objects.get(receiver=client, new_acquired_plan=acquired_plan)
+
+        if ManageObj[0].type_operation == 2:
+            prefix = 'C'
 
     code_user = role + prefix + document_number
 

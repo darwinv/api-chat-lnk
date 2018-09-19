@@ -208,8 +208,7 @@ class QuerySerializer(serializers.ModelSerializer):
         # creamos el grupo para ese mensaje
         group = GroupMessage.objects.create(status=1)
         # Generar codigo de usuario para chat
-        code_user = generate_message_code_user(validated_data["client"],
-                                                 acq_plan.sale_detail.is_billable)
+        code_user = generate_message_code_user(validated_data["client"], acq_plan)
         # Recorremos los mensajes para crearlos todos
         for data_message in data_messages:
             # por defecto el tipo de mensaje al crearse
@@ -367,7 +366,7 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
         group = GroupMessage.objects.create(status=1)
         # Generar codigo de usuario para chat
         code_user = generate_message_code_user(instance.client,
-                                                 instance.acquired_plan.sale_detail.is_billable)
+                                                 instance.acquired_plan)
         # Recorremos los mensajes para crearlos todos
         for data_message in data_messages:
             # por defecto el tipo de mensaje al actualizarse debe
