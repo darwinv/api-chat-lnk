@@ -62,7 +62,6 @@ class PaymentSerializer(serializers.ModelSerializer):
                 subject="Confirmación de pago. Productos comprados",
                 to=fee.sale.client.username, template='email/pin_code')
             if 'test' not in sys.argv:
-                print('envio')
                 mail.sendmail(args=data)
         # buscar contacto efectivo para acualitzar estado a efectivo cliente
         # filtar por el correo del id del cliente
