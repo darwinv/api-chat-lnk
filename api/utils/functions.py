@@ -60,14 +60,14 @@ def generate_message_code_user(client, acquired_plan):
     else:
         role = "U"
 
-    ManageObj = QueryPlansManage.objects.get(receiver=client, acquired_plan=acquired_plan)
+    ManageObj = QueryPlansManage.objects.filter(receiver=client, acquired_plan=acquired_plan)
     if ManageObj:
         if ManageObj[0].type_operation == 1:
             prefix = 'T'
         if ManageObj[0].type_operation == 3:
             prefix = 'F'
     else:
-        ManageObj = QueryPlansManage.objects.get(receiver=client, new_acquired_plan=acquired_plan)
+        ManageObj = QueryPlansManage.objects.filter(receiver=client, new_acquired_plan=acquired_plan)
 
         if ManageObj[0].type_operation == 2:
             prefix = 'C'
