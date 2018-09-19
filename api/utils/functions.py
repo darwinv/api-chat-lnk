@@ -1,5 +1,5 @@
 """Funciones utiles para logica de negocio"""
-from api.models import Parameter, ParameterSeller, Seller
+from api.models import Parameter, ParameterSeller, Seller, QueryPlansManage
 import datetime
 
 def generate_sellers_goals():
@@ -41,3 +41,34 @@ def generate_seller_goals(seller_id, day=None):
 
 
 
+def generate_message_code_user(client, is_billable):
+    """
+        client: Objeto cliente
+        is_billable: Bolean plan facturable
+        retorna string para cada mensaje de la consulta
+        return str 
+    """
+    document_number = role = prefix = ""
+    
+    if client.type_client=="b":
+        document_number = client.ruc     
+    else:
+        document_number = client.document_number
+
+    if is_billable:
+        role = "C"
+    else:
+        role = "U"
+
+    ManageObj = QueryPlansManage.objects.filter(receiver=client)
+    if ManageObj:
+        if ManageObj[0]['type_operation'] == 1:
+            prefix = 'T'
+        if ManageObj[0]['type_operation'] == 2:
+            prefix = 'C'
+        if ManageObj[0]['type_operation'] == 3:
+            prefix = 'F'
+
+    code_user = role + prefix + document_number
+
+    return code_user
