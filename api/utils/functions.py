@@ -69,7 +69,7 @@ def generate_message_code_user(client, acquired_plan):
     else:
         ManageObj = QueryPlansManage.objects.filter(receiver=client, new_acquired_plan=acquired_plan)
 
-        if ManageObj[0].type_operation == 2:
+        if ManageObj and ManageObj[0].type_operation == 2:
             prefix = 'C'
 
     code_user = role + prefix + document_number
