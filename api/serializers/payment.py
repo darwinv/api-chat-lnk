@@ -52,6 +52,18 @@ class PaymentSerializer(serializers.ModelSerializer):
         # 2 PAID
         fee.status = 2
         fee.save()
+
+        qsetdetail = SaleDetail.objects.filter(sale=fee.sale)
+
+        data = {'qset': qsetdetail}
+        # envio codigo pin por correo
+        if fee.sale.status == 1:
+            mail = BasicEmailAmazon(
+                subject="Confirmación de pago. Productos comprados",
+                to=fee.sale.client.username, template='email/pin_code')
+            if 'test' not in sys.argv:
+                print('envio')
+                mail.sendmail(args=data)
         # buscar contacto efectivo para acualitzar estado a efectivo cliente
         # filtar por el correo del id del cliente
         SellerContact.objects.filter(
@@ -65,9 +77,6 @@ class PaymentSerializer(serializers.ModelSerializer):
             # 3 pagada
             Sale.objects.filter(pk=fee.sale_id).update(status=3)
 
-        qsetdetail = SaleDetail.objects.filter(sale=fee.sale)
-
-        # import pdb; pdb.set_trace()
         for detail in qsetdetail:
             qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
             qpclient = qacd.queryplansclient_set.get()
@@ -89,8 +98,6 @@ class PaymentSerializer(serializers.ModelSerializer):
                     pyrebase.chosen_plan(
                         fee.sale.client.id,
                         {"available_queries": qacd.available_queries})
-
-        data = {'qset': qsetdetail}
         # cambio el codigo del usuario
         user = User.objects.get(pk=fee.sale.client_id)
         if fee.sale.client.type_client == 'b':
@@ -98,13 +105,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         else:
             user.code = Params.CODE_PREFIX["client"] + user.document_number
         user.save()
-        # envio codigo pin por correo
-        mail = BasicEmailAmazon(
-            subject="Confirmación de pago. Productos comprados",
-            to=fee.sale.client.username, template='email/pin_code')
 
-        if 'test' not in sys.argv:
-            mail.sendmail(args=data)
 
         validated_data["status"] = 2
         instance = Payment(**validated_data)
