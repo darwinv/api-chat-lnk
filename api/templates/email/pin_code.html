@@ -2,9 +2,14 @@
 {% load i18n %}
 {% block content_mail %}
 
-  <h1> {% trans "Your pin code!"|title %} </h1>
+<div style="margin:20px 20px">
+<h1> {% trans "Your pin code!"|title %} </h1>
+<div>
 
-  <div style="text-align: justify;">
+<div style="text-align: justify;">
+Felicitaciones por adquirir tu(s) planes(s) de consultas.
+Te dejamos los codigos pin para cuando lo desees lo actives:
+
 {% for record in qset %}
     <p>
       {% trans "" %}
