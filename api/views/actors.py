@@ -857,7 +857,7 @@ class SpecialistDetailView(APIView):
         """Actualizar."""
         data = request.data
         specialist = self.get_object(pk)
-        # codigo de usuario se crea con su prefijo de especialista y su numero de documento       
+        # codigo de usuario se crea con su prefijo de especialista y su numero de documento
 
         if request.data.get("type_specialist") == "m":
             data['code'] = PREFIX_CODE_SPECIALIST + request.data.get(
@@ -960,7 +960,7 @@ class SellerListView(ListCreateAPIView, UpdateAPIView):
         if serializer.is_valid():
             serializer.save()
             generate_seller_goals(serializer.data['id'])
-            
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -973,12 +973,14 @@ class SellerClientListView(ListCreateAPIView):
 
         seller = Operations.get_id(self, request)
 
-        queryset = Client.objects.filter(seller_assigned=seller)
+        queryset = Client.objects.filter(seller_assigned=seller,
+                                         sale__status__range=(2, 3))
         serializer = ClientSerializer(queryset, many=True)
 
         # pagination
         page = self.paginate_queryset(queryset)
         if page is not None:
+            serializer = ClientSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
 
@@ -1176,7 +1178,7 @@ class ContactFilterView(ListAPIView):
         type_contact = self.request.query_params.get('type_contact', None)
         if type_contact is not None:
             if int(type_contact) == 1:
-                queryset = queryset.filter(Q(type_contact=1) | Q(type_contact=3))
+                queryset = queryset.filter(type_contact=1)
             elif int(type_contact) == 2:
                 queryset = queryset.filter(type_contact=2)
         date_start = self.request.query_params.get('date_start', None)

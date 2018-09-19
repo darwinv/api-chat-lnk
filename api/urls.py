@@ -153,7 +153,7 @@ urlpatterns = [
         name='sellers-account'),
 
     # url(r'^account_status/sellers/(?P<pk>[0-9]+)/$', actors.SellerAccountView.as_view(), name='seller-account-status'),
-    
+
     # Estado de cuenta del vendedor
     url(r'^account_status/backend/seller/(?P<pk>[0-9]+)/$',
         account.SellerAccountBackendView.as_view(),
@@ -213,8 +213,9 @@ urlpatterns = [
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(),
         name='seller-detail'),
-    
-    url(r'^sellers/clients/$', actors.SellerClientListView.as_view(), name='sellers-clients'),
+
+    url(r'^sellers/clients/$', actors.SellerClientListView.as_view(),
+        name='sellers-clients'),
 
     # Actualizar Consulta por detalle (Responder)
     url(r'^specialist/queries/(?P<pk>[0-9]+)/$',
