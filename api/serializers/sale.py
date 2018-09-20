@@ -133,8 +133,6 @@ class SaleSerializer(serializers.Serializer):
                     sale_detail["sale"] = instance
                     # creamos la instancia de detalle
                     instance_sale = SaleDetail.objects.create(**sale_detail)
-
-
                     # Calculamos la mayor cantidad de vigencias para el descuento
                     validity_months = product["plan_id"].validity_months
                     if validity_months > max_fee_product:

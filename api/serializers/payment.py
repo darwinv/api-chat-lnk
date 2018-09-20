@@ -54,7 +54,8 @@ class PaymentSerializer(serializers.ModelSerializer):
         fee.save()
 
         qsetdetail = SaleDetail.objects.filter(sale=fee.sale)
-
+        # devolver plan name, validity_months, y query quantity de los productos adquiridos
+        # mostrarlos en  la data
         data = {'qset': qsetdetail}
         # envio codigo pin por correo
         if fee.sale.status == 1:
