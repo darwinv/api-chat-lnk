@@ -7,6 +7,7 @@ from api.models import User, GroupMessage, Declinator
 from api.api_choices_models import ChoicesAPI as c
 from api.utils import querysets
 from api.utils.parameters import Params
+from api.utils.functions import generate_message_code_user
 from api import pyrebase
 import sys
 
@@ -206,6 +207,8 @@ class QuerySerializer(serializers.ModelSerializer):
         query = Query.objects.create(**validated_data)
         # creamos el grupo para ese mensaje
         group = GroupMessage.objects.create(status=1)
+        # Generar codigo de usuario para chat
+        code_user = generate_message_code_user(validated_data["client"], acq_plan)
         # Recorremos los mensajes para crearlos todos
         for data_message in data_messages:
             # por defecto el tipo de mensaje al crearse
@@ -216,7 +219,8 @@ class QuerySerializer(serializers.ModelSerializer):
             data_message["room"] = Params.PREFIX['client']+str(
                 validated_data["client"].id)+'-'+Params.PREFIX['category']+str(
                     validated_data["category"].id)
-            data_message["code"] = validated_data["client"].code
+            # data_message["code"] = validated_data["client"].code
+            data_message["code"] = code_user
             # self.context["user_id"] = validated_data["client"].id
             Message.objects.create(query=query, group=group, **data_message)
         # restamos una consulta disponible al plan adquirido
@@ -360,6 +364,9 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
         self.context["size_msgs"] = len(data_messages)
         # creamos el grupo
         group = GroupMessage.objects.create(status=1)
+        # Generar codigo de usuario para chat
+        code_user = generate_message_code_user(instance.client,
+                                                 instance.acquired_plan)
         # Recorremos los mensajes para crearlos todos
         for data_message in data_messages:
             # por defecto el tipo de mensaje al actualizarse debe
@@ -369,7 +376,7 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
             data_message["room"] = Params.PREFIX['client'] +\
                 str(instance.client.id)+'-'+Params.PREFIX['category'] +\
                 str(instance.category.id)
-            data_message["code"] = instance.client.code
+            
             # se busca el mensaje de referencia y se extrae de la respuesta
             if 'message_reference' in data_message and data_message['message_reference'] != 0:
                 ms_ref = data_message['message_reference'].id

@@ -1441,21 +1441,33 @@ class RucApiDetailSerializer(serializers.Serializer):
     def get_address(self, obj):
         address = {}
         try:
-            if 'departamento' in obj:
-                department = Department.objects.get(name=obj['departamento'])
-                address['department'] = department
+            if 'departamento' in obj:                
+                try:
+                    department = Department.objects.get(name=obj['departamento'])
+                    address['department'] = department
+                except Department.DoesNotExist:
+                    address['department'] = None
             else:
                 address['department'] = None
 
             if 'provincia' in obj:
-                province = Province.objects.get(name=obj['provincia'], department=department)
-                address['province'] = province
+                try:
+                    province = Province.objects.get(name=obj['provincia'], 
+                                                    department=address['department'])
+                    address['province'] = province
+                except Province.DoesNotExist:
+                    address['province'] = None                
             else:
                 address['province'] = None
             
             if 'distrito' in obj:
-                district = District.objects.get(name=obj['distrito'], province=province)
-                address['district'] = district
+                
+                try:
+                    district = District.objects.get(name="obj['distrito']", 
+                                                    province=address['province'])
+                    address['district'] = district
+                except District.DoesNotExist:
+                    address['district'] = None
             else:
                 address['district'] = None
 
@@ -1469,6 +1481,7 @@ class RucApiDetailSerializer(serializers.Serializer):
             else:
                 return None
         except Exception as e:
+            print(e)
             return None
         
 

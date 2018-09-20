@@ -229,6 +229,7 @@ class SaleContactoDetailSerializer(serializers.ModelSerializer):
 
     products = serializers.SerializerMethodField()
     fee = serializers.SerializerMethodField()
+    created_at = serializers.SerializerMethodField()
     class Meta:
         """Modelo."""
 
@@ -249,3 +250,9 @@ class SaleContactoDetailSerializer(serializers.ModelSerializer):
         fee = get_next_fee_to_pay(obj.id)
         serializer = FeeSerializer(fee)
         return serializer.data
+
+    def get_created_at(self, obj):
+        """Devuelve created_at."""
+        if type(obj) is dict:
+            return str(obj['created_at'])
+        return str(obj.created_at)

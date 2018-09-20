@@ -282,11 +282,11 @@ class ClientSharePlansView(APIView):
             # Para cada uno de los correos guardados
             for email_receiver in serializer_data:
                 if 'test' not in sys.argv:
-                        # Envio de correos notificacion
-                        mail = BasicEmailAmazon(subject="Share Plan Success", to=email_receiver,
-                                    template='email/share')
-                        arguments = {'link': WEB_HOST}
-                        mail.sendmail(args=arguments)
+                    # Envio de correos notificacion
+                    mail = BasicEmailAmazon(subject="Share Plan Success", to=email_receiver,
+                                template='email/share')
+                    arguments = {'link': WEB_HOST}
+                    mail.sendmail(args=arguments)
 
                 # Ejecutamos el serializer
                 serializer_data[email_receiver].save()

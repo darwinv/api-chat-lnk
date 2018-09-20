@@ -139,18 +139,24 @@ class SellerAccountSerializer(serializers.Serializer):
         # todos los promocionales de ese mes
 
         if quant_dic["quantity__sum"]:
+            # sumo los promocionales que me quedan con los promocionales entregados
             all_promo = quant_dic["quantity__sum"] + promotional_plans
         else:
             all_promo = 0 + promotional_plans
 
-        return {"month_clients": new_clients,
-                "month_contacts": contacts,
-                "month_promotionals": promotional_plans,
-                "month_people_purchase": people_purchase,
-                "month_people_purchase_goal": people_purchase_goal,
-                "month_contacts_goal": contacts_goal,
-                "month_new_clients_goal": new_clients_goal,
-                "month_all_promotionals": all_promo}
+        return {
+                    "month_new_clients_goal": new_clients_goal,
+                    "month_clients": new_clients,
+
+                    "month_contacts_goal": contacts_goal,
+                    "month_contacts": contacts,
+
+                    "month_people_purchase_goal": people_purchase_goal,
+                    "month_people_purchase": people_purchase,
+
+                    "month_all_promotionals": all_promom,
+                    "month_promotionals": promotional_plans
+                }
 
 
 class SellerAccountBackendSerializer(serializers.Serializer):

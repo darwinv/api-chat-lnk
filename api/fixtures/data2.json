@@ -358,7 +358,7 @@
     "model": "api.category",
     "pk": 20,
     "fields": {
-      "name": "electronics",
+      "name": "Electronics",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/06/Sin-título-1-22-1.png",
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidutuas"
     }
