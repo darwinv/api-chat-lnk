@@ -14,7 +14,7 @@ from rest_framework.generics import ListCreateAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
-from django.db.models import Subquery, Q
+from django.db.models import Subquery, Q, OuterRef
 import django_filters.rest_framework
 
 
@@ -44,19 +44,25 @@ class PaymentPendingView(ListCreateAPIView):
         """get compra pendientes"""
         data = request.query_params
 
-        if not 'document_number' in data:
-            raise serializers.ValidationError({'document_number': [self.required]})
-
-        document = data['document_number']
-
-        fee = MonthlyFee.objects.filter(status=1)
-
+        fee = MonthlyFee.objects.filter(
+                            sale=OuterRef("pk"),
+                            status=1
+                        )
+        
         manage_data = Sale.objects.values('created_at',
             'total_amount','reference_number', 'is_fee', 'id',
             'client__first_name','client__last_name', 'client__business_name'
-            ).filter(
-                Q(client__ruc=document) | Q(client__document_number= document),
-                id__in=Subquery(fee.values('sale'))).order_by('-created_at')
+            ).filter(id__in=Subquery(fee.values('sale'))).annotate(
+                                                            pay_before=Subquery(
+                                                                fee.values(
+                                                                    'pay_before')[:1]
+                                                            )
+                                                        ).order_by('pay_before')
+        
+        if 'document_number' in data:
+            document = data['document_number']
+            manage_data = manage_data.filter(Q(client__ruc=document) | Q(
+                                        client__document_number= document))
 
         # paginacion
         page = self.paginate_queryset(manage_data)
