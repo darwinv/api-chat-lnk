@@ -154,7 +154,7 @@ class SellerAccountSerializer(serializers.Serializer):
                     "month_people_purchase_goal": people_purchase_goal,
                     "month_people_purchase": people_purchase,
 
-                    "month_all_promotionals": all_promom,
+                    "month_all_promotionals": all_promo,
                     "month_promotionals": promotional_plans
                 }
 

@@ -1460,8 +1460,7 @@ class RucApiDetailSerializer(serializers.Serializer):
             else:
                 address['province'] = None
             
-            if 'distrito' in obj:
-                
+            if 'distrito' in obj:                
                 try:
                     district = District.objects.get(name="obj['distrito']", 
                                                     province=address['province'])
