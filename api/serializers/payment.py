@@ -158,8 +158,8 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
     def get_client__business_name(self, obj):
         """Devuelve client__business_name."""
         if type(obj) is dict:
-            return str(obj['client__business_name'])
-        return str(obj.client.business_name)
+            return obj['client__business_name']
+        return obj.client.business_name
 
 
 
