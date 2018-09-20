@@ -97,8 +97,6 @@ class SaleSerializer(serializers.Serializer):
         instance = Sale(**validated_data)
         instance.save()
         sale_detail = {}
-
-
         max_fee_product = 0
         for product in products:
             plan_acquired = {}
@@ -114,8 +112,14 @@ class SaleSerializer(serializers.Serializer):
                     if product["is_billable"]:
                         sale_detail["discount"] = 0.0
                         plan_acquired["is_active"] = False
+                        plan_acquired["available_queries"] = 0
+                        plan_acquired["queries_to_pay"] = product["plan_id"].query_quantity
                     else:
+                        plan_acquired["available_queries"] = product["plan_id"].query_quantity
+                        plan_acquired["queries_to_pay"] = 0
                         validated_data["is_fee"] = False
+                        plan_acquired["activation_date"] = date.today()
+                        plan_acquired["expiration_date"] = get_date_by_time(product["plan_id"].validity_months)
                         # se activa automaticamente por ser promocional
                         plan_acquired["is_active"] = True
                         plan_promotionals = SellerNonBillablePlans.objects.get(
@@ -138,9 +142,7 @@ class SaleSerializer(serializers.Serializer):
 
                     # llenamos data del plan adquirido
 
-                    plan_acquired["validity_months"] = validity_months 
-                    plan_acquired["available_queries"] = 0
-                    plan_acquired["queries_to_pay"] = product["plan_id"].query_quantity
+                    plan_acquired["validity_months"] = validity_months
                     plan_acquired["query_quantity"] = product["plan_id"].query_quantity
                     plan_acquired["available_requeries"] = 10  # harcoded. CAMBIAR
                     plan_acquired["maximum_response_time"] = 24  # harcoded.CAMBIAR
@@ -158,32 +160,32 @@ class SaleSerializer(serializers.Serializer):
             n_fees = max_fee_product
         else:
             n_fees = 1
+        # solo si no es promocional
+        if product["is_billable"]:
+            for i in range(1, n_fees+1):
 
-        for i in range(1, n_fees+1):
+                if n_fees == 1:
+                    # Si la venta es de una sola cuota
+                    fee_amount = float(instance.total_amount)
+                else:
+                    # Calcular el monto a pagar
+                    fee_amount = 0
+                    for product in products:
+                        price = float(product["plan_id"].price)
+                        validity_months = int(product["plan_id"].validity_months)
+                        quantity = int(product["quantity"])
 
-            if n_fees==1:
-                # Si la venta es de una sola cuota
-                fee_amount = float(instance.total_amount)
-            else:
-                # Calcular el monto a pagar
-                fee_amount = 0
-                for product in products:
-                    price = float(product["plan_id"].price)
-                    validity_months = int(product["plan_id"].validity_months)
-                    quantity = int(product["quantity"])
+                        # Se Toman en cuenta solo planes con cuotas
+                        if validity_months >= i:
+                            fee_amount = (price/validity_months)*quantity + fee_amount
 
-                    # Se Toman en cuenta solo planes con cuotas
-                    if validity_months >= i:
-                        fee_amount = (price/validity_months)*quantity + fee_amount
-
-            pay_day = date.today() + relativedelta(days=3, months=i-1) # Hardcoded cambiar la cantidad de dias
-
-            sale_id = instance
-            MonthlyFee.objects.create(fee_amount=fee_amount,
-                                      fee_order_number=i, status=1,
-                                      sale=sale_id,
-                                      pay_before=pay_day,
-                                      fee_quantity=n_fees)
+                pay_day = date.today() + relativedelta(days=3, months=i-1) # Hardcoded cambiar la cantidad de dias
+                sale_id = instance
+                MonthlyFee.objects.create(fee_amount=fee_amount,
+                                          fee_order_number=i, status=1,
+                                          sale=sale_id,
+                                          pay_before=pay_day,
+                                          fee_quantity=n_fees)
 
         return instance
 
