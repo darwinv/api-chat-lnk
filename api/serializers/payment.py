@@ -120,13 +120,22 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
     client__last_name = serializers.SerializerMethodField()
     client__business_name = serializers.SerializerMethodField()
     created_at = serializers.SerializerMethodField()
+
+    pay_before = serializers.SerializerMethodField()
+
     class Meta:
         """Modelo."""
 
         model = Sale
         fields = (
             'created_at', 'total_amount', 'reference_number', 'is_fee', 'id',
-            'client__first_name','client__last_name', 'client__business_name')
+            'client__first_name','client__last_name', 'client__business_name', 'pay_before')
+
+    def get_pay_before(self, obj):
+        """Devuelve pay_before."""
+        if type(obj) is dict:
+            return str(obj['pay_before'])
+        return None
 
     def get_created_at(self, obj):
         """Devuelve created_at."""
@@ -149,8 +158,8 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
     def get_client__business_name(self, obj):
         """Devuelve client__business_name."""
         if type(obj) is dict:
-            return str(obj['client__business_name'])
-        return str(obj.client.business_name)
+            return obj['client__business_name']
+        return obj.client.business_name
 
 
 
