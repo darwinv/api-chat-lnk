@@ -1439,6 +1439,7 @@ class RucApiDetailSerializer(serializers.Serializer):
     ruc = serializers.CharField()
 
     def get_address(self, obj):
+        return None
         address = {}
         try:
             if 'departamento' in obj:

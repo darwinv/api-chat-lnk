@@ -68,7 +68,6 @@ def generate_message_code_user(client, acquired_plan):
             prefix = 'F'
     else:
         ManageObj = QueryPlansManage.objects.filter(receiver=client, new_acquired_plan=acquired_plan)
-
         if ManageObj and ManageObj[0].type_operation == 2:
             prefix = 'C'
 
