@@ -1178,7 +1178,7 @@ class ContactFilterView(ListAPIView):
         type_contact = self.request.query_params.get('type_contact', None)
         if type_contact is not None:
             if int(type_contact) == 1:
-                queryset = queryset.filter(type_contact=1)
+                queryset = queryset.filter(Q(type_contact=1) | Q(type_contact=3))
             elif int(type_contact) == 2:
                 queryset = queryset.filter(type_contact=2)
         date_start = self.request.query_params.get('date_start', None)
