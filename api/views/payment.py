@@ -88,6 +88,7 @@ class PaymentPendingDetailView(APIView):
         else:
             raise Http404
 
+
 class PaymentDetailContactView(ListCreateAPIView):
     """Vista para traer pagos pendientes."""
     authentication_classes = (OAuth2Authentication,)

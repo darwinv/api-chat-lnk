@@ -432,8 +432,8 @@ msgid "Please click the next link for get your plan empower"
 msgstr "Por favor dale click al siguiente link para obtener tu plan facultado"
 
 #: .\api\templates\email\pin_code.html:5
-msgid "Your pin code!"
-msgstr "Tu codigo pin!"
+msgid "Your pin code"
+msgstr "¡Tu codigo pin!"
 
 #: .\api\templates\email\send_code.html:4
 msgid "Recovery Password"
