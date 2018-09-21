@@ -12,7 +12,6 @@ from rest_framework.validators import UniqueValidator
 from api.serializers.actors import ClientSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from api.serializers.fee import FeeSerializer
-
 from api.utils.parameters import Params
 import sys
 from api import pyrebase
