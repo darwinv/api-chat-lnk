@@ -7,7 +7,7 @@ def generate_sellers_goals():
     today = datetime.datetime.now()
     number_month = today.month
     number_year = today.year
-    
+
     sellers = Seller.objects.raw("SELECT api_seller.user_ptr_id FROM api_seller WHERE \
         ( SELECT api_parameterseller.seller_id FROM \
         api_parameterseller WHERE api_parameterseller.seller_id = api_seller.user_ptr_id AND \
@@ -46,12 +46,12 @@ def generate_message_code_user(client, acquired_plan):
         client: Objeto cliente
         acquired_plan: Objeto acquired_plan
         retorna string para cada mensaje de la consulta
-        return str 
+        return str
     """
     document_number = role = prefix = ""
-    
+
     if client.type_client=="b":
-        document_number = client.ruc     
+        document_number = client.ruc
     else:
         document_number = client.document_number
 
