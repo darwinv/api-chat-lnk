@@ -1190,7 +1190,9 @@ class ContactFilterView(ListAPIView):
                 created_at__range=(date_start, date_end))
         return queryset
 
+
 # ------------ Fin de Vendedores -----------------
+
 
 # Subir la foto de un contacto
 class PhotoContactUploadView(APIView):
