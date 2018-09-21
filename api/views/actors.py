@@ -38,6 +38,7 @@ from django.utils.translation import ugettext_lazy as _
 import os
 import uuid
 import boto3, sys
+import random, string
 from datetime import datetime, date, timedelta
 from django.utils import timezone
 from api.utils.validations import Operations
@@ -1119,9 +1120,15 @@ class ContactListView(ListCreateAPIView):
         if "type_client" not in data or not data["type_client"]:
             raise serializers.ValidationError({'type_client': [required]})
 
-        # eliminamos contraseña para contacto no efectivo en caso de envio
-        if 'type_contact' in data and data['type_contact'] == 2 and 'password' in data:
+        # eliminamos contraseña para contacto en caso de envio
+        if 'type_contact' in data and 'password' in data:
             del data["password"]
+
+        # generamos contraseña random
+        if 'type_contact' in data and data['type_contact'] == 1:
+            password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
+            data["password"] = password
+
 
         if data["type_client"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
