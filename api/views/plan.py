@@ -517,7 +517,7 @@ class ClientAllPlansView(ListCreateAPIView):
                     price=F('sale_detail__price'),
                     sale=F('sale_detail__sale'),
                   is_fee=F('sale_detail__sale__is_fee')).order_by('id')
-            
+
             self.check_object_permissions(self.request, obj)
             return obj
         except QueryPlansAcquired.DoesNotExist:
@@ -919,7 +919,7 @@ class PlansStatus(APIView):
         user_id = Operations.get_id(self, request)
         qs = QueryPlansAcquired.objects.filter(queryplansclient__client=user_id)
         # import pdb; pdb.set_trace()
-        plans = PlanStatusSerializer(qs)
+        plans = PlanStatusSerializer(qs, context={"client":user_id})
         return Response(plans.data)
 
 
