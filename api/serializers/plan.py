@@ -7,27 +7,34 @@ from datetime import datetime
 from api.utils.querysets import get_next_fee_to_pay
 from api.serializers.fee import FeeSerializer
 
+
 class PlanStatusSerializer(serializers.Serializer):
     """Chequeo de Status."""
     def to_representation(self, obj):
         """repr."""
-        qs_to_activate = obj.filter(is_active=False,
-                                    expiration_date__gte=datetime.now().date(),
-                                    activation_date=None)
+        client = self.context["client"]
+        qs_to_activate = QueryPlansAcquired.objects.filter(
+            is_active=False,
+            expiration_date__gte=datetime.now().date(),
+            activation_date=None,
+            queryplansclient__client_id=client)
+        qs_active_plans = QueryPlansAcquired.objects.filter(
+            is_active=True, queryplansclient__client_id=client)
 
-        qs_active_plans = obj.filter(is_active=True)
+        qs = QueryPlansAcquired.objects.filter(
+            queryplansclient__is_chosen=True,
+            expiration_date__lte=datetime.now().date(),
+            queryplansclient__client_id=client)
 
-        qs = obj.filter(queryplansclient__is_chosen=True,
-                        expiration_date__lte=datetime.now().date())
         # import pdb; pdb.set_trace()
         if obj.exists() is False:  # No hay comprado
             return {"code": 1, "message": "No tiene plan comprado"}
         else:
             if qs_active_plans.exists():  # tiene activos
-                if obj.filter(queryplansclient__is_chosen=True).exists():  # tiene seleccionado
+                if QueryPlansAcquired.objects.filter(queryplansclient__is_chosen=True, queryplansclient__client_id=client).exists():  # tiene seleccionado
                     if qs.exists():
                         return {"code": 6, "message": "seleccionado expiro, tiene activos"}
-                    elif obj.filter(queryplansclient__is_chosen=True, available_queries__lt=1).exists():
+                    elif QueryPlansAcquired.objects.filter(queryplansclient__is_chosen=True, available_queries__lt=1, queryplansclient__client_id=client).exists():
                         if qs_active_plans.count() > 1:
                             return {"code": 9, "message": "seleccionado, sin consultas, otros activos"}
                         if qs_to_activate.exists():  # tiene otros por activar
