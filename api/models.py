@@ -4,7 +4,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from api.api_choices_models import ChoicesAPI as Ch
 from django.utils.translation import ugettext_lazy as _
-from api.utils.routines import get_messages_list
 
 
 class Countries(models.Model):
@@ -754,6 +753,7 @@ class Parameter(models.Model):
 """ STOREPROCEDURE y Clases exclusivas para la API"""
 """ No migrar para la web"""
 
+from api.utils.routines import get_messages_list
 
 class SpecialistMessageList_sp(models.Model):
     id = models.IntegerField(primary_key=True)
