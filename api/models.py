@@ -522,13 +522,13 @@ class MonthlyFee(models.Model):
 class Payment(models.Model):
     """Pagos."""
 
-    amount = models.FloatField()
-    operation_number = models.CharField(max_length=12)
+    amount = models.FloatField(_("amount"))
+    operation_number = models.CharField(_("operation number"), max_length=12)
+    observations = models.CharField(_("observations"), max_length=255, null=True)
     authorized_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     authorization_date = models.DateTimeField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.PositiveIntegerField(choices=Ch.payment_status, default=1)
-    observations = models.CharField(max_length=255, null=True)
     bank = models.ForeignKey(Bank, on_delete=models.PROTECT)
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
     monthly_fee = models.ForeignKey(MonthlyFee, on_delete=models.PROTECT,
