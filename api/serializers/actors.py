@@ -872,7 +872,7 @@ class SellerSerializer(serializers.ModelSerializer):
                                 template='email/send_credentials')
         # import pdb; pdb.set_trace()
         credentials = {}
-        credentials["user"] = validated_data["username"]
+        credentials["user"] = validated_data["email_exact"]
         credentials["pass"] = password
         #print(Response(mail.sendmail(args=credentials)))
         return instance
@@ -1462,7 +1462,7 @@ class RucApiDetailSerializer(serializers.Serializer):
             
             if 'distrito' in obj:                
                 try:
-                    district = District.objects.get(name="obj['distrito']", 
+                    district = District.objects.get(name=obj['distrito'], 
                                                     province=address['province'])
                     address['district'] = district
                 except District.DoesNotExist:

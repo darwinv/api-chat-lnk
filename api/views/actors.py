@@ -38,6 +38,7 @@ from django.utils.translation import ugettext_lazy as _
 import os
 import uuid
 import boto3, sys
+import random, string
 from datetime import datetime, date, timedelta
 from django.utils import timezone
 from api.utils.validations import Operations
@@ -461,6 +462,11 @@ class ClientListView(ListCreateAPIView):
         if 'type_client' not in data or not data['type_client']:
             raise serializers.ValidationError({'type_client': [self.required]})
 
+        # generamos contraseña random
+        if 'register_type' in data and data['register_type'] == 2:
+            password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
+            data["password"] = password
+
         if data['type_client'] == 'n':
             data['economic_sector'] = ''
         elif data['type_client'] == 'b':
@@ -479,6 +485,15 @@ class ClientListView(ListCreateAPIView):
                 # se le crea la lista de todas las categorias al cliente en firebase
                 pyrebase.createCategoriesLisClients(serializer.data['id'])
 
+                if 'register_type' in data and data['register_type'] == 2:
+                    # envio de contraseña al cliente
+                    mail = BasicEmailAmazon(subject='Envio Credenciales', to=data["email_exact"],
+                                            template='email/send_credentials')
+                    credentials = {}
+                    credentials["user"] = data["email_exact"]
+                    credentials["pass"] = password
+                    mail.sendmail(args=credentials)
+
             # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
             give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
 
@@ -490,7 +505,10 @@ class ClientListView(ListCreateAPIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     def check_plans_operation_manage(self, receiver_id, email_receiver):
-
+        """
+            funcion creada para otorgar al cliente beneficios segun su corre
+            de registro
+        """
         # No realizar operacion si tiene operacioens previas para este plan
         plan_manages = QueryPlansManage.objects.filter(
             email_receiver=email_receiver, status=3)
@@ -1128,9 +1146,15 @@ class ContactListView(ListCreateAPIView):
         if "type_client" not in data or not data["type_client"]:
             raise serializers.ValidationError({'type_client': [required]})
 
-        # eliminamos contraseña para contacto no efectivo en caso de envio
-        if 'type_contact' in data and data['type_contact'] == 2 and 'password' in data:
+        # eliminamos contraseña para contacto en caso de envio
+        if 'type_contact' in data and 'password' in data:
             del data["password"]
+
+        # generamos contraseña random
+        if 'type_contact' in data and data['type_contact'] == 1:
+            password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
+            data["password"] = password
+
 
         if data["type_client"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
@@ -1148,7 +1172,14 @@ class ContactListView(ListCreateAPIView):
                     # se le crea la lista de todas las categorias al cliente en firebase
                     pyrebase.createCategoriesLisClients(serializer.data['client_id'])
 
-
+                    # envio de contraseña al cliente
+                    mail = BasicEmailAmazon(subject='Envio Credenciales', to=data["email_exact"],
+                                            template='email/send_credentials')
+                    credentials = {}
+                    credentials["user"] = data["email_exact"]
+                    credentials["pass"] = password
+                    mail.sendmail(args=credentials)
+                    
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
