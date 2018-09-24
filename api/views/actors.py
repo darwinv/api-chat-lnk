@@ -1101,8 +1101,17 @@ class ContactListView(ListCreateAPIView):
     def get(self, request):
         """Devolver contactos del vendedor."""
         seller = Operations.get_id(self, request)
-        contacts = SellerContact.objects.filter(seller=seller,
-                                                created_at__startswith=date.today())
+        date_start = self.request.query_params.get('date_start', None)
+        date_end = self.request.query_params.get('date_end', None)
+        # si hay fecha poder filtrarla
+        if date_start is not None or date_end is not None:
+            fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
+            date_end = fecha_end + timedelta(days=1)
+            contacts = SellerContact.objects.filter(
+                seller=seller, created_at__range=(date_start, date_end))
+            serializer = SellerContactSerializer(contacts, many=True)
+            return Response(serializer.data)
+        contacts = SellerContact.objects.filter(seller=seller)
         serializer = SellerContactSerializer(contacts, many=True)
         return Response(serializer.data)
 
