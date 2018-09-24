@@ -40,7 +40,6 @@ def generate_seller_goals(seller_id, day=None):
                         number_year = number_year)
 
 
-
 def generate_message_code_user(client, acquired_plan):
     """
         client: Objeto cliente

@@ -872,7 +872,7 @@ class SellerSerializer(serializers.ModelSerializer):
                                 template='email/send_credentials')
         # import pdb; pdb.set_trace()
         credentials = {}
-        credentials["user"] = validated_data["username"]
+        credentials["user"] = validated_data["email_exact"]
         credentials["pass"] = password
         #print(Response(mail.sendmail(args=credentials)))
         return instance
