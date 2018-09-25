@@ -888,6 +888,7 @@ class SellerSerializer(serializers.ModelSerializer):
 
             value = time_delay.value
         except Exception as e:
+            print("error get_quota")
             print(e.args)
         return value
 
@@ -1479,6 +1480,7 @@ class RucApiDetailSerializer(serializers.Serializer):
             else:
                 return None
         except Exception as e:
+            print("error get_address")
             print(e)
             return None
         

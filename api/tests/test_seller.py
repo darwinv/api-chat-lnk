@@ -387,7 +387,7 @@ class GetAllSellers(APITestCase):
         # get data from db
         sellers = Seller.objects.all()
         serializer = SellerSerializer(sellers, many=True)
-        # print(response.data['results'])
+        
         self.assertEqual(response.data['results'], serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

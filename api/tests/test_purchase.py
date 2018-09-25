@@ -102,7 +102,7 @@ class PurchaseQueryPromotionalPlans(APITestCase):
                                content_type='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        # print(SaleDetail.objects.all())
+        
         response2 = client.post(reverse('purchase'),
                                 data=json.dumps(self.valid_payload),
                                 content_type='application/json')

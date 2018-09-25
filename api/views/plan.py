@@ -562,6 +562,7 @@ class ActivationPlanView(APIView):
             serializer = PlanDetailSerializer(query_set)
             return Response(serializer.data)
         except Exception as e:
+            print("error ActivationPlanView")
             print(e)
             raise Http404
 
@@ -640,6 +641,7 @@ class ChosenPlanView(APIView):
             serializer = PlanDetailSerializer(data)
             return Response(serializer.data)
         except Exception as e:
+            
             print(e)
             raise Http404
 

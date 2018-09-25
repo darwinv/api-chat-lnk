@@ -140,6 +140,7 @@ def remove_file(file):
             try:
                 os.remove(file.name)
             except Exception as e:
+                print("error remove_file")
                 print(e.strerror)
                 logger.warning(e.strerror)
 
