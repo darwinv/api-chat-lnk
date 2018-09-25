@@ -12,6 +12,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunSQL("DROP PROCEDURE IF EXISTS SP_MESSAGES_LIST;"),
+        migrations.RunSQL("DROP FUNCTION IF EXISTS  get_display_name ;"),
+        migrations.RunSQL(
+            """ CREATE FUNCTION get_display_name(nick VARCHAR(250), first_name VARCHAR(250), last_name VARCHAR(250), agent_firstname VARCHAR(250),  agent_lastname VARCHAR(250))
+                RETURNS VARCHAR(250)
+                BEGIN
+                    DECLARE display_name VARCHAR(250);
+                    IF LENGTH(nick)>0 THEN SET display_name = nick;
+                    ELSEIF LENGTH(first_name) > 0 THEN SET display_name = CONCAT(first_name, ' ', last_name);
+                    ELSE SET display_name =  CONCAT(agent_firstname, ' ', agent_lastname);
+                    END IF;
+                    RETURN display_name;
+                END ;
+                """),
+
         migrations.RunSQL(
             # 'source dump.sql'
             """
@@ -48,7 +62,7 @@ BEGIN DECLARE v_id_specialist INT;
         SELECT DISTINCT
           q.id         AS id,
           u.photo,
-          IF(LENGTH(u.nick)>0, u.nick, CONCAT(u.first_name, ' ', u.last_name) ) as display_name,
+          get_display_name(u.nick, u.first_name, u.last_name, c.agent_firstname, c.agent_lastname ) AS display_name,
           m.created_at    AS date,
           q.title,
           m.message,
