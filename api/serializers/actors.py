@@ -600,7 +600,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
         credentials = {}
         credentials["user"] = validated_data["username"]
         credentials["pass"] = password
-        # Response(mail.sendmail(args=credentials))
+        mail.sendmail(args=credentials)
         return instance
 
     def update(self, instance, validated_data):
@@ -870,11 +870,10 @@ class SellerSerializer(serializers.ModelSerializer):
         instance.save()
         mail = BasicEmailAmazon(subject='Envio Credenciales', to=validated_data["email_exact"],
                                 template='email/send_credentials')
-        # import pdb; pdb.set_trace()
         credentials = {}
         credentials["user"] = validated_data["email_exact"]
         credentials["pass"] = password
-        #print(Response(mail.sendmail(args=credentials)))
+        mail.sendmail(args=credentials)
         return instance
 
     def __init__(self, *args, **kwargs):

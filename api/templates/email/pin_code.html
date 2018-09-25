@@ -2,24 +2,23 @@
 {% load i18n %}
 {% block content_mail %}
 
-<div style="margin:20px 20px">
-<h1> Tu Código Pin</h1>  
-<!-- <h1>  trans "Your pin code"|title  </h1> -->
-<div>
+
+<h1 style="margin:20px 20px">{% trans "Your Pin Code" %}</h1>  
 
 <div style="text-align: justify;">
-Felicitaciones por adquirir tu(s) planes(s) de consultas.
-Te dejamos los datos de tu(s) plan(es) y codigo(s)
-pin para cuando lo desees activarlos:
+{% trans "Congratulations on acquiring your consultation plan(s).
+We leave you the data of your plan(s) and code(s)
+pin for when you want to activate them" %}:
 
   <br>
 <table class="linkup">
   <tr>
-    <th>Nombre del Plan</th>
-    <th>Meses de Vigencia</th>
-    <th>Numero de Consultas</th>
-    <th>Codigo PIN</th>
+    <th>{% trans "Name of the Plan" %}</th>
+    <th>{% trans "Months of Validity" %}</th>
+    <th>{% trans "Number of Queries" %}</th>
+    <th>{% trans "Pin code" %}</th>
   </tr>
+
 {% for record in qset %}
     <tr>
       <td>{{record.queryplansacquired_set.get.plan_name}}</td>
