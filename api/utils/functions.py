@@ -45,7 +45,16 @@ def generate_message_code_user(client, acquired_plan):
         client: Objeto cliente
         acquired_plan: Objeto acquired_plan
         retorna string para cada mensaje de la consulta
-        return str
+
+        LOS CODIGOS EN EL CHAT DEPENDE DEL PLAN COMPRADO
+        U  -> plan regalado
+        UC -> plan regalado usado por compartido
+        UT -> plan regalado usado por transferido
+        UF -> plan regalado usado por un facultado
+        C  -> plan comprado
+        CC -> plan comprado y usado por compartido
+        CT -> plan comprado y usado por transferencia
+        CF -> plan comprado y usado por facultado
     """
     document_number = role = prefix = ""
 

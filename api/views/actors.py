@@ -39,6 +39,7 @@ import os
 import uuid
 import boto3, sys
 import random, string
+
 from datetime import datetime, date, timedelta
 from django.utils import timezone
 from api.utils.validations import Operations
@@ -344,7 +345,6 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 from api.models import QueryPlansAcquired, SaleDetail, Sale, QueryPlansClient
 from api.models import Clasification, QueryPlans, ProductType
-from datetime import datetime
 from api.utils import tools
 from api.pyrebase import chosen_plan
 from api.serializers.plan import QueryPlansAcquiredSerializer
@@ -1129,7 +1129,16 @@ class ContactListView(ListCreateAPIView):
                 seller=seller, created_at__range=(date_start, date_end))
             serializer = SellerContactSerializer(contacts, many=True)
             return Response(serializer.data)
-        contacts = SellerContact.objects.filter(seller=seller)
+
+        # SI NO ENVIAN DATE, TOMAMOS FECHA ACTUAL
+        # CODIGO NO NECESARIO
+        Today = datetime.now()
+        date_start = date_end = Today.strftime("%Y-%m-%d")
+        fecha_end = datetime.strptime(date_end, "%Y-%m-%d")
+        date_end = fecha_end + timedelta(days=1)
+
+        contacts = SellerContact.objects.filter(seller=seller,
+            created_at__range=(date_start, date_end))
         serializer = SellerContactSerializer(contacts, many=True)
         return Response(serializer.data)
 

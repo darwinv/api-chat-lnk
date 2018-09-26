@@ -32,6 +32,7 @@ class BasicEmailAmazon(object):
         txt = get_template(self.template_txt)
         html_content = html.render(d)
         txt_content = txt.render(d)
+        
         # Try to send the email.
         try:
             response = client.send_email(
