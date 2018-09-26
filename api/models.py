@@ -645,14 +645,14 @@ class Message(models.Model):
     file_url = models.CharField(max_length=500, blank=True)
     file_preview_url = models.CharField(max_length=500, blank=True)
     code = models.CharField(_('code'), max_length=45)
-    # uploaded = models.NullBooleanField(null=True)
+    
     room = models.CharField(max_length=200)  # Sala de chat
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
     group = models.ForeignKey(GroupMessage, on_delete=models.PROTECT,
                               null=True)
     message_reference = models.ForeignKey('self', on_delete=models.PROTECT,
                                           related_name="ref", null=True)
-
+    uploaded = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         """Str."""

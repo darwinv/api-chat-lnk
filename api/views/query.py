@@ -550,7 +550,7 @@ class QueryUploadFilesView(APIView):
             # Actualizamos el modelo mensaje
             ms.file_url = url
             ms.file_preview_url = url_thumb
-            ms.save()
+            
             s3 = boto3.client('s3')
             # Evaluamos si el archivo se subio a S3
             try:
@@ -569,16 +569,21 @@ class QueryUploadFilesView(APIView):
                     pyrebase.mark_failed_file(room=ms.room, message_id=ms.id)
                     logger.error("file dont put, room:{} -m:{} ".format(ms.room, ms.id))
                     print("con objeto error")
+                    ms.uploaded = 5
+                    ms.save()
                 else:
                     logger.error("file dont put, message_ID:{} ".format(msg_id))
                     print("sin objeto error")
         else:
             if 'test' not in sys.argv:
                 # Actualizamos el status en firebase
-                data = {"uploaded": 2, "fileUrl": url, "filePreviewUrl": url_thumb}
+                ms_status = 2
+                data = {"uploaded": ms_status, "fileUrl": url, "filePreviewUrl": url_thumb}
                 r = pyrebase.mark_uploaded_file(room=ms.room, message_id=ms.id,
                                                 data=data)
                 print(r)
+                ms.uploaded = ms_status
+                ms.save()
 
 
 class QueryMessageView(APIView):

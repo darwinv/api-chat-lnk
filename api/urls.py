@@ -214,7 +214,6 @@ urlpatterns = [
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(),
         name='seller-detail'),
-
     url(r'^sellers/clients/$', actors.SellerClientListView.as_view(),
         name='sellers-clients'),
 
@@ -224,10 +223,12 @@ urlpatterns = [
 
     # Contactos crear y listar en mapa
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
+
     # detalle de contacto
     url(r'^objections/contacts/(?P<pk>[0-9]+)/$',
         actors.ContactObjectionsDetailView.as_view(),
         name='objections-contact'),
+
     # filtrar contactos por efectivo, no efectivo, y fecha desde hasta
     url(r'^seller/contacts/$', actors.ContactFilterView.as_view(),
         name='contacts-filter'),
