@@ -5,7 +5,7 @@ import datetime
 import string
 from rest_framework.validators import UniqueValidator
 from api.models import User, Client, Countries, SellerContact
-from api.models import Address, Department, EconomicSector
+from api.models import Address, Department, EconomicSector, Sale
 from api.models import Province, District, Specialist, Ciiu, Parameter
 from api.models import Seller, LevelInstruction, ObjectionsList, Objection
 from django.utils.translation import ugettext_lazy as _
@@ -1023,12 +1023,36 @@ class SellerContactSerializer(serializers.ModelSerializer):
 class SellerFilterContactSerializer(serializers.ModelSerializer):
     """Serializer de contacto filtrado."""
     address = AddressSerializer(required=False)
+    client_id = serializers.SerializerMethodField()
+    have_sale = serializers.SerializerMethodField()
 
     class Meta:
         """ Model Contacto."""
         model = SellerContact
         fields = '__all__'
 
+    def get_client_id(self, obj):
+        """Devuelve cliente id"""
+        try:
+            client = Client.objects.get(email_exact=obj.email_exact)
+            client_id = client.id
+        except Client.DoesNotExist:
+            client_id = None
+        return client_id
+
+    def get_have_sale(self, obj):
+        """Devuelve si contacto tiene compra"""
+        try:
+            client = Client.objects.get(email_exact=obj.email_exact)
+            client_id = client.id
+        except Client.DoesNotExist:
+            client_id = None
+        
+        if client_id:
+            sale = Sale.objects.filter(client=client_id)
+            if sale:
+                return True
+        return False
 
 class ObjectionsContactSerializer(serializers.ModelSerializer):
     """Lista de objeciones del serializer del contacto."""
