@@ -1046,7 +1046,7 @@ class SellerFilterContactSerializer(serializers.ModelSerializer):
             client = Client.objects.get(email_exact=obj.email_exact)
             client_id = client.id
         except Client.DoesNotExist:
-            client_id = None
+            client_id = False
         
         if client_id:
             sale = Sale.objects.filter(client=client_id)
