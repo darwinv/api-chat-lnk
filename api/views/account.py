@@ -6,6 +6,7 @@ from api.serializers.account import SellerAccountSerializer
 from api.serializers.account import SellerAccountBackendSerializer
 from api.serializers.account import ClientAccountSerializer
 from api.serializers.account import SellerFooterSerializer
+from api.serializers.account import SellerAccountHistoricSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
@@ -113,9 +114,20 @@ class SellerAccountBackendView(APIView):
     def get(self, request, pk):
         seller = self.get_object(pk)
         queryset = Sale.objects.filter(seller=seller)
-        serializer = SellerAccountBackendSerializer(queryset,
-                                                    context={"seller": seller})
-        return Response(serializer.data)
+
+        serializer = SellerAccountSerializer(queryset,
+                                             context={
+                                                "seller": seller
+                                            })
+
+        serializer_historic = SellerAccountHistoricSerializer(queryset,
+                                             context={
+                                                "seller": seller
+                                            })
+        return Response({
+                    'mounth':serializer.data,
+                    'historic': serializer_historic.data
+                    })
 
 
 class SellerFooterView(APIView):

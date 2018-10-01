@@ -102,40 +102,44 @@ class SellerAccountSerializer(serializers.Serializer):
     def to_representation(self, obj):
         """To Representation."""
         seller = self.context["seller"]
-        hoy = datetime.now()  # fecha de hoy
+
+        # fecha de hoy
+        to_date = datetime.now()  
         # fecha de primer  dia del mes
-        primer = datetime(hoy.year, hoy.month, 1, 0, 0, 0)
+        from_date = datetime(to_date.year, to_date.month, 1, 0, 0, 0)
+        
+
         # clientes nuevos que ya pagaron en este mes
         new_clients = SellerContact.objects.filter(seller=seller,
                                                    type_contact=3,
-                                                   created_at__range=(primer, hoy)).count()
+                                                   created_at__range=(from_date, to_date)).count()
         # contactos nuevos registrados
         contacts = SellerContact.objects.filter(seller=seller,
-                                                created_at__range=(primer, hoy)).count()
+                                                created_at__range=(from_date, to_date)).count()
         # planes promocionales entregados en el mes
         promotional_plans = obj.filter(saledetail__product_type=1,
                                        saledetail__is_billable=False,
-                                       created_at__range=(primer, hoy)).count()
+                                       created_at__range=(from_date, to_date)).count()
 
         qs = obj.filter(saledetail__product_type=1,
                         saledetail__is_billable=True,
-                        created_at__range=(primer, hoy),
+                        created_at__range=(from_date, to_date),
                         status__range=(2, 3)).values('client_id')
         # Cantidad de personas  que compraron este mes
         people_purchase = qs.annotate(client_count=Count('client_id')).count()
         # instancia parametro de vendedor
         try:
             seller_param = ParameterSeller.objects.get(seller=seller,
-                                                       number_month=hoy.month,
-                                                       number_year=hoy.year)
+                                                       number_month=to_date.month,
+                                                       number_year=to_date.year)
             contacts_goal = seller_param.contacts_goal
             new_clients_goal = seller_param.new_clients_goal
             people_purchase_goal = seller_param.people_purchase_goal
         except ParameterSeller.DoesNotExist:
-            contacts_goal = new_clients_goal = people_purchase_goal = None
+            contacts_goal = new_clients_goal = people_purchase_goal = 0
         # suma de promocionales disponibles
         quant_dic = SellerNonBillablePlans.objects.filter(
-            number_month=hoy.month, number_year=hoy.year, seller=seller).aggregate(Sum('quantity'))
+            number_month=to_date.month, number_year=to_date.year, seller=seller).aggregate(Sum('quantity'))
         # todos los promocionales de ese mes
 
         if quant_dic["quantity__sum"]:
@@ -158,6 +162,32 @@ class SellerAccountSerializer(serializers.Serializer):
                     "month_promotionals": promotional_plans
                 }
 
+class SellerAccountHistoricSerializer(serializers.Serializer):
+    """Serializer de estado de cuenta Vendedor."""
+
+    def to_representation(self, obj):
+        """To Representation."""
+        seller = self.context["seller"]
+        
+        # clientes nuevos que ya pagaron en este mes
+        new_clients = SellerContact.objects.filter(seller=seller,
+                                                   type_contact=3).count()
+        # contactos nuevos registrados
+        contacts = SellerContact.objects.filter(seller=seller).count()
+        
+
+        qs = obj.filter(saledetail__product_type=1,
+                        saledetail__is_billable=True,
+                        status__range=(2, 3)).values('client_id')
+        # Cantidad de personas  que compraron este mes
+        people_purchase = qs.annotate(client_count=Count('client_id')).count()
+        
+
+        return {
+                    "total_clients": new_clients,
+                    "total_contacts": contacts,
+                    "total_people_purchase": people_purchase
+                }
 
 class SellerAccountBackendSerializer(serializers.Serializer):
     """Serializer de estado de cuenta Vendedor."""

@@ -432,7 +432,7 @@ msgstr "este no es un plan promocional para este vendedor"
 
 #: .\api\templates\email\base.html:250
 msgid "All rights reserved"
-msgstr ""
+msgstr "Todos los derechos reservados"
 
 #: .\api\templates\email\empower.html:5 .\api\templates\email\share.html:4
 #: .\api\templates\email\transfer.html:5
@@ -451,15 +451,15 @@ msgstr "¡Tu codigo pin!"
 
 #: .\api\templates\email\pin_code.html:16
 msgid "Name of the Plan"
-msgstr ""
+msgstr "Nombre del Plan"
 
 #: .\api\templates\email\pin_code.html:17
 msgid "Months of Validity"
-msgstr ""
+msgstr "Meses de vigencia"
 
 #: .\api\templates\email\pin_code.html:18
 msgid "Number of Queries"
-msgstr ""
+msgstr "Cantidad de Consultas"
 
 #: .\api\templates\email\pin_code.html:19
 #, fuzzy
