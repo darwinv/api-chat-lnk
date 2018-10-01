@@ -34,10 +34,7 @@ class SpecialistAccountView(APIView):
         specialist = self.get_object(pk)
         queryset = Query.objects.filter(specialist=specialist)
         # import pdb; pdb.set_trace()
-        serializer = SpecialistAccountSerializer(queryset,
-                                                 context={'category': specialist.category,
-                                                          'specialist': specialist
-                                                          })
+        serializer = SpecialistAccountSerializer(queryset)
         return Response(serializer.data)
 
 

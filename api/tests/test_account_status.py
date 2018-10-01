@@ -197,13 +197,16 @@ class AccountStatusSeller(APITestCase):
 
         response = client.get(reverse('sellers-account-back',
                                       args=(self.seller,)))
-        self.assertEqual(response.data["month_sold_plans"], 4)
-        self.assertEqual(response.data["sold_plans"], 5)
-        self.assertEqual(response.data["month_sold_queries"], 24)
-        self.assertEqual(response.data["sold_queries"], 29)
-        self.assertEqual(response.data["month_all_promotionals"], 8)
-        self.assertEqual(response.data["month_promotionals"], 2)
-        self.assertEqual(response.data["promotionals"], 2)
+        
+        self.assertEqual(response.data["mounth"]["month_people_purchase_goal"], 12)
+        self.assertEqual(response.data["mounth"]["month_new_clients_goal"], 10)
+        self.assertEqual(response.data["mounth"]["month_promotionals"], 0)
+        self.assertEqual(response.data["mounth"]["month_clients"], 0)
+        self.assertEqual(response.data["mounth"]["month_all_promotionals"], 6)
+        self.assertEqual(response.data["mounth"]["month_contacts_goal"], 10)
+        self.assertEqual(response.data["mounth"]["month_people_purchase"], 0)
+        self.assertEqual(response.data["mounth"]["month_contacts"], 0)
+
 
     def test_data_footer(self):
         """footer de Vendedor."""
