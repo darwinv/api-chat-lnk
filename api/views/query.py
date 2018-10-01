@@ -240,9 +240,9 @@ class QueryDetailSpecialistView(APIView):
                     msg_type='a', query__client=client_id).count()
                 body = get_body(lista[-1]["fileType"], lista[-1]["message"])
                 data_fcm = {
-                    "title": cat.name,
+                    "title": _(cat.name),
                     "body": body,
-                    "sub_text": cat.name,
+                    "sub_text": _(cat.name),
                     "ticker": query.title,
                     "icon": cat.image,
                     "badge": pending_badge,  # mensajes por ver
@@ -550,7 +550,7 @@ class QueryUploadFilesView(APIView):
             # Actualizamos el modelo mensaje
             ms.file_url = url
             ms.file_preview_url = url_thumb
-            
+
             s3 = boto3.client('s3')
             # Evaluamos si el archivo se subio a S3
             try:
