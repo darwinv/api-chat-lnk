@@ -184,9 +184,9 @@ class SellerAccountHistoricSerializer(serializers.Serializer):
         
 
         return {
-                    "month_clients": new_clients,
-                    "month_contacts": contacts,
-                    "month_people_purchase": people_purchase
+                    "total_clients": new_clients,
+                    "total_contacts": contacts,
+                    "total_people_purchase": people_purchase
                 }
 
 class SellerAccountBackendSerializer(serializers.Serializer):
