@@ -128,7 +128,7 @@ LANGUAGE_CODE = 'es'
 # Tell Django where the project's translation files should be.
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale/static_db'),
-    os.path.join(BASE_DIR, 'locale'), #python manage.py makemessages -l en
+    os.path.join(BASE_DIR, 'locale'), # python manage.py makemessages -l en
 )
 
 # LANGUAGE_CODE = 'en-us'
