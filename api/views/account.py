@@ -8,6 +8,8 @@ from api.serializers.account import ClientAccountSerializer
 from api.serializers.account import SellerFooterSerializer
 from api.serializers.account import SellerAccountHistoricSerializer
 from api.serializers.account import SpecialistHistoricAccountSerializer
+from api.serializers.account import SpecialistAsociateAccountSerializer
+from api.serializers.account import SpecialistAsociateHistoricAccountSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
@@ -35,14 +37,21 @@ class SpecialistAccountView(APIView):
         specialist = self.get_object(pk)
         queryset = Query.objects.filter(specialist=specialist)
         
-        serializer = SpecialistAccountSerializer(queryset,
-                                                 context={'category': specialist.category
-                                                          })
-        serializer_historic = SpecialistHistoricAccountSerializer(queryset,
-                                                 context={'category': specialist.category
-                                                          })
+        if specialist.type_specialist == "m":
+            serializer = SpecialistAccountSerializer(queryset,
+                                                     context={'category': specialist.category
+                                                              })
+            serializer_historic = SpecialistHistoricAccountSerializer(queryset,
+                                                     context={'category': specialist.category
+                                                              })
+        else:
+            serializer = SpecialistAsociateAccountSerializer(queryset)
+            serializer_historic = SpecialistAsociateHistoricAccountSerializer(queryset,
+                                                     context={'specialist': specialist
+                                                              })
 
         return Response({
+            "type_specialist": specialist.type_specialist,
             "mounth":serializer.data,
             "historic":serializer_historic.data
             })

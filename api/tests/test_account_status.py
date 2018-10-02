@@ -29,13 +29,19 @@ class AccountSpecialist(APITestCase):
                                       args=(self.specialist,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # absuelto por el mes
-        self.assertEqual(response.data["month_queries_absolved"], 2)
-        # pendientes por absolver por el mes
-        self.assertEqual(response.data["month_queries_pending"], 4)
-        # pendientes declinadas por el mes
-        self.assertEqual(response.data["month_queries_declined"], 1)
-        # absueltos historico de especialidad
-        self.assertEqual(response.data["queries_absolved_category"], 6)
+        self.assertEqual(response.data["mounth"]["match_accepted"], 0)
+        self.assertEqual(response.data["mounth"]["queries_category_absolved"], 0)
+        self.assertEqual(response.data["mounth"]["match_declined"], 0)
+        self.assertEqual(response.data["mounth"]["queries_asociate_absolved"], 0)
+        self.assertEqual(response.data["mounth"]["queries_category_total"], 0)
+        self.assertEqual(response.data["mounth"]["queries_main_absolved"], 0)
+        self.assertEqual(response.data["mounth"]["queries_main_total"], 0)
+        self.assertEqual(response.data["mounth"]["queries_asociate_total"], 0)
+        self.assertEqual(response.data["mounth"]["match_total"], 0)
+        self.assertEqual(response.data["mounth"]["queries_main_pending"], 0)
+        self.assertEqual(response.data["mounth"]["queries_category_pending"], 0)
+        self.assertEqual(response.data["mounth"]["queries_asociate_pending"], 0)
+
 
     def test_data_footer(self):
         """data del footer del especialista."""

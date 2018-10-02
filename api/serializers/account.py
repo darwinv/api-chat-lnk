@@ -56,15 +56,19 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
         return {
                 "queries_category_total": queries_category_absolved+queries_category_pending,
                 "queries_category_absolved": queries_category_absolved,
-                "queries_category_declined": queries_category_pending,
+                "queries_category_pending": queries_category_pending,
                 
                 "queries_main_total": queries_main_absolved+queries_main_pending,  
                 "queries_main_absolved": queries_main_absolved,
                 "queries_main_pending": queries_main_pending,
                               
                 "queries_asociate_total": queries_asociate_total,
-                "queries_asociate_absolved": queries_category_absolved - queries_category_pending,
-                "queries_asociate_declined": queries_category_pending - queries_main_pending              
+                "queries_asociate_absolved": queries_category_absolved - queries_main_absolved,
+                "queries_asociate_pending": queries_category_pending - queries_main_pending,
+
+                "match_total": 0,
+                "match_accepted": 0,
+                "match_declined": 0,
                 }
 
 class SpecialistHistoricAccountSerializer(serializers.ModelSerializer):
@@ -90,6 +94,64 @@ class SpecialistHistoricAccountSerializer(serializers.ModelSerializer):
                 "queries_category_absolved": queries_category_absolved,
                 "queries_main_absolved": queries_main_absolved,
                 "queries_asociate_absolved": queries_category_absolved - queries_main_absolved       
+                }
+
+class SpecialistAsociateAccountSerializer(serializers.ModelSerializer):
+    """Serializer de estado de cuenta Especialista Asociado"""
+
+    class Meta:
+        """Modelo."""
+
+        model = Specialist
+        fields = ('id')
+
+    def to_representation(self, obj):
+        """To Representation."""
+        # fecha de hoy
+        hoy = datetime.now()
+        # fecha de primer  dia del mes
+        primer = datetime(hoy.year, hoy.month, 1, 0, 0, 0)
+
+        # calculó de las consultas absueltas del mes
+        queries_asociate_absolved = obj.filter(
+            status__range=(4, 5),
+            created_at__range=(primer, hoy)).count()
+
+        # calculó de las consultas pendientes por absolver del mes
+        queries_asociate_pending = obj.filter(
+            status__range=(1, 3),
+            created_at__range=(primer, hoy)).count()
+
+        return {
+                "queries_asociate_total": queries_asociate_absolved + queries_asociate_pending,
+                "queries_asociate_absolved": queries_asociate_absolved,
+                "queries_asociate_pending": queries_asociate_pending
+                }
+
+class SpecialistAsociateHistoricAccountSerializer(serializers.ModelSerializer):
+    """Serializer de estado de cuenta Especialista Asociado"""
+
+    class Meta:
+        """Modelo."""
+
+        model = Specialist
+        fields = ('id')
+
+    def to_representation(self, obj):
+        """To Representation."""
+        specialist = self.context["specialist"]
+
+        queries_asociate_absolved = obj.filter(
+            status__range=(4, 5)).count()
+
+        # calculó el numero de consultas absueltas mensual por especialidad
+        queries_asociate_declinated = Declinator.objects.filter(
+            specialist=specialist).count()
+
+        return {
+                "queries_asociate_total": queries_asociate_absolved + queries_asociate_declinated,
+                "queries_asociate_absolved": queries_asociate_absolved,
+                "queries_asociate_declinated": queries_asociate_declinated
                 }
 
 class SpecialistFooterSerializer(serializers.ModelSerializer):
