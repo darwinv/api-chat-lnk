@@ -7,6 +7,7 @@ from api.serializers.account import SellerAccountBackendSerializer
 from api.serializers.account import ClientAccountSerializer
 from api.serializers.account import SellerFooterSerializer
 from api.serializers.account import SellerAccountHistoricSerializer
+from api.serializers.account import SpecialistHistoricAccountSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
@@ -33,9 +34,18 @@ class SpecialistAccountView(APIView):
     def get(self, request, pk):
         specialist = self.get_object(pk)
         queryset = Query.objects.filter(specialist=specialist)
-        # import pdb; pdb.set_trace()
-        serializer = SpecialistAccountSerializer(queryset)
-        return Response(serializer.data)
+        
+        serializer = SpecialistAccountSerializer(queryset,
+                                                 context={'category': specialist.category
+                                                          })
+        serializer_historic = SpecialistHistoricAccountSerializer(queryset,
+                                                 context={'category': specialist.category
+                                                          })
+
+        return Response({
+            "mounth":serializer.data,
+            "historic":serializer_historic.data
+            })
 
 
 class SpecialistFooterView(APIView):

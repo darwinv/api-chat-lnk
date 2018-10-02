@@ -19,45 +19,78 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """To Representation."""
 
+        
+        category_id = self.context["category"]
         # fecha de hoy
         hoy = datetime.now()
         # fecha de primer  dia del mes
         primer = datetime(hoy.year, hoy.month, 1, 0, 0, 0)
 
         # consultas declinadas del mes
-        month_queries_declined = Declinator.objects.filter(
-            specialist=specialist,
-            query__created_at__range=(primer, hoy)).count()
-
+        # queries_declined = Declinator.objects.filter(
+        #     specialist=specialist,
+        #     query__created_at__range=(primer, hoy)).count()
+        
         # calculó de las consultas absueltas del mes
-        month_queries_main = obj.filter(
+        queries_main_absolved = obj.filter(
             status__range=(4, 5),
             created_at__range=(primer, hoy)).count()
         # calculó de las consultas pendientes por absolver del mes
-        month_queries_pending = obj.filter(
+        queries_main_pending = obj.filter(
             status__range=(1, 3),
             created_at__range=(primer, hoy)).count()
-        # calculó el numero de consultas absueltas historico por especialidad
-        queries_absolved = Query.objects.filter(
-            status__range=(4, 5), category=category_id).count()
+        
+        # calculó el numero de consultas absueltas mensual por especialidad
+        queries_category_absolved = Query.objects.filter(
+            status__range=(4, 5), category=category_id,
+            created_at__range=(primer, hoy)).count()
+
+        # calculó el numero de consultas pendientes mensual por especialidad
+        queries_category_pending = Query.objects.filter(
+            status__range=(1, 3), category=category_id,
+            created_at__range=(primer, hoy)).count()
+
         # consultas por especialista
         # queries_specialist = obj.filter(status__range=(4, 5)).count()
-
+        queries_asociate_total = queries_category_absolved+queries_category_pending - queries_main_absolved-queries_main_pending
         return {
-                "month_queries_main_absolved": month_queries_main,
-                "month_queries_main_pending": month_queries_pending,
-                "month_queries_main_total": month_queries_main+month_queries_pending,
-
-                "queries_absolved_category": queries_absolved,
-                "month_queries_declined": month_queries_declined,
-
-                "queries_absolved_category": queries_absolved,
-                "month_queries_declined": month_queries_declined,
-
-                "queries_absolved_category": queries_absolved,
-                "month_queries_declined": month_queries_declined,
+                "queries_category_total": queries_category_absolved+queries_category_pending,
+                "queries_category_absolved": queries_category_absolved,
+                "queries_category_declined": queries_category_pending,
+                
+                "queries_main_total": queries_main_absolved+queries_main_pending,  
+                "queries_main_absolved": queries_main_absolved,
+                "queries_main_pending": queries_main_pending,
+                              
+                "queries_asociate_total": queries_asociate_total,
+                "queries_asociate_absolved": queries_category_absolved - queries_category_pending,
+                "queries_asociate_declined": queries_category_pending - queries_main_pending              
                 }
 
+class SpecialistHistoricAccountSerializer(serializers.ModelSerializer):
+    """Serializer de estado de cuenta Especialista"""
+
+    class Meta:
+        """Modelo."""
+
+        model = Specialist
+        fields = ('id')
+
+    def to_representation(self, obj):
+        """To Representation."""
+        category_id = self.context["category"]
+        queries_main_absolved = obj.filter(
+            status__range=(4, 5)).count()
+
+        # calculó el numero de consultas absueltas mensual por especialidad
+        queries_category_absolved = Query.objects.filter(
+            status__range=(4, 5), category=category_id).count()
+
+        return {
+                "queries_category_absolved": queries_category_absolved,
+                "queries_main_absolved": queries_main_absolved,
+                "queries_asociate_absolved": queries_category_absolved - queries_main_absolved       
+                }
 
 class SpecialistFooterSerializer(serializers.ModelSerializer):
     """Serializer para datos del footer del especialista."""
