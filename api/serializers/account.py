@@ -66,9 +66,9 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
                 "queries_asociate_absolved": queries_category_absolved - queries_main_absolved,
                 "queries_asociate_pending": queries_category_pending - queries_main_pending,
 
-                "match_total":0,
-                "match_accepted":0,
-                "match_declined":0,
+                "match_total": 0,
+                "match_accepted": 0,
+                "match_declined": 0,
                 }
 
 class SpecialistHistoricAccountSerializer(serializers.ModelSerializer):
