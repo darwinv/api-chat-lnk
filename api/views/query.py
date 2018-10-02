@@ -240,9 +240,9 @@ class QueryDetailSpecialistView(APIView):
                     msg_type='a', query__client=client_id).count()
                 body = get_body(lista[-1]["fileType"], lista[-1]["message"])
                 data_fcm = {
-                    "title": _(cat.name),
+                    "title": cat.name,
                     "body": body,
-                    "sub_text": _(cat.name),
+                    "sub_text": cat.name,
                     "ticker": query.title,
                     "icon": cat.image,
                     "badge": pending_badge,  # mensajes por ver
