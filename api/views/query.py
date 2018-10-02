@@ -9,6 +9,7 @@ import boto3
 from django.db.models import OuterRef, Subquery, F, Count
 from django.http import Http404, HttpResponse
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
 from rest_framework import serializers
 # paquetes de terceros
 from api.models import Declinator
@@ -240,9 +241,9 @@ class QueryDetailSpecialistView(APIView):
                     msg_type='a', query__client=client_id).count()
                 body = get_body(lista[-1]["fileType"], lista[-1]["message"])
                 data_fcm = {
-                    "title": cat.name,
+                    "title": ugettext(cat.name),
                     "body": body,
-                    "sub_text": cat.name,
+                    "sub_text": ugettext(cat.name),
                     "ticker": query.title,
                     "icon": cat.image,
                     "badge": pending_badge,  # mensajes por ver
