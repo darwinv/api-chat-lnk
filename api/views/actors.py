@@ -905,8 +905,6 @@ class SpecialistDetailView(APIView):
 
 
 
-
-
 # ------------ Fin de Especialistas -----------------
 
 
@@ -990,9 +988,19 @@ class SellerClientListView(ListCreateAPIView):
     def list(self, request):
 
         seller = Operations.get_id(self, request)
+        # filtro fecha desde y fecha hasta
+        date_start = self.request.query_params.get('date_start', None)
+        date_end = self.request.query_params.get('date_end', None)
 
         queryset = Client.objects.filter(seller_assigned=seller,
                                          sale__status__range=(2, 3))
+
+        if date_start is not None and date_end is not None:
+            fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
+            date_end = fecha_end + timedelta(days=1)
+            queryset = queryset.filter(
+                date_joined__range=(date_start, date_end))
+
         serializer = ClientSerializer(queryset, many=True)
 
         # pagination
@@ -1122,7 +1130,7 @@ class ContactListView(ListCreateAPIView):
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
         # si hay fecha poder filtrarla
-        if date_start is not None or date_end is not None:
+        if date_start is not None and date_end is not None:
             fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
             date_end = fecha_end + timedelta(days=1)
             contacts = SellerContact.objects.filter(
@@ -1130,15 +1138,7 @@ class ContactListView(ListCreateAPIView):
             serializer = SellerContactSerializer(contacts, many=True)
             return Response(serializer.data)
 
-        # SI NO ENVIAN DATE, TOMAMOS FECHA ACTUAL
-        # CODIGO NO NECESARIO
-        Today = datetime.now()
-        date_start = date_end = Today.strftime("%Y-%m-%d")
-        fecha_end = datetime.strptime(date_end, "%Y-%m-%d")
-        date_end = fecha_end + timedelta(days=1)
-
-        contacts = SellerContact.objects.filter(seller=seller,
-            created_at__range=(date_start, date_end))
+        contacts = SellerContact.objects.filter(seller=seller)
         serializer = SellerContactSerializer(contacts, many=True)
         return Response(serializer.data)
 
@@ -1188,7 +1188,7 @@ class ContactListView(ListCreateAPIView):
                     credentials["user"] = data["email_exact"]
                     credentials["pass"] = password
                     mail.sendmail(args=credentials)
-                    
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1232,7 +1232,7 @@ class ContactFilterView(ListAPIView):
                 queryset = queryset.filter(type_contact=2)
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
-        if date_start is not None or date_end is not None:
+        if date_start is not None and date_end is not None:
             fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
             date_end = fecha_end + timedelta(days=1)
             queryset = queryset.filter(
