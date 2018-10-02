@@ -18,17 +18,19 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
 
     def to_representation(self, obj):
         """To Representation."""
-        hoy = datetime.now()  # fecha de hoy
-        category_id = self.context["category"]
-        specialist = self.context["specialist"]
+
+        # fecha de hoy
+        hoy = datetime.now()
         # fecha de primer  dia del mes
         primer = datetime(hoy.year, hoy.month, 1, 0, 0, 0)
+
         # consultas declinadas del mes
         month_queries_declined = Declinator.objects.filter(
             specialist=specialist,
             query__created_at__range=(primer, hoy)).count()
+
         # calculó de las consultas absueltas del mes
-        month_queries = obj.filter(
+        month_queries_main = obj.filter(
             status__range=(4, 5),
             created_at__range=(primer, hoy)).count()
         # calculó de las consultas pendientes por absolver del mes
@@ -41,8 +43,17 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
         # consultas por especialista
         # queries_specialist = obj.filter(status__range=(4, 5)).count()
 
-        return {"month_queries_absolved": month_queries,
-                "month_queries_pending": month_queries_pending,
+        return {
+                "month_queries_main_absolved": month_queries_main,
+                "month_queries_main_pending": month_queries_pending,
+                "month_queries_main_total": month_queries_main+month_queries_pending,
+
+                "queries_absolved_category": queries_absolved,
+                "month_queries_declined": month_queries_declined,
+
+                "queries_absolved_category": queries_absolved,
+                "month_queries_declined": month_queries_declined,
+
                 "queries_absolved_category": queries_absolved,
                 "month_queries_declined": month_queries_declined,
                 }
@@ -287,8 +298,6 @@ class SellerFooterSerializer(serializers.Serializer):
         return {"month_promotionals": promotional_plans,
                 "month_not_effective": contacts_not_effective,
                 "month_effective": contacts_effective}
-
-
 
 
 # SELECT
