@@ -31,5 +31,5 @@ class Notification:
         # import pdb; pdb.set_trace()
         print(data)
         print(result)
-        print("ios-resp "+result_ios)
+        print(result_ios)
         return result
