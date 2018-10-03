@@ -1004,7 +1004,6 @@ class SellerClientListView(ListCreateAPIView):
 
         serializer = ClientSerializer(queryset, many=True)
         # pagination
-        print(queryset.query)
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = ClientSerializer(page, many=True)
