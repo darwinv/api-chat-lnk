@@ -69,6 +69,13 @@ def update_specialist_client():
             generateDataMessageClients(query.client.id, query.category.id, query.id,
                                    query.status, specialist.id)
 
+
+def delete_node_categories_client():
+    """Eliminar nodo de categorias de cliente"""
+
+    firebase = pyrebase.initialize_app(config)
+    db = firebase.database()
+    db.child("categories/clients").remove()
 # FIN DE FUNCIONES PARA CREAR NODOS EN FIREBASE MANUALMENTE#####
 
 
@@ -148,6 +155,8 @@ def node_query(data, id, room):
 def exist_node(node):
     """Chequear si el nodo de sala existe."""
     res = db.child(node).get()
+    print(node)
+    print(res)
     if res.pyres:
         return True
     else:
@@ -161,7 +170,7 @@ def categories_db(client_id, cat_id, time_now=None, read=False):
     db = firebase.database()
     node_client = Params.PREFIX['client'] + str(client_id)
     node_category = Params.PREFIX['category'] + str(cat_id)
-    main_node = 'categories/clients' + node_client + '/' + node_category
+    main_node = 'categories/clients/' + node_client + '/' + node_category
     pending = Message.objects.filter(query__status=3,
                                      viewed=0, msg_type='a',
                                      query__category=cat_id,
@@ -349,13 +358,10 @@ def createListMessageClients(lista, query_id, status,
     del data_obj['title']
     del data_obj['date']
     del data_obj['id']
-    
-    main_node = "messagesList/specialist/{}/{}"
-    if exist_node(main_node):
-        db.child("messagesList/specialist/").child(
-            node_specialist).child(node_client).update(data_obj)
-    else:
-        logger.warning("createListMessageClients, no existe:" + main_node)
+
+    # main_node = "messagesList/specialist/{}/{}"
+    db.child("messagesList/specialist/").child(
+        node_specialist).child(node_client).set(data_obj)
 
 
 def chosen_plan(client_id, data):
@@ -368,7 +374,7 @@ def chosen_plan(client_id, data):
 def mark_failed_file(room, message_id):
     """Actualizar que el archivo se ha subido a firebase."""
     node = 'chats/' + room + '/' + Params.PREFIX['message'] + str(message_id)
-    
+
     if exist_node(node):
         db.child(node).update({"uploaded": 5})
         if DEBUG_FIREBASE:
