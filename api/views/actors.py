@@ -301,7 +301,7 @@ class UpdateEmailUserView(APIView):
 
             seller_contact = SellerContact.objects.filter(email_exact=last_email)
             if seller_contact:
-                success = seller_contact.update(email=data['email_exact'])
+                success = seller_contact.update(email_exact=data['email_exact'])
 
             return Response(serializer.data)
 
