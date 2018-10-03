@@ -1000,10 +1000,11 @@ class SellerClientListView(ListCreateAPIView):
             date_end = fecha_end + timedelta(days=1)
             queryset = Client.objects.filter(seller_assigned=seller,
                                              sale__status__range=(2, 3),
-                                             date_joined__range=(date_start, date_end))
+                                             date_joined__range=(date_start, date_end)).distinct()
 
         serializer = ClientSerializer(queryset, many=True)
         # pagination
+        print(queryset.query)
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = ClientSerializer(page, many=True)
