@@ -147,8 +147,11 @@ def node_query(data, id, room):
 
 def exist_node(node):
     """Chequear si el nodo de sala existe."""
-    r = db.child(node).get() is not None
-    return r
+    res = db.child(node).get()
+    if res.pyres:
+        return True
+    else:
+        return False
 
 
 def categories_db(client_id, cat_id, time_now=None, read=False):
