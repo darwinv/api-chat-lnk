@@ -993,7 +993,7 @@ class SellerClientListView(ListCreateAPIView):
         date_end = self.request.query_params.get('date_end', None)
 
         queryset = Client.objects.filter(seller_assigned=seller,
-                                         sale__status__range=(2, 3))
+                                         sale__status__range=(2, 3)).distinct()
 
         if date_start is not None and date_end is not None:
             fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
