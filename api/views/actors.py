@@ -301,7 +301,7 @@ class UpdateEmailUserView(APIView):
 
             seller_contact = SellerContact.objects.filter(email_exact=last_email)
             if seller_contact:
-                success = seller_contact.update(email=data['email_exact'])
+                success = seller_contact.update(email_exact=data['email_exact'])
 
             return Response(serializer.data)
 
@@ -998,11 +998,11 @@ class SellerClientListView(ListCreateAPIView):
         if date_start is not None and date_end is not None:
             fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
             date_end = fecha_end + timedelta(days=1)
-            queryset = queryset.filter(
-                date_joined__range=(date_start, date_end))
+            queryset = Client.objects.filter(seller_assigned=seller,
+                                             sale__status__range=(2, 3),
+                                             date_joined__range=(date_start, date_end)).distinct()
 
         serializer = ClientSerializer(queryset, many=True)
-
         # pagination
         page = self.paginate_queryset(queryset)
         if page is not None:

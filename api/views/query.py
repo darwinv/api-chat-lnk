@@ -208,7 +208,6 @@ class QueryDetailSpecialistView(APIView):
                                              context={'specialist': spec})
         if serializer.is_valid():
             serializer.save()
-
             lista = list(serializer.data['message'].values())
             client_id = serializer.data["client_id"]
             category_id = serializer.data["category"]
