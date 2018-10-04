@@ -83,7 +83,8 @@ class SaleSerializer(serializers.Serializer):
     reference_number = serializers.CharField(default=increment_reference)
 
     def to_representation(self, instance):
-        return {"id": instance.id,
+        return {
+                "id": instance.id,
                 "reference_number": instance.reference_number,
                 "total_amount": instance.total_amount,
                 "fees": instance.monthlyfee_set.all().count(),
@@ -177,7 +178,7 @@ class SaleSerializer(serializers.Serializer):
                         if validity_months >= i:
                             fee_amount = (price/validity_months)*quantity + fee_amount
 
-                pay_day = date.today() + relativedelta(days=3, months=i-1) # Hardcoded cambiar la cantidad de dias
+                pay_day = date.today() + relativedelta(months=i-1) # Hardcoded cambiar la cantidad de dias
                 sale_id = instance
                 MonthlyFee.objects.create(fee_amount=fee_amount,
                                           fee_order_number=i, status=1,
