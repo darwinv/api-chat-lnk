@@ -298,7 +298,7 @@ class QueryDetailClientView(APIView):
         if not user_id:
             raise Http404
         data = request.data
-        # import pdb; pdb.set_trace()
+        
         # No utilizamos partial=True, ya que solo actualizamos mensaje
         serializer = ReQuerySerializer(query, data)
         if serializer.is_valid():
