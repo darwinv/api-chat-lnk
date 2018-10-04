@@ -432,11 +432,16 @@ class ClientPlanSerializer(serializers.ModelSerializer):
 
 class QueryPlansAcquiredSimpleSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
+    queries_used = serializers.SerializerMethodField()
+
     class Meta:
         """Modelo del especialista y sus campos."""
         model = QueryPlansAcquired
-        fields = ('query_quantity', 'available_queries')
+        fields = ('query_quantity', 'available_queries', 'queries_used')
 
+    def get_queries_used(self, obj):
+        """Cliente"""
+        return obj.query_quantity - obj.available_queries - obj.queries_to_pay
 
 class QueryPlansManageSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""

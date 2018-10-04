@@ -5,7 +5,7 @@ from api.serializers.account import SpecialistFooterSerializer
 from api.serializers.account import SellerAccountSerializer
 from api.serializers.account import SellerAccountBackendSerializer
 from api.serializers.account import ClientAccountSerializer
-from api.serializers.account import SellerFooterSerializer
+from api.serializers.account import SellerFooterSerializer, ClientAccountMonthSerializer
 from api.serializers.account import SellerAccountHistoricSerializer
 from api.serializers.account import SpecialistHistoricAccountSerializer
 from api.serializers.account import SpecialistAsociateAccountSerializer
@@ -91,10 +91,17 @@ class ClientAccountView(APIView):
 
     def get(self, request, pk):
         client = self.get_object(pk)
-        queryset = QueryPlansClient.objects.filter(client=client)
-        serializer = ClientAccountSerializer(queryset,
+        queryset = QueryPlansClient.objects.filter(client=client,
+                                        acquired_plan__is_active=True)
+
+        serializer = ClientAccountMonthSerializer(queryset,
                                              context={"client": client})
-        return Response(serializer.data)
+        serializer_historic = ClientAccountSerializer(queryset,
+                                             context={"client": client})
+        return Response({
+                        "mounth":serializer.data,
+                        "historic":serializer_historic.data
+                    })
 
 
 class SellerAccountView(APIView):
