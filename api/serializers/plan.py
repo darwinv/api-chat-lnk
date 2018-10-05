@@ -437,7 +437,7 @@ class QueryPlansAcquiredSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         """Modelo del especialista y sus campos."""
         model = QueryPlansAcquired
-        fields = ('query_quantity', 'available_queries', 'queries_used')
+        fields = ('query_quantity', 'available_queries', 'queries_used', 'plan_name')
 
     def get_queries_used(self, obj):
         """Cliente"""
