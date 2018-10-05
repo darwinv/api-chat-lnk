@@ -87,7 +87,6 @@ class QueryListClientView(ListCreateAPIView):
         data = request.data
         # tomamos del token el id de usuario (cliente en este caso)
         data["client"] = user_id
-        # import pdb; pdb.set_trace()
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -172,7 +171,6 @@ class QueryListClientView(ListCreateAPIView):
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             return Response(serializer.data, status.HTTP_201_CREATED)
         else:
-            print(serializer.errors)
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
@@ -298,7 +296,7 @@ class QueryDetailClientView(APIView):
         if not user_id:
             raise Http404
         data = request.data
-        
+
         # No utilizamos partial=True, ya que solo actualizamos mensaje
         serializer = ReQuerySerializer(query, data)
         if serializer.is_valid():

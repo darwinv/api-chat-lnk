@@ -115,9 +115,10 @@ class ChoicesAPI:
 
     # MatchAcquired model
     match_acquired_status = (
-        (1, _('Requested')),
-        (2, _('Accepted')),
-        (3, _('Declined')),
+        (1, _('Requested')),  # solicitado
+        (2, _('Accepted')),  # aceptado por especialista, falta que pague el especialista y/o cliente
+        (3, _('Declined')),  # declinado por especialista
+        (4, _('Done')),  # hecho, match exitoso
     )
 
     # Message Model
@@ -127,19 +128,13 @@ class ChoicesAPI:
         ('a', _('answer')),  # es de tipo respuesta
     )
 
+   # Para mensaje y Match
     message_content_type = (
         (1, _('Text')),
         (2, _('Image')),
         (3, _('Video')),
         (4, _('Voice')),
         (5, _('Document')),
-    )
-
-    # Match Model
-    match_type_file = (
-        (2, _('Image')),
-        (3, _('Voice')),
-        (4, _('Document')),
     )
 
     # AlertCategory Model

@@ -10,9 +10,9 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Countries, Ciiu, Department, Province, District, Address, Zone
 from .models import Permmission, Role, User, Seller, Objection, EconomicSector, LevelInstruction
 from .models import SellerContact, Client, ContractType, Contract, Category, Bank, Specialist
-from .models import Clasification, ProductType, QueryPlans, SellerNonBillablePlans, Match, Sale
-from .models import SaleDetail, QueryPlansAcquired, PaymentType, Payment, MatchAcquired
-from .models import MatchAcquiredFiles, MatchAcquiredLog, MonthlyFee, LogPaymentsCreditCard
+from .models import Clasification, ProductType, QueryPlans, SellerNonBillablePlans, MatchProduct, Sale
+from .models import SaleDetail, QueryPlansAcquired, PaymentType, Payment, Match
+from .models import MatchFile, MatchLog, MonthlyFee, LogPaymentsCreditCard
 from .models import Query, QueryLogs, Message, FeeMonthSeller, NotificationsBack
 from .models import Parameter, QueryPlansClient
 # Register your models here.
@@ -119,13 +119,13 @@ admin.site.register(Bank)
 
 admin.site.register(ProductType)
 admin.site.register(SellerNonBillablePlans)
-admin.site.register(Match)
+admin.site.register(MatchProduct)
 
 admin.site.register(Payment)
-admin.site.register(MatchAcquired)
+admin.site.register(Match)
 
-admin.site.register(MatchAcquiredFiles)
-admin.site.register(MatchAcquiredLog)
+admin.site.register(MatchFile)
+admin.site.register(MatchLog)
 admin.site.register(MonthlyFee)
 admin.site.register(LogPaymentsCreditCard)
 

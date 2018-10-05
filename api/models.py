@@ -394,7 +394,6 @@ class QueryPlans(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=4)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
-    product_type = models.ForeignKey(ProductType, on_delete=models.PROTECT)
     clasification = models.ForeignKey(Clasification, on_delete=models.PROTECT)
     non_billable = models.ManyToManyField(Seller, through='SellerNonBillablePlans')
 
@@ -414,12 +413,11 @@ class SellerNonBillablePlans(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
-class Match(models.Model):
+class MatchProduct(models.Model):
     """Contratacion de Especialista (Producto)."""
 
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    product_type = models.ForeignKey(ProductType, on_delete=models.PROTECT)
-    speciality = models.ForeignKey(Category, on_delete=models.PROTECT)
+
 
 
 class Sale(models.Model):
@@ -535,37 +533,42 @@ class Payment(models.Model):
                                     null=True)
 
 
-class MatchAcquired(models.Model):
+class Match(models.Model):
     """Match Adquirido."""
 
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    cause = models.TextField()
+    subject = models.TextField()
     status = models.PositiveIntegerField(choices=Ch.match_acquired_status)
     paid_by_specialist = models.BooleanField(default=False)
-    paid_by_client = models.BooleanField(default=True)
-    paid_by_specialist = models.BooleanField(default=False)
+    declined_motive = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     specialist = models.ForeignKey(Specialist, on_delete=models.PROTECT)
-    sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
+    sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT,
+                                    null=True)
+    specialist_payment = models.ForeignKey(Payment, null=True,
+                                           on_delete=models.PROTECT)
 
 
-class MatchAcquiredFiles(models.Model):
+class MatchFile(models.Model):
     """Archivos Adjuntos del Match."""
 
-    file_url = models.CharField(max_length=100)
-    type_file = models.PositiveIntegerField(choices=Ch.match_type_file)
-    match_acquired = models.ForeignKey(MatchAcquired)
+    file_url = models.CharField(max_length=500)
+    content_type = models.PositiveIntegerField(choices=Ch.message_content_type)
+    created_at = models.DateTimeField(auto_now_add=True)
+    match = models.ForeignKey(Match)
 
 
-class MatchAcquiredLog(models.Model):
+class MatchLog(models.Model):
     """Log Match Adquirido."""
 
+    action = models.CharField(max_length=10)
     changed_on = models.DateTimeField(auto_now_add=True)
-    action = models.CharField(max_length=50)
     status = models.PositiveIntegerField(choices=Ch.match_acquired_status)
-    declined = models.NullBooleanField()
-    declined_motive = models.CharField(max_length=255, null=True)
-    match_acquired = models.ForeignKey(MatchAcquired, on_delete=models.PROTECT)
+    paid_by_specialist = models.BooleanField(default=False)
+    match_acquired = models.ForeignKey(Match, on_delete=models.PROTECT)
+
 
 class LogPaymentsCreditCard(models.Model):
     """Log Pagos Pasarela."""
@@ -645,7 +648,7 @@ class Message(models.Model):
     file_url = models.CharField(max_length=500, blank=True)
     file_preview_url = models.CharField(max_length=500, blank=True)
     code = models.CharField(_('code'), max_length=45)
-    
+
     room = models.CharField(max_length=200)  # Sala de chat
     query = models.ForeignKey(Query, on_delete=models.PROTECT)
     group = models.ForeignKey(GroupMessage, on_delete=models.PROTECT,

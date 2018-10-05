@@ -1,0 +1,178 @@
+[
+  {
+  "model": "api.address",
+  "pk": 8,
+  "fields": {
+    "street": "na",
+    "department": 7,
+    "province": 66,
+    "district": 669
+  }
+},
+{
+  "model": "api.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "clientoscar@mail.com",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-02-07T17:09:39.233Z",
+    "nick": "TheClient",
+    "email_exact": "clientoscar@mail.com",
+    "telephone": "9213223131231",
+    "cellphone": "1231231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "",
+    "document_type": 1,
+    "document_number": "98482831251464424",
+    "img_document_number": "",
+    "ruc": "234234233252",
+    "code": "C98482831251464424",
+    "anonymous": true,
+    "updated_at": "2018-02-07T17:09:39.466Z",
+    "nationality": 1,
+    "role": 2,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.client",
+  "pk": 3,
+  "fields": {
+    "type_client": "b",
+    "sex": "m",
+    "commercial_reason": "alpaneted",
+    "civil_state": "c",
+    "birthdate": "1991-02-05",
+    "ciiu": 5,
+    "activity_description": "123131232321",
+    "institute": "",
+    "ocupation": 7,
+    "about": "1231231231231232123",
+    "business_name": "alpanet",
+    "agent_firstname": "Oscar",
+    "agent_lastname": "Lopez",
+    "position": "Gerente en Ventas",
+    "profession": "",
+    "economic_sector": 5,
+    "level_instruction": null,
+    "seller_assigned": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 20,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "informationtechnology@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-08T21:02:15.150Z",
+    "nick": "informationtechnology ML",
+    "email_exact": "informationtechnology@mail.com",
+    "telephone": "00023123",
+    "cellphone": "0001231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": 1,
+    "document_number": "32145678",
+    "img_document_number": "",
+    "ruc": "32145678",
+    "code": "E3145678",
+    "anonymous": true,
+    "updated_at": "2018-03-08T21:02:15.238Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 20,
+  "fields": {
+    "business_name": "PYMPACK",
+    "type_specialist": "m",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 8,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 2,
+  "fields": {
+    "user": 3,
+    "token": "HhaMCycvJ5SCLXSpEo7KerIXcNgBSt",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "read write groups",
+    "created": "2017-12-21T17:31:54.255Z",
+    "updated": "2018-01-31T17:17:21.129Z"
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 6,
+  "fields": {
+    "created_at": "2018-09-01T15:48:45.943Z",
+    "place": "BCP",
+    "total_amount": "300.00",
+    "reference_number": "CD1005",
+    "description": "test",
+    "is_fee": false,
+    "client": 3,
+    "seller": null
+  }
+},
+{
+  "model": "api.matchproduct",
+  "pk": 1,
+  "fields":{
+    "price": "450.00"
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 30,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "NG5HZ2",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 6
+  }
+}
+]
