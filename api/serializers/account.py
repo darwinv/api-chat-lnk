@@ -177,26 +177,9 @@ class SpecialistFooterSerializer(serializers.ModelSerializer):
                 "queries_absolved": queries_absolved}
 
 
+
+
 class ClientAccountSerializer(serializers.Serializer):
-    """Serializer de estado de cuenta de Cliente."""
-
-    def to_representation(self, obj):
-        """Representacion."""
-
-        client = self.context["client"]
-        # calculó de las consultas adquiridas
-        queries_client = obj.aggregate(query_quantity=Sum('acquired_plan__query_quantity'),
-                             available_queries=Sum('acquired_plan__available_queries'))
-        # calculó de las consultas absueltas
-        queries = Query.objects.filter(client=client).count()
-        
-        return {
-                "queries_acquired": queries_client["query_quantity"] if queries_client["query_quantity"] else 0,
-                "queries_made": queries,
-                "queries_available": queries_client["available_queries"] if queries_client["available_queries"] else 0,
-                }
-
-class ClientAccountMonthSerializer(serializers.Serializer):
     """Serializer de estado de cuenta de Cliente."""
 
     def to_representation(self, obj):
@@ -219,6 +202,31 @@ class ClientAccountMonthSerializer(serializers.Serializer):
                 "match_declined": 0
                 }
 
+class ClientAccountHistoricSerializer(serializers.Serializer):
+    """Serializer de estado de cuenta de Cliente."""
+
+    def to_representation(self, obj):
+        """Representacion."""
+
+        client = self.context["client"]
+        # calculó de las consultas adquiridas
+        queries_client = obj.aggregate(query_quantity=Sum('query_quantity'),
+                             available_queries=Sum('available_queries'),
+                             queries_to_pay=Sum('queries_to_pay'))
+                
+        queries_acquired = queries_client["query_quantity"] if queries_client["query_quantity"] else 0
+        queries_available = queries_client["available_queries"] if queries_client["available_queries"] else 0
+        queries_to_pay = queries_client["queries_to_pay"] if queries_client["queries_to_pay"] else 0
+
+        queries_made = queries_acquired - queries_available - queries_to_pay
+        return {
+                "queries_acquired": queries_acquired,
+                "queries_made": queries_made,
+                "queries_available": queries_available,
+                "match_acquired": 0,
+                "match_absolved": 0,
+                "match_declined": 0
+                }
 
 class SellerAccountSerializer(serializers.Serializer):
     """Serializer de estado de cuenta Vendedor."""

@@ -5,7 +5,7 @@ from api.serializers.account import SpecialistFooterSerializer
 from api.serializers.account import SellerAccountSerializer
 from api.serializers.account import SellerAccountBackendSerializer
 from api.serializers.account import ClientAccountSerializer
-from api.serializers.account import SellerFooterSerializer, ClientAccountMonthSerializer
+from api.serializers.account import SellerFooterSerializer, ClientAccountHistoricSerializer
 from api.serializers.account import SellerAccountHistoricSerializer
 from api.serializers.account import SpecialistHistoricAccountSerializer
 from api.serializers.account import SpecialistAsociateAccountSerializer
@@ -13,11 +13,12 @@ from api.serializers.account import SpecialistAsociateHistoricAccountSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
+from datetime import datetime
 from api.utils.validations import Operations
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django.http import Http404
 from api.models import Specialist, Query, Seller, Sale, Client
-from api.models import QueryPlansClient
+from api.models import QueryPlansAcquired
 from rest_framework.pagination import PageNumberPagination
 from api.permissions import IsSpecialist, IsSeller
 
@@ -91,12 +92,13 @@ class ClientAccountView(APIView):
 
     def get(self, request, pk):
         client = self.get_object(pk)
-        queryset = QueryPlansClient.objects.filter(client=client,
-                                        acquired_plan__is_active=True)
-
-        serializer = ClientAccountMonthSerializer(queryset,
+        today = datetime.now()
+        queryset = QueryPlansAcquired.objects.filter(queryplansclient__client=client,
+                                        sale_detail__sale__status=3,
+                                        activation_date__lte=today)
+        serializer = ClientAccountSerializer(queryset,
                                              context={"client": client})
-        serializer_historic = ClientAccountSerializer(queryset,
+        serializer_historic = ClientAccountHistoricSerializer(queryset,
                                              context={"client": client})
         return Response({
                         "mounth":serializer.data,
