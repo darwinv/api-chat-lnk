@@ -94,6 +94,7 @@ class ClientAccountView(APIView):
         client = self.get_object(pk)
         today = datetime.now()
         queryset = QueryPlansAcquired.objects.filter(queryplansclient__client=client,
+                                        queryplansclient__owner=True,
                                         sale_detail__sale__status=3,
                                         activation_date__lte=today)
         serializer = ClientAccountSerializer(queryset,
