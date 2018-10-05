@@ -167,6 +167,14 @@ class ChoicesAPI:
         (2, _('Deactivated')),
         (3, _('Processing')),
     )
+
+    file_status = (
+        (0, _('Loaded')),
+        (1, _('Sent')),
+        (2, _('Delivered')),
+        (3, _('Read')),
+        (4, _('Failed')),
+    )
     # tipo de Contacto
     type_seller_contact = (
         (1, _('Effective')),

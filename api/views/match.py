@@ -5,8 +5,10 @@ from django.http import Http404, HttpResponse
 from botocore.exceptions import ClientError
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.views import APIView
+from django.utils.translation import ugettext_lazy as _
 from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_framework.response import Response
+from rest_framework import serializers
 from rest_framework import status, permissions
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api.utils.validations import Operations
@@ -69,7 +71,11 @@ class MatchUploadFilesView(APIView):
             resp = self.upload(file=file)
             if resp is False:
                 errors_list.append(file.name)
-        
+
+        if errors_list:
+            raise serializers.ValidationError(
+                {"this files failed": errors_list})
+
         return HttpResponse(status=200)
 
     def upload(self, file):

@@ -558,7 +558,8 @@ class MatchFile(models.Model):
     file_url = models.CharField(max_length=500)
     content_type = models.PositiveIntegerField(choices=Ch.message_content_type)
     created_at = models.DateTimeField(auto_now_add=True)
-    match = models.ForeignKey(Match,  on_delete=models.PROTECT)
+    uploaded = models.IntegerField(choices=Ch.file_status, default=1)
+    match = models.ForeignKey(Match, on_delete=models.PROTECT)
 
 
 class MatchLog(models.Model):
