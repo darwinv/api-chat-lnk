@@ -556,6 +556,7 @@ class MatchFile(models.Model):
     """Archivos Adjuntos del Match."""
 
     file_url = models.CharField(max_length=500)
+    file_preview_url = models.CharField(max_length=500, blank=True)
     content_type = models.PositiveIntegerField(choices=Ch.message_content_type)
     created_at = models.DateTimeField(auto_now_add=True)
     uploaded = models.IntegerField(choices=Ch.file_status, default=1)

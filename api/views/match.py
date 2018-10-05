@@ -114,4 +114,10 @@ class MatchUploadFilesView(APIView):
             logger.error("subir archivo, error general, m_ID: {} - ERROR: {} ".format(file_match_id, e))
             resp = False
 
+        if resp is False:
+            mf.uploaded = 5
+        else:
+            mf.uploaded = 2
+        mf.save()
+        
         return resp

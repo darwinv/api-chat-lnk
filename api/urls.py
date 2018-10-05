@@ -215,7 +215,7 @@ urlpatterns = [
         match.MatchListClientView.as_view(),
         name='match-client'),
 
-    url(r'^matchs/upload_files/(?P<pk>[0-9]+)/$',
+    url(r'^match/upload_files/(?P<pk>[0-9]+)/$',
         match.MatchUploadFilesView.as_view(), name='match-upload-files'),
 
     # Vendedores
