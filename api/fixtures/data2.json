@@ -783,5 +783,12 @@
     "is_active": true,
     "clasification": 2
   }
+},
+{
+  "model": "api.matchproduct",
+  "pk": 1,
+  "fields":{
+    "price": "450.00"
+  }
 }
 ]

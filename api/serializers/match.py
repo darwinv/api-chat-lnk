@@ -12,18 +12,18 @@ class MatchFileSerializer(serializers.ModelSerializer):
 
 class MatchSerializer(serializers.ModelSerializer):
     """Serializer Match."""
-    files = MatchFileSerializer(many=True)
+    file = MatchFileSerializer(many=True)
 
     class Meta:
         model = Match
-        fields = ('category', 'subject', 'files', 'client')
+        fields = ('category', 'subject', 'file', 'client')
 
     def create(self, validated_data):
         """Redefinido Crear Serializer."""
         validated_data["specialist"] = Specialist.objects.get(
             type_specialist="m",
             category_id=validated_data["category"])
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         validated_data["price"] = MatchProduct.objects.first().price
         validated_data["status"] = 1
         data_files = validated_data.pop('file')

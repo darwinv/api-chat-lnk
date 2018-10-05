@@ -118,7 +118,13 @@ class ChoicesAPI:
         (1, _('Requested')),  # solicitado
         (2, _('Accepted')),  # aceptado por especialista, falta que pague el especialista y/o cliente
         (3, _('Declined')),  # declinado por especialista
-        (4, _('Done')),  # hecho, match exitoso
+        (4, _('Pending_Paid_Client')),  # Pendiente pago del usuario. sino es cliente
+        (5, _('Done')),  # hecho, match exitoso
+    )
+
+    match_paid_specialist = (
+        (1, _('paid_bank')),
+        (2, _('make_discount'))
     )
 
     # Message Model

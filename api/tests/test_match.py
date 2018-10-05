@@ -24,7 +24,7 @@ class RequestMatch(APITestCase):
         self.valid_payload = {
             "category": 8,
             "subject": "Quiero demandar a la sunat",
-            "files": [
+            "file": [
                 {
                     "file_url": "https://20180820-21.jpg",
                     "content_type": 1
@@ -39,5 +39,5 @@ class RequestMatch(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

@@ -155,13 +155,6 @@
   }
 },
 {
-  "model": "api.matchproduct",
-  "pk": 1,
-  "fields":{
-    "price": "450.00"
-  }
-},
-{
   "model": "api.saledetail",
   "pk": 30,
   "fields": {

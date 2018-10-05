@@ -539,7 +539,8 @@ class Match(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     subject = models.TextField()
     status = models.PositiveIntegerField(choices=Ch.match_acquired_status)
-    paid_by_specialist = models.BooleanField(default=False)
+    payment_option_specialist = models.PositiveIntegerField(
+        choices=Ch.match_paid_specialist, null=True)
     declined_motive = models.CharField(max_length=255, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
@@ -557,7 +558,7 @@ class MatchFile(models.Model):
     file_url = models.CharField(max_length=500)
     content_type = models.PositiveIntegerField(choices=Ch.message_content_type)
     created_at = models.DateTimeField(auto_now_add=True)
-    match = models.ForeignKey(Match)
+    match = models.ForeignKey(Match,  on_delete=models.PROTECT)
 
 
 class MatchLog(models.Model):
