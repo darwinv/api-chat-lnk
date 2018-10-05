@@ -214,6 +214,10 @@ urlpatterns = [
     url(r'^client/matchs/$',
         match.MatchListClientView.as_view(),
         name='match-client'),
+
+    url(r'^matchs/upload_files/(?P<pk>[0-9]+)/$',
+        match.MatchUploadFilesView.as_view(), name='match-upload-files'),
+
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(),

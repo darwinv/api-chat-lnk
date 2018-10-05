@@ -86,7 +86,7 @@ class RequestMatch(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        
+
     def test_create_match(self):
         """Creacion Exitosa del match."""
         response = self.client.post(

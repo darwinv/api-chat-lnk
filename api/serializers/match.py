@@ -7,7 +7,7 @@ class ListFileSerializer(serializers.ModelSerializer):
     """Serializer para la representacion del mensaje."""
     class Meta:
         model = MatchFile
-        fields = ('file_url', 'content_type')
+        fields = ('id', 'file_url', 'content_type')
 
 
 class MatchFileSerializer(serializers.ModelSerializer):
@@ -43,7 +43,12 @@ class MatchSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
         files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
+        files_ids = []
+        for file_obj in files:
+            files_ids.append(file_obj["id"])
+
         return {"id": obj.id, "file": files,
                 "category": obj.category.id,
                 "subject": obj.subject, "client": obj.client.id,
-                "specialist": obj.specialist.id}
+                "specialist": obj.specialist.id,
+                "files_id": files_ids}
