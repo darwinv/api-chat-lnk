@@ -32,6 +32,61 @@ class RequestMatch(APITestCase):
                 ]
             }
 
+    def test_no_category(self):
+        """No hay especialidad."""
+        data = self.valid_payload.copy()
+        del data["category"]
+        response = self.client.post(
+            reverse('match-client'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_category(self):
+        """Especialidad no existe."""
+        data = self.valid_payload.copy()
+        data["category"] = 50
+        response = self.client.post(
+            reverse('match-client'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_subject(self):
+        """No hay especialidad."""
+        data = self.valid_payload.copy()
+        del data["subject"]
+        response = self.client.post(
+            reverse('match-client'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_file(self):
+        """No hay especialidad."""
+        data = self.valid_payload.copy()
+        del data["file"]
+        response = self.client.post(
+            reverse('match-client'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_not_client_credentials(self):
+        """Token no es de cliente (no autorizado)."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+        response = self.client.post(
+            reverse('queries-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        
     def test_create_match(self):
         """Creacion Exitosa del match."""
         response = self.client.post(
@@ -39,5 +94,4 @@ class RequestMatch(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

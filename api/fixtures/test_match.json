@@ -141,6 +141,19 @@
   }
 },
 {
+  "model": "oauth2_provider.accesstoken",
+  "pk": 3,
+  "fields": {
+    "user": 20,
+    "token": "FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "read write groups",
+    "created": "2017-12-21T17:31:54.255Z",
+    "updated": "2018-01-31T17:17:21.129Z"
+  }
+},
+{
   "model": "api.sale",
   "pk": 6,
   "fields": {
