@@ -12,7 +12,7 @@ from rest_framework import serializers
 from rest_framework import status, permissions
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api.utils.validations import Operations
-from api.serializers.match import MatchSerializer
+from api.serializers.match import MatchSerializer, MatchListClientSerializer
 from api.permissions import IsAdminOrClient, IsOwnerAndClient
 from api.models import Match, MatchFile
 from api.utils.tools import s3_upload_file, remove_file, resize_img
@@ -25,6 +25,13 @@ class MatchListClientView(ListCreateAPIView):
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsAdminOrClient]
+
+    def list(self, request):
+        """Listado de Matchs."""
+        user_id = Operations.get_id(self, request)
+        queryset = Match.objects.filter(client_id=user_id)
+        serializer = MatchListClientSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     def post(self, request):
         """Metodo para Solicitar Match."""
@@ -119,5 +126,5 @@ class MatchUploadFilesView(APIView):
         else:
             mf.uploaded = 2
         mf.save()
-        
+
         return resp

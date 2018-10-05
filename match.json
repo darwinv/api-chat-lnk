@@ -1,0 +1,104 @@
+[
+{
+  "model": "api.match",
+  "pk": 1,
+  "fields": {
+    "price": "450.00",
+    "subject": "Quiero demandar a la sunat",
+    "status": 1,
+    "payment_option_specialist": null,
+    "declined_motive": null,
+    "created_at": "2018-10-05T18:04:14.195Z",
+    "category": 3,
+    "client": 12,
+    "specialist": 15,
+    "sale_detail": null,
+    "specialist_payment": null
+  }
+},
+{
+  "model": "api.match",
+  "pk": 2,
+  "fields": {
+    "price": "450.00",
+    "subject": "Prueba de contrataci\u00f3n de especialista",
+    "status": 1,
+    "payment_option_specialist": null,
+    "declined_motive": null,
+    "created_at": "2018-10-05T18:54:39.760Z",
+    "category": 8,
+    "client": 12,
+    "specialist": 20,
+    "sale_detail": null,
+    "specialist_payment": null
+  }
+},
+{
+  "model": "api.match",
+  "pk": 3,
+  "fields": {
+    "price": "450.00",
+    "subject": "Quiero demandar a la sunat",
+    "status": 1,
+    "payment_option_specialist": null,
+    "declined_motive": null,
+    "created_at": "2018-10-05T19:00:48.339Z",
+    "category": 3,
+    "client": 12,
+    "specialist": 15,
+    "sale_detail": null,
+    "specialist_payment": null
+  }
+},
+{
+  "model": "api.match",
+  "pk": 4,
+  "fields": {
+    "price": "450.00",
+    "subject": "Test match with files",
+    "status": 1,
+    "payment_option_specialist": null,
+    "declined_motive": null,
+    "created_at": "2018-10-05T19:14:36.728Z",
+    "category": 8,
+    "client": 12,
+    "specialist": 20,
+    "sale_detail": null,
+    "specialist_payment": null
+  }
+},
+{
+  "model": "api.match",
+  "pk": 5,
+  "fields": {
+    "price": "450.00",
+    "subject": "Test match files 2",
+    "status": 1,
+    "payment_option_specialist": null,
+    "declined_motive": null,
+    "created_at": "2018-10-05T19:18:01.487Z",
+    "category": 8,
+    "client": 12,
+    "specialist": 20,
+    "sale_detail": null,
+    "specialist_payment": null
+  }
+},
+{
+  "model": "api.match",
+  "pk": 6,
+  "fields": {
+    "price": "450.00",
+    "subject": "Test match files 3",
+    "status": 1,
+    "payment_option_specialist": null,
+    "declined_motive": null,
+    "created_at": "2018-10-05T19:19:58.145Z",
+    "category": 8,
+    "client": 12,
+    "specialist": 20,
+    "sale_detail": null,
+    "specialist_payment": null
+  }
+}
+]

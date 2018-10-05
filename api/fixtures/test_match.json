@@ -180,5 +180,51 @@
     "product_type": 1,
     "sale": 6
   }
+},
+{
+  "model": "api.match",
+  "pk": 1,
+  "fields": {
+    "price": "450.00",
+    "subject": "Quiero demandar a la sunat",
+    "status": 1,
+    "payment_option_specialist": null,
+    "declined_motive": null,
+    "created_at": "2018-10-05T18:04:14.195Z",
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "sale_detail": null,
+    "specialist_payment": null
+  }
+},
+{
+  "model": "api.match",
+  "pk": 2,
+  "fields": {
+    "price": "450.00",
+    "subject": "Prueba de contrataci\u00f3n de especialista",
+    "status": 1,
+    "payment_option_specialist": null,
+    "declined_motive": null,
+    "created_at": "2018-10-05T18:54:39.760Z",
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "sale_detail": null,
+    "specialist_payment": null
+  }
+},
+{
+  "model": "api.matchfile",
+  "pk": 1,
+  "fields": {
+    "file_url": "https://s3.amazonaws.com/linkup-photos/IMG-20180820-21.jpg",
+    "file_preview_url": "",
+    "content_type": 1,
+    "created_at": "2018-10-05T18:04:14.478Z",
+    "uploaded": 1,
+    "match": 1
+  }
 }
 ]

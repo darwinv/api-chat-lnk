@@ -95,3 +95,23 @@ class RequestMatch(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class GetListMatch(APITestCase):
+    """Devolver listado de matchs."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_match']
+
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_match(self):
+        """Obtener resultado 200."""
+        # se provee un token de especialista el cuel tiene
+        # mensajes pendientes de responders
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        response = self.client.get(reverse('match-client'),
+                                   format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
