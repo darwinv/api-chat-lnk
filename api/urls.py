@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from api.views import actors, query, category, email, authorization, payment
 from api.views import validations, plan, chat, oauth, static_data, purchase
-from api.views import account
+from api.views import account, match
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
 router = routers.DefaultRouter()
@@ -117,7 +117,7 @@ urlpatterns = [
     url(r'^specialists/(?P<pk>[0-9]+)/$',
         actors.SpecialistDetailView.as_view(),
         name='specialist-detail'),
-    
+
     # numero de consultas mensual y anual de un especialista
     url(r'^specialists/query-count/$',
         actors.SpecialistQueryCountView.as_view(),
@@ -209,6 +209,14 @@ urlpatterns = [
     # Specialist Decline Query
     url(r'^query-decline/(?P<pk>[0-9]+)/$', query.QueryDeclineView.as_view(),
         name='query-decline'),
+
+    # Match
+    url(r'^client/matchs/$',
+        match.MatchListClientView.as_view(),
+        name='match-client'),
+
+    url(r'^match/upload_files/(?P<pk>[0-9]+)/$',
+        match.MatchUploadFilesView.as_view(), name='match-upload-files'),
 
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),

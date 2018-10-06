@@ -115,9 +115,16 @@ class ChoicesAPI:
 
     # MatchAcquired model
     match_acquired_status = (
-        (1, _('Requested')),
-        (2, _('Accepted')),
-        (3, _('Declined')),
+        (1, _('Requested')),  # solicitado
+        (2, _('Accepted')),  # aceptado por especialista, falta que pague el especialista y/o cliente
+        (3, _('Declined')),  # declinado por especialista
+        (4, _('Pending_Paid_Client')),  # Pendiente pago del usuario. sino es cliente
+        (5, _('Done')),  # hecho, match exitoso
+    )
+
+    match_paid_specialist = (
+        (1, _('paid_bank')),
+        (2, _('make_discount'))
     )
 
     # Message Model
@@ -127,19 +134,13 @@ class ChoicesAPI:
         ('a', _('answer')),  # es de tipo respuesta
     )
 
+   # Para mensaje y Match
     message_content_type = (
         (1, _('Text')),
         (2, _('Image')),
         (3, _('Video')),
         (4, _('Voice')),
         (5, _('Document')),
-    )
-
-    # Match Model
-    match_type_file = (
-        (2, _('Image')),
-        (3, _('Voice')),
-        (4, _('Document')),
     )
 
     # AlertCategory Model
@@ -165,6 +166,14 @@ class ChoicesAPI:
         (1, _('Active')),
         (2, _('Deactivated')),
         (3, _('Processing')),
+    )
+
+    file_status = (
+        (0, _('Loaded')),
+        (1, _('Sent')),
+        (2, _('Delivered')),
+        (3, _('Read')),
+        (4, _('Failed')),
     )
     # tipo de Contacto
     type_seller_contact = (

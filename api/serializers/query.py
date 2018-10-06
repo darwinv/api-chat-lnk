@@ -11,6 +11,7 @@ from api.utils.functions import generate_message_code_user
 from api import pyrebase
 import sys
 
+
 # Serializer de Mensajes
 class MessageSerializer(serializers.ModelSerializer):
     """Serializer para el mensaje."""
@@ -377,7 +378,7 @@ class ReQuerySerializer(BaseQueryResponseSerializer):
             data_message["room"] = Params.PREFIX['client'] +\
                 str(instance.client.id)+'-'+Params.PREFIX['category'] +\
                 str(instance.category.id)
-            
+
             # se busca el mensaje de referencia y se extrae de la respuesta
             if 'message_reference' in data_message and data_message['message_reference'] != 0:
                 ms_ref = data_message['message_reference'].id

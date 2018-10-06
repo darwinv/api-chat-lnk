@@ -1397,7 +1397,6 @@
     "price": "45.0000",
     "created_at": "2018-02-15T23:03:29.725Z",
     "is_active": true,
-    "product_type": 1,
     "clasification": 1
   }
 },

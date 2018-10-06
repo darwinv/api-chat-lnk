@@ -124,8 +124,16 @@ class IsClientOrSpecialistAndOwner(permissions.BasePermission):
 class IsOwnerAndClient(permissions.BasePermission):
     """Solo Dueños y que sea cliente."""
 
+    def has_permission(self, request, view):
+        """Permiso General."""
+        if (request.user and (request.user.role_id == 2)):
+            return True
+        return False
+
     def has_object_permission(self, request, view, owner_id):
         """Permiso nivel objeto."""
+        if request.method == "POST" or request.method == "PUT":
+            return request.user.id == owner_id
 
 
 
