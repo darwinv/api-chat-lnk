@@ -218,10 +218,15 @@ urlpatterns = [
     url(r'^match/upload_files/(?P<pk>[0-9]+)/$',
         match.MatchUploadFilesView.as_view(), name='match-upload-files'),
 
+    # Listado de matchs para el especialista
     url(r'^specialists/matchs/$',
         match.MatchListSpecialistView.as_view(),
         name='match-specialist'),
 
+    # Aceptar match especialista
+    url(r'^specialists/accept/matchs/(?P<pk>[0-9]+)/$',
+        match.MatchAcceptView.as_view(),
+        name='match-specialist-accept'),
 
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
