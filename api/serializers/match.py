@@ -75,6 +75,23 @@ class MatchAcceptSerializer(serializers.ModelSerializer):
         return instance
 
 
+class MatchDeclineSerializer(serializers.ModelSerializer):
+    """Aceptar match ."""
+    declined_motive = serializers.CharField(max_length=255)
+
+    class Meta:
+        """Meta."""
+        model = Match
+        fields = ('declined_motive', 'status')
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        instance.declined_motive = validated_data["declined_motive"]
+        instance.status = 3
+        instance.save()
+        return instance
+
+
 class MatchListClientSerializer(serializers.ModelSerializer):
     """Listado de Matchs."""
     class Meta:
