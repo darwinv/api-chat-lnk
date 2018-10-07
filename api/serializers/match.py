@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from api.models import Match, MatchFile, MatchProduct, Specialist
 from django.utils.translation import ugettext_lazy as _
+from api.serializers.actors import ClientSerializer
 
 class ListFileSerializer(serializers.ModelSerializer):
     """Serializer para la representacion del mensaje."""
@@ -64,15 +65,42 @@ class MatchListClientSerializer(serializers.ModelSerializer):
         """Redefinido metodo de to_representation."""
 
         files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
-        specialist = {"code": obj.specialist.code,
+
+        if obj.status == 5:
+            specialist = {"code": obj.specialist.code,
                       "first_name": obj.specialist.first_name,
                       "last_name": obj.specialist.last_name,
                       "email_exact": obj.specialist.email_exact,
                       "telephone": obj.specialist.telephone,
                       "cellphone": obj.specialist.cellphone,
                       "photo": obj.specialist.photo}
+        else:
+            specialist = None
+        
 
         return {"id": obj.id, "date": str(obj.created_at),
                 "subject": obj.subject, "category": _(obj.category.name),
                 "specialist": specialist, "category_image": obj.category.image,
+                "file": files, "status": obj.status}
+
+class MatchListSpecialistSerializer(serializers.ModelSerializer):
+    """Listado de Matchs."""
+    class Meta:
+        model = Match
+        fields = ('category', 'subject', 'file', 'specialist')
+
+    def to_representation(self, obj):
+        """Redefinido metodo de to_representation."""
+
+        files = ListFileSerializer(obj.matchfile_set.all(), many=True).data        
+
+        if obj.status == 5:
+            client = ClientSerializer(obj.client)
+            client_data = client.data
+        else:
+            client_data = None
+
+        return {"id": obj.id, "date": str(obj.created_at),
+                "subject": obj.subject, "category": _(obj.category.name),
+                "client": client_data, "category_image": obj.category.image,
                 "file": files, "status": obj.status}

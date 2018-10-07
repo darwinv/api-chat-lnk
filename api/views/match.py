@@ -13,7 +13,9 @@ from rest_framework import status, permissions
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api.utils.validations import Operations
 from api.serializers.match import MatchSerializer, MatchListClientSerializer
+from api.serializers.match import MatchListSpecialistSerializer
 from api.permissions import IsAdminOrClient, IsOwnerAndClient
+from api.permissions import IsAdminOrSpecialist
 from api.models import Match, MatchFile
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.logger import manager
@@ -44,6 +46,20 @@ class MatchListClientView(ListCreateAPIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class MatchListSpecialistView(ListCreateAPIView):
+    """Vista Match cliente."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrSpecialist]
+
+    def list(self, request):
+        """Listado de Matchs."""
+        user_id = Operations.get_id(self, request)
+        queryset = Match.objects.filter(specialist=user_id)
+        serializer = MatchListSpecialistSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 
 class MatchUploadFilesView(APIView):
