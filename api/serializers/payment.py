@@ -113,7 +113,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 class PaymentMatchSerializer(serializers.ModelSerializer):
     """Serializer del Pago."""
     match = serializers.PrimaryKeyRelatedField(
-            queryset=Match.objects.all(), required=True)
+            queryset=Match.objects.all(), required=True, write_only=True)
 
     class Meta:
         """Modelo."""
@@ -135,14 +135,22 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Crear pago de especialista."""
         match = validated_data.pop('match')
-        match = Match.objects.get(match)
+        # import pdb; pdb.set_trace()
+        match = Match.objects.get(pk=match.id)
         instance = Payment(**validated_data)
         instance.save()
         match.specialist_payment = instance
-        ## if match.status ==
-        ## si el status es 2 y paga el especialista
+        client = match.client
         # se verifica si ya fue cliente el usuario que solicito el match
         # si ya lo fue pasa a status 5 directo sino pasa a 4. pendiente de pago
+        is_client = Sale.objects.filter(saledetail__product_type=1,
+                                        saledetail__is_billable=True,
+                                        client=client,
+                                        status__range=(2, 3)).exists()
+        if is_client:
+            match.status = 5
+        else:
+            match.status = 4
         match.save()
         return instance
 
