@@ -749,8 +749,6 @@ class SpecialistListView(ListCreateAPIView):
     # Funcion para crear un especialista
     def post(self, request):
         """Redefinido funcion para crear especialista."""
-        import pdb
-        pdb.set_trace()
         required = _("required")
         data = request.data
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento

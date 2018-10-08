@@ -13,6 +13,7 @@ from rest_framework import status, permissions
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api.utils.validations import Operations
 from api.serializers.match import MatchSerializer, MatchListClientSerializer
+from api.serializers.match import MatchAcceptSerializer, MatchDeclineSerializer
 from api.serializers.match import MatchListSpecialistSerializer
 from api.serializers.match import MatchListSerializer
 from api.permissions import IsAdminOrClient, IsOwnerAndClient
@@ -48,6 +49,7 @@ class MatchListClientView(ListCreateAPIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+<<<<<<< HEAD
 class MatchBackendListView(ListCreateAPIView):
     """Vista Match cliente."""
 
@@ -73,6 +75,8 @@ class MatchBackendListView(ListCreateAPIView):
             return self.get_paginated_response(serializer.data)
         serializer = MatchListSerializer(page, many=True)
         return Response(serializer.data)
+=======
+>>>>>>> cc32770a424a45f83b19c3ce943299e8c7ee3fda
 
 class MatchListSpecialistView(ListCreateAPIView):
     """Vista Match cliente."""
@@ -88,6 +92,50 @@ class MatchListSpecialistView(ListCreateAPIView):
         return Response(serializer.data)
 
 
+class MatchAcceptView(APIView):
+    """Acepta el Match."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrSpecialist]
+
+    def put(self, request, pk):
+        """Match para un especialista."""
+        specialist = Operations.get_id(self, request)
+        try:
+            match = Match.objects.get(pk=pk, status=1,
+                                      specialist=specialist)
+        except Match.DoesNotExist:
+            raise Http404
+
+        data = request.data
+        data["status"] = 2
+        serializer = MatchAcceptSerializer(match, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class MatchDeclineView(APIView):
+    """Declina el Match."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrSpecialist]
+
+    def put(self, request, pk):
+        """Redefinido put"""
+        specialist = Operations.get_id(self, request)
+        try:
+            match = Match.objects.get(pk=pk, status=1,
+                                      specialist=specialist)
+        except Match.DoesNotExist:
+            raise Http404
+
+        data = request.data
+        data["status"] = 3
+        serializer = MatchDeclineSerializer(match, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class MatchUploadFilesView(APIView):
     """Subida de archivos para la consultas."""

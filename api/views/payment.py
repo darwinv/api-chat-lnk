@@ -1,6 +1,7 @@
 """Vista de Pagos."""
 from api.serializers.payment import PaymentSerializer, PaymentSaleSerializer
 from api.serializers.payment import PaymentSalePendingDetailSerializer
+from api.serializers.payment import PaymentMatchSerializer
 from api.serializers.payment import SaleContactoDetailSerializer
 from api.utils.validations import Operations
 from api.utils.querysets import get_next_fee_to_pay
@@ -34,6 +35,21 @@ class CreatePayment(APIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
+class MatchPaymentSpecialist(APIView):
+    """Vista para crear pago de match specialista."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, isAdminBackWrite,)
+
+    def post(self, request):
+        """crear compra."""
+        data = request.data
+        user_id = Operations.get_id(self, request)
+        serializer = PaymentMatchSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 class PaymentPendingView(ListCreateAPIView):
     """Vista para traer pagos pendientes."""
     authentication_classes = (OAuth2Authentication,)
@@ -48,7 +64,7 @@ class PaymentPendingView(ListCreateAPIView):
                             sale=OuterRef("pk"),
                             status=1
                         )
-        
+
         manage_data = Sale.objects.values('created_at',
             'total_amount','reference_number', 'is_fee', 'id',
             'client__first_name','client__last_name', 'client__business_name'
@@ -58,7 +74,7 @@ class PaymentPendingView(ListCreateAPIView):
                                                                     'pay_before')[:1]
                                                             )
                                                         ).order_by('pay_before')
-        
+
         if 'document_number' in data:
             document = data['document_number']
             manage_data = manage_data.filter(Q(client__ruc=document) | Q(

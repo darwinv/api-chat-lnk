@@ -3,6 +3,8 @@ from rest_framework import serializers
 from api.models import Match, MatchFile, MatchProduct, Specialist
 from django.utils.translation import ugettext_lazy as _
 from api.serializers.actors import ClientSerializer
+from api.api_choices_models import ChoicesAPI as ch
+
 
 class ListFileSerializer(serializers.ModelSerializer):
     """Serializer para la representacion del mensaje."""
@@ -55,6 +57,41 @@ class MatchSerializer(serializers.ModelSerializer):
                 "files_id": files_ids}
 
 
+class MatchAcceptSerializer(serializers.ModelSerializer):
+    """Aceptar match ."""
+    payment_option_specialist = serializers.ChoiceField(
+            choices=ch.match_paid_specialist, required=True)
+
+    class Meta:
+        """Meta."""
+        model = Match
+        fields = ('payment_option_specialist', 'status')
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        instance.payment_option_specialist = validated_data["payment_option_specialist"]
+        instance.status = 2
+        instance.save()
+        return instance
+
+
+class MatchDeclineSerializer(serializers.ModelSerializer):
+    """Aceptar match ."""
+    declined_motive = serializers.CharField(max_length=255)
+
+    class Meta:
+        """Meta."""
+        model = Match
+        fields = ('declined_motive', 'status')
+
+    def update(self, instance, validated_data):
+        """Redefinir update."""
+        instance.declined_motive = validated_data["declined_motive"]
+        instance.status = 3
+        instance.save()
+        return instance
+
+
 class MatchListClientSerializer(serializers.ModelSerializer):
     """Listado de Matchs."""
     class Meta:
@@ -68,20 +105,21 @@ class MatchListClientSerializer(serializers.ModelSerializer):
 
         if obj.status == 5:
             specialist = {"code": obj.specialist.code,
-                      "first_name": obj.specialist.first_name,
-                      "last_name": obj.specialist.last_name,
-                      "email_exact": obj.specialist.email_exact,
-                      "telephone": obj.specialist.telephone,
-                      "cellphone": obj.specialist.cellphone,
-                      "photo": obj.specialist.photo}
+                          "first_name": obj.specialist.first_name,
+                          "last_name": obj.specialist.last_name,
+                          "email_exact": obj.specialist.email_exact,
+                          "telephone": obj.specialist.telephone,
+                          "cellphone": obj.specialist.cellphone,
+                          "photo": obj.specialist.photo}
         else:
             specialist = None
-        
 
         return {"id": obj.id, "date": str(obj.created_at),
                 "subject": obj.subject, "category": _(obj.category.name),
                 "specialist": specialist, "category_image": obj.category.image,
-                "file": files, "status": obj.status}
+                "file": files, "status": obj.status,
+                "declined_motive": obj.declined_motive}
+
 
 
 class MatchListSerializer(serializers.ModelSerializer):
@@ -118,7 +156,7 @@ class MatchListSpecialistSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """Redefinido metodo de to_representation."""
 
-        files = ListFileSerializer(obj.matchfile_set.all(), many=True).data        
+        files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
 
         if obj.status == 5:
             client = ClientSerializer(obj.client)
@@ -129,4 +167,5 @@ class MatchListSpecialistSerializer(serializers.ModelSerializer):
         return {"id": obj.id, "date": str(obj.created_at),
                 "subject": obj.subject, "category": _(obj.category.name),
                 "client": client_data, "category_image": obj.category.image,
-                "file": files, "status": obj.status}
+                "file": files, "status": obj.status,
+                "declined_motive": obj.declined_motive}

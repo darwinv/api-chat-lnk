@@ -218,13 +218,26 @@ urlpatterns = [
     url(r'^match/upload_files/(?P<pk>[0-9]+)/$',
         match.MatchUploadFilesView.as_view(), name='match-upload-files'),
 
+    # Listado de matchs para el especialista
     url(r'^specialists/matchs/$',
         match.MatchListSpecialistView.as_view(),
         name='match-specialist'),
 
+<<<<<<< HEAD
     url(r'^backend/matchs/$',
         match.MatchBackendListView.as_view(),
         name='backend-matchs'),
+=======
+    # Aceptar match especialista
+    url(r'^specialists/accept/matchs/(?P<pk>[0-9]+)/$',
+        match.MatchAcceptView.as_view(),
+        name='match-specialist-accept'),
+
+    # Declinar match especialista
+    url(r'^specialists/decline/matchs/(?P<pk>[0-9]+)/$',
+        match.MatchDeclineView.as_view(),
+        name='match-specialist-decline'),
+>>>>>>> cc32770a424a45f83b19c3ce943299e8c7ee3fda
 
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
@@ -310,6 +323,10 @@ urlpatterns = [
     # Pagos
     url(r'^payment/$',
         payment.CreatePayment.as_view(), name='payment'),
+    # Pago de especialista match
+    url(r'^specialists/payment/match/$',
+        payment.MatchPaymentSpecialist.as_view(),
+        name='payment-match-specialist'),
 
     url(r'^sales/payment-pending/$',
         payment.PaymentPendingView.as_view(), name='sale-payment-pending'),
