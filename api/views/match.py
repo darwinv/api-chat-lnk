@@ -49,7 +49,7 @@ class MatchListClientView(ListCreateAPIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-<<<<<<< HEAD
+
 class MatchBackendListView(ListCreateAPIView):
     """Vista Match cliente."""
 

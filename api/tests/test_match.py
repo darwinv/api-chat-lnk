@@ -301,7 +301,7 @@ class GetListMatchSpecialist(APITestCase):
         response = self.client.get(reverse('match-specialist'),
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-<<<<<<< HEAD
+
 
 class GetListMatchBackend(APITestCase):
     """Devolver listado de matchs."""
