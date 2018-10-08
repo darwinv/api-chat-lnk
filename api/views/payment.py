@@ -2,6 +2,7 @@
 from api.serializers.payment import PaymentSerializer, PaymentSaleSerializer
 from api.serializers.payment import PaymentSalePendingDetailSerializer
 from api.serializers.payment import PaymentMatchSerializer
+from api.serializers.payment import PaymentMatchClientSerializer
 from api.serializers.payment import SaleContactoDetailSerializer
 from api.utils.validations import Operations
 from api.utils.querysets import get_next_fee_to_pay
@@ -49,6 +50,23 @@ class MatchPaymentSpecialist(APIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class MatchPaymentClient(APIView):
+    """Vista para crear pago de match specialista."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, isAdminBackWrite,)
+
+    def post(self, request):
+        """crear compra."""
+        data = request.data
+        user_id = Operations.get_id(self, request)
+        serializer = PaymentMatchClientSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class PaymentPendingView(ListCreateAPIView):
     """Vista para traer pagos pendientes."""

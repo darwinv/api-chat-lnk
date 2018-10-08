@@ -15,6 +15,7 @@ from api.serializers.fee import FeeSerializer
 from api.utils.parameters import Params
 import sys
 from api import pyrebase
+from api.serializers.sale import increment_reference
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -154,6 +155,54 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
         match.save()
         return instance
 
+
+class PaymentMatchClientSerializer(serializers.ModelSerializer):
+    """Se crea, venta, pago y cambia el match."""
+
+    match = serializers.PrimaryKeyRelatedField(
+            queryset=Match.objects.all(), required=True, write_only=True)
+
+    class Meta:
+        """Modelo."""
+
+        model = Payment
+        fields = ('amount', 'operation_number', 'payment_type',
+                  'observations', 'bank', 'id', 'match')
+
+    def validate_amount(self, value):
+        """Validacion de amount."""
+        data = self.get_initial()
+        match = Match.objects.get(pk=data["match"])
+        # si el monto es menor que el pago, devuelvo un error
+        if float(value) < float(match.price):
+            raise serializers.ValidationError(
+                'This field must not be lesser than the corresponding.')
+        return value
+
+    def create(self, validated_data):
+        """Crear pago de especialista."""
+        match = validated_data.pop('match')
+        # import pdb; pdb.set_trace()
+        match = Match.objects.get(pk=match.id)
+        # import pdb; pdb.set_trace()
+        sale = Sale.objects.create(place="BCP", total_amount=match.price,
+                                   reference_number=increment_reference(),
+                                   description='pago de match',
+                                   client=match.client, status=3)
+
+        sale_detail = SaleDetail.objects.create(price=match.price,
+                                                description="Contratacion de especialista",
+                                                discount=float(0),
+                                                pin_code='XXXXXX',
+                                                is_billable=True,
+                                                product_type_id=2, sale=sale)
+
+        instance = Payment(**validated_data)
+        instance.save()
+        match.status = 5
+        match.sale_detail = sale_detail
+        match.save()
+        return instance
 
 class PaymentSaleSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
