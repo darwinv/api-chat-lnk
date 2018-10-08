@@ -223,11 +223,11 @@ urlpatterns = [
         match.MatchListSpecialistView.as_view(),
         name='match-specialist'),
 
-<<<<<<< HEAD
+
     url(r'^backend/matchs/$',
         match.MatchBackendListView.as_view(),
         name='backend-matchs'),
-=======
+
     # Aceptar match especialista
     url(r'^specialists/accept/matchs/(?P<pk>[0-9]+)/$',
         match.MatchAcceptView.as_view(),
@@ -237,7 +237,7 @@ urlpatterns = [
     url(r'^specialists/decline/matchs/(?P<pk>[0-9]+)/$',
         match.MatchDeclineView.as_view(),
         name='match-specialist-decline'),
->>>>>>> cc32770a424a45f83b19c3ce943299e8c7ee3fda
+
 
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),

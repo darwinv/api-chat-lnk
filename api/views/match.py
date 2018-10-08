@@ -75,8 +75,7 @@ class MatchBackendListView(ListCreateAPIView):
             return self.get_paginated_response(serializer.data)
         serializer = MatchListSerializer(page, many=True)
         return Response(serializer.data)
-=======
->>>>>>> cc32770a424a45f83b19c3ce943299e8c7ee3fda
+
 
 class MatchListSpecialistView(ListCreateAPIView):
     """Vista Match cliente."""
