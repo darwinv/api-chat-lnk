@@ -222,6 +222,9 @@ urlpatterns = [
         match.MatchListSpecialistView.as_view(),
         name='match-specialist'),
 
+    url(r'^backend/matchs/$',
+        match.MatchBackendListView.as_view(),
+        name='backend-matchs'),
 
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),

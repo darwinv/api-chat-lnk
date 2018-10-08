@@ -136,5 +136,19 @@ class GetListMatch(APITestCase):
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+class GetListMatchBackend(APITestCase):
+    """Devolver listado de matchs."""
 
+    fixtures = ['data', 'data2', 'data3', 'test_match']
 
+    def setUp(self):
+        """Setup."""
+        pass
+
+    def test_get_match(self):
+        """Obtener resultado 200."""
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        response = self.client.get(reverse('backend-matchs'),
+                                   format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

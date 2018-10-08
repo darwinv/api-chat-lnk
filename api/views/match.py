@@ -14,8 +14,9 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api.utils.validations import Operations
 from api.serializers.match import MatchSerializer, MatchListClientSerializer
 from api.serializers.match import MatchListSpecialistSerializer
+from api.serializers.match import MatchListSerializer
 from api.permissions import IsAdminOrClient, IsOwnerAndClient
-from api.permissions import IsAdminOrSpecialist
+from api.permissions import IsAdminOrSpecialist, IsAdmin
 from api.models import Match, MatchFile
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.logger import manager
@@ -46,6 +47,32 @@ class MatchListClientView(ListCreateAPIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class MatchBackendListView(ListCreateAPIView):
+    """Vista Match cliente."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+    def list(self, request):
+        """Listado de Matchs."""
+        queryset = Match.objects.all()
+
+        if 'status' in request.query_params:
+            status = request.query_params["status"]
+            queryset = queryset.filter(status=status)
+        
+        if 'payment_option_specialist' in request.query_params:
+            payment_option_specialist = request.query_params["payment_option_specialist"]
+            queryset = queryset.filter(payment_option_specialist=payment_option_specialist)
+
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = MatchListSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = MatchListSerializer(page, many=True)
+        return Response(serializer.data)
 
 class MatchListSpecialistView(ListCreateAPIView):
     """Vista Match cliente."""

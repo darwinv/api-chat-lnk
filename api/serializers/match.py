@@ -83,6 +83,32 @@ class MatchListClientSerializer(serializers.ModelSerializer):
                 "specialist": specialist, "category_image": obj.category.image,
                 "file": files, "status": obj.status}
 
+
+class MatchListSerializer(serializers.ModelSerializer):
+    """Listado de Matchs."""
+    class Meta:
+        model = Match
+        fields = ('category', 'subject', 'file', 'client', 'specialist')
+
+    def to_representation(self, obj):
+        """Redefinido metodo de to_representation."""
+        files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
+        
+        specialist = {"code": obj.specialist.code,
+                  "first_name": obj.specialist.first_name,
+                  "last_name": obj.specialist.last_name,
+                  "email_exact": obj.specialist.email_exact,
+                  "telephone": obj.specialist.telephone,
+                  "cellphone": obj.specialist.cellphone,
+                  "photo": obj.specialist.photo}        
+        client = ClientSerializer(obj.client)
+
+        return {"id": obj.id, "date": str(obj.created_at),
+                "subject": obj.subject, "category": _(obj.category.name),
+                "specialist": specialist, "category_image": obj.category.image,
+                "file": files, "status": obj.status, "client": client.data,
+                "payment_option_specialist":obj.payment_option_specialist}
+
 class MatchListSpecialistSerializer(serializers.ModelSerializer):
     """Listado de Matchs."""
     class Meta:
