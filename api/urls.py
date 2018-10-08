@@ -317,6 +317,10 @@ urlpatterns = [
     # Pagos
     url(r'^payment/$',
         payment.CreatePayment.as_view(), name='payment'),
+    # Pago de especialista match
+    url(r'^specialists/payment/match/$',
+        payment.MatchPaymentSpecialist.as_view(),
+        name='payment-match-specialist'),
 
     url(r'^sales/payment-pending/$',
         payment.PaymentPendingView.as_view(), name='sale-payment-pending'),

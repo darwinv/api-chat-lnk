@@ -311,6 +311,30 @@ class MakePaymentWithFee(APITestCase):
         self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
 
 
+class PaymentSpecialistMatch(APITestCase):
+    """Pago de Especialista Match."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_payment', 'test_match']
+
+    def setUp(self):
+        """Setup."""
+        self.url = 'payment-match'
+        self.data = {
+            "amount": 450,
+            "operation_number": "123123-ERT",
+            "observations": "opcional",
+            "payment_type": 2,
+            "bank": 1,
+            "match": 2
+        }
+
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 class PaymentPendig(APITestCase):
     """Prueba de Traer Pagos Pendientes."""

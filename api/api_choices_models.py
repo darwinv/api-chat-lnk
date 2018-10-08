@@ -116,7 +116,7 @@ class ChoicesAPI:
     # MatchAcquired model
     match_acquired_status = (
         (1, _('Requested')),  # solicitado
-        (2, _('Accepted')),  # aceptado por especialista, falta que pague el especialista y/o cliente
+        (2, _('Accepted')),  # aceptado por especialista, falta que pague el especialista
         (3, _('Declined')),  # declinado por especialista
         (4, _('Pending_Paid_Client')),  # Pendiente pago del usuario. sino es cliente
         (5, _('Done')),  # hecho, match exitoso

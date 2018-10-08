@@ -1,7 +1,7 @@
 """Serializer de Venta"""
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
-from api.models import Payment, MonthlyFee, Sale, SaleDetail
+from api.models import Payment, MonthlyFee, Sale, SaleDetail, Match
 from api.models import QueryPlansAcquired, SellerContact, User
 from api.utils.tools import get_date_by_time
 from api.utils.querysets import get_next_fee_to_pay
@@ -104,11 +104,46 @@ class PaymentSerializer(serializers.ModelSerializer):
         else:
             user.code = Params.CODE_PREFIX["client"] + user.document_number
         user.save()
-
-
         validated_data["status"] = 2
         instance = Payment(**validated_data)
         instance.save()
+        return instance
+
+
+class PaymentMatchSerializer(serializers.ModelSerializer):
+    """Serializer del Pago."""
+    match = serializers.PrimaryKeyRelatedField(
+            queryset=Match.objects.all(), required=True)
+
+    class Meta:
+        """Modelo."""
+
+        model = Payment
+        fields = ('amount', 'operation_number', 'payment_type',
+                  'observations', 'bank', 'id', 'match')
+
+    def validate_amount(self, value):
+        """Validacion de amount."""
+        data = self.get_initial()
+        match = Match.objects.get(pk=data["match"])
+        # si el monto es menor que el pago, devuelvo un error
+        if float(value) < float(match.price):
+            raise serializers.ValidationError(
+                'This field must not be lesser than the corresponding.')
+        return value
+
+    def create(self, validated_data):
+        """Crear pago de especialista."""
+        match = validated_data.pop('match')
+        match = Match.objects.get(match)
+        instance = Payment(**validated_data)
+        instance.save()
+        match.specialist_payment = instance
+        ## if match.status ==
+        ## si el status es 2 y paga el especialista
+        # se verifica si ya fue cliente el usuario que solicito el match
+        # si ya lo fue pasa a status 5 directo sino pasa a 4. pendiente de pago
+        match.save()
         return instance
 
 

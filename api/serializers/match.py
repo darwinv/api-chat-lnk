@@ -105,19 +105,20 @@ class MatchListClientSerializer(serializers.ModelSerializer):
 
         if obj.status == 5:
             specialist = {"code": obj.specialist.code,
-                      "first_name": obj.specialist.first_name,
-                      "last_name": obj.specialist.last_name,
-                      "email_exact": obj.specialist.email_exact,
-                      "telephone": obj.specialist.telephone,
-                      "cellphone": obj.specialist.cellphone,
-                      "photo": obj.specialist.photo}
+                          "first_name": obj.specialist.first_name,
+                          "last_name": obj.specialist.last_name,
+                          "email_exact": obj.specialist.email_exact,
+                          "telephone": obj.specialist.telephone,
+                          "cellphone": obj.specialist.cellphone,
+                          "photo": obj.specialist.photo}
         else:
             specialist = None
 
         return {"id": obj.id, "date": str(obj.created_at),
                 "subject": obj.subject, "category": _(obj.category.name),
                 "specialist": specialist, "category_image": obj.category.image,
-                "file": files, "status": obj.status}
+                "file": files, "status": obj.status,
+                "declined_motive": obj.declined_motive}
 
 
 class MatchListSpecialistSerializer(serializers.ModelSerializer):
@@ -140,4 +141,5 @@ class MatchListSpecialistSerializer(serializers.ModelSerializer):
         return {"id": obj.id, "date": str(obj.created_at),
                 "subject": obj.subject, "category": _(obj.category.name),
                 "client": client_data, "category_image": obj.category.image,
-                "file": files, "status": obj.status}
+                "file": files, "status": obj.status,
+                "declined_motive": obj.declined_motive}
