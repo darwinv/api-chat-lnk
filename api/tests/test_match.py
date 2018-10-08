@@ -319,5 +319,4 @@ class GetListMatchBackend(APITestCase):
         response = self.client.get(reverse('backend-matchs'),
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-=======
->>>>>>> cc32770a424a45f83b19c3ce943299e8c7ee3fda
+
