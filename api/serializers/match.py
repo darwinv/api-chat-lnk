@@ -27,6 +27,16 @@ class MatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
         fields = ('category', 'subject', 'file', 'client')
+    
+    def validate(self, data):
+        """validate Redefinido."""
+        msg = _("you can not hire that specialty anymore")
+        qs = Match.objects.filter(category=data["category"],
+                                  client=data["client"])
+        if qs.exists():
+            raise serializers.ValidationError({"category": [msg]})
+
+        return data
 
     def create(self, validated_data):
         """Redefinido Crear Serializer."""
@@ -131,14 +141,14 @@ class MatchListSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """Redefinido metodo de to_representation."""
         files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
-        
+
         specialist = {"code": obj.specialist.code,
                   "first_name": obj.specialist.first_name,
                   "last_name": obj.specialist.last_name,
                   "email_exact": obj.specialist.email_exact,
                   "telephone": obj.specialist.telephone,
                   "cellphone": obj.specialist.cellphone,
-                  "photo": obj.specialist.photo}        
+                  "photo": obj.specialist.photo}
         client = ClientSerializer(obj.client)
 
         return {"id": obj.id, "date": str(obj.created_at),

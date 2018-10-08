@@ -23,7 +23,7 @@ class RequestMatch(APITestCase):
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
         self.valid_payload = {
-            "category": 8,
+            "category": 10,
             "subject": "Quiero demandar a la sunat",
             "file": [
                 {
@@ -95,6 +95,7 @@ class RequestMatch(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -319,4 +320,3 @@ class GetListMatchBackend(APITestCase):
         response = self.client.get(reverse('backend-matchs'),
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
