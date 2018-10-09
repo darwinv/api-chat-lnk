@@ -269,6 +269,23 @@
   }
 },
 {
+  "model": "api.match",
+  "pk": 3,
+  "fields": {
+    "price": "450.00",
+    "subject": "Demanda a Empleador",
+    "status": 2,
+    "payment_option_specialist": null,
+    "declined_motive": null,
+    "created_at": "2018-10-05T18:54:39.760Z",
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "sale_detail": null,
+    "specialist_payment": null
+  }
+},
+{
   "model": "api.matchfile",
   "pk": 1,
   "fields": {

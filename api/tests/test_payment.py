@@ -341,6 +341,29 @@ class PaymentSpecialistMatch(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
+class ConfirmDiscountMatch(APITestCase):
+    """Confirma si solo se le hace el descuento."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_match', 'test_payment']
+
+    def setUp(self):
+        """SetUp."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.url = 'confirm-discount'
+
+    def test_confirm_success(self):
+        """Confirm Discount."""
+        response = self.client.put(
+            reverse(self.url, kwargs={'pk': 3}),
+            content_type='application/json'
+        )
+        # match_status = Match.objects.get(pk=2)
+        # self.assertEqual(3, int(match_status.status))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class PaymentClientMatch(APITestCase):
     """Pago de cliente Match."""
     fixtures = ['data', 'data2', 'data3', 'test_payment', 'test_match']
@@ -367,7 +390,6 @@ class PaymentClientMatch(APITestCase):
             data=json.dumps(self.data),
             content_type='application/json'
         )
-        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 

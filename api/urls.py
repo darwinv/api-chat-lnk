@@ -222,7 +222,10 @@ urlpatterns = [
     url(r'^specialists/matchs/$',
         match.MatchListSpecialistView.as_view(),
         name='match-specialist'),
-
+    # confirmar descuento por parte del especialista
+    url(r'^confirm-discount/(?P<pk>[0-9]+)/$',
+        payment.ConfirmDiscountView.as_view(),
+        name='confirm-discount'),
 
     url(r'^backend/matchs/$',
         match.MatchBackendListView.as_view(),
