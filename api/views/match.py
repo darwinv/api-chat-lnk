@@ -16,9 +16,9 @@ from api.serializers.match import MatchSerializer, MatchListClientSerializer
 from api.serializers.match import MatchAcceptSerializer, MatchDeclineSerializer
 from api.serializers.match import MatchListSpecialistSerializer
 from api.serializers.match import MatchListSerializer
-from api.permissions import IsAdminOrClient, IsOwnerAndClient
+from api.permissions import IsAdminOrClient, IsOwnerAndClient, isAdminBackWrite
 from api.permissions import IsAdminOrSpecialist, IsAdmin
-from api.models import Match, MatchFile
+from api.models import Match, MatchFile, Sale
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.logger import manager
 logger = manager.setup_log(__name__)
@@ -62,7 +62,7 @@ class MatchBackendListView(ListCreateAPIView):
         if 'status' in request.query_params:
             status = request.query_params["status"]
             queryset = queryset.filter(status=status)
-        
+
         if 'payment_option_specialist' in request.query_params:
             payment_option_specialist = request.query_params["payment_option_specialist"]
             queryset = queryset.filter(payment_option_specialist=payment_option_specialist)

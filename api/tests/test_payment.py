@@ -317,8 +317,11 @@ class PaymentSpecialistMatch(APITestCase):
     fixtures = ['data', 'data2', 'data3', 'test_payment', 'test_match']
 
     def setUp(self):
-        """Setup."""
-        self.url = 'payment-match'
+        """SetUp."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.url = 'payment-match-specialist'
         self.data = {
             "amount": 450,
             "operation_number": "123123-ERT",
@@ -328,13 +331,67 @@ class PaymentSpecialistMatch(APITestCase):
             "match": 2
         }
 
+    def test_payment_match_specialist(self):
+
         response = self.client.post(
             reverse(self.url),
             data=json.dumps(self.data),
             content_type='application/json'
         )
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class ConfirmDiscountMatch(APITestCase):
+    """Confirma si solo se le hace el descuento."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_match', 'test_payment']
+
+    def setUp(self):
+        """SetUp."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.url = 'confirm-discount'
+
+    def test_confirm_success(self):
+        """Confirm Discount."""
+        response = self.client.put(
+            reverse(self.url, kwargs={'pk': 3}),
+            content_type='application/json'
+        )
+        # match_status = Match.objects.get(pk=2)
+        # self.assertEqual(3, int(match_status.status))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class PaymentClientMatch(APITestCase):
+    """Pago de cliente Match."""
+    fixtures = ['data', 'data2', 'data3', 'test_payment', 'test_match']
+
+    def setUp(self):
+        """SetUp."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.url = 'payment-match-client'
+        self.data = {
+            "amount": 450,
+            "operation_number": "123123-ERT",
+            "observations": "opcional",
+            "payment_type": 2,
+            "bank": 1,
+            "match": 2
+        }
+
+    def test_payment_match_client(self):
+
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
 
 class PaymentPendig(APITestCase):
     """Prueba de Traer Pagos Pendientes."""

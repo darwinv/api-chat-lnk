@@ -222,7 +222,10 @@ urlpatterns = [
     url(r'^specialists/matchs/$',
         match.MatchListSpecialistView.as_view(),
         name='match-specialist'),
-
+    # confirmar descuento por parte del especialista
+    url(r'^confirm-discount/(?P<pk>[0-9]+)/$',
+        payment.ConfirmDiscountView.as_view(),
+        name='confirm-discount'),
 
     url(r'^backend/matchs/$',
         match.MatchBackendListView.as_view(),
@@ -331,6 +334,11 @@ urlpatterns = [
     url(r'^specialists/payment/match/$',
         payment.MatchPaymentSpecialist.as_view(),
         name='payment-match-specialist'),
+
+    # Pago de Match Cliente
+    url(r'^clients/payment/match/$',
+        payment.MatchPaymentClient.as_view(),
+        name='payment-match-client'),
 
     url(r'^sales/payment-pending/$',
         payment.PaymentPendingView.as_view(), name='sale-payment-pending'),

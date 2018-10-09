@@ -2,11 +2,13 @@
 from api.serializers.payment import PaymentSerializer, PaymentSaleSerializer
 from api.serializers.payment import PaymentSalePendingDetailSerializer
 from api.serializers.payment import PaymentMatchSerializer
+from api.serializers.payment import PaymentMatchClientSerializer
 from api.serializers.payment import SaleContactoDetailSerializer
 from api.utils.validations import Operations
 from api.utils.querysets import get_next_fee_to_pay
 from api.permissions import IsAdminOrSeller, IsAdmin, isAdminBackWrite
-from api.models import Sale, MonthlyFee, Client
+from api.permissions import IsAdminOrSpecialist
+from api.models import Sale, MonthlyFee, Client, Match
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 from rest_framework.views import APIView
@@ -49,6 +51,52 @@ class MatchPaymentSpecialist(APIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class ConfirmDiscountView(APIView):
+    """Confirmar descuento."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrSpecialist]
+
+    def put(self, request, pk):
+        """Redefinido put"""
+        try:
+            match = Match.objects.get(pk=pk, status=2)
+        except Match.DoesNotExist:
+            raise Http404
+
+        client = match.client
+        # se verifica si ya fue cliente el usuario que solicito el match
+        # si ya lo fue pasa a status 5 directo sino pasa a 4. pendiente de pago
+        is_client = Sale.objects.filter(saledetail__product_type=1,
+                                        saledetail__is_billable=True,
+                                        client=client,
+                                        status__range=(2, 3)).exists()
+        if is_client:
+            match.status = 5
+        else:
+            match.status = 4
+
+        match.save()
+
+        return Response({"confirmado"}, status.HTTP_200_OK)
+
+class MatchPaymentClient(APIView):
+    """Vista para crear pago de match specialista."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, isAdminBackWrite,)
+
+    def post(self, request):
+        """crear compra."""
+        data = request.data
+        user_id = Operations.get_id(self, request)
+        serializer = PaymentMatchClientSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class PaymentPendingView(ListCreateAPIView):
     """Vista para traer pagos pendientes."""

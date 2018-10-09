@@ -76,6 +76,45 @@
 },
 {
   "model": "api.user",
+  "pk": 12,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "advertising@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Lopez",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-08T21:02:15.150Z",
+    "nick": "advertising ML",
+    "email_exact": "advertising@mail.com",
+    "telephone": "00023123",
+    "cellphone": "0001231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": null,
+    "document_type": 1,
+    "document_number": "1132312",
+    "img_document_number": "",
+    "ruc": "1231231",
+    "code": "E1132312",
+    "anonymous": true,
+    "updated_at": "2018-03-08T21:02:15.238Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 8,
+    "residence_country": 1,
+    "foreign_address": "",
+    "key": "123456",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
   "pk": 20,
   "fields": {
     "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
@@ -123,6 +162,20 @@
     "cv": "",
     "payment_per_answer": "3.20",
     "category": 8,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 12,
+  "fields": {
+    "business_name": "PYMPACK",
+    "type_specialist": "m",
+    "star_rating": null,
+    "cv": "",
+    "payment_per_answer": "3.20",
+    "category": 10,
     "groups": [],
     "user_permissions": []
   }
@@ -205,6 +258,23 @@
     "price": "450.00",
     "subject": "Prueba de contrataci\u00f3n de especialista",
     "status": 1,
+    "payment_option_specialist": null,
+    "declined_motive": null,
+    "created_at": "2018-10-05T18:54:39.760Z",
+    "category": 8,
+    "client": 3,
+    "specialist": 20,
+    "sale_detail": null,
+    "specialist_payment": null
+  }
+},
+{
+  "model": "api.match",
+  "pk": 3,
+  "fields": {
+    "price": "450.00",
+    "subject": "Demanda a Empleador",
+    "status": 2,
     "payment_option_specialist": null,
     "declined_motive": null,
     "created_at": "2018-10-05T18:54:39.760Z",
