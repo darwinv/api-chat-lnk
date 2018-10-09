@@ -170,6 +170,7 @@ class MakePaymentNoFee(APITestCase):
     #     )
     #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+
 class MakePaymentWithFee(APITestCase):
     """Prueba de Crear Pagos."""
 
@@ -331,6 +332,39 @@ class PaymentSpecialistMatch(APITestCase):
             "match": 2
         }
 
+    def test_invalid_permissions(self):
+        """Invalid Permissions."""
+        client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        response = client.post(
+            reverse(self.url),
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_less_amount(self):
+        """monto menor."""
+        payload = self.data.copy()
+        payload["amount"] = 400
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_match(self):
+        """no match."""
+        payload = self.data.copy()
+        del payload["match"]
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_payment_match_specialist(self):
 
         response = self.client.post(
@@ -382,6 +416,39 @@ class PaymentClientMatch(APITestCase):
             "bank": 1,
             "match": 2
         }
+
+    def test_invalid_permissions(self):
+        """Invalid Permissions."""
+        client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        response = client.post(
+            reverse(self.url),
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_less_amount(self):
+        """monto menor."""
+        payload = self.data.copy()
+        payload["amount"] = 400
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
+    def test_no_match(self):
+        """no match."""
+        payload = self.data.copy()
+        del payload["match"]
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_payment_match_client(self):
 
