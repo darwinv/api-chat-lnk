@@ -67,7 +67,7 @@ class RequestMatch(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_file(self):
-        """No hay especialidad."""
+        """No hay archivo, exitoso igual."""
         data = self.valid_payload.copy()
         del data["file"]
         response = self.client.post(
@@ -75,7 +75,7 @@ class RequestMatch(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_not_client_credentials(self):
         """Token no es de cliente (no autorizado)."""
@@ -116,6 +116,8 @@ class GetListMatch(APITestCase):
             HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
         response = self.client.get(reverse('match-client'),
                                    format='json')
+
+        self.assertEqual(response.data["count"], 3)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -284,7 +286,6 @@ class DeclineMatchSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-
 class GetListMatchSpecialist(APITestCase):
     """Devolver listado de matchs."""
 
@@ -292,16 +293,25 @@ class GetListMatchSpecialist(APITestCase):
 
     def setUp(self):
         """Setup."""
-        pass
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+
+    def test_invalid_permission(self):
+        """Invalid Permissions."""
+        client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+
+        response = client.get(reverse('match-specialist'),
+                              format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_match(self):
         """Obtener resultado 200."""
         # se provee un token de especialista el cuel tiene
         # mensajes pendientes de responders
-        self.client.credentials(
-            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
         response = self.client.get(reverse('match-specialist'),
                                    format='json')
+        self.assertEqual(response.data["count"], 3)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -312,12 +322,41 @@ class GetListMatchBackend(APITestCase):
 
     def setUp(self):
         """Setup."""
-        pass
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+
+    def test_invalid_permissions(self):
+        """SetUp."""
+        client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+
+        response = client.get(reverse('backend-matchs'), format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_filter_status_1(self):
+        """filtro de status."""
+        data = {"status": 1}
+        response = self.client.get(reverse('backend-matchs'), data)
+        self.assertEqual(response.data["count"], 2)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_payment_2(self):
+        """filtro, solo pago y por descuento."""
+        data = {"payment_option_specialist": 2}
+        response = self.client.get(reverse('backend-matchs'), data)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_filter_status_2_payment_1(self):
+        """filtro, status 2 y pago por banco."""
+        data = {"status": 2, "payment_option_specialist": 1}
+        response = self.client.get(reverse('backend-matchs'), data)
+        self.assertEqual(response.data["count"], 1)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_match(self):
         """Obtener resultado 200."""
-        self.client.credentials(
-            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+
         response = self.client.get(reverse('backend-matchs'),
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -16,9 +16,9 @@ from api.serializers.match import MatchSerializer, MatchListClientSerializer
 from api.serializers.match import MatchAcceptSerializer, MatchDeclineSerializer
 from api.serializers.match import MatchListSpecialistSerializer
 from api.serializers.match import MatchListSerializer
-from api.permissions import IsAdminOrClient, IsOwnerAndClient, isAdminBackWrite
-from api.permissions import IsAdminOrSpecialist, IsAdmin
-from api.models import Match, MatchFile, Sale
+from api.permissions import IsAdminOrClient, IsOwnerAndClient
+from api.permissions import IsAdminOrSpecialist, IsAdminOnList
+from api.models import Match, MatchFile
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.logger import manager
 logger = manager.setup_log(__name__)
@@ -43,7 +43,6 @@ class MatchListClientView(ListCreateAPIView):
         serializer = MatchListClientSerializer(page, many=True)
         return Response(serializer.data)
 
-
     def post(self, request):
         """Metodo para Solicitar Match."""
         # Devolvemos el id del usuario
@@ -61,7 +60,7 @@ class MatchBackendListView(ListCreateAPIView):
     """Vista Match cliente."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOnList, ]
 
     def list(self, request):
         """Listado de Matchs."""
@@ -87,13 +86,14 @@ class MatchBackendDetailView(APIView):
     """Vista Match cliente."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOnList]
 
     def get(self, request, pk):
         """Listado de Matchs."""
         queryset = Match.objects.get(pk=pk)
         serializer = MatchListSerializer(queryset)
         return Response(serializer.data)
+
 
 class MatchListSpecialistView(ListCreateAPIView):
     """Vista Match cliente."""
@@ -105,8 +105,6 @@ class MatchListSpecialistView(ListCreateAPIView):
         """Listado de Matchs."""
         user_id = Operations.get_id(self, request)
         queryset = Match.objects.filter(specialist=user_id)
-
-
         # pagination
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -160,6 +158,7 @@ class MatchDeclineView(APIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class MatchUploadFilesView(APIView):
     """Subida de archivos para la consultas."""
