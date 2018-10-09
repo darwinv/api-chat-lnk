@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from api.models import Match, MatchFile, MatchProduct, Specialist
 from django.utils.translation import ugettext_lazy as _
-from api.serializers.actors import ClientSerializer
+from api.serializers.actors import ClientSerializer, SpecialistSerializer
 from api.api_choices_models import ChoicesAPI as ch
 
 
@@ -132,20 +132,15 @@ class MatchListSerializer(serializers.ModelSerializer):
         """Redefinido metodo de to_representation."""
         files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
         
-        specialist = {"code": obj.specialist.code,
-                  "first_name": obj.specialist.first_name,
-                  "last_name": obj.specialist.last_name,
-                  "email_exact": obj.specialist.email_exact,
-                  "telephone": obj.specialist.telephone,
-                  "cellphone": obj.specialist.cellphone,
-                  "photo": obj.specialist.photo}        
+        specialist = SpecialistSerializer(obj.specialist)
         client = ClientSerializer(obj.client)
 
         return {"id": obj.id, "date": str(obj.created_at),
                 "subject": obj.subject, "category": _(obj.category.name),
-                "specialist": specialist, "category_image": obj.category.image,
+                "specialist": specialist.data, "category_image": obj.category.image,
                 "file": files, "status": obj.status, "client": client.data,
-                "payment_option_specialist":obj.payment_option_specialist}
+                "payment_option_specialist":obj.payment_option_specialist,
+                "price": obj.price}
 
 class MatchListSpecialistSerializer(serializers.ModelSerializer):
     """Listado de Matchs."""

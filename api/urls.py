@@ -227,6 +227,10 @@ urlpatterns = [
     url(r'^backend/matchs/$',
         match.MatchBackendListView.as_view(),
         name='backend-matchs'),
+    
+    url(r'^backend/matchs/(?P<pk>[0-9]+)/$',
+        match.MatchBackendDetailView.as_view(),
+        name='backend-matchs'),
 
     # Aceptar match especialista
     url(r'^specialists/accept/matchs/(?P<pk>[0-9]+)/$',

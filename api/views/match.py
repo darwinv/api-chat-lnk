@@ -59,7 +59,6 @@ class MatchBackendListView(ListCreateAPIView):
     def list(self, request):
         """Listado de Matchs."""
         queryset = Match.objects.all()
-
         if 'status' in request.query_params:
             status = request.query_params["status"]
             queryset = queryset.filter(status=status)
@@ -76,6 +75,18 @@ class MatchBackendListView(ListCreateAPIView):
         serializer = MatchListSerializer(page, many=True)
         return Response(serializer.data)
 
+
+class MatchBackendDetailView(APIView):
+    """Vista Match cliente."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsAdmin]
+
+    def get(self, request, pk):
+        """Listado de Matchs."""
+        queryset = Match.objects.get(pk=pk)
+        serializer = MatchListSerializer(queryset)
+        return Response(serializer.data)
 
 class MatchListSpecialistView(ListCreateAPIView):
     """Vista Match cliente."""
