@@ -521,7 +521,7 @@ class Payment(models.Model):
     """Pagos."""
 
     amount = models.FloatField(_("amount"))
-    operation_number = models.CharField(_("operation number"), max_length=12)
+    operation_number = models.CharField(_("operation number"), max_length=12, null=True, blank=True)
     observations = models.CharField(_("observations"), max_length=255, null=True)
     authorized_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     authorization_date = models.DateTimeField(null=True)

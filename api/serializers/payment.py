@@ -177,7 +177,7 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
         # si el monto es menor que el pago, devuelvo un error
         if float(value) < float(match.price):
             raise serializers.ValidationError(
-                'This field must not be lesser than the corresponding.')
+                _('This field must not be lesser than the corresponding'))
         return value
 
     def create(self, validated_data):
