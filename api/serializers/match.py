@@ -22,12 +22,12 @@ class MatchFileSerializer(serializers.ModelSerializer):
 
 class MatchSerializer(serializers.ModelSerializer):
     """Serializer Match."""
-    file = MatchFileSerializer(many=True)
+    file = MatchFileSerializer(many=True, required=False)
 
     class Meta:
         model = Match
         fields = ('category', 'subject', 'file', 'client')
-    
+
     def validate(self, data):
         """validate Redefinido."""
         msg = _("you can not hire that specialty anymore")
@@ -46,11 +46,11 @@ class MatchSerializer(serializers.ModelSerializer):
         # import pdb; pdb.set_trace()
         validated_data["price"] = MatchProduct.objects.first().price
         validated_data["status"] = 1
-        data_files = validated_data.pop('file')
+        data_files = validated_data.pop('file', None)
         match = Match.objects.create(**validated_data)
-        for data_file in data_files:
-            MatchFile.objects.create(match=match, **data_file)
-
+        if data_files is not None:
+            for data_file in data_files:
+                MatchFile.objects.create(match=match, **data_file)
         return match
 
     def to_representation(self, obj):
@@ -140,8 +140,8 @@ class MatchListSerializer(serializers.ModelSerializer):
 
     def to_representation(self, obj):
         """Redefinido metodo de to_representation."""
-        files = ListFileSerializer(obj.matchfile_set.all(), many=True).data 
-        
+        files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
+
         specialist = SpecialistSerializer(obj.specialist)
         client = ClientSerializer(obj.client)
 

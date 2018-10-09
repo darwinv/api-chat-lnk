@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
 from api.models import Payment, MonthlyFee, Sale, SaleDetail, Match
-from api.models import QueryPlansAcquired, SellerContact, User
+from api.models import QueryPlansAcquired, SellerContact, User, MatchProduct
 from api.utils.tools import get_date_by_time
 from api.utils.querysets import get_next_fee_to_pay
 from datetime import datetime, date
@@ -116,6 +116,9 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
     match = serializers.PrimaryKeyRelatedField(
             queryset=Match.objects.all(), required=True, write_only=True)
 
+    operation_number = serializers.CharField(validators=[UniqueValidator(
+        queryset=Payment.objects.all())], required=True)
+
     class Meta:
         """Modelo."""
 
@@ -125,10 +128,9 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
 
     def validate_amount(self, value):
         """Validacion de amount."""
-        data = self.get_initial()
-        match = Match.objects.get(pk=data["match"])
+        price = MatchProduct.objects.first().price
         # si el monto es menor que el pago, devuelvo un error
-        if float(value) < float(match.price):
+        if float(value) < float(price):
             raise serializers.ValidationError(
                 'This field must not be lesser than the corresponding.')
         return value
@@ -156,7 +158,6 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
         return instance
 
 
-
 class PaymentMatchClientSerializer(serializers.ModelSerializer):
     """Se crea, venta, pago y cambia el match."""
 
@@ -172,10 +173,9 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
 
     def validate_amount(self, value):
         """Validacion de amount."""
-        data = self.get_initial()
-        match = Match.objects.get(pk=data["match"])
+        price = MatchProduct.objects.first().price
         # si el monto es menor que el pago, devuelvo un error
-        if float(value) < float(match.price):
+        if float(value) < float(price):
             raise serializers.ValidationError(
                 _('This field must not be lesser than the corresponding'))
         return value
