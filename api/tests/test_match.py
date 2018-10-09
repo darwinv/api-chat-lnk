@@ -110,14 +110,14 @@ class GetListMatch(APITestCase):
 
     def test_get_match(self):
         """Obtener resultado 200."""
-        # se provee un token de especialista el cuel tiene
+        # se provee un token de especialista el cual tiene
         # mensajes pendientes de responders
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
         response = self.client.get(reverse('match-client'),
                                    format='json')
 
-        self.assertEqual(response.data["count"], 3)
+        self.assertEqual(response.data["count"], 4)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

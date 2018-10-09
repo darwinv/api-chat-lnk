@@ -37,7 +37,7 @@ class SpecialistAccountView(APIView):
     def get(self, request, pk):
         specialist = self.get_object(pk)
         queryset = Query.objects.filter(specialist=specialist)
-        
+
         if specialist.type_specialist == "m":
             serializer = SpecialistAccountSerializer(queryset,
                                                      context={'category': specialist.category
@@ -102,7 +102,7 @@ class ClientAccountView(APIView):
         serializer_historic = ClientAccountHistoricSerializer(queryset,
                                              context={"client": client})
         return Response({
-                        "mounth":serializer.data,
+                        "mounth":serializer.data,  # corregir el mounth por month
                         "historic":serializer_historic.data
                     })
 

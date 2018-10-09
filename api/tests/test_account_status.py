@@ -174,11 +174,11 @@ class AccountStatusClient(APITestCase):
 
         response = client.get(reverse('clients-account',
                                       args=(self.cliente,)))
-
-        self.assertEqual(response.data["queries_acquired"], 6)
-        self.assertEqual(response.data["queries_absolved"], 6)
-        self.assertEqual(response.data["queries_pending"], 5)
-        self.assertEqual(response.data["available_queries"], 2)
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.data["historic"]["queries_acquired"], 6)
+        self.assertEqual(response.data["historic"]["queries_absolved"], 6)
+        self.assertEqual(response.data["historic"]["queries_pending"], 5)
+        self.assertEqual(response.data["historic"]["available_queries"], 2)
 
 
 class AccountStatusSeller(APITestCase):
@@ -203,7 +203,7 @@ class AccountStatusSeller(APITestCase):
 
         response = client.get(reverse('sellers-account-back',
                                       args=(self.seller,)))
-        
+
         self.assertEqual(response.data["mounth"]["month_people_purchase_goal"], 12)
         self.assertEqual(response.data["mounth"]["month_new_clients_goal"], 10)
         self.assertEqual(response.data["mounth"]["month_promotionals"], 0)
