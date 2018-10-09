@@ -34,8 +34,15 @@ class MatchListClientView(ListCreateAPIView):
         """Listado de Matchs."""
         user_id = Operations.get_id(self, request)
         queryset = Match.objects.filter(client_id=user_id)
-        serializer = MatchListClientSerializer(queryset, many=True)
+
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = MatchListClientSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = MatchListClientSerializer(page, many=True)
         return Response(serializer.data)
+
 
     def post(self, request):
         """Metodo para Solicitar Match."""
@@ -98,7 +105,14 @@ class MatchListSpecialistView(ListCreateAPIView):
         """Listado de Matchs."""
         user_id = Operations.get_id(self, request)
         queryset = Match.objects.filter(specialist=user_id)
-        serializer = MatchListSpecialistSerializer(queryset, many=True)
+
+
+        # pagination
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = MatchListSpecialistSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = MatchListSpecialistSerializer(page, many=True)
         return Response(serializer.data)
 
 

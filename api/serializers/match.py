@@ -140,8 +140,7 @@ class MatchListSerializer(serializers.ModelSerializer):
 
     def to_representation(self, obj):
         """Redefinido metodo de to_representation."""
-        files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
- 
+        files = ListFileSerializer(obj.matchfile_set.all(), many=True).data 
         
         specialist = SpecialistSerializer(obj.specialist)
         client = ClientSerializer(obj.client)
