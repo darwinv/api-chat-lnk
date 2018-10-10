@@ -189,13 +189,13 @@ class MatchUploadFilesView(APIView):
             arch = list(data.values())
 
         for file in arch:
-            resp = upload(file=file, model_update=MatchFile)
+            resp = upload_file(file=file, model_update=MatchFile)
             if resp is False:
                 errors_list.append(file.name)
 
         if errors_list:
             raise serializers.ValidationError(
-                {"this files failed": errors_list})
+                {"files_failed": errors_list})
 
         return HttpResponse(status=200)
 
@@ -231,13 +231,13 @@ class SpecialistMatchUploadFilesView(APIView):
             arch = list(data.values())
 
         for file in arch:
-            resp = upload(file=file, obj_instance=obj_instance)
+            resp = upload_file(file=file, obj_instance=obj_instance)
             if resp is False:
                 errors_list.append(file.name)
 
         if errors_list:
             raise serializers.ValidationError(
-                {"this files failed": errors_list})
+                {"files_failed": errors_list})
 
         return HttpResponse(status=200)
 
@@ -272,19 +272,19 @@ class SaleClientUploadFilesView(APIView):
             arch = list(data.values())
 
         for file in arch:
-            resp = upload(file=file, obj_instance=obj_instance)
+            resp = upload_file(file=file, obj_instance=obj_instance)
             if resp is False:
                 errors_list.append(file.name)
 
         if errors_list:
             raise serializers.ValidationError(
-                {"this files failed": errors_list})
+                {"files_failed": errors_list})
 
         return HttpResponse(status=200)
 
 
 
-def upload(file, model_update=None, obj_instance=None):
+def upload_file(file, model_update=None, obj_instance=None):
     """Funcion para subir archivos."""
 
     mf = None  # Objeto mensajes
@@ -297,6 +297,8 @@ def upload(file, model_update=None, obj_instance=None):
             mf = obj_instance
         else:
             mf = model_update.objects.get(pk=int(file_match_id))
+            
+            
         # lo subimos a Amazon S3
         url = s3_upload_file(file, file.name)
         # generamos la miniatura
@@ -323,6 +325,7 @@ def upload(file, model_update=None, obj_instance=None):
         logger.error("subir archivo, error general, m_ID: {} - ERROR: {} ".format(file_match_id, e))
         resp = False
 
-    mf.save()
+    if mf:
+        mf.save()
 
     return resp

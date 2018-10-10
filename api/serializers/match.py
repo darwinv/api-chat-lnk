@@ -10,7 +10,8 @@ class ListFileSerializer(serializers.ModelSerializer):
     """Serializer para la representacion del mensaje."""
     class Meta:
         model = MatchFile
-        fields = ('id', 'file_url', 'content_type')
+        fields = ('id', 'file_url', 'file_preview_url', 'content_type')
+        read_only_fields = ('file_preview_url',)
 
 
 class MatchFileSerializer(serializers.ModelSerializer):
