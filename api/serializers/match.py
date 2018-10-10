@@ -123,12 +123,17 @@ class MatchListClientSerializer(serializers.ModelSerializer):
                           "photo": obj.specialist.photo}
         else:
             specialist = None
+        if obj.sale_detail:
+            sale = obj.sale_detail.sale.id
+        else:
+            sale = None
 
         return {"id": obj.id, "date": str(obj.created_at),
                 "subject": obj.subject, "category": _(obj.category.name),
                 "specialist": specialist, "category_image": obj.category.image,
                 "file": files, "status": obj.status,
-                "declined_motive": obj.declined_motive}
+                "declined_motive": obj.declined_motive,
+                "sale":sale}
 
 
 

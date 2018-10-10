@@ -152,8 +152,22 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
                                         status__range=(2, 3)).exists()
         if is_client:
             match.status = 5
-        else:
+        else:            
+
+            sale = Sale.objects.create(place="BCP", total_amount=match.price,
+                                   reference_number=increment_reference(),
+                                   description='pago de match',
+                                   client=match.client, status=1)
+
+            sale_detail = SaleDetail.objects.create(price=match.price,
+                                                    description="Contratacion de especialista",
+                                                    discount=float(0),
+                                                    pin_code='XXXXXX',
+                                                    is_billable=True,
+                                                    product_type_id=2, sale=sale)
             match.status = 4
+            match.sale_detail = sale_detail
+
         match.save()
         return instance
 
@@ -185,23 +199,11 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
         match = validated_data.pop('match')
         # import pdb; pdb.set_trace()
         match = Match.objects.get(pk=match.id)
-        # import pdb; pdb.set_trace()
-        sale = Sale.objects.create(place="BCP", total_amount=match.price,
-                                   reference_number=increment_reference(),
-                                   description='pago de match',
-                                   client=match.client, status=3)
-
-        sale_detail = SaleDetail.objects.create(price=match.price,
-                                                description="Contratacion de especialista",
-                                                discount=float(0),
-                                                pin_code='XXXXXX',
-                                                is_billable=True,
-                                                product_type_id=2, sale=sale)
+        # import pdb; pdb.set_trace()       
 
         instance = Payment(**validated_data)
         instance.save()
-        match.status = 5
-        match.sale_detail = sale_detail
+        match.status = 5        
         match.save()
         return instance
 

@@ -204,23 +204,25 @@ class SpecialistMatchUploadFilesView(APIView):
     """Subida de archivos para la consultas."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsOwnerAndClient]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrSpecialist]
     parser_classes = (JSONParser, MultiPartParser)
 
     def get_object(self, request, pk):
         """Devuelvo la consulta."""
         try:
             obj = Match.objects.get(pk=pk)
-            owner = obj.client_id
-            self.check_object_permissions(self.request, owner)
             return obj
         except Match.DoesNotExist:
             raise Http404
 
     def put(self, request, pk):
         """Actualiza el match, subiendo archivos."""
-        self.get_object(request, pk)
+        obj_instance = self.get_object(request, pk)
         files = request.FILES.getlist('file')
+
+        if len(files) == 0:
+            raise serializers.ValidationError(
+                {"file": _("required")})
         errors_list = []
         if files:
             arch = files
@@ -229,7 +231,7 @@ class SpecialistMatchUploadFilesView(APIView):
             arch = list(data.values())
 
         for file in arch:
-            resp = upload(file=file, model_update=Match)
+            resp = upload(file=file, obj_instance=obj_instance)
             if resp is False:
                 errors_list.append(file.name)
 
@@ -244,23 +246,24 @@ class SaleClientUploadFilesView(APIView):
     """Subida de archivos para la consultas."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsOwnerAndClient]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrClient]
     parser_classes = (JSONParser, MultiPartParser)
 
     def get_object(self, request, pk):
         """Devuelvo la consulta."""
         try:
-            obj = Match.objects.get(pk=pk)
-            owner = obj.client_id
-            self.check_object_permissions(self.request, owner)
+            obj = Sale.objects.get(pk=pk)
             return obj
         except Match.DoesNotExist:
             raise Http404
 
     def put(self, request, pk):
         """Actualiza el match, subiendo archivos."""
-        self.get_object(request, pk)
+        obj_instance = self.get_object(request, pk)
         files = request.FILES.getlist('file')
+        if len(files) == 0:
+            raise serializers.ValidationError(
+                {"file": _("required")})
         errors_list = []
         if files:
             arch = files
@@ -269,7 +272,7 @@ class SaleClientUploadFilesView(APIView):
             arch = list(data.values())
 
         for file in arch:
-            resp = upload(file=file, model_update=Sale)
+            resp = upload(file=file, obj_instance=obj_instance)
             if resp is False:
                 errors_list.append(file.name)
 
@@ -281,7 +284,7 @@ class SaleClientUploadFilesView(APIView):
 
 
 
-def upload(file, model_update):
+def upload(file, model_update=None, obj_instance=None):
     """Funcion para subir archivos."""
 
     mf = None  # Objeto mensajes
@@ -290,7 +293,10 @@ def upload(file, model_update):
     file_match_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)
 
     try:
-        mf = model_update.objects.get(pk=int(file_match_id))
+        if obj_instance:
+            mf = obj_instance
+        else:
+            mf = model_update.objects.get(pk=int(file_match_id))
         # lo subimos a Amazon S3
         url = s3_upload_file(file, file.name)
         # generamos la miniatura
