@@ -25,7 +25,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         queryset=MonthlyFee.objects.all(), required=True)
 
     operation_number = serializers.CharField(validators=[UniqueValidator(
-        queryset=Payment.objects.all())], required=True)
+        queryset=Payment.objects.all())], required=False)
 
     class Meta:
         """Modelo."""
