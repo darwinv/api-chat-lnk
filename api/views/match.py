@@ -18,7 +18,7 @@ from api.serializers.match import MatchListSpecialistSerializer
 from api.serializers.match import MatchListSerializer
 from api.permissions import IsAdminOrClient, IsOwnerAndClient
 from api.permissions import IsAdminOrSpecialist, IsAdminOnList
-from api.models import Match, MatchFile, Sale
+from api.models import Match, MatchFile, Sale, QueryPlansAcquired
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.logger import manager
 logger = manager.setup_log(__name__)
@@ -257,7 +257,7 @@ class SaleClientUploadFilesView(APIView):
         try:
             obj = Sale.objects.get(pk=pk)
             return obj
-        except Match.DoesNotExist:
+        except Sale.DoesNotExist:
             raise Http404
 
     def put(self, request, pk):
@@ -283,6 +283,10 @@ class SaleClientUploadFilesView(APIView):
             raise serializers.ValidationError(
                 {"files_failed": errors_list})
 
+        qsdetail = obj_instance.saledetail_set.all()
+        # ya se envio el voucher
+        QueryPlansAcquired.objects.filter(
+            sale_detail=qsdetail, status=1).update(status=2)
         return HttpResponse(status=200)
 
 
