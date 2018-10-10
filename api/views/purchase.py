@@ -31,3 +31,11 @@ class CreatePurchase(APIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+class PurchaseDetail(APIView):
+    """Vista para crear compra."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, pk):
+        pass
