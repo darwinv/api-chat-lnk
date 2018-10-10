@@ -242,3 +242,167 @@ class MatchUploadFilesView(APIView):
         mf.save()
 
         return resp
+
+
+class SpecialistMatchUploadFilesView(APIView):
+    """Subida de archivos para la consultas."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsOwnerAndClient]
+    parser_classes = (JSONParser, MultiPartParser)
+
+    def get_object(self, request, pk):
+        """Devuelvo la consulta."""
+        try:
+            obj = Match.objects.get(pk=pk)
+            owner = obj.client_id
+            self.check_object_permissions(self.request, owner)
+            return obj
+        except Match.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Actualiza el match, subiendo archivos."""
+        self.get_object(request, pk)
+        files = request.FILES.getlist('file')
+        errors_list = []
+        if files:
+            arch = files
+        else:
+            data = request.data.dict()
+            arch = list(data.values())
+
+        for file in arch:
+            resp = self.upload(file=file)
+            if resp is False:
+                errors_list.append(file.name)
+
+        if errors_list:
+            raise serializers.ValidationError(
+                {"this files failed": errors_list})
+
+        return HttpResponse(status=200)
+
+    def upload(self, file):
+        """Funcion para subir archivos."""
+
+        mf = None  # Objeto mensajes
+        resp = True  # variable bandera
+        name_file, extension = os.path.splitext(file.name)
+        file_match_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)
+
+        try:
+            mf = Match.objects.get(pk=int(file_match_id))
+            # lo subimos a Amazon S3
+            url = s3_upload_file(file, file.name)
+            # generamos la miniatura
+            thumb = resize_img(file, 256)
+            if thumb:
+                name_file_thumb, extension_thumb = os.path.splitext(thumb.name)
+                url_thumb = s3_upload_file(thumb, name_file + '-thumb' + extension_thumb)
+                remove_file(thumb)
+            else:
+                url_thumb = ""
+
+            # Actualizamos el modelo mensaje
+            mf.file_url = url
+            mf.file_preview_url = url_thumb
+
+            s3 = boto3.client('s3')
+            # Evaluamos si el archivo se subio a S3
+            try:
+                s3.head_object(Bucket='linkup-photos', Key=file.name)
+            except ClientError as e:
+                resp = int(e.response['Error']['Code']) != 404
+
+        except Exception as e:
+            logger.error("subir archivo, error general, m_ID: {} - ERROR: {} ".format(file_match_id, e))
+            resp = False
+
+        if resp is False:
+            mf.uploaded = 5
+        else:
+            mf.uploaded = 2
+        mf.save()
+
+        return resp
+
+
+class SaleClientUploadFilesView(APIView):
+    """Subida de archivos para la consultas."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsOwnerAndClient]
+    parser_classes = (JSONParser, MultiPartParser)
+
+    def get_object(self, request, pk):
+        """Devuelvo la consulta."""
+        try:
+            obj = Match.objects.get(pk=pk)
+            owner = obj.client_id
+            self.check_object_permissions(self.request, owner)
+            return obj
+        except Match.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk):
+        """Actualiza el match, subiendo archivos."""
+        self.get_object(request, pk)
+        files = request.FILES.getlist('file')
+        errors_list = []
+        if files:
+            arch = files
+        else:
+            data = request.data.dict()
+            arch = list(data.values())
+
+        for file in arch:
+            resp = self.upload(file=file)
+            if resp is False:
+                errors_list.append(file.name)
+
+        if errors_list:
+            raise serializers.ValidationError(
+                {"this files failed": errors_list})
+
+        return HttpResponse(status=200)
+
+    def upload(self, file):
+        """Funcion para subir archivos."""
+
+        mf = None  # Objeto mensajes
+        resp = True  # variable bandera
+        name_file, extension = os.path.splitext(file.name)
+        file_match_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)
+
+        try:
+            mf = Sale.objects.get(pk=int(file_match_id))
+            # lo subimos a Amazon S3
+            url = s3_upload_file(file, file.name)
+            # generamos la miniatura
+            thumb = resize_img(file, 256)
+            if thumb:
+                name_file_thumb, extension_thumb = os.path.splitext(thumb.name)
+                url_thumb = s3_upload_file(thumb, name_file + '-thumb' + extension_thumb)
+                remove_file(thumb)
+            else:
+                url_thumb = ""
+
+            # Actualizamos el modelo mensaje
+            mf.file_url = url
+            mf.file_preview_url = url_thumb
+
+            s3 = boto3.client('s3')
+            # Evaluamos si el archivo se subio a S3
+            try:
+                s3.head_object(Bucket='linkup-photos', Key=file.name)
+            except ClientError as e:
+                resp = int(e.response['Error']['Code']) != 404
+
+        except Exception as e:
+            logger.error("subir archivo, error general, m_ID: {} - ERROR: {} ".format(file_match_id, e))
+            resp = False
+
+        mf.save()
+
+        return resp
