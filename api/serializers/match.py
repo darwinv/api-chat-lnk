@@ -10,7 +10,8 @@ class ListFileSerializer(serializers.ModelSerializer):
     """Serializer para la representacion del mensaje."""
     class Meta:
         model = MatchFile
-        fields = ('id', 'file_url', 'content_type')
+        fields = ('id', 'file_url', 'file_preview_url', 'content_type')
+        read_only_fields = ('file_preview_url',)
 
 
 class MatchFileSerializer(serializers.ModelSerializer):
@@ -31,8 +32,10 @@ class MatchSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """validate Redefinido."""
         msg = _("you can not hire that specialty anymore")
+        # no puede contratar un match con la especialidad si aun  no se ha resuelto,
+        # o si ya fue exitoso
         qs = Match.objects.filter(category=data["category"],
-                                  client=data["client"])
+                                  client=data["client"]).exclude(status=3)
         if qs.exists():
             raise serializers.ValidationError({"category": [msg]})
 
@@ -123,12 +126,17 @@ class MatchListClientSerializer(serializers.ModelSerializer):
                           "photo": obj.specialist.photo}
         else:
             specialist = None
+        if obj.sale_detail:
+            sale = obj.sale_detail.sale.id
+        else:
+            sale = None
 
         return {"id": obj.id, "date": str(obj.created_at),
                 "subject": obj.subject, "category": _(obj.category.name),
                 "specialist": specialist, "category_image": obj.category.image,
                 "file": files, "status": obj.status,
-                "declined_motive": obj.declined_motive}
+                "declined_motive": obj.declined_motive,
+                "sale":sale}
 
 
 
