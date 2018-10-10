@@ -32,8 +32,10 @@ class MatchSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """validate Redefinido."""
         msg = _("you can not hire that specialty anymore")
+        # no puede contratar un match con la especialidad si aun  no se ha resuelto,
+        # o si ya fue exitoso
         qs = Match.objects.filter(category=data["category"],
-                                  client=data["client"])
+                                  client=data["client"]).exclude(status=3)
         if qs.exists():
             raise serializers.ValidationError({"category": [msg]})
 
