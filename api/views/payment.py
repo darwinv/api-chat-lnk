@@ -4,6 +4,7 @@ from api.serializers.payment import PaymentSalePendingDetailSerializer
 from api.serializers.payment import PaymentMatchSerializer
 from api.serializers.payment import PaymentMatchClientSerializer
 from api.serializers.payment import SaleContactoDetailSerializer
+from api.serializers.sale import increment_reference
 from api.utils.validations import Operations
 from api.utils.querysets import get_next_fee_to_pay
 from api.permissions import IsAdminOrSeller, IsAdmin, isAdminBackWrite
