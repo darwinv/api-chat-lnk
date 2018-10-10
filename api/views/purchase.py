@@ -70,4 +70,4 @@ class PurchaseDetail(APIView):
         query_plan.delete()
         sale_detail.delete()
         sale.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({})
