@@ -32,8 +32,6 @@ from api.serializers.query import QuerySerializer, QueryListClientSerializer
 from api.serializers.query import QueryMessageSerializer
 from api.serializers.query import QueryDeriveSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
-from api.logger import manager
-logger = manager.setup_log(__name__)
 from api.serializers.query import ChatMessageSerializer, QueryDeclineSerializer
 from api.serializers.query import QueryResponseSerializer, ReQuerySerializer
 from api.serializers.query import QueryQualifySerializer
@@ -43,6 +41,8 @@ from botocore.exceptions import ClientError
 from api.utils.tools import s3_upload_file, remove_file, resize_img, get_body
 from api.utils.parameters import Params
 from fcm.fcm import Notification
+from api.logger import manager
+logger = manager.setup_log(__name__)
 
 
 class QueryListClientView(ListCreateAPIView):
@@ -87,7 +87,6 @@ class QueryListClientView(ListCreateAPIView):
         data = request.data
         # tomamos del token el id de usuario (cliente en este caso)
         data["client"] = user_id
-        # import pdb; pdb.set_trace()
         serializer = QuerySerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -172,7 +171,6 @@ class QueryListClientView(ListCreateAPIView):
             Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
             return Response(serializer.data, status.HTTP_201_CREATED)
         else:
-            print(serializer.errors)
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
@@ -298,7 +296,7 @@ class QueryDetailClientView(APIView):
         if not user_id:
             raise Http404
         data = request.data
-        
+
         # No utilizamos partial=True, ya que solo actualizamos mensaje
         serializer = ReQuerySerializer(query, data)
         if serializer.is_valid():
@@ -496,10 +494,6 @@ class QueryUploadFilesView(APIView):
     def put(self, request, pk):
         """Actualiza la consulta, subiendo archivos."""
         self.get_object(request, pk)
-        # import pdb; pdb.set_trace()
-        # Cargamos el listado de archivos adjuntos
-        # msgs = request.data["message_id"].split(',')
-        # print(request.data)
         files = request.FILES.getlist('file')
         if files:
             arch = files
@@ -511,7 +505,6 @@ class QueryUploadFilesView(APIView):
         threads = []
         i = 0
         for file in arch:
-            # print(msgs[i])
             t = threading.Thread(target=self.upload, args=(file,))
             threads.append(t)
             i = i + 1
@@ -528,7 +521,7 @@ class QueryUploadFilesView(APIView):
     def upload(self, file):
         """Funcion para subir archivos."""
 
-        ms = None # Objeto mensajes
+        ms = None  # Objeto mensajes
         resp = True  # variable bandera
         name_file, extension = os.path.splitext(file.name)
         msg_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)

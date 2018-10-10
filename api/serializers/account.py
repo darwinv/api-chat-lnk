@@ -1,11 +1,11 @@
 """Estados de cuenta."""
 from rest_framework import serializers
 from api.models import Specialist, Query, SellerContact, ParameterSeller
-from api.models import SellerNonBillablePlans, Declinator
+from api.models import SellerNonBillablePlans, Declinator, QueryPlansAcquired
 from django.utils.translation import ugettext_lazy as _
-from datetime import datetime
+from datetime import datetime, timedelta, date
 from django.db.models import Count, Sum, Q
-
+from api.serializers.plan import QueryPlansAcquiredSimpleSerializer
 
 class SpecialistAccountSerializer(serializers.ModelSerializer):
     """Serializer de estado de cuenta Especialista"""
@@ -177,7 +177,32 @@ class SpecialistFooterSerializer(serializers.ModelSerializer):
                 "queries_absolved": queries_absolved}
 
 
+
+
 class ClientAccountSerializer(serializers.Serializer):
+    """Serializer de estado de cuenta de Cliente."""
+
+    def to_representation(self, obj):
+        """Representacion."""
+
+        client_id = self.context["client"]
+
+        end = datetime.now()
+        new_end = end + timedelta(days=1)
+        start = date(end.year, end.month, 1)
+        plan = QueryPlansAcquired.objects.filter(activation_date__range=(start, new_end),
+                                            queryplansclient__client=client_id)
+
+        serializers_plans = QueryPlansAcquiredSimpleSerializer(plan, many=True)
+        
+        return {
+                "plans": serializers_plans.data,
+                "match_acquired": 0,
+                "match_absolved": 0,
+                "match_declined": 0
+                }
+
+class ClientAccountHistoricSerializer(serializers.Serializer):
     """Serializer de estado de cuenta de Cliente."""
 
     def to_representation(self, obj):
@@ -185,22 +210,23 @@ class ClientAccountSerializer(serializers.Serializer):
 
         client = self.context["client"]
         # calculó de las consultas adquiridas
-        resp = obj.aggregate(queries=Sum('acquired_plan__query_quantity'),
-                             av_queries=Sum('acquired_plan__available_queries'))
-        # calculó de las consultas absueltas
-        queries = Query.objects.filter(client=client,
-                                       status__range=(4, 5)).count()
+        queries_client = obj.aggregate(query_quantity=Sum('query_quantity'),
+                             available_queries=Sum('available_queries'),
+                             queries_to_pay=Sum('queries_to_pay'))
+                
+        queries_acquired = queries_client["query_quantity"] if queries_client["query_quantity"] else 0
+        queries_available = queries_client["available_queries"] if queries_client["available_queries"] else 0
+        queries_to_pay = queries_client["queries_to_pay"] if queries_client["queries_to_pay"] else 0
 
-        # calculó de las consultas pendientes
-        queries_pending = Query.objects.filter(client=client,
-                                               status__range=(1, 3)).count()
-
-        return {"queries_acquired": resp["queries"],
-                "queries_absolved": queries,
-                "queries_pending": queries_pending,
-                "available_queries": resp["av_queries"]
+        queries_made = queries_acquired - queries_available - queries_to_pay
+        return {
+                "queries_acquired": queries_acquired,
+                "queries_made": queries_made,
+                "queries_available": queries_available,
+                "match_acquired": 0,
+                "match_absolved": 0,
+                "match_declined": 0
                 }
-
 
 class SellerAccountSerializer(serializers.Serializer):
     """Serializer de estado de cuenta Vendedor."""

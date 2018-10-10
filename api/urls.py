@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from api.views import actors, query, category, email, authorization, payment
 from api.views import validations, plan, chat, oauth, static_data, purchase
-from api.views import account
+from api.views import account, match
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
 router = routers.DefaultRouter()
@@ -117,7 +117,7 @@ urlpatterns = [
     url(r'^specialists/(?P<pk>[0-9]+)/$',
         actors.SpecialistDetailView.as_view(),
         name='specialist-detail'),
-    
+
     # numero de consultas mensual y anual de un especialista
     url(r'^specialists/query-count/$',
         actors.SpecialistQueryCountView.as_view(),
@@ -210,6 +210,47 @@ urlpatterns = [
     url(r'^query-decline/(?P<pk>[0-9]+)/$', query.QueryDeclineView.as_view(),
         name='query-decline'),
 
+    # Match
+    url(r'^client/matchs/$',
+        match.MatchListClientView.as_view(),
+        name='match-client'),
+
+    url(r'^match/upload_files/(?P<pk>[0-9]+)/$',
+        match.MatchUploadFilesView.as_view(), name='match-upload-files'),
+
+    url(r'^specialists/matchs/upload_files/(?P<pk>[0-9]+)/$',
+        match.SpecialistMatchUploadFilesView.as_view(), name='specialists-match-files'),
+    url(r'^clients/sales/upload_files/(?P<pk>[0-9]+)/$',
+        match.SaleClientUploadFilesView.as_view(), name='client-sale-files'),
+
+    # Listado de matchs para el especialista
+    url(r'^specialists/matchs/$',
+        match.MatchListSpecialistView.as_view(),
+        name='match-specialist'),
+    # confirmar descuento por parte del especialista
+    url(r'^confirm-discount/(?P<pk>[0-9]+)/$',
+        payment.ConfirmDiscountView.as_view(),
+        name='confirm-discount'),
+
+    url(r'^backend/matchs/$',
+        match.MatchBackendListView.as_view(),
+        name='backend-matchs'),
+
+    url(r'^backend/matchs/(?P<pk>[0-9]+)/$',
+        match.MatchBackendDetailView.as_view(),
+        name='backend-matchs-detail'),
+
+    # Aceptar match especialista
+    url(r'^specialists/accept/matchs/(?P<pk>[0-9]+)/$',
+        match.MatchAcceptView.as_view(),
+        name='match-specialist-accept'),
+
+    # Declinar match especialista
+    url(r'^specialists/decline/matchs/(?P<pk>[0-9]+)/$',
+        match.MatchDeclineView.as_view(),
+        name='match-specialist-decline'),
+
+
     # Vendedores
     url(r'^sellers/$', actors.SellerListView.as_view(), name='sellers'),
     url(r'^sellers/(?P<pk>[0-9]+)/$', actors.SellerDetailView.as_view(),
@@ -291,9 +332,21 @@ urlpatterns = [
     url(r'^purchase/$',
         purchase.CreatePurchase.as_view(), name='purchase'),
 
+    url(r'^purchase/(?P<pk>[0-9]+)$',
+        purchase.PurchaseDetail.as_view(), name='purchase-detail'),
+
     # Pagos
     url(r'^payment/$',
         payment.CreatePayment.as_view(), name='payment'),
+    # Pago de especialista match
+    url(r'^specialists/payment/match/$',
+        payment.MatchPaymentSpecialist.as_view(),
+        name='payment-match-specialist'),
+
+    # Pago de Match Cliente
+    url(r'^clients/payment/match/$',
+        payment.MatchPaymentClient.as_view(),
+        name='payment-match-client'),
 
     url(r'^sales/payment-pending/$',
         payment.PaymentPendingView.as_view(), name='sale-payment-pending'),
@@ -304,5 +357,8 @@ urlpatterns = [
 
     url(r'^fees/payment-pending-by-client/$',
         payment.PaymentDetailContactView.as_view(), name='payment-pending-by-client-detail'),
+
+    url(r'^clients/sales/have-payment-pending/$',
+        payment.ClientHaveSalePending.as_view(), name='payment-pending-sale-client'),
 
 ]

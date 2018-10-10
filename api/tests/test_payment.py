@@ -170,6 +170,7 @@ class MakePaymentNoFee(APITestCase):
     #     )
     #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+
 class MakePaymentWithFee(APITestCase):
     """Prueba de Crear Pagos."""
 
@@ -310,6 +311,153 @@ class MakePaymentWithFee(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
 
+
+class PaymentSpecialistMatch(APITestCase):
+    """Pago de Especialista Match."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_payment', 'test_match']
+
+    def setUp(self):
+        """SetUp."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.url = 'payment-match-specialist'
+        self.data = {
+            "amount": 450,
+            "operation_number": "123123-ERT",
+            "observations": "opcional",
+            "payment_type": 2,
+            "bank": 1,
+            "match": 2
+        }
+
+    def test_invalid_permissions(self):
+        """Invalid Permissions."""
+        client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        response = client.post(
+            reverse(self.url),
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_less_amount(self):
+        """monto menor."""
+        payload = self.data.copy()
+        payload["amount"] = 400
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_match(self):
+        """no match."""
+        payload = self.data.copy()
+        del payload["match"]
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_payment_match_specialist(self):
+
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class ConfirmDiscountMatch(APITestCase):
+    """Confirma si solo se le hace el descuento."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_match', 'test_payment']
+
+    def setUp(self):
+        """SetUp."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.url = 'confirm-discount'
+
+    def test_confirm_success(self):
+        """Confirm Discount."""
+        response = self.client.put(
+            reverse(self.url, kwargs={'pk': 3}),
+            content_type='application/json'
+        )
+        # match_status = Match.objects.get(pk=2)
+        # self.assertEqual(3, int(match_status.status))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class PaymentClientMatch(APITestCase):
+    """Pago de cliente Match."""
+    fixtures = ['data', 'data2', 'data3', 'test_payment', 'test_match']
+
+    def setUp(self):
+        """SetUp."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        self.url = 'payment-match-client'
+        self.data = {
+            "amount": 450,
+            "operation_number": "123123-ERT",
+            "observations": "opcional",
+            "payment_type": 2,
+            "bank": 1,
+            "match": 2
+        }
+
+    def test_invalid_permissions(self):
+        """Invalid Permissions."""
+        client.credentials(
+            HTTP_AUTHORIZATION='Bearer HhaMCycvJ5SCLXSpEo7KerIXcNgBSt')
+        response = client.post(
+            reverse(self.url),
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_less_amount(self):
+        """monto menor."""
+        payload = self.data.copy()
+        payload["amount"] = 400
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
+    def test_no_match(self):
+        """no match."""
+        payload = self.data.copy()
+        del payload["match"]
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_payment_match_client(self):
+
+        response = self.client.post(
+            reverse(self.url),
+            data=json.dumps(self.data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
 class PaymentPendig(APITestCase):

@@ -34,13 +34,11 @@ def update_categories_detail():
         res = db.child("categories/categoryDetail").child(
             node_client).update({"description": categorie.description})
 
-
 def update_categories():
     """Cargar listado de categorias para todos los usuarios."""
     # SOLO USO PARA AMBIENTE EN DESARROLLO
     for client in Client.objects.all():
         createCategoriesLisClients(client.id)
-
 
 def update_plan_choisen():
     """Cargar plan activo para todos los usuarios."""

@@ -5,7 +5,7 @@ from api.serializers.account import SpecialistFooterSerializer
 from api.serializers.account import SellerAccountSerializer
 from api.serializers.account import SellerAccountBackendSerializer
 from api.serializers.account import ClientAccountSerializer
-from api.serializers.account import SellerFooterSerializer
+from api.serializers.account import SellerFooterSerializer, ClientAccountHistoricSerializer
 from api.serializers.account import SellerAccountHistoricSerializer
 from api.serializers.account import SpecialistHistoricAccountSerializer
 from api.serializers.account import SpecialistAsociateAccountSerializer
@@ -13,11 +13,12 @@ from api.serializers.account import SpecialistAsociateHistoricAccountSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 import django_filters.rest_framework
+from datetime import datetime
 from api.utils.validations import Operations
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django.http import Http404
 from api.models import Specialist, Query, Seller, Sale, Client
-from api.models import QueryPlansClient
+from api.models import QueryPlansAcquired
 from rest_framework.pagination import PageNumberPagination
 from api.permissions import IsSpecialist, IsSeller
 
@@ -36,7 +37,7 @@ class SpecialistAccountView(APIView):
     def get(self, request, pk):
         specialist = self.get_object(pk)
         queryset = Query.objects.filter(specialist=specialist)
-        
+
         if specialist.type_specialist == "m":
             serializer = SpecialistAccountSerializer(queryset,
                                                      context={'category': specialist.category
@@ -91,10 +92,19 @@ class ClientAccountView(APIView):
 
     def get(self, request, pk):
         client = self.get_object(pk)
-        queryset = QueryPlansClient.objects.filter(client=client)
+        today = datetime.now()
+        queryset = QueryPlansAcquired.objects.filter(queryplansclient__client=client,
+                                        queryplansclient__owner=True,
+                                        sale_detail__sale__status=3,
+                                        activation_date__lte=today)
         serializer = ClientAccountSerializer(queryset,
                                              context={"client": client})
-        return Response(serializer.data)
+        serializer_historic = ClientAccountHistoricSerializer(queryset,
+                                             context={"client": client})
+        return Response({
+                        "mounth":serializer.data,  # corregir el mounth por month
+                        "historic":serializer_historic.data
+                    })
 
 
 class SellerAccountView(APIView):

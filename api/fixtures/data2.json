@@ -669,7 +669,6 @@
     "price": "150.0000",
     "created_at": "2018-02-08T14:37:27Z",
     "is_active": true,
-    "product_type": 1,
     "clasification": 1
   }
 },
@@ -684,7 +683,6 @@
     "price": "300.0000",
     "created_at": "2018-02-08T14:37:27Z",
     "is_active": true,
-    "product_type": 1,
     "clasification": 1
   }
 },
@@ -699,7 +697,6 @@
     "price": "900.0000",
     "created_at": "2018-02-08T14:37:27Z",
     "is_active": true,
-    "product_type": 1,
     "clasification": 1
   }
 },
@@ -714,7 +711,6 @@
     "price": "1500.0000",
     "created_at": "2018-02-08T14:37:27Z",
     "is_active": true,
-    "product_type": 1,
     "clasification": 1
   }
 },
@@ -729,7 +725,6 @@
     "price": "2500.0000",
     "created_at": "2018-02-08T14:37:27Z",
     "is_active": true,
-    "product_type": 1,
     "clasification": 1
   }
 },
@@ -744,7 +739,6 @@
     "price": "4500.0000",
     "created_at": "2018-02-08T14:37:27Z",
     "is_active": true,
-    "product_type": 1,
     "clasification": 1
   }
 },
@@ -759,7 +753,6 @@
     "price": "15000.0000",
     "created_at": "2018-02-08T14:37:27Z",
     "is_active": true,
-    "product_type": 1,
     "clasification": 2
   }
 },
@@ -774,7 +767,6 @@
     "price": "30000.0000",
     "created_at": "2018-02-08T14:37:27Z",
     "is_active": true,
-    "product_type": 1,
     "clasification": 2
   }
 },
@@ -789,8 +781,14 @@
     "price": "90000.0000",
     "created_at": "2018-02-08T14:37:27Z",
     "is_active": true,
-    "product_type": 1,
     "clasification": 2
+  }
+},
+{
+  "model": "api.matchproduct",
+  "pk": 1,
+  "fields":{
+    "price": "450.00"
   }
 }
 ]
