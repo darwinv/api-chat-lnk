@@ -63,7 +63,7 @@ class GetPlanByPIN(APITestCase):
 
 
 class UpdatePlanActiveByAPI(APITestCase):
-    """Test module for Activate Plan by API API.""" # comentar en español ojo
+    """Test module for Activate Plan by API API."""  # comentar en español ojo
 
     fixtures = ['data', 'data2', 'data3', 'test_plan']
 
@@ -156,7 +156,7 @@ class GetClientPlansAllList(APITestCase):
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
         response = self.client.get(reverse('client-plans-all'), format='json')
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

@@ -113,6 +113,7 @@ class MakePaymentNoFee(APITestCase):
         # disponibles
         self.assertEqual(q_acqd.available_queries, 2)
         self.assertEqual(q_acqd_2.available_queries, 6)
+        self.assertEqual(q_acqd.status, 3)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     # def test_no_monthly_fee(self):

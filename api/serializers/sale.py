@@ -116,13 +116,16 @@ class SaleSerializer(serializers.Serializer):
                         plan_acquired["available_queries"] = 0
                         plan_acquired["queries_to_pay"] = product["plan_id"].query_quantity
                     else:
+                        # es plan promocional
                         plan_acquired["available_queries"] = product["plan_id"].query_quantity
                         plan_acquired["queries_to_pay"] = 0
                         validated_data["is_fee"] = False
                         plan_acquired["activation_date"] = date.today()
+                        plan_acquired["status"] = date.today()
                         plan_acquired["expiration_date"] = get_date_by_time(product["plan_id"].validity_months)
                         # se activa automaticamente por ser promocional
                         plan_acquired["is_active"] = True
+                        plan_acquired["status"] = 4
                         plan_promotionals = SellerNonBillablePlans.objects.get(
                             query_plans=product["plan_id"],
                             seller=validated_data["seller"],
@@ -148,6 +151,7 @@ class SaleSerializer(serializers.Serializer):
                     plan_acquired["plan_name"] = product["plan_id"].name
                     plan_acquired["query_plans"] = product["plan_id"]
                     plan_acquired["sale_detail"] = instance_sale
+                    plan_acquired["status"] = 1
                     ins_plan = QueryPlansAcquired.objects.create(**plan_acquired)
 
                     QueryPlansClient.objects.create(
