@@ -80,6 +80,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         for detail in qsetdetail:
             qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
             qpclient = qacd.queryplansclient_set.get()
+
             # debo chequear si es por cuotas o no
             if fee.sale.is_fee:
                 # libero el numero de consultas que corresponde
@@ -91,6 +92,8 @@ class PaymentSerializer(serializers.ModelSerializer):
                 qacd.available_queries = qacd.query_plans.query_quantity
                 # actualizo cuantas consultas faltan por pagar
                 qacd.queries_to_pay = 0
+            if fee.sale.status == 1:
+                qacd.status = 3
             qacd.save()
             # actualizo a pyrebase si es el elegido
             if 'test' not in sys.argv:

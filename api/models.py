@@ -419,7 +419,6 @@ class MatchProduct(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
 
-
 class Sale(models.Model):
     """Venta."""
     created_at = models.DateTimeField(auto_now_add=True)
@@ -463,6 +462,7 @@ class QueryPlansAcquired(models.Model):
     plan_name = models.CharField(max_length=50)
     query_plans = models.ForeignKey(QueryPlans, on_delete=models.PROTECT)
     sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
+    status = models.PositiveIntegerField(choices=Ch.plan_status, default=1)
 
     def __str__(self):
         """String."""

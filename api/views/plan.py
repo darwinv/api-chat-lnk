@@ -509,8 +509,8 @@ class ClientAllPlansView(ListCreateAPIView):
         """Obtener lista de planes."""
         try:
             obj = QueryPlansAcquired.objects.filter(queryplansclient__client=pk).values('id',
-                'plan_name', 'queryplansclient__is_chosen', 'is_active',
-                'validity_months', 'query_quantity', 'queries_to_pay',
+                'plan_name', 'queryplansclient__is_chosen', 'is_active', 'status',
+                'validity_months', 'query_quantity', 'queries_to_pay', 'activation_date',
                 'available_queries', 'expiration_date', 'queryplansclient__transfer',
                 'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner'
                 ).annotate(is_chosen=F('queryplansclient__is_chosen'),
@@ -641,7 +641,7 @@ class ChosenPlanView(APIView):
             serializer = PlanDetailSerializer(data)
             return Response(serializer.data)
         except Exception as e:
-            
+
             print(e)
             raise Http404
 

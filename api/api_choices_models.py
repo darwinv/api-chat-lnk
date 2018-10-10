@@ -113,6 +113,14 @@ class ChoicesAPI:
         (5, _('Absolved')),  # resuelta y finalizada
     )
 
+    # Plan Estado
+    plan_status = (
+        (1, _('Reserved')),  # reservado, pendiente de pago
+        (2, _('Pending Confirmation')),  # reporte pago, esperando confirmacion
+        (3, _('Insert Your Pin')),  # confirmado pago, falta por activar
+        (4, _('In Use')),  # Activo
+        (5, _('Culminated')),  # expirado o finalidas las consultas
+    )
     # MatchAcquired model
     match_acquired_status = (
         (1, _('Requested')),  # solicitado

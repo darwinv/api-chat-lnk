@@ -94,6 +94,7 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         instance.is_active = True
         instance.activation_date = datetime.now().date()
         instance.expiration_date = get_date_by_time(instance.validity_months)
+        instance.status = 4
         instance.save()
 
         query_plan_client = QueryPlansClient.objects.get(client=client,acquired_plan=instance)
@@ -184,8 +185,9 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
         model = QueryPlansAcquired
         fields = ('id', 'plan_name', 'is_chosen', 'is_active',
                   'validity_months', 'query_quantity', 'queries_to_pay',
-                  'available_queries', 'expiration_date', 'transfer',
-                  'share', 'empower', 'owner', 'price', 'fee', 'is_fee')
+                  'available_queries', 'expiration_date', 'activation_date',
+                  'transfer', 'share', 'empower', 'owner',
+                  'price', 'fee', 'is_fee', 'status')
 
     def get_transfer(self, obj):
         if 'queryplansclient__transfer' in obj:
