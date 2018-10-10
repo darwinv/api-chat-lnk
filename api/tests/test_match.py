@@ -77,17 +77,6 @@ class RequestMatch(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_null_file(self):
-        """No hay archivo, exitoso igual."""
-        data = self.valid_payload.copy()
-        data["file"] = None
-        response = self.client.post(
-            reverse('match-client'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
     def test_not_client_credentials(self):
         """Token no es de cliente (no autorizado)."""
         self.client.credentials(
