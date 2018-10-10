@@ -196,3 +196,33 @@ class PaymentDetailContactView(ListCreateAPIView):
 
         serializer = SaleContactoDetailSerializer(sale, many=True)
         return Response(serializer.data)
+
+class ClientHaveSalePending(ListCreateAPIView):
+    """Vista para traer pagos pendientes."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    required = _("required")
+
+    def get(self, request):
+        """Detalle."""
+        """Detalle de venta para contacto efectivo, devuelve ventas con
+        paginacion para un cliente dado"""
+        data = request.query_params
+        if not 'client' in data:
+            raise serializers.ValidationError({'client': [self.required]})
+
+        client = data['client']
+
+        have_pending_plans = Sale.objects.filter(saledetail__product_type=1,
+                                        saledetail__is_billable=True,
+                                        client=client,
+                                        status=1,
+                                        file_url="").values('id').first()
+        
+        if have_pending_plans:
+            sale = Sale.objects.get(client=client, status=1, pk=have_pending_plans['id'])
+        else:
+            raise Http404
+
+        serializer = SaleContactoDetailSerializer(sale)
+        return Response(serializer.data)
