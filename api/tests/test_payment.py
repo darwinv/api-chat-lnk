@@ -438,7 +438,7 @@ class PaymentClientMatch(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        
+
     def test_no_match(self):
         """no match."""
         payload = self.data.copy()
@@ -479,6 +479,7 @@ class PaymentPendig(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+
 class GetFeePaymentPendig(APITestCase):
     """Prueba de Traer Pagos Pendientes."""
 
@@ -496,6 +497,7 @@ class GetFeePaymentPendig(APITestCase):
              format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class GetContactsEfectiveSale(APITestCase):
     """Devolver data de contactos."""

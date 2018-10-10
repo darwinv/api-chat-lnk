@@ -184,8 +184,9 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
         model = QueryPlansAcquired
         fields = ('id', 'plan_name', 'is_chosen', 'is_active',
                   'validity_months', 'query_quantity', 'queries_to_pay',
-                  'available_queries', 'expiration_date', 'transfer',
-                  'share', 'empower', 'owner', 'price', 'fee', 'is_fee')
+                  'available_queries', 'expiration_date', 'activation_date',
+                  'transfer', 'share', 'empower', 'owner',
+                  'price', 'fee', 'is_fee')
 
     def get_transfer(self, obj):
         if 'queryplansclient__transfer' in obj:

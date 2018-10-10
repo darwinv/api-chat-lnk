@@ -145,18 +145,20 @@ class GetDetailPlan(APITestCase):
 class GetClientPlansAllList(APITestCase):
     """Prueba para devolver listado de planes al cliente"""
 
-    fixtures = ['data', 'data2', 'data3', 'test_chosen_plan', 'oauth2']
+    fixtures = ['data', 'data2', 'data3', 'test_client_plans']
 
     def setUp(self):
         """Setup."""
+        self.client = APIClient()
         self.client.credentials(
-            HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
 
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
         response = self.client.get(reverse('client-plans-all'), format='json')
-
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class GetClientPlansShareEmpowerList(APITestCase):
     """Prueba para devolver listado de clientes compartidos facultados"""
