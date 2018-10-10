@@ -40,8 +40,7 @@ class PurchaseDetail(APIView):
 
     def get_object(self, request, pk):
         try:
-            obj = Sale.objects.get(pk=pk, status=1)
-            
+            obj = Sale.objects.get(pk=pk, status=1)            
             if request.user.role_id != 1:
                 # Es Dueño del plan
                 if request.user.role_id == 2 and request.user.id == obj.client.id:
