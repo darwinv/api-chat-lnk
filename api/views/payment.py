@@ -9,7 +9,7 @@ from api.utils.validations import Operations
 from api.utils.querysets import get_next_fee_to_pay
 from api.permissions import IsAdminOrSeller, IsAdmin, isAdminBackWrite
 from api.permissions import IsAdminOrSpecialist
-from api.models import Sale, MonthlyFee, Client, Match
+from api.models import Sale, MonthlyFee, Client, Match, SaleDetail
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 from rest_framework.views import APIView
