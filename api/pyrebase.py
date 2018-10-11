@@ -221,6 +221,7 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     category_id = query.category.id
     room = query.message_set.last().room
 
+    import pdb; pdb.set_trace()
     # Remover query del listado de especialista actual
     removeQueryAcceptList(old_specialist_id, client_id, query_id)
 
@@ -276,7 +277,7 @@ def update_status_query_current_list(specialist_id, client_id,
             res = None
     else:
         if exist_node(root_room):
-            db.child(root_room).update({"queries_pending_to_solve": qpending})
+            db.child(root_room).update({"pending_queries_to_solve": qpending})
         else:
             logger.warning('nodo no existe {}'.format(root_room))
 
@@ -358,8 +359,7 @@ def createListMessageClients(lista, query_id, status,
         "date": str(data_obj['date']),
         "message": data_obj['message'],
         "id": data_obj['id'],
-        "specialist_id": data_obj['specialist'],
-        "pending_queries_to_solve": qpending
+        "specialist_id": data_obj['specialist']
     }
     data_obj['queryCurrent'] = query_current
     del data_obj['specialist']
@@ -367,11 +367,13 @@ def createListMessageClients(lista, query_id, status,
     del data_obj['title']
     del data_obj['date']
     del data_obj['id']
-
-    # main_node = "messagesList/specialist/{}/{}"
+    # import pdb; pdb.set_trace()
     db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).set(data_obj)
 
+    db.child("messagesList/specialist/").child(
+        node_specialist).child(node_client).update(
+            {"pending_queries_to_solve": qpending})
 
 def chosen_plan(client_id, data):
     node = Params.PREFIX['client'] + str(client_id)

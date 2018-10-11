@@ -160,8 +160,7 @@ class QueryListClientView(ListCreateAPIView):
                                                   serializer.data["status"],
                                                   user_id,
                                                   specialist_id,
-                                                  queries_list=lista_d
-                                                  qpending)
+                                                  queries_list=lista_d)
                 # envio de notificacion push
                 Notification.fcm_send_data(user_id=specialist_id,
                                            data=data_notif_push)
