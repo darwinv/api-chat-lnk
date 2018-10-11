@@ -495,7 +495,7 @@ class ClientListView(ListCreateAPIView):
                     mail.sendmail(args=credentials)
 
             # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
-            give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
+            # give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
 
             client_id = serializer.data['id']
             email = data['email_exact']

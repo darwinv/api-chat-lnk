@@ -532,8 +532,8 @@ class Payment(models.Model):
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
     monthly_fee = models.ForeignKey(MonthlyFee, on_delete=models.PROTECT,
                                     null=True)
-    file_url = models.CharField(max_length=500, blank=True)
-    file_preview_url = models.CharField(max_length=500, blank=True)
+    file_url = models.CharField(max_length=500, blank=True, null=True)
+    file_preview_url = models.CharField(max_length=500, blank=True, null=True)
 
 
 class Match(models.Model):

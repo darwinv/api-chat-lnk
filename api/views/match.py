@@ -294,8 +294,11 @@ class SaleClientUploadFilesView(APIView):
         # ya se envio el voucher
         QueryPlansAcquired.objects.filter(
             sale_detail__in=qsdetail, status=1).update(status=2)
-        return HttpResponse(status=200)
 
+        Match.objects.filter(
+            sale_detail__sale=obj_instance, status=4).update(status=6)
+        
+        return HttpResponse(status=200)
 
 
 def upload_file(file, model_update=None, obj_instance=None):

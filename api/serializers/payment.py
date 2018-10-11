@@ -118,16 +118,16 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
     """Serializer del Pago."""
     match = serializers.PrimaryKeyRelatedField(
             queryset=Match.objects.all(), required=True, write_only=True)
-
     operation_number = serializers.CharField(validators=[UniqueValidator(
-        queryset=Payment.objects.all())], required=True)
+        queryset=Payment.objects.all())], required=False, allow_null = True, allow_blank=True)
 
     class Meta:
         """Modelo."""
 
         model = Payment
         fields = ('amount', 'operation_number', 'payment_type',
-                  'observations', 'bank', 'id', 'match')
+                  'observations', 'bank', 'id', 'match', 'file_url',
+                  'file_preview_url')
 
     def validate_amount(self, value):
         """Validacion de amount."""
@@ -180,13 +180,16 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
 
     match = serializers.PrimaryKeyRelatedField(
             queryset=Match.objects.all(), required=True, write_only=True)
+    operation_number = serializers.CharField(validators=[UniqueValidator(
+        queryset=Payment.objects.all())], required=False, allow_null = True, allow_blank=True)
 
     class Meta:
         """Modelo."""
 
         model = Payment
         fields = ('amount', 'operation_number', 'payment_type',
-                  'observations', 'bank', 'id', 'match')
+                  'observations', 'bank', 'id', 'match', 'file_url',
+                  'file_preview_url')
 
     def validate_amount(self, value):
         """Validacion de amount."""
@@ -202,7 +205,7 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
         match = validated_data.pop('match')
         # import pdb; pdb.set_trace()
         match = Match.objects.get(pk=match.id)
-        # import pdb; pdb.set_trace()       
+        # import pdb; pdb.set_trace()
 
         instance = Payment(**validated_data)
         instance.save()
