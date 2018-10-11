@@ -221,7 +221,6 @@ def updateStatusQueryDerive(old_specialist_id, specialist_id, query):
     category_id = query.category.id
     room = query.message_set.last().room
 
-    import pdb; pdb.set_trace()
     # Remover query del listado de especialista actual
     removeQueryAcceptList(old_specialist_id, client_id, query_id)
 
@@ -267,6 +266,12 @@ def update_status_query_current_list(specialist_id, client_id,
 
     room = "messagesList/specialist/{}/{}/{}/".format(node_specialist,
                                                       node_client, node_query)
+
+    if exist_node(root_room):
+        db.child(root_room).update({"pending_queries_to_solve": qpending})
+    else:
+        logger.warning('nodo no existe {}'.format(root_room))
+
     if query_id:
         node = db.child(room + 'id').get()
         if node.pyres and node.pyres == int(query_id):
@@ -276,16 +281,12 @@ def update_status_query_current_list(specialist_id, client_id,
                 'status_query_currentlist-queryid nodo no existe {}'.format(room))
             res = None
     else:
-        if exist_node(root_room):
-            db.child(root_room).update({"pending_queries_to_solve": qpending})
-        else:
-            logger.warning('nodo no existe {}'.format(root_room))
-
         if exist_node(room):
             res = db.child(room).update(data)
         else:
             logger.warning(
                 'status_query_currentlist nodo no existe {}'.format(room))
+
     return res
 
 
