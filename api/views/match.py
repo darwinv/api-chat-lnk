@@ -300,7 +300,6 @@ class SaleClientUploadFilesView(APIView):
         
         return HttpResponse(status=200)
 
-
 def upload_file(file, model_update=None, obj_instance=None):
     """Funcion para subir archivos."""
 

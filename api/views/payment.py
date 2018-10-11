@@ -31,7 +31,7 @@ class CreatePayment(APIView):
         """crear compra."""
         data = request.data
         user_id = Operations.get_id(self, request)
-        
+
         serializer = PaymentSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -210,6 +210,7 @@ class PaymentDetailContactView(ListCreateAPIView):
         serializer = SaleContactoDetailSerializer(sale, many=True)
         return Response(serializer.data)
 
+
 class ClientHaveSalePending(ListCreateAPIView):
     """Vista para traer pagos pendientes."""
     authentication_classes = (OAuth2Authentication,)
@@ -221,7 +222,7 @@ class ClientHaveSalePending(ListCreateAPIView):
         """Detalle de venta para contacto efectivo, devuelve ventas con
         paginacion para un cliente dado"""
         data = request.query_params
-        if not 'client' in data:
+        if 'client' not in data:
             raise serializers.ValidationError({'client': [self.required]})
 
         client = data['client']
@@ -231,7 +232,7 @@ class ClientHaveSalePending(ListCreateAPIView):
                                         client=client,
                                         status=1,
                                         file_url="").values('id').first()
-        
+
         if have_pending_plans:
             sale = Sale.objects.get(client=client, status=1, pk=have_pending_plans['id'])
         else:

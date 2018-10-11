@@ -40,6 +40,7 @@ from api.serializers.actors import PendingQueriesSerializer
 from botocore.exceptions import ClientError
 from api.utils.tools import s3_upload_file, remove_file, resize_img, get_body
 from api.utils.parameters import Params
+from api.utils.querysets import get_queries_pending_to_solve
 from fcm.fcm import Notification
 from api.logger import manager
 logger = manager.setup_log(__name__)
@@ -159,8 +160,7 @@ class QueryListClientView(ListCreateAPIView):
                                                   serializer.data["status"],
                                                   user_id,
                                                   specialist_id,
-                                                  queries_list=lista_d
-                                                  )
+                                                  queries_list=lista_d)
                 # envio de notificacion push
                 Notification.fcm_send_data(user_id=specialist_id,
                                            data=data_notif_push)
