@@ -31,6 +31,7 @@ class CreatePayment(APIView):
         """crear compra."""
         data = request.data
         user_id = Operations.get_id(self, request)
+        
         serializer = PaymentSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
