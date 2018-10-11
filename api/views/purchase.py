@@ -33,6 +33,7 @@ class CreatePurchase(APIView):
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+
 class PurchaseDetail(APIView):
     """Vista para crear compra."""
     authentication_classes = (OAuth2Authentication,)
@@ -40,7 +41,8 @@ class PurchaseDetail(APIView):
 
     def get_object(self, request, pk):
         try:
-            obj = Sale.objects.get(pk=pk, status=1)            
+            obj = Sale.objects.get(pk=pk, status=1)
+
             if request.user.role_id != 1:
                 # Es Dueño del plan
                 if request.user.role_id == 2 and request.user.id == obj.client.id:
@@ -50,7 +52,6 @@ class PurchaseDetail(APIView):
                     return obj
                 else:
                     raise Http404
-            
             return obj
         except Sale.DoesNotExist:
             raise Http404
