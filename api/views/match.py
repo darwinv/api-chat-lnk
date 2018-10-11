@@ -286,7 +286,7 @@ class SaleClientUploadFilesView(APIView):
         qsdetail = obj_instance.saledetail_set.all()
         # ya se envio el voucher
         QueryPlansAcquired.objects.filter(
-            sale_detail=qsdetail, status=1).update(status=2)
+            sale_detail__in=qsdetail, status=1).update(status=2)
         return HttpResponse(status=200)
 
 
