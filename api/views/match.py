@@ -222,7 +222,7 @@ class SpecialistMatchUploadFilesView(APIView):
         """Actualiza el match, subiendo archivos."""
         obj_instance = self.get_object(request, pk)
         files = request.FILES.getlist('file')
-
+        
         if len(files) == 0:
             raise serializers.ValidationError(
                 {"file": _("required")})
@@ -242,7 +242,16 @@ class SpecialistMatchUploadFilesView(APIView):
             raise serializers.ValidationError(
                 {"files_failed": errors_list})
 
-        return HttpResponse(status=200)
+        
+        data_match = {}
+        data_match["status"] = 2
+        data_match["payment_option_specialist"] = 1
+        serializer = MatchAcceptSerializer(obj_instance, data=data_match)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 
 class SaleClientUploadFilesView(APIView):
@@ -304,7 +313,6 @@ def upload_file(file, model_update=None, obj_instance=None):
             mf = obj_instance
         else:
             mf = model_update.objects.get(pk=int(file_match_id))
-
 
         # lo subimos a Amazon S3
         url = s3_upload_file(file, file.name)
