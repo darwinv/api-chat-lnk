@@ -213,7 +213,7 @@ class SpecialistMatchUploadFilesView(APIView):
     def get_object(self, request, pk):
         """Devuelvo la consulta."""
         try:
-            obj = Match.objects.get(pk=pk)
+            obj = Match.objects.get(pk=pk, status=1)
             return obj
         except Match.DoesNotExist:
             raise Http404
@@ -242,7 +242,6 @@ class SpecialistMatchUploadFilesView(APIView):
             raise serializers.ValidationError(
                 {"files_failed": errors_list})
 
-        
         data_match = {}
         data_match["status"] = 2
         data_match["payment_option_specialist"] = 1
@@ -251,7 +250,6 @@ class SpecialistMatchUploadFilesView(APIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
 
 
 class SaleClientUploadFilesView(APIView):
