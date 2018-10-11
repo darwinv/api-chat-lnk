@@ -17,6 +17,7 @@ from api.utils.tools import capitalize as cap
 from api.utils.parameters import Params
 from api.utils.validations import document_exists, ruc_exists
 from django.contrib.auth.hashers import check_password
+from api.utils.querysets import get_queries_pending_to_solve
 from django.contrib.auth import password_validation
 from api.utils import tools
 from collections import OrderedDict
@@ -387,7 +388,7 @@ class ClientSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        """Redefinido metodo de crear cliente."""        
+        """Redefinido metodo de crear cliente."""
         country_peru = Countries.objects.get(name="Peru")
         validated_data['code'] = str(self.context.get('temp_code')) # El codigo no comienza con C hasta no comprar
         # Verificamos si reside en el extranjero, se elimina direccion
@@ -535,7 +536,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
         """Validar Numero de Documento."""
         data = self.get_initial()
         document_type = data.get('document_type', '0')
-        
+
         if self.instance and self.instance.document_number == value:
             return value
 
@@ -703,6 +704,15 @@ class SpecialistSerializer(serializers.ModelSerializer):
 
         return data
 
+
+class AssociateSpecialistSerializer(SpecialistSerializer):
+    """Listado de Especialistas Asociados."""
+    def to_representation(self, instance):
+        # import pdb; pdb.set_trace()
+        pending = get_queries_pending_to_solve(specialist=instance)
+        ret = super().to_representation(instance)
+        ret["pending_queries_to_solve"] = pending
+        return ret
 
 # Serializer para traer el listado de vendedores
 class SellerSerializer(serializers.ModelSerializer):
@@ -1047,7 +1057,7 @@ class SellerFilterContactSerializer(serializers.ModelSerializer):
             client_id = client.id
         except Client.DoesNotExist:
             client_id = False
-        
+
         if client_id:
             sale = Sale.objects.filter(client=client_id)
             if sale:
@@ -1465,7 +1475,7 @@ class RucApiDetailSerializer(serializers.Serializer):
     def get_address(self, obj):
         address = {}
         try:
-            if 'departamento' in obj:                
+            if 'departamento' in obj:
                 try:
                     department = Department.objects.get(name=obj['departamento'])
                     address['department'] = department
@@ -1476,17 +1486,17 @@ class RucApiDetailSerializer(serializers.Serializer):
 
             if 'provincia' in obj:
                 try:
-                    province = Province.objects.get(name=obj['provincia'], 
+                    province = Province.objects.get(name=obj['provincia'],
                                                     department=address['department'])
                     address['province'] = province
                 except Province.DoesNotExist:
-                    address['province'] = None                
+                    address['province'] = None
             else:
                 address['province'] = None
-            
-            if 'distrito' in obj:                
+
+            if 'distrito' in obj:
                 try:
-                    district = District.objects.get(name=obj['distrito'], 
+                    district = District.objects.get(name=obj['distrito'],
                                                     province=address['province'])
                     address['district'] = district
                 except District.DoesNotExist:
@@ -1507,7 +1517,7 @@ class RucApiDetailSerializer(serializers.Serializer):
             print("error get_address")
             print(e)
             return None
-        
+
 
     def get_business_name(self, obj):
         if 'nombre_o_razon_social' in obj:

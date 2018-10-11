@@ -55,13 +55,16 @@ def get_next_fee_to_pay(sale):
         return None
 
 
-def get_queries_pending_to_solve(specialist, client):
+def get_queries_pending_to_solve(specialist, client=None):
     """ Consultas pendientes por resolver """
     """
     Devuelve el numero total de consultas en estado 1 o 2.
     :return: Int
     """
-    qs = Query.objects.filter(status__range=(1, 2),
-                              specialist=specialist, client=client)
+    if client is not None:
+        qs = Query.objects.filter(status__range=(1, 2),
+                                  specialist=specialist, client=client)
+    else:
+        qs = Query.objects.filter(status__range=(1, 2), specialist=specialist)
     pending = qs.count()
     return pending
