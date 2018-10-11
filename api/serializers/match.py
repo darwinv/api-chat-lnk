@@ -136,7 +136,7 @@ class MatchListClientSerializer(serializers.ModelSerializer):
                 "specialist": specialist, "category_image": obj.category.image,
                 "file": files, "status": obj.status,
                 "declined_motive": obj.declined_motive,
-                "sale":sale}
+                "sale":sale, "price":obj.price}
 
 
 
@@ -181,4 +181,4 @@ class MatchListSpecialistSerializer(serializers.ModelSerializer):
                 "subject": obj.subject, "category": _(obj.category.name),
                 "client": client_data, "category_image": obj.category.image,
                 "file": files, "status": obj.status,
-                "declined_motive": obj.declined_motive}
+                "declined_motive": obj.declined_motive, "price":obj.price}
