@@ -297,8 +297,7 @@ def upload_file(file, model_update=None, obj_instance=None):
             mf = obj_instance
         else:
             mf = model_update.objects.get(pk=int(file_match_id))
-            
-            
+        
         # lo subimos a Amazon S3
         url = s3_upload_file(file, file.name)
         # generamos la miniatura
