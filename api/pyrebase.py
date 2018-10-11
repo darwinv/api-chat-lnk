@@ -9,7 +9,7 @@ from django.db.models import OuterRef, Subquery, Count
 
 # from datetime import datetime, timedelta
 from api.utils.parameters import Params, Payloads
-from api.utils.querysets import get_query_set_plan
+from api.utils.querysets import get_query_set_plan, get_queries_pending_to_solve
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from linkupapi.settings import CONFIG_ENVIROMENT
 from linkupapi.settings import DEBUG_FIREBASE
@@ -259,6 +259,10 @@ def update_status_query_current_list(specialist_id, client_id,
     node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
     node_query = 'queryCurrent'
+    root_room = "messagesList/specialist/{}/{}/".format(node_specialist,
+                                                        node_client)
+    qpending = get_queries_pending_to_solve(specialist=specialist_id,
+                                            client=client_id)
 
     room = "messagesList/specialist/{}/{}/{}/".format(node_specialist,
                                                       node_client, node_query)
@@ -271,6 +275,11 @@ def update_status_query_current_list(specialist_id, client_id,
                 'status_query_currentlist-queryid nodo no existe {}'.format(room))
             res = None
     else:
+        if exist_node(root_room):
+            db.child(root_room).update({"queries_pending_to_solve": qpending})
+        else:
+            logger.warning('nodo no existe {}'.format(root_room))
+
         if exist_node(room):
             res = db.child(room).update(data)
         else:
@@ -341,13 +350,16 @@ def createListMessageClients(lista, query_id, status,
         data_obj['isQueryActive'] = True
 
     data_obj['queries'] = queries_list
+    qpending = get_queries_pending_to_solve(specialist=specialist_id,
+                                            client=client_id)
     query_current = {
         "status": status,
         "title": data_obj['title'],
         "date": str(data_obj['date']),
         "message": data_obj['message'],
         "id": data_obj['id'],
-        "specialist_id": data_obj['specialist']
+        "specialist_id": data_obj['specialist'],
+        "pending_queries_to_solve": qpending
     }
     data_obj['queryCurrent'] = query_current
     del data_obj['specialist']
