@@ -184,8 +184,6 @@ class SpecialistFooterSerializer(serializers.ModelSerializer):
                 "queries_absolved": queries_absolved}
 
 
-
-
 class ClientAccountSerializer(serializers.Serializer):
     """Serializer de estado de cuenta de Cliente."""
 
@@ -222,6 +220,7 @@ class ClientAccountHistoricSerializer(serializers.Serializer):
 
         client = self.context["client"]
         # calculó de las consultas adquiridas
+        # import pdb; pdb.set_trace()
         queries_client = obj.aggregate(query_quantity=Sum('query_quantity'),
                              available_queries=Sum('available_queries'),
                              queries_to_pay=Sum('queries_to_pay'))
