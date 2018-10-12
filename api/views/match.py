@@ -257,7 +257,7 @@ class SaleClientUploadFilesView(APIView):
     """Subida de archivos para la consultas."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrClient]
+    permission_classes = [permissions.IsAuthenticated]
     parser_classes = (JSONParser, MultiPartParser)
 
     def get_object(self, request, pk):
@@ -300,8 +300,7 @@ class SaleClientUploadFilesView(APIView):
             sale_detail__sale=obj_instance, status=4).update(status=6)
 
         SellerContact.objects.filter(
-            email_exact=obj_instance.client.email_exact).update(type_contact=1)
-        
+            email_exact=obj_instance.client.email_exact).update(type_contact=1)        
         
         return HttpResponse(status=200)
 
