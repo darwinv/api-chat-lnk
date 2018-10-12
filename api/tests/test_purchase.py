@@ -97,13 +97,31 @@ class ContactPurchaseQueryPlans(APITestCase):
         }
 
     def test_purchase_business(self):
-        """Compra exitosa."""
+        """Compra exitosa de juridico."""
         data = self.valid_payload.copy()
         data["email_exact"] = "munitambo@mail.com"
         response = client.post(reverse('contact-purchase'),
                                data=json.dumps(self.valid_payload),
                                content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_no_email(self):
+        """No envia correo."""
+        data = self.valid_payload.copy()
+        del data["email_exact"]
+        response = client.post(reverse('contact-purchase'),
+                               data=json.dumps(data),
+                               content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_email_not_found(self):
+        """EMail no existe."""
+        data = self.valid_payload.copy()
+        data["email_exact"] = 'dar_a@mail.com'
+        response = client.post(reverse('contact-purchase'),
+                               data=json.dumps(data),
+                               content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_purchase_ok(self):
         """Compra exitosa."""

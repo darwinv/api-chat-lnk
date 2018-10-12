@@ -51,11 +51,14 @@ class ContactNoEffectivePurchase(APIView):
         if serializer_client.is_valid():
             serializer_client.save()
             data["client"] = serializer_client.data["client_id"]
+        else:
+            return Response(serializer_client.errors, status.HTTP_400_BAD_REQUEST)
         serializer = SaleSerializer(data=data, context=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class PurchaseDetail(APIView):
     """Vista para crear compra."""

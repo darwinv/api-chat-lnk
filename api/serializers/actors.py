@@ -1083,6 +1083,7 @@ class ObjectionsContactSerializer(serializers.ModelSerializer):
 
 class ContactToClientSerializer(serializers.ModelSerializer):
     """Pasar de Contacto a Cliente."""
+    email_exact = serializers.EmailField(required=True)
 
     class Meta:
         """ Model Contacto."""
@@ -1231,7 +1232,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             serializer_client = ClientSerializer(data=data_client)
 
             if serializer_client.is_valid():
-                serializer_client.save()                
+                serializer_client.save()
                 instance.save()
                 self.context['client_id'] = serializer_client.data['id']
             else:
