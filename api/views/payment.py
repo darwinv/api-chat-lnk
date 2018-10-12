@@ -88,13 +88,15 @@ class MatchPaymentSpecialist(APIView):
     def post(self, request):
         """crear compra."""
         data = request.data
-        try:
-            match = Match.objects.get(pk=data["match"])
-        except Match.DoesNotExist:
-            raise Http404
 
-        data["file_url"] = match.file_url
-        data["file_preview_url"] = match.file_preview_url
+        if "match" in data:
+            try:
+                match = Match.objects.get(pk=data["match"])
+            except Match.DoesNotExist:
+                raise Http404
+
+            data["file_url"] = match.file_url
+            data["file_preview_url"] = match.file_preview_url
 
         serializer = PaymentMatchSerializer(data=data)
         if serializer.is_valid():
@@ -111,12 +113,14 @@ class MatchPaymentClient(APIView):
         """crear compra."""
         data = request.data
         
-        sale = Match.objects.filter(pk=data["match"]
-                            ).values("sale_detail__sale__file_url",
-                                     "sale_detail__sale__file_preview_url").first()
+        if "match" in data:
+            sale = Match.objects.filter(pk=data["match"]
+                                ).values("sale_detail__sale__file_url",
+                                         "sale_detail__sale__file_preview_url").first()
 
-        data["file_url"] = sale["sale_detail__sale__file_url"]
-        data["file_preview_url"] = sale["sale_detail__sale__file_preview_url"]
+            data["file_url"] = sale["sale_detail__sale__file_url"]
+            data["file_preview_url"] = sale["sale_detail__sale__file_preview_url"]
+
         serializer = PaymentMatchClientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

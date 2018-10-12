@@ -209,7 +209,7 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
 
         instance = Payment(**validated_data)
         instance.save()
-        match.status = 5        
+        match.status = 5
         match.save()
         return instance
 
