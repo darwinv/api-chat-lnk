@@ -195,8 +195,7 @@ class ClientAccountSerializer(serializers.Serializer):
         end = datetime.now()
         new_end = end + timedelta(days=1)
         start = date(end.year, end.month, 1)
-        plan = QueryPlansAcquired.objects.filter(activation_date__range=(start, new_end),
-                                            queryplansclient__client=client_id)
+        plan = obj.filter(activation_date__range=(start, new_end))
 
         serializers_plans = QueryPlansAcquiredSimpleSerializer(plan, many=True)
 
@@ -218,7 +217,7 @@ class ClientAccountHistoricSerializer(serializers.Serializer):
     def to_representation(self, obj):
         """Representacion."""
 
-        client = self.context["client"]
+        client_id = self.context["client"]
         # calculó de las consultas adquiridas
         # import pdb; pdb.set_trace()
         queries_client = obj.aggregate(query_quantity=Sum('query_quantity'),
@@ -230,13 +229,17 @@ class ClientAccountHistoricSerializer(serializers.Serializer):
         queries_to_pay = queries_client["queries_to_pay"] if queries_client["queries_to_pay"] else 0
 
         queries_made = queries_acquired - queries_available - queries_to_pay
+
+        match_acquired = Match.objects.filter(client=client_id).count()
+        match_absolved = Match.objects.filter(client=client_id, status=5).count()
+        match_declined = Match.objects.filter(client=client_id, status=3).count()
         return {
                 "queries_acquired": queries_acquired,
                 "queries_made": queries_made,
                 "queries_available": queries_available,
-                "match_acquired": 0,
-                "match_absolved": 0,
-                "match_declined": 0
+                "match_acquired": match_acquired,
+                "match_absolved": match_absolved,
+                "match_declined": match_declined
                 }
 
 class SellerAccountSerializer(serializers.Serializer):
