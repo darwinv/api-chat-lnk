@@ -227,6 +227,9 @@ class QuerySerializer(serializers.ModelSerializer):
             Message.objects.create(query=query, group=group, **data_message)
         # restamos una consulta disponible al plan adquirido
         acq_plan.available_queries = acq_plan.available_queries - 1
+        # si el plan queda en 0 consultas, pasa a culminado
+        if acq_plan.available_queries == 0 and acq_plan.queries_to_pay == 0:
+            acq_plan.status = 5
         acq_plan.save()
         if 'test' not in sys.argv:
             pyrebase.chosen_plan(

@@ -113,6 +113,7 @@ class MakePaymentNoFee(APITestCase):
         # disponibles
         self.assertEqual(q_acqd.available_queries, 2)
         self.assertEqual(q_acqd_2.available_queries, 6)
+        self.assertEqual(q_acqd.status, 3)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     # def test_no_monthly_fee(self):
@@ -438,7 +439,7 @@ class PaymentClientMatch(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        
+
     def test_no_match(self):
         """no match."""
         payload = self.data.copy()
@@ -479,6 +480,7 @@ class PaymentPendig(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+
 class GetFeePaymentPendig(APITestCase):
     """Prueba de Traer Pagos Pendientes."""
 
@@ -496,6 +498,7 @@ class GetFeePaymentPendig(APITestCase):
              format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 
 class GetContactsEfectiveSale(APITestCase):
     """Devolver data de contactos."""

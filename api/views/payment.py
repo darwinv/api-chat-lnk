@@ -31,24 +31,8 @@ class CreatePayment(APIView):
         """crear compra."""
         data = request.data
         user_id = Operations.get_id(self, request)
-        
+
         serializer = PaymentSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status.HTTP_201_CREATED)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
-
-class MatchPaymentSpecialist(APIView):
-    """Vista para crear pago de match specialista."""
-    authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated, isAdminBackWrite,)
-
-    def post(self, request):
-        """crear compra."""
-        data = request.data
-        user_id = Operations.get_id(self, request)
-        serializer = PaymentMatchSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
@@ -96,6 +80,30 @@ class ConfirmDiscountView(APIView):
 
         return Response({"confirmado"}, status.HTTP_200_OK)
 
+class MatchPaymentSpecialist(APIView):
+    """Vista para crear pago de match specialista."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, isAdminBackWrite,)
+
+    def post(self, request):
+        """crear compra."""
+        data = request.data
+
+        if "match" in data:
+            try:
+                match = Match.objects.get(pk=data["match"])
+            except Match.DoesNotExist:
+                raise Http404
+
+            data["file_url"] = match.file_url
+            data["file_preview_url"] = match.file_preview_url
+
+        serializer = PaymentMatchSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_201_CREATED)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        
 class MatchPaymentClient(APIView):
     """Vista para crear pago de match specialista."""
     authentication_classes = (OAuth2Authentication,)
@@ -104,7 +112,15 @@ class MatchPaymentClient(APIView):
     def post(self, request):
         """crear compra."""
         data = request.data
-        user_id = Operations.get_id(self, request)
+        
+        if "match" in data:
+            sale = Match.objects.filter(pk=data["match"]
+                                ).values("sale_detail__sale__file_url",
+                                         "sale_detail__sale__file_preview_url").first()
+
+            data["file_url"] = sale["sale_detail__sale__file_url"]
+            data["file_preview_url"] = sale["sale_detail__sale__file_preview_url"]
+
         serializer = PaymentMatchClientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -198,6 +214,7 @@ class PaymentDetailContactView(ListCreateAPIView):
         serializer = SaleContactoDetailSerializer(sale, many=True)
         return Response(serializer.data)
 
+
 class ClientHaveSalePending(ListCreateAPIView):
     """Vista para traer pagos pendientes."""
     authentication_classes = (OAuth2Authentication,)
@@ -209,7 +226,7 @@ class ClientHaveSalePending(ListCreateAPIView):
         """Detalle de venta para contacto efectivo, devuelve ventas con
         paginacion para un cliente dado"""
         data = request.query_params
-        if not 'client' in data:
+        if 'client' not in data:
             raise serializers.ValidationError({'client': [self.required]})
 
         client = data['client']
@@ -219,7 +236,7 @@ class ClientHaveSalePending(ListCreateAPIView):
                                         client=client,
                                         status=1,
                                         file_url="").values('id').first()
-        
+
         if have_pending_plans:
             sale = Sale.objects.get(client=client, status=1, pk=have_pending_plans['id'])
         else:

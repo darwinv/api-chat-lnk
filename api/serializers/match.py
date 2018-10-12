@@ -32,8 +32,10 @@ class MatchSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """validate Redefinido."""
         msg = _("you can not hire that specialty anymore")
+        # no puede contratar un match con la especialidad si aun  no se ha resuelto,
+        # o si ya fue exitoso
         qs = Match.objects.filter(category=data["category"],
-                                  client=data["client"])
+                                  client=data["client"]).exclude(status=3)
         if qs.exists():
             raise serializers.ValidationError({"category": [msg]})
 
@@ -134,7 +136,7 @@ class MatchListClientSerializer(serializers.ModelSerializer):
                 "specialist": specialist, "category_image": obj.category.image,
                 "file": files, "status": obj.status,
                 "declined_motive": obj.declined_motive,
-                "sale":sale}
+                "sale":sale, "price":obj.price}
 
 
 
@@ -179,4 +181,4 @@ class MatchListSpecialistSerializer(serializers.ModelSerializer):
                 "subject": obj.subject, "category": _(obj.category.name),
                 "client": client_data, "category_image": obj.category.image,
                 "file": files, "status": obj.status,
-                "declined_motive": obj.declined_motive}
+                "declined_motive": obj.declined_motive, "price":obj.price}

@@ -135,7 +135,7 @@
       "profession": "Administrador",
       "economic_sector": null,
       "level_instruction": 1,
-      "seller_assigned": null,
+      "seller_assigned": 2,
       "groups": [],
       "user_permissions": []
   }
@@ -271,6 +271,160 @@
     "number_month": 10,
     "number_year": 2018,
     "created_at": "2018-07-31T15:31:02Z"
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 10,
+  "fields": {
+    "created_at": "2018-10-10T20:12:14.525Z",
+    "place": "BCP",
+    "total_amount": "300.00",
+    "reference_number": "CD1007",
+    "description": "test",
+    "is_fee": true,
+    "client": 6,
+    "seller": null,
+    "status": 2,
+    "file_url": "",
+    "file_preview_url": ""
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 11,
+  "fields": {
+    "created_at": "2018-10-10T20:18:40.447Z",
+    "place": "BCP",
+    "total_amount": "30000.00",
+    "reference_number": "CD1008",
+    "description": "test",
+    "is_fee": true,
+    "client": 6,
+    "seller": null,
+    "status": 1,
+    "file_url": "",
+    "file_preview_url": ""
+  }
+},
+{
+  "model": "api.monthlyfee",
+  "pk": 2,
+  "fields": {
+    "fee_amount": "5000.00",
+    "fee_order_number": 1,
+    "fee_quantity": 2,
+    "sale": 11,
+    "pay_before": "2019-02-10",
+    "status": 1
+  }
+},
+{
+  "model": "api.monthlyfee",
+  "pk": 3,
+  "fields": {
+    "fee_amount": "5000.00",
+    "fee_order_number": 2,
+    "fee_quantity": 2,
+    "sale": 11,
+    "pay_before": "2019-03-10",
+    "status": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 10,
+  "fields": {
+    "price": "1500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "3S3ER2",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 11
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 11,
+  "fields": {
+    "price": "1500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "DUVKG7",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 11
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 5,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "queries_to_pay": 0,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T21:21:21.664Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 11,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 6,
+  "fields": {
+    "expiration_date": "2018-12-09",
+    "validity_months": 2,
+    "available_queries": 2,
+    "queries_to_pay": 0,
+    "query_quantity": 2,
+    "activation_date": "2018-10-10",
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-10-10T20:12:14.710Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 11,
+    "status": 4
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 10,
+  "fields": {
+    "acquired_plan": 5,
+    "client": 6,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 11,
+  "fields": {
+    "acquired_plan": 6,
+    "client": 6,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
   }
 }
 ]

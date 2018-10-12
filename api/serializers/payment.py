@@ -80,6 +80,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         for detail in qsetdetail:
             qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
             qpclient = qacd.queryplansclient_set.get()
+
             # debo chequear si es por cuotas o no
             if fee.sale.is_fee:
                 # libero el numero de consultas que corresponde
@@ -91,6 +92,8 @@ class PaymentSerializer(serializers.ModelSerializer):
                 qacd.available_queries = qacd.query_plans.query_quantity
                 # actualizo cuantas consultas faltan por pagar
                 qacd.queries_to_pay = 0
+            if fee.sale.status == 1:
+                qacd.status = 3
             qacd.save()
             # actualizo a pyrebase si es el elegido
             if 'test' not in sys.argv:
@@ -115,16 +118,16 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
     """Serializer del Pago."""
     match = serializers.PrimaryKeyRelatedField(
             queryset=Match.objects.all(), required=True, write_only=True)
-
     operation_number = serializers.CharField(validators=[UniqueValidator(
-        queryset=Payment.objects.all())], required=True)
+        queryset=Payment.objects.all())], required=False, allow_null = True, allow_blank=True)
 
     class Meta:
         """Modelo."""
 
         model = Payment
         fields = ('amount', 'operation_number', 'payment_type',
-                  'observations', 'bank', 'id', 'match')
+                  'observations', 'bank', 'id', 'match', 'file_url',
+                  'file_preview_url')
 
     def validate_amount(self, value):
         """Validacion de amount."""
@@ -177,13 +180,16 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
 
     match = serializers.PrimaryKeyRelatedField(
             queryset=Match.objects.all(), required=True, write_only=True)
+    operation_number = serializers.CharField(validators=[UniqueValidator(
+        queryset=Payment.objects.all())], required=False, allow_null = True, allow_blank=True)
 
     class Meta:
         """Modelo."""
 
         model = Payment
         fields = ('amount', 'operation_number', 'payment_type',
-                  'observations', 'bank', 'id', 'match')
+                  'observations', 'bank', 'id', 'match', 'file_url',
+                  'file_preview_url')
 
     def validate_amount(self, value):
         """Validacion de amount."""
@@ -199,11 +205,11 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
         match = validated_data.pop('match')
         # import pdb; pdb.set_trace()
         match = Match.objects.get(pk=match.id)
-        # import pdb; pdb.set_trace()       
+        # import pdb; pdb.set_trace()
 
         instance = Payment(**validated_data)
         instance.save()
-        match.status = 5        
+        match.status = 5
         match.save()
         return instance
 

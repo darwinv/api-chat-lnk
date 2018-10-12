@@ -220,8 +220,11 @@ urlpatterns = [
 
     url(r'^specialists/matchs/upload_files/(?P<pk>[0-9]+)/$',
         match.SpecialistMatchUploadFilesView.as_view(), name='specialists-match-files'),
+
     url(r'^clients/sales/upload_files/(?P<pk>[0-9]+)/$',
         match.SaleClientUploadFilesView.as_view(), name='client-sale-files'),
+
+
 
     # Listado de matchs para el especialista
     url(r'^specialists/matchs/$',
@@ -332,7 +335,7 @@ urlpatterns = [
     url(r'^purchase/$',
         purchase.CreatePurchase.as_view(), name='purchase'),
 
-    url(r'^purchase/(?P<pk>[0-9]+)$',
+    url(r'^purchase/(?P<pk>[0-9]+)/$',
         purchase.PurchaseDetail.as_view(), name='purchase-detail'),
 
     # Pagos

@@ -2,7 +2,7 @@
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from rest_framework import status
-from api.models import SaleDetail
+from api.models import Sale
 from django.urls import reverse
 import json
 
@@ -56,6 +56,26 @@ class PurchaseQueryPlans(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
+class PurchaseDelete(APITestCase):
+    """Pago de Compra."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_purchase']
+
+    def setUp(self):
+        """Setup."""
+        self.url = 'purchase-detail'
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer RCOM8gcbsOv56QFlcCJpgDENETGCLr')
+
+    def test_delete_sale(self):
+        """Delete Sale."""
+        self.assertEqual(2, Sale.objects.all().count())
+        response = self.client.delete(reverse(self.url, kwargs={'pk': 11}))
+        self.assertEqual(1, Sale.objects.all().count())
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class PurchaseQueryPromotionalPlans(APITestCase):
     """Compra  de plan promocional."""
     fixtures = ['data', 'data2', 'data3', 'test_purchase']
@@ -82,7 +102,7 @@ class PurchaseQueryPromotionalPlans(APITestCase):
         response = client.post(reverse('purchase'),
                                data=json.dumps(self.valid_payload),
                                content_type='application/json')
-        
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_promotional_for_seller(self):
@@ -96,13 +116,12 @@ class PurchaseQueryPromotionalPlans(APITestCase):
 
     def test_promotional_repeat_client(self):
         """Compra exitosa promocional."""
-        
+
         response = client.post(reverse('purchase'),
                                data=json.dumps(self.valid_payload),
                                content_type='application/json')
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        
+
         response2 = client.post(reverse('purchase'),
                                 data=json.dumps(self.valid_payload),
                                 content_type='application/json')

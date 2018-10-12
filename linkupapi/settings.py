@@ -45,14 +45,7 @@ INSTALLED_APPS = [
 ]
 
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ]
-}
+
 
 OAUTH2_PROVIDER = {
     'ACCESS_TOKEN_EXPIRE_SECONDS': 31104000,
@@ -152,13 +145,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'files/')
 TEST_URL = os.path.join(BASE_DIR, 'api/tests/files')
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination',
     'PAGE_SIZE': 20,
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
-
 # Capas de Canal de Channels
 CHANNEL_LAYERS = {
     "default": {
