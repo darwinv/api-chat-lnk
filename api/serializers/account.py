@@ -53,9 +53,12 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
             status__range=(1, 3), category=category_id,
             created_at__range=(primer, hoy)).count()
 
-        match_total = Match.objects.filter(specialist=specialist).count()
-        match_accepted = Match.objects.filter(specialist=specialist, status=5).count()
-        match_declined = Match.objects.filter(specialist=specialist, status=3).count()
+        match_total = Match.objects.filter(specialist=specialist,
+                                            created_at__range=(primer, hoy)).count()
+        match_accepted = Match.objects.filter(specialist=specialist, status=5,
+                                            created_at__range=(primer, hoy)).count()
+        match_declined = Match.objects.filter(specialist=specialist, status=3,
+                                            created_at__range=(primer, hoy)).count()
 
         # consultas por especialista
         # queries_specialist = obj.filter(status__range=(4, 5)).count()
@@ -199,9 +202,9 @@ class ClientAccountSerializer(serializers.Serializer):
 
         serializers_plans = QueryPlansAcquiredSimpleSerializer(plan, many=True)
 
-        match_acquired = Match.objects.filter(client=client_id).count()
-        match_absolved = Match.objects.filter(client=client_id, status=5).count()
-        match_declined = Match.objects.filter(client=client_id, status=3).count()
+        match_acquired = Match.objects.filter(client=client_id, created_at__range=(start, new_end)).count()
+        match_absolved = Match.objects.filter(client=client_id, status=5, created_at__range=(start, new_end)).count()
+        match_declined = Match.objects.filter(client=client_id, status=3, created_at__range=(start, new_end)).count()
 
         return {
                 "plans": serializers_plans.data,

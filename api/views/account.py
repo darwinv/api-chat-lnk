@@ -100,7 +100,7 @@ class ClientAccountView(APIView):
             queryplansclient__client=client, queryplansclient__owner=True,
             sale_detail__sale__status__range=(2, 3),
             activation_date__lte=today)
-        # import pdb; pdb.set_trace()
+        
         serializer = ClientAccountSerializer(queryset,
                                              context={"client": client})
         serializer_historic = ClientAccountHistoricSerializer(queryset,
