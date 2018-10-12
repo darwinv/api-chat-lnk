@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-25 09:42-0500\n"
+"POT-Creation-Date: 2018-10-11 19:34-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,8 +43,8 @@ msgstr "Activar"
 msgid "Reject"
 msgstr "Rechazar"
 
-#: .\api\api_choices_models.py:23 .\api\api_choices_models.py:155
-#: .\api\api_choices_models.py:166
+#: .\api\api_choices_models.py:23 .\api\api_choices_models.py:165
+#: .\api\api_choices_models.py:176
 msgid "Deactivated"
 msgstr "Desactivado"
 
@@ -133,17 +133,17 @@ msgid "Associate"
 msgstr "Asociado"
 
 #: .\api\api_choices_models.py:69 .\api\api_choices_models.py:109
-#: .\api\api_choices_models.py:118
+#: .\api\api_choices_models.py:126
 msgid "Requested"
 msgstr "Preguntada"
 
 #: .\api\api_choices_models.py:70 .\api\api_choices_models.py:103
-#: .\api\api_choices_models.py:110 .\api\api_choices_models.py:119
+#: .\api\api_choices_models.py:110 .\api\api_choices_models.py:127
 msgid "Accepted"
 msgstr "Aceptado"
 
 #: .\api\api_choices_models.py:71 .\api\api_choices_models.py:104
-#: .\api\api_choices_models.py:120
+#: .\api\api_choices_models.py:128
 msgid "Declined"
 msgstr "Rechazado"
 
@@ -192,79 +192,139 @@ msgstr "Por calificar"
 msgid "Absolved"
 msgstr "Absuelto"
 
-#: .\api\api_choices_models.py:125 .\api\templates\email\support.html:16
+#: .\api\api_choices_models.py:118
+msgid "Reserved"
+msgstr "Reservado"
+
+#: .\api\api_choices_models.py:119
+msgid "Pending Confirmation"
+msgstr "Por Confirmar"
+
+#: .\api\api_choices_models.py:120
+msgid "Insert Your Pin"
+msgstr "Inserte tu codigo PIN"
+
+#: .\api\api_choices_models.py:121
+msgid "In Use"
+msgstr "En Uso"
+
+#: .\api\api_choices_models.py:122
+msgid "Culminated"
+msgstr "Culminado"
+
+#: .\api\api_choices_models.py:129
+msgid "Pending paid client"
+msgstr "Pago pendiente del cliente"
+
+#: .\api\api_choices_models.py:130
+msgid "Done"
+msgstr "Listo"
+
+#: .\api\api_choices_models.py:131
+msgid "Voucher uploaded"
+msgstr "Voucher subido"
+
+#: .\api\api_choices_models.py:135
+msgid "paid_bank"
+msgstr ""
+
+#: .\api\api_choices_models.py:136
+msgid "make_discount"
+msgstr ""
+
+#: .\api\api_choices_models.py:141 .\api\templates\email\support.html:16
 msgid "query"
 msgstr "consulta"
 
-#: .\api\api_choices_models.py:126
+#: .\api\api_choices_models.py:142
 msgid "requery"
 msgstr "reconsulta"
 
-#: .\api\api_choices_models.py:127
+#: .\api\api_choices_models.py:143
 msgid "answer"
 msgstr "responder"
 
-#: .\api\api_choices_models.py:131
+#: .\api\api_choices_models.py:148
 msgid "Text"
 msgstr "Texto"
 
-#: .\api\api_choices_models.py:132 .\api\api_choices_models.py:140
+#: .\api\api_choices_models.py:149
 msgid "Image"
 msgstr "Imagen"
 
-#: .\api\api_choices_models.py:133
+#: .\api\api_choices_models.py:150
 msgid "Video"
 msgstr "Video"
 
-#: .\api\api_choices_models.py:134 .\api\api_choices_models.py:141
+#: .\api\api_choices_models.py:151
 msgid "Voice"
 msgstr "Voz"
 
-#: .\api\api_choices_models.py:135 .\api\api_choices_models.py:142
+#: .\api\api_choices_models.py:152
 msgid "Document"
 msgstr "Documento"
 
-#: .\api\api_choices_models.py:147
+#: .\api\api_choices_models.py:157
 msgid "Critic"
 msgstr "Crítico"
 
-#: .\api\api_choices_models.py:148
+#: .\api\api_choices_models.py:158
 msgid "Moderate"
 msgstr "Moderar"
 
-#: .\api\api_choices_models.py:149
+#: .\api\api_choices_models.py:159
 msgid "Positive"
 msgstr "Positivo"
 
-#: .\api\api_choices_models.py:154 .\api\api_choices_models.py:165
+#: .\api\api_choices_models.py:164 .\api\api_choices_models.py:175
 msgid "Active"
 msgstr "Activo"
 
-#: .\api\api_choices_models.py:160
+#: .\api\api_choices_models.py:170
 msgid "Transfer"
 msgstr "Transferir"
 
-#: .\api\api_choices_models.py:161
+#: .\api\api_choices_models.py:171
 msgid "Share"
 msgstr "Compartir"
 
-#: .\api\api_choices_models.py:162
+#: .\api\api_choices_models.py:172
 msgid "Empower"
 msgstr "Facultar"
 
-#: .\api\api_choices_models.py:167
+#: .\api\api_choices_models.py:177
 msgid "Processing"
 msgstr "Procesando"
 
-#: .\api\api_choices_models.py:171
+#: .\api\api_choices_models.py:181
+msgid "Loaded"
+msgstr "Cargado"
+
+#: .\api\api_choices_models.py:182
+msgid "Sent"
+msgstr "Enviado"
+
+#: .\api\api_choices_models.py:183
+msgid "Delivered"
+msgstr "Entregado"
+
+#: .\api\api_choices_models.py:184
+msgid "Read"
+msgstr "Leido"
+
+#: .\api\api_choices_models.py:185
+msgid "Failed"
+msgstr "Fallo"
+
+#: .\api\api_choices_models.py:189
 msgid "Effective"
 msgstr "Efectivo"
 
-#: .\api\api_choices_models.py:172
+#: .\api\api_choices_models.py:190
 msgid "Non Effective"
 msgstr "No Efectivo"
 
-#: .\api\api_choices_models.py:173
+#: .\api\api_choices_models.py:191
 msgid "Effective paid"
 msgstr "Efectivo pagado"
 
@@ -300,7 +360,7 @@ msgstr "numero de documento"
 msgid "upload document"
 msgstr "subir documento"
 
-#: .\api\models.py:131 .\api\models.py:647
+#: .\api\models.py:131 .\api\models.py:658
 msgid "code"
 msgstr "codigo"
 
@@ -320,7 +380,7 @@ msgstr "nacionalidad"
 msgid "role"
 msgstr "rol"
 
-#: .\api\models.py:142 .\api\serializers\actors.py:764
+#: .\api\models.py:142 .\api\serializers\actors.py:774
 msgid "address"
 msgstr "direccion"
 
@@ -340,81 +400,90 @@ msgstr "contacto con el país de residencia"
 msgid "Bank"
 msgstr "Banco"
 
-#: .\api\models.py:525
+#: .\api\models.py:524
 msgid "amount"
 msgstr "cantidad"
 
-#: .\api\models.py:526
+#: .\api\models.py:525
 msgid "operation number"
 msgstr "numero de operacion"
 
-#: .\api\models.py:527
+#: .\api\models.py:526
 msgid "observations"
 msgstr "observaciones"
 
-#: .\api\models.py:703 .\api\templates\email\support.html:18
+#: .\api\models.py:714 .\api\templates\email\support.html:18
 msgid "message"
 msgstr "mensaje"
 
-#: .\api\models.py:704
+#: .\api\models.py:715
 msgid "viewed"
 msgstr "visto"
 
-#: .\api\serializers\actors.py:268 .\api\serializers\actors.py:279
-#: .\api\serializers\actors.py:545 .\api\serializers\actors.py:557
-#: .\api\serializers\actors.py:838 .\api\serializers\actors.py:849
+#: .\api\serializers\actors.py:269 .\api\serializers\actors.py:280
+#: .\api\serializers\actors.py:546 .\api\serializers\actors.py:558
+#: .\api\serializers\actors.py:848 .\api\serializers\actors.py:859
 msgid "This field must be unique"
 msgstr "Este campo debe ser unico"
 
-#: .\api\serializers\actors.py:290
+#: .\api\serializers\actors.py:291
 msgid "You must be of legal age"
 msgstr "Debes ser mayor de edad"
 
-#: .\api\serializers\actors.py:295 .\api\serializers\actors.py:329
-#: .\api\serializers\actors.py:365 .\api\serializers\actors.py:450
-#: .\api\serializers\actors.py:690 .\api\serializers\actors.py:763
-#: .\api\serializers\actors.py:1079 .\api\serializers\actors.py:1409
-#: .\api\serializers\query.py:53 .\api\views\actors.py:122
-#: .\api\views\actors.py:164 .\api\views\actors.py:192
-#: .\api\views\actors.py:243 .\api\views\actors.py:272
-#: .\api\views\actors.py:446 .\api\views\actors.py:752
-#: .\api\views\actors.py:797 .\api\views\actors.py:970
-#: .\api\views\actors.py:1138 .\api\views\actors.py:1537
-#: .\api\views\payment.py:41 .\api\views\payment.py:96 .\api\views\plan.py:161
-#: .\api\views\plan.py:308 .\api\views\plan.py:415 .\api\views\plan.py:825
-#: .\api\views\query.py:778
+#: .\api\serializers\actors.py:296 .\api\serializers\actors.py:330
+#: .\api\serializers\actors.py:366 .\api\serializers\actors.py:451
+#: .\api\serializers\actors.py:691 .\api\serializers\actors.py:773
+#: .\api\serializers\actors.py:1114 .\api\serializers\actors.py:1444
+#: .\api\serializers\query.py:55 .\api\views\actors.py:124
+#: .\api\views\actors.py:166 .\api\views\actors.py:194
+#: .\api\views\actors.py:245 .\api\views\actors.py:274
+#: .\api\views\actors.py:447 .\api\views\actors.py:753
+#: .\api\views\actors.py:799 .\api\views\actors.py:970
+#: .\api\views\actors.py:1149 .\api\views\actors.py:1548
+#: .\api\views\match.py:228 .\api\views\match.py:276 .\api\views\payment.py:135
+#: .\api\views\payment.py:190 .\api\views\payment.py:222
+#: .\api\views\plan.py:161 .\api\views\plan.py:308 .\api\views\plan.py:415
+#: .\api\views\plan.py:827 .\api\views\query.py:776
 msgid "required"
 msgstr "requerido"
 
-#: .\api\serializers\actors.py:330
+#: .\api\serializers\actors.py:331
 msgid "Tax Code"
 msgstr "Registro de información Fiscal"
 
-#: .\api\serializers\actors.py:550 .\api\serializers\actors.py:608
+#: .\api\serializers\actors.py:551 .\api\serializers\actors.py:609
 msgid "Main Specialist already exists for this speciality"
 msgstr "Especialista Principal ya existe para esta especialidad"
 
-#: .\api\serializers\actors.py:1094
+#: .\api\serializers\actors.py:1129
 msgid "the objection is required"
 msgstr "la objeción es requerida"
 
-#: .\api\serializers\actors.py:1097
+#: .\api\serializers\actors.py:1132
 msgid "password required"
 msgstr "contraseña requerida"
 
-#: .\api\serializers\actors.py:1348 .\api\serializers\actors.py:1393
+#: .\api\serializers\actors.py:1383 .\api\serializers\actors.py:1428
 msgid "old password is invalid"
 msgstr "contraseña anterior es invalidad"
 
-#: .\api\serializers\query.py:187
+#: .\api\serializers\match.py:34
+msgid "you can not hire that specialty anymore"
+msgstr "ya posees una contratación con esta especialidad"
+
+#: .\api\serializers\payment.py:200
+msgid "This field must not be lesser than the corresponding"
+msgstr "Este campo no puede ser menor al correspondiente"
+
+#: .\api\serializers\query.py:189
 msgid "You need to have an active plan"
 msgstr "Necesitas tener un plan activo"
 
-#: .\api\serializers\query.py:189
+#: .\api\serializers\query.py:191
 msgid "You don't have available queries"
 msgstr "No tienes consultas disponibles"
 
-#: .\api\serializers\query.py:361
+#: .\api\serializers\query.py:366
 msgid "You don't have available requeries"
 msgstr "No tienes consultas disponibles"
 
@@ -444,10 +513,8 @@ msgid "Please click the next link for get your plan empower"
 msgstr "Por favor dale click al siguiente link para obtener tu plan facultado"
 
 #: .\api\templates\email\pin_code.html:6
-#, fuzzy
-#| msgid "Your pin code"
 msgid "Your Pin Code"
-msgstr "¡Tu codigo pin!"
+msgstr "Tu codigo PIN!"
 
 #: .\api\templates\email\pin_code.html:16
 msgid "Name of the Plan"
@@ -462,10 +529,8 @@ msgid "Number of Queries"
 msgstr "Cantidad de Consultas"
 
 #: .\api\templates\email\pin_code.html:19
-#, fuzzy
-#| msgid "Your pin code"
 msgid "Pin code"
-msgstr "¡Tu codigo pin!"
+msgstr "Tu codigo PIN"
 
 #: .\api\templates\email\send_code.html:5
 msgid "Recovery Password"
@@ -484,14 +549,10 @@ msgid "Credentials for your Linkup account"
 msgstr "Credenciales de tu cuenta Linkup"
 
 #: .\api\templates\email\send_credentials.html:6
-msgid "credentials"
-msgstr "credenciales"
-
-#: .\api\templates\email\send_credentials.html:7
 msgid "user"
 msgstr "usuario"
 
-#: .\api\templates\email\send_credentials.html:8
+#: .\api\templates\email\send_credentials.html:7
 msgid "password"
 msgstr "contraseña"
 
@@ -512,14 +573,14 @@ msgstr ""
 msgid "yesterday"
 msgstr "ayer"
 
-#: .\api\views\actors.py:165 .\api\views\actors.py:193
-#: .\api\views\actors.py:244 .\api\views\actors.py:273
-#: .\api\views\actors.py:1139
+#: .\api\views\actors.py:167 .\api\views\actors.py:195
+#: .\api\views\actors.py:246 .\api\views\actors.py:275
+#: .\api\views\actors.py:1150
 msgid "not valid"
 msgstr "no valido"
 
 #: .\api\views\plan.py:162 .\api\views\plan.py:309 .\api\views\plan.py:417
-#: .\api\views\plan.py:664
+#: .\api\views\plan.py:666
 msgid "invalid"
 msgstr "inválido"
 
@@ -547,53 +608,56 @@ msgstr "Ya ha sido compartido"
 msgid "it already exists"
 msgstr "ya existe"
 
-#: .\api\views\plan.py:665
+#: .\api\views\plan.py:667
 msgid "the plan was previously transferred for this user"
 msgstr "El plan ya fue transferido previamente a este usuario"
 
-#: .\api\views\plan.py:666
+#: .\api\views\plan.py:668
 msgid "Has already been empowered"
 msgstr "Ya ha sido facultado"
 
-#: .\api\views\plan.py:667
+#: .\api\views\plan.py:669
 msgid "Has already been shared"
 msgstr "Ya ha sido compartido"
 
-#: .\api\views\plan.py:669
+#: .\api\views\plan.py:671
 msgid "it can not be share"
 msgstr "no puede ser compartido"
 
-#: .\api\views\plan.py:670
+#: .\api\views\plan.py:672
 msgid "it can not be empower"
 msgstr "no puede ser facultado"
 
-#: .\api\views\plan.py:671
+#: .\api\views\plan.py:673
 msgid "it can not be transfer"
 msgstr "no puede ser transferido"
 
-#: .\api\views\plan.py:673
+#: .\api\views\plan.py:675
 msgid "you can not be shared by yourself"
 msgstr "no puedes compartirlo con tigo mismo"
 
-#: .\api\views\plan.py:674
+#: .\api\views\plan.py:676
 msgid "you can not be empowered by yourself"
 msgstr "no puedes facultarte a con tigo mismo"
 
-#: .\api\views\plan.py:675
+#: .\api\views\plan.py:677
 msgid "you can not be transferred by yourself"
 msgstr "no puedes trasferirte a con tigo mismo"
 
-#: .\api\views\plan.py:824
+#: .\api\views\plan.py:826
 msgid "You don't have permissions"
 msgstr "No tienes permisos"
 
-#: .\linkupapi\settings.py:122
+#: .\linkupapi\settings.py:115
 msgid "Spanish"
 msgstr "Español"
 
-#: .\linkupapi\settings.py:123
+#: .\linkupapi\settings.py:116
 msgid "English"
 msgstr "Ingles"
+
+#~ msgid "credentials"
+#~ msgstr "credenciales"
 
 #~ msgid "Title"
 #~ msgstr "titulo"
@@ -622,9 +686,6 @@ msgstr "Ingles"
 
 #~ msgid "Pending Response"
 #~ msgstr "Respuesta pendiente"
-
-#~ msgid "Pending Main Response"
-#~ msgstr "Respuesta principal pendiente"
 
 #~ msgid "Answered Main"
 #~ msgstr "Respondido Principal"
