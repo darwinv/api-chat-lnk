@@ -40,8 +40,10 @@ class SpecialistAccountView(APIView):
 
         if specialist.type_specialist == "m":
             serializer = SpecialistAccountSerializer(queryset,
-                                                     context={'category': specialist.category
-                                                              })
+                                                     context={
+                                                     'category': specialist.category,
+                                                     'specialist': specialist,
+                                                     })
             serializer_historic = SpecialistHistoricAccountSerializer(queryset,
                                                      context={'category': specialist.category
                                                               })

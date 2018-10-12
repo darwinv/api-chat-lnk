@@ -2,10 +2,12 @@
 from rest_framework import serializers
 from api.models import Specialist, Query, SellerContact, ParameterSeller
 from api.models import SellerNonBillablePlans, Declinator, QueryPlansAcquired
+from api.models import Match
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime, timedelta, date
 from django.db.models import Count, Sum, Q
 from api.serializers.plan import QueryPlansAcquiredSimpleSerializer
+
 
 class SpecialistAccountSerializer(serializers.ModelSerializer):
     """Serializer de estado de cuenta Especialista"""
@@ -19,8 +21,9 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """To Representation."""
 
-
         category_id = self.context["category"]
+        specialist = self.context["specialist"]
+
         # fecha de hoy
         hoy = datetime.now()
         # fecha de primer  dia del mes
@@ -50,6 +53,10 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
             status__range=(1, 3), category=category_id,
             created_at__range=(primer, hoy)).count()
 
+        match_total = Match.objects.filter(specialist=specialist).count()
+        match_accepted = Match.objects.filter(specialist=specialist, status=5).count()
+        match_declined = Match.objects.filter(specialist=specialist, status=3).count()
+
         # consultas por especialista
         # queries_specialist = obj.filter(status__range=(4, 5)).count()
         queries_asociate_total = queries_category_absolved+queries_category_pending - queries_main_absolved-queries_main_pending
@@ -66,9 +73,9 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
                 "queries_asociate_absolved": queries_category_absolved - queries_main_absolved,
                 "queries_asociate_pending": queries_category_pending - queries_main_pending,
 
-                "match_total": 0,
-                "match_accepted": 0,
-                "match_declined": 0,
+                "match_total": match_total,
+                "match_accepted": match_accepted,
+                "match_declined": match_declined,
                 }
 
 class SpecialistHistoricAccountSerializer(serializers.ModelSerializer):
@@ -195,11 +202,15 @@ class ClientAccountSerializer(serializers.Serializer):
 
         serializers_plans = QueryPlansAcquiredSimpleSerializer(plan, many=True)
 
+        match_acquired = Match.objects.filter(client=client_id).count()
+        match_absolved = Match.objects.filter(client=client_id, status=5).count()
+        match_declined = Match.objects.filter(client=client_id, status=3).count()
+
         return {
                 "plans": serializers_plans.data,
-                "match_acquired": 0,
-                "match_absolved": 0,
-                "match_declined": 0
+                "match_acquired": match_acquired,
+                "match_absolved": match_absolved,
+                "match_declined": match_declined
                 }
 
 
