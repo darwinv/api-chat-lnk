@@ -76,6 +76,35 @@ class PurchaseDelete(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
+class ContactPurchaseQueryPlans(APITestCase):
+    """Caso de pruebas para Compras."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_purchase']
+
+    def setUp(self):
+        """Setup."""
+        self.valid_payload = {
+            "place": "BCP",
+            "description": "test",
+            "is_fee": 0,
+            "email_exact": 'darwin-vasqz@gmail.com',
+            "products": [{
+                "product_type": 1,
+                "is_billable": 1,
+                "plan_id": 2,
+                "quantity": 1
+               }]
+        }
+
+    def test_purchase_ok(self):
+        """Compra exitosa."""
+        response = client.post(reverse('contact-purchase'),
+                               data=json.dumps(self.valid_payload),
+                               content_type='application/json')
+        import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
 class PurchaseQueryPromotionalPlans(APITestCase):
     """Compra  de plan promocional."""
     fixtures = ['data', 'data2', 'data3', 'test_purchase']

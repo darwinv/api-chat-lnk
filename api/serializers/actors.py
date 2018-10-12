@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
 from dateutil.relativedelta import relativedelta
 from api.emails import BasicEmailAmazon
+from django.http import Http404
 from rest_framework.response import Response
 from api.utils.tools import capitalize as cap
 from api.utils.parameters import Params
@@ -192,7 +193,7 @@ class ClientSerializer(serializers.ModelSerializer):
     residence_country = serializers.PrimaryKeyRelatedField(
         queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
-    commercial_reason = serializers.CharField(required=False)
+    commercial_reason = serializers.CharField(required=False, allow_null=True)
     birthdate = serializers.DateField(required=True)
 
     photo = serializers.CharField(read_only=True)
@@ -1078,6 +1079,57 @@ class ObjectionsContactSerializer(serializers.ModelSerializer):
                 other['name'] = obj.other_objection
                 data["objections"].append(other)
         return data
+
+
+class ContactToClientSerializer(serializers.ModelSerializer):
+    """Pasar de Contacto a Cliente."""
+
+    class Meta:
+        """ Model Contacto."""
+        model = SellerContact
+        fields = ('email_exact',)
+
+    def create(self, validated_data):
+        email = validated_data["email_exact"]
+        try:
+            contact = SellerContact.objects.get(email_exact=email)
+        except SellerContact.DoesNotExist:
+            raise Http404
+
+        data_client = SellerContact.objects.filter(
+            email_exact=email).values().first()
+        # import pdb; pdb.set_trace()
+        data_client["username"] = email
+        data_client["role"] = Params.ROLE_CLIENT
+        data_client['seller_assigned'] = contact.seller
+        password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
+        data_client["password"] = password
+        data_client["nationality"] = contact.nationality_id
+        data_client["residence_country"] = contact.residence_country_id
+        data_client["level_instruction"] = contact.level_instruction_id
+        data_client["address"] = AddressSerializer(contact.address).data
+
+        if data_client["type_client"] == 'b':
+            data_client['birthdate'] = '1900-01-01'
+            data_client['sex'] = ''
+            data_client['civil_state'] = ''
+            data_client['level_instruction'] = ''
+            data_client['profession'] = ''
+            data_client['ocupation'] = None
+
+        serializer_client = ClientSerializer(data=data_client)
+        if serializer_client.is_valid():
+            serializer_client.save()
+            self.context['client_id'] = serializer_client.data['id']
+        else:
+            raise serializers.ValidationError(serializer_client.errors)
+        return contact
+
+    def to_representation(self, instance):
+        """To Repr."""
+
+        client_id = self.context['client_id']
+        return {"client_id": client_id}
 
 
 class BaseSellerContactSerializer(serializers.ModelSerializer):

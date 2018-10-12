@@ -335,6 +335,9 @@ urlpatterns = [
     url(r'^purchase/$',
         purchase.CreatePurchase.as_view(), name='purchase'),
 
+    url(r'^contact/purchase/$',
+        purchase.ContactNoEffectivePurchase.as_view(), name='contact-purchase'),
+
     url(r'^purchase/(?P<pk>[0-9]+)/$',
         purchase.PurchaseDetail.as_view(), name='purchase-detail'),
 
