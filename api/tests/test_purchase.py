@@ -96,12 +96,20 @@ class ContactPurchaseQueryPlans(APITestCase):
                }]
         }
 
+    def test_purchase_business(self):
+        """Compra exitosa."""
+        data = self.valid_payload.copy()
+        data["email_exact"] = "munitambo@mail.com"
+        response = client.post(reverse('contact-purchase'),
+                               data=json.dumps(self.valid_payload),
+                               content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_purchase_ok(self):
         """Compra exitosa."""
         response = client.post(reverse('contact-purchase'),
                                data=json.dumps(self.valid_payload),
                                content_type='application/json')
-        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
