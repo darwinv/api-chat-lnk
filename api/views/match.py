@@ -19,6 +19,7 @@ from api.serializers.match import MatchListSerializer
 from api.permissions import IsAdminOrClient, IsOwnerAndClient
 from api.permissions import IsAdminOrSpecialist, IsAdminOnList
 from api.models import Match, MatchFile, Sale, QueryPlansAcquired
+from api.models import SellerContact
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.logger import manager
 logger = manager.setup_log(__name__)
@@ -297,6 +298,10 @@ class SaleClientUploadFilesView(APIView):
 
         Match.objects.filter(
             sale_detail__sale=obj_instance, status=4).update(status=6)
+
+        SellerContact.objects.filter(
+            email_exact=obj_instance.client.email_exact).update(type_contact=1)
+        
         
         return HttpResponse(status=200)
 
