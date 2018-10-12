@@ -93,6 +93,8 @@ class SpecialistHistoricAccountSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """To Representation."""
         category_id = self.context["category"]
+        specialist_id = self.context["specialist"]
+
         queries_main_absolved = obj.filter(
             status__range=(4, 5)).count()
 
@@ -100,10 +102,13 @@ class SpecialistHistoricAccountSerializer(serializers.ModelSerializer):
         queries_category_absolved = Query.objects.filter(
             status__range=(4, 5), category=category_id).count()
 
+        match_accepted = Match.objects.filter(specialist=specialist_id, status=5).count()
+
         return {
                 "queries_category_absolved": queries_category_absolved,
                 "queries_main_absolved": queries_main_absolved,
-                "queries_asociate_absolved": queries_category_absolved - queries_main_absolved
+                "queries_asociate_absolved": queries_category_absolved - queries_main_absolved,
+                "match_accepted": match_accepted
                 }
 
 class SpecialistAsociateAccountSerializer(serializers.ModelSerializer):

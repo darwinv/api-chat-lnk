@@ -45,7 +45,8 @@ class SpecialistAccountView(APIView):
                                                      'specialist': specialist,
                                                      })
             serializer_historic = SpecialistHistoricAccountSerializer(queryset,
-                                                     context={'category': specialist.category
+                                                     context={'category': specialist.category,
+                                                              'specialist': specialist
                                                               })
         else:
             serializer = SpecialistAsociateAccountSerializer(queryset)
