@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from api.views import actors, query, category, email, authorization, payment
 from api.views import validations, plan, chat, oauth, static_data, purchase
-from api.views import account, match
+from api.views import account, match, notification
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
 router = routers.DefaultRouter()
@@ -364,4 +364,6 @@ urlpatterns = [
     url(r'^clients/sales/have-payment-pending/$',
         payment.ClientHaveSalePending.as_view(), name='payment-pending-sale-client'),
 
+    url(r'^pending/data/$',
+        notification.PendingNotificationView.as_view(), name='get-badge'),
 ]
