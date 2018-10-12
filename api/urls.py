@@ -225,7 +225,6 @@ urlpatterns = [
         match.SaleClientUploadFilesView.as_view(), name='client-sale-files'),
 
 
-
     # Listado de matchs para el especialista
     url(r'^specialists/matchs/$',
         match.MatchListSpecialistView.as_view(),
