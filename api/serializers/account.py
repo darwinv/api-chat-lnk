@@ -19,7 +19,7 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """To Representation."""
 
-        
+
         category_id = self.context["category"]
         # fecha de hoy
         hoy = datetime.now()
@@ -30,7 +30,7 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
         # queries_declined = Declinator.objects.filter(
         #     specialist=specialist,
         #     query__created_at__range=(primer, hoy)).count()
-        
+
         # calculó de las consultas absueltas del mes
         queries_main_absolved = obj.filter(
             status__range=(4, 5),
@@ -39,7 +39,7 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
         queries_main_pending = obj.filter(
             status__range=(1, 3),
             created_at__range=(primer, hoy)).count()
-        
+
         # calculó el numero de consultas absueltas mensual por especialidad
         queries_category_absolved = Query.objects.filter(
             status__range=(4, 5), category=category_id,
@@ -57,11 +57,11 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
                 "queries_category_total": queries_category_absolved+queries_category_pending,
                 "queries_category_absolved": queries_category_absolved,
                 "queries_category_pending": queries_category_pending,
-                
-                "queries_main_total": queries_main_absolved+queries_main_pending,  
+
+                "queries_main_total": queries_main_absolved+queries_main_pending,
                 "queries_main_absolved": queries_main_absolved,
                 "queries_main_pending": queries_main_pending,
-                              
+
                 "queries_asociate_total": queries_asociate_total,
                 "queries_asociate_absolved": queries_category_absolved - queries_main_absolved,
                 "queries_asociate_pending": queries_category_pending - queries_main_pending,
@@ -93,7 +93,7 @@ class SpecialistHistoricAccountSerializer(serializers.ModelSerializer):
         return {
                 "queries_category_absolved": queries_category_absolved,
                 "queries_main_absolved": queries_main_absolved,
-                "queries_asociate_absolved": queries_category_absolved - queries_main_absolved       
+                "queries_asociate_absolved": queries_category_absolved - queries_main_absolved
                 }
 
 class SpecialistAsociateAccountSerializer(serializers.ModelSerializer):
@@ -194,13 +194,14 @@ class ClientAccountSerializer(serializers.Serializer):
                                             queryplansclient__client=client_id)
 
         serializers_plans = QueryPlansAcquiredSimpleSerializer(plan, many=True)
-        
+
         return {
                 "plans": serializers_plans.data,
                 "match_acquired": 0,
                 "match_absolved": 0,
                 "match_declined": 0
                 }
+
 
 class ClientAccountHistoricSerializer(serializers.Serializer):
     """Serializer de estado de cuenta de Cliente."""
@@ -213,7 +214,7 @@ class ClientAccountHistoricSerializer(serializers.Serializer):
         queries_client = obj.aggregate(query_quantity=Sum('query_quantity'),
                              available_queries=Sum('available_queries'),
                              queries_to_pay=Sum('queries_to_pay'))
-                
+
         queries_acquired = queries_client["query_quantity"] if queries_client["query_quantity"] else 0
         queries_available = queries_client["available_queries"] if queries_client["available_queries"] else 0
         queries_to_pay = queries_client["queries_to_pay"] if queries_client["queries_to_pay"] else 0
@@ -236,10 +237,10 @@ class SellerAccountSerializer(serializers.Serializer):
         seller = self.context["seller"]
 
         # fecha de hoy
-        to_date = datetime.now()  
+        to_date = datetime.now()
         # fecha de primer  dia del mes
         from_date = datetime(to_date.year, to_date.month, 1, 0, 0, 0)
-        
+
 
         # clientes nuevos que ya pagaron en este mes
         new_clients = SellerContact.objects.filter(seller=seller,
@@ -300,20 +301,20 @@ class SellerAccountHistoricSerializer(serializers.Serializer):
     def to_representation(self, obj):
         """To Representation."""
         seller = self.context["seller"]
-        
+
         # clientes nuevos que ya pagaron en este mes
         new_clients = SellerContact.objects.filter(seller=seller,
                                                    type_contact=3).count()
         # contactos nuevos registrados
         contacts = SellerContact.objects.filter(seller=seller).count()
-        
+
 
         qs = obj.filter(saledetail__product_type=1,
                         saledetail__is_billable=True,
                         status__range=(2, 3)).values('client_id')
         # Cantidad de personas  que compraron este mes
         people_purchase = qs.annotate(client_count=Count('client_id')).count()
-        
+
 
         return {
                     "total_clients": new_clients,

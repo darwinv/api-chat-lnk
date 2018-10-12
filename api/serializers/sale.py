@@ -166,7 +166,6 @@ class SaleSerializer(serializers.Serializer):
         # solo si no es promocional
         if product["is_billable"]:
             for i in range(1, n_fees+1):
-
                 if n_fees == 1:
                     # Si la venta es de una sola cuota
                     fee_amount = float(instance.total_amount)
@@ -182,7 +181,7 @@ class SaleSerializer(serializers.Serializer):
                         if validity_months >= i:
                             fee_amount = (price/validity_months)*quantity + fee_amount
 
-                pay_day = date.today() + relativedelta(months=i-1) # Hardcoded cambiar la cantidad de dias
+                pay_day = date.today() + relativedelta(months=i-1)  # Hardcoded cambiar la cantidad de dias
                 sale_id = instance
                 MonthlyFee.objects.create(fee_amount=fee_amount,
                                           fee_order_number=i, status=1,

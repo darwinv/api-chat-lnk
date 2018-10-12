@@ -24,7 +24,6 @@ class CreatePurchase(APIView):
         extra = {}
         data = request.data
         user_id = Operations.get_id(self, request)
-        # import pdb; pdb.set_trace()
         if request.user.role_id == 4:
             data["seller"] = user_id
         serializer = SaleSerializer(data=data, context=data)

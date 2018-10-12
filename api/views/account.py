@@ -93,10 +93,12 @@ class ClientAccountView(APIView):
     def get(self, request, pk):
         client = self.get_object(pk)
         today = datetime.now()
+
         queryset = QueryPlansAcquired.objects.filter(queryplansclient__client=client,
                                         queryplansclient__owner=True,
                                         sale_detail__sale__status=3,
                                         activation_date__lte=today)
+        # import pdb; pdb.set_trace()
         serializer = ClientAccountSerializer(queryset,
                                              context={"client": client})
         serializer_historic = ClientAccountHistoricSerializer(queryset,
