@@ -17,7 +17,6 @@ import sys
 from api import pyrebase
 from api.serializers.sale import increment_reference
 
-
 class PaymentSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
 
@@ -33,7 +32,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = Payment
         fields = (
             'amount', 'operation_number', 'monthly_fee', 'payment_type',
-            'observations', 'bank', 'id')
+            'observations', 'bank', 'id', 'file_url', 'file_preview_url')
 
     def validate_amount(self, value):
         """Validacion de amount."""

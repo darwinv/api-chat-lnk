@@ -20,6 +20,8 @@ from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Subquery, Q, OuterRef
 import django_filters.rest_framework
+from api.logger import manager
+logger = manager.setup_log(__name__)
 
 
 class CreatePayment(APIView):
@@ -31,6 +33,16 @@ class CreatePayment(APIView):
         """crear compra."""
         data = request.data
         user_id = Operations.get_id(self, request)
+
+        if "monthly_fee" in data:
+            try:
+                mfee = MonthlyFee.objects.get(pk=data["monthly_fee"])
+                data["file_url"] = mfee.sale.file_url
+                data["file_preview_url"] = mfee.sale.file_preview_url
+            except Match.DoesNotExist:
+                data["file_url"] = ""
+                data["file_preview_url"] = ""
+                logger.warning("no file_url para fee:" + mfee.id)
 
         serializer = PaymentSerializer(data=data)
         if serializer.is_valid():
