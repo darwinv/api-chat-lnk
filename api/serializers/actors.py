@@ -1117,12 +1117,17 @@ class ContactToClientSerializer(serializers.ModelSerializer):
             data_client['level_instruction'] = ''
             data_client['profession'] = ''
             data_client['ocupation'] = None
+            data_client['last_name'] = ''
+            data_client['first_name'] = ''
+            data_client['economic_sector'] = contact.economic_sector_id
+            data_client['ciiu'] = contact.ciiu_id
 
         serializer_client = ClientSerializer(data=data_client)
         if serializer_client.is_valid():
             serializer_client.save()
             self.context['client_id'] = serializer_client.data['id']
         else:
+            import pdb; pdb.set_trace()
             raise serializers.ValidationError(serializer_client.errors)
         return contact
 
