@@ -18,6 +18,7 @@ from api.serializers.actors import ClientSerializer, UserPhotoSerializer
 from api.serializers.actors import KeySerializer, ContactPhotoSerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SellerContactSerializer
+from api.serializers.actors import AssociateSpecialistSerializer
 from api.serializers.actors import SellerContactNaturalSerializer
 from api.serializers.actors import SellerFilterContactSerializer
 from api.serializers.actors import SellerSerializer, SellerContactBusinessSerializer
@@ -495,7 +496,7 @@ class ClientListView(ListCreateAPIView):
                     mail.sendmail(args=credentials)
 
             # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
-            give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
+            # give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
 
             client_id = serializer.data['id']
             email = data['email_exact']
@@ -781,13 +782,14 @@ class SpecialistAsociateListView(ListCreateAPIView):
         except Specialist.DoesNotExist:
             raise Http404
 
-        specialists = Specialist.objects.filter(category=obj.category, type_specialist="a")
+        specialists = Specialist.objects.filter(category=obj.category,
+                                                type_specialist="a")
 
         page = self.paginate_queryset(specialists)
         if page is not None:
-            serializer = SpecialistSerializer(page, many=True)
+            serializer = AssociateSpecialistSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-        serializer = SpecialistSerializer(specialists, many=True)
+        serializer = AssociateSpecialistSerializer(specialists, many=True)
         return Response(serializer.data)
 
 

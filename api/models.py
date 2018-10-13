@@ -419,7 +419,6 @@ class MatchProduct(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
 
-
 class Sale(models.Model):
     """Venta."""
     created_at = models.DateTimeField(auto_now_add=True)
@@ -431,7 +430,8 @@ class Sale(models.Model):
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     seller = models.ForeignKey(Seller, null=True, on_delete=models.PROTECT)
     status = models.PositiveIntegerField(choices=Ch.sale_status, default=1)
-
+    file_url = models.CharField(max_length=500, blank=True)
+    file_preview_url = models.CharField(max_length=500, blank=True)
 
 class SaleDetail(models.Model):
     """Detalle de Venta."""
@@ -462,6 +462,7 @@ class QueryPlansAcquired(models.Model):
     plan_name = models.CharField(max_length=50)
     query_plans = models.ForeignKey(QueryPlans, on_delete=models.PROTECT)
     sale_detail = models.ForeignKey(SaleDetail, on_delete=models.PROTECT)
+    status = models.PositiveIntegerField(choices=Ch.plan_status, default=1)
 
     def __str__(self):
         """String."""
@@ -521,7 +522,7 @@ class Payment(models.Model):
     """Pagos."""
 
     amount = models.FloatField(_("amount"))
-    operation_number = models.CharField(_("operation number"), max_length=12)
+    operation_number = models.CharField(_("operation number"), max_length=12, null=True, blank=True)
     observations = models.CharField(_("observations"), max_length=255, null=True)
     authorized_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True)
     authorization_date = models.DateTimeField(null=True)
@@ -531,6 +532,8 @@ class Payment(models.Model):
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
     monthly_fee = models.ForeignKey(MonthlyFee, on_delete=models.PROTECT,
                                     null=True)
+    file_url = models.CharField(max_length=500, blank=True, null=True)
+    file_preview_url = models.CharField(max_length=500, blank=True, null=True)
 
 
 class Match(models.Model):
@@ -550,6 +553,8 @@ class Match(models.Model):
                                     null=True)
     specialist_payment = models.ForeignKey(Payment, null=True,
                                            on_delete=models.PROTECT)
+    file_url = models.CharField(max_length=500, blank=True)
+    file_preview_url = models.CharField(max_length=500, blank=True)
 
 
 class MatchFile(models.Model):

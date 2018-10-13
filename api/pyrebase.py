@@ -9,7 +9,7 @@ from django.db.models import OuterRef, Subquery, Count
 
 # from datetime import datetime, timedelta
 from api.utils.parameters import Params, Payloads
-from api.utils.querysets import get_query_set_plan
+from api.utils.querysets import get_query_set_plan, get_queries_pending_to_solve
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from linkupapi.settings import CONFIG_ENVIROMENT
 from linkupapi.settings import DEBUG_FIREBASE
@@ -259,9 +259,19 @@ def update_status_query_current_list(specialist_id, client_id,
     node_specialist = Params.PREFIX['specialist'] + str(specialist_id)
     node_client = Params.PREFIX['client'] + str(client_id)
     node_query = 'queryCurrent'
+    root_room = "messagesList/specialist/{}/{}/".format(node_specialist,
+                                                        node_client)
+    qpending = get_queries_pending_to_solve(specialist=specialist_id,
+                                            client=client_id)
 
     room = "messagesList/specialist/{}/{}/{}/".format(node_specialist,
                                                       node_client, node_query)
+
+    if exist_node(root_room):
+        db.child(root_room).update({"pending_queries_to_solve": qpending})
+    else:
+        logger.warning('nodo no existe {}'.format(root_room))
+
     if query_id:
         node = db.child(room + 'id').get()
         if node.pyres and node.pyres == int(query_id):
@@ -276,6 +286,7 @@ def update_status_query_current_list(specialist_id, client_id,
         else:
             logger.warning(
                 'status_query_currentlist nodo no existe {}'.format(room))
+
     return res
 
 
@@ -341,6 +352,8 @@ def createListMessageClients(lista, query_id, status,
         data_obj['isQueryActive'] = True
 
     data_obj['queries'] = queries_list
+    qpending = get_queries_pending_to_solve(specialist=specialist_id,
+                                            client=client_id)
     query_current = {
         "status": status,
         "title": data_obj['title'],
@@ -355,11 +368,13 @@ def createListMessageClients(lista, query_id, status,
     del data_obj['title']
     del data_obj['date']
     del data_obj['id']
-
-    # main_node = "messagesList/specialist/{}/{}"
+    # import pdb; pdb.set_trace()
     db.child("messagesList/specialist/").child(
         node_specialist).child(node_client).set(data_obj)
 
+    db.child("messagesList/specialist/").child(
+        node_specialist).child(node_client).update(
+            {"pending_queries_to_solve": qpending})
 
 def chosen_plan(client_id, data):
     node = Params.PREFIX['client'] + str(client_id)

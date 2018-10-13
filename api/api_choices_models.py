@@ -113,13 +113,22 @@ class ChoicesAPI:
         (5, _('Absolved')),  # resuelta y finalizada
     )
 
+    # Plan Estado
+    plan_status = (
+        (1, _('Reserved')),  # reservado, pendiente de pago
+        (2, _('Pending Confirmation')),  # reporte pago, esperando confirmacion
+        (3, _('Insert Your Pin')),  # confirmado pago, falta por activar
+        (4, _('In Use')),  # Activo
+        (5, _('Culminated')),  # expirado o finalidas las consultas
+    )
     # MatchAcquired model
     match_acquired_status = (
         (1, _('Requested')),  # solicitado
-        (2, _('Accepted')),  # aceptado por especialista, falta que pague el especialista y/o cliente
+        (2, _('Accepted')),  # aceptado por especialista, falta que pague el especialista
         (3, _('Declined')),  # declinado por especialista
-        (4, _('Pending_Paid_Client')),  # Pendiente pago del usuario. sino es cliente
+        (4, _('Pending paid client')),  # Pendiente pago del usuario. sino es cliente
         (5, _('Done')),  # hecho, match exitoso
+        (6, _('Voucher uploaded')),  # ya se subio el voucher de cliente
     )
 
     match_paid_specialist = (

@@ -135,7 +135,7 @@
       "profession": "Administrador",
       "economic_sector": null,
       "level_instruction": 1,
-      "seller_assigned": null,
+      "seller_assigned": 2,
       "groups": [],
       "user_permissions": []
   }
@@ -172,6 +172,90 @@
     "groups": [],
     "user_permissions": []
 }
+},
+{
+  "model": "api.sellercontact",
+  "pk": 1,
+  "fields": {
+    "first_name": "Kajshd",
+    "last_name": "Jjdkdj",
+    "type_contact": 2,
+    "type_client": "n",
+    "document_type": 1,
+    "document_number": "457312222",
+    "email_exact": "darwin-vasqz@gmail.com",
+    "civil_state": "d",
+    "birthdate": "1993-08-15",
+    "institute": "",
+    "ciiu": null,
+    "activity_description": "",
+    "photo": "https://s3.amazonaws.com/linkup-photos/03cdf3a9-6273-4e5d-b561-6990ab7cae7d.png",
+    "about": "",
+    "cellphone": "",
+    "telephone": "",
+    "ocupation": 3,
+    "profession": "Jsjsbdv",
+    "business_name": null,
+    "commercial_reason": null,
+    "agent_firstname": null,
+    "agent_lastname": null,
+    "sex": "f",
+    "latitude": "-12.1001781",
+    "longitude": "-76.9700853",
+    "created_at": "2018-08-15T23:02:44.355Z",
+    "position": null,
+    "ruc": null,
+    "other_objection": null,
+    "seller": 2,
+    "economic_sector": null,
+    "address": 1,
+    "level_instruction": 4,
+    "nationality": 1,
+    "foreign_address": null,
+    "residence_country": 1
+  }
+},
+{
+  "model": "api.sellercontact",
+  "pk": 2,
+  "fields": {
+    "first_name": null,
+    "last_name": null,
+    "type_contact": 2,
+    "type_client": "b",
+    "document_type": 1,
+    "document_number": "07899999",
+    "email_exact": "munitambo@mail.com",
+    "civil_state": null,
+    "birthdate": null,
+    "institute": null,
+    "ciiu": 5,
+    "activity_description": "kakaja",
+    "photo": "e=1541635200&v=beta&t=ClD8ZilgMq5wR5CYrgaKFhmWvuy3Sm5EG0LwEsWrIwQ",
+    "about": "",
+    "cellphone": "",
+    "telephone": "",
+    "ocupation": 7,
+    "profession": null,
+    "business_name": "Gloria C A",
+    "commercial_reason": "Gloria CA",
+    "agent_firstname": "Reinaldo ",
+    "agent_lastname": "Jaimes",
+    "sex": "",
+    "latitude": "-12.1001891",
+    "longitude": "-76.9700759",
+    "created_at": "2018-08-17T15:59:59.843Z",
+    "position": "bzbsja",
+    "ruc": "646464",
+    "other_objection": "",
+    "seller": 2,
+    "economic_sector": 5,
+    "address": 1,
+    "level_instruction": null,
+    "nationality": 1,
+    "foreign_address": null,
+    "residence_country": 1
+  }
 },
 {
   "model": "api.seller",
@@ -271,6 +355,160 @@
     "number_month": 10,
     "number_year": 2018,
     "created_at": "2018-07-31T15:31:02Z"
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 10,
+  "fields": {
+    "created_at": "2018-10-10T20:12:14.525Z",
+    "place": "BCP",
+    "total_amount": "300.00",
+    "reference_number": "CD1007",
+    "description": "test",
+    "is_fee": true,
+    "client": 6,
+    "seller": null,
+    "status": 2,
+    "file_url": "",
+    "file_preview_url": ""
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 11,
+  "fields": {
+    "created_at": "2018-10-10T20:18:40.447Z",
+    "place": "BCP",
+    "total_amount": "30000.00",
+    "reference_number": "CD1008",
+    "description": "test",
+    "is_fee": true,
+    "client": 6,
+    "seller": null,
+    "status": 1,
+    "file_url": "",
+    "file_preview_url": ""
+  }
+},
+{
+  "model": "api.monthlyfee",
+  "pk": 2,
+  "fields": {
+    "fee_amount": "5000.00",
+    "fee_order_number": 1,
+    "fee_quantity": 2,
+    "sale": 11,
+    "pay_before": "2019-02-10",
+    "status": 1
+  }
+},
+{
+  "model": "api.monthlyfee",
+  "pk": 3,
+  "fields": {
+    "fee_amount": "5000.00",
+    "fee_order_number": 2,
+    "fee_quantity": 2,
+    "sale": 11,
+    "pay_before": "2019-03-10",
+    "status": 1
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 10,
+  "fields": {
+    "price": "1500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "3S3ER2",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 11
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 11,
+  "fields": {
+    "price": "1500.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "DUVKG7",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 11
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 5,
+  "fields": {
+    "expiration_date": null,
+    "validity_months": 2,
+    "available_queries": 2,
+    "queries_to_pay": 0,
+    "query_quantity": 2,
+    "activation_date": null,
+    "is_active": false,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T21:21:21.664Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 11,
+    "status": 1
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 6,
+  "fields": {
+    "expiration_date": "2018-12-09",
+    "validity_months": 2,
+    "available_queries": 2,
+    "queries_to_pay": 0,
+    "query_quantity": 2,
+    "activation_date": "2018-10-10",
+    "is_active": true,
+    "available_requeries": 10,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-10-10T20:12:14.710Z",
+    "plan_name": "Express Duo",
+    "query_plans": 2,
+    "sale_detail": 11,
+    "status": 4
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 10,
+  "fields": {
+    "acquired_plan": 5,
+    "client": 6,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 11,
+  "fields": {
+    "acquired_plan": 6,
+    "client": 6,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": true
   }
 }
 ]

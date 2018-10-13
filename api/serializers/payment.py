@@ -1,8 +1,8 @@
 """Serializer de Venta"""
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
-from api.models import Payment, MonthlyFee, Sale, SaleDetail
-from api.models import QueryPlansAcquired, SellerContact, User
+from api.models import Payment, MonthlyFee, Sale, SaleDetail, Match
+from api.models import QueryPlansAcquired, SellerContact, User, MatchProduct
 from api.utils.tools import get_date_by_time
 from api.utils.querysets import get_next_fee_to_pay
 from datetime import datetime, date
@@ -15,7 +15,7 @@ from api.serializers.fee import FeeSerializer
 from api.utils.parameters import Params
 import sys
 from api import pyrebase
-
+from api.serializers.sale import increment_reference
 
 class PaymentSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
@@ -24,7 +24,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         queryset=MonthlyFee.objects.all(), required=True)
 
     operation_number = serializers.CharField(validators=[UniqueValidator(
-        queryset=Payment.objects.all())], required=True)
+        queryset=Payment.objects.all())], required=False, allow_null = True, allow_blank=True)
 
     class Meta:
         """Modelo."""
@@ -32,7 +32,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         model = Payment
         fields = (
             'amount', 'operation_number', 'monthly_fee', 'payment_type',
-            'observations', 'bank', 'id')
+            'observations', 'bank', 'id', 'file_url', 'file_preview_url')
 
     def validate_amount(self, value):
         """Validacion de amount."""
@@ -79,6 +79,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         for detail in qsetdetail:
             qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
             qpclient = qacd.queryplansclient_set.get()
+
             # debo chequear si es por cuotas o no
             if fee.sale.is_fee:
                 # libero el numero de consultas que corresponde
@@ -90,6 +91,8 @@ class PaymentSerializer(serializers.ModelSerializer):
                 qacd.available_queries = qacd.query_plans.query_quantity
                 # actualizo cuantas consultas faltan por pagar
                 qacd.queries_to_pay = 0
+            if fee.sale.status == 1:
+                qacd.status = 3
             qacd.save()
             # actualizo a pyrebase si es el elegido
             if 'test' not in sys.argv:
@@ -104,13 +107,110 @@ class PaymentSerializer(serializers.ModelSerializer):
         else:
             user.code = Params.CODE_PREFIX["client"] + user.document_number
         user.save()
-
-
         validated_data["status"] = 2
         instance = Payment(**validated_data)
         instance.save()
         return instance
 
+
+class PaymentMatchSerializer(serializers.ModelSerializer):
+    """Serializer del Pago."""
+    match = serializers.PrimaryKeyRelatedField(
+            queryset=Match.objects.all(), required=True, write_only=True)
+    operation_number = serializers.CharField(validators=[UniqueValidator(
+        queryset=Payment.objects.all())], required=False, allow_null = True, allow_blank=True)
+
+    class Meta:
+        """Modelo."""
+
+        model = Payment
+        fields = ('amount', 'operation_number', 'payment_type',
+                  'observations', 'bank', 'id', 'match', 'file_url',
+                  'file_preview_url')
+
+    def validate_amount(self, value):
+        """Validacion de amount."""
+        price = MatchProduct.objects.first().price
+        # si el monto es menor que el pago, devuelvo un error
+        if float(value) < float(price):
+            raise serializers.ValidationError(
+                'This field must not be lesser than the corresponding.')
+        return value
+
+    def create(self, validated_data):
+        """Crear pago de especialista."""
+        match = validated_data.pop('match')
+        # import pdb; pdb.set_trace()
+        match = Match.objects.get(pk=match.id)
+        instance = Payment(**validated_data)
+        instance.save()
+        match.specialist_payment = instance
+        client = match.client
+        # se verifica si ya fue cliente el usuario que solicito el match
+        # si ya lo fue pasa a status 5 directo sino pasa a 4. pendiente de pago
+        is_client = Sale.objects.filter(saledetail__product_type=1,
+                                        saledetail__is_billable=True,
+                                        client=client,
+                                        status__range=(2, 3)).exists()
+        if is_client:
+            match.status = 5
+        else:            
+
+            sale = Sale.objects.create(place="BCP", total_amount=match.price,
+                                   reference_number=increment_reference(),
+                                   description='pago de match',
+                                   client=match.client, status=1)
+
+            sale_detail = SaleDetail.objects.create(price=match.price,
+                                                    description="Contratacion de especialista",
+                                                    discount=float(0),
+                                                    pin_code='XXXXXX',
+                                                    is_billable=True,
+                                                    product_type_id=2, sale=sale)
+            match.status = 4
+            match.sale_detail = sale_detail
+
+        match.save()
+        return instance
+
+
+class PaymentMatchClientSerializer(serializers.ModelSerializer):
+    """Se crea, venta, pago y cambia el match."""
+
+    match = serializers.PrimaryKeyRelatedField(
+            queryset=Match.objects.all(), required=True, write_only=True)
+    operation_number = serializers.CharField(validators=[UniqueValidator(
+        queryset=Payment.objects.all())], required=False, allow_null = True, allow_blank=True)
+
+    class Meta:
+        """Modelo."""
+
+        model = Payment
+        fields = ('amount', 'operation_number', 'payment_type',
+                  'observations', 'bank', 'id', 'match', 'file_url',
+                  'file_preview_url')
+
+    def validate_amount(self, value):
+        """Validacion de amount."""
+        price = MatchProduct.objects.first().price
+        # si el monto es menor que el pago, devuelvo un error
+        if float(value) < float(price):
+            raise serializers.ValidationError(
+                _('This field must not be lesser than the corresponding'))
+        return value
+
+    def create(self, validated_data):
+        """Crear pago de especialista."""
+        match = validated_data.pop('match')
+        # import pdb; pdb.set_trace()
+        match = Match.objects.get(pk=match.id)
+        # import pdb; pdb.set_trace()
+
+        instance = Payment(**validated_data)
+        instance.save()
+        match.status = 5
+        match.save()
+        return instance
 
 class PaymentSaleSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
