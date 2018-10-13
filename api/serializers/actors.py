@@ -1127,7 +1127,6 @@ class ContactToClientSerializer(serializers.ModelSerializer):
             serializer_client.save()
             self.context['client_id'] = serializer_client.data['id']
         else:
-            import pdb; pdb.set_trace()
             raise serializers.ValidationError(serializer_client.errors)
         return contact
 
