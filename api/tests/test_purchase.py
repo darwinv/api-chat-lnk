@@ -101,7 +101,7 @@ class ContactPurchaseQueryPlans(APITestCase):
         data = self.valid_payload.copy()
         data["email_exact"] = "munitambo@mail.com"
         response = client.post(reverse('contact-purchase'),
-                               data=json.dumps(self.valid_payload),
+                               data=json.dumps(data),
                                content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
