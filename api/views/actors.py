@@ -785,7 +785,7 @@ class SpecialistAsociateListView(ListCreateAPIView):
 
         specialists = Specialist.objects.filter(category=obj.category,
                                                 type_specialist="a")
-
+        
         page = self.paginate_queryset(specialists)
         if page is not None:
             serializer = AssociateSpecialistSerializer(page, many=True)
