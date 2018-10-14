@@ -12,7 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 from api.permissions import IsAdminOrSeller
 from api.models import Sale, SaleDetail, QueryPlansAcquired, QueryPlansClient
 from api.models import MonthlyFee
-
+from api import pyrebase
 
 class CreatePurchase(APIView):
     """Vista para crear compra."""
@@ -51,8 +51,14 @@ class ContactNoEffectivePurchase(APIView):
         if serializer_client.is_valid():
             serializer_client.save()
             data["client"] = serializer_client.data["client_id"]
+
+            # Categorias para usuario pyrebase
+            pyrebase.createCategoriesLisClients(data["client"])
+
         else:
             return Response(serializer_client.errors, status.HTTP_400_BAD_REQUEST)
+
+
         serializer = SaleSerializer(data=data, context=data)
         if serializer.is_valid():
             serializer.save()

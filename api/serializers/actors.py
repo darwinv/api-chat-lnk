@@ -1105,6 +1105,7 @@ class ContactToClientSerializer(serializers.ModelSerializer):
         data_client['seller_assigned'] = contact.seller
         password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
         data_client["password"] = password
+        data_client["password"] = "123456" # CREAR CONTRASEÑA GENERICA
         data_client["nationality"] = contact.nationality_id
         data_client["residence_country"] = contact.residence_country_id
         data_client["level_instruction"] = contact.level_instruction_id
@@ -1126,6 +1127,14 @@ class ContactToClientSerializer(serializers.ModelSerializer):
         if serializer_client.is_valid():
             serializer_client.save()
             self.context['client_id'] = serializer_client.data['id']
+
+            mail = BasicEmailAmazon(subject='Envio Credenciales', to=data_client["username"],
+                                    template='email/send_credentials')
+            credentials = {}
+            credentials["user"] = data_client["username"]
+            credentials["pass"] = password
+            mail.sendmail(args=credentials)
+
         else:
             raise serializers.ValidationError(serializer_client.errors)
         return contact
