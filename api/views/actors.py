@@ -728,6 +728,7 @@ class SpecialistListView(ListCreateAPIView):
     def list(self, request):
         # en dado caso que exista el parametro "main_specialist", se devuelve
         # el listado de especialistas asociados, caso contrario devuelve todos
+        
         if 'main_specialist' in request.query_params:
             specialist = self.get_object(
                 request.query_params["main_specialist"])
