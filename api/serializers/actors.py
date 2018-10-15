@@ -1105,7 +1105,7 @@ class ContactToClientSerializer(serializers.ModelSerializer):
         data_client['seller_assigned'] = contact.seller
         password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
         data_client["password"] = password
-        data_client["password"] = "123456" # CREAR CONTRASEÑA GENERICA
+        data_client["password"] = "123456"  # CREAR CONTRASEÑA GENERICA
         data_client["nationality"] = contact.nationality_id
         data_client["residence_country"] = contact.residence_country_id
         data_client["level_instruction"] = contact.level_instruction_id
@@ -1191,7 +1191,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
                          {"foreign_address": [required]})
 
         if data["type_contact"] == 2:
-            if 'objection' not in data and 'other_reason' not in data:
+            if 'objection' not in data and 'other_objection' not in data:
                 raise serializers.ValidationError(
                     _("the objection is required"))
         else:
@@ -1211,11 +1211,11 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             if 'address' in validated_data:
                 del validated_data['address']
 
-        if 'objection' in validated_data:
-            objection_list = validated_data.pop('objection')
-
         if 'password' in validated_data:
             password = validated_data.pop('password')
+
+        if 'objection' in validated_data:
+            objection_list = validated_data.pop('objection')
 
         type_contact_temp = validated_data["type_contact"]
         validated_data["type_contact"] = 2
@@ -1224,10 +1224,11 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
 
         if type_contact_temp == 2:
             instance.save()
-            for objection in objection_list:
-                # objection_obj = Objection.objects.get(pk=objection)
-                ObjectionsList.objects.create(contact=instance,
-                                              objection=objection)
+            if 'objection_list' in locals():
+                for objection in objection_list:
+                    # objection_obj = Objection.objects.get(pk=objection)
+                    ObjectionsList.objects.create(contact=instance,
+                                                  objection=objection)
         else:
             # registro de cliente si es efectivo
             data_client = self.get_initial()
