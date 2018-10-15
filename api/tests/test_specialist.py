@@ -439,6 +439,7 @@ class UpdateSpecialistCase(APITestCase):
 
     def test_can_change_address(self):
         """Poder cambiar la direccion de residencia"""
+        
         data_address = {
             "address": {
                 "street": "jupiter 208",
@@ -453,12 +454,12 @@ class UpdateSpecialistCase(APITestCase):
         # agregar el especialista por defecto
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
+        
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-
         # crear direccion nueva
         data={'address': data_address["address"],
                 'residence_country':data_address["residence_country"],
