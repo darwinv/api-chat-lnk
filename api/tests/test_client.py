@@ -1541,20 +1541,20 @@ class UpdatePasswordClientNatural(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-# class GetNotificationOnBadge(APITestCase):
-#     """Notificacion on badge."""
-#
-#     fixtures = ['data', 'data2', 'data3', 'test_notification']
-#
-#     def setUp(self):
-#         self.client = APIClient()
-#         self.client.credentials(
-#             HTTP_AUTHORIZATION='Bearer user3GlavEforKavpDzuZSgK0zpoXS')
-#
-#     def test_get_badge(self):
-#         """Badge para el cliente."""
-#         response = self.client.get(reverse('get-badge'))
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+class GetNotificationOnBadge(APITestCase):
+    """Notificacion on badge."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_notification']
+
+    def setUp(self):
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer user3GlavEforKavpDzuZSgK0zpoXS')
+
+    def test_get_badge(self):
+        """Badge para el cliente."""
+        response = self.client.get(reverse('get-badge'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class UpdateEmail(APITestCase):
