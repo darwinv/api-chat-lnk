@@ -94,6 +94,7 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         instance.is_active = True
         instance.activation_date = datetime.now().date()
         instance.expiration_date = get_date_by_time(instance.validity_months)
+        instance.status = 4
         instance.save()
 
         query_plan_client = QueryPlansClient.objects.get(client=client,acquired_plan=instance)
@@ -184,8 +185,9 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
         model = QueryPlansAcquired
         fields = ('id', 'plan_name', 'is_chosen', 'is_active',
                   'validity_months', 'query_quantity', 'queries_to_pay',
-                  'available_queries', 'expiration_date', 'transfer',
-                  'share', 'empower', 'owner', 'price', 'fee', 'is_fee')
+                  'available_queries', 'expiration_date', 'activation_date',
+                  'transfer', 'share', 'empower', 'owner',
+                  'price', 'fee', 'is_fee', 'status')
 
     def get_transfer(self, obj):
         if 'queryplansclient__transfer' in obj:
@@ -435,11 +437,12 @@ class QueryPlansAcquiredSimpleSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
     queries_used = serializers.SerializerMethodField()
     plan_name = serializers.SerializerMethodField()
+    is_fee = serializers.SerializerMethodField()
 
     class Meta:
         """Modelo del especialista y sus campos."""
         model = QueryPlansAcquired
-        fields = ('query_quantity', 'available_queries', 'queries_used', 'plan_name')
+        fields = ('query_quantity', 'available_queries', 'queries_used', 'plan_name', 'is_fee')
 
     def get_plan_name(self, obj):
         """Cliente"""
@@ -457,9 +460,14 @@ class QueryPlansAcquiredSimpleSerializer(serializers.ModelSerializer):
                 return obj["query_quantity"] - obj["available_queries"] - obj["queries_to_pay"]
         elif hasattr(obj, 'query_quantity') and hasattr(obj, 'available_queries') and hasattr(obj, 'queries_to_pay'):
             return obj.query_quantity - obj.available_queries - obj.queries_to_pay
-        else:
-            return 0
+        return 0
 
+    def get_is_fee(self, obj):
+        """is fee"""
+        if hasattr(obj, 'sale_detail'):
+            return obj.sale_detail.sale.is_fee
+        else:
+            return False
 
 class QueryPlansManageSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""

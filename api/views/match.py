@@ -18,7 +18,8 @@ from api.serializers.match import MatchListSpecialistSerializer
 from api.serializers.match import MatchListSerializer
 from api.permissions import IsAdminOrClient, IsOwnerAndClient
 from api.permissions import IsAdminOrSpecialist, IsAdminOnList
-from api.models import Match, MatchFile, Sale
+from api.models import Match, MatchFile, Sale, QueryPlansAcquired
+from api.models import SellerContact
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.logger import manager
 logger = manager.setup_log(__name__)
@@ -48,6 +49,9 @@ class MatchListClientView(ListCreateAPIView):
         # Devolvemos el id del usuario
         user_id = Operations.get_id(self, request)
         data = request.data
+        if 'file' in data:
+            if data["file"] is None:
+                del data["file"]
         data["client"] = user_id
         serializer = MatchSerializer(data=data)
         if serializer.is_valid():
@@ -189,13 +193,13 @@ class MatchUploadFilesView(APIView):
             arch = list(data.values())
 
         for file in arch:
-            resp = upload(file=file, model_update=MatchFile)
+            resp = upload_file(file=file, model_update=MatchFile)
             if resp is False:
                 errors_list.append(file.name)
 
         if errors_list:
             raise serializers.ValidationError(
-                {"this files failed": errors_list})
+                {"files_failed": errors_list})
 
         return HttpResponse(status=200)
 
@@ -210,7 +214,7 @@ class SpecialistMatchUploadFilesView(APIView):
     def get_object(self, request, pk):
         """Devuelvo la consulta."""
         try:
-            obj = Match.objects.get(pk=pk)
+            obj = Match.objects.get(pk=pk, status=1)
             return obj
         except Match.DoesNotExist:
             raise Http404
@@ -219,7 +223,7 @@ class SpecialistMatchUploadFilesView(APIView):
         """Actualiza el match, subiendo archivos."""
         obj_instance = self.get_object(request, pk)
         files = request.FILES.getlist('file')
-
+        
         if len(files) == 0:
             raise serializers.ValidationError(
                 {"file": _("required")})
@@ -231,22 +235,29 @@ class SpecialistMatchUploadFilesView(APIView):
             arch = list(data.values())
 
         for file in arch:
-            resp = upload(file=file, obj_instance=obj_instance)
+            resp = upload_file(file=file, obj_instance=obj_instance)
             if resp is False:
                 errors_list.append(file.name)
 
         if errors_list:
             raise serializers.ValidationError(
-                {"this files failed": errors_list})
+                {"files_failed": errors_list})
 
-        return HttpResponse(status=200)
+        data_match = {}
+        data_match["status"] = 2
+        data_match["payment_option_specialist"] = 1
+        serializer = MatchAcceptSerializer(obj_instance, data=data_match)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status.HTTP_200_OK)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class SaleClientUploadFilesView(APIView):
     """Subida de archivos para la consultas."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrClient]
+    permission_classes = [permissions.IsAuthenticated]
     parser_classes = (JSONParser, MultiPartParser)
 
     def get_object(self, request, pk):
@@ -254,7 +265,7 @@ class SaleClientUploadFilesView(APIView):
         try:
             obj = Sale.objects.get(pk=pk)
             return obj
-        except Match.DoesNotExist:
+        except Sale.DoesNotExist:
             raise Http404
 
     def put(self, request, pk):
@@ -272,19 +283,28 @@ class SaleClientUploadFilesView(APIView):
             arch = list(data.values())
 
         for file in arch:
-            resp = upload(file=file, obj_instance=obj_instance)
+            resp = upload_file(file=file, obj_instance=obj_instance)
             if resp is False:
                 errors_list.append(file.name)
 
         if errors_list:
             raise serializers.ValidationError(
-                {"this files failed": errors_list})
+                {"files_failed": errors_list})
 
+        qsdetail = obj_instance.saledetail_set.all()
+        # ya se envio el voucher
+        QueryPlansAcquired.objects.filter(
+            sale_detail__in=qsdetail, status=1).update(status=2)
+
+        Match.objects.filter(
+            sale_detail__sale=obj_instance, status=4).update(status=6)
+
+        SellerContact.objects.filter(
+            email_exact=obj_instance.client.email_exact).update(type_contact=1)        
+        
         return HttpResponse(status=200)
 
-
-
-def upload(file, model_update=None, obj_instance=None):
+def upload_file(file, model_update=None, obj_instance=None):
     """Funcion para subir archivos."""
 
     mf = None  # Objeto mensajes
@@ -297,6 +317,7 @@ def upload(file, model_update=None, obj_instance=None):
             mf = obj_instance
         else:
             mf = model_update.objects.get(pk=int(file_match_id))
+
         # lo subimos a Amazon S3
         url = s3_upload_file(file, file.name)
         # generamos la miniatura
@@ -323,6 +344,7 @@ def upload(file, model_update=None, obj_instance=None):
         logger.error("subir archivo, error general, m_ID: {} - ERROR: {} ".format(file_match_id, e))
         resp = False
 
-    mf.save()
+    if mf:
+        mf.save()
 
     return resp

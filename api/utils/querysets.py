@@ -1,6 +1,6 @@
 """Funciones Varias."""
 from api.models import Specialist
-from api.models import QueryPlansAcquired, MonthlyFee
+from api.models import QueryPlansAcquired, MonthlyFee, Query
 from django.http import Http404
 from django.db.models import F
 
@@ -29,7 +29,7 @@ def has_available_queries(client):
     except QueryPlansAcquired.DoesNotExist:
         return False
 
-    
+
 
 """ Planes de Consultas """
 def get_query_set_plan():
@@ -43,8 +43,8 @@ def get_query_set_plan():
             .annotate(price=F('sale_detail__price'), is_chosen=F('queryplansclient__is_chosen'))
 
 
-""" Cuotas de Venta """
 def get_next_fee_to_pay(sale):
+    """ Cuotas de Venta """
     """
     Funcion creada para traer la proxima cuota a pagar
     :return: QuerySet
@@ -54,4 +54,17 @@ def get_next_fee_to_pay(sale):
     except IndexError:
         return None
 
-    
+
+def get_queries_pending_to_solve(specialist, client=None):
+    """ Consultas pendientes por resolver """
+    """
+    Devuelve el numero total de consultas en estado 1 o 2.
+    :return: Int
+    """
+    if client is not None:
+        qs = Query.objects.filter(status__range=(1, 2),
+                                  specialist=specialist, client=client)
+    else:
+        qs = Query.objects.filter(status__range=(1, 2), specialist=specialist)
+    pending = qs.count()
+    return pending

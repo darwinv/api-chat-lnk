@@ -40,10 +40,13 @@ class SpecialistAccountView(APIView):
 
         if specialist.type_specialist == "m":
             serializer = SpecialistAccountSerializer(queryset,
-                                                     context={'category': specialist.category
-                                                              })
+                                                     context={
+                                                     'category': specialist.category,
+                                                     'specialist': specialist,
+                                                     })
             serializer_historic = SpecialistHistoricAccountSerializer(queryset,
-                                                     context={'category': specialist.category
+                                                     context={'category': specialist.category,
+                                                              'specialist': specialist
                                                               })
         else:
             serializer = SpecialistAsociateAccountSerializer(queryset)
@@ -93,17 +96,19 @@ class ClientAccountView(APIView):
     def get(self, request, pk):
         client = self.get_object(pk)
         today = datetime.now()
-        queryset = QueryPlansAcquired.objects.filter(queryplansclient__client=client,
-                                        queryplansclient__owner=True,
-                                        sale_detail__sale__status=3,
-                                        activation_date__lte=today)
+
+        queryset = QueryPlansAcquired.objects.filter(
+            queryplansclient__client=client, queryplansclient__owner=True,
+            sale_detail__sale__status__range=(2, 3),
+            activation_date__lte=today)
+        
         serializer = ClientAccountSerializer(queryset,
                                              context={"client": client})
         serializer_historic = ClientAccountHistoricSerializer(queryset,
                                              context={"client": client})
         return Response({
-                        "mounth":serializer.data,  # corregir el mounth por month
-                        "historic":serializer_historic.data
+                        "mounth": serializer.data,  # corregir el mounth por month
+                        "historic": serializer_historic.data
                     })
 
 

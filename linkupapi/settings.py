@@ -44,17 +44,6 @@ INSTALLED_APPS = [
     'chat'
 ]
 
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-#         'master_password.auth.ModelBackend',
-#     ],
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ]
-# }
-
 OAUTH2_PROVIDER = {
     'ACCESS_TOKEN_EXPIRE_SECONDS': 31104000,
     # this is the list of available scopes
@@ -151,6 +140,16 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'files/')
 TEST_URL = os.path.join(BASE_DIR, 'api/tests/files')
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+#         'master_password.auth.ModelBackend',
+#     ],
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ]
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination',
