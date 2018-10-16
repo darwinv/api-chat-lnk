@@ -107,7 +107,7 @@ class ActivePlanSerializer(serializers.ModelSerializer):
 class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
     """Plan Adquirido."""
     is_chosen = serializers.SerializerMethodField()
-    
+
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -348,6 +348,7 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
             new_acquired_plan.sale_detail_id = acquired_plan.sale_detail_id
             new_acquired_plan.plan_name = acquired_plan.plan_name
             new_acquired_plan.is_chosen = False
+            new_acquired_plan.status = acquired_plan.status
             new_acquired_plan.save()
 
             # Damos los permisos del plan al usuario
