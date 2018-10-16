@@ -516,7 +516,7 @@ class ClientAllPlansView(ListCreateAPIView):
                 ).annotate(is_chosen=F('queryplansclient__is_chosen'),
                     price=F('sale_detail__price'),
                     sale=F('sale_detail__sale'),
-                  is_fee=F('sale_detail__sale__is_fee')).order_by('id')
+                  is_fee=F('sale_detail__sale__is_fee')).order_by('-id')
 
             self.check_object_permissions(self.request, obj)
             return obj
@@ -592,7 +592,6 @@ class ActivationPlanView(APIView):
         if serializer.is_valid():
             serializer.save()
             if not has_chosen:
-                # print('no deberia  de entrar')
                 if 'test' not in sys.argv:
                     pyrebase.chosen_plan(client, serializer.data)
             return Response(serializer.data)
