@@ -530,6 +530,18 @@ class CreateNaturalContact(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_send_only_other_objection(self):
+        """Enviar solo otra razon."""
+        data = self.valid_payload
+        data["other_objection"] = "Otra  razon"
+        del data["objection"]
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_create_effective(self):
         """Crear conctacto efectivo."""
         self.valid_payload.pop('objection')
@@ -967,6 +979,18 @@ class CreateBussinessContact(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    # def test_send_only_other_objection(self):
+    #     """Enviar solo otra razon."""
+    #     data = self.valid_payload
+    #     data["other_objection"] = "Otra  razon"
+    #     del data["objection"]
+    #     response = self.client.post(
+    #         reverse('contacts'),
+    #         data=json.dumps(data),
+    #         content_type='application/json'
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_effective(self):
         """Crear conctacto efectivo."""

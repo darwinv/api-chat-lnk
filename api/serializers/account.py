@@ -53,9 +53,12 @@ class SpecialistAccountSerializer(serializers.ModelSerializer):
             status__range=(1, 3), category=category_id,
             created_at__range=(primer, hoy)).count()
 
-        match_total = Match.objects.filter(specialist=specialist).count()
-        match_accepted = Match.objects.filter(specialist=specialist, status=5).count()
-        match_declined = Match.objects.filter(specialist=specialist, status=3).count()
+        match_total = Match.objects.filter(specialist=specialist,
+                                            created_at__range=(primer, hoy)).count()
+        match_accepted = Match.objects.filter(specialist=specialist, status=5,
+                                            created_at__range=(primer, hoy)).count()
+        match_declined = Match.objects.filter(specialist=specialist, status=3,
+                                            created_at__range=(primer, hoy)).count()
 
         # consultas por especialista
         # queries_specialist = obj.filter(status__range=(4, 5)).count()
@@ -90,6 +93,8 @@ class SpecialistHistoricAccountSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         """To Representation."""
         category_id = self.context["category"]
+        specialist_id = self.context["specialist"]
+
         queries_main_absolved = obj.filter(
             status__range=(4, 5)).count()
 
@@ -97,10 +102,13 @@ class SpecialistHistoricAccountSerializer(serializers.ModelSerializer):
         queries_category_absolved = Query.objects.filter(
             status__range=(4, 5), category=category_id).count()
 
+        match_accepted = Match.objects.filter(specialist=specialist_id, status=5).count()
+
         return {
                 "queries_category_absolved": queries_category_absolved,
                 "queries_main_absolved": queries_main_absolved,
-                "queries_asociate_absolved": queries_category_absolved - queries_main_absolved
+                "queries_asociate_absolved": queries_category_absolved - queries_main_absolved,
+                "match_accepted": match_accepted
                 }
 
 class SpecialistAsociateAccountSerializer(serializers.ModelSerializer):
@@ -195,14 +203,13 @@ class ClientAccountSerializer(serializers.Serializer):
         end = datetime.now()
         new_end = end + timedelta(days=1)
         start = date(end.year, end.month, 1)
-        plan = QueryPlansAcquired.objects.filter(activation_date__range=(start, new_end),
-                                            queryplansclient__client=client_id)
+        plan = obj.filter(activation_date__range=(start, new_end))
 
         serializers_plans = QueryPlansAcquiredSimpleSerializer(plan, many=True)
 
-        match_acquired = Match.objects.filter(client=client_id).count()
-        match_absolved = Match.objects.filter(client=client_id, status=5).count()
-        match_declined = Match.objects.filter(client=client_id, status=3).count()
+        match_acquired = Match.objects.filter(client=client_id, created_at__range=(start, new_end)).count()
+        match_absolved = Match.objects.filter(client=client_id, status=5, created_at__range=(start, new_end)).count()
+        match_declined = Match.objects.filter(client=client_id, status=3, created_at__range=(start, new_end)).count()
 
         return {
                 "plans": serializers_plans.data,
@@ -218,7 +225,7 @@ class ClientAccountHistoricSerializer(serializers.Serializer):
     def to_representation(self, obj):
         """Representacion."""
 
-        client = self.context["client"]
+        client_id = self.context["client"]
         # calculó de las consultas adquiridas
         # import pdb; pdb.set_trace()
         queries_client = obj.aggregate(query_quantity=Sum('query_quantity'),
@@ -230,13 +237,17 @@ class ClientAccountHistoricSerializer(serializers.Serializer):
         queries_to_pay = queries_client["queries_to_pay"] if queries_client["queries_to_pay"] else 0
 
         queries_made = queries_acquired - queries_available - queries_to_pay
+
+        match_acquired = Match.objects.filter(client=client_id).count()
+        match_absolved = Match.objects.filter(client=client_id, status=5).count()
+        match_declined = Match.objects.filter(client=client_id, status=3).count()
         return {
                 "queries_acquired": queries_acquired,
                 "queries_made": queries_made,
                 "queries_available": queries_available,
-                "match_acquired": 0,
-                "match_absolved": 0,
-                "match_declined": 0
+                "match_acquired": match_acquired,
+                "match_absolved": match_absolved,
+                "match_declined": match_declined
                 }
 
 class SellerAccountSerializer(serializers.Serializer):

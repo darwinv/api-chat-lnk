@@ -728,6 +728,7 @@ class SpecialistListView(ListCreateAPIView):
     def list(self, request):
         # en dado caso que exista el parametro "main_specialist", se devuelve
         # el listado de especialistas asociados, caso contrario devuelve todos
+        
         if 'main_specialist' in request.query_params:
             specialist = self.get_object(
                 request.query_params["main_specialist"])
@@ -784,7 +785,7 @@ class SpecialistAsociateListView(ListCreateAPIView):
 
         specialists = Specialist.objects.filter(category=obj.category,
                                                 type_specialist="a")
-
+        
         page = self.paginate_queryset(specialists)
         if page is not None:
             serializer = AssociateSpecialistSerializer(page, many=True)
@@ -1165,6 +1166,7 @@ class ContactListView(ListCreateAPIView):
         if 'type_contact' in data and data['type_contact'] == 1:
             password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
             data["password"] = password
+            data["password"] = "123456"
 
 
         if data["type_client"] == 'n':
@@ -1285,12 +1287,12 @@ class PhotoContactUploadView(APIView):
         serializer = ContactPhotoSerializer(contact, data={'photo': name_photo},
                                             partial=True)
 
-        if contact.type_contact == 1 or contact.type_contact == 3:
+        try:
             user = User.objects.get(username=contact.email_exact)
             serializer_user = UserPhotoSerializer(user,
                                                   data={'photo': name_photo},
                                                   partial=True)
-        else:
+        except User.DoesNotExist:
             serializer_user = None
 
         if serializer.is_valid():

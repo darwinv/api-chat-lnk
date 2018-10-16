@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
 from dateutil.relativedelta import relativedelta
 from api.emails import BasicEmailAmazon
+from django.http import Http404
 from rest_framework.response import Response
 from api.utils.tools import capitalize as cap
 from api.utils.parameters import Params
@@ -192,7 +193,7 @@ class ClientSerializer(serializers.ModelSerializer):
     residence_country = serializers.PrimaryKeyRelatedField(
         queryset=Countries.objects.all(), required=True)
     residence_country_name = serializers.SerializerMethodField()
-    commercial_reason = serializers.CharField(required=False)
+    commercial_reason = serializers.CharField(required=False, allow_null=True)
     birthdate = serializers.DateField(required=True)
 
     photo = serializers.CharField(read_only=True)
@@ -1080,6 +1081,72 @@ class ObjectionsContactSerializer(serializers.ModelSerializer):
         return data
 
 
+class ContactToClientSerializer(serializers.ModelSerializer):
+    """Pasar de Contacto a Cliente."""
+    email_exact = serializers.EmailField(required=True)
+
+    class Meta:
+        """ Model Contacto."""
+        model = SellerContact
+        fields = ('email_exact',)
+
+    def create(self, validated_data):
+        email = validated_data["email_exact"]
+        try:
+            contact = SellerContact.objects.get(email_exact=email)
+        except SellerContact.DoesNotExist:
+            raise Http404
+
+        data_client = SellerContact.objects.filter(
+            email_exact=email).values().first()
+        # import pdb; pdb.set_trace()
+        data_client["username"] = email
+        data_client["role"] = Params.ROLE_CLIENT
+        data_client['seller_assigned'] = contact.seller
+        password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
+        data_client["password"] = password
+        data_client["password"] = "123456"  # CREAR CONTRASEÑA GENERICA
+        data_client["nationality"] = contact.nationality_id
+        data_client["residence_country"] = contact.residence_country_id
+        data_client["level_instruction"] = contact.level_instruction_id
+        data_client["address"] = AddressSerializer(contact.address).data
+        data_client["photo"] = contact.photo
+
+        if data_client["type_client"] == 'b':
+            data_client['birthdate'] = '1900-01-01'
+            data_client['sex'] = ''
+            data_client['civil_state'] = ''
+            data_client['level_instruction'] = ''
+            data_client['profession'] = ''
+            data_client['ocupation'] = None
+            data_client['last_name'] = ''
+            data_client['first_name'] = ''
+            data_client['economic_sector'] = contact.economic_sector_id
+            data_client['ciiu'] = contact.ciiu_id
+
+        serializer_client = ClientSerializer(data=data_client)
+        if serializer_client.is_valid():
+            serializer_client.save()
+            self.context['client_id'] = serializer_client.data['id']
+
+            mail = BasicEmailAmazon(subject='Envio Credenciales', to=data_client["username"],
+                                    template='email/send_credentials')
+            credentials = {}
+            credentials["user"] = data_client["username"]
+            credentials["pass"] = password
+            mail.sendmail(args=credentials)
+
+        else:
+            raise serializers.ValidationError(serializer_client.errors)
+        return contact
+
+    def to_representation(self, instance):
+        """To Repr."""
+
+        client_id = self.context['client_id']
+        return {"client_id": client_id}
+
+
 class BaseSellerContactSerializer(serializers.ModelSerializer):
     """Base para contacto."""
 
@@ -1124,7 +1191,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
                          {"foreign_address": [required]})
 
         if data["type_contact"] == 2:
-            if 'objection' not in data and 'other_reason' not in data:
+            if 'objection' not in data and 'other_objection' not in data:
                 raise serializers.ValidationError(
                     _("the objection is required"))
         else:
@@ -1144,21 +1211,24 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             if 'address' in validated_data:
                 del validated_data['address']
 
-        if 'objection' in validated_data:
-            objection_list = validated_data.pop('objection')
-
         if 'password' in validated_data:
             password = validated_data.pop('password')
 
+        if 'objection' in validated_data:
+            objection_list = validated_data.pop('objection')
+
+        type_contact_temp = validated_data["type_contact"]
+        validated_data["type_contact"] = 2
         instance = self.Meta.model(**validated_data)
         # creo el listado de objeciones si es no efectivo
 
-        if validated_data["type_contact"] == 2:
+        if type_contact_temp == 2:
             instance.save()
-            for objection in objection_list:
-                # objection_obj = Objection.objects.get(pk=objection)
-                ObjectionsList.objects.create(contact=instance,
-                                              objection=objection)
+            if 'objection_list' in locals():
+                for objection in objection_list:
+                    # objection_obj = Objection.objects.get(pk=objection)
+                    ObjectionsList.objects.create(contact=instance,
+                                                  objection=objection)
         else:
             # registro de cliente si es efectivo
             data_client = self.get_initial()

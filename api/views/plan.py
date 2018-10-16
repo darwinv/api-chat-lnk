@@ -592,7 +592,6 @@ class ActivationPlanView(APIView):
         if serializer.is_valid():
             serializer.save()
             if not has_chosen:
-                # print('no deberia  de entrar')
                 if 'test' not in sys.argv:
                     pyrebase.chosen_plan(client, serializer.data)
             return Response(serializer.data)

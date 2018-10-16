@@ -437,11 +437,12 @@ class QueryPlansAcquiredSimpleSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
     queries_used = serializers.SerializerMethodField()
     plan_name = serializers.SerializerMethodField()
+    is_fee = serializers.SerializerMethodField()
 
     class Meta:
         """Modelo del especialista y sus campos."""
         model = QueryPlansAcquired
-        fields = ('query_quantity', 'available_queries', 'queries_used', 'plan_name')
+        fields = ('query_quantity', 'available_queries', 'queries_used', 'plan_name', 'is_fee')
 
     def get_plan_name(self, obj):
         """Cliente"""
@@ -459,9 +460,14 @@ class QueryPlansAcquiredSimpleSerializer(serializers.ModelSerializer):
                 return obj["query_quantity"] - obj["available_queries"] - obj["queries_to_pay"]
         elif hasattr(obj, 'query_quantity') and hasattr(obj, 'available_queries') and hasattr(obj, 'queries_to_pay'):
             return obj.query_quantity - obj.available_queries - obj.queries_to_pay
-        else:
-            return 0
+        return 0
 
+    def get_is_fee(self, obj):
+        """is fee"""
+        if hasattr(obj, 'sale_detail'):
+            return obj.sale_detail.sale.is_fee
+        else:
+            return False
 
 class QueryPlansManageSerializer(serializers.ModelSerializer):
     """Serializer del detalle de plan."""
