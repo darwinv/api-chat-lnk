@@ -1166,7 +1166,6 @@ class ContactListView(ListCreateAPIView):
         if 'type_contact' in data and data['type_contact'] == 1:
             password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
             data["password"] = password
-            data["password"] = "123456"
 
 
         if data["type_client"] == 'n':

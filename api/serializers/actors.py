@@ -578,8 +578,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
         password = ''.join(
               random.SystemRandom().choice(
                 string.ascii_uppercase + string.digits) for _ in range(10))
-        # validated_data['key'] = password
-        validated_data['key'] = "123456"
+        validated_data['key'] = password
         validated_data['status'] = 1
         instance = self.Meta.model(**validated_data)
         # "ruc {}".format(required)
@@ -590,8 +589,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"type_specialist": [valid_spec]})
         if password is not None:
-            # instance.set_password(password)
-            instance.set_password("123456")
+            instance.set_password(password)
         instance.save()
 
         mail = BasicEmailAmazon(subject='Envio Credenciales',
@@ -871,13 +869,11 @@ class SellerSerializer(serializers.ModelSerializer):
             if not validated_data['ruc'] or validated_data['ruc'] is None:
                 del validated_data['ruc']
         password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
-        # validated_data['key'] = password
-        validated_data['key'] = "123456"
+        validated_data['key'] = password
         validated_data['status'] = 1
         instance = self.Meta.model(**validated_data)
         if password is not None:
-            # instance.set_password(password)
-            instance.set_password("123456")
+            instance.set_password(password)
         instance.save()
         mail = BasicEmailAmazon(subject='Envio Credenciales', to=validated_data["email_exact"],
                                 template='email/send_credentials')
@@ -1105,7 +1101,6 @@ class ContactToClientSerializer(serializers.ModelSerializer):
         data_client['seller_assigned'] = contact.seller
         password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
         data_client["password"] = password
-        data_client["password"] = "123456"  # CREAR CONTRASEÑA GENERICA
         data_client["nationality"] = contact.nationality_id
         data_client["residence_country"] = contact.residence_country_id
         data_client["level_instruction"] = contact.level_instruction_id
