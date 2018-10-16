@@ -1546,6 +1546,7 @@ class UpdateEmail(APITestCase):
     """Test module for put email user API."""
 
     fixtures = ['data', 'data2', 'data3', 'test_plan']
+    
     def setUp(self):
         self.client = APIClient()
         self.client.credentials(
