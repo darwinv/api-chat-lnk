@@ -516,7 +516,7 @@ class ClientAllPlansView(ListCreateAPIView):
                 ).annotate(is_chosen=F('queryplansclient__is_chosen'),
                     price=F('sale_detail__price'),
                     sale=F('sale_detail__sale'),
-                  is_fee=F('sale_detail__sale__is_fee')).order_by('id')
+                  is_fee=F('sale_detail__sale__is_fee')).order_by('-id')
 
             self.check_object_permissions(self.request, obj)
             return obj
