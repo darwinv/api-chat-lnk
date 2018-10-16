@@ -82,9 +82,9 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         model = QueryPlansAcquired
         fields = ('id', 'plan_name', 'is_active',
                   'query_quantity', 'available_queries',
-                  'validity_months', 'expiration_date')
+                  'validity_months', 'expiration_date', 'status')
         read_only_fields = ('id', 'plan_name', 'query_quantity',
-                            'available_queries', 'validity_months')
+                            'available_queries', 'validity_months', 'status')
 
     def update(self, instance, validated_data):
         """Redefinido metodo actualizar."""
