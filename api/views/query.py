@@ -38,6 +38,7 @@ from api.serializers.query import QueryQualifySerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from api.serializers.notification import NotificationSpecialistSerializer
+from api.serializers.notification import NotificationClientSerializer
 from botocore.exceptions import ClientError
 from api.utils.tools import s3_upload_file, remove_file, resize_img, get_body
 from api.utils.parameters import Params
@@ -236,12 +237,15 @@ class QueryDetailSpecialistView(APIView):
             group = GroupMessage.objects.get(message__id=ms_ref)
             msgs = group.message_set.all()
 
+            # determino el total de consultas pendientes (status 3 o 5)
+            # y matchs por pagar (status 4)
+            qset_client = Client.objects.filter(pk=client_id)
+            dict_pending = NotificationClientSerializer(qset_client).data
+            badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+
             if 'test' not in sys.argv:
                 pyrebase.update_status_group_messages(msgs, group.status)
 
-                pending_badge = Message.objects.filter(
-                    query__status=3, viewed=0,
-                    msg_type='a', query__client=client_id).count()
                 body = get_body(lista[-1]["fileType"], lista[-1]["message"])
                 data_fcm = {
                     "title": ugettext(cat.name),
@@ -249,9 +253,11 @@ class QueryDetailSpecialistView(APIView):
                     "sub_text": ugettext(cat.name),
                     "ticker": query.title,
                     "icon": cat.image,
-                    "badge": pending_badge,  # mensajes por ver
+                    "badge": badge_count,
                     "client_id":  query.client.id,
                     "category_id": category_id,
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
                     "query_id": query.id
                 }
                 Notification.fcm_send_data(user_id=client_id, data=data_fcm)
@@ -331,6 +337,10 @@ class QueryDetailClientView(APIView):
 
             gp = GroupMessage.objects.get(message__id=ms_ref)
             msgs = gp.message_set.all()
+            qset_spec = Specialist.objects.filter(pk=specialist_id)
+            dict_pending = NotificationSpecialistSerializer(qset_spec).data
+            badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+
             if 'test' not in sys.argv:
                 us = User.objects.get(pk=user_id)
                 if us.nick == '':
@@ -338,7 +348,6 @@ class QueryDetailClientView(APIView):
                 else:
                     displayname = us.nick
 
-                badge_count = Query.objects.filter(specialist=specialist_id, status__lte=2).count()
                 # crea data de notificacion push
                 body = get_body(lista[-1]["fileType"], lista[-1]["message"])
                 data_notif_push = {
@@ -350,6 +359,8 @@ class QueryDetailClientView(APIView):
                     "icon": us.photo,
                     "client_id": user_id,
                     "category_id": category_id,
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
                     "query_id": serializer.data["query_id"]
                 }
                 pyrebase.update_status_group_messages(msgs, gp.status)
