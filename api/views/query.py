@@ -37,6 +37,7 @@ from api.serializers.query import QueryResponseSerializer, ReQuerySerializer
 from api.serializers.query import QueryQualifySerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
+from api.serializers.notification import NotificationSpecialistSerializer
 from botocore.exceptions import ClientError
 from api.utils.tools import s3_upload_file, remove_file, resize_img, get_body
 from api.utils.parameters import Params
@@ -136,9 +137,12 @@ class QueryListClientView(ListCreateAPIView):
                                         .order_by('-message__created_at')
             query_pending = PendingQueriesSerializer(data_queries, many=True)
             lista_d = {Params.PREFIX['query']+str(l['id']): l for l in query_pending.data}
+
             # determino el total de consultas pendientes (status 1 o 2)
-            badge_count = Query.objects.filter(specialist=specialist_id,
-                                               status__lte=2).count()
+            # y matchs por responder o pagar
+            qset_spec = Specialist.objects.filter(pk=specialist_id)
+            dict_pending = NotificationSpecialistSerializer(qset_spec).data
+            badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
 
             if 'test' not in sys.argv:
                 # crea data de notificacion push
@@ -152,6 +156,8 @@ class QueryListClientView(ListCreateAPIView):
                     "icon": serializer_tmp.data[0]['photo'],
                     "client_id": user_id,
                     "category_id": category,
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
                     "query_id": serializer.data["query_id"]
                 }
                 # crea nodo de listado de mensajes
