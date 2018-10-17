@@ -500,6 +500,7 @@ class ClientTransferPlansView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ClientAllPlansView(ListCreateAPIView):
     """Vista para obetener todos los planes de un cliente."""
     authentication_classes = (OAuth2Authentication,)

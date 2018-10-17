@@ -103,6 +103,30 @@ class ActivePlanSerializer(serializers.ModelSerializer):
 
         return instance
 
+    def to_representation(self, instance):
+        """Datos de vuelta."""
+        # import pdb; pdb.set_trace()
+        qplanclient = instance.queryplansclient_set.get()
+        fee = get_next_fee_to_pay(instance.sale_detail.sale)
+        serializer_fee = FeeSerializer(fee)
+        return {"id": instance.id, "plan_name": instance.plan_name,
+                "is_active": instance.is_active,
+                "query_quantity": instance.query_quantity,
+                "available_queries": instance.available_queries,
+                "validity_months": instance.validity_months,
+                "status": instance.status,
+                "is_chosen": self.context['is_chosen'],
+                "expiration_date": instance.expiration_date,
+                "activation_date": instance.activation_date,
+                "transfer": qplanclient.transfer,
+                "share": qplanclient.share,
+                "empower": qplanclient.empower,
+                "owner": qplanclient.owner,
+                "price": instance.sale_detail.price,
+                "is_fee": instance.sale_detail.sale.is_fee,
+                "fee": serializer_fee.data
+                }
+
 
 class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
     """Plan Adquirido."""
