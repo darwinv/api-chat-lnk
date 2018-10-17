@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-16 15:38-0500\n"
+"POT-Creation-Date: 2018-10-17 13:01-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -442,8 +442,8 @@ msgstr "Debes ser mayor de edad"
 #: .\api\views\actors.py:1150 .\api\views\actors.py:1549
 #: .\api\views\match.py:229 .\api\views\match.py:277 .\api\views\payment.py:147
 #: .\api\views\payment.py:202 .\api\views\payment.py:234
-#: .\api\views\plan.py:161 .\api\views\plan.py:308 .\api\views\plan.py:415
-#: .\api\views\plan.py:826 .\api\views\query.py:776
+#: .\api\views\plan.py:163 .\api\views\plan.py:314 .\api\views\plan.py:425
+#: .\api\views\plan.py:838 .\api\views\query.py:776
 msgid "required"
 msgstr "requerido"
 
@@ -507,27 +507,31 @@ msgstr "Todos los derechos reservados"
 msgid "You have been empowered with a query plan"
 msgstr "Has sido facultado con un plan de consultas"
 
-#: .\api\templates\email\empower.html:7
-msgid "Please click the next link for get your plan empower"
-msgstr "Por favor dale click al siguiente link para obtener tu plan facultado"
-
 #: .\api\templates\email\pin_code.html:6
 msgid "Your Pin Code"
 msgstr "Tu codigo PIN!"
 
-#: .\api\templates\email\pin_code.html:16
+#: .\api\templates\email\pin_code.html:9
+msgid ""
+"Congratulations on acquiring your consultation plan(s). We leave you the "
+"data of your plan(s) and code(s) pin for when you want to activate them"
+msgstr ""
+"Felicitaciones por adquirir su(s) plan(es) de consulta. Te dejamos los datos "
+"de tu(s) plane(s) y codigo(s) pin para cuando quieras activarlos"
+
+#: .\api\templates\email\pin_code.html:18
 msgid "Name of the Plan"
 msgstr "Nombre del Plan"
 
-#: .\api\templates\email\pin_code.html:17
+#: .\api\templates\email\pin_code.html:19
 msgid "Months of Validity"
 msgstr "Meses de vigencia"
 
-#: .\api\templates\email\pin_code.html:18
+#: .\api\templates\email\pin_code.html:20
 msgid "Number of Queries"
 msgstr "Cantidad de Consultas"
 
-#: .\api\templates\email\pin_code.html:19
+#: .\api\templates\email\pin_code.html:21
 msgid "Pin code"
 msgstr "Tu codigo PIN"
 
@@ -559,10 +563,6 @@ msgstr "contraseña"
 msgid "A query plan has been shared with you"
 msgstr "Un plan de consultas ha sido compartido contigo"
 
-#: .\api\templates\email\share.html:7
-msgid "Please click the next link for get your plan share"
-msgstr "Por favor dale click al siguiente link para obtener tu plan compartido"
-
 #: .\api\templates\email\support.html:7
 msgid "name"
 msgstr "name"
@@ -570,10 +570,6 @@ msgstr "name"
 #: .\api\templates\email\transfer.html:4
 msgid "A query plan has been transferred to your"
 msgstr "Un plan de consultas se te ha sido transferido"
-
-#: .\api\templates\email\transfer.html:7
-msgid "Please click the next link for get your plan transfer"
-msgstr "Por favor dale click al siguiente link para obtener tu plan transferido"
 
 #: .\api\utils\tools.py:52
 msgid "yesterday"
@@ -585,72 +581,97 @@ msgstr "ayer"
 msgid "not valid"
 msgstr "no valido"
 
-#: .\api\views\plan.py:162 .\api\views\plan.py:309 .\api\views\plan.py:417
-#: .\api\views\plan.py:665
+#: .\api\views\plan.py:30
+msgid ""
+"Please, click the following register link, fill your details and you will "
+"get your query plans"
+msgstr ""
+"Por favor, dale click al siguiente link de registro, llena tus datos y "
+"recibiras tu plan de consultas"
+
+#: .\api\views\plan.py:164 .\api\views\plan.py:315 .\api\views\plan.py:428
+#: .\api\views\plan.py:677
 msgid "invalid"
 msgstr "inválido"
 
-#: .\api\views\plan.py:163
+#: .\api\views\plan.py:165
+msgid "Please click the next link to get your plan share"
+msgstr "Por favor dale click al siguiente link para obtener tu plan compartido"
+
+#: .\api\views\plan.py:166
 msgid "Share Plan Success"
 msgstr "Plan compartido exitosamente"
 
-#: .\api\views\plan.py:164
+#: .\api\views\plan.py:167
 msgid "too many queries to share"
 msgstr "demasiadas queries para compartir"
 
-#: .\api\views\plan.py:165 .\api\views\plan.py:311
+#: .\api\views\plan.py:168 .\api\views\plan.py:318
 msgid "Empower already exists"
 msgstr "Ya ha sido facultado"
 
-#: .\api\views\plan.py:310
+#: .\api\views\plan.py:316
+msgid "Please click the next link to get your plan empower"
+msgstr "Por favor dale click al siguiente link para obtener tu plan facultado"
+
+#: .\api\views\plan.py:317
 msgid "Empower Plan Success"
 msgstr "Plan facultado exitosamente"
 
-#: .\api\views\plan.py:312
+#: .\api\views\plan.py:319
 msgid "Share already exists"
 msgstr "Ya ha sido compartido"
 
-#: .\api\views\plan.py:418
+#: .\api\views\plan.py:426
+msgid "Please click the next link to get your plan transfer"
+msgstr ""
+"Por favor dale click al siguiente link para obtener tu plan transferido"
+
+#: .\api\views\plan.py:427
+msgid "Transfer Plan Success"
+msgstr "Plan transferido exitosamente"
+
+#: .\api\views\plan.py:429
 msgid "it already exists"
 msgstr "ya existe"
 
-#: .\api\views\plan.py:666
+#: .\api\views\plan.py:678
 msgid "the plan was previously transferred for this user"
 msgstr "El plan ya fue transferido previamente a este usuario"
 
-#: .\api\views\plan.py:667
+#: .\api\views\plan.py:679
 msgid "Has already been empowered"
 msgstr "Ya ha sido facultado"
 
-#: .\api\views\plan.py:668
+#: .\api\views\plan.py:680
 msgid "Has already been shared"
 msgstr "Ya ha sido compartido"
 
-#: .\api\views\plan.py:670
+#: .\api\views\plan.py:682
 msgid "it can not be share"
 msgstr "no puede ser compartido"
 
-#: .\api\views\plan.py:671
+#: .\api\views\plan.py:683
 msgid "it can not be empower"
 msgstr "no puede ser facultado"
 
-#: .\api\views\plan.py:672
+#: .\api\views\plan.py:684
 msgid "it can not be transfer"
 msgstr "no puede ser transferido"
 
-#: .\api\views\plan.py:674
+#: .\api\views\plan.py:686
 msgid "you can not be shared by yourself"
 msgstr "no puedes compartirlo con tigo mismo"
 
-#: .\api\views\plan.py:675
+#: .\api\views\plan.py:687
 msgid "you can not be empowered by yourself"
 msgstr "no puedes facultarte a con tigo mismo"
 
-#: .\api\views\plan.py:676
+#: .\api\views\plan.py:688
 msgid "you can not be transferred by yourself"
 msgstr "no puedes trasferirte a con tigo mismo"
 
-#: .\api\views\plan.py:825
+#: .\api\views\plan.py:837
 msgid "You don't have permissions"
 msgstr "No tienes permisos"
 
