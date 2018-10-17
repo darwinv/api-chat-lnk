@@ -1555,6 +1555,8 @@ class GetNotificationOnBadge(APITestCase):
         """Badge para el cliente."""
         response = self.client.get(reverse('get-badge'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["queries_pending"], 2)
+        self.assertEqual(response.data["match_pending"], 1)
 
 
 class UpdateEmail(APITestCase):

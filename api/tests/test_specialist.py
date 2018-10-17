@@ -335,7 +335,7 @@ class CreateSpecialist(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
-        
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_specialist_foreign_without(self):
@@ -372,6 +372,44 @@ class DetailSpecialist(APITestCase):
                               kwargs={'pk': self.specialist}), format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class GetNotificationOnBadgeMainSpecialist(APITestCase):
+    """Notificacion redondela especialista principal."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_notification']
+
+    def setUp(self):
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09lk2avXwe09k2avX')
+
+    def test_get_badge(self):
+        """Badge para el cliente."""
+        response = self.client.get(reverse('get-badge'))
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["queries_pending"], 2)
+        self.assertEqual(response.data["match_pending"], 1)
+
+
+class GetNotificationOnBadgeAsocSpecialist(APITestCase):
+    """Notificacion redondela especialista asociado."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_notification']
+
+    def setUp(self):
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09lk2avXweFEk2avXwe09')
+
+    def test_get_badge(self):
+        """Badge para el cliente."""
+        response = self.client.get(reverse('get-badge'))
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["queries_pending"], 1)
+        self.assertEqual(response.data["match_pending"], 0)
 
 
 class UpdateSpecialistCase(APITestCase):
@@ -439,7 +477,7 @@ class UpdateSpecialistCase(APITestCase):
 
     def test_can_change_address(self):
         """Poder cambiar la direccion de residencia"""
-        
+
         data_address = {
             "address": {
                 "street": "jupiter 208",
@@ -454,7 +492,7 @@ class UpdateSpecialistCase(APITestCase):
         # agregar el especialista por defecto
         self.client.credentials(
             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
-        
+
         send = self.client.post(
             reverse('specialists'),
             data=json.dumps(self.valid_payload),
@@ -689,7 +727,7 @@ class GetAsociateSpecialist(APITestCase):
 
         client.credentials(HTTP_AUTHORIZATION='Bearer rRNQmSvkyHvi80qkYplRvLmckV3DYy')
         response = client.get(reverse('specialists-associate-category'))
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

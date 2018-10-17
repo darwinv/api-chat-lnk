@@ -4,8 +4,10 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api.utils.validations import Operations
-from api.serializers.notification import NotificationSerializer
-from api.utils.parameters import ROLE_CLIENT, ROLE_SELLER, ROLE_SPECIALIST
+from api.serializers.notification import NotificationClientSerializer
+from api.serializers.notification import NotificationSpecialistSerializer
+from api.utils.parameters import Params
+from api.models import Client, Specialist
 
 
 class PendingNotificationView(APIView):
@@ -15,6 +17,11 @@ class PendingNotificationView(APIView):
 
     def get(self, request):
         """Funcion devolver data segun rol."""
-        # pk = Operations.get_id(self, request)
-        serializer = NotificationSerializer(pk)
+        user_id = Operations.get_id(self, request)
+        if request.user.role_id == Params.ROLE_CLIENT:
+            queryset = Client.objects.filter(pk=user_id)
+            serializer = NotificationClientSerializer(queryset)
+        elif request.user.role_id == Params.ROLE_SPECIALIST:
+            queryset = Specialist.objects.filter(pk=user_id)
+            serializer = NotificationSpecialistSerializer(queryset)
         return Response(serializer.data)
