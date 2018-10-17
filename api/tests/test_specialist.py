@@ -414,6 +414,7 @@ class GetNotificationOnBadgeAsocSpecialist(APITestCase):
 
 class UpdateSpecialistCase(APITestCase):
     fixtures = ['data','data2','data3']
+    
     def setUp(self):
         self.valid_payload = {
             'username': 'julia',

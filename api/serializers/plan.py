@@ -97,7 +97,8 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         instance.status = 4
         instance.save()
 
-        query_plan_client = QueryPlansClient.objects.get(client=client,acquired_plan=instance)
+        query_plan_client = QueryPlansClient.objects.get(client=client,
+                                                         acquired_plan=instance)
         query_plan_client.is_chosen = is_chosen
         query_plan_client.save()
 
