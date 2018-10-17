@@ -82,9 +82,9 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         model = QueryPlansAcquired
         fields = ('id', 'plan_name', 'is_active',
                   'query_quantity', 'available_queries',
-                  'validity_months', 'expiration_date')
+                  'validity_months', 'expiration_date', 'status')
         read_only_fields = ('id', 'plan_name', 'query_quantity',
-                            'available_queries', 'validity_months')
+                            'available_queries', 'validity_months', 'status')
 
     def update(self, instance, validated_data):
         """Redefinido metodo actualizar."""
@@ -97,7 +97,7 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         instance.status = 4
         instance.save()
 
-        query_plan_client = QueryPlansClient.objects.get(client=client,acquired_plan=instance)
+        query_plan_client = QueryPlansClient.objects.get(client=client, acquired_plan=instance)
         query_plan_client.is_chosen = is_chosen
         query_plan_client.save()
 
@@ -107,6 +107,7 @@ class ActivePlanSerializer(serializers.ModelSerializer):
 class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
     """Plan Adquirido."""
     is_chosen = serializers.SerializerMethodField()
+
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -347,6 +348,7 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
             new_acquired_plan.sale_detail_id = acquired_plan.sale_detail_id
             new_acquired_plan.plan_name = acquired_plan.plan_name
             new_acquired_plan.is_chosen = False
+            new_acquired_plan.status = acquired_plan.status
             new_acquired_plan.save()
 
             # Damos los permisos del plan al usuario
