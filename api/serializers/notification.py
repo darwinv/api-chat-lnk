@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 
-class NotificationSerializer(serializers.Serializer):
+class NotificationClientSerializer(serializers.Serializer):
     """Serializer de data pendiente."""
     def to_representation(self, instance):
         return {

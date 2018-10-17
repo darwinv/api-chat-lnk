@@ -5,6 +5,7 @@ from rest_framework import status, permissions
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from api.utils.validations import Operations
 from api.serializers.notification import NotificationSerializer
+from api.utils.parameters import ROLE_CLIENT, ROLE_SELLER, ROLE_SPECIALIST
 
 
 class PendingNotificationView(APIView):
@@ -14,7 +15,6 @@ class PendingNotificationView(APIView):
 
     def get(self, request):
         """Funcion devolver data segun rol."""
-        pk = Operations.get_id(self, request)
-        import pdb; pdb.set_trace()
+        # pk = Operations.get_id(self, request)
         serializer = NotificationSerializer(pk)
         return Response(serializer.data)

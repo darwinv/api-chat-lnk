@@ -1549,7 +1549,7 @@ class GetNotificationOnBadge(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.client.credentials(
-            HTTP_AUTHORIZATION='Bearer user3GlavEforKavpDzuZSgK0zpoXS')
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
 
     def test_get_badge(self):
         """Badge para el cliente."""

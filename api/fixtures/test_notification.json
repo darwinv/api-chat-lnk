@@ -171,6 +171,23 @@
   }
 },
 {
+  "model": "api.sale",
+  "pk": 8,
+  "fields": {
+    "created_at": "2018-11-10T20:12:14.525Z",
+    "place": "BCP",
+    "total_amount": "450.00",
+    "reference_number": "CD1005",
+    "description": "test",
+    "is_fee": false,
+    "client": 5,
+    "seller": null,
+    "status": 3,
+    "file_url": "",
+    "file_preview_url": ""
+  }
+},
+{
   "model": "api.saledetail",
   "pk": 31,
   "fields": {
@@ -182,6 +199,20 @@
     "contract": null,
     "product_type": 1,
     "sale": 7
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 32,
+  "fields": {
+    "price": "450.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "XXXXX",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 8
   }
 },
 {
@@ -247,7 +278,7 @@
       "available_requeries": 1,
       "category": 17,
       "client": 5,
-      "specialist": 57,
+      "specialist": 6,
       "acquired_plan": 31,
       "changed_on": "2018-08-17T15:23:48.537Z"
     }
@@ -264,8 +295,8 @@
       "created_at": "2018-10-09T20:55:27.105Z",
       "category": 11,
       "client": 5,
-      "specialist": 23,
-      "sale_detail": 123,
+      "specialist": 6,
+      "sale_detail": 32,
       "specialist_payment": null,
       "file_url": "",
       "file_preview_url": ""
@@ -283,8 +314,8 @@
       "created_at": "2018-10-10T14:58:43.956Z",
       "category": 19,
       "client": 5,
-      "specialist": 31,
-      "sale_detail": null,
+      "specialist": 6,
+      "sale_detail": 32,
       "specialist_payment": null,
       "file_url": "",
       "file_preview_url": ""
