@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-11 19:34-0500\n"
+"POT-Creation-Date: 2018-10-17 13:01-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -380,7 +380,7 @@ msgstr "nacionalidad"
 msgid "role"
 msgstr "rol"
 
-#: .\api\models.py:142 .\api\serializers\actors.py:774
+#: .\api\models.py:142 .\api\serializers\actors.py:773
 msgid "address"
 msgstr "direccion"
 
@@ -420,50 +420,50 @@ msgstr "mensaje"
 msgid "viewed"
 msgstr "visto"
 
-#: .\api\serializers\actors.py:269 .\api\serializers\actors.py:280
-#: .\api\serializers\actors.py:546 .\api\serializers\actors.py:558
-#: .\api\serializers\actors.py:848 .\api\serializers\actors.py:859
+#: .\api\serializers\actors.py:270 .\api\serializers\actors.py:281
+#: .\api\serializers\actors.py:547 .\api\serializers\actors.py:559
+#: .\api\serializers\actors.py:847 .\api\serializers\actors.py:858
 msgid "This field must be unique"
 msgstr "Este campo debe ser unico"
 
-#: .\api\serializers\actors.py:291
+#: .\api\serializers\actors.py:292
 msgid "You must be of legal age"
 msgstr "Debes ser mayor de edad"
 
-#: .\api\serializers\actors.py:296 .\api\serializers\actors.py:330
-#: .\api\serializers\actors.py:366 .\api\serializers\actors.py:451
-#: .\api\serializers\actors.py:691 .\api\serializers\actors.py:773
-#: .\api\serializers\actors.py:1114 .\api\serializers\actors.py:1444
+#: .\api\serializers\actors.py:297 .\api\serializers\actors.py:331
+#: .\api\serializers\actors.py:367 .\api\serializers\actors.py:452
+#: .\api\serializers\actors.py:690 .\api\serializers\actors.py:772
+#: .\api\serializers\actors.py:1176 .\api\serializers\actors.py:1509
 #: .\api\serializers\query.py:55 .\api\views\actors.py:124
 #: .\api\views\actors.py:166 .\api\views\actors.py:194
 #: .\api\views\actors.py:245 .\api\views\actors.py:274
-#: .\api\views\actors.py:447 .\api\views\actors.py:753
-#: .\api\views\actors.py:799 .\api\views\actors.py:970
-#: .\api\views\actors.py:1149 .\api\views\actors.py:1548
-#: .\api\views\match.py:228 .\api\views\match.py:276 .\api\views\payment.py:135
-#: .\api\views\payment.py:190 .\api\views\payment.py:222
-#: .\api\views\plan.py:161 .\api\views\plan.py:308 .\api\views\plan.py:415
-#: .\api\views\plan.py:827 .\api\views\query.py:776
+#: .\api\views\actors.py:447 .\api\views\actors.py:754
+#: .\api\views\actors.py:800 .\api\views\actors.py:971
+#: .\api\views\actors.py:1150 .\api\views\actors.py:1549
+#: .\api\views\match.py:229 .\api\views\match.py:277 .\api\views\payment.py:147
+#: .\api\views\payment.py:202 .\api\views\payment.py:234
+#: .\api\views\plan.py:163 .\api\views\plan.py:314 .\api\views\plan.py:425
+#: .\api\views\plan.py:838 .\api\views\query.py:776
 msgid "required"
 msgstr "requerido"
 
-#: .\api\serializers\actors.py:331
+#: .\api\serializers\actors.py:332
 msgid "Tax Code"
 msgstr "Registro de información Fiscal"
 
-#: .\api\serializers\actors.py:551 .\api\serializers\actors.py:609
+#: .\api\serializers\actors.py:552 .\api\serializers\actors.py:608
 msgid "Main Specialist already exists for this speciality"
 msgstr "Especialista Principal ya existe para esta especialidad"
 
-#: .\api\serializers\actors.py:1129
+#: .\api\serializers\actors.py:1191
 msgid "the objection is required"
 msgstr "la objeción es requerida"
 
-#: .\api\serializers\actors.py:1132
+#: .\api\serializers\actors.py:1194
 msgid "password required"
 msgstr "contraseña requerida"
 
-#: .\api\serializers\actors.py:1383 .\api\serializers\actors.py:1428
+#: .\api\serializers\actors.py:1448 .\api\serializers\actors.py:1493
 msgid "old password is invalid"
 msgstr "contraseña anterior es invalidad"
 
@@ -471,7 +471,7 @@ msgstr "contraseña anterior es invalidad"
 msgid "you can not hire that specialty anymore"
 msgstr "ya posees una contratación con esta especialidad"
 
-#: .\api\serializers\payment.py:200
+#: .\api\serializers\payment.py:199
 msgid "This field must not be lesser than the corresponding"
 msgstr "Este campo no puede ser menor al correspondiente"
 
@@ -503,32 +503,35 @@ msgstr "este no es un plan promocional para este vendedor"
 msgid "All rights reserved"
 msgstr "Todos los derechos reservados"
 
-#: .\api\templates\email\empower.html:5 .\api\templates\email\share.html:4
-#: .\api\templates\email\transfer.html:5
-msgid "LinkUp Give you Congratulations!"
-msgstr "Linkup te da las Felicitaciones"
-
-#: .\api\templates\email\empower.html:9
-msgid "Please click the next link for get your plan empower"
-msgstr "Por favor dale click al siguiente link para obtener tu plan facultado"
+#: .\api\templates\email\empower.html:4
+msgid "You have been empowered with a query plan"
+msgstr "Has sido facultado con un plan de consultas"
 
 #: .\api\templates\email\pin_code.html:6
 msgid "Your Pin Code"
 msgstr "Tu codigo PIN!"
 
-#: .\api\templates\email\pin_code.html:16
+#: .\api\templates\email\pin_code.html:9
+msgid ""
+"Congratulations on acquiring your consultation plan(s). We leave you the "
+"data of your plan(s) and code(s) pin for when you want to activate them"
+msgstr ""
+"Felicitaciones por adquirir su(s) plan(es) de consulta. Te dejamos los datos "
+"de tu(s) plane(s) y codigo(s) pin para cuando quieras activarlos"
+
+#: .\api\templates\email\pin_code.html:18
 msgid "Name of the Plan"
 msgstr "Nombre del Plan"
 
-#: .\api\templates\email\pin_code.html:17
+#: .\api\templates\email\pin_code.html:19
 msgid "Months of Validity"
 msgstr "Meses de vigencia"
 
-#: .\api\templates\email\pin_code.html:18
+#: .\api\templates\email\pin_code.html:20
 msgid "Number of Queries"
 msgstr "Cantidad de Consultas"
 
-#: .\api\templates\email\pin_code.html:19
+#: .\api\templates\email\pin_code.html:21
 msgid "Pin code"
 msgstr "Tu codigo PIN"
 
@@ -556,18 +559,17 @@ msgstr "usuario"
 msgid "password"
 msgstr "contraseña"
 
-#: .\api\templates\email\share.html:7
-msgid "Please click the next link for get your plan share"
-msgstr "Por favor dale click al siguiente link para obtener tu plan compartido"
+#: .\api\templates\email\share.html:4
+msgid "A query plan has been shared with you"
+msgstr "Un plan de consultas ha sido compartido contigo"
 
 #: .\api\templates\email\support.html:7
 msgid "name"
 msgstr "name"
 
-#: .\api\templates\email\transfer.html:8
-msgid "Please click the next link for get your plan transfer"
-msgstr ""
-"Por favor dale click al siguiente link para obtener tu plan transferido"
+#: .\api\templates\email\transfer.html:4
+msgid "A query plan has been transferred to your"
+msgstr "Un plan de consultas se te ha sido transferido"
 
 #: .\api\utils\tools.py:52
 msgid "yesterday"
@@ -575,84 +577,109 @@ msgstr "ayer"
 
 #: .\api\views\actors.py:167 .\api\views\actors.py:195
 #: .\api\views\actors.py:246 .\api\views\actors.py:275
-#: .\api\views\actors.py:1150
+#: .\api\views\actors.py:1151
 msgid "not valid"
 msgstr "no valido"
 
-#: .\api\views\plan.py:162 .\api\views\plan.py:309 .\api\views\plan.py:417
-#: .\api\views\plan.py:666
+#: .\api\views\plan.py:30
+msgid ""
+"Please, click the following register link, fill your details and you will "
+"get your query plans"
+msgstr ""
+"Por favor, dale click al siguiente link de registro, llena tus datos y "
+"recibiras tu plan de consultas"
+
+#: .\api\views\plan.py:164 .\api\views\plan.py:315 .\api\views\plan.py:428
+#: .\api\views\plan.py:677
 msgid "invalid"
 msgstr "inválido"
 
-#: .\api\views\plan.py:163
+#: .\api\views\plan.py:165
+msgid "Please click the next link to get your plan share"
+msgstr "Por favor dale click al siguiente link para obtener tu plan compartido"
+
+#: .\api\views\plan.py:166
 msgid "Share Plan Success"
 msgstr "Plan compartido exitosamente"
 
-#: .\api\views\plan.py:164
+#: .\api\views\plan.py:167
 msgid "too many queries to share"
 msgstr "demasiadas queries para compartir"
 
-#: .\api\views\plan.py:165 .\api\views\plan.py:311
+#: .\api\views\plan.py:168 .\api\views\plan.py:318
 msgid "Empower already exists"
 msgstr "Ya ha sido facultado"
 
-#: .\api\views\plan.py:310
+#: .\api\views\plan.py:316
+msgid "Please click the next link to get your plan empower"
+msgstr "Por favor dale click al siguiente link para obtener tu plan facultado"
+
+#: .\api\views\plan.py:317
 msgid "Empower Plan Success"
 msgstr "Plan facultado exitosamente"
 
-#: .\api\views\plan.py:312
+#: .\api\views\plan.py:319
 msgid "Share already exists"
 msgstr "Ya ha sido compartido"
 
-#: .\api\views\plan.py:418
+#: .\api\views\plan.py:426
+msgid "Please click the next link to get your plan transfer"
+msgstr ""
+"Por favor dale click al siguiente link para obtener tu plan transferido"
+
+#: .\api\views\plan.py:427
+msgid "Transfer Plan Success"
+msgstr "Plan transferido exitosamente"
+
+#: .\api\views\plan.py:429
 msgid "it already exists"
 msgstr "ya existe"
 
-#: .\api\views\plan.py:667
+#: .\api\views\plan.py:678
 msgid "the plan was previously transferred for this user"
 msgstr "El plan ya fue transferido previamente a este usuario"
 
-#: .\api\views\plan.py:668
+#: .\api\views\plan.py:679
 msgid "Has already been empowered"
 msgstr "Ya ha sido facultado"
 
-#: .\api\views\plan.py:669
+#: .\api\views\plan.py:680
 msgid "Has already been shared"
 msgstr "Ya ha sido compartido"
 
-#: .\api\views\plan.py:671
+#: .\api\views\plan.py:682
 msgid "it can not be share"
 msgstr "no puede ser compartido"
 
-#: .\api\views\plan.py:672
+#: .\api\views\plan.py:683
 msgid "it can not be empower"
 msgstr "no puede ser facultado"
 
-#: .\api\views\plan.py:673
+#: .\api\views\plan.py:684
 msgid "it can not be transfer"
 msgstr "no puede ser transferido"
 
-#: .\api\views\plan.py:675
+#: .\api\views\plan.py:686
 msgid "you can not be shared by yourself"
 msgstr "no puedes compartirlo con tigo mismo"
 
-#: .\api\views\plan.py:676
+#: .\api\views\plan.py:687
 msgid "you can not be empowered by yourself"
 msgstr "no puedes facultarte a con tigo mismo"
 
-#: .\api\views\plan.py:677
+#: .\api\views\plan.py:688
 msgid "you can not be transferred by yourself"
 msgstr "no puedes trasferirte a con tigo mismo"
 
-#: .\api\views\plan.py:826
+#: .\api\views\plan.py:837
 msgid "You don't have permissions"
 msgstr "No tienes permisos"
 
-#: .\linkupapi\settings.py:115
+#: .\linkupapi\settings.py:112
 msgid "Spanish"
 msgstr "Español"
 
-#: .\linkupapi\settings.py:116
+#: .\linkupapi\settings.py:113
 msgid "English"
 msgstr "Ingles"
 

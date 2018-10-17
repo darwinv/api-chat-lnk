@@ -1,14 +1,12 @@
 {% extends 'email/base.html' %}
 {% load i18n %}
 {% block content_mail %}
-
   <h1> {% trans "You have been empowered with a query plan"|title %} </h1>
-
   <div style="text-align: justify;">
     <p>
-      {% trans "Please click the next link for get your plan empower" %}
+      {{ message }}
       <br>
-      <strong>{{link}}</strong>
+      <strong>{{ link }}</strong>
     </p>
   </div>
 {% endblock content_mail %}
