@@ -29,7 +29,7 @@ class MatchListClientView(ListCreateAPIView):
     """Vista Match cliente."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrClient]
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
         """Listado de Matchs."""
@@ -47,12 +47,18 @@ class MatchListClientView(ListCreateAPIView):
     def post(self, request):
         """Metodo para Solicitar Match."""
         # Devolvemos el id del usuario
-        user_id = Operations.get_id(self, request)
         data = request.data
+        user_id = Operations.get_id(self, request)
+
+        if (request.user.role_id == 4 or request.user.role_id == 1) and "client_id" in data:
+            data["client"] = data["client_id"]
+        else:
+            data["client"] = user_id
+        
         if 'file' in data:
             if data["file"] is None:
                 del data["file"]
-        data["client"] = user_id
+        
         serializer = MatchSerializer(data=data)
         if serializer.is_valid():
             serializer.save()

@@ -40,8 +40,9 @@ def ws_receive(message):
 @channel_session
 def ws_disconnect(message):
     """Desconectar."""
-    label = message.channel_session['room']
-    Group('chat-'+label).discard(message.reply_channel)
+    if message.channel_session and "room" in message.channel_session:
+        label = message.channel_session['room']
+        Group('chat-'+label).discard(message.reply_channel)
 
 
 def send_api(token='', arg=None, files=None):
