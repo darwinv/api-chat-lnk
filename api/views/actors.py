@@ -1511,6 +1511,7 @@ class RucDetailView(APIView):
             response = requests.post(url, json=payload, timeout=2.5)
         except Exception as e:
             response = None
+        
         try:
             url_sunat = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
             response2 = requests.get(url_sunat, timeout=2.5)
@@ -1523,7 +1524,7 @@ class RucDetailView(APIView):
             # Convinamos los diccionarios
             data = dict(data, **response.json())
 
-            data['cellphone'] = data['telephone'] = ""
+            data['cellphone'] = data['telephone'] = data['code_cellphone'] = data['code_telephone'] = ""
             if 'telefono' in response2.json():
                 telefonos = response2.json()['telefono']
                 phones = telefonos.split('|')

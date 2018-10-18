@@ -428,6 +428,8 @@ class ClientSerializer(serializers.ModelSerializer):
         instance.nick = validated_data.get('nick', instance.nick)
         instance.telephone = validated_data.get('telephone', instance.telephone)
         instance.cellphone = validated_data.get('cellphone', instance.cellphone)
+        instance.code_telephone = validated_data.get('code_telephone', instance.code_telephone)
+        instance.code_cellphone = validated_data.get('code_cellphone', instance.code_cellphone)
         instance.residence_country = validated_data.get('residence_country', instance.residence_country)
 
         # Verificamos si reside en el extranjero, se elimina direccion
@@ -503,6 +505,7 @@ class SpecialistSerializer(serializers.ModelSerializer):
             'type_specialist', 'type_specialist_name', 'photo',
             'document_type', 'document_type_name', 'document_number',
             'address', 'ruc', 'email_exact', 'code', 'telephone', 'cellphone',
+            'code_telephone', 'code_cellphone',
             'business_name', 'payment_per_answer', 'cv', 'star_rating',
             'category', 'category_name', 'nationality', 'nationality_name',
             'residence_country', 'residence_country_name',
@@ -623,6 +626,10 @@ class SpecialistSerializer(serializers.ModelSerializer):
                                                 instance.telephone)
         instance.cellphone = validated_data.get('cellphone',
                                                 instance.cellphone)
+        instance.code_telephone = validated_data.get('code_telephone',
+                                                instance.code_telephone)
+        instance.code_cellphone = validated_data.get('code_cellphone',
+                                                instance.code_cellphone)
         instance.ruc = validated_data.get('ruc', instance.ruc)
         instance.business_name = validated_data.get('business_name',
                                                     instance.business_name)
@@ -742,11 +749,11 @@ class SellerSerializer(serializers.ModelSerializer):
         model = Seller
         fields = (
             'id', 'address', 'quota', 'zone', 'username', 'nick', 'first_name',
-            'last_name', 'email_exact', 'telephone', 'cellphone', "photo",
-            'document_type', 'document_type_name', 'code', 'document_number',
-            'ruc', 'nationality', 'nationality_name', 'residence_country',
-            'residence_country_name', "foreign_address", "ciiu", "ciiu_name",
-            "role")
+            'last_name', 'email_exact', 'telephone', 'cellphone', 'code_telephone',
+            'code_cellphone', 'photo', 'document_type', 'document_type_name',
+            'code', 'document_number', 'ruc', 'nationality', 'nationality_name',
+            'residence_country', 'residence_country_name', "foreign_address",
+            "ciiu", "ciiu_name", "role")
 
     def get_nationality_name(self, obj):
         """Devuelvo la nacionalidad del vendedor."""
@@ -804,6 +811,10 @@ class SellerSerializer(serializers.ModelSerializer):
             'cellphone', instance.cellphone)
         instance.telephone = validated_data.get(
             'telephone', instance.telephone)
+        instance.code_cellphone = validated_data.get(
+            'code_cellphone', instance.code_cellphone)
+        instance.code_telephone = validated_data.get(
+            'code_telephone', instance.code_telephone)
         instance.last_name = validated_data.get(
             'last_name', instance.last_name)
 
@@ -1295,10 +1306,10 @@ class SellerContactNaturalSerializer(BaseSellerContactSerializer):
                   'document_number', 'email_exact', 'type_client', 'civil_state',
                   'civil_state_name', 'birthdate', 'institute', 'objection',
                   'sex', 'sex_name', 'ocupation_name', 'activity_description',
-                  'photo', 'about', 'cellphone', 'telephone', 'ocupation',
-                  'profession', 'address', 'level_instruction', 'latitude',
-                  'longitude', 'seller', 'objection_name', 'nationality',
-                  'nationality_name', 'level_instruction_name', 'photo',
+                  'photo', 'about', 'cellphone', 'telephone', 'code_cellphone',
+                  'code_telephone', 'ocupation', 'profession', 'address',
+                  'level_instruction', 'latitude', 'longitude', 'seller', 'objection_name', 
+                  'nationality', 'nationality_name', 'level_instruction_name', 'photo',
                   "foreign_address", 'residence_country',
                   'password', 'other_objection'
                   )
@@ -1383,11 +1394,11 @@ class SellerContactBusinessSerializer(BaseSellerContactSerializer):
         fields = ('id', 'business_name', 'commercial_reason', 'type_contact',
                   'document_type', 'document_type_name', 'document_number',
                   'ruc', 'economic_sector', 'activity_description', 'about',
-                  'cellphone', 'telephone', 'address', 'latitude', 'position',
-                  'type_client', 'longitude', 'seller', 'objection', 'email_exact',
-                  'objection_name', 'nationality', 'type_contact_name',
-                  'nationality_name', 'photo', 'agent_firstname', 'objection',
-                  'agent_lastname', 'residence_country', 'password', 'ciiu',
+                  'cellphone', 'telephone', 'code_cellphone', 'code_telephone', 
+                  'address', 'latitude', 'position', 'type_client', 'longitude',
+                  'seller', 'objection', 'email_exact', 'objection_name', 'nationality',
+                  'type_contact_name', 'nationality_name', 'photo', 'agent_firstname',
+                  'objection', 'agent_lastname', 'residence_country', 'password', 'ciiu',
                   'other_objection', "foreign_address"
                   )
 
@@ -1535,6 +1546,8 @@ class RucApiDetailSerializer(serializers.Serializer):
     commercial_reason = serializers.CharField()
     telephone = serializers.CharField()
     cellphone = serializers.CharField()
+    code_telephone = serializers.CharField()
+    code_cellphone = serializers.CharField()
     ruc = serializers.CharField()
 
     def get_address(self, obj):
