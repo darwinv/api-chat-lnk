@@ -609,7 +609,7 @@ class ClientDetailView(APIView):
         data = request.data
 
         valid_fields = ("commercial_reason", "ciiu", "nick",
-                "telephone", "cellphone", "residence_country", "address", "foreign_address")
+                "telephone", "cellphone", "code_telephone", "code_cellphone", "residence_country", "address", "foreign_address")
 
         clear_data_no_valid(data, valid_fields)
 
