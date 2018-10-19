@@ -116,6 +116,23 @@ class MatchDeclineSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+    def to_representation(self, obj):
+        """to Representacion."""
+        # cuando se declina el nombre a devolver es el especialista
+        # ya que se le envia al cliente en el notification push
+        display_name = obj.specialist.first_name + ' ' + obj.specialist.last_name
+
+        if obj.specialist.nick is not None:
+            if len(obj.specialist.nick) > 0:
+                display_name = obj.specialist.nick
+
+        return {"id": obj.id, "category": obj.category.id,
+                "subject": obj.subject, "client": obj.client.id,
+                "specialist": obj.specialist.id,
+                "display_name": display_name,
+                "photo": obj.specialist.photo,
+                "declined_motive": obj.declined_motive}
+
 
 class MatchListClientSerializer(serializers.ModelSerializer):
     """Listado de Matchs."""

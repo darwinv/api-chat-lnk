@@ -18,9 +18,10 @@ from api.serializers.match import MatchAcceptSerializer, MatchDeclineSerializer
 from api.serializers.match import MatchListSpecialistSerializer
 from api.serializers.match import MatchListSerializer
 from api.serializers.notification import NotificationSpecialistSerializer
+from api.serializers.notification import NotificationClientSerializer
 from api.permissions import IsAdminOrClient, IsOwnerAndClient
 from api.permissions import IsAdminOrSpecialist, IsAdminOnList
-from api.models import Match, MatchFile, Sale, QueryPlansAcquired
+from api.models import Match, MatchFile, Sale, QueryPlansAcquired, Client
 from api.models import SellerContact, Specialist
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.logger import manager
@@ -186,6 +187,26 @@ class MatchDeclineView(APIView):
         serializer = MatchDeclineSerializer(match, data=data)
         if serializer.is_valid():
             serializer.save()
+            if 'test' not in sys.argv:
+                client_id = serializer.data["client"]
+                qset_client = Client.objects.filter(pk=client_id)
+                dict_pending = NotificationClientSerializer(qset_client).data
+                badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                data_notif_push = {
+                    "title": serializer.data['display_name'],
+                    "body": serializer.data["subject"],
+                    "sub_text": "",
+                    "ticker": serializer.data["declined_motive"],
+                    "badge": badge_count,
+                    "icon": serializer.data['photo'],
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
+                    "match_id": serializer.data["id"]
+                }
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=client_id,
+                                           data=data_notif_push)
+
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 

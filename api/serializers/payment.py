@@ -154,7 +154,7 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
                                         status__range=(2, 3)).exists()
         if is_client:
             match.status = 5
-        else:            
+        else:
 
             sale = Sale.objects.create(place="BCP", total_amount=match.price,
                                    reference_number=increment_reference(),
