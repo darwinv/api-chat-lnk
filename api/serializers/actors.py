@@ -1117,7 +1117,7 @@ class ContactToClientSerializer(serializers.ModelSerializer):
         data_client["level_instruction"] = contact.level_instruction_id
         data_client["address"] = AddressSerializer(contact.address).data
         data_client["photo"] = contact.photo
-
+        
         if data_client["type_client"] == 'b':
             data_client['birthdate'] = '1900-01-01'
             data_client['sex'] = ''

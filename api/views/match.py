@@ -23,7 +23,7 @@ from api.models import Match, MatchFile, Sale, QueryPlansAcquired
 from api.models import SellerContact
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.logger import manager
-
+from api import pyrebase
 logger = manager.setup_log(__name__)
 
 
@@ -68,11 +68,14 @@ class MatchListClientView(ListCreateAPIView):
                 except SellerContact.DoesNotExist:
                     pass
                 
-            if "seller" in data:
+            if "seller" in data and "email_exact" in data:
                 serializer_client = ContactToClientSerializer(data=data)
                 if serializer_client.is_valid():
                     serializer_client.save()
-                    data["client"] = serializer_client.data["client_id"] 
+                    data["client"] = serializer_client.data["client_id"]
+
+                    # categorias firebase para el cliente
+                    pyrebase.createCategoriesLisClients(serializer.data['client_id'])
         
 
         # Cliente que hace match es requerido
