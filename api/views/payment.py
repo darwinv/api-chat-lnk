@@ -67,26 +67,14 @@ class ConfirmDiscountView(APIView):
         client = match.client
         # se verifica si ya fue cliente el usuario que solicito el match
         # si ya lo fue pasa a status 5 directo sino pasa a 4. pendiente de pago
-        is_client = Sale.objects.filter(saledetail__product_type=1,
+        is_client = Sale.objects.filter(
                                         saledetail__is_billable=True,
                                         client=client,
                                         status__range=(2, 3)).exists()
         if is_client:
             match.status = 5
         else:
-            sale = Sale.objects.create(place="BCP", total_amount=match.price,
-                                   reference_number=increment_reference(),
-                                   description='pago de match',
-                                   client=match.client, status=1)
-
-            sale_detail = SaleDetail.objects.create(price=match.price,
-                                                    description="Contratacion de especialista",
-                                                    discount=float(0),
-                                                    pin_code='XXXXXX',
-                                                    is_billable=True,
-                                                    product_type_id=2, sale=sale)
             match.status = 4
-            match.sale_detail = sale_detail
 
         match.save()
 
