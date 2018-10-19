@@ -23,6 +23,7 @@ from api.models import Match, MatchFile, Sale, QueryPlansAcquired
 from api.models import SellerContact
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.logger import manager
+
 logger = manager.setup_log(__name__)
 
 
@@ -97,12 +98,13 @@ class MatchBackendListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsAdminOnList, ]
 
+
     def list(self, request):
         """Listado de Matchs."""
         queryset = Match.objects.all()
         if 'status' in request.query_params:
-            status = request.query_params["status"]
-            queryset = queryset.filter(status=status)
+            status = request.query_params["status"]            
+            queryset = queryset.filter(status__in=status)
 
         if 'payment_option_specialist' in request.query_params:
             payment_option_specialist = request.query_params["payment_option_specialist"]
