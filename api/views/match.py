@@ -199,7 +199,7 @@ class MatchUploadFilesView(APIView):
     """Subida de archivos para la consultas."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsOwnerAndClient]
+    permission_classes = [permissions.IsAuthenticated]
     parser_classes = (JSONParser, MultiPartParser)
 
     def get_object(self, request, pk):
