@@ -1,6 +1,7 @@
 """Vista de MAtch."""
 import os
 import boto3
+import sys
 from django.http import Http404, HttpResponse
 from botocore.exceptions import ClientError
 from rest_framework.generics import ListCreateAPIView
@@ -16,12 +17,14 @@ from api.serializers.match import MatchSerializer, MatchListClientSerializer
 from api.serializers.match import MatchAcceptSerializer, MatchDeclineSerializer
 from api.serializers.match import MatchListSpecialistSerializer
 from api.serializers.match import MatchListSerializer
+from api.serializers.notification import NotificationSpecialistSerializer
 from api.permissions import IsAdminOrClient, IsOwnerAndClient
 from api.permissions import IsAdminOrSpecialist, IsAdminOnList
 from api.models import Match, MatchFile, Sale, QueryPlansAcquired
-from api.models import SellerContact
+from api.models import SellerContact, Specialist
 from api.utils.tools import s3_upload_file, remove_file, resize_img
 from api.logger import manager
+from fcm.fcm import Notification
 logger = manager.setup_log(__name__)
 
 
@@ -54,8 +57,31 @@ class MatchListClientView(ListCreateAPIView):
                 del data["file"]
         data["client"] = user_id
         serializer = MatchSerializer(data=data)
+        # determino el total de consultas pendientes (status 1 o 2)
+        # y matchs por responder o pagar
+
         if serializer.is_valid():
             serializer.save()
+            if 'test' not in sys.argv:
+                specialist_id = serializer.data["specialist"]
+                qset_spec = Specialist.objects.filter(pk=specialist_id)
+                dict_pending = NotificationSpecialistSerializer(qset_spec).data
+                badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                data_notif_push = {
+                    "title": serializer.data['display_name'],
+                    "body": serializer.data["subject"],
+                    "sub_text": "",
+                    "ticker": serializer.data["subject"],
+                    "badge": badge_count,
+                    "icon": serializer.data['photo'],
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
+                    "match_id": serializer.data["id"]
+                }
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=specialist_id,
+                                           data=data_notif_push)
+
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -223,7 +249,7 @@ class SpecialistMatchUploadFilesView(APIView):
         """Actualiza el match, subiendo archivos."""
         obj_instance = self.get_object(request, pk)
         files = request.FILES.getlist('file')
-        
+
         if len(files) == 0:
             raise serializers.ValidationError(
                 {"file": _("required")})
@@ -300,8 +326,8 @@ class SaleClientUploadFilesView(APIView):
             sale_detail__sale=obj_instance, status=4).update(status=6)
 
         SellerContact.objects.filter(
-            email_exact=obj_instance.client.email_exact).update(type_contact=1)        
-        
+            email_exact=obj_instance.client.email_exact).update(type_contact=1)
+
         return HttpResponse(status=200)
 
 def upload_file(file, model_update=None, obj_instance=None):
