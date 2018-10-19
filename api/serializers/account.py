@@ -4,6 +4,7 @@ from api.models import Specialist, Query, SellerContact, ParameterSeller
 from api.models import SellerNonBillablePlans, Declinator, QueryPlansAcquired
 from api.models import Match
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from datetime import datetime, timedelta, date
 from django.db.models import Count, Sum, Q
 from api.serializers.plan import QueryPlansAcquiredSimpleSerializer
@@ -258,9 +259,9 @@ class SellerAccountSerializer(serializers.Serializer):
         seller = self.context["seller"]
 
         # fecha de hoy
-        to_date = datetime.now()
+        to_date = timezone.now()
         # fecha de primer  dia del mes
-        from_date = datetime(to_date.year, to_date.month, 1, 0, 0, 0)
+        from_date = datetime(to_date.year, to_date.month, 1, 0, 0, 0, tzinfo=timezone.get_default_timezone())
 
 
         # clientes nuevos que ya pagaron en este mes
@@ -275,12 +276,35 @@ class SellerAccountSerializer(serializers.Serializer):
                                        saledetail__is_billable=False,
                                        created_at__range=(from_date, to_date)).count()
 
-        qs = obj.filter(saledetail__product_type=1,
-                        saledetail__is_billable=True,
-                        created_at__range=(from_date, to_date),
-                        status__range=(2, 3)).values('client_id')
-        # Cantidad de personas  que compraron este mes
-        people_purchase = qs.annotate(client_count=Count('client_id')).count()
+        # query de todas las ventas hechas por el vendedor con al menos un producto del tipo 1, facturable
+        # y con status de 2 a 3
+        qs = obj.filter(
+            saledetail__product_type=1,
+            saledetail__is_billable=True,
+            status__range=(2, 3)
+        ).values('client_id')
+
+        # diccionario de clientes y sus respectivas compras historicas
+        clients_purchases = qs.annotate(purchases_count=Count('id', distinct=True))
+
+        # query de todas las ventas hechas en este mes
+        this_month_purchases = qs.filter(
+            created_at__range=(from_date, to_date)
+        ).values('client_id')
+
+        # diccionario de clientes y sus respectivas compras de este mes
+        this_month_clients_purchases = this_month_purchases.annotate(purchases_count=Count('id', distinct=True))
+
+        # se usa los dos diccionarios anteriores para identificar cuantas recompras se hicieron
+        this_month_repurchases = 0
+        for month_purchase_info in this_month_clients_purchases:
+            client_id = month_purchase_info['client_id']
+            historic_purchases = next((item for item in clients_purchases if item['client_id'] == client_id))['purchases_count']
+            # si el cliente ha hecho mas de una compra, entonces ha efectuado recompras
+            if historic_purchases > 1:
+                # la cantidad de recompras agregadas solo seran de el mes en cuestion
+                this_month_repurchases += min(month_purchase_info['purchases_count'], historic_purchases - 1)
+
         # instancia parametro de vendedor
         try:
             seller_param = ParameterSeller.objects.get(seller=seller,
@@ -310,7 +334,7 @@ class SellerAccountSerializer(serializers.Serializer):
                     "month_contacts": contacts,
 
                     "month_people_purchase_goal": people_purchase_goal,
-                    "month_people_purchase": people_purchase,
+                    "month_people_purchase": this_month_repurchases,
 
                     "month_all_promotionals": all_promo,
                     "month_promotionals": promotional_plans
@@ -334,13 +358,21 @@ class SellerAccountHistoricSerializer(serializers.Serializer):
                         saledetail__is_billable=True,
                         status__range=(2, 3)).values('client_id')
         # Cantidad de personas  que compraron este mes
-        people_purchase = qs.annotate(client_count=Count('client_id')).count()
+        people_purchase = qs.annotate(purchases_count=Count('id', distinct=True))
 
+        repurchases = 0
+        for purchase in people_purchase:
+            client_id = purchase['client_id']
+            historic_purchases = purchase['purchases_count']
+            # si el cliente ha hecho mas de una compra, entonces ha efectuado recompras
+            if historic_purchases > 1:
+                # la cantidad de recompras agregadas solo seran de el mes en cuestion
+                repurchases += (historic_purchases - 1)
 
         return {
                     "total_clients": new_clients,
                     "total_contacts": contacts,
-                    "total_people_purchase": people_purchase
+                    "total_people_purchase": repurchases
                 }
 
 class SellerAccountBackendSerializer(serializers.Serializer):
