@@ -34,7 +34,7 @@ from api.serializers.query import QueryDeriveSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
 from api.serializers.query import ChatMessageSerializer, QueryDeclineSerializer
 from api.serializers.query import QueryResponseSerializer, ReQuerySerializer
-from api.serializers.query import QueryQualifySerializer
+from api.serializers.query import QueryQualifySerializer, DeclineReprSerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
 from api.serializers.actors import PendingQueriesSerializer
 from api.serializers.notification import NotificationSpecialistSerializer
@@ -697,10 +697,34 @@ class QueryDeriveView(APIView):
         data = {}
         data["status"] = 1
         data["specialist"] = request.data["specialist"]
+        specialist_asoc_id = data["specialist"]
+        qset_spec = Specialist.objects.filter(pk=specialist_asoc_id)
+        dict_pending = NotificationSpecialistSerializer(qset_spec).data
+        badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+
         serializer = QueryDeriveSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
             if 'test' not in sys.argv:
+                lista = list(serializer.data['message'].values())
+                body = get_body(lista[-1]["fileType"], lista[-1]["message"])
+                data_notif_push = {
+                    "title": serializer.data['displayName'],
+                    "body": body,
+                    "sub_text": "",
+                    "ticker": serializer.data["obj_query"]["title"],
+                    "badge": badge_count,
+                    "icon": serializer.data['photo'],
+                    "client_id": serializer.data['client'],
+                    "category_id": serializer.data['category'],
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
+                    "query_id": serializer.data["query_id"]
+                }
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=specialist_asoc_id,
+                                           data=data_notif_push)
+
                 pyrebase.updateStatusQueryDerive(specialist,
                                                  data["specialist"], query)
             return Response(serializer.data, status.HTTP_200_OK)
@@ -735,14 +759,35 @@ class QueryDeclineView(ListAPIView):
         context["specialist"] = main_specialist
         context["specialist_declined"] = specialist
 
+        qset_spec = Specialist.objects.filter(pk=main_specialist)
+        dict_pending = NotificationSpecialistSerializer(qset_spec).data
+        badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+
         serializer = QueryDeclineSerializer(query, data=request.data,
                                             context=context)
 
         if serializer.is_valid():
             serializer.save()
+            ser = DeclineReprSerializer(query)
             if 'test' not in sys.argv:
+                data_notif_push = {
+                    "title": ser.data['displayName'],
+                    "body": ser.data["motive"],
+                    "sub_text": "",
+                    "ticker": ser.data["motive"],
+                    "badge": badge_count,
+                    "icon": ser.data['photo'],
+                    "client_id": ser.data['client'],
+                    "category_id": ser.data["category"],
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
+                    "query_id": ser.data["query_id"]
+                }
                 pyrebase.updateStatusQueryDerive(specialist,
                                                  main_specialist.id, query)
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=main_specialist,
+                                           data=data_notif_push)
             return Response(serializer.data, status.HTTP_200_OK)
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

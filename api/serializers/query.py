@@ -661,6 +661,25 @@ class QueryDeriveSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+    def to_representation(self, obj):
+        """redefinido to repr."""
+        if obj.client.type_client == 'n':
+            display_name = obj.client.first_name + ' ' + obj.client.last_name
+        else:
+            display_name = obj.client.agent_firstname + ' ' + obj.client.agent_lastname
+
+        if obj.client.nick is not None:
+            if len(obj.client.nick) > 0:
+                display_name = obj.client.nick
+
+        resp = QuerySerializer(obj).data
+        resp["photo"] = obj.category.image
+        resp["displayName"] = display_name
+        resp["category"] = obj.category_id
+        resp["client"] = obj.client_id
+        return resp
+
+
 
 class QueryQualifySerializer(serializers.ModelSerializer):
     """Calificar Consulta."""
@@ -684,6 +703,28 @@ class QueryQualifySerializer(serializers.ModelSerializer):
             pk=instance.specialist).update(
                 star_rating=int(rating["qualification__avg"]))
         return instance
+
+
+class DeclineReprSerializer(serializers.ModelSerializer):
+    """Serializer solo para repr."""
+
+    class Meta:
+        """Meta."""
+        model = Query
+        fields = ('id',)
+
+    def to_representation(self, obj):
+        """Data devuelta."""
+        dict_repr = {}
+        decline_obj = obj.declinator_set.last()
+
+        dict_repr["displayName"] = decline_obj.specialist.last_name + _("has declined")
+        dict_repr["motive"] = decline_obj.message
+        dict_repr["photo"] = decline_obj.specialist.photo
+        dict_repr["client"] = obj.client_id
+        dict_repr["category"] = obj.category_id
+        dict_repr["query_id"] = obj.id
+        return dict_repr
 
 
 class QueryDeclineSerializer(QueryDeriveSerializer):
@@ -713,7 +754,6 @@ class QueryDeclineSerializer(QueryDeriveSerializer):
         if type(obj) is dict and 'specialist__first_name' in obj:
             return obj['specialist__first_name']
         return ""
-
 
     def get_last_name(self, obj):
         if type(obj) is dict and 'specialist__last_name' in obj:

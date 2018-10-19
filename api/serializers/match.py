@@ -130,7 +130,7 @@ class MatchDeclineSerializer(serializers.ModelSerializer):
                 "subject": obj.subject, "client": obj.client.id,
                 "specialist": obj.specialist.id,
                 "display_name": display_name,
-                "photo": obj.specialist.photo,
+                "photo": obj.client.photo,
                 "declined_motive": obj.declined_motive}
 
 
