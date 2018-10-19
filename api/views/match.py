@@ -103,13 +103,14 @@ class MatchBackendListView(ListCreateAPIView):
         """Listado de Matchs."""
         queryset = Match.objects.all()
         if 'status' in request.query_params:
-            status = request.query_params["status"]            
+            status = request.query_params.getlist('status')
             queryset = queryset.filter(status__in=status)
-
+            
         if 'payment_option_specialist' in request.query_params:
             payment_option_specialist = request.query_params["payment_option_specialist"]
             queryset = queryset.filter(payment_option_specialist=payment_option_specialist)
 
+        
         # pagination
         page = self.paginate_queryset(queryset)
         if page is not None:
