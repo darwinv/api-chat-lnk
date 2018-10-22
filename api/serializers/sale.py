@@ -70,9 +70,10 @@ class ProductSerializer(serializers.Serializer):
 
 class SaleSerializer(serializers.Serializer):
     """Serializer de venta."""
-    # vendedor es  opcional, ya que puede comprar el cliente por su cuenta
+    # Antes el vendedor era opcional, pero ahora es requerido y se almacenara como el que efectuo la venta
+    # asi haya sido un cliente o un administrador el que la efectuo
     seller = serializers.PrimaryKeyRelatedField(queryset=Seller.objects.all(),
-                                                required=False)
+                                                required=True)
     client = serializers.PrimaryKeyRelatedField(queryset=Client.objects.all(),
                                                 required=True)
     # listado de  productos que se agregaran en la venta
