@@ -1,11 +1,12 @@
 """Serializers del Match."""
 from rest_framework import serializers
-from api.models import Match, MatchFile, MatchProduct, Specialist, Sale
+
+from api.models import Match, MatchFile, MatchProduct, Specialist, Sale, SaleDetail
+
 from django.utils.translation import ugettext_lazy as _
 from api.serializers.actors import ClientSerializer, SpecialistSerializer
 from api.api_choices_models import ChoicesAPI as ch
-
-
+from api.serializers.sale import increment_reference
 class ListFileSerializer(serializers.ModelSerializer):
     """Serializer para la representacion del mensaje."""
     class Meta:
@@ -48,9 +49,11 @@ class MatchSerializer(serializers.ModelSerializer):
             category_id=validated_data["category"])
         # import pdb; pdb.set_trace()
         validated_data["price"] = MatchProduct.objects.first().price
-        validated_data["status"] = 1       
 
-        is_client = Sale.objects.filter(saledetail__is_billable=True,
+        validated_data["status"] = 1
+
+        is_client = Sale.objects.filter(
+                                        saledetail__is_billable=True,
                                         client=validated_data["client"],
                                         status__range=(2, 3)).exists()
         if is_client:
@@ -62,7 +65,7 @@ class MatchSerializer(serializers.ModelSerializer):
         sale = Sale.objects.create(place="BCP", total_amount=validated_data["price"],
                                    reference_number=increment_reference(),
                                    description='pago de match',
-                                   client=validated_data["client"], status=1)
+                                   client=validated_data["client"], status=1)        
 
         # Detalle de la compra del match
         sale_detail = SaleDetail.objects.create(price=validated_data["price"],
@@ -71,6 +74,7 @@ class MatchSerializer(serializers.ModelSerializer):
                                                 pin_code='XXXXXX',
                                                 is_billable=is_billable,
                                                 product_type_id=2, sale=sale)
+        
         validated_data["sale_detail"] = sale_detail
 
         data_files = validated_data.pop('file', None)

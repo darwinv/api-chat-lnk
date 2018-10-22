@@ -153,6 +153,11 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
                                         status__range=(2, 3)).exists()
         if is_client:
             match.status = 5
+            import pdb
+            pdb.set_trace()
+            sale = match.sale_detail.sale
+            sale.status = 3
+            sale.save()
         else:
             match.status = 4
 

@@ -80,7 +80,7 @@ class SaleSerializer(serializers.Serializer):
     is_fee = serializers.BooleanField(required=True)
     place = serializers.CharField(allow_blank=True)
     description = serializers.CharField(required=False)
-    reference_number = serializers.CharField(default=increment_reference)
+    reference_number = serializers.CharField(default=increment_reference())
 
     def to_representation(self, instance):
         return {
