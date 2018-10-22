@@ -1,6 +1,6 @@
 """Serializers del Match."""
 from rest_framework import serializers
-from api.models import Match, MatchFile, MatchProduct, Specialist
+from api.models import Match, MatchFile, MatchProduct, Specialist, Sale
 from django.utils.translation import ugettext_lazy as _
 from api.serializers.actors import ClientSerializer, SpecialistSerializer
 from api.api_choices_models import ChoicesAPI as ch
@@ -48,12 +48,38 @@ class MatchSerializer(serializers.ModelSerializer):
             category_id=validated_data["category"])
         # import pdb; pdb.set_trace()
         validated_data["price"] = MatchProduct.objects.first().price
-        validated_data["status"] = 1
+        validated_data["status"] = 1       
+
+        is_client = Sale.objects.filter(saledetail__is_billable=True,
+                                        client=validated_data["client"],
+                                        status__range=(2, 3)).exists()
+        if is_client:
+            is_billable = False
+        else:
+            is_billable = True
+
+        # Crear compra del match
+        sale = Sale.objects.create(place="BCP", total_amount=validated_data["price"],
+                                   reference_number=increment_reference(),
+                                   description='pago de match',
+                                   client=validated_data["client"], status=1)
+
+        # Detalle de la compra del match
+        sale_detail = SaleDetail.objects.create(price=validated_data["price"],
+                                                description="Contratacion de especialista",
+                                                discount=float(0),
+                                                pin_code='XXXXXX',
+                                                is_billable=is_billable,
+                                                product_type_id=2, sale=sale)
+        validated_data["sale_detail"] = sale_detail
+
         data_files = validated_data.pop('file', None)
         match = Match.objects.create(**validated_data)
         if data_files is not None:
             for data_file in data_files:
                 MatchFile.objects.create(match=match, **data_file)
+
+
         return match
 
     def to_representation(self, obj):

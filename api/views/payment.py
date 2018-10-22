@@ -67,8 +67,7 @@ class ConfirmDiscountView(APIView):
         client = match.client
         # se verifica si ya fue cliente el usuario que solicito el match
         # si ya lo fue pasa a status 5 directo sino pasa a 4. pendiente de pago
-        is_client = Sale.objects.filter(
-                                        saledetail__is_billable=True,
+        is_client = Sale.objects.filter(saledetail__is_billable=True,
                                         client=client,
                                         status__range=(2, 3)).exists()
         if is_client:
