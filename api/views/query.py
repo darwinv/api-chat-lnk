@@ -699,12 +699,12 @@ class QueryDeriveView(APIView):
         data["status"] = 1
         data["specialist"] = request.data["specialist"]
         specialist_asoc_id = data["specialist"]
-        qset_spec = Specialist.objects.filter(pk=specialist_asoc_id)
-        dict_pending = NotificationSpecialistSerializer(qset_spec).data
-        badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
         serializer = QueryDeriveSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
+            qset_spec = Specialist.objects.filter(pk=specialist_asoc_id)
+            dict_pending = NotificationSpecialistSerializer(qset_spec).data
+            badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
             if 'test' not in sys.argv:
                 lista = list(serializer.data['message'].values())
                 body = get_body(lista[-1]["fileType"], lista[-1]["message"])
@@ -758,15 +758,14 @@ class QueryDeclineView(ListAPIView):
         context["status"] = 1
         context["specialist"] = main_specialist
         context["specialist_declined"] = specialist
-
-        qset_spec = Specialist.objects.filter(pk=main_specialist)
-        dict_pending = NotificationSpecialistSerializer(qset_spec).data
-        badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
         serializer = QueryDeclineSerializer(query, data=request.data,
                                             context=context)
 
         if serializer.is_valid():
             serializer.save()
+            qset_spec = Specialist.objects.filter(pk=main_specialist)
+            dict_pending = NotificationSpecialistSerializer(qset_spec).data
+            badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
             ser = DeclineReprSerializer(query)
             if 'test' not in sys.argv:
                 data_notif_push = {
