@@ -122,7 +122,7 @@ class ActivePlanSerializer(serializers.ModelSerializer):
                 "share": qplanclient.share,
                 "empower": qplanclient.empower,
                 "owner": qplanclient.owner,
-                "price": instance.sale_detail.price,
+                "price": str(instance.sale_detail.price),
                 "is_fee": instance.sale_detail.sale.is_fee,
                 "fee": serializer_fee.data
                 }
