@@ -1106,6 +1106,7 @@ class ContactToClientSerializer(serializers.ModelSerializer):
 
         data_client = SellerContact.objects.filter(
             email_exact=email).values().first()
+
         # import pdb; pdb.set_trace()
         data_client["username"] = email
         data_client["role"] = Params.ROLE_CLIENT
@@ -1116,8 +1117,11 @@ class ContactToClientSerializer(serializers.ModelSerializer):
         data_client["residence_country"] = contact.residence_country_id
         data_client["level_instruction"] = contact.level_instruction_id
         data_client["address"] = AddressSerializer(contact.address).data
-        
-        
+
+        data_client["photo"] = contact.photo
+        data_client["code_telephone"] = contact.code_telephone.id
+        data_client["code_cellphone"] = contact.code_cellphone.id
+
         if data_client["type_client"] == 'b':
             data_client['birthdate'] = '1900-01-01'
             data_client['sex'] = ''
@@ -1131,6 +1135,7 @@ class ContactToClientSerializer(serializers.ModelSerializer):
             data_client['ciiu'] = contact.ciiu_id
 
         serializer_client = ClientSerializer(data=data_client)
+
         if serializer_client.is_valid():
             serializer_client.save()
             self.context['client_id'] = serializer_client.data['id']
