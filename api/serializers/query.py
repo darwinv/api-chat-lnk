@@ -1,5 +1,6 @@
 """Consultas."""
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as trans
 from django.db.models import Avg
 from rest_framework import serializers
 from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
@@ -718,7 +719,7 @@ class DeclineReprSerializer(serializers.ModelSerializer):
         dict_repr = {}
         decline_obj = obj.declinator_set.last()
 
-        dict_repr["displayName"] = decline_obj.specialist.last_name + _("has declined")
+        dict_repr["displayName"] = decline_obj.specialist.last_name + trans("has declined")
         dict_repr["motive"] = decline_obj.message
         dict_repr["photo"] = decline_obj.specialist.photo
         dict_repr["client"] = obj.client_id
@@ -749,6 +750,18 @@ class QueryDeclineSerializer(QueryDeriveSerializer):
         specialist = self.context['specialist_declined']
         data_declinator["specialist"] = Specialist.objects.get(pk=specialist)
         return Declinator.objects.create(**data_declinator)
+
+
+class QueryListDeclineSerializer(serializers.ModelSerializer):
+    """Listado de Declinaciones."""
+
+    name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+
+    class Meta:
+        """Meta."""
+        model = Declinator
+        fields = ('message', 'name', 'last_name')
 
     def get_name(self, obj):
         if type(obj) is dict and 'specialist__first_name' in obj:

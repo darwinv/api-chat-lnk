@@ -33,6 +33,7 @@ from api.serializers.query import QueryMessageSerializer
 from api.serializers.query import QueryDeriveSerializer, QueryAcceptSerializer
 from api.serializers.query import QueryDetailLastMsgSerializer
 from api.serializers.query import ChatMessageSerializer, QueryDeclineSerializer
+from api.serializers.query import QueryListDeclineSerializer
 from api.serializers.query import QueryResponseSerializer, ReQuerySerializer
 from api.serializers.query import QueryQualifySerializer, DeclineReprSerializer
 from api.serializers.actors import SpecialistMessageListCustomSerializer
@@ -701,7 +702,6 @@ class QueryDeriveView(APIView):
         qset_spec = Specialist.objects.filter(pk=specialist_asoc_id)
         dict_pending = NotificationSpecialistSerializer(qset_spec).data
         badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
-
         serializer = QueryDeriveSerializer(query, data=data)
         if serializer.is_valid():
             serializer.save()
@@ -762,7 +762,6 @@ class QueryDeclineView(ListAPIView):
         qset_spec = Specialist.objects.filter(pk=main_specialist)
         dict_pending = NotificationSpecialistSerializer(qset_spec).data
         badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
-
         serializer = QueryDeclineSerializer(query, data=request.data,
                                             context=context)
 
@@ -788,17 +787,17 @@ class QueryDeclineView(ListAPIView):
                 # envio de notificacion push
                 Notification.fcm_send_data(user_id=main_specialist,
                                            data=data_notif_push)
-            return Response(serializer.data, status.HTTP_200_OK)
+            return Response(ser.data, status.HTTP_200_OK)
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-
     def get(self, request, pk):
         """Obtener la lista con todos los planes del cliente."""
-        declinators = Declinator.objects.filter(query=pk).values('message',
-            'specialist__first_name','specialist__last_name')
+        declinators = Declinator.objects.filter(
+            query=pk).values('message', 'specialist__first_name',
+                             'specialist__last_name')
 
-        serializer = QueryDeclineSerializer(declinators, many=True)
+        serializer = QueryListDeclineSerializer(declinators, many=True)
 
         return Response(serializer.data)
 
