@@ -1,20 +1,23 @@
 """Serializer de Venta"""
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
-from api.models import Payment, MonthlyFee, Sale, SaleDetail, Match
+from api.models import Payment, MonthlyFee, Sale, SaleDetail, Match, Client
 from api.models import QueryPlansAcquired, SellerContact, User, MatchProduct
 from api.utils.tools import get_date_by_time
 from api.utils.querysets import get_next_fee_to_pay
 from datetime import datetime, date
+from fcm.fcm import Notification
 from api.emails import BasicEmailAmazon
 from dateutil.relativedelta import relativedelta
 from rest_framework.validators import UniqueValidator
 from api.serializers.actors import ClientSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from api.serializers.fee import FeeSerializer
+from api.serializers.notification import NotificationClientSerializer
 from api.utils.parameters import Params
 import sys
 from api import pyrebase
+from api.utils.tools import display_specialist_name
 from api.serializers.sale import increment_reference
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -154,6 +157,26 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
                                         status__range=(2, 3)).exists()
         if is_client:
             match.status = 5
+            if 'test' not in sys.argv:
+                client_id = match.client_id
+                qset_client = Client.objects.filter(pk=client_id)
+                dict_pending = NotificationClientSerializer(qset_client).data
+                badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                disp_name = display_specialist_name(match)
+                data_notif_push = {
+                    "title": disp_name,
+                    "body": match.subject,
+                    "sub_text": "",
+                    "ticker": _("successful hiring"),
+                    "badge": badge_count,
+                    "icon": match.category.image,
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
+                    "match_id": match.id
+                }
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=client_id,
+                                           data=data_notif_push)
         else:
 
             sale = Sale.objects.create(place="BCP", total_amount=match.price,
@@ -209,6 +232,26 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
         instance = Payment(**validated_data)
         instance.save()
         match.status = 5
+        if 'test' not in sys.argv:
+            client_id = match.client_id
+            qset_client = Client.objects.filter(pk=client_id)
+            dict_pending = NotificationClientSerializer(qset_client).data
+            badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+            disp_name = display_specialist_name(match)
+            data_notif_push = {
+                "title": disp_name,
+                "body": match.subject,
+                "sub_text": "",
+                "ticker": _("successful hiring"),
+                "badge": badge_count,
+                "icon": match.category.image,
+                "queries_pending": dict_pending["queries_pending"],
+                "match_pending": dict_pending["match_pending"],
+                "match_id": match.id
+            }
+            # envio de notificacion push
+            Notification.fcm_send_data(user_id=client_id,
+                                       data=data_notif_push)
         match.save()
         return instance
 
