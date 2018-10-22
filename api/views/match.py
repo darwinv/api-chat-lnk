@@ -251,7 +251,7 @@ class SpecialistMatchUploadFilesView(APIView):
     def get_object(self, request, pk):
         """Devuelvo la consulta."""
         try:
-            obj = Match.objects.get(pk=pk, status=1)
+            obj = Match.objects.get(pk=pk, status__in=[1,2])
             return obj
         except Match.DoesNotExist:
             raise Http404
