@@ -189,4 +189,5 @@ class ChoicesAPI:
         (1, _('Effective')),
         (2, _('Non Effective')),
         (3, _('Effective paid')),  # efectivo que ya ha pagado.
+        (4, _('Promotional')),
     )

@@ -154,7 +154,7 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
                                         status__range=(2, 3)).exists()
         if is_client:
             match.status = 5
-        else:            
+        else:
 
             sale = Sale.objects.create(place="BCP", total_amount=match.price,
                                    reference_number=increment_reference(),
@@ -261,11 +261,11 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
         return obj.client.business_name
 
 
-
 class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
     attribute_product = serializers.SerializerMethodField()
     product_type_name = serializers.SerializerMethodField()
+
     class Meta:
         """Modelo."""
 
@@ -332,6 +332,7 @@ class PaymentSalePendingDetailSerializer(serializers.ModelSerializer):
         serializer = SaleWithFeeSerializer(obj.sale)
 
         return serializer.data
+
 
 class SaleContactoDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""

@@ -544,18 +544,32 @@ class CreateNaturalContact(APITestCase):
 
     def test_create_effective(self):
         """Crear conctacto efectivo."""
-        self.valid_payload.pop('objection')
-        self.valid_payload["type_contact"] = 1
+        data = self.valid_payload.copy()
+        data.pop('objection')
+        data["type_contact"] = 1
         # registro como usuario tambien
-        self.valid_payload["password"] = '123456'
+        data["password"] = '123456'
         response = self.client.post(
             reverse('contacts'),
-            data=json.dumps(self.valid_payload),
+            data=json.dumps(data),
             content_type='application/json'
         )
+        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
 
+    def test_create_promotional(self):
+        """Crear conctacto promocional."""
+        data = self.valid_payload.copy()
+        data.pop('objection')
+        data["type_contact"] = 4
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 # Prueba para verificar la insercion de cliente juridico
 class CreateBussinessContact(APITestCase):
