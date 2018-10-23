@@ -248,23 +248,22 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
         return obj.client.business_name
 
 
-
 class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
     attribute_product = serializers.SerializerMethodField()
     product_type_name = serializers.SerializerMethodField()
+
     class Meta:
         """Modelo."""
 
         model = SaleDetail
         fields = (
             'price', 'description', 'discount', 'pin_code', 'is_billable',
-            'contract','product_type', 'sale', 'attribute_product',
+            'contract', 'product_type', 'sale', 'attribute_product',
             'product_type_name')
 
     def get_attribute_product(self, obj):
         """Devuelve client."""
-
         if obj.product_type.id == 1:
             plan = QueryPlansAcquired.objects.get(sale_detail=obj.id)
             sale = QueryPlansAcquiredSerializer(plan)
