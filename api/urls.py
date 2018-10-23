@@ -260,6 +260,9 @@ urlpatterns = [
     url(r'^sellers/clients/$', actors.SellerClientListView.as_view(),
         name='sellers-clients'),
 
+    url(r'^sellers/clients/(?P<pk>[0-9]+)/assign/$', actors.AssignClientToOtherSeller.as_view(),
+        name='assign-clients'),
+
     # Actualizar Consulta por detalle (Responder)
     url(r'^specialist/queries/(?P<pk>[0-9]+)/$',
         query.QueryDetailSpecialistView.as_view(), name='query-specialist'),

@@ -467,6 +467,14 @@ class ClientSerializer(serializers.ModelSerializer):
                          {"foreign_address": [required]})
         return
 
+class ClientDetailSerializer(serializers.ModelSerializer):
+    """  Serializer creado para evitar la validacion no parcial de ClientSerializer """
+
+    class Meta:
+        """declaracion del modelo y sus campos."""
+
+        model = Client
+        fields = '__all__'
 
 class SpecialistSerializer(serializers.ModelSerializer):
     """Serializer del especialista."""
