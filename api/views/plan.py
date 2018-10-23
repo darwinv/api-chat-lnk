@@ -26,6 +26,8 @@ from rest_framework import serializers
 from linkupapi.settings_secret import WEB_HOST
 from api.serializers.plan import PlansNonBillableSerializer, PlanStatusSerializer
 
+REGISTER_LINK = WEB_HOST + 'register'
+REGISTRATION_MESSAGE = _('Please, click the following register link, fill your details and you will get your query plans')
 
 class PlansView(APIView):
     """Listado de planes activos a la venta."""
@@ -160,6 +162,7 @@ class ClientSharePlansView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     required = _("required")
     invalid = _("invalid")
+    default_message = _("Please click the next link to get your plan share")
     subject = _("Share Plan Success")
     to_much_query_share = _("too many queries to share")
     already_exists_empower = _("Empower already exists")
@@ -283,9 +286,12 @@ class ClientSharePlansView(APIView):
             for email_receiver in serializer_data:
                 if 'test' not in sys.argv:
                     # Envio de correos notificacion
-                    mail = BasicEmailAmazon(subject="Share Plan Success", to=email_receiver,
+                    mail = BasicEmailAmazon(subject=str(self.subject), to=email_receiver,
                                 template='email/share')
-                    arguments = {'link': WEB_HOST}
+                    if receiver is not None:
+                        arguments = {'message':self.default_message, 'link':WEB_HOST}
+                    else:
+                        arguments = {'message':REGISTRATION_MESSAGE, 'link':REGISTER_LINK}
                     mail.sendmail(args=arguments)
 
                 # Ejecutamos el serializer
@@ -307,6 +313,7 @@ class ClientEmpowerPlansView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     required = _("required")
     invalid = _("invalid")
+    default_message = _("Please click the next link to get your plan empower")
     subject = _("Empower Plan Success")
     already_exists_empower = _("Empower already exists")
     already_exists_share = _("Share already exists")
@@ -397,9 +404,12 @@ class ClientEmpowerPlansView(APIView):
             for email_receiver in serializer_data:
                 if 'test' not in sys.argv:
                         # Envio de correos notificacion
-                        mail = BasicEmailAmazon(subject="Facultar Plan Exitoso", to=email_receiver,
+                        mail = BasicEmailAmazon(subject=str(self.subject), to=email_receiver,
                                     template='email/empower')
-                        arguments = {'link': WEB_HOST}
+                        if receiver is not None:
+                            arguments = {'message':self.default_message, 'link':WEB_HOST}
+                        else:
+                            arguments = {'message':REGISTRATION_MESSAGE, 'link':REGISTER_LINK}
                         mail.sendmail(args=arguments)
 
                 # Ejecutamos el serializer
@@ -413,7 +423,8 @@ class ClientTransferPlansView(APIView):
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
     required = _("required")
-    subject = "Transfer Plan Success"
+    default_message = _("Please click the next link to get your plan transfer")
+    subject = _("Transfer Plan Success")
     invalid = _("invalid")
     already_exists = _("it already exists")
 
@@ -488,17 +499,20 @@ class ClientTransferPlansView(APIView):
                 # Si el plan estaba escogido por el anterior cliente
                 if is_chosen_plan:
                     pyrebase.delete_actual_plan_client(client)
-                    mail = BasicEmailAmazon(subject=self.subject, to=email_receiver,
-                                template='email/transfer')
-                    args = {
-                        'link': WEB_HOST
-                    }
-                    mail.sendmail(args=request.data)
+
+                mail = BasicEmailAmazon(subject=str(self.subject), to=email_receiver,
+                            template='email/transfer')
+                if receiver is not None:
+                    arguments = {'message':self.default_message, 'link':WEB_HOST}
+                else:
+                    arguments = {'message':REGISTRATION_MESSAGE, 'link':REGISTER_LINK}
+                mail.sendmail(args=arguments)
 
             serializer.save()
 
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ClientAllPlansView(ListCreateAPIView):
     """Vista para obetener todos los planes de un cliente."""
@@ -516,7 +530,7 @@ class ClientAllPlansView(ListCreateAPIView):
                 ).annotate(is_chosen=F('queryplansclient__is_chosen'),
                     price=F('sale_detail__price'),
                     sale=F('sale_detail__sale'),
-                  is_fee=F('sale_detail__sale__is_fee')).order_by('id')
+                  is_fee=F('sale_detail__sale__is_fee')).order_by('-id')
 
             self.check_object_permissions(self.request, obj)
             return obj

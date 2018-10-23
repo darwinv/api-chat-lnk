@@ -19,6 +19,7 @@ from api.serializers.match import MatchListSpecialistSerializer
 from api.serializers.match import MatchListSerializer
 from api.serializers.notification import NotificationSpecialistSerializer
 from api.serializers.notification import NotificationClientSerializer
+from api.serializers.actors import ContactToClientSerializer
 from api.permissions import IsAdminOrClient, IsOwnerAndClient
 from api.permissions import IsAdminOrSpecialist, IsAdminOnList
 from api.models import Match, MatchFile, Sale, QueryPlansAcquired, Client
@@ -33,7 +34,7 @@ class MatchListClientView(ListCreateAPIView):
     """Vista Match cliente."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = [permissions.IsAuthenticated, IsAdminOrClient]
+    permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
         """Listado de Matchs."""
@@ -51,12 +52,42 @@ class MatchListClientView(ListCreateAPIView):
     def post(self, request):
         """Metodo para Solicitar Match."""
         # Devolvemos el id del usuario
-        user_id = Operations.get_id(self, request)
         data = request.data
+        user_id = Operations.get_id(self, request)
+
+        if request.user.role_id == 2:
+            data["client"] = user_id
+        elif (request.user.role_id == 4 or request.user.role_id == 1) and "client_id" in data and data["client_id"]:
+            data["client"] = data["client_id"]
+        elif (request.user.role_id == 4 or request.user.role_id == 1) and "email_exact" in data and data["email_exact"]:
+            email_exact = data["email_exact"]
+
+            if request.user.role_id == 4:
+                user_id = Operations.get_id(self, request)
+                data["seller"] = user_id
+            else:
+                try:
+                   data["seller"] = SellerContact.objects.get(email_exact=email_exact).seller.id
+                except SellerContact.DoesNotExist:
+                    pass
+
+            if "seller" in data:
+                serializer_client = ContactToClientSerializer(data=data)
+                if serializer_client.is_valid():
+                    serializer_client.save()
+                    data["client"] = serializer_client.data["client_id"]
+
+
+        # Cliente que hace match es requerido
+        if "client" not in data:
+            raise serializers.ValidationError(
+                {"client_id": _("required")})
+
+
         if 'file' in data:
             if data["file"] is None:
                 del data["file"]
-        data["client"] = user_id
+
         serializer = MatchSerializer(data=data)
         # determino el total de consultas pendientes (status 1 o 2)
         # y matchs por responder o pagar

@@ -223,6 +223,13 @@ class SellerContact(models.Model):
     cellphone = models.CharField(max_length=14, blank=True, null=True)
     telephone = models.CharField(max_length=14, blank=True, null=True)
 
+    code_telephone = models.ForeignKey(Countries, null=True,
+                                       on_delete=models.PROTECT,
+                                       related_name="prefix_telephone_contact")
+    code_cellphone = models.ForeignKey(Countries, null=True,
+                                       on_delete=models.PROTECT,
+                                       related_name="prefix_cellphone_contact")
+
     ocupation = models.PositiveIntegerField(choices=Ch.client_ocupation,
                                             null=True, default=7)
     profession = models.CharField(max_length=150, null=True)

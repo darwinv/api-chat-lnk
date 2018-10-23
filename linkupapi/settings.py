@@ -44,9 +44,6 @@ INSTALLED_APPS = [
     'chat'
 ]
 
-
-
-
 OAUTH2_PROVIDER = {
     'ACCESS_TOKEN_EXPIRE_SECONDS': 31104000,
     # this is the list of available scopes
@@ -147,16 +144,13 @@ TEST_URL = os.path.join(BASE_DIR, 'api/tests/files')
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': [
 #         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+#         'master_password.auth.ModelBackend',
 #     ],
 #     'DEFAULT_PERMISSION_CLASSES': [
 #         'rest_framework.permissions.IsAuthenticated',
-#     ],
-#     'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination',
-#     'PAGE_SIZE': 20,
-#     'DEFAULT_FILTER_BACKENDS': (
-#         'django_filters.rest_framework.DjangoFilterBackend',
-#     ),
+#     ]
 # }
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination',
     'PAGE_SIZE': 20,
@@ -177,3 +171,8 @@ CHANNEL_LAYERS = {
         "ROUTING": "chat.routing.channel_routing",
     },
 }
+
+AUTHENTICATION_BACKENDS = (
+    'oauth2_provider.backends.OAuth2Backend',
+    'master_password.auth.ModelBackend'
+)

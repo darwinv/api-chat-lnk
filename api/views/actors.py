@@ -609,7 +609,7 @@ class ClientDetailView(APIView):
         data = request.data
 
         valid_fields = ("commercial_reason", "ciiu", "nick",
-                "telephone", "cellphone", "residence_country", "address", "foreign_address")
+                "telephone", "cellphone", "code_telephone", "code_cellphone", "residence_country", "address", "foreign_address")
 
         clear_data_no_valid(data, valid_fields)
 
@@ -1166,7 +1166,6 @@ class ContactListView(ListCreateAPIView):
         if 'type_contact' in data and data['type_contact'] == 1:
             password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
             data["password"] = password
-            data["password"] = "123456"
 
 
         if data["type_client"] == 'n':
@@ -1512,6 +1511,7 @@ class RucDetailView(APIView):
             response = requests.post(url, json=payload, timeout=2.5)
         except Exception as e:
             response = None
+        
         try:
             url_sunat = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
             response2 = requests.get(url_sunat, timeout=2.5)
@@ -1524,7 +1524,7 @@ class RucDetailView(APIView):
             # Convinamos los diccionarios
             data = dict(data, **response.json())
 
-            data['cellphone'] = data['telephone'] = ""
+            data['cellphone'] = data['telephone'] = data['code_cellphone'] = data['code_telephone'] = ""
             if 'telefono' in response2.json():
                 telefonos = response2.json()['telefono']
                 phones = telefonos.split('|')

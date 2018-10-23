@@ -82,9 +82,9 @@ class ActivePlanSerializer(serializers.ModelSerializer):
         model = QueryPlansAcquired
         fields = ('id', 'plan_name', 'is_active',
                   'query_quantity', 'available_queries',
-                  'validity_months', 'expiration_date')
+                  'validity_months', 'expiration_date', 'status')
         read_only_fields = ('id', 'plan_name', 'query_quantity',
-                            'available_queries', 'validity_months')
+                            'available_queries', 'validity_months', 'status')
 
     def update(self, instance, validated_data):
         """Redefinido metodo actualizar."""
@@ -104,10 +104,35 @@ class ActivePlanSerializer(serializers.ModelSerializer):
 
         return instance
 
+    def to_representation(self, instance):
+        """Datos de vuelta."""
+        # import pdb; pdb.set_trace()
+        qplanclient = instance.queryplansclient_set.get()
+        fee = get_next_fee_to_pay(instance.sale_detail.sale)
+        serializer_fee = FeeSerializer(fee)
+        return {"id": instance.id, "plan_name": instance.plan_name,
+                "is_active": instance.is_active,
+                "query_quantity": instance.query_quantity,
+                "available_queries": instance.available_queries,
+                "validity_months": instance.validity_months,
+                "status": instance.status,
+                "is_chosen": self.context['is_chosen'],
+                "expiration_date": instance.expiration_date,
+                "activation_date": instance.activation_date,
+                "transfer": qplanclient.transfer,
+                "share": qplanclient.share,
+                "empower": qplanclient.empower,
+                "owner": qplanclient.owner,
+                "price": instance.sale_detail.price,
+                "is_fee": instance.sale_detail.sale.is_fee,
+                "fee": serializer_fee.data
+                }
+
 
 class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
     """Plan Adquirido."""
     is_chosen = serializers.SerializerMethodField()
+
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -348,6 +373,7 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
             new_acquired_plan.sale_detail_id = acquired_plan.sale_detail_id
             new_acquired_plan.plan_name = acquired_plan.plan_name
             new_acquired_plan.is_chosen = False
+            new_acquired_plan.status = acquired_plan.status
             new_acquired_plan.save()
 
             # Damos los permisos del plan al usuario
