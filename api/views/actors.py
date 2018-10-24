@@ -1150,7 +1150,7 @@ class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated, IsSeller)
+    #permission_classes = (permissions.IsAuthenticated, IsSeller)
     # aca se debe colocar el serializer para listar todos
     serializer_class = SellerContactNaturalSerializer
     queryset = SellerContact.objects.all()
@@ -1179,6 +1179,13 @@ class ContactListView(ListCreateAPIView):
         not_valid = _("not valid")
         data = request.data
         data["seller"] = Operations.get_id(self, request)
+        if data['seller'] is None:
+            data['seller'] = Parameter.objects.get(parameter='platform_seller').value
+            #TODO: Usar constantes. Eliminar numeros magicos
+            data['latitude'] = '-12.1000244'
+            data['longitude'] = '76.9701127'
+            data['type_contact'] = 1
+
         if "email_exact" not in data or not data["email_exact"]:
             raise serializers.ValidationError({'email_exact': [required]})
 
