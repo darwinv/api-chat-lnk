@@ -728,7 +728,7 @@ class SpecialistListView(ListCreateAPIView):
     def list(self, request):
         # en dado caso que exista el parametro "main_specialist", se devuelve
         # el listado de especialistas asociados, caso contrario devuelve todos
-        
+
         if 'main_specialist' in request.query_params:
             specialist = self.get_object(
                 request.query_params["main_specialist"])
@@ -785,7 +785,7 @@ class SpecialistAsociateListView(ListCreateAPIView):
 
         specialists = Specialist.objects.filter(category=obj.category,
                                                 type_specialist="a")
-        
+
         page = self.paginate_queryset(specialists)
         if page is not None:
             serializer = AssociateSpecialistSerializer(page, many=True)
@@ -1191,7 +1191,7 @@ class ContactListView(ListCreateAPIView):
             del data["password"]
 
         # generamos contraseña random
-        if 'type_contact' in data and data['type_contact'] == 1:
+        if 'type_contact' in data and data['type_contact'] != 2:
             password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
             data["password"] = password
 
@@ -1208,7 +1208,7 @@ class ContactListView(ListCreateAPIView):
 
             # Registrar nodos para contacto efectivo
             if 'test' not in sys.argv:
-                if data['type_contact'] == 1:
+                if data['type_contact'] != 2:
                     # se le crea la lista de todas las categorias al cliente en firebase
                     pyrebase.createCategoriesLisClients(serializer.data['client_id'])
 
@@ -1539,7 +1539,7 @@ class RucDetailView(APIView):
             response = requests.post(url, json=payload, timeout=2.5)
         except Exception as e:
             response = None
-        
+
         try:
             url_sunat = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
             response2 = requests.get(url_sunat, timeout=2.5)
