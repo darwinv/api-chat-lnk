@@ -14,7 +14,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django.db.models import OuterRef, Subquery, Q, Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
-from api.serializers.actors import ClientSerializer, UserPhotoSerializer
+from api.serializers.actors import ClientSerializer, UserPhotoSerializer, ClientDetailSerializer
 from api.serializers.actors import KeySerializer, ContactPhotoSerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SellerContactSerializer
@@ -1012,6 +1012,34 @@ class SellerClientListView(ListCreateAPIView):
             serializer = ClientSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
+
+class AssignClientToOtherSeller(APIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrSeller]
+
+    def get_object(self, pk):
+        try:
+            obj = Client.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except Client.DoesNotExist:
+                raise Http404
+
+    def put(self, request, pk):
+        data = request.data
+
+        client = self.get_object(pk)
+        
+        updated_data = {}
+        updated_data['seller_assigned'] = request.data['seller_id']
+
+        serializer = ClientDetailSerializer(client, updated_data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SellerDetailView(APIView):
