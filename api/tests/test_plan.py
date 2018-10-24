@@ -507,7 +507,6 @@ class CreatePlansNonBillable(APITestCase):
         """Setup."""
         self.valid_payload = {
             "quantity": 2,
-            "query_plans": 2,
             "seller": 19,
             "number_month": 6,
             "number_year": 2018
@@ -517,14 +516,6 @@ class CreatePlansNonBillable(APITestCase):
         """Sin Cantidad."""
         data = self.valid_payload.copy()
         data["quantity"] = ""
-        response = client.post(reverse('plans-nonbillable'),
-                               format='json', data=data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_no_query_plans(self):
-        """Sin plan de consulta."""
-        data = self.valid_payload.copy()
-        data["query_plans"] = ""
         response = client.post(reverse('plans-nonbillable'),
                                format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

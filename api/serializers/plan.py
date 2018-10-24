@@ -525,17 +525,14 @@ class PlansNonBillableSerializer(serializers.ModelSerializer):
     class Meta:
         """Modelo."""
         model = SellerNonBillablePlans
-        fields = ('seller', 'query_plans', 'quantity',
+        fields = ('seller', 'quantity',
                   'number_month', 'number_year')
 
     def to_representation(self, instance):
         """representation."""
         data = {
             "id": instance.id,
-            "name": instance.query_plans.name,
-            "query_quantity": instance.query_plans.query_quantity,
-            "validity_months": instance.query_plans.validity_months,
-            "price": instance.query_plans.price,
-            "clasification": instance.query_plans.clasification.id
+            "number_month": instance.number_month,
+            "seller": instance.seller_id
         }
         return data

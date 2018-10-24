@@ -2,7 +2,7 @@
 from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 from rest_framework import status
-from api.models import Sale
+from api.models import Sale, SellerNonBillablePlans
 from django.urls import reverse
 import json
 
@@ -153,24 +153,23 @@ class PurchaseQueryPromotionalPlans(APITestCase):
     def test_unavailable_promotional(self):
         """planes de vendedor agotados."""
         data = self.valid_payload.copy()
-        data["products"][0]["plan_id"] = 5
+        SellerNonBillablePlans.objects.filter(seller=2).update(quantity=0)
         response = client.post(reverse('purchase'),
-                               data=json.dumps(self.valid_payload),
+                               data=json.dumps(data),
                                content_type='application/json')
-
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_no_promotional_for_seller(self):
         """no es un plan promocional para este vendedor."""
         data = self.valid_payload.copy()
-        data["products"][0]["plan_id"] = 3
+        data["products"][0]["plan_id"] = 4
         response = client.post(reverse('purchase'),
                                data=json.dumps(data),
                                content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_promotional_repeat_client(self):
-        """Compra exitosa promocional."""
+        """no es valida, se repite cliente."""
 
         response = client.post(reverse('purchase'),
                                data=json.dumps(self.valid_payload),

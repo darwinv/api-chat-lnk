@@ -402,7 +402,7 @@ class QueryPlans(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     clasification = models.ForeignKey(Clasification, on_delete=models.PROTECT)
-    non_billable = models.ManyToManyField(Seller, through='SellerNonBillablePlans')
+    is_promotional = models.BooleanField(default=False)
 
     def __str__(self):
         """String."""
@@ -413,7 +413,6 @@ class SellerNonBillablePlans(models.Model):
     """Planes no Facturables Asignados a Vendedores."""
 
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
-    query_plans = models.ForeignKey(QueryPlans, on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField()
     number_month = models.PositiveIntegerField()
     number_year = models.PositiveIntegerField()
