@@ -1065,7 +1065,7 @@ class GetContactsFilterDate(APITestCase):
         # SellerContact.objects.filter(seller=2).update(created_at=hoy)
         response = self.client.get(reverse('contacts-filter'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 4)
+        self.assertEqual(response.data["count"], 5)
 
     def test_get_filter_no_effective_contacts(self):
         """Devolver Contactos No efectivos."""
@@ -1083,6 +1083,14 @@ class GetContactsFilterDate(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 2)
 
+    def test_get_filter_promo_contacts(self):
+        """Devolver Contactos promocionales."""
+        data = {"type_contact": 4}
+        response = self.client.get(reverse('contacts-filter'), data)
+        # import pdb; pdb.set_trace()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
     def test_get_filter_with_date_contacts(self):
         """Devolver Contactos No efectivos."""
         data = {"date_start": '2018-08-20',
@@ -1090,7 +1098,7 @@ class GetContactsFilterDate(APITestCase):
         response = self.client.get(reverse('contacts-filter'), data)
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 3)
+        self.assertEqual(response.data["count"], 4)
 
     def test_get_filter_with_date_contacts_e(self):
         """Devolver Contactos No efectivos."""

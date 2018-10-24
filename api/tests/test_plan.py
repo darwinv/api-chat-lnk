@@ -156,7 +156,6 @@ class GetClientPlansAllList(APITestCase):
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
         response = self.client.get(reverse('client-plans-all'), format='json')
-        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -558,7 +557,6 @@ class GetPromocionalPlans(APITestCase):
     def test_get_seller_plans(self):
         """devolver todos los planes pertenecientes al vendedor."""
         response = self.client.get(reverse('seller-plans-nonbillable'))
-        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetCheckEmailForOperationPlans(APITestCase):

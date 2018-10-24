@@ -1278,6 +1278,8 @@ class ContactFilterView(ListAPIView):
                 queryset = queryset.filter(type_contact=1)
             elif int(type_contact) == 2:
                 queryset = queryset.filter(type_contact=2)
+            elif int(type_contact) == 4:
+                queryset = queryset.filter(type_contact=4)
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
         if date_start is not None and date_end is not None:
