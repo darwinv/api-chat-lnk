@@ -262,7 +262,6 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
     client__last_name = serializers.SerializerMethodField()
     client__business_name = serializers.SerializerMethodField()
     created_at = serializers.SerializerMethodField()
-
     pay_before = serializers.SerializerMethodField()
 
     class Meta:

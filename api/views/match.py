@@ -89,13 +89,13 @@ class MatchListClientView(ListCreateAPIView):
                 del data["file"]
 
         serializer = MatchSerializer(data=data)
-        # determino el total de consultas pendientes (status 1 o 2)
-        # y matchs por responder o pagar
 
         if serializer.is_valid():
             serializer.save()
             if 'test' not in sys.argv:
                 specialist_id = serializer.data["specialist"]
+                # determino el total de consultas pendientes (status 1 o 2)
+                # y matchs por responder o pagar
                 qset_spec = Specialist.objects.filter(pk=specialist_id)
                 dict_pending = NotificationSpecialistSerializer(qset_spec).data
                 badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
