@@ -1029,7 +1029,7 @@ class AssignClientToOtherSeller(APIView):
         data = request.data
 
         client = self.get_object(pk)
-        
+
         updated_data = {}
         updated_data['seller_assigned'] = request.data['seller_id']
 
@@ -1150,7 +1150,7 @@ class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated, IsSeller)
+    #permission_classes = (permissions.IsAuthenticated, IsSeller)
     # aca se debe colocar el serializer para listar todos
     serializer_class = SellerContactNaturalSerializer
     queryset = SellerContact.objects.all()
@@ -1179,6 +1179,22 @@ class ContactListView(ListCreateAPIView):
         not_valid = _("not valid")
         data = request.data
         data["seller"] = Operations.get_id(self, request)
+        password = None
+        if data['seller'] is None:
+            data['seller'] = Parameter.objects.get(parameter='platform_seller').value
+            #TODO: Usar constantes. Eliminar numeros magicos
+            data['latitude'] = '-12.1000244'
+            data['longitude'] = '76.9701127'
+            data['type_contact'] = 1
+        # eliminamos contraseña para contacto en caso de envio
+        elif 'type_contact' in data and 'password' in data:
+            del data["password"]
+
+            # generamos contraseña random
+            if 'type_contact' in data and data['type_contact'] == 1:
+                password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
+                data["password"] = password
+
         if "email_exact" not in data or not data["email_exact"]:
             raise serializers.ValidationError({'email_exact': [required]})
 
@@ -1213,12 +1229,13 @@ class ContactListView(ListCreateAPIView):
                     pyrebase.createCategoriesLisClients(serializer.data['client_id'])
 
                     # envio de contraseña al cliente
-                    mail = BasicEmailAmazon(subject='Envio Credenciales', to=data["email_exact"],
-                                            template='email/send_credentials')
-                    credentials = {}
-                    credentials["user"] = data["email_exact"]
-                    credentials["pass"] = password
-                    mail.sendmail(args=credentials)
+                    if password is not None:
+                        mail = BasicEmailAmazon(subject='Envio Credenciales', to=data["email_exact"],
+                                                template='email/send_credentials')
+                        credentials = {}
+                        credentials["user"] = data["email_exact"]
+                        credentials["pass"] = password
+                        mail.sendmail(args=credentials)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
