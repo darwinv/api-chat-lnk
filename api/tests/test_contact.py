@@ -554,7 +554,6 @@ class CreateNaturalContact(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
 
@@ -568,8 +567,8 @@ class CreateNaturalContact(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
 
 # Prueba para verificar la insercion de cliente juridico
 class CreateBussinessContact(APITestCase):
@@ -1019,6 +1018,17 @@ class CreateBussinessContact(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_create_promotional(self):
+        """Crear conctacto promocional."""
+        data = self.valid_payload.copy()
+        data.pop('objection')
+        data["type_contact"] = 4
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 class GetContacts(APITestCase):
     """Devolver data de contactos."""

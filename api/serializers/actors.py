@@ -1224,7 +1224,8 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             objection_list = validated_data.pop('objection')
 
         type_contact_temp = validated_data["type_contact"]
-        validated_data["type_contact"] = 2
+        if validated_data["type_contact"] == 1:
+            validated_data["type_contact"] = 2
         instance = self.Meta.model(**validated_data)
         # creo el listado de objeciones si es no efectivo
 
