@@ -63,10 +63,10 @@ class ChangeStatusClient(APITestCase):
             HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         
         response = client.put(reverse('auth-clients',
-                              kwargs={'pk': send.data["id"]}),
+                              kwargs={'pk': send.data['client_id']}),
                               data, format='json')
 
-        c = Cliente.objects.get(pk=send.data["id"])
+        c = Cliente.objects.get(pk=send.data['client_id'])
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["status"], int(c.status))
@@ -82,10 +82,10 @@ class ChangeStatusClient(APITestCase):
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.put(reverse('auth-clients',
-                              kwargs={'pk': send.data["id"]}),
+                              kwargs={'pk': send.data['client_id']}),
                               data, format='json')
 
-        c = Cliente.objects.get(pk=send.data["id"])
+        c = Cliente.objects.get(pk=send.data['client_id'])
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["status"], int(c.status))
@@ -101,10 +101,10 @@ class ChangeStatusClient(APITestCase):
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.put(reverse('auth-clients',
-                              kwargs={'pk': send.data["id"]}),
+                              kwargs={'pk': send.data['client_id']}),
                               data, format='json')
 
-        c = Cliente.objects.get(pk=send.data["id"])
+        c = Cliente.objects.get(pk=send.data['client_id'])
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data["status"], int(c.status))
@@ -120,7 +120,7 @@ class ChangeStatusClient(APITestCase):
         client = APIClient()
         client.credentials(HTTP_AUTHORIZATION='Bearer EGsnU4Cz3Mx50UCuLrc20mup10s0Gz')
         response = client.put(reverse('auth-clients',
-                              kwargs={'pk': send.data["id"]}),
+                              kwargs={'pk': send.data['client_id']}),
                               data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

@@ -36,7 +36,7 @@ class CreateNaturalContact(APITestCase):
                 "district": 1
             },
             'sex': 'm',
-            'document_type': '2',
+            'document_type': 2,
             'document_number': '144013012',
             'email_exact': 'darwin.vasqz@gmail.com',
             'telephone': '921471559',
