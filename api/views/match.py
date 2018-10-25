@@ -140,7 +140,7 @@ class MatchDetail(APIView):
     def get(self, request, pk):
         """Detalle."""
         match = self.get_object(pk)
-        serializer = MatchDetailSerializer(match)
+        serializer = MatchListSpecialistSerializer(match)
         return Response(serializer.data)
 
 
