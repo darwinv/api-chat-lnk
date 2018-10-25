@@ -105,7 +105,9 @@ class ClientPlansView(ListCreateAPIView):
 
     def get_object(self, pk):
         """Obtener lista de planes."""
-        plan = QueryPlansAcquired.objects.filter(is_active=True, queryplansclient__client=pk,
+        plan = QueryPlansAcquired.objects.filter(
+            is_active=True, queryplansclient__client=pk,
+            available_queries__gt=0,
             expiration_date__gte=datetime.now().date()).order_by('id').values(
                   'id', 'plan_name', 'is_active',
                   'validity_months', 'query_quantity',

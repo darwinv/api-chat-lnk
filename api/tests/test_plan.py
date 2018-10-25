@@ -121,8 +121,8 @@ class GetClientPlansList(APITestCase):
 
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
-        response = self.client.get(reverse('client-plans')+'?client_id=11', format='json')
-
+        response = self.client.get(reverse('client-plans')+'?client_id=11',
+                                   format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
