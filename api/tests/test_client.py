@@ -126,17 +126,6 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_username(self):
-        """Solicitud invalida por no tener el username."""
-        data = self.valid_payload
-        del data["username"]
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_no_sex(self):
         """Solicitud invalida por no enviar el sexo."""
         data = self.valid_payload
@@ -261,8 +250,9 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["code"][:3],
+        self.assertEqual(Cliente.objects.get(pk=response.data['client_id']).code[:3],
                          Countries.objects.get(
                             pk=data["nationality"]).iso_code + "1")
 
@@ -1144,7 +1134,7 @@ class CreateBusinessClient(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["code"][:3],
+        self.assertEqual(Cliente.objects.get(pk=response.data['client_id']).code[:3],
                          Countries.objects.get(
                             pk=data["nationality"]).iso_code + "1")
 
@@ -1330,8 +1320,9 @@ class GetDetailClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+
         response = client.get(reverse('client-detail',
-                                      kwargs={'pk': send.data["id"]}),
+                                      kwargs={'pk': send.data['client_id']}),
                               format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

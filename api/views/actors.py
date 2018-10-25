@@ -458,52 +458,56 @@ class ClientListView(ListCreateAPIView):
 
     # Metodo post redefinido
     def post(self, request):
+        """Ahora se usa el post de ContactListView"""
+
+        view = ContactListView()
+        return view.post(request)
         """Redefinido metodo para crear clientes."""
-        data = request.data
-        if 'type_client' not in data or not data['type_client']:
-            raise serializers.ValidationError({'type_client': [self.required]})
+        # data = request.data
+        # if 'type_client' not in data or not data['type_client']:
+        #     raise serializers.ValidationError({'type_client': [self.required]})
 
-        # generamos contraseña random
-        if 'register_type' in data and data['register_type'] == 2:
-            password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
-            data["password"] = password
+        # # generamos contraseña random
+        # if 'register_type' in data and data['register_type'] == 2:
+        #     password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
+        #     data["password"] = password
 
-        if data['type_client'] == 'n':
-            data['economic_sector'] = ''
-        elif data['type_client'] == 'b':
-            data['birthdate'] = DATE_FAKE
-            data['sex'] = ''
-            data['civil_state'] = ''
-            data['level_instruction'] = ''
-            data['profession'] = ''
-            data['ocupation'] = None
-        data['role'] = ROLE_CLIENT
-        serializer = ClientSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
+        # if data['type_client'] == 'n':
+        #     data['economic_sector'] = ''
+        # elif data['type_client'] == 'b':
+        #     data['birthdate'] = DATE_FAKE
+        #     data['sex'] = ''
+        #     data['civil_state'] = ''
+        #     data['level_instruction'] = ''
+        #     data['profession'] = ''
+        #     data['ocupation'] = None
+        # data['role'] = ROLE_CLIENT
+        # serializer = ClientSerializer(data=data)
+        # if serializer.is_valid():
+        #     serializer.save()
 
-            if 'test' not in sys.argv:
-                # se le crea la lista de todas las categorias al cliente en firebase
-                pyrebase.createCategoriesLisClients(serializer.data['id'])
+        #     if 'test' not in sys.argv:
+        #         # se le crea la lista de todas las categorias al cliente en firebase
+        #         pyrebase.createCategoriesLisClients(serializer.data['id'])
 
-                if 'register_type' in data and data['register_type'] == 2:
-                    # envio de contraseña al cliente
-                    mail = BasicEmailAmazon(subject='Envio Credenciales', to=data["email_exact"],
-                                            template='email/send_credentials')
-                    credentials = {}
-                    credentials["user"] = data["email_exact"]
-                    credentials["pass"] = password
-                    mail.sendmail(args=credentials)
+        #         if 'register_type' in data and data['register_type'] == 2:
+        #             # envio de contraseña al cliente
+        #             mail = BasicEmailAmazon(subject='Envio Credenciales', to=data["email_exact"],
+        #                                     template='email/send_credentials')
+        #             credentials = {}
+        #             credentials["user"] = data["email_exact"]
+        #             credentials["pass"] = password
+        #             mail.sendmail(args=credentials)
 
-            # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
-            # give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
+        #     # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
+        #     # give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
 
-            client_id = serializer.data['id']
-            email = data['email_exact']
-            self.check_plans_operation_manage(client_id, email)
+        #     client_id = serializer.data['id']
+        #     email = data['email_exact']
+        #     self.check_plans_operation_manage(client_id, email)
 
-            return Response(serializer.data, status.HTTP_201_CREATED)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        #     return Response(serializer.data, status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     def check_plans_operation_manage(self, receiver_id, email_receiver):
         """

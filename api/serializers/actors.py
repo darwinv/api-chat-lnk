@@ -16,7 +16,7 @@ from django.http import Http404
 from rest_framework.response import Response
 from api.utils.tools import capitalize as cap
 from api.utils.parameters import Params
-from api.utils.validations import document_exists, ruc_exists
+from api.utils.validations import document_exists, document_exists_contact, ruc_exists
 from django.contrib.auth.hashers import check_password
 from api.utils.querysets import get_queries_pending_to_solve
 from django.contrib.auth import password_validation
@@ -1223,6 +1223,30 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(_("password required"))
         return data
 
+    def validate_document_number(self, value):
+        """Validar Numero de Documento."""
+        data = self.get_initial()
+        document_type = data.get('document_type', 0)
+        if isinstance(document_type, str) and document_type.isdigit():
+            document_type = int(document_type)
+
+        if document_type not in range(1, 4):
+            return value
+
+        if 'type_contact' in data and data['type_contact'] == 2:
+            if document_exists_contact(type_doc=document_type, 
+                                       document_number=data['document_number']):
+                raise serializers.ValidationError(
+                    [_('This field must be unique')])
+        elif 'type_client' in data and data['type_client'] == 'n':
+            #TODO colocar el ROLE_CLIENT y otras constantes en un archivo aparte
+            ROLE_CLIENT = 2
+            if document_exists(type_doc=document_type, role=ROLE_CLIENT,
+                               document_number=data['document_number']):
+                raise serializers.ValidationError(
+                    [_('This field must be unique')])
+        return value
+
     def create(self, validated_data):
         """Redefinido metodo de crear contacto."""
         country_peru = Countries.objects.get(name="Peru")
@@ -1241,12 +1265,10 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         if 'objection' in validated_data:
             objection_list = validated_data.pop('objection')
 
-        type_contact_temp = validated_data["type_contact"]
-        validated_data["type_contact"] = 2
         instance = self.Meta.model(**validated_data)
         # creo el listado de objeciones si es no efectivo
 
-        if type_contact_temp == 2:
+        if validated_data["type_contact"] == 2:
             instance.save()
             if 'objection_list' in locals():
                 for objection in objection_list:
@@ -1256,8 +1278,8 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         else:
             # registro de cliente si es efectivo
             data_client = self.get_initial()
-            data_client["username"] = data_client["email_exact"]
-            data_client["role"] = Params.ROLE_CLIENT
+            data_client['username'] = data_client['email_exact']
+            data_client['role'] = Params.ROLE_CLIENT
             data_client['password'] = password
             data_client['seller_assigned'] = data_client['seller']
 
@@ -1272,6 +1294,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
 
             if serializer_client.is_valid():
                 serializer_client.save()
+                instance.client = Client.objects.get(pk=serializer_client.data['id'])
                 instance.save()
                 self.context['client_id'] = serializer_client.data['id']
             else:
@@ -1290,7 +1313,7 @@ class SellerContactNaturalSerializer(BaseSellerContactSerializer):
     type_contact_name = serializers.SerializerMethodField()
     type_client = serializers.ChoiceField(choices=c.client_type_client)
     document_type = serializers.ChoiceField(choices=c.user_document_type)
-    document_number = serializers.CharField(validators=[UniqueValidator(queryset=SellerContact.objects.filter(type_client='n'))])
+    document_number = serializers.CharField()
     document_type_name = serializers.SerializerMethodField()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContact.objects.all())])
     civil_state = serializers.ChoiceField(choices=c.client_civil_state)
