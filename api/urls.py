@@ -47,7 +47,7 @@ urlpatterns = [
         name='plans-delete-empower'),
 
     # Facultar plan de consultas
-    url(r'^clients/plans-share-empower/(?P<pk>[0-9]+)$', plan.ClientShareEmpowerPlansView.as_view(),
+    url(r'^clients/plans-share-empower/(?P<pk>[0-9]+)/$', plan.ClientShareEmpowerPlansView.as_view(),
         name='client-plans-share-empower'),
 
     # Facultar plan de consultas
@@ -70,7 +70,7 @@ urlpatterns = [
     url(r'^plans/$', plan.PlansView.as_view(),
         name='plans'),
 
-    url(r'^plans/check_status$', plan.PlansStatus.as_view(),
+    url(r'^plans/check_status/$', plan.PlansStatus.as_view(),
         name='plans-status'),
 
     # crear planes no facturables

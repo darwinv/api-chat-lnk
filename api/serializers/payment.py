@@ -287,6 +287,7 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
         """Devuelve product_type."""
         return _(str(obj.product_type))
 
+
 class SaleWithFeeSerializer(serializers.Serializer):
     """serializador para detalle de venta"""
 
@@ -338,6 +339,7 @@ class SaleContactoDetailSerializer(serializers.ModelSerializer):
     products = serializers.SerializerMethodField()
     fee = serializers.SerializerMethodField()
     created_at = serializers.SerializerMethodField()
+
     class Meta:
         """Modelo."""
 

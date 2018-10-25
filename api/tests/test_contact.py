@@ -567,6 +567,7 @@ class CreateNaturalContact(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
+        self.assertEqual(response.data["type_contact"], 4)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
@@ -1087,7 +1088,6 @@ class GetContactsFilterDate(APITestCase):
         """Devolver Contactos promocionales."""
         data = {"type_contact": 4}
         response = self.client.get(reverse('contacts-filter'), data)
-        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 1)
 
