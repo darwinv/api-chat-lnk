@@ -170,6 +170,7 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
                     "ticker": _("successful hiring"),
                     "badge": badge_count,
                     "icon": match.category.image,
+                    "type": Params.TYPE_NOTIF["match"],
                     "queries_pending": dict_pending["queries_pending"],
                     "match_pending": dict_pending["match_pending"],
                     "match_id": match.id
@@ -244,6 +245,7 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
                 "ticker": _("successful hiring"),
                 "badge": badge_count,
                 "icon": match.category.image,
+                "type": Params.TYPE_NOTIF["match"],
                 "queries_pending": dict_pending["queries_pending"],
                 "match_pending": dict_pending["match_pending"],
                 "match_id": match.id

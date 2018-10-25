@@ -25,6 +25,7 @@ from api.permissions import IsAdminOrSpecialist, IsAdminOnList
 from api.models import Match, MatchFile, Sale, QueryPlansAcquired, Client
 from api.models import SellerContact, Specialist
 from api.utils.tools import s3_upload_file, remove_file, resize_img
+from api.utils.parameters import Params
 from api.logger import manager
 from api import pyrebase
 from fcm.fcm import Notification
@@ -80,7 +81,7 @@ class MatchListClientView(ListCreateAPIView):
 
                     # categorias firebase para el cliente
                     pyrebase.createCategoriesLisClients(data["client"])
-        
+
 
         # Cliente que hace match es requerido
         if "client" not in data:
@@ -110,6 +111,7 @@ class MatchListClientView(ListCreateAPIView):
                     "ticker": serializer.data["subject"],
                     "badge": badge_count,
                     "icon": serializer.data['photo'],
+                    "type": Params.TYPE_NOTIF["match"],
                     "queries_pending": dict_pending["queries_pending"],
                     "match_pending": dict_pending["match_pending"],
                     "match_id": serializer.data["id"]
@@ -236,6 +238,7 @@ class MatchDeclineView(APIView):
                     "ticker": serializer.data["declined_motive"],
                     "badge": badge_count,
                     "icon": serializer.data['photo'],
+                    "type": Params.TYPE_NOTIF["match"],
                     "queries_pending": dict_pending["queries_pending"],
                     "match_pending": dict_pending["match_pending"],
                     "match_id": serializer.data["id"]
