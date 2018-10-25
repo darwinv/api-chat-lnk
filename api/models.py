@@ -198,8 +198,46 @@ class LevelInstruction(models.Model):
         return self.name
 
 
+class Client(User):
+    """Modelo de Cliente (herede de usuario)."""
+
+    type_client = models.CharField(max_length=1, choices=Ch.client_type_client)
+    sex = models.CharField(max_length=1, choices=Ch.client_sex, blank=True)
+    commercial_reason = models.CharField(max_length=100, null=True)
+    civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state,
+                                   null=True)
+    birthdate = models.DateField(null=True)
+    # ciiu = models.CharField(max_length=4, blank=True)
+    ciiu = models.ForeignKey(Ciiu, null=True)
+    activity_description = models.CharField(max_length=255, null=True,
+                                            blank=True)
+    institute = models.CharField(max_length=100, null=True, blank=True)
+    ocupation = models.PositiveIntegerField(null=True,
+                                            choices=Ch.client_ocupation)
+    about = models.CharField(max_length=255, null=True, blank=True)
+    business_name = models.CharField(max_length=100, null=True)
+    agent_firstname = models.CharField(max_length=100, null=True)
+    agent_lastname = models.CharField(max_length=100, null=True)
+    position = models.CharField(max_length=100, null=True)
+    profession = models.CharField(max_length=100, null=True)
+    economic_sector = models.ForeignKey(EconomicSector,
+                                        on_delete=models.PROTECT, null=True)
+    level_instruction = models.ForeignKey(LevelInstruction,
+                                          on_delete=models.PROTECT, null=True)
+    seller_assigned = models.ForeignKey(Seller, on_delete=models.PROTECT,
+                                       null=True)
+
+    class Meta:
+        """Modelo de Cliente."""
+
+        verbose_name = 'Client'
+        verbose_name_plural = 'Clients'
+
+
 class SellerContact(models.Model):
     """Contacto de Vendedor."""
+
+    client = models.ForeignKey(Client, null=True, on_delete=models.PROTECT)
 
     first_name = models.CharField(max_length=150, null=True)
     last_name = models.CharField(max_length=150, null=True)
@@ -267,42 +305,6 @@ class ObjectionsList(models.Model):
     """Lista de objeciones."""
     objection = models.ForeignKey(Objection, on_delete=models.PROTECT)
     contact = models.ForeignKey(SellerContact, on_delete=models.PROTECT)
-
-
-class Client(User):
-    """Modelo de Cliente (herede de usuario)."""
-
-    type_client = models.CharField(max_length=1, choices=Ch.client_type_client)
-    sex = models.CharField(max_length=1, choices=Ch.client_sex, blank=True)
-    commercial_reason = models.CharField(max_length=100, null=True)
-    civil_state = models.CharField(max_length=1, choices=Ch.client_civil_state,
-                                   null=True)
-    birthdate = models.DateField(null=True)
-    # ciiu = models.CharField(max_length=4, blank=True)
-    ciiu = models.ForeignKey(Ciiu, null=True)
-    activity_description = models.CharField(max_length=255, null=True,
-                                            blank=True)
-    institute = models.CharField(max_length=100, null=True, blank=True)
-    ocupation = models.PositiveIntegerField(null=True,
-                                            choices=Ch.client_ocupation)
-    about = models.CharField(max_length=255, null=True, blank=True)
-    business_name = models.CharField(max_length=100, null=True)
-    agent_firstname = models.CharField(max_length=100, null=True)
-    agent_lastname = models.CharField(max_length=100, null=True)
-    position = models.CharField(max_length=100, null=True)
-    profession = models.CharField(max_length=100, null=True)
-    economic_sector = models.ForeignKey(EconomicSector,
-                                        on_delete=models.PROTECT, null=True)
-    level_instruction = models.ForeignKey(LevelInstruction,
-                                          on_delete=models.PROTECT, null=True)
-    seller_assigned = models.ForeignKey(Seller, on_delete=models.PROTECT,
-                                       null=True)
-
-    class Meta:
-        """Modelo de Cliente."""
-
-        verbose_name = 'Client'
-        verbose_name_plural = 'Clients'
 
 
 class ContractType(models.Model):
