@@ -221,7 +221,6 @@ class GetMatchDetail(APITestCase):
         """Detalle de Match."""
         response = client.get(reverse('match-detail', kwargs={'pk': 1}),
                               format='json')
-        import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class DeclineMatchSpecialist(APITestCase):
