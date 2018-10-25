@@ -1,20 +1,23 @@
 """Serializer de Venta"""
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
-from api.models import Payment, MonthlyFee, Sale, SaleDetail, Match
+from api.models import Payment, MonthlyFee, Sale, SaleDetail, Match, Client
 from api.models import QueryPlansAcquired, SellerContact, User, MatchProduct
 from api.utils.tools import get_date_by_time
 from api.utils.querysets import get_next_fee_to_pay
 from datetime import datetime, date
+from fcm.fcm import Notification
 from api.emails import BasicEmailAmazon
 from dateutil.relativedelta import relativedelta
 from rest_framework.validators import UniqueValidator
 from api.serializers.actors import ClientSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from api.serializers.fee import FeeSerializer
+from api.serializers.notification import NotificationClientSerializer
 from api.utils.parameters import Params
 import sys
 from api import pyrebase
+from api.utils.tools import display_specialist_name
 from api.serializers.sale import increment_reference
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -154,7 +157,40 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
                                         status__range=(2, 3)).exists()
         if is_client:
             match.status = 5
+            if 'test' not in sys.argv:
+                client_id = match.client_id
+                qset_client = Client.objects.filter(pk=client_id)
+                dict_pending = NotificationClientSerializer(qset_client).data
+                badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                disp_name = display_specialist_name(match)
+                data_notif_push = {
+                    "title": disp_name,
+                    "body": match.subject,
+                    "sub_text": "",
+                    "ticker": _("successful hiring"),
+                    "badge": badge_count,
+                    "icon": match.category.image,
+                    "type": Params.TYPE_NOTIF["match"],
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
+                    "match_id": match.id
+                }
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=client_id,
+                                           data=data_notif_push)
         else:
+
+            sale = Sale.objects.create(place="BCP", total_amount=match.price,
+                                   reference_number=increment_reference(),
+                                   description='pago de match',
+                                   client=match.client, status=1)
+
+            sale_detail = SaleDetail.objects.create(price=match.price,
+                                                    description="Contratacion de especialista",
+                                                    discount=float(0),
+                                                    pin_code='XXXXXX',
+                                                    is_billable=True,
+                                                    product_type_id=2, sale=sale)
             match.status = 4
 
         match.save()
@@ -196,6 +232,27 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
         instance = Payment(**validated_data)
         instance.save()
         match.status = 5
+        if 'test' not in sys.argv:
+            client_id = match.client_id
+            qset_client = Client.objects.filter(pk=client_id)
+            dict_pending = NotificationClientSerializer(qset_client).data
+            badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+            disp_name = display_specialist_name(match)
+            data_notif_push = {
+                "title": disp_name,
+                "body": match.subject,
+                "sub_text": "",
+                "ticker": _("successful hiring"),
+                "badge": badge_count,
+                "icon": match.category.image,
+                "type": Params.TYPE_NOTIF["match"],
+                "queries_pending": dict_pending["queries_pending"],
+                "match_pending": dict_pending["match_pending"],
+                "match_id": match.id
+            }
+            # envio de notificacion push
+            Notification.fcm_send_data(user_id=client_id,
+                                       data=data_notif_push)
         match.save()
         return instance
 
@@ -206,7 +263,6 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
     client__last_name = serializers.SerializerMethodField()
     client__business_name = serializers.SerializerMethodField()
     created_at = serializers.SerializerMethodField()
-
     pay_before = serializers.SerializerMethodField()
 
     class Meta:
@@ -248,23 +304,22 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
         return obj.client.business_name
 
 
-
 class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
     attribute_product = serializers.SerializerMethodField()
     product_type_name = serializers.SerializerMethodField()
+
     class Meta:
         """Modelo."""
 
         model = SaleDetail
         fields = (
             'price', 'description', 'discount', 'pin_code', 'is_billable',
-            'contract','product_type', 'sale', 'attribute_product',
+            'contract', 'product_type', 'sale', 'attribute_product',
             'product_type_name')
 
     def get_attribute_product(self, obj):
         """Devuelve client."""
-
         if obj.product_type.id == 1:
             plan = QueryPlansAcquired.objects.get(sale_detail=obj.id)
             sale = QueryPlansAcquiredSerializer(plan)
@@ -275,6 +330,7 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     def get_product_type_name(self, obj):
         """Devuelve product_type."""
         return _(str(obj.product_type))
+
 
 class SaleWithFeeSerializer(serializers.Serializer):
     """serializador para detalle de venta"""
@@ -320,12 +376,14 @@ class PaymentSalePendingDetailSerializer(serializers.ModelSerializer):
 
         return serializer.data
 
+
 class SaleContactoDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
 
     products = serializers.SerializerMethodField()
     fee = serializers.SerializerMethodField()
     created_at = serializers.SerializerMethodField()
+
     class Meta:
         """Modelo."""
 

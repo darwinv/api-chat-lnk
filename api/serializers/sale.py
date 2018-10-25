@@ -47,6 +47,9 @@ class ProductSerializer(serializers.Serializer):
         plan = data["plan_id"]
         client = self.context["client"]
         hoy.month
+        if plan.is_promotional is False:
+            raise serializers.ValidationError(
+                _("this is not a promotional plan for this seller"))
         if data['is_billable'] is False:
             # import pdb; pdb.set_trace()
             detail = SaleDetail.objects.filter(sale__client_id=client)
@@ -57,14 +60,14 @@ class ProductSerializer(serializers.Serializer):
                 seller = self.context["seller"]
                 try:
                     obj = SellerNonBillablePlans.objects.get(
-                        query_plans=plan, seller_id=seller,
-                        number_month=hoy.month, number_year=hoy.year)
+                        seller_id=seller, number_month=hoy.month,
+                        number_year=hoy.year)
                     if obj.quantity < 1:
                         raise serializers.ValidationError(
-                            _("seller exceeds quantity for this promotional plan"))
+                            _("seller exceeds quantity for promotional plans"))
                 except SellerNonBillablePlans.DoesNotExist:
                     raise serializers.ValidationError(
-                        _("this is not a promotional plan for this seller"))
+                        _("You don't have promotional plans for this month"))
         return data
 
 
@@ -128,7 +131,6 @@ class SaleSerializer(serializers.Serializer):
                         plan_acquired["is_active"] = True
                         plan_acquired["status"] = 4
                         plan_promotionals = SellerNonBillablePlans.objects.get(
-                            query_plans=product["plan_id"],
                             seller=validated_data["seller"],
                             number_month=hoy.month, number_year=hoy.year)
                         plan_promotionals.quantity = plan_promotionals.quantity - 1

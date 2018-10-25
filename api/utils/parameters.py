@@ -11,6 +11,12 @@ class Params:
         "query": "q",
         "message": "m"
     }
+    # Tipo de notificacion (para push notif)
+    TYPE_NOTIF = {
+        "query": 2,
+        "match": 3
+     }
+
     CODE_PREFIX = {
         "client": "C",
         "specialist": "E",
@@ -18,8 +24,11 @@ class Params:
         "seller": "V"
     }
     ROLE_CLIENT = 2
+    ROLE_SPECIALIST = 3
+    ROLE_SELLER = 4
 
     TIME_ZONE = ""
+
 
 class Payloads:
     read = True

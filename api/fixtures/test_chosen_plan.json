@@ -583,7 +583,7 @@
   "fields": {
     "expiration_date": "2019-02-28",
     "validity_months": 21,
-    "available_queries": 6,
+    "available_queries": 1,
     "query_quantity": 4,
     "activation_date": "2018-02-19",
     "is_active": true,

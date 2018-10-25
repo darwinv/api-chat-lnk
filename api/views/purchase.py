@@ -14,6 +14,7 @@ from api.models import Sale, SaleDetail, QueryPlansAcquired, QueryPlansClient
 from api.models import MonthlyFee, Client
 from api import pyrebase
 
+
 class CreatePurchase(APIView):
     """Vista para crear compra."""
     authentication_classes = (OAuth2Authentication,)

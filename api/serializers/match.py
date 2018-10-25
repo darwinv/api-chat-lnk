@@ -21,6 +21,20 @@ class MatchFileSerializer(serializers.ModelSerializer):
         fields = ('file_url', 'content_type')
 
 
+class MatchDetailSerializer(serializers.ModelSerializer):
+    """Match Detalle."""
+    file = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Match
+        fields = ('category', 'subject', 'file', 'client', 'price',
+                  'status')
+
+    def get_file(self, obj):
+        """Devuelve lista de archivos."""
+        files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
+        return files
+
 class MatchSerializer(serializers.ModelSerializer):
     """Serializer Match."""
     file = MatchFileSerializer(many=True, required=False)
@@ -58,15 +72,27 @@ class MatchSerializer(serializers.ModelSerializer):
 
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
+        display_name = ''
         files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
         files_ids = []
         for file_obj in files:
             files_ids.append(file_obj["id"])
 
+        if obj.client.type_client == 'n':
+            display_name = obj.client.first_name + ' ' + obj.client.last_name
+        else:
+            display_name = obj.client.agent_firstname + ' ' + obj.client.agent_lastname
+
+        if obj.client.nick is not None:
+            if len(obj.client.nick) > 0:
+                display_name = obj.client.nick
+
         return {"id": obj.id, "file": files,
                 "category": obj.category.id,
                 "subject": obj.subject, "client": obj.client.id,
                 "specialist": obj.specialist.id,
+                "display_name": display_name,
+                "photo": obj.client.photo,
                 "files_id": files_ids}
 
 
@@ -103,6 +129,23 @@ class MatchDeclineSerializer(serializers.ModelSerializer):
         instance.status = 3
         instance.save()
         return instance
+
+    def to_representation(self, obj):
+        """to Representacion."""
+        # cuando se declina el nombre a devolver es el especialista
+        # ya que se le envia al cliente en el notification push
+        display_name = obj.specialist.first_name + ' ' + obj.specialist.last_name
+
+        if obj.specialist.nick is not None:
+            if len(obj.specialist.nick) > 0:
+                display_name = obj.specialist.nick
+
+        return {"id": obj.id, "category": obj.category.id,
+                "subject": obj.subject, "client": obj.client.id,
+                "specialist": obj.specialist.id,
+                "display_name": display_name,
+                "photo": obj.category.image,
+                "declined_motive": obj.declined_motive}
 
 
 class MatchListClientSerializer(serializers.ModelSerializer):

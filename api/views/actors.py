@@ -732,7 +732,7 @@ class SpecialistListView(ListCreateAPIView):
     def list(self, request):
         # en dado caso que exista el parametro "main_specialist", se devuelve
         # el listado de especialistas asociados, caso contrario devuelve todos
-        
+
         if 'main_specialist' in request.query_params:
             specialist = self.get_object(
                 request.query_params["main_specialist"])
@@ -789,7 +789,7 @@ class SpecialistAsociateListView(ListCreateAPIView):
 
         specialists = Specialist.objects.filter(category=obj.category,
                                                 type_specialist="a")
-        
+
         page = self.paginate_queryset(specialists)
         if page is not None:
             serializer = AssociateSpecialistSerializer(page, many=True)
@@ -1033,7 +1033,7 @@ class AssignClientToOtherSeller(APIView):
         data = request.data
 
         client = self.get_object(pk)
-        
+
         updated_data = {}
         updated_data['seller_assigned'] = request.data['seller_id']
 
@@ -1206,6 +1206,16 @@ class ContactListView(ListCreateAPIView):
         if "type_client" not in data or not data["type_client"]:
             raise serializers.ValidationError({'type_client': [required]})
 
+        # eliminamos contraseña para contacto en caso de envio
+        if 'type_contact' in data and 'password' in data:
+            del data["password"]
+
+        # generamos contraseña random
+        if 'type_contact' in data and data['type_contact'] != 2:
+            password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
+            data["password"] = password
+
+
         if data["type_client"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
         elif data["type_client"] == 'b':
@@ -1218,7 +1228,7 @@ class ContactListView(ListCreateAPIView):
 
             # Registrar nodos para contacto efectivo
             if 'test' not in sys.argv:
-                if data['type_contact'] == 1:
+                if data['type_contact'] != 2:
                     # se le crea la lista de todas las categorias al cliente en firebase
                     pyrebase.createCategoriesLisClients(serializer.data['client_id'])
 
@@ -1272,6 +1282,8 @@ class ContactFilterView(ListAPIView):
                 queryset = queryset.filter(type_contact=1)
             elif int(type_contact) == 2:
                 queryset = queryset.filter(type_contact=2)
+            elif int(type_contact) == 4:
+                queryset = queryset.filter(type_contact=4)
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
         if date_start is not None and date_end is not None:
@@ -1550,7 +1562,7 @@ class RucDetailView(APIView):
             response = requests.post(url, json=payload, timeout=2.5)
         except Exception as e:
             response = None
-        
+
         try:
             url_sunat = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
             response2 = requests.get(url_sunat, timeout=2.5)

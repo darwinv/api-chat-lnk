@@ -1349,7 +1349,7 @@ class SellerContactNaturalSerializer(BaseSellerContactSerializer):
                   'sex', 'sex_name', 'ocupation_name', 'activity_description',
                   'photo', 'about', 'cellphone', 'telephone', 'code_cellphone',
                   'code_telephone', 'ocupation', 'profession', 'address',
-                  'level_instruction', 'latitude', 'longitude', 'seller', 'objection_name', 
+                  'level_instruction', 'latitude', 'longitude', 'seller', 'objection_name',
                   'nationality', 'nationality_name', 'level_instruction_name', 'photo',
                   "foreign_address", 'residence_country',
                   'password', 'other_objection'
@@ -1435,7 +1435,7 @@ class SellerContactBusinessSerializer(BaseSellerContactSerializer):
         fields = ('id', 'business_name', 'commercial_reason', 'type_contact',
                   'document_type', 'document_type_name', 'document_number',
                   'ruc', 'economic_sector', 'activity_description', 'about',
-                  'cellphone', 'telephone', 'code_cellphone', 'code_telephone', 
+                  'cellphone', 'telephone', 'code_cellphone', 'code_telephone',
                   'address', 'latitude', 'position', 'type_client', 'longitude',
                   'seller', 'objection', 'email_exact', 'objection_name', 'nationality',
                   'type_contact_name', 'nationality_name', 'photo', 'agent_firstname',

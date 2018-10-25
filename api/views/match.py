@@ -1,6 +1,7 @@
 """Vista de MAtch."""
 import os
 import boto3
+import sys
 from django.http import Http404, HttpResponse
 from botocore.exceptions import ClientError
 from rest_framework.generics import ListCreateAPIView
@@ -15,15 +16,19 @@ from api.utils.validations import Operations
 from api.serializers.match import MatchSerializer, MatchListClientSerializer
 from api.serializers.match import MatchAcceptSerializer, MatchDeclineSerializer
 from api.serializers.match import MatchListSpecialistSerializer
-from api.serializers.match import MatchListSerializer
+from api.serializers.match import MatchListSerializer, MatchDetailSerializer
+from api.serializers.notification import NotificationSpecialistSerializer
+from api.serializers.notification import NotificationClientSerializer
 from api.serializers.actors import ContactToClientSerializer
 from api.permissions import IsAdminOrClient, IsOwnerAndClient
 from api.permissions import IsAdminOrSpecialist, IsAdminOnList
-from api.models import Match, MatchFile, Sale, QueryPlansAcquired
-from api.models import SellerContact
+from api.models import Match, MatchFile, Sale, QueryPlansAcquired, Client
+from api.models import SellerContact, Specialist
 from api.utils.tools import s3_upload_file, remove_file, resize_img
+from api.utils.parameters import Params
 from api.logger import manager
 from api import pyrebase
+from fcm.fcm import Notification
 logger = manager.setup_log(__name__)
 
 
@@ -67,7 +72,7 @@ class MatchListClientView(ListCreateAPIView):
                    data["seller"] = SellerContact.objects.get(email_exact=email_exact).seller.id
                 except SellerContact.DoesNotExist:
                     pass
-                
+
             if "seller" in data and "email_exact" in data:
                 serializer_client = ContactToClientSerializer(data=data)
                 if serializer_client.is_valid():
@@ -76,23 +81,67 @@ class MatchListClientView(ListCreateAPIView):
 
                     # categorias firebase para el cliente
                     pyrebase.createCategoriesLisClients(data["client"])
-        
+
 
         # Cliente que hace match es requerido
         if "client" not in data:
             raise serializers.ValidationError(
                 {"client_id": _("required")})
 
-        
+
         if 'file' in data:
             if data["file"] is None:
                 del data["file"]
-        
+
         serializer = MatchSerializer(data=data)
+
         if serializer.is_valid():
             serializer.save()
+            if 'test' not in sys.argv:
+                specialist_id = serializer.data["specialist"]
+                # determino el total de consultas pendientes (status 1 o 2)
+                # y matchs por responder o pagar
+                qset_spec = Specialist.objects.filter(pk=specialist_id)
+                dict_pending = NotificationSpecialistSerializer(qset_spec).data
+                badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                data_notif_push = {
+                    "title": serializer.data['display_name'],
+                    "body": serializer.data["subject"],
+                    "sub_text": "",
+                    "ticker": serializer.data["subject"],
+                    "badge": badge_count,
+                    "icon": serializer.data['photo'],
+                    "type": Params.TYPE_NOTIF["match"],
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
+                    "match_id": serializer.data["id"]
+                }
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=specialist_id,
+                                           data=data_notif_push)
+
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class MatchDetail(APIView):
+    """Detalle de Match."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def get_object(self, pk):
+        """Obtener objeto."""
+        try:
+            obj = Match.objects.get(pk=pk)
+            return obj
+        except Match.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        """Detalle."""
+        match = self.get_object(pk)
+        serializer = MatchListSpecialistSerializer(match)
+        return Response(serializer.data)
 
 
 class MatchBackendListView(ListCreateAPIView):
@@ -108,12 +157,12 @@ class MatchBackendListView(ListCreateAPIView):
         if 'status' in request.query_params:
             status = request.query_params.getlist('status')
             queryset = queryset.filter(status__in=status)
-            
+
         if 'payment_option_specialist' in request.query_params:
             payment_option_specialist = request.query_params["payment_option_specialist"]
             queryset = queryset.filter(payment_option_specialist=payment_option_specialist)
 
-        
+
         # pagination
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -197,6 +246,27 @@ class MatchDeclineView(APIView):
         serializer = MatchDeclineSerializer(match, data=data)
         if serializer.is_valid():
             serializer.save()
+            if 'test' not in sys.argv:
+                client_id = serializer.data["client"]
+                qset_client = Client.objects.filter(pk=client_id)
+                dict_pending = NotificationClientSerializer(qset_client).data
+                badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                data_notif_push = {
+                    "title": serializer.data['display_name'],
+                    "body": serializer.data["subject"],
+                    "sub_text": "",
+                    "ticker": serializer.data["declined_motive"],
+                    "badge": badge_count,
+                    "icon": serializer.data['photo'],
+                    "type": Params.TYPE_NOTIF["match"],
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
+                    "match_id": serializer.data["id"]
+                }
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=client_id,
+                                           data=data_notif_push)
+
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -260,7 +330,7 @@ class SpecialistMatchUploadFilesView(APIView):
         """Actualiza el match, subiendo archivos."""
         obj_instance = self.get_object(request, pk)
         files = request.FILES.getlist('file')
-        
+
         if len(files) == 0:
             raise serializers.ValidationError(
                 {"file": _("required")})
@@ -337,8 +407,8 @@ class SaleClientUploadFilesView(APIView):
             sale_detail__sale=obj_instance, status=4).update(status=6)
 
         SellerContact.objects.filter(
-            email_exact=obj_instance.client.email_exact).update(type_contact=1)        
-        
+            email_exact=obj_instance.client.email_exact).update(type_contact=1)
+
         return HttpResponse(status=200)
 
 def upload_file(file, model_update=None, obj_instance=None):

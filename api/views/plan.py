@@ -105,7 +105,9 @@ class ClientPlansView(ListCreateAPIView):
 
     def get_object(self, pk):
         """Obtener lista de planes."""
-        plan = QueryPlansAcquired.objects.filter(is_active=True, queryplansclient__client=pk,
+        plan = QueryPlansAcquired.objects.filter(
+            is_active=True, queryplansclient__client=pk,
+            available_queries__gt=0,
             expiration_date__gte=datetime.now().date()).order_by('id').values(
                   'id', 'plan_name', 'is_active',
                   'validity_months', 'query_quantity',
@@ -934,7 +936,7 @@ class PlansStatus(APIView):
         user_id = Operations.get_id(self, request)
         qs = QueryPlansAcquired.objects.filter(queryplansclient__client=user_id)
         # import pdb; pdb.set_trace()
-        plans = PlanStatusSerializer(qs, context={"client":user_id})
+        plans = PlanStatusSerializer(qs, context={"client": user_id})
         return Response(plans.data)
 
 
@@ -946,11 +948,19 @@ class PlansNonBillableSellerView(APIView):
 
     def get(self, request):
         """Devolver Planes."""
+        duct = {}
         user_id = Operations.get_id(self, request)
-        hoy = datetime.now()  # fecha de hoy
-        q_plans = SellerNonBillablePlans.objects.filter(seller_id=user_id,
-                                                        number_month=hoy.month,
-                                                        number_year=hoy.year,
-                                                        quantity__gt=0)
-        plans = PlansNonBillableSerializer(q_plans, many=True)
-        return Response(plans.data)
+        q_plans = QueryPlans.objects.filter(is_active=True,
+                                            is_promotional=True)
+        hoy = datetime.now()
+        try:
+            prom = SellerNonBillablePlans.objects.get(seller_id=user_id,
+                                                      number_month=hoy.month,
+                                                      number_year=hoy.year)
+            duct["quantity"] = prom.quantity
+        except SellerNonBillablePlans.DoesNotExist:
+            duct["quantity"] = 0
+
+        plans = QueryPlansSerializer(q_plans, many=True)
+        duct["plans"] = plans.data
+        return Response(duct)

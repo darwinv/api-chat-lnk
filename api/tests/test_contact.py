@@ -544,17 +544,31 @@ class CreateNaturalContact(APITestCase):
 
     def test_create_effective(self):
         """Crear conctacto efectivo."""
-        self.valid_payload.pop('objection')
-        self.valid_payload["type_contact"] = 1
+        data = self.valid_payload.copy()
+        data.pop('objection')
+        data["type_contact"] = 1
         # registro como usuario tambien
-        self.valid_payload["password"] = '123456'
+        data["password"] = '123456'
         response = self.client.post(
             reverse('contacts'),
-            data=json.dumps(self.valid_payload),
+            data=json.dumps(data),
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # self.assertEqual(response2.status_code, status.HTTP_201_CREATED)
+
+    def test_create_promotional(self):
+        """Crear conctacto promocional."""
+        data = self.valid_payload.copy()
+        data.pop('objection')
+        data["type_contact"] = 4
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.data["type_contact"], 4)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
 # Prueba para verificar la insercion de cliente juridico
@@ -1005,6 +1019,17 @@ class CreateBussinessContact(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_create_promotional(self):
+        """Crear conctacto promocional."""
+        data = self.valid_payload.copy()
+        data.pop('objection')
+        data["type_contact"] = 4
+        response = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 class GetContacts(APITestCase):
     """Devolver data de contactos."""
@@ -1041,7 +1066,7 @@ class GetContactsFilterDate(APITestCase):
         # SellerContact.objects.filter(seller=2).update(created_at=hoy)
         response = self.client.get(reverse('contacts-filter'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 4)
+        self.assertEqual(response.data["count"], 5)
 
     def test_get_filter_no_effective_contacts(self):
         """Devolver Contactos No efectivos."""
@@ -1059,6 +1084,13 @@ class GetContactsFilterDate(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["count"], 2)
 
+    def test_get_filter_promo_contacts(self):
+        """Devolver Contactos promocionales."""
+        data = {"type_contact": 4}
+        response = self.client.get(reverse('contacts-filter'), data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+
     def test_get_filter_with_date_contacts(self):
         """Devolver Contactos No efectivos."""
         data = {"date_start": '2018-08-20',
@@ -1066,7 +1098,7 @@ class GetContactsFilterDate(APITestCase):
         response = self.client.get(reverse('contacts-filter'), data)
         # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["count"], 3)
+        self.assertEqual(response.data["count"], 4)
 
     def test_get_filter_with_date_contacts_e(self):
         """Devolver Contactos No efectivos."""
