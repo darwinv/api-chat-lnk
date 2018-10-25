@@ -995,23 +995,41 @@ class SellerClientListView(ListCreateAPIView):
     def list(self, request):
 
         seller = Operations.get_id(self, request)
-        # filtro fecha desde y fecha hasta
+
+        clients = Client.objects.filter(sale__status__range=(2, 3)).distinct()
+
+        # Filtro de tipo de clientes (Mis clientes/Asignados)
+        # client_type = 1 (Mis clientes)
+        # client_Type = 2 (Mis asignados)
+        client_type = self.request.query_params.get('client_type', '1')
+        if client_type is not None:
+            if int(client_type) == 1:
+                clients = clients.filter(seller_assigned=seller, sellercontact__seller=seller)
+            elif int(client_type) == 2:
+                clients = clients.filter(seller_assigned=seller).exclude(sellercontact__seller=seller)
+
+        # Filtro fecha desde y fecha hasta
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
-
-        queryset = Client.objects.filter(seller_assigned=seller,
-                                         sale__status__range=(2, 3)).distinct()
-
         if date_start is not None and date_end is not None:
             fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
             date_end = fecha_end + timedelta(days=1)
-            queryset = Client.objects.filter(seller_assigned=seller,
-                                             sale__status__range=(2, 3),
-                                             date_joined__range=(date_start, date_end)).distinct()
+            clients = clients.filter(date_joined__range=(date_start, date_end)).distinct()
 
-        serializer = ClientSerializer(queryset, many=True)
+        # Filtro de clientes con consultas disponibles
+        # available = 1 (Todos los clientes - por defecto)
+        # available = 2 (Los clientes que tienen planes con consultas disponibles)
+        available = self.request.query_params.get('available', '1')
+        if available is not None and int(available) == 2:
+            qpc = QueryPlansClient.objects.filter(client__in=clients,
+                                                  acquired_plan__available_queries__gt=0,
+                                                  acquired_plan__is_active=True).distinct()
+
+            clients = Client.objects.filter(queryplansclient__in=qpc).distinct()
+
+        serializer = ClientSerializer(clients, many=True)
         # pagination
-        page = self.paginate_queryset(queryset)
+        page = self.paginate_queryset(clients)
         if page is not None:
             serializer = ClientSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
