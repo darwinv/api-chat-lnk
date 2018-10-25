@@ -21,6 +21,20 @@ class MatchFileSerializer(serializers.ModelSerializer):
         fields = ('file_url', 'content_type')
 
 
+class MatchDetailSerializer(serializers.ModelSerializer):
+    """Match Detalle."""
+    file = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Match
+        fields = ('category', 'subject', 'file', 'client', 'price',
+                  'status')
+
+    def get_file(self, obj):
+        """Devuelve lista de archivos."""
+        files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
+        return files
+
 class MatchSerializer(serializers.ModelSerializer):
     """Serializer Match."""
     file = MatchFileSerializer(many=True, required=False)

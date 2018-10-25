@@ -16,7 +16,7 @@ from api.utils.validations import Operations
 from api.serializers.match import MatchSerializer, MatchListClientSerializer
 from api.serializers.match import MatchAcceptSerializer, MatchDeclineSerializer
 from api.serializers.match import MatchListSpecialistSerializer
-from api.serializers.match import MatchListSerializer
+from api.serializers.match import MatchListSerializer, MatchDetailSerializer
 from api.serializers.notification import NotificationSpecialistSerializer
 from api.serializers.notification import NotificationClientSerializer
 from api.serializers.actors import ContactToClientSerializer
@@ -122,6 +122,26 @@ class MatchListClientView(ListCreateAPIView):
 
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class MatchDetail(APIView):
+    """Detalle de Match."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def get_object(self, pk):
+        """Obtener objeto."""
+        try:
+            obj = Match.objects.get(pk=pk)
+            return obj
+        except Match.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        """Detalle."""
+        match = self.get_object(pk)
+        serializer = MatchDetailSerializer(match)
+        return Response(serializer.data)
 
 
 class MatchBackendListView(ListCreateAPIView):
