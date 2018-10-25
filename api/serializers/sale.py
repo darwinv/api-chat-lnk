@@ -47,11 +47,11 @@ class ProductSerializer(serializers.Serializer):
         plan = data["plan_id"]
         client = self.context["client"]
         hoy.month
-        if plan.is_promotional is False:
-            raise serializers.ValidationError(
-                _("this is not a promotional plan for this seller"))
+
         if data['is_billable'] is False:
-            # import pdb; pdb.set_trace()
+            if plan.is_promotional is False:
+                raise serializers.ValidationError(
+                    _("this is not a promotional plan for this seller"))
             detail = SaleDetail.objects.filter(sale__client_id=client)
             if detail.filter(is_billable=False).exists():
                 raise serializers.ValidationError(
