@@ -18,6 +18,8 @@ class Params:
         "seller": "V"
     }
     ROLE_CLIENT = 2
+    ROLE_SPECIALIST = 3
+    ROLE_SELLER = 4
 
     TIME_ZONE = ""
 

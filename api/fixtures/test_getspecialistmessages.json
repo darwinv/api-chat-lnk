@@ -1014,6 +1014,7 @@
     "viewed": false,
     "code": "1",
     "content_type": 1,
+    "group": 1,
     "message_reference": null
   }
 },
@@ -3410,5 +3411,12 @@
     "query": 3,
     "specialist": 31
   }
+},
+{
+	"model": "api.groupmessage",
+	"pk": 1,
+	"fields": {
+		"status": 1
+	}
 }
 ]

@@ -602,8 +602,9 @@ class PutDeclineQuery(APITestCase):
                                    content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+
 class GetDeclineListQuery(APITestCase):
-    """Prueba para especialista deribar query"""
+    """Prueba para especialista derivar query"""
 
     fixtures = ['data', 'data2', 'data3', 'test_getspecialistmessages']
 
