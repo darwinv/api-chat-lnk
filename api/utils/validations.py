@@ -1,5 +1,5 @@
 # from django.http import Http404
-from api.models import User
+from api.models import User, SellerContact
 
 class Operations():
     """
@@ -40,8 +40,13 @@ class Operations():
 def document_exists(type_doc, role, document_number):
     """Verificar si el documento ya existe para ese rol y tipo de documento."""
     return User.objects.filter(document_type=type_doc, role=role,
-                               document_number=document_number
-                               ).exists()
+                               document_number=document_number).exists()
+
+
+def document_exists_contact(type_doc, document_number):
+    """Verificar si el documento ya existe para ese rol y tipo de documento."""
+    return SellerContact.objects.filter(document_type=type_doc,
+                                        document_number=document_number).exists()
 
 
 def ruc_exists(residence_country, role, ruc):
