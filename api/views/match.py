@@ -105,7 +105,7 @@ class MatchListClientView(ListCreateAPIView):
                 dict_pending = NotificationSpecialistSerializer(qset_spec).data
                 badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
                 data_notif_push = {
-                    "title": serializer.data['display_name'],
+                    "title": str(serializer.data['display_name']),
                     "body": serializer.data["subject"],
                     "sub_text": "",
                     "ticker": serializer.data["subject"],
