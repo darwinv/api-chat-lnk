@@ -1204,23 +1204,32 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         """Validate."""
         required = _("required")
         # si reside en peru la direccion es obligatoria.
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
-            if "address" not in data or not data["address"]:
-                raise serializers.ValidationError({"address": [required]})
-        else:
-            if ("foreign_address" not in data or
-                not data["foreign_address"] or
-                    data["foreign_address"] is None):
-                raise serializers.ValidationError(
-                         {"foreign_address": [required]})
+        if data['residence_country'] == Countries.objects.get(name='Peru'):
+            if 'address' not in data or not data['address']:
+                raise serializers.ValidationError({'address': [required]})
 
-        if data["type_contact"] == 2:
+            if 'street' not in data['address'] or not data['address']['street']:
+                raise serializers.ValidationError({'street': [required]})
+            if 'department' not in data['address'] or not data['address']['department']:
+                raise serializers.ValidationError({'department': [required]})
+            if 'province' not in data['address'] or not data['address']['province']:
+                raise serializers.ValidationError({'province': [required]})
+            if 'district' not in data['address'] or not data['address']['district']:
+                raise serializers.ValidationError({'district': [required]})
+        else:
+            if ('foreign_address' not in data or
+                not data['foreign_address'] or
+                    data['foreign_address'] is None):
+                raise serializers.ValidationError(
+                         {'oreign_address': [required]})
+
+        if data['type_contact'] == 2:
             if 'objection' not in data and 'other_objection' not in data:
                 raise serializers.ValidationError(
-                    _("the objection is required"))
+                    _('the objection is required'))
         else:
             if 'password' not in data:
-                raise serializers.ValidationError(_("password required"))
+                raise serializers.ValidationError(_('password required'))
         return data
 
     def validate_document_number(self, value):

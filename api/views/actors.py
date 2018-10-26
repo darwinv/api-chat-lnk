@@ -1209,11 +1209,12 @@ class ContactListView(ListCreateAPIView):
             data['longitude'] = '76.9701127'
             data['type_contact'] = 1
         # eliminamos contraseña para contacto en caso de envio
-        elif 'type_contact' in data and 'password' in data:
-            del data["password"]
+        elif 'type_contact' in data:
+            if 'password' in data:
+                del data["password"]
 
             # generamos contraseña random
-            if 'type_contact' in data and data['type_contact'] == 1:
+            if data['type_contact'] != 2:
                 password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
                 data["password"] = password
 
@@ -1223,16 +1224,6 @@ class ContactListView(ListCreateAPIView):
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         if "type_client" not in data or not data["type_client"]:
             raise serializers.ValidationError({'type_client': [required]})
-
-        # eliminamos contraseña para contacto en caso de envio
-        if 'type_contact' in data and 'password' in data:
-            del data["password"]
-
-        # generamos contraseña random
-        if 'type_contact' in data and data['type_contact'] != 2:
-            password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
-            data["password"] = password
-
 
         if data["type_client"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
