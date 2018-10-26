@@ -75,7 +75,7 @@ class MatchListClientView(ListCreateAPIView):
                     data["client"] = serializer_client.data["client_id"]
 
                     # categorias firebase para el cliente
-                    pyrebase.createCategoriesLisClients(serializer.data['client_id'])
+                    pyrebase.createCategoriesLisClients(data["client"])
         
 
         # Cliente que hace match es requerido

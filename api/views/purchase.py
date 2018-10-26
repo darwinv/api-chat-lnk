@@ -11,7 +11,7 @@ from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from api.permissions import IsAdminOrSeller
 from api.models import Sale, SaleDetail, QueryPlansAcquired, QueryPlansClient
-from api.models import MonthlyFee
+from api.models import MonthlyFee, Client
 from api import pyrebase
 
 class CreatePurchase(APIView):
@@ -27,7 +27,11 @@ class CreatePurchase(APIView):
         data = request.data
         user_id = Operations.get_id(self, request)
         if request.user.role_id == 4:
-            data["seller"] = user_id
+            # Si es vendedor, se usa su id como el que efectuo la venta
+            data['seller'] = user_id
+        elif request.user.role_id == 1 or request.user.role_id == 2:
+            # si se trata de un administrador o cliente, la venta la habra efectuado el vendedor asignado
+            data['seller'] = Client.objects.get(pk=data['client']).seller_assigned.id
         serializer = SaleSerializer(data=data, context=data)
         if serializer.is_valid():
             serializer.save()
@@ -46,7 +50,11 @@ class ContactNoEffectivePurchase(APIView):
         data = request.data
         user_id = Operations.get_id(self, request)
         if request.user.role_id == 4:
-            data["seller"] = user_id
+            # Si es vendedor, se usa su id como el que efectuo la venta
+            data['seller'] = user_id
+        elif request.user.role_id == 1 or request.user.role_id == 2:
+            # si se trata de un administrador o cliente, la venta la habra efectuado el vendedor asignado
+            data['seller'] = Client.objects.get(pk=data['client']).seller_assigned.id
         serializer_client = ContactToClientSerializer(data=data)
         if serializer_client.is_valid():
             serializer_client.save()
