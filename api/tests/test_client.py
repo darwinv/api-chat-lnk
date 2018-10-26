@@ -212,13 +212,85 @@ class CreateNaturalClient(APITestCase):
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
-        data["address"] = ""
+        data['address'] = ""
         response1 = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        del data["address"]
+        del data['address']
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_street(self):
+        """Solicitud invalida por no enviar calle."""
+        data = self.valid_payload
+        data['address']['street'] = ""
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data['address']['street']
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_department(self):
+        """Solicitud invalida por no enviar departamento."""
+        data = self.valid_payload
+        data['address']['department'] = ""
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data['address']['department']
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_province(self):
+        """Solicitud invalida por no enviar provincia."""
+        data = self.valid_payload
+        data['address']['province'] = ""
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data['address']['province']
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_district(self):
+        """Solicitud invalida por no enviar distrito."""
+        data = self.valid_payload
+        data['address']['district'] = ""
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data['address']['district']
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
