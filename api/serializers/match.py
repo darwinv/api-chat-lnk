@@ -1,12 +1,12 @@
 """Serializers del Match."""
 from rest_framework import serializers
-
 from api.models import Match, MatchFile, MatchProduct, Specialist, Sale, SaleDetail
-
 from django.utils.translation import ugettext_lazy as _
 from api.serializers.actors import ClientSerializer, SpecialistSerializer
 from api.api_choices_models import ChoicesAPI as ch
 from api.serializers.sale import increment_reference
+
+
 class ListFileSerializer(serializers.ModelSerializer):
     """Serializer para la representacion del mensaje."""
     class Meta:
@@ -79,7 +79,7 @@ class MatchSerializer(serializers.ModelSerializer):
         sale = Sale.objects.create(place="BCP", total_amount=validated_data["price"],
                                    reference_number=increment_reference(),
                                    description='pago de match',
-                                   client=validated_data["client"], status=1)        
+                                   client=validated_data["client"], status=1)
 
         # Detalle de la compra del match
         sale_detail = SaleDetail.objects.create(price=validated_data["price"],
@@ -88,7 +88,7 @@ class MatchSerializer(serializers.ModelSerializer):
                                                 pin_code='XXXXXX',
                                                 is_billable=is_billable,
                                                 product_type_id=2, sale=sale)
-        
+
         validated_data["sale_detail"] = sale_detail
 
         data_files = validated_data.pop('file', None)
@@ -96,8 +96,6 @@ class MatchSerializer(serializers.ModelSerializer):
         if data_files is not None:
             for data_file in data_files:
                 MatchFile.objects.create(match=match, **data_file)
-
-
         return match
 
     def to_representation(self, obj):
