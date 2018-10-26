@@ -29,6 +29,7 @@ from api.serializers.query import QuerySerializer, QueryCustomSerializer
 from api.serializers.plan import QueryPlansShareSerializer, QueryPlansTransferSerializer
 from api.serializers.plan import QueryPlansEmpowerSerializer
 from django.http import Http404
+from django.db.models import Count
 
 from api.permissions import IsAdminOnList, IsAdminOrOwner, IsSeller, IsAdminOrSpecialist, IsAdminOrSeller
 from api.permissions import IsAdminOrClient
@@ -1285,24 +1286,43 @@ class ContactFilterView(ListAPIView):
 
     def get_queryset(self):
         seller = Operations.get_id(self, self.request)
-        queryset = SellerContact.objects.filter(
-            seller=seller).order_by('-created_at')
+        contacts = SellerContact.objects.filter(seller=seller).order_by('-created_at')
+
+        # Filtro de tipo de contato (Mis contactos/Asignados)
+        # assignment_type = 1 (Mis contactos)
+        # assignment_type = 2 (Mis asignados)
+        assignment_type = self.request.query_params.get('assignment_type', '1')
+        if assignment_type is not None:
+            if int(assignment_type) == 1:
+                contacts = contacts.filter(seller=seller, client__seller_assigned=seller)
+            elif int(assignment_type) == 2:
+                clients = clients.filter(seller=seller).exclude(client__seller_assigned=seller)
+
+        # Filetro de tipo de contacto
+        # type_contact = 1 (Contactos efectivos. Tipo de contacto 1 que han subido un voucher)
+        # type_contact = 2 (Contactos no efectivos. Tipo de contacto 2 + Tipo 1 que no hayan subido voucher)
+        # type_contact = 4 (Contactos promocionales)
         type_contact = self.request.query_params.get('type_contact', None)
         if type_contact is not None:
             if int(type_contact) == 1:
-                queryset = queryset.filter(type_contact=1)
+                contacts = contacts.annotate(files_count=Count('client__sale__file_url')).filter(
+                    type_contact = 1, files_count__gt=0
+                )
             elif int(type_contact) == 2:
-                queryset = queryset.filter(type_contact=2)
+                contacts = contacts.annotate(files_count=Count('client__sale__file_url')).filter(
+                   Q (type_contact = 2) | Q(type_contact = 1, files_count=0)
+                )
             elif int(type_contact) == 4:
-                queryset = queryset.filter(type_contact=4)
+                contacts = contacts.filter(type_contact=4)
+
+        # Filtro fecha desde y fecha hasta
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
         if date_start is not None and date_end is not None:
             fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
             date_end = fecha_end + timedelta(days=1)
-            queryset = queryset.filter(
-                created_at__range=(date_start, date_end))
-        return queryset
+            contacts = contacts.filter(created_at__range=(date_start, date_end))
+        return contacts
 
 
 # ------------ Fin de Vendedores -----------------
