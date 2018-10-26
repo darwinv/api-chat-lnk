@@ -16,7 +16,7 @@ from django.http import Http404
 from rest_framework.response import Response
 from api.utils.tools import capitalize as cap
 from api.utils.parameters import Params
-from api.utils.validations import document_exists, ruc_exists
+from api.utils.validations import document_exists, document_exists_contact, ruc_exists
 from django.contrib.auth.hashers import check_password
 from api.utils.querysets import get_queries_pending_to_solve
 from django.contrib.auth import password_validation
@@ -467,6 +467,14 @@ class ClientSerializer(serializers.ModelSerializer):
                          {"foreign_address": [required]})
         return
 
+class ClientDetailSerializer(serializers.ModelSerializer):
+    """  Serializer creado para evitar la validacion no parcial de ClientSerializer """
+
+    class Meta:
+        """declaracion del modelo y sus campos."""
+
+        model = Client
+        fields = '__all__'
 
 class SpecialistSerializer(serializers.ModelSerializer):
     """Serializer del especialista."""
@@ -1106,6 +1114,7 @@ class ContactToClientSerializer(serializers.ModelSerializer):
 
         data_client = SellerContact.objects.filter(
             email_exact=email).values().first()
+
         # import pdb; pdb.set_trace()
         data_client["username"] = email
         data_client["role"] = Params.ROLE_CLIENT
@@ -1116,8 +1125,11 @@ class ContactToClientSerializer(serializers.ModelSerializer):
         data_client["residence_country"] = contact.residence_country_id
         data_client["level_instruction"] = contact.level_instruction_id
         data_client["address"] = AddressSerializer(contact.address).data
-        
-        
+
+        data_client["photo"] = contact.photo
+        data_client["code_telephone"] = contact.code_telephone.id
+        data_client["code_cellphone"] = contact.code_cellphone.id
+
         if data_client["type_client"] == 'b':
             data_client['birthdate'] = '1900-01-01'
             data_client['sex'] = ''
@@ -1131,6 +1143,7 @@ class ContactToClientSerializer(serializers.ModelSerializer):
             data_client['ciiu'] = contact.ciiu_id
 
         serializer_client = ClientSerializer(data=data_client)
+
         if serializer_client.is_valid():
             serializer_client.save()
             self.context['client_id'] = serializer_client.data['id']
@@ -1191,24 +1204,57 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         """Validate."""
         required = _("required")
         # si reside en peru la direccion es obligatoria.
-        if data["residence_country"] == Countries.objects.get(name="Peru"):
-            if "address" not in data or not data["address"]:
-                raise serializers.ValidationError({"address": [required]})
-        else:
-            if ("foreign_address" not in data or
-                not data["foreign_address"] or
-                    data["foreign_address"] is None):
-                raise serializers.ValidationError(
-                         {"foreign_address": [required]})
+        if data['residence_country'] == Countries.objects.get(name='Peru'):
+            if 'address' not in data or not data['address']:
+                raise serializers.ValidationError({'address': [required]})
 
-        if data["type_contact"] == 2:
+            if 'street' not in data['address'] or not data['address']['street']:
+                raise serializers.ValidationError({'street': [required]})
+            if 'department' not in data['address'] or not data['address']['department']:
+                raise serializers.ValidationError({'department': [required]})
+            if 'province' not in data['address'] or not data['address']['province']:
+                raise serializers.ValidationError({'province': [required]})
+            if 'district' not in data['address'] or not data['address']['district']:
+                raise serializers.ValidationError({'district': [required]})
+        else:
+            if ('foreign_address' not in data or
+                not data['foreign_address'] or
+                    data['foreign_address'] is None):
+                raise serializers.ValidationError(
+                         {'oreign_address': [required]})
+
+        if data['type_contact'] == 2:
             if 'objection' not in data and 'other_objection' not in data:
                 raise serializers.ValidationError(
-                    _("the objection is required"))
+                    _('the objection is required'))
         else:
             if 'password' not in data:
-                raise serializers.ValidationError(_("password required"))
+                raise serializers.ValidationError(_('password required'))
         return data
+
+    def validate_document_number(self, value):
+        """Validar Numero de Documento."""
+        data = self.get_initial()
+        document_type = data.get('document_type', 0)
+        if isinstance(document_type, str) and document_type.isdigit():
+            document_type = int(document_type)
+
+        if document_type not in range(1, 4):
+            return value
+
+        if 'type_contact' in data and data['type_contact'] == 2:
+            if document_exists_contact(type_doc=document_type, 
+                                       document_number=data['document_number']):
+                raise serializers.ValidationError(
+                    [_('This field must be unique')])
+        elif 'type_client' in data and data['type_client'] == 'n':
+            #TODO colocar el ROLE_CLIENT y otras constantes en un archivo aparte
+            ROLE_CLIENT = 2
+            if document_exists(type_doc=document_type, role=ROLE_CLIENT,
+                               document_number=data['document_number']):
+                raise serializers.ValidationError(
+                    [_('This field must be unique')])
+        return value
 
     def create(self, validated_data):
         """Redefinido metodo de crear contacto."""
@@ -1228,12 +1274,10 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         if 'objection' in validated_data:
             objection_list = validated_data.pop('objection')
 
-        type_contact_temp = validated_data["type_contact"]
-        validated_data["type_contact"] = 2
         instance = self.Meta.model(**validated_data)
         # creo el listado de objeciones si es no efectivo
 
-        if type_contact_temp == 2:
+        if validated_data["type_contact"] == 2:
             instance.save()
             if 'objection_list' in locals():
                 for objection in objection_list:
@@ -1243,8 +1287,8 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         else:
             # registro de cliente si es efectivo
             data_client = self.get_initial()
-            data_client["username"] = data_client["email_exact"]
-            data_client["role"] = Params.ROLE_CLIENT
+            data_client['username'] = data_client['email_exact']
+            data_client['role'] = Params.ROLE_CLIENT
             data_client['password'] = password
             data_client['seller_assigned'] = data_client['seller']
 
@@ -1259,6 +1303,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
 
             if serializer_client.is_valid():
                 serializer_client.save()
+                instance.client = Client.objects.get(pk=serializer_client.data['id'])
                 instance.save()
                 self.context['client_id'] = serializer_client.data['id']
             else:
@@ -1277,7 +1322,7 @@ class SellerContactNaturalSerializer(BaseSellerContactSerializer):
     type_contact_name = serializers.SerializerMethodField()
     type_client = serializers.ChoiceField(choices=c.client_type_client)
     document_type = serializers.ChoiceField(choices=c.user_document_type)
-    document_number = serializers.CharField(validators=[UniqueValidator(queryset=SellerContact.objects.filter(type_client='n'))])
+    document_number = serializers.CharField()
     document_type_name = serializers.SerializerMethodField()
     email_exact = serializers.EmailField(validators=[UniqueValidator(queryset=SellerContact.objects.all())])
     civil_state = serializers.ChoiceField(choices=c.client_civil_state)
@@ -1313,7 +1358,7 @@ class SellerContactNaturalSerializer(BaseSellerContactSerializer):
                   'sex', 'sex_name', 'ocupation_name', 'activity_description',
                   'photo', 'about', 'cellphone', 'telephone', 'code_cellphone',
                   'code_telephone', 'ocupation', 'profession', 'address',
-                  'level_instruction', 'latitude', 'longitude', 'seller', 'objection_name', 
+                  'level_instruction', 'latitude', 'longitude', 'seller', 'objection_name',
                   'nationality', 'nationality_name', 'level_instruction_name', 'photo',
                   "foreign_address", 'residence_country',
                   'password', 'other_objection'
@@ -1399,7 +1444,7 @@ class SellerContactBusinessSerializer(BaseSellerContactSerializer):
         fields = ('id', 'business_name', 'commercial_reason', 'type_contact',
                   'document_type', 'document_type_name', 'document_number',
                   'ruc', 'economic_sector', 'activity_description', 'about',
-                  'cellphone', 'telephone', 'code_cellphone', 'code_telephone', 
+                  'cellphone', 'telephone', 'code_cellphone', 'code_telephone',
                   'address', 'latitude', 'position', 'type_client', 'longitude',
                   'seller', 'objection', 'email_exact', 'objection_name', 'nationality',
                   'type_contact_name', 'nationality_name', 'photo', 'agent_firstname',

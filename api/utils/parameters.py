@@ -11,6 +11,19 @@ class Params:
         "query": "q",
         "message": "m"
     }
+    # Tipo de notificacion (para push notif)
+    TYPE_NOTIF = {
+        "default": 0,
+        "browsable": 1,
+        "query_new": 2,
+        "query_declined": 3,
+        "query_derived": 4,
+        "query_answer": 5,
+        "match_new": 6,
+        "match_declined": 7,
+        "match_success": 8
+     }
+
     CODE_PREFIX = {
         "client": "C",
         "specialist": "E",
@@ -18,8 +31,11 @@ class Params:
         "seller": "V"
     }
     ROLE_CLIENT = 2
+    ROLE_SPECIALIST = 3
+    ROLE_SELLER = 4
 
     TIME_ZONE = ""
+
 
 class Payloads:
     read = True

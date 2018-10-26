@@ -102,7 +102,7 @@ class MatchPaymentSpecialist(APIView):
             serializer.save()
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        
+
 class MatchPaymentClient(APIView):
     """Vista para crear pago de match specialista."""
     authentication_classes = (OAuth2Authentication,)
@@ -111,7 +111,7 @@ class MatchPaymentClient(APIView):
     def post(self, request):
         """crear compra."""
         data = request.data
-        
+
         if "match" in data:
             sale = Match.objects.filter(pk=data["match"]
                                 ).values("sale_detail__sale__file_url",
@@ -189,7 +189,6 @@ class PaymentDetailContactView(ListCreateAPIView):
     required = _("required")
 
     def get(self, request):
-        """Detalle."""
         """Detalle de venta para contacto efectivo, devuelve ventas con
         paginacion para un cliente dado"""
         data = request.query_params

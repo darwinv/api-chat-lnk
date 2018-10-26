@@ -1,0 +1,477 @@
+[
+  {
+      "model": "api.address",
+      "pk": 1,
+      "fields": {
+          "street": "esteban camere",
+          "department": 1,
+          "province": 1,
+          "district": 1
+      }
+  },
+  {
+    "model": "api.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "darwinio_vasqz@gmail.com",
+        "first_name": "darwin",
+        "last_name": "vasquez",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2018-02-05T23:10:23.879Z",
+        "nick": "dar",
+        "email_exact": "darwinio_vasqz@gmail.com",
+        "telephone": "921471559",
+        "cellphone": "921471559",
+        "code_telephone": null,
+        "code_cellphone": null,
+        "photo": null,
+        "document_type": "2",
+        "document_number": "20122984",
+        "img_document_number": null,
+        "ruc": "123456789",
+        "code": "C20122984",
+        "anonymous": true,
+        "updated_at": "2018-02-05T23:10:24.020Z",
+        "nationality": 1,
+        "role": 2,
+        "address": 1,
+        "residence_country": 1,
+        "foreign_address": null,
+        "key": null,
+        "status": 1,
+        "groups": [],
+        "user_permissions": []
+      }
+},
+{
+    "model": "api.client",
+    "pk": 5,
+    "fields": {
+        "type_client": "n",
+        "sex": "m",
+        "commercial_reason": null,
+        "civil_state": "s",
+        "birthdate": "2017-09-19",
+        "ciiu": 10,
+        "activity_description": "Loremp iptsum",
+        "institute": "UNEFA",
+        "ocupation": 1,
+        "about": "iptsum aabout",
+        "business_name": null,
+        "agent_firstname": null,
+        "agent_lastname": null,
+        "position": null,
+        "profession": "Administrador",
+        "economic_sector": null,
+        "level_instruction": 1,
+        "seller_assigned": null,
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+  "model": "api.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "impuestos@mail.com",
+    "first_name": "Carlos",
+    "last_name": "Alfaro Canterac",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "Carlos Alfaro Canterac",
+    "email_exact": "impuestos@mail.com",
+    "telephone": "000231123",
+    "cellphone": "00012231",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://media.licdn.com/dms/image/C4D03AQHsGnu-OWHkdA/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=M6naZAU0nJaF99CQUkBD7fkrIJg7esFaLWul0zaKpuE",
+    "document_type": 1,
+    "document_number": "246125822",
+    "img_document_number": null,
+    "ruc": "316674344",
+    "code": "E246125822",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 1,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": "QHDLZI8E5R",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 6,
+  "fields": {
+    "business_name": "PYMPACK",
+    "type_specialist": "m",
+    "star_rating": null,
+    "cv": null,
+    "payment_per_answer": "3.20",
+    "category": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "criminalley@mail.com",
+    "first_name": "Juan",
+    "last_name": "Guere Porras",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "Juan Jesus Guere Porras",
+    "email_exact": "criminalley@mail.com",
+    "telephone": "0002311234",
+    "cellphone": "0001223121",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://media.licdn.com/dms/image/C4D03AQHsGnu-OWHkdA/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=M6naZAU0nJaF99CQUkBD7fkrIJg7esFaLWul0zaKpuE",
+    "document_type": 1,
+    "document_number": "246125824",
+    "img_document_number": null,
+    "ruc": "316674344",
+    "code": "E246125824",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 1,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": "QHDLZI8E5R",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 7,
+  "fields": {
+    "business_name": "WeWORK",
+    "type_specialist": "m",
+    "star_rating": null,
+    "cv": null,
+    "payment_per_answer": "3.20",
+    "category": 21,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$DjB49YwHRIZg$Q/LnsILs4o+guLxCivJfNbvE0sV3n8OOGczrQSDWbe0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "impuestos2@mail.com",
+    "first_name": "Sandra",
+    "last_name": "Bouvier",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2018-03-05T21:35:00.992Z",
+    "nick": "Sandra",
+    "email_exact": "impuestos2@mail.com",
+    "telephone": "0002311239",
+    "cellphone": "0001223127",
+    "code_telephone": null,
+    "code_cellphone": null,
+    "photo": "https://media.licdn.com/dms/image/C4D03AQHsGnu-OWHkdA/profile-displayphoto-shrink_800_800/0?e=1541635200&v=beta&t=M6naZAU0nJaF99CQUkBD7fkrIJg7esFaLWul0zaKpuE",
+    "document_type": 1,
+    "document_number": "246125821",
+    "img_document_number": null,
+    "ruc": "316674344",
+    "code": "E246125821",
+    "anonymous": true,
+    "updated_at": "2018-03-05T21:35:01.071Z",
+    "nationality": 1,
+    "role": 3,
+    "address": 1,
+    "residence_country": 1,
+    "foreign_address": null,
+    "key": "QHDLZI8E5R",
+    "status": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "api.specialist",
+  "pk": 8,
+  "fields": {
+    "business_name": "PYMPACK",
+    "type_specialist": "a",
+    "star_rating": null,
+    "cv": null,
+    "payment_per_answer": "3.20",
+    "category": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 3,
+  "fields": {
+    "user": 5,
+    "token": "FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "read write groups",
+    "created": "2017-12-21T17:31:54.255Z",
+    "updated": "2018-01-31T17:17:21.129Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 4,
+  "fields": {
+    "user": 6,
+    "token": "FEk2avXwe09lk2avXwe09k2avX",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "read write groups",
+    "created": "2017-12-21T17:31:54.255Z",
+    "updated": "2018-01-31T17:17:21.129Z"
+  }
+},
+{
+  "model": "oauth2_provider.accesstoken",
+  "pk": 5,
+  "fields": {
+    "user": 8,
+    "token": "FEk2avXwe09lk2avXweFEk2avXwe09",
+    "application": 1,
+    "expires": "9999-12-31T23:59:59Z",
+    "scope": "read write groups",
+    "created": "2017-12-21T17:31:54.255Z",
+    "updated": "2018-01-31T17:17:21.129Z"
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 7,
+  "fields": {
+    "created_at": "2018-10-10T20:12:14.525Z",
+    "place": "BCP",
+    "total_amount": "300.00",
+    "reference_number": "CD1004",
+    "description": "test",
+    "is_fee": false,
+    "client": 5,
+    "seller": null,
+    "status": 2,
+    "file_url": "",
+    "file_preview_url": ""
+  }
+},
+{
+  "model": "api.sale",
+  "pk": 8,
+  "fields": {
+    "created_at": "2018-11-10T20:12:14.525Z",
+    "place": "BCP",
+    "total_amount": "450.00",
+    "reference_number": "CD1005",
+    "description": "test",
+    "is_fee": false,
+    "client": 5,
+    "seller": null,
+    "status": 3,
+    "file_url": "",
+    "file_preview_url": ""
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 31,
+  "fields": {
+    "price": "300.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "K3ZXQY",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 7
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 32,
+  "fields": {
+    "price": "450.00",
+    "description": "Description",
+    "discount": "0.00",
+    "pin_code": "XXXXX",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 1,
+    "sale": 8
+  }
+},
+{
+  "model": "api.queryplansacquired",
+  "pk": 31,
+  "fields": {
+    "expiration_date": "2019-04-09",
+    "validity_months": 2,
+    "available_queries": 6,
+    "queries_to_pay": 0,
+    "query_quantity": 6,
+    "activation_date": "2018-08-17",
+    "is_active": true,
+    "available_requeries": 1,
+    "maximum_response_time": 24,
+    "acquired_at": "2018-09-10T21:21:21.664Z",
+    "plan_name": "MiniPack",
+    "query_plans": 3,
+    "sale_detail": 31,
+    "status": 3
+  }
+},
+{
+  "model": "api.queryplansclient",
+  "pk": 31,
+  "fields": {
+    "acquired_plan": 31,
+    "client": 5,
+    "owner": true,
+    "transfer": true,
+    "share": true,
+    "empower": true,
+    "status": 1,
+    "is_chosen": false
+  }
+},
+  {
+    "model": "api.query",
+    "pk": 1,
+    "fields": {
+      "title": "Consulta",
+      "status": 3,
+      "created_at": "2018-08-17T15:12:30.186Z",
+      "last_modified": "2018-08-17T15:20:36.266Z",
+      "qualification": null,
+      "available_requeries": 0,
+      "category": 1,
+      "client": 5,
+      "specialist": 6,
+      "acquired_plan": 31,
+      "changed_on": "2018-08-17T15:20:36.266Z"
+    }
+  },
+  {
+    "model": "api.query",
+    "pk": 2,
+    "fields": {
+      "title": "Bssksk",
+      "status": 4,
+      "created_at": "2018-08-17T15:22:17.560Z",
+      "last_modified": "2018-08-17T15:23:48.537Z",
+      "qualification": null,
+      "available_requeries": 1,
+      "category": 1,
+      "client": 5,
+      "specialist": 6,
+      "acquired_plan": 31,
+      "changed_on": "2018-08-17T15:23:48.537Z"
+    }
+  },
+  {
+    "model": "api.query",
+    "pk": 3,
+    "fields": {
+      "title": "Consulta",
+      "status": 2,
+      "created_at": "2018-08-17T15:12:30.186Z",
+      "last_modified": "2018-08-17T15:20:36.266Z",
+      "qualification": null,
+      "available_requeries": 0,
+      "category": 1,
+      "client": 5,
+      "specialist": 6,
+      "acquired_plan": 31,
+      "changed_on": "2018-08-17T15:20:36.266Z"
+    }
+  },
+  {
+    "model": "api.query",
+    "pk": 4,
+    "fields": {
+      "title": "Consulta",
+      "status": 2,
+      "created_at": "2018-08-17T15:12:30.186Z",
+      "last_modified": "2018-08-17T15:20:36.266Z",
+      "qualification": null,
+      "available_requeries": 0,
+      "category": 1,
+      "client": 5,
+      "specialist": 8,
+      "acquired_plan": 31,
+      "changed_on": "2018-08-17T15:20:36.266Z"
+    }
+  },
+  {
+    "model": "api.match",
+    "pk": 1,
+    "fields": {
+      "price": "450.00",
+      "subject": "Necesitamos apoyo para la selecci\u00f3n de nuevo personal",
+      "status": 2,
+      "payment_option_specialist": 2,
+      "declined_motive": null,
+      "created_at": "2018-10-09T20:55:27.105Z",
+      "category": 1,
+      "client": 5,
+      "specialist": 6,
+      "sale_detail": 32,
+      "specialist_payment": null,
+      "file_url": "",
+      "file_preview_url": ""
+    }
+  },
+  {
+    "model": "api.match",
+    "pk": 2,
+    "fields": {
+      "price": "450.00",
+      "subject": "Segundo test de contrataci\u00f3n de especialista",
+      "status": 4,
+      "payment_option_specialist": null,
+      "declined_motive": null,
+      "created_at": "2018-10-10T14:58:43.956Z",
+      "category": 21,
+      "client": 5,
+      "specialist": 7,
+      "sale_detail": 32,
+      "specialist_payment": null,
+      "file_url": "",
+      "file_preview_url": ""
+    }
+  }
+]

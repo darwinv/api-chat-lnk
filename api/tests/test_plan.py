@@ -121,8 +121,8 @@ class GetClientPlansList(APITestCase):
 
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
-        response = self.client.get(reverse('client-plans')+'?client_id=11', format='json')
-
+        response = self.client.get(reverse('client-plans')+'?client_id=11',
+                                   format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -156,7 +156,6 @@ class GetClientPlansAllList(APITestCase):
     def test_get_list(self):
         """Obtener resultado 200 de la lista."""
         response = self.client.get(reverse('client-plans-all'), format='json')
-        # import pdb; pdb.set_trace()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -507,7 +506,6 @@ class CreatePlansNonBillable(APITestCase):
         """Setup."""
         self.valid_payload = {
             "quantity": 2,
-            "query_plans": 2,
             "seller": 19,
             "number_month": 6,
             "number_year": 2018
@@ -517,14 +515,6 @@ class CreatePlansNonBillable(APITestCase):
         """Sin Cantidad."""
         data = self.valid_payload.copy()
         data["quantity"] = ""
-        response = client.post(reverse('plans-nonbillable'),
-                               format='json', data=data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_no_query_plans(self):
-        """Sin plan de consulta."""
-        data = self.valid_payload.copy()
-        data["query_plans"] = ""
         response = client.post(reverse('plans-nonbillable'),
                                format='json', data=data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -567,7 +557,6 @@ class GetPromocionalPlans(APITestCase):
     def test_get_seller_plans(self):
         """devolver todos los planes pertenecientes al vendedor."""
         response = self.client.get(reverse('seller-plans-nonbillable'))
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class GetCheckEmailForOperationPlans(APITestCase):

@@ -206,6 +206,23 @@ class AcceptMatchSpecialist(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
+class GetMatchDetail(APITestCase):
+    """Ver Detalle de Match."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_match']
+
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+
+    def test_get_match_detail(self):
+        """Detalle de Match."""
+        response = client.get(reverse('match-detail', kwargs={'pk': 1}),
+                              format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 class DeclineMatchSpecialist(APITestCase):
     """Declinar Match."""
 

@@ -105,6 +105,18 @@ class IsAdminOrSeller(permissions.BasePermission):
             return True
         return False
 
+    def has_object_permission(self, request, view, obj):
+        """Permiso de nivel objeto. PAara saber si se trata del vendedor del obj o un admin """
+
+        if request.method == "POST" or request.method == "PUT":
+            # Si es el vendedor asignado del clliente
+            is_seller_assigned = hasattr(obj, 'seller_assigned') and request.user.id == obj.seller_assigned.id
+            # Si es el vendedor del contacto
+            is_seller_of_contact = hasattr(obj, 'seller') and request.user.id == obj.seller.id
+
+            return is_seller_assigned  or is_seller_of_contact or request.user.is_staff
+
+
 class IsClientOrSpecialistAndOwner(permissions.BasePermission):
     """Solo Cliente y Dueño del objeto actual."""
 

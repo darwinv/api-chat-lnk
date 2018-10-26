@@ -126,17 +126,6 @@ class CreateNaturalClient(APITestCase):
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_no_username(self):
-        """Solicitud invalida por no tener el username."""
-        data = self.valid_payload
-        del data["username"]
-        response = self.client.post(
-            reverse('clients'),
-            data=json.dumps(data),
-            content_type='application/json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_no_sex(self):
         """Solicitud invalida por no enviar el sexo."""
         data = self.valid_payload
@@ -223,13 +212,85 @@ class CreateNaturalClient(APITestCase):
     def test_no_address(self):
         """Solicitud invalida por no enviar direccion."""
         data = self.valid_payload
-        data["address"] = ""
+        data['address'] = ""
         response1 = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
             content_type='application/json'
         )
-        del data["address"]
+        del data['address']
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_street(self):
+        """Solicitud invalida por no enviar calle."""
+        data = self.valid_payload
+        data['address']['street'] = ""
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data['address']['street']
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_department(self):
+        """Solicitud invalida por no enviar departamento."""
+        data = self.valid_payload
+        data['address']['department'] = ""
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data['address']['department']
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_province(self):
+        """Solicitud invalida por no enviar provincia."""
+        data = self.valid_payload
+        data['address']['province'] = ""
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data['address']['province']
+        response = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_no_district(self):
+        """Solicitud invalida por no enviar distrito."""
+        data = self.valid_payload
+        data['address']['district'] = ""
+        response1 = self.client.post(
+            reverse('clients'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        del data['address']['district']
         response = self.client.post(
             reverse('clients'),
             data=json.dumps(data),
@@ -261,8 +322,9 @@ class CreateNaturalClient(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["code"][:3],
+        self.assertEqual(Cliente.objects.get(pk=response.data['client_id']).code[:3],
                          Countries.objects.get(
                             pk=data["nationality"]).iso_code + "1")
 
@@ -1144,7 +1206,7 @@ class CreateBusinessClient(APITestCase):
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["code"][:3],
+        self.assertEqual(Cliente.objects.get(pk=response.data['client_id']).code[:3],
                          Countries.objects.get(
                             pk=data["nationality"]).iso_code + "1")
 
@@ -1330,8 +1392,9 @@ class GetDetailClient(APITestCase):
             data=json.dumps(self.valid_payload),
             content_type='application/json'
         )
+
         response = client.get(reverse('client-detail',
-                                      kwargs={'pk': send.data["id"]}),
+                                      kwargs={'pk': send.data['client_id']}),
                               format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -1495,8 +1558,9 @@ class UpdatePasswordByRecoverCode(APITestCase):
 
     def test_error_bad_email(self):
         # envio data erronea
-        data = {'password':'123456', 'code':'XYZ123'}
-        response = client.put(reverse('reset-password-recovery', args=(111,)), data)
+        data = {'password': '123456', 'code': 'XYZ123'}
+        response = client.put(reverse('reset-password-recovery', args=(111,)),
+                              data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
@@ -1540,6 +1604,22 @@ class UpdatePasswordClientNatural(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
+class GetNotificationOnBadge(APITestCase):
+    """Notificacion on badge."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_notification']
+
+    def setUp(self):
+        self.client = APIClient()
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Qsl7yHY')
+
+    def test_get_badge(self):
+        """Badge para el cliente."""
+        response = self.client.get(reverse('get-badge'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["queries_pending"], 2)
+        self.assertEqual(response.data["match_pending"], 1)
 
 
 class UpdateEmail(APITestCase):

@@ -173,3 +173,12 @@ def get_body(file_type, message):
 def send_api(url_name, token='', arg=None, files=None):
     r = requests.post(URL_HOST + url_name, json=arg)
     return r
+
+
+def display_specialist_name(obj):
+    """Desplegar nombre del especialista a mostrar."""
+    display_name = obj.specialist.first_name + ' ' + obj.specialist.last_name
+    if obj.specialist.nick is not None:
+        if len(obj.specialist.nick) > 0:
+            display_name = obj.specialist.nick
+    return display_name

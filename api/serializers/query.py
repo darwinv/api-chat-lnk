@@ -1,5 +1,6 @@
 """Consultas."""
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as trans
 from django.db.models import Avg
 from rest_framework import serializers
 from api.models import Specialist, Query, Message, Category, QueryPlansAcquired
@@ -661,6 +662,25 @@ class QueryDeriveSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+    def to_representation(self, obj):
+        """redefinido to repr."""
+        if obj.client.type_client == 'n':
+            display_name = obj.client.first_name + ' ' + obj.client.last_name
+        else:
+            display_name = obj.client.agent_firstname + ' ' + obj.client.agent_lastname
+
+        if obj.client.nick is not None:
+            if len(obj.client.nick) > 0:
+                display_name = obj.client.nick
+
+        resp = QuerySerializer(obj).data
+        resp["photo"] = obj.category.image
+        resp["displayName"] = display_name
+        resp["category"] = obj.category_id
+        resp["client"] = obj.client_id
+        return resp
+
+
 
 class QueryQualifySerializer(serializers.ModelSerializer):
     """Calificar Consulta."""
@@ -686,6 +706,28 @@ class QueryQualifySerializer(serializers.ModelSerializer):
         return instance
 
 
+class DeclineReprSerializer(serializers.ModelSerializer):
+    """Serializer solo para repr."""
+
+    class Meta:
+        """Meta."""
+        model = Query
+        fields = ('id',)
+
+    def to_representation(self, obj):
+        """Data devuelta."""
+        dict_repr = {}
+        decline_obj = obj.declinator_set.last()
+
+        dict_repr["displayName"] = decline_obj.specialist.last_name + trans("has declined")
+        dict_repr["motive"] = decline_obj.message
+        dict_repr["photo"] = decline_obj.specialist.photo
+        dict_repr["client"] = obj.client_id
+        dict_repr["category"] = obj.category_id
+        dict_repr["query_id"] = obj.id
+        return dict_repr
+
+
 class QueryDeclineSerializer(QueryDeriveSerializer):
     """Cambiar clave de usuario."""
 
@@ -709,11 +751,22 @@ class QueryDeclineSerializer(QueryDeriveSerializer):
         data_declinator["specialist"] = Specialist.objects.get(pk=specialist)
         return Declinator.objects.create(**data_declinator)
 
+
+class QueryListDeclineSerializer(serializers.ModelSerializer):
+    """Listado de Declinaciones."""
+
+    name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+
+    class Meta:
+        """Meta."""
+        model = Declinator
+        fields = ('message', 'name', 'last_name')
+
     def get_name(self, obj):
         if type(obj) is dict and 'specialist__first_name' in obj:
             return obj['specialist__first_name']
         return ""
-
 
     def get_last_name(self, obj):
         if type(obj) is dict and 'specialist__last_name' in obj:

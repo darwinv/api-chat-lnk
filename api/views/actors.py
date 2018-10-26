@@ -14,7 +14,7 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django.db.models import OuterRef, Subquery, Q, Sum
 from django_filters import rest_framework as filters
 from rest_framework import filters as searchfilters
-from api.serializers.actors import ClientSerializer, UserPhotoSerializer
+from api.serializers.actors import ClientSerializer, UserPhotoSerializer, ClientDetailSerializer
 from api.serializers.actors import KeySerializer, ContactPhotoSerializer
 from api.serializers.actors import UserSerializer, SpecialistSerializer
 from api.serializers.actors import SellerContactSerializer
@@ -458,52 +458,56 @@ class ClientListView(ListCreateAPIView):
 
     # Metodo post redefinido
     def post(self, request):
+        """Ahora se usa el post de ContactListView"""
+
+        view = ContactListView()
+        return view.post(request)
         """Redefinido metodo para crear clientes."""
-        data = request.data
-        if 'type_client' not in data or not data['type_client']:
-            raise serializers.ValidationError({'type_client': [self.required]})
+        # data = request.data
+        # if 'type_client' not in data or not data['type_client']:
+        #     raise serializers.ValidationError({'type_client': [self.required]})
 
-        # generamos contraseña random
-        if 'register_type' in data and data['register_type'] == 2:
-            password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
-            data["password"] = password
+        # # generamos contraseña random
+        # if 'register_type' in data and data['register_type'] == 2:
+        #     password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
+        #     data["password"] = password
 
-        if data['type_client'] == 'n':
-            data['economic_sector'] = ''
-        elif data['type_client'] == 'b':
-            data['birthdate'] = DATE_FAKE
-            data['sex'] = ''
-            data['civil_state'] = ''
-            data['level_instruction'] = ''
-            data['profession'] = ''
-            data['ocupation'] = None
-        data['role'] = ROLE_CLIENT
-        serializer = ClientSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
+        # if data['type_client'] == 'n':
+        #     data['economic_sector'] = ''
+        # elif data['type_client'] == 'b':
+        #     data['birthdate'] = DATE_FAKE
+        #     data['sex'] = ''
+        #     data['civil_state'] = ''
+        #     data['level_instruction'] = ''
+        #     data['profession'] = ''
+        #     data['ocupation'] = None
+        # data['role'] = ROLE_CLIENT
+        # serializer = ClientSerializer(data=data)
+        # if serializer.is_valid():
+        #     serializer.save()
 
-            if 'test' not in sys.argv:
-                # se le crea la lista de todas las categorias al cliente en firebase
-                pyrebase.createCategoriesLisClients(serializer.data['id'])
+        #     if 'test' not in sys.argv:
+        #         # se le crea la lista de todas las categorias al cliente en firebase
+        #         pyrebase.createCategoriesLisClients(serializer.data['id'])
 
-                if 'register_type' in data and data['register_type'] == 2:
-                    # envio de contraseña al cliente
-                    mail = BasicEmailAmazon(subject='Envio Credenciales', to=data["email_exact"],
-                                            template='email/send_credentials')
-                    credentials = {}
-                    credentials["user"] = data["email_exact"]
-                    credentials["pass"] = password
-                    mail.sendmail(args=credentials)
+        #         if 'register_type' in data and data['register_type'] == 2:
+        #             # envio de contraseña al cliente
+        #             mail = BasicEmailAmazon(subject='Envio Credenciales', to=data["email_exact"],
+        #                                     template='email/send_credentials')
+        #             credentials = {}
+        #             credentials["user"] = data["email_exact"]
+        #             credentials["pass"] = password
+        #             mail.sendmail(args=credentials)
 
-            # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
-            # give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
+        #     # FUNCION TEMPORAL PARA OTORGAR PLANES A CLIENTES
+        #     # give_plan_new_client(serializer.data['id']) # OJO FUNCION TEMPORAL
 
-            client_id = serializer.data['id']
-            email = data['email_exact']
-            self.check_plans_operation_manage(client_id, email)
+        #     client_id = serializer.data['id']
+        #     email = data['email_exact']
+        #     self.check_plans_operation_manage(client_id, email)
 
-            return Response(serializer.data, status.HTTP_201_CREATED)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        #     return Response(serializer.data, status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     def check_plans_operation_manage(self, receiver_id, email_receiver):
         """
@@ -728,7 +732,7 @@ class SpecialistListView(ListCreateAPIView):
     def list(self, request):
         # en dado caso que exista el parametro "main_specialist", se devuelve
         # el listado de especialistas asociados, caso contrario devuelve todos
-        
+
         if 'main_specialist' in request.query_params:
             specialist = self.get_object(
                 request.query_params["main_specialist"])
@@ -785,7 +789,7 @@ class SpecialistAsociateListView(ListCreateAPIView):
 
         specialists = Specialist.objects.filter(category=obj.category,
                                                 type_specialist="a")
-        
+
         page = self.paginate_queryset(specialists)
         if page is not None:
             serializer = AssociateSpecialistSerializer(page, many=True)
@@ -991,27 +995,73 @@ class SellerClientListView(ListCreateAPIView):
     def list(self, request):
 
         seller = Operations.get_id(self, request)
-        # filtro fecha desde y fecha hasta
+
+        clients = Client.objects.filter(sale__status__range=(2, 3)).distinct()
+
+        # Filtro de tipo de clientes (Mis clientes/Asignados)
+        # client_type = 1 (Mis clientes)
+        # client_Type = 2 (Mis asignados)
+        client_type = self.request.query_params.get('client_type', '1')
+        if client_type is not None:
+            if int(client_type) == 1:
+                clients = clients.filter(seller_assigned=seller, sellercontact__seller=seller)
+            elif int(client_type) == 2:
+                clients = clients.filter(seller_assigned=seller).exclude(sellercontact__seller=seller)
+
+        # Filtro fecha desde y fecha hasta
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
-
-        queryset = Client.objects.filter(seller_assigned=seller,
-                                         sale__status__range=(2, 3)).distinct()
-
         if date_start is not None and date_end is not None:
             fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
             date_end = fecha_end + timedelta(days=1)
-            queryset = Client.objects.filter(seller_assigned=seller,
-                                             sale__status__range=(2, 3),
-                                             date_joined__range=(date_start, date_end)).distinct()
+            clients = clients.filter(date_joined__range=(date_start, date_end)).distinct()
 
-        serializer = ClientSerializer(queryset, many=True)
+        # Filtro de clientes con consultas disponibles
+        # available = 1 (Todos los clientes - por defecto)
+        # available = 2 (Los clientes que tienen planes con consultas disponibles)
+        available = self.request.query_params.get('available', '1')
+        if available is not None and int(available) == 2:
+            qpc = QueryPlansClient.objects.filter(client__in=clients,
+                                                  acquired_plan__available_queries__gt=0,
+                                                  acquired_plan__is_active=True).distinct()
+
+            clients = Client.objects.filter(queryplansclient__in=qpc).distinct()
+
+        serializer = ClientSerializer(clients, many=True)
         # pagination
-        page = self.paginate_queryset(queryset)
+        page = self.paginate_queryset(clients)
         if page is not None:
             serializer = ClientSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         return Response(serializer.data)
+
+class AssignClientToOtherSeller(APIView):
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrSeller]
+
+    def get_object(self, pk):
+        try:
+            obj = Client.objects.get(pk=pk)
+            self.check_object_permissions(self.request, obj)
+            return obj
+        except Client.DoesNotExist:
+                raise Http404
+
+    def put(self, request, pk):
+        data = request.data
+
+        client = self.get_object(pk)
+
+        updated_data = {}
+        updated_data['seller_assigned'] = request.data['seller_id']
+
+        serializer = ClientDetailSerializer(client, updated_data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SellerDetailView(APIView):
@@ -1122,7 +1172,7 @@ class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated, IsSeller)
+    #permission_classes = (permissions.IsAuthenticated, IsSeller)
     # aca se debe colocar el serializer para listar todos
     serializer_class = SellerContactNaturalSerializer
     queryset = SellerContact.objects.all()
@@ -1151,22 +1201,29 @@ class ContactListView(ListCreateAPIView):
         not_valid = _("not valid")
         data = request.data
         data["seller"] = Operations.get_id(self, request)
+        password = None
+        if data['seller'] is None:
+            data['seller'] = Parameter.objects.get(parameter='platform_seller').value
+            #TODO: Usar constantes. Eliminar numeros magicos
+            data['latitude'] = '-12.1000244'
+            data['longitude'] = '76.9701127'
+            data['type_contact'] = 1
+        # eliminamos contraseña para contacto en caso de envio
+        elif 'type_contact' in data:
+            if 'password' in data:
+                del data["password"]
+
+            # generamos contraseña random
+            if data['type_contact'] != 2:
+                password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
+                data["password"] = password
+
         if "email_exact" not in data or not data["email_exact"]:
             raise serializers.ValidationError({'email_exact': [required]})
 
         # codigo de usuario se crea con su prefijo de especialista y su numero de documento
         if "type_client" not in data or not data["type_client"]:
             raise serializers.ValidationError({'type_client': [required]})
-
-        # eliminamos contraseña para contacto en caso de envio
-        if 'type_contact' in data and 'password' in data:
-            del data["password"]
-
-        # generamos contraseña random
-        if 'type_contact' in data and data['type_contact'] == 1:
-            password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
-            data["password"] = password
-
 
         if data["type_client"] == 'n':
             serializer = SellerContactNaturalSerializer(data=data)
@@ -1180,17 +1237,18 @@ class ContactListView(ListCreateAPIView):
 
             # Registrar nodos para contacto efectivo
             if 'test' not in sys.argv:
-                if data['type_contact'] == 1:
+                if data['type_contact'] != 2:
                     # se le crea la lista de todas las categorias al cliente en firebase
                     pyrebase.createCategoriesLisClients(serializer.data['client_id'])
 
                     # envio de contraseña al cliente
-                    mail = BasicEmailAmazon(subject='Envio Credenciales', to=data["email_exact"],
-                                            template='email/send_credentials')
-                    credentials = {}
-                    credentials["user"] = data["email_exact"]
-                    credentials["pass"] = password
-                    mail.sendmail(args=credentials)
+                    if password is not None:
+                        mail = BasicEmailAmazon(subject='Envio Credenciales', to=data["email_exact"],
+                                                template='email/send_credentials')
+                        credentials = {}
+                        credentials["user"] = data["email_exact"]
+                        credentials["pass"] = password
+                        mail.sendmail(args=credentials)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -1233,6 +1291,8 @@ class ContactFilterView(ListAPIView):
                 queryset = queryset.filter(type_contact=1)
             elif int(type_contact) == 2:
                 queryset = queryset.filter(type_contact=2)
+            elif int(type_contact) == 4:
+                queryset = queryset.filter(type_contact=4)
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
         if date_start is not None and date_end is not None:
@@ -1511,7 +1571,7 @@ class RucDetailView(APIView):
             response = requests.post(url, json=payload, timeout=2.5)
         except Exception as e:
             response = None
-        
+
         try:
             url_sunat = "https://api.sunat.cloud/ruc/{ruc}".format(ruc=pk)
             response2 = requests.get(url_sunat, timeout=2.5)

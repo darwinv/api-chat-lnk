@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from api.views import actors, query, category, email, authorization, payment
 from api.views import validations, plan, chat, oauth, static_data, purchase
-from api.views import account, match
+from api.views import account, match, notification
 # registro de url para consultar usuarios
 # servicio requerido por la web para la autenticacion
 router = routers.DefaultRouter()
@@ -47,7 +47,7 @@ urlpatterns = [
         name='plans-delete-empower'),
 
     # Facultar plan de consultas
-    url(r'^clients/plans-share-empower/(?P<pk>[0-9]+)$', plan.ClientShareEmpowerPlansView.as_view(),
+    url(r'^clients/plans-share-empower/(?P<pk>[0-9]+)/$', plan.ClientShareEmpowerPlansView.as_view(),
         name='client-plans-share-empower'),
 
     # Facultar plan de consultas
@@ -70,7 +70,7 @@ urlpatterns = [
     url(r'^plans/$', plan.PlansView.as_view(),
         name='plans'),
 
-    url(r'^plans/check_status$', plan.PlansStatus.as_view(),
+    url(r'^plans/check_status/$', plan.PlansStatus.as_view(),
         name='plans-status'),
 
     # crear planes no facturables
@@ -215,6 +215,9 @@ urlpatterns = [
         match.MatchListClientView.as_view(),
         name='match-client'),
 
+    url(r'^match/(?P<pk>[0-9]+)/$',
+        match.MatchDetail.as_view(), name='match-detail'),
+
     url(r'^match/upload_files/(?P<pk>[0-9]+)/$',
         match.MatchUploadFilesView.as_view(), name='match-upload-files'),
 
@@ -259,6 +262,9 @@ urlpatterns = [
         name='seller-detail'),
     url(r'^sellers/clients/$', actors.SellerClientListView.as_view(),
         name='sellers-clients'),
+
+    url(r'^sellers/clients/(?P<pk>[0-9]+)/assign/$', actors.AssignClientToOtherSeller.as_view(),
+        name='assign-clients'),
 
     # Actualizar Consulta por detalle (Responder)
     url(r'^specialist/queries/(?P<pk>[0-9]+)/$',
@@ -366,4 +372,6 @@ urlpatterns = [
     url(r'^clients/sales/have-payment-pending/$',
         payment.ClientHaveSalePending.as_view(), name='payment-pending-sale-client'),
 
+    url(r'^pending/data/$',
+        notification.PendingNotificationView.as_view(), name='get-badge'),
 ]
