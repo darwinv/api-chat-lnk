@@ -21,7 +21,8 @@ class PendingNotificationView(APIView):
         if request.user.role_id == Params.ROLE_CLIENT:
             queryset = Client.objects.filter(pk=user_id)
             serializer = NotificationClientSerializer(queryset)
+            return Response(serializer.data)
         elif request.user.role_id == Params.ROLE_SPECIALIST:
             queryset = Specialist.objects.filter(pk=user_id)
             serializer = NotificationSpecialistSerializer(queryset)
-        return Response(serializer.data)
+            return Response(serializer.data)

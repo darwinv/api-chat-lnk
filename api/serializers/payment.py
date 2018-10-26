@@ -392,7 +392,6 @@ class SaleContactoDetailSerializer(serializers.ModelSerializer):
             'created_at', 'total_amount', 'reference_number', 'is_fee', 'id',
             'products', 'fee')
 
-
     def get_products(self, obj):
         """Devuelve sale detail."""
         sale_detail = SaleDetail.objects.filter(sale=obj.id)
