@@ -111,7 +111,7 @@ class MatchListClientView(ListCreateAPIView):
                     "ticker": serializer.data["subject"],
                     "badge": badge_count,
                     "icon": serializer.data['photo'],
-                    "type": Params.TYPE_NOTIF["match"],
+                    "type": Params.TYPE_NOTIF["match_new"],
                     "queries_pending": dict_pending["queries_pending"],
                     "match_pending": dict_pending["match_pending"],
                     "match_id": serializer.data["id"]
@@ -258,7 +258,7 @@ class MatchDeclineView(APIView):
                     "ticker": serializer.data["declined_motive"],
                     "badge": badge_count,
                     "icon": serializer.data['photo'],
-                    "type": Params.TYPE_NOTIF["match"],
+                    "type": Params.TYPE_NOTIF["match_declined"],
                     "queries_pending": dict_pending["queries_pending"],
                     "match_pending": dict_pending["match_pending"],
                     "match_id": serializer.data["id"]
