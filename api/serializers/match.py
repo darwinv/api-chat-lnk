@@ -35,6 +35,7 @@ class MatchDetailSerializer(serializers.ModelSerializer):
         files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
         return files
 
+
 class MatchSerializer(serializers.ModelSerializer):
     """Serializer Match."""
     file = MatchFileSerializer(many=True, required=False)
@@ -72,27 +73,26 @@ class MatchSerializer(serializers.ModelSerializer):
 
     def to_representation(self, obj):
         """Redefinido metodo de representación del serializer."""
-        display_name = ''
         files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
         files_ids = []
         for file_obj in files:
             files_ids.append(file_obj["id"])
 
-        if obj.client.type_client == 'n':
-            display_name = obj.client.first_name + ' ' + obj.client.last_name
-        else:
-            display_name = obj.client.agent_firstname + ' ' + obj.client.agent_lastname
-
-        if obj.client.nick is not None:
-            if len(obj.client.nick) > 0:
-                display_name = obj.client.nick
+        # if obj.client.type_client == 'n':
+        #     display_name = obj.client.first_name + ' ' + obj.client.last_name
+        # else:
+        #     display_name = obj.client.agent_firstname + ' ' + obj.client.agent_lastname
+        #
+        # if obj.client.nick is not None:
+        #     if len(obj.client.nick) > 0:
+        #         display_name = obj.client.nick
 
         return {"id": obj.id, "file": files,
                 "category": obj.category.id,
                 "subject": obj.subject, "client": obj.client.id,
                 "specialist": obj.specialist.id,
-                "display_name": display_name,
-                "photo": obj.client.photo,
+                "display_name": _(obj.category.name),
+                "photo": obj.category.image,
                 "files_id": files_ids}
 
 
@@ -200,8 +200,9 @@ class MatchListSerializer(serializers.ModelSerializer):
                 "subject": obj.subject, "category": _(obj.category.name),
                 "specialist": specialist.data, "category_image": obj.category.image,
                 "file": files, "status": obj.status, "client": client.data,
-                "payment_option_specialist":obj.payment_option_specialist,
+                "payment_option_specialist": obj.payment_option_specialist,
                 "price": obj.price}
+
 
 class MatchListSpecialistSerializer(serializers.ModelSerializer):
     """Listado de Matchs."""
