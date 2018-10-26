@@ -407,9 +407,11 @@ class SaleClientUploadFilesView(APIView):
             sale_detail__sale=obj_instance, status=4).update(status=6)
 
         SellerContact.objects.filter(
-            email_exact=obj_instance.client.email_exact).update(type_contact=1)
+            email_exact=obj_instance.client.email_exact).exclude(
+                type_contact=3).update(type_contact=1)
 
         return HttpResponse(status=200)
+
 
 def upload_file(file, model_update=None, obj_instance=None):
     """Funcion para subir archivos."""
