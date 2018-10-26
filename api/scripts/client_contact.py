@@ -3,6 +3,8 @@ from api.models import Client, SellerContact, Sale
 import pdb
 
 def get_data(client):
+    """Devuelve data que servira para crear un contacto a partir de un cliente"""
+
     type_contact = 3 if Sale.objects.filter(client=client.id, status__range=(2, 3)) else 1
     data = {
             'first_name': client.first_name,
@@ -34,6 +36,12 @@ def get_data(client):
     return data
 
 def sync():
+    """
+    Todos los clientes tienen una instancia de contacto con los mismos datos
+    Esta funcion los sincroniza o los crea, de ser necesario
+    """
+
+    # Primero se agregan clientes a los contactos ya existentes
     clients = Client.objects.all()
     contacts = SellerContact.objects.filter(email_exact__in=clients.values('email_exact'))
 
@@ -43,17 +51,19 @@ def sync():
             contact.client = client
             contact.save()
 
-    contacts = SellerContact.objects.all()
+    # Luego se crean contactos nuevos para conectarse con los clientes
     clients = Client.objects.exclude(email_exact__in=contacts.values('email_exact'))
 
     contact =  None
     for client in clients:
-        type_contact = 3 if Sale.objects.filter(client=client.id, status__range=(2, 3)) else 1
-
         contact = SellerContact(**get_data(client))
         contact.client = client
         contact.save()
 
 def change_contact_type():
+    """
+    Cambia el tipo de contacto de 2 a 1 si es que son clientes
+    """
+
     clients = Client.objects.exclude(status__range=(2, 3))
     SellerContact.objects.filter(client__in=clients, type_contact=2).update(type_contact=1)

@@ -1017,15 +1017,17 @@ class SellerClientListView(ListCreateAPIView):
             clients = clients.filter(date_joined__range=(date_start, date_end)).distinct()
 
         # Filtro de clientes con consultas disponibles
-        # available = 1 (Todos los clientes - por defecto)
-        # available = 2 (Los clientes que tienen planes con consultas disponibles)
-        available = self.request.query_params.get('available', '1')
-        if available is not None and int(available) == 2:
+        # available = 1 (Los clientes que tienen planes con consultas disponibles)
+        # available = 2 (Los clientes sin planes con consultas disponibles)
+        available = self.request.query_params.get('available', None)
+        if available is not None :
             qpc = QueryPlansClient.objects.filter(client__in=clients,
                                                   acquired_plan__available_queries__gt=0,
                                                   acquired_plan__is_active=True).distinct()
-
-            clients = Client.objects.filter(queryplansclient__in=qpc).distinct()
+            if int(available) == 1:
+                clients = Client.objects.filter(queryplansclient__in=qpc).distinct()
+            elif int(available) == 2:
+                clients = Client.objects.exclude(queryplansclient__in=qpc).distinct()
 
         serializer = ClientSerializer(clients, many=True)
         # pagination
