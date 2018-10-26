@@ -646,9 +646,9 @@ class QueryAcceptView(APIView):
 
             # Traemos todas las consultas pendientes por tomar accion por asignadas
             # a este especialista
-            msgs_pendings = Query.objects.filter(status=1, specialist=specialist)
+            # msgs_pendings = Query.objects.filter(status=1, specialist=specialist)
 
-            return Response({'badge_number': len(msgs_pendings)}, status.HTTP_200_OK)
+            return Response({}, status.HTTP_200_OK)
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -870,7 +870,4 @@ class ReadPendingAnswerView(APIView):
             if 'test' not in sys.argv:
                 pyrebase.categories_db(client_id, category)
 
-        msgs_pendings = Message.objects.filter(
-            viewed=False, msg_type='a', query__client=client_id)
-
-        return Response({'badge_number': len(msgs_pendings)}, status.HTTP_200_OK)
+        return Response({}, status.HTTP_200_OK)
