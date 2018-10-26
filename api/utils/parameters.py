@@ -13,8 +13,15 @@ class Params:
     }
     # Tipo de notificacion (para push notif)
     TYPE_NOTIF = {
-        "query": 2,
-        "match": 3
+        "default": 0,
+        "browsable": 1,
+        "query_new": 2,
+        "query_declined": 3,
+        "query_derived": 4,
+        "query_answer": 5,
+        "match_new": 6,
+        "match_declined": 7,
+        "match_success": 8
      }
 
     CODE_PREFIX = {
