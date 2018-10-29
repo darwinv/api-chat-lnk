@@ -119,6 +119,7 @@ class SaleSerializer(serializers.Serializer):
                         plan_acquired["is_active"] = False
                         plan_acquired["available_queries"] = 0
                         plan_acquired["queries_to_pay"] = product["plan_id"].query_quantity
+                        plan_acquired["status"] = 1
                     else:
                         # es plan promocional
                         plan_acquired["available_queries"] = product["plan_id"].query_quantity
@@ -154,7 +155,6 @@ class SaleSerializer(serializers.Serializer):
                     plan_acquired["plan_name"] = product["plan_id"].name
                     plan_acquired["query_plans"] = product["plan_id"]
                     plan_acquired["sale_detail"] = instance_sale
-                    plan_acquired["status"] = 1
                     ins_plan = QueryPlansAcquired.objects.create(**plan_acquired)
 
                     QueryPlansClient.objects.create(
