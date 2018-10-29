@@ -63,7 +63,6 @@ class MatchListClientView(ListCreateAPIView):
             data["client"] = data["client_id"]
         elif (request.user.role_id == 4 or request.user.role_id == 1) and "email_exact" in data and data["email_exact"]:
             email_exact = data["email_exact"]
-
             if request.user.role_id == 4:
                 user_id = Operations.get_id(self, request)
                 data["seller"] = user_id
@@ -72,7 +71,6 @@ class MatchListClientView(ListCreateAPIView):
                    data["seller"] = SellerContact.objects.get(email_exact=email_exact).seller.id
                 except SellerContact.DoesNotExist:
                     pass
-
             if "seller" in data and "email_exact" in data:
                 serializer_client = ContactToClientSerializer(data=data)
                 if serializer_client.is_valid():
@@ -82,12 +80,10 @@ class MatchListClientView(ListCreateAPIView):
                     # categorias firebase para el cliente
                     pyrebase.createCategoriesLisClients(data["client"])
 
-
         # Cliente que hace match es requerido
         if "client" not in data:
             raise serializers.ValidationError(
-                {"client_id": _("required")})
-
+                {"client": _("required")})
 
         if 'file' in data:
             if data["file"] is None:

@@ -36,6 +36,7 @@ class MatchDetailSerializer(serializers.ModelSerializer):
         files = ListFileSerializer(obj.matchfile_set.all(), many=True).data
         return files
 
+
 class MatchSerializer(serializers.ModelSerializer):
     """Serializer Match."""
     file = MatchFileSerializer(many=True, required=False)
