@@ -26,4 +26,5 @@ class PendingNotificationView(APIView):
             queryset = Specialist.objects.filter(pk=user_id)
             serializer = NotificationSpecialistSerializer(queryset)
             return Response(serializer.data)
-        return Response(serializer.data)
+        else:
+            return Response({"response": 0})

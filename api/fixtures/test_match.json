@@ -182,7 +182,7 @@
 },
 {
   "model": "oauth2_provider.accesstoken",
-  "pk": 1,
+  "pk": 10,
   "fields": {
     "user": 3,
     "token": "HhaMCycvJ5SCLXSpEo7KerIXcNgBSt",
