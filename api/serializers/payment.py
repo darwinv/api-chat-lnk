@@ -318,8 +318,10 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
 
 class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
-    attribute_product = serializers.SerializerMethodField()
+    # attribute_product = serializers.SerializerMethodField()
     product_type_name = serializers.SerializerMethodField()
+    plan = serializers.SerializerMethodField()
+    match = serializers.SerializerMethodField()
 
     class Meta:
         """Modelo."""
@@ -327,16 +329,34 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
         model = SaleDetail
         fields = (
             'price', 'description', 'discount', 'pin_code', 'is_billable',
-            'contract', 'product_type', 'sale', 'attribute_product',
-            'product_type_name')
+            'contract', 'product_type', 'sale', 'product_type_name',
+            'plan', 'match')
 
-    def get_attribute_product(self, obj):
-        """Devuelve client."""
+    # def get_attribute_product(self, obj):
+    #     """Devuelve client."""
+    #     if obj.product_type.id == 1:
+    #         plan = QueryPlansAcquired.objects.get(sale_detail=obj.id)
+    #         sale = QueryPlansAcquiredSerializer(plan)
+    #         return sale.data
+    #     elif obj.product_type_id == 2:
+    #         match = Match.objects.get(sale_detail=obj.id)
+    #         sale = MatchListSpecialistSerializer(match)
+    #         return sale.data
+    #     else:
+    #         return None
+
+    def get_plan(self, obj):
+        """Devolver data del plan si el producto lo es."""
         if obj.product_type.id == 1:
             plan = QueryPlansAcquired.objects.get(sale_detail=obj.id)
             sale = QueryPlansAcquiredSerializer(plan)
             return sale.data
-        elif obj.product_type_id == 2:
+        else:
+            return None
+
+    def get_match(self, obj):
+        """Devolver data del match si el producto lo es."""
+        if obj.product_type.id == 2:
             match = Match.objects.get(sale_detail=obj.id)
             sale = MatchListSpecialistSerializer(match)
             return sale.data
