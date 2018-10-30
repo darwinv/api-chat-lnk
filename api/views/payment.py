@@ -112,7 +112,6 @@ class MatchPaymentClient(APIView):
     def post(self, request):
         """crear compra."""
         data = request.data
-
         if "match" in data:
             sale = Match.objects.filter(pk=data["match"]
                                 ).values("sale_detail__sale__file_url",
