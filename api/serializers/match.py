@@ -37,6 +37,20 @@ class MatchDetailSerializer(serializers.ModelSerializer):
         return files
 
 
+class MatchAttributeSerializer(serializers.ModelSerializer):
+    """Datos de atributos del producto Match."""
+
+    category_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Match
+        fields = ('category_name', 'subject', 'status')
+
+    def get_category_name(self, obj):
+        """devolver nombre de especialidad."""
+        return _(obj.category.name)
+
+
 class MatchSerializer(serializers.ModelSerializer):
     """Serializer Match."""
     file = MatchFileSerializer(many=True, required=False)
