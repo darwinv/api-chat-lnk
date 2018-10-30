@@ -13,12 +13,14 @@ from rest_framework.validators import UniqueValidator
 from api.serializers.actors import ClientSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from api.serializers.fee import FeeSerializer
+from api.serializers.match import MatchAttributeSerializer
 from api.serializers.notification import NotificationClientSerializer
 from api.utils.parameters import Params
 import sys
 from api import pyrebase
 from api.utils.tools import display_specialist_name
 from api.serializers.sale import increment_reference
+
 
 class PaymentSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
@@ -333,6 +335,10 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
         if obj.product_type.id == 1:
             plan = QueryPlansAcquired.objects.get(sale_detail=obj.id)
             sale = QueryPlansAcquiredSerializer(plan)
+            return sale.data
+        elif obj.product_type_id == 2:
+            match = Match.objects.get(sale_detail=obj.id)
+            sale = MatchAttributeSerializer(match)
             return sale.data
         else:
             return None
