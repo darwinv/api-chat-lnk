@@ -296,6 +296,8 @@ class SellerContact(models.Model):
                                           related_name="residence_contact",
                                           verbose_name=_('residence country contact'))
 
+    is_assigned = models.BooleanField(default=False)
+
     # def __str__(self):
     #     """Nombre del Contacto."""
     #     return self.first_name
