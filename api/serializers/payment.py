@@ -13,7 +13,7 @@ from rest_framework.validators import UniqueValidator
 from api.serializers.actors import ClientSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from api.serializers.fee import FeeSerializer
-from api.serializers.match import MatchAttributeSerializer
+from api.serializers.match import MatchListSpecialistSerializer
 from api.serializers.notification import NotificationClientSerializer
 from api.utils.parameters import Params
 import sys
@@ -338,7 +338,7 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
             return sale.data
         elif obj.product_type_id == 2:
             match = Match.objects.get(sale_detail=obj.id)
-            sale = MatchAttributeSerializer(match)
+            sale = MatchListSpecialistSerializer(match)
             return sale.data
         else:
             return None
