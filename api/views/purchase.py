@@ -11,8 +11,9 @@ from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from api.permissions import IsAdminOrSeller
 from api.models import Sale, SaleDetail, QueryPlansAcquired, QueryPlansClient
-from api.models import MonthlyFee, Client
+from api.models import MonthlyFee, Client, SellerContact
 from api import pyrebase
+from api.utils.querysets import is_assigned
 
 
 class CreatePurchase(APIView):
@@ -26,16 +27,27 @@ class CreatePurchase(APIView):
         # user_id = Operations.get_id(self, request)
         extra = {}
         data = request.data
-        user_id = Operations.get_id(self, request)
+        client = Client.objects.get(pk=data['client'])
         if request.user.role_id == 4:
             # Si es vendedor, se usa su id como el que efectuo la venta
+            user_id = Operations.get_id(self, request)
             data['seller'] = user_id
         elif request.user.role_id == 1 or request.user.role_id == 2:
             # si se trata de un administrador o cliente, la venta la habra efectuado el vendedor asignado
-            data['seller'] = Client.objects.get(pk=data['client']).seller_assigned.id
+            data['seller'] = client.seller_assigned.id
+
         serializer = SaleSerializer(data=data, context=data)
         if serializer.is_valid():
             serializer.save()
+
+            contact = SellerContact.objects.get(client=client)
+            if is_assigned(client=client, contact=contact):
+                if 'latitude' in data:
+                    contact.latitude = data['latitude']
+                if 'longitude' in data:
+                    contact.longitude = data['longitude']
+                contact.save()
+
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -50,12 +62,13 @@ class ContactNoEffectivePurchase(APIView):
         # user_id = Operations.get_id(self, request)
         data = request.data
         user_id = Operations.get_id(self, request)
+        client = Client.objects.get(pk=data['client'])
         if request.user.role_id == 4:
             # Si es vendedor, se usa su id como el que efectuo la venta
             data['seller'] = user_id
         elif request.user.role_id == 1 or request.user.role_id == 2:
             # si se trata de un administrador o cliente, la venta la habra efectuado el vendedor asignado
-            data['seller'] = Client.objects.get(pk=data['client']).seller_assigned.id
+            data['seller'] = client.seller_assigned.id
         serializer_client = ContactToClientSerializer(data=data)
         if serializer_client.is_valid():
             serializer_client.save()
@@ -63,14 +76,22 @@ class ContactNoEffectivePurchase(APIView):
 
             # Categorias para usuario pyrebase
             pyrebase.createCategoriesLisClients(data["client"])
-
         else:
             return Response(serializer_client.errors, status.HTTP_400_BAD_REQUEST)
 
+        contact = SellerContact.objects.get(client=client)
 
         serializer = SaleSerializer(data=data, context=data)
         if serializer.is_valid():
             serializer.save()
+
+            if is_assigned(client=client, contact=contact):
+                if 'latitude' in data:
+                    contact.latitude = data['latitude']
+                if 'longitude' in data:
+                    contact.longitude = data['longitude']
+                contact.save()
+
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 

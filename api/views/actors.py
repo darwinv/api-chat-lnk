@@ -1286,7 +1286,7 @@ class ContactFilterView(ListAPIView):
 
     def get_queryset(self):
         seller = Operations.get_id(self, self.request)
-        contacts = SellerContact.objects.filter(seller=seller).order_by('-created_at')
+        contacts = SellerContact.objects.filter(seller=seller).exclude(type_contact=3).order_by('-created_at')
 
         # Filtro de tipo de contato (Mis contactos/Asignados)
         # assignment_type = 1 (Mis contactos)
@@ -1294,9 +1294,9 @@ class ContactFilterView(ListAPIView):
         assignment_type = self.request.query_params.get('assignment_type', '1')
         if assignment_type is not None:
             if int(assignment_type) == 1:
-                contacts = contacts.filter(seller=seller, client__seller_assigned=seller)
+                contacts = contacts.filter(is_assigned=False)
             elif int(assignment_type) == 2:
-                contacts = contacts.filter(seller=seller).exclude(client__seller_assigned=seller)
+                contacts = contacts.filter(is_assigned=True)
 
         # Filetro de tipo de contacto
         # type_contact = 1 (Contactos efectivos. Tipo de contacto 1 que han subido un voucher)
@@ -1306,11 +1306,11 @@ class ContactFilterView(ListAPIView):
         if type_contact is not None:
             if int(type_contact) == 1:
                 contacts = contacts.annotate(files_count=Count('client__sale__file_url')).filter(
-                    type_contact = 1, files_count__gt=0
+                    type_contact=1, files_count__gt=0
                 )
             elif int(type_contact) == 2:
                 contacts = contacts.annotate(files_count=Count('client__sale__file_url')).filter(
-                   Q (type_contact = 2) | Q(type_contact = 1, files_count=0)
+                   Q (type_contact=2) | Q(type_contact=1, files_count=0)
                 )
             elif int(type_contact) == 4:
                 contacts = contacts.filter(type_contact=4)
