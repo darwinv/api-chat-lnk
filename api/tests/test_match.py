@@ -99,6 +99,50 @@ class RequestMatch(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
+class RequestMatchNoEffective(APITestCase):
+    """Crear Match contacto no efectivo."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_match']
+
+    def setUp(self):
+        """Setup."""
+        self.valid_payload = {
+            "email_exact": "contactnoeffective@mail.com",
+            "category": 10,
+            "subject": "Quiero demandar a la sunat",
+            "file": [
+                {
+                    "file_url": "https://20180820-21.jpg",
+                    "content_type": 1
+                }
+                ]
+            }
+        self.client = APIClient()
+        # deben ser credenciales de vendedor
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer FEk2avXwe09l8lqS3zTc0Q3Q2avXwe')
+
+    def test_invalid_email_exact(self):
+        """email exact no encontrado."""
+        data = self.valid_payload.copy()
+        data["email_exact"] = "cnoeffective@mail.com",
+        response = self.client.post(
+            reverse('match-client'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_match(self):
+        """Creacion Exitosa del match."""
+        response = self.client.post(
+            reverse('match-client'),
+            data=json.dumps(self.valid_payload),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
 class GetListMatch(APITestCase):
     """Devolver listado de matchs."""
 

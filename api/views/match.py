@@ -56,14 +56,13 @@ class MatchListClientView(ListCreateAPIView):
         # Devolvemos el id del usuario
         data = request.data
         user_id = Operations.get_id(self, request)
-
+        context_data = {}
         if request.user.role_id == 2:
             data["client"] = user_id
         elif (request.user.role_id == 4 or request.user.role_id == 1) and "client_id" in data and data["client_id"]:
             data["client"] = data["client_id"]
         elif (request.user.role_id == 4 or request.user.role_id == 1) and "email_exact" in data and data["email_exact"]:
             email_exact = data["email_exact"]
-
             if request.user.role_id == 4:
                 user_id = Operations.get_id(self, request)
                 data["seller"] = user_id
@@ -72,28 +71,26 @@ class MatchListClientView(ListCreateAPIView):
                    data["seller"] = SellerContact.objects.get(email_exact=email_exact).seller.id
                 except SellerContact.DoesNotExist:
                     pass
-
             if "seller" in data and "email_exact" in data:
                 serializer_client = ContactToClientSerializer(data=data)
                 if serializer_client.is_valid():
                     serializer_client.save()
                     data["client"] = serializer_client.data["client_id"]
+                    context_data["seller"] = data["seller"]
 
                     # categorias firebase para el cliente
                     pyrebase.createCategoriesLisClients(data["client"])
 
-
         # Cliente que hace match es requerido
         if "client" not in data:
             raise serializers.ValidationError(
-                {"client_id": _("required")})
-
+                {"client": _("required")})
 
         if 'file' in data:
             if data["file"] is None:
                 del data["file"]
-
-        serializer = MatchSerializer(data=data)
+        # import pdb; pdb.set_trace()
+        serializer = MatchSerializer(data=data, context=context_data)
 
         if serializer.is_valid():
             serializer.save()
@@ -321,7 +318,7 @@ class SpecialistMatchUploadFilesView(APIView):
     def get_object(self, request, pk):
         """Devuelvo la consulta."""
         try:
-            obj = Match.objects.get(pk=pk, status=1)
+            obj = Match.objects.get(pk=pk, status__in=[1,2])
             return obj
         except Match.DoesNotExist:
             raise Http404

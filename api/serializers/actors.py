@@ -1127,8 +1127,8 @@ class ContactToClientSerializer(serializers.ModelSerializer):
         data_client["address"] = AddressSerializer(contact.address).data
 
         data_client["photo"] = contact.photo
-        data_client["code_telephone"] = contact.code_telephone.id
-        data_client["code_cellphone"] = contact.code_cellphone.id
+        data_client["code_telephone"] = contact.code_telephone_id
+        data_client["code_cellphone"] = contact.code_cellphone_id
 
         if data_client["type_client"] == 'b':
             data_client['birthdate'] = '1900-01-01'
@@ -1222,7 +1222,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
                     data['foreign_address'] is None):
                 raise serializers.ValidationError(
                          {'oreign_address': [required]})
-
+        
         if data['type_contact'] == 2:
             if 'objection' not in data and 'other_objection' not in data:
                 raise serializers.ValidationError(
@@ -1243,7 +1243,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             return value
 
         if 'type_contact' in data and data['type_contact'] == 2:
-            if document_exists_contact(type_doc=document_type, 
+            if document_exists_contact(type_doc=document_type,
                                        document_number=data['document_number']):
                 raise serializers.ValidationError(
                     [_('This field must be unique')])

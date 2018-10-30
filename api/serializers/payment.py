@@ -151,8 +151,7 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
         client = match.client
         # se verifica si ya fue cliente el usuario que solicito el match
         # si ya lo fue pasa a status 5 directo sino pasa a 4. pendiente de pago
-        is_client = Sale.objects.filter(
-                                        saledetail__is_billable=True,
+        is_client = Sale.objects.filter(saledetail__is_billable=True,
                                         client=client,
                                         status__range=(2, 3)).exists()
         if is_client:
@@ -178,6 +177,11 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
                 # envio de notificacion push
                 Notification.fcm_send_data(user_id=client_id,
                                            data=data_notif_push)
+            # import pdb
+            # pdb.set_trace()
+            # sale = match.sale_detail.sale
+            # sale.status = 3
+            # sale.save()
         else:
 
             sale = Sale.objects.create(place="BCP", total_amount=match.price,
@@ -225,9 +229,6 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Crear pago de especialista."""
         match = validated_data.pop('match')
-        # import pdb; pdb.set_trace()
-        match = Match.objects.get(pk=match.id)
-        # import pdb; pdb.set_trace()
 
         instance = Payment(**validated_data)
         instance.save()
@@ -254,6 +255,15 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
             Notification.fcm_send_data(user_id=client_id,
                                        data=data_notif_push)
         match.save()
+
+        sellercontact = match.client.sellercontact
+        sellercontact.type_contact = 3
+        sellercontact.save()
+
+        sale = match.sale_detail.sale
+        sale.status = 3
+        sale.save()
+
         return instance
 
 class PaymentSaleSerializer(serializers.ModelSerializer):
