@@ -1026,9 +1026,9 @@ class SellerClientListView(ListCreateAPIView):
                                                   acquired_plan__available_queries__gt=0,
                                                   acquired_plan__is_active=True).distinct()
             if int(available) == 1:
-                clients = Client.objects.filter(queryplansclient__in=qpc).distinct()
+                clients = clients.filter(queryplansclient__in=qpc).distinct()
             elif int(available) == 2:
-                clients = Client.objects.exclude(queryplansclient__in=qpc).distinct()
+                clients = clients.exclude(queryplansclient__in=qpc).distinct()
 
         serializer = ClientSerializer(clients, many=True)
         # pagination
