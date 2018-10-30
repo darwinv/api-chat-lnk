@@ -76,10 +76,11 @@ class MatchSerializer(serializers.ModelSerializer):
         else:
             is_billable = True
 
+        seller = self.context.get('seller', None)
         # Crear compra del match
         sale = Sale.objects.create(place="BCP", total_amount=validated_data["price"],
                                    reference_number=increment_reference(),
-                                   description='pago de match',
+                                   description='pago de match', seller_id=seller,
                                    client=validated_data["client"], status=1)
 
         # Detalle de la compra del match
