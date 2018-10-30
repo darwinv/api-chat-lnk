@@ -1296,7 +1296,7 @@ class ContactFilterView(ListAPIView):
             if int(assignment_type) == 1:
                 contacts = contacts.filter(seller=seller, client__seller_assigned=seller)
             elif int(assignment_type) == 2:
-                clients = clients.filter(seller=seller).exclude(client__seller_assigned=seller)
+                contacts = contacts.filter(seller=seller).exclude(client__seller_assigned=seller)
 
         # Filetro de tipo de contacto
         # type_contact = 1 (Contactos efectivos. Tipo de contacto 1 que han subido un voucher)
