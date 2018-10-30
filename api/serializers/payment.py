@@ -1,6 +1,7 @@
 """Serializer de Venta"""
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as trans
 from api.models import Payment, MonthlyFee, Sale, SaleDetail, Match, Client
 from api.models import QueryPlansAcquired, SellerContact, User, MatchProduct
 from api.utils.tools import get_date_by_time
@@ -168,7 +169,7 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
                     "title": disp_name,
                     "body": match.subject,
                     "sub_text": "",
-                    "ticker": _("successful hiring"),
+                    "ticker": trans("successful hiring"),
                     "badge": badge_count,
                     "icon": match.category.image,
                     "type": Params.TYPE_NOTIF["match_success"],
@@ -245,7 +246,7 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
                 "title": disp_name,
                 "body": match.subject,
                 "sub_text": "",
-                "ticker": _("successful hiring"),
+                "ticker": trans("successful hiring"),
                 "badge": badge_count,
                 "icon": match.category.image,
                 "type": Params.TYPE_NOTIF["match_success"],
