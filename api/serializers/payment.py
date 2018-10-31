@@ -269,6 +269,7 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
 
         return instance
 
+
 class PaymentSaleSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
 
