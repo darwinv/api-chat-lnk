@@ -235,6 +235,34 @@
   }
 },
 {
+  "model": "api.sale",
+  "pk": 2,
+  "fields": {
+    "created_at": "2018-02-08T14:28:25Z",
+    "place": "BCP",
+    "total_amount": "450.0000",
+    "reference_number": "CD2000",
+    "description": "Test",
+    "is_fee": false,
+    "client": 3,
+    "seller": null
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 1,
+  "fields": {
+    "price": "450.0000",
+    "description": "Contratacion de Especialista",
+    "discount": "0.00",
+    "pin_code": "XXXXX",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 2,
+    "sale": 2
+  }
+},
+{
   "model": "api.match",
   "pk": 1,
   "fields": {
@@ -264,7 +292,7 @@
     "category": 8,
     "client": 3,
     "specialist": 20,
-    "sale_detail": null,
+    "sale_detail": 1,
     "specialist_payment": null
   }
 },
