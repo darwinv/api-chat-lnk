@@ -95,7 +95,6 @@ class MatchListClientView(ListCreateAPIView):
 
         if serializer.is_valid():
             serializer.save()
-
             contact = SellerContact.objects.get(client_id=data['client'])
             if is_assigned(contact=contact):
                 if 'latitude' in data:
