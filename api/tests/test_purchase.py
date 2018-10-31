@@ -39,14 +39,14 @@ class PurchaseQueryPlans(APITestCase):
                                content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_no_client(self):
-        """Cliente  obligatorio."""
-        data = self.valid_payload.copy()
-        data["client"] = None
-        response = client.post(reverse('purchase'),
-                               data=json.dumps(data),
-                               content_type='application/json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    # def test_no_client(self):
+    #     """Cliente  obligatorio."""
+    #     data = self.valid_payload.copy()
+    #     data["client"] = None
+    #     response = client.post(reverse('purchase'),
+    #                            data=json.dumps(data),
+    #                            content_type='application/json')
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_purchase_succesfull(self):
         """Compra exitosa."""

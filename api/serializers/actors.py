@@ -1224,7 +1224,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
                     data['foreign_address'] is None):
                 raise serializers.ValidationError(
                          {'oreign_address': [required]})
-        
+
         if data['type_contact'] == 2:
             if 'objection' not in data and 'other_objection' not in data:
                 raise serializers.ValidationError(
