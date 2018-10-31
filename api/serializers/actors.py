@@ -1023,13 +1023,14 @@ class SellerContactSerializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField()
     document = serializers.SerializerMethodField()
+    display_type_contact = serializers.IntegerField(read_only=True)
 
     class Meta:
         """ Model Contacto."""
         model = SellerContact
         fields = ('id', 'photo', 'name', 'document_type',
                   'type_contact', 'latitude', 'longitude',
-                  'type_client', 'document')
+                  'type_client', 'document', 'display_type_contact')
 
     def get_name(self, obj):
         """Devuelve nombre del cliente."""

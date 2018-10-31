@@ -1189,8 +1189,49 @@ class ContactListView(ListCreateAPIView):
         if date_start is not None and date_end is not None:
             fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
             date_end = fecha_end + timedelta(days=1)
-            contacts = SellerContact.objects.filter(
-                seller=seller, created_at__range=(date_start, date_end))
+
+            # contacts = SellerContact.objects.filter(
+            #     seller=seller, created_at__range=(date_start, date_end))
+
+            contacts = SellerContact.objects.raw("""
+                    SELECT
+                    IF (
+                        se.type_contact = 4,
+                        se.type_contact,
+                        IF (
+                            se.type_contact = 1
+                            AND sale.file_url <> "",
+                            se.type_contact,
+                            2
+                        )
+                    ) AS display_type_contact,
+                    se.type_contact,
+                    se.email_exact,
+                    se.id,
+                    se.photo,
+                    se.document_type,
+                    se.type_contact,
+                    se.latitude,
+                    se.longitude,
+                    se.type_client,
+                    se.first_name,
+                    se.last_name,
+                    se.agent_firstname,
+                    se.agent_lastname,
+                    se.ruc,
+                    se.document_number
+                    FROM
+                        api_sellercontact AS se
+                    LEFT JOIN api_client ON 
+                    se.client_id = api_client.user_ptr_id
+                    LEFT JOIN api_sale AS sale ON 
+                    sale.client_id = api_client.user_ptr_id
+                    WHERE
+                        se.type_contact IN (2, 1, 4)
+                        and se.created_at > "{}"
+                        and se.created_at < "{}"
+                    """.format(date_start, date_end))
+
             serializer = SellerContactSerializer(contacts, many=True)
             return Response(serializer.data)
 
