@@ -70,13 +70,10 @@ def get_queries_pending_to_solve(specialist, client=None):
     return pending
 
 def is_assigned(client=None, contact=None):
-    if client is not None:
-        if contact is None:
-            contact = SellerContact.objects.get(client=client)
+    if client is not None and contact is None:
+        contact = SellerContact.objects.get(client=client)
 
-        return client.seller_assigned.id != contact.seller.id
+    if contact is None
+        return None
 
-    if contact is not None:
-        return contact.is_assigned
-
-    return False
+    return contact.is_assigned
