@@ -47,7 +47,7 @@ class CreatePurchase(APIView):
                 if 'longitude' in data:
                     contact.longitude = data['longitude']
 
-                contact.seller = client.seller_assigned
+                contact.is_assigned = False
                 contact.save()
 
             return Response(serializer.data, status.HTTP_201_CREATED)
@@ -84,14 +84,14 @@ class ContactNoEffectivePurchase(APIView):
         if serializer.is_valid():
             serializer.save()
 
-            contact = SellerContact.objects.get(client=client)
-            if is_assigned(client=client, contact=contact):
+            contact = SellerContact.objects.get(client_id=data['client'])
+            if is_assigned(contact=contact):
                 if 'latitude' in data:
                     contact.latitude = data['latitude']
                 if 'longitude' in data:
                     contact.longitude = data['longitude']
 
-                contact.seller = SellerContact.object.get(pk=data['seller'])
+                contact.is_assigned = False
                 contact.save()
 
             return Response(serializer.data, status.HTTP_201_CREATED)

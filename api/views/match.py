@@ -103,7 +103,7 @@ class MatchListClientView(ListCreateAPIView):
                 if 'longitude' in data:
                     contact.longitude = data['longitude']
 
-                contact.seller = Client.objects.get(pk=data['client']).seller_assigned
+                contact.is_assigned = False
                 contact.save()
 
             if 'test' not in sys.argv:
