@@ -68,3 +68,15 @@ def get_queries_pending_to_solve(specialist, client=None):
         qs = Query.objects.filter(status__range=(1, 2), specialist=specialist)
     pending = qs.count()
     return pending
+
+def is_assigned(client=None, contact=None):
+    if client is not None:
+        if contact is None:
+            contact = SellerContact.objects.get(client=client)
+
+        return client.seller_assigned.id != contact.seller.id
+
+    if contact is not None:
+        return contact.is_assigned
+
+    return False

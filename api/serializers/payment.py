@@ -259,7 +259,7 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
                                        data=data_notif_push)
         match.save()
 
-        sellercontact = match.client.sellercontact
+        sellercontact = match.client.sellercontact_set.get()
         sellercontact.type_contact = 3
         sellercontact.save()
 

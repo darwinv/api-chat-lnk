@@ -29,6 +29,7 @@ from api.utils.parameters import Params
 from api.logger import manager
 from api import pyrebase
 from fcm.fcm import Notification
+from api.utils.querysets import is_assigned
 logger = manager.setup_log(__name__)
 
 
@@ -94,6 +95,17 @@ class MatchListClientView(ListCreateAPIView):
 
         if serializer.is_valid():
             serializer.save()
+
+            contact = SellerContact.objects.get(client_id=data['client'])
+            if is_assigned(contact=contact):
+                if 'latitude' in data:
+                    contact.latitude = data['latitude']
+                if 'longitude' in data:
+                    contact.longitude = data['longitude']
+
+                contact.seller = Client.objects.get(pk=data['client']).seller_assigned
+                contact.save()
+
             if 'test' not in sys.argv:
                 specialist_id = serializer.data["specialist"]
                 # determino el total de consultas pendientes (status 1 o 2)
