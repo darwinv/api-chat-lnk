@@ -46,6 +46,8 @@ class CreatePurchase(APIView):
                     contact.latitude = data['latitude']
                 if 'longitude' in data:
                     contact.longitude = data['longitude']
+
+                contact.seller = client.seller_assigned
                 contact.save()
 
             return Response(serializer.data, status.HTTP_201_CREATED)
@@ -62,34 +64,34 @@ class ContactNoEffectivePurchase(APIView):
         # user_id = Operations.get_id(self, request)
         data = request.data
         user_id = Operations.get_id(self, request)
-        client = Client.objects.get(pk=data['client'])
         if request.user.role_id == 4:
             # Si es vendedor, se usa su id como el que efectuo la venta
             data['seller'] = user_id
         elif request.user.role_id == 1 or request.user.role_id == 2:
             # si se trata de un administrador o cliente, la venta la habra efectuado el vendedor asignado
-            data['seller'] = client.seller_assigned.id
+            data['seller'] = Client.objects.get(pk=data['client']).seller_assigned.id
         serializer_client = ContactToClientSerializer(data=data)
         if serializer_client.is_valid():
             serializer_client.save()
-            data["client"] = serializer_client.data["client_id"]
+            data['client'] = serializer_client.data['client_id']
 
             # Categorias para usuario pyrebase
-            pyrebase.createCategoriesLisClients(data["client"])
+            pyrebase.createCategoriesLisClients(data['client'])
         else:
             return Response(serializer_client.errors, status.HTTP_400_BAD_REQUEST)
-
-        contact = SellerContact.objects.get(client=client)
 
         serializer = SaleSerializer(data=data, context=data)
         if serializer.is_valid():
             serializer.save()
 
+            contact = SellerContact.objects.get(client=client)
             if is_assigned(client=client, contact=contact):
                 if 'latitude' in data:
                     contact.latitude = data['latitude']
                 if 'longitude' in data:
                     contact.longitude = data['longitude']
+
+                contact.seller = SellerContact.object.get(pk=data['seller'])
                 contact.save()
 
             return Response(serializer.data, status.HTTP_201_CREATED)

@@ -74,7 +74,7 @@ def is_assigned(client=None, contact=None):
         if contact is None:
             contact = SellerContact.objects.get(client=client)
 
-        return client.seller_assigned.id != seller.id
+        return client.seller_assigned.id != contact.seller.id
 
     if contact is not None:
         return contact.is_assigned
