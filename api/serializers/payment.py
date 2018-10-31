@@ -232,7 +232,6 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Crear pago de especialista."""
         match = validated_data.pop('match')
-
         instance = Payment(**validated_data)
         instance.save()
         match.status = 5
@@ -268,6 +267,7 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
         sale.save()
 
         return instance
+
 
 class PaymentSaleSerializer(serializers.ModelSerializer):
     """Serializer del pago."""

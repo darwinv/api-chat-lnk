@@ -1151,7 +1151,9 @@ class ContactToClientSerializer(serializers.ModelSerializer):
 
             # Actualizamos la foto del cliente
             client_instance = Client.objects.get(pk=self.context['client_id'])
-            client_instance.photo=contact.photo
+            client_instance.photo = contact.photo
+            contact.client = client_instance
+            contact.save()
             client_instance.save()
 
             mail = BasicEmailAmazon(subject='Envio Credenciales', to=data_client["username"],

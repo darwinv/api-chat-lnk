@@ -69,7 +69,7 @@
     "profession": "",
     "economic_sector": 5,
     "level_instruction": null,
-    "seller_assigned": null,
+    "seller_assigned": 8,
     "groups": [],
     "user_permissions": []
   }
@@ -235,6 +235,34 @@
   }
 },
 {
+  "model": "api.sale",
+  "pk": 2,
+  "fields": {
+    "created_at": "2018-02-08T14:28:25Z",
+    "place": "BCP",
+    "total_amount": "450.0000",
+    "reference_number": "CD2000",
+    "description": "Test",
+    "is_fee": false,
+    "client": 3,
+    "seller": null
+  }
+},
+{
+  "model": "api.saledetail",
+  "pk": 1,
+  "fields": {
+    "price": "450.0000",
+    "description": "Contratacion de Especialista",
+    "discount": "0.00",
+    "pin_code": "XXXXX",
+    "is_billable": true,
+    "contract": null,
+    "product_type": 2,
+    "sale": 2
+  }
+},
+{
   "model": "api.match",
   "pk": 1,
   "fields": {
@@ -264,7 +292,7 @@
     "category": 8,
     "client": 3,
     "specialist": 20,
-    "sale_detail": null,
+    "sale_detail": 1,
     "specialist_payment": null
   }
 },
@@ -415,6 +443,49 @@
     "nationality": 1,
     "foreign_address": null,
     "residence_country": 1
+  }
+},
+{
+  "model": "api.sellercontact",
+  "pk": 2,
+  "fields": {
+    "first_name": "",
+    "last_name": "",
+    "type_contact": 3,
+    "type_client": "b",
+    "document_type": 1,
+    "document_number": "98482831251464424",
+    "email_exact": "clientoscar@mail.com",
+    "civil_state": "c",
+    "birthdate": "1991-02-05",
+    "institute": "",
+    "ciiu": 5,
+    "activity_description": "123131232321",
+    "photo": "",
+    "about": "1231231231231232123",
+    "cellphone": "1231231",
+    "telephone": "9213223131231",
+    "ocupation": 7,
+    "profession": "",
+    "business_name": "alpanet",
+    "commercial_reason": "alpaneted",
+    "agent_firstname":  "Oscar",
+    "agent_lastname": "Lopez",
+    "sex": "m",
+    "latitude": "-12.1001781",
+    "longitude": "-76.9700853",
+    "created_at": "2018-08-15T23:02:44.355Z",
+    "position": "Gerente en Ventas",
+    "ruc": "234234233252",
+    "other_objection": null,
+    "seller": 8,
+    "economic_sector": 5,
+    "address": 8,
+    "level_instruction": null,
+    "nationality": 1,
+    "foreign_address": null,
+    "residence_country": 1,
+    "client": 3
   }
 }
 ]
