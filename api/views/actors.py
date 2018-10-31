@@ -1185,58 +1185,69 @@ class ContactListView(ListCreateAPIView):
         seller = Operations.get_id(self, request)
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
-        # si hay fecha poder filtrarla
-        if date_start is not None and date_end is not None:
-            fecha_end = datetime.strptime(date_end, '%Y-%m-%d')
-            date_end = fecha_end + timedelta(days=1)
+        assignment_type = int(self.request.query_params.get('assignment_type', None))
+        today = datetime.today()
 
-            # contacts = SellerContact.objects.filter(
-            #     seller=seller, created_at__range=(date_start, date_end))
+        # Filters
+        if date_end:
+            date_end = datetime.strptime(date_end, '%Y-%m-%d')
+            date_end = date_end + timedelta(days=1)
+        else:            
+            date_end = today + timedelta(days=1)
+            date_end = date_end.strftime('%Y-%m-%d')
 
-            contacts = SellerContact.objects.raw("""
-                    SELECT
+        if date_start is None:
+            date_start = today.strftime('%Y-%m-%d')          
+
+        if assignment_type and assignment_type == 2: # Mis Asignados
+            is_assigned = 1
+        else:
+            is_assigned = 0
+
+        contacts = SellerContact.objects.raw("""
+                SELECT DISTINCT
+                IF (
+                    se.type_contact = 4,
+                    se.type_contact,
                     IF (
-                        se.type_contact = 4,
+                        se.type_contact = 1
+                        AND sale.file_url <> "",
                         se.type_contact,
-                        IF (
-                            se.type_contact = 1
-                            AND sale.file_url <> "",
-                            se.type_contact,
-                            2
-                        )
-                    ) AS display_type_contact,
-                    se.type_contact,
-                    se.email_exact,
-                    se.id,
-                    se.photo,
-                    se.document_type,
-                    se.type_contact,
-                    se.latitude,
-                    se.longitude,
-                    se.type_client,
-                    se.first_name,
-                    se.last_name,
-                    se.agent_firstname,
-                    se.agent_lastname,
-                    se.ruc,
-                    se.document_number
-                    FROM
-                        api_sellercontact AS se
-                    LEFT JOIN api_client ON 
-                    se.client_id = api_client.user_ptr_id
-                    LEFT JOIN api_sale AS sale ON 
-                    sale.client_id = api_client.user_ptr_id
-                    WHERE
-                        se.type_contact IN (2, 1, 4)
-                        and se.created_at > "{}"
-                        and se.created_at < "{}"
-                    """.format(date_start, date_end))
+                        2
+                    )
+                ) AS display_type_contact,
+                se.type_contact,
+                se.email_exact,
+                se.id,
+                se.photo,
+                se.document_type,
+                se.type_contact,
+                se.latitude,
+                se.longitude,
+                se.type_client,
+                se.first_name,
+                se.last_name,
+                se.agent_firstname,
+                se.agent_lastname,
+                se.ruc,
+                se.document_number
+                FROM
+                    api_sellercontact AS se
+                LEFT JOIN api_client as cli ON 
+                se.client_id = cli.user_ptr_id
+                LEFT JOIN api_sale AS sale ON 
+                sale.client_id = cli.user_ptr_id
+                WHERE
+                    se.type_contact IN (2, 1, 4)
+                    and se.created_at > "{}"
+                    and se.created_at < "{}"
 
-            serializer = SellerContactSerializer(contacts, many=True)
-            return Response(serializer.data)
+                    and se.is_assigned = {}
+                    and se.seller_id={}
+                """.format(date_start, date_end, is_assigned, seller))
 
-        contacts = SellerContact.objects.filter(seller=seller)
         serializer = SellerContactSerializer(contacts, many=True)
+        
         return Response(serializer.data)
 
     def post(self, request):
