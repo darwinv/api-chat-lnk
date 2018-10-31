@@ -997,7 +997,7 @@ class SellerClientListView(ListCreateAPIView):
 
         seller = Operations.get_id(self, request)
 
-        clients = Client.objects.filter(sale__status__range=(2, 3)).distinct()
+        clients = Client.objects.filter(sellercontact__type_contact=3).distinct()
 
         # Filtro de tipo de clientes (Mis clientes/Asignados)
         # assignment_type = 1 (Mis clientes)
@@ -1005,9 +1005,9 @@ class SellerClientListView(ListCreateAPIView):
         assignment_type = self.request.query_params.get('assignment_type', '1')
         if assignment_type is not None:
             if int(assignment_type) == 1:
-                clients = clients.filter(seller_assigned=seller, sellercontact__seller=seller)
+                clients = clients.filter(sellercontact__is_assigned=False)
             elif int(assignment_type) == 2:
-                clients = clients.filter(seller_assigned=seller).exclude(sellercontact__seller=seller)
+                clients = clients.filter(sellercontact__is_assigned=True)
 
         # Filtro fecha desde y fecha hasta
         date_start = self.request.query_params.get('date_start', None)
