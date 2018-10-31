@@ -84,8 +84,8 @@ class ContactNoEffectivePurchase(APIView):
         if serializer.is_valid():
             serializer.save()
 
-            contact = SellerContact.objects.get(client=client)
-            if is_assigned(client=client, contact=contact):
+            contact = SellerContact.objects.get(client_id=data['client'])
+            if is_assigned(contact=contact):
                 if 'latitude' in data:
                     contact.latitude = data['latitude']
                 if 'longitude' in data:
