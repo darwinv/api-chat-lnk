@@ -1185,7 +1185,7 @@ class ContactListView(ListCreateAPIView):
         seller = Operations.get_id(self, request)
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
-        assignment_type = int(self.request.query_params.get('assignment_type', None))
+        assignment_type = int(self.request.query_params.get('assignment_type', '1'))
         today = datetime.today()
 
         # Filters

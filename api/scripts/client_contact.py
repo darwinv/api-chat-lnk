@@ -8,7 +8,7 @@ def get_data(client):
     fields = ['first_name', 'last_name', 'type_client', 'civil_state', 'birthdate', "address", 'sex',
             'document_type', 'document_number', 'email_exact', 'telephone', 'cellphone', 'activity_description',
             'level_instruction', 'institute', 'profession', 'ocupation', "latitude", "longitude", 'about',
-            'nationality', 'residence_country', 'cciu', 'photo', 'code_telephone', 'code_cellphone', 'business_name',
+            'nationality', 'residence_country', 'ciiu', 'photo', 'code_telephone', 'code_cellphone', 'business_name',
             'commercial_reason', 'agent_firstname', 'agent_lastname', 'position', 'ruc', 'economic_sector',
             'foreign_address']
 
@@ -16,9 +16,12 @@ def get_data(client):
 
     for field in fields:
         data[field] = getattr(client, field) if hasattr(client, field) else None
+    
 
     data['type_contact'] = 3 if Sale.objects.filter(client=client.id, status__range=(2, 3)) else 1
     data['seller'] = client.seller_assigned
+    data['latitude'] = '-12.0431800'
+    data['longitude'] = '-77.0282400'
 
     return data
 
@@ -43,7 +46,8 @@ def sync():
 
     contact =  None
     for client in clients:
-        contact = SellerContact(**get_data(client))
+        data = get_data(client)
+        contact = SellerContact.objects.create(**data)
         contact.client = client
         contact.save()
 
