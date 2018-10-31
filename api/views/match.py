@@ -60,8 +60,10 @@ class MatchListClientView(ListCreateAPIView):
         context_data = {}
         if request.user.role_id == 2:
             data["client"] = user_id
+            data["seller"] = Client.objects.get(pk=user_id).seller_assigned.id
         elif (request.user.role_id == 4 or request.user.role_id == 1) and "client_id" in data and data["client_id"]:
             data["client"] = data["client_id"]
+            data["seller"] = Client.objects.get(pk=data["client"]).seller_assigned.id
         elif (request.user.role_id == 4 or request.user.role_id == 1) and "email_exact" in data and data["email_exact"]:
             email_exact = data["email_exact"]
             if request.user.role_id == 4:
