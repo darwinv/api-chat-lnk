@@ -1,6 +1,7 @@
 """Serializer de Venta"""
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as trans
 from api.models import Payment, MonthlyFee, Sale, SaleDetail, Match, Client
 from api.models import QueryPlansAcquired, SellerContact, User, MatchProduct
 from api.utils.tools import get_date_by_time
@@ -13,7 +14,7 @@ from rest_framework.validators import UniqueValidator
 from api.serializers.actors import ClientSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from api.serializers.fee import FeeSerializer
-from api.serializers.match import MatchAttributeSerializer
+from api.serializers.match import MatchListSpecialistSerializer
 from api.serializers.notification import NotificationClientSerializer
 from api.utils.parameters import Params
 import sys
@@ -168,7 +169,7 @@ class PaymentMatchSerializer(serializers.ModelSerializer):
                     "title": disp_name,
                     "body": match.subject,
                     "sub_text": "",
-                    "ticker": _("successful hiring"),
+                    "ticker": trans("successful hiring"),
                     "badge": badge_count,
                     "icon": match.category.image,
                     "type": Params.TYPE_NOTIF["match_success"],
@@ -245,7 +246,7 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
                 "title": disp_name,
                 "body": match.subject,
                 "sub_text": "",
-                "ticker": _("successful hiring"),
+                "ticker": trans("successful hiring"),
                 "badge": badge_count,
                 "icon": match.category.image,
                 "type": Params.TYPE_NOTIF["match_success"],
@@ -258,7 +259,7 @@ class PaymentMatchClientSerializer(serializers.ModelSerializer):
                                        data=data_notif_push)
         match.save()
 
-        sellercontact = match.client.sellercontact
+        sellercontact = match.client.sellercontact_set.get()
         sellercontact.type_contact = 3
         sellercontact.save()
 
@@ -318,8 +319,10 @@ class PaymentSaleSerializer(serializers.ModelSerializer):
 
 class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     """Serializer del pago."""
-    attribute_product = serializers.SerializerMethodField()
+    # attribute_product = serializers.SerializerMethodField()
     product_type_name = serializers.SerializerMethodField()
+    plan = serializers.SerializerMethodField()
+    match = serializers.SerializerMethodField()
 
     class Meta:
         """Modelo."""
@@ -327,18 +330,36 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
         model = SaleDetail
         fields = (
             'price', 'description', 'discount', 'pin_code', 'is_billable',
-            'contract', 'product_type', 'sale', 'attribute_product',
-            'product_type_name')
+            'contract', 'product_type', 'sale', 'product_type_name',
+            'plan', 'match')
 
-    def get_attribute_product(self, obj):
-        """Devuelve client."""
+    # def get_attribute_product(self, obj):
+    #     """Devuelve client."""
+    #     if obj.product_type.id == 1:
+    #         plan = QueryPlansAcquired.objects.get(sale_detail=obj.id)
+    #         sale = QueryPlansAcquiredSerializer(plan)
+    #         return sale.data
+    #     elif obj.product_type_id == 2:
+    #         match = Match.objects.get(sale_detail=obj.id)
+    #         sale = MatchListSpecialistSerializer(match)
+    #         return sale.data
+    #     else:
+    #         return None
+
+    def get_plan(self, obj):
+        """Devolver data del plan si el producto lo es."""
         if obj.product_type.id == 1:
             plan = QueryPlansAcquired.objects.get(sale_detail=obj.id)
             sale = QueryPlansAcquiredSerializer(plan)
             return sale.data
-        elif obj.product_type_id == 2:
+        else:
+            return None
+
+    def get_match(self, obj):
+        """Devolver data del match si el producto lo es."""
+        if obj.product_type.id == 2:
             match = Match.objects.get(sale_detail=obj.id)
-            sale = MatchAttributeSerializer(match)
+            sale = MatchListSpecialistSerializer(match)
             return sale.data
         else:
             return None
