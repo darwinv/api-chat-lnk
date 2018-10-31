@@ -1113,6 +1113,9 @@ class ContactToClientSerializer(serializers.ModelSerializer):
         except SellerContact.DoesNotExist:
             raise Http404
 
+        if Client.objects.filter(email_exact=email).exists():
+            return contact
+
         data_client = SellerContact.objects.filter(
             email_exact=email).values().first()
 
@@ -1170,7 +1173,10 @@ class ContactToClientSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         """To Repr."""
 
-        client_id = self.context['client_id']
+        if 'client_id' in self.context:
+            client_id = self.context['client_id']
+        else:
+            client_id = instance.client_id
         return {"client_id": client_id}
 
 
