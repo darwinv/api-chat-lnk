@@ -20,8 +20,8 @@ def get_data(client):
 
     data['type_contact'] = 3 if Sale.objects.filter(client=client.id, status__range=(2, 3)) else 1
     data['seller'] = client.seller_assigned
-    data['latitude'] = '-77.0282400'
-    data['longitude'] = '-12.0431800'
+    data['latitude'] = '-12.0431800'
+    data['longitude'] = '-77.0282400'
 
     return data
 
