@@ -8,12 +8,15 @@ from api.serializers.plan import QueryPlansAcquiredSerializer, QueryPlansAcquire
 from api.serializers.plan import QueryPlansSerializer, QueryPlansManageSerializer
 from api.serializers.plan import QueryPlansClientSerializer
 from api.serializers.plan import QueryPlansTransferSerializer, QueryPlansShareSerializer, QueryPlansEmpowerSerializer
+from api.serializers.notification import NotificationClientSerializer
 from api.models import QueryPlans, Client, QueryPlansManage
 from api.models import SellerNonBillablePlans
 from api.models import QueryPlansAcquired, QueryPlansClient
 from api.permissions import IsAdminOrClient, IsSeller
 from api.utils.validations import Operations
 from api.utils.querysets import get_query_set_plan
+from api.utils.tools import display_client_name
+from api.utils.parameters import Params
 from api.emails import BasicEmailAmazon
 from api import pyrebase
 import sys
@@ -25,6 +28,7 @@ from datetime import datetime
 from rest_framework import serializers
 from linkupapi.settings_secret import WEB_HOST
 from api.serializers.plan import PlansNonBillableSerializer, PlanStatusSerializer
+from fcm.fcm import Notification
 
 REGISTER_LINK = WEB_HOST + 'register'
 REGISTRATION_MESSAGE = _('Please, click the following register link, fill your details and you will get your query plans')
@@ -227,6 +231,7 @@ class ClientSharePlansView(APIView):
             try:
                 receiver = Client.objects.get(email_exact=email_receiver)
                 status_transfer = 1
+                qset_client = Client.objects.filter(pk=receiver.id)
             except Client.DoesNotExist:
                 status_transfer = 3
                 receiver = None
@@ -300,6 +305,23 @@ class ClientSharePlansView(APIView):
                 serializer_data[email_receiver].save()
 
             if 'test' not in sys.argv:
+                if status_transfer == 1:
+                    dict_pending = NotificationClientSerializer(qset_client).data
+                    badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                    data_notif_push = {
+                        "title": "Se te han compartido consultas",
+                        "body": display_client_name(client_obj),
+                        "sub_text": "",
+                        "ticker": "",
+                        "badge": badge_count,
+                        "icon": client_obj.photo,
+                        "type": Params.TYPE_NOTIF["default"],
+                        "queries_pending": dict_pending["queries_pending"],
+                        "match_pending": dict_pending["match_pending"]
+                    }
+                    # envio de notificacion push
+                    Notification.fcm_send_data(user_id=receiver.id,
+                                               data=data_notif_push)
                 if acquired_plan_client.is_chosen:
                     data_plan = {
                         'available_queries': acquired_plan.available_queries
@@ -359,6 +381,7 @@ class ClientEmpowerPlansView(APIView):
             try:
                 receiver = Client.objects.get(email_exact=email_receiver)
                 status_transfer = 1
+                qset_client = Client.objects.filter(pk=receiver.id)
             except Client.DoesNotExist:
                 status_transfer = 3
                 receiver = None
@@ -413,6 +436,24 @@ class ClientEmpowerPlansView(APIView):
                         else:
                             arguments = {'message':REGISTRATION_MESSAGE, 'link':REGISTER_LINK}
                         mail.sendmail(args=arguments)
+                if status_transfer == 1:
+                    dict_pending = NotificationClientSerializer(qset_client).data
+                    badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                    data_notif_push = {
+                        "title": "Se te ha facultado un plan",
+                        "body": display_client_name(client_obj),
+                        "sub_text": "",
+                        "ticker": "",
+                        "badge": badge_count,
+                        "icon": client_obj.photo,
+                        "type": Params.TYPE_NOTIF["default"],
+                        "queries_pending": dict_pending["queries_pending"],
+                        "match_pending": dict_pending["match_pending"]
+                    }
+                    # envio de notificacion push
+                    Notification.fcm_send_data(user_id=receiver.id,
+                                               data=data_notif_push)
+
 
                 # Ejecutamos el serializer
                 serializer_data[email_receiver].save()
@@ -461,6 +502,7 @@ class ClientTransferPlansView(APIView):
         try:
             receiver = Client.objects.get(email_exact=email_receiver)
             status_transfer = 1
+            qset_client = Client.objects.filter(pk=receiver.id)
         except Client.DoesNotExist:
             receiver = None
             status_transfer = 3
@@ -509,7 +551,23 @@ class ClientTransferPlansView(APIView):
                 else:
                     arguments = {'message':REGISTRATION_MESSAGE, 'link':REGISTER_LINK}
                 mail.sendmail(args=arguments)
-
+                if status_transfer == 1:
+                    dict_pending = NotificationClientSerializer(qset_client).data
+                    badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                    data_notif_push = {
+                        "title": "Se te ha transferido un plan",
+                        "body": display_client_name(sender),
+                        "sub_text": "",
+                        "ticker": "",
+                        "badge": badge_count,
+                        "icon": sender.photo,
+                        "type": Params.TYPE_NOTIF["default"],
+                        "queries_pending": dict_pending["queries_pending"],
+                        "match_pending": dict_pending["match_pending"]
+                    }
+                    # envio de notificacion push
+                    Notification.fcm_send_data(user_id=receiver.id,
+                                               data=data_notif_push)
             serializer.save()
 
             return Response(serializer.data)
