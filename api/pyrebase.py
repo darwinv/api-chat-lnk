@@ -40,6 +40,17 @@ def update_categories():
     for client in Client.objects.all():
         createCategoriesLisClients(client.id)
 
+def update_categories_name(text):
+    """Crear la lista completa de categorias.
+
+    Al momento de darse de alta un cliente
+    """
+    for client in Client.objects.all():
+        node_client = Params.PREFIX['client'] + str(client.id)
+        db.child("categories/clients").child(node_client).child(
+            "c11").update({"name":text})
+
+
 def update_plan_choisen():
     """Cargar plan activo para todos los usuarios."""
     # SOLO USO PARA AMBIENTE EN DESARROLLO
