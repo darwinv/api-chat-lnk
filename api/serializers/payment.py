@@ -69,6 +69,23 @@ class PaymentSerializer(serializers.ModelSerializer):
                 to=fee.sale.client.username, template='email/pin_code')
             if 'test' not in sys.argv:
                 mail.sendmail(args=data)
+                qset_client = Client.objects.filter(pk=fee.sale.client_id)
+                dict_pending = NotificationClientSerializer(qset_client).data
+                badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                data_notif_push = {
+                    "title": "Se te ha validado tu pago",
+                    "body": "Revisa tu codigo PIN, en tu Correo",
+                    "sub_text": "",
+                    "ticker": "",
+                    "badge": badge_count,
+                    "icon": 'http://linkup-lb-09-916728193.us-east-1.elb.amazonaws.com/static/dashboard/dist/img/logo_grande.png',
+                    "type": Params.TYPE_NOTIF["default"],
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"]
+                }
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=fee.sale.client_id,
+                                           data=data_notif_push)
         # buscar contacto efectivo para acualitzar estado a efectivo cliente
         # filtar por el correo del id del cliente
         SellerContact.objects.filter(
