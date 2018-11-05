@@ -113,7 +113,7 @@ class ClientPlansView(ListCreateAPIView):
                   'validity_months', 'query_quantity',
                   'available_queries', 'expiration_date').annotate(
                   is_chosen=F('queryplansclient__is_chosen')).order_by('id')
-        if plan:
+        if plan is not None:
             return plan
         else:
             raise Http404
@@ -129,6 +129,7 @@ class ClientPlansView(ListCreateAPIView):
             serializer = QueryPlansAcquiredSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         serializer = QueryPlansAcquiredSerializer(plan, many=True)
+
         return Response(serializer.data)
 
 
@@ -140,11 +141,11 @@ class ClientPlansDetailView(ListCreateAPIView):
     def get(self, request, pk):
         """Obtener la lista con todos los planes del cliente."""
         client = Operations.get_id(self, request)
-        plan = QueryPlansAcquired.objects.filter(pk=pk, queryplansclient__client=client).values(
-                  'id', 'plan_name', 'is_active',
-                  'validity_months', 'query_quantity', 'queries_to_pay',
-                  'available_queries', 'expiration_date', 'queryplansclient__transfer',
-                  'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner').annotate(
+        plan = QueryPlansAcquired.objects.filter(pk=pk, queryplansclient__client=client).values('id',
+                 'plan_name', 'queryplansclient__is_chosen', 'is_active', 'status',
+                 'validity_months', 'query_quantity', 'queries_to_pay', 'activation_date',
+                 'available_queries', 'expiration_date', 'queryplansclient__transfer',
+                 'queryplansclient__share', 'queryplansclient__empower', 'queryplansclient__owner').annotate(
                   is_chosen=F('queryplansclient__is_chosen'),
                   price=F('sale_detail__price'),
                   sale=F('sale_detail__sale'),
