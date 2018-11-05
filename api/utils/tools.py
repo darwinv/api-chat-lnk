@@ -182,3 +182,16 @@ def display_specialist_name(obj):
         if len(obj.specialist.nick) > 0:
             display_name = obj.specialist.nick
     return display_name
+
+
+def display_client_name(obj_client):
+    """Desplegar nombre del cliente a mostrar."""
+    if obj_client.type_client == 'n':
+        display_name = obj_client.first_name + ' ' + obj_client.last_name
+    else:
+        display_name = obj_client.agent_firstname + ' ' + obj_client.agent_lastname
+
+    if obj_client.nick is not None:
+        if len(obj_client.nick) > 0:
+            display_name = obj_client.nick
+    return display_name

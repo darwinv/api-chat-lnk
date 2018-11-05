@@ -46,8 +46,8 @@ msgstr "Propiedad Intelectual"
 msgid "Advertising"
 msgstr "Publicidad"
 
-msgid "Organizational psychology"
-msgstr "Psicología Organizacional"
+msgid "People Management"
+msgstr "Gestión de Personas"
 
 msgid "Contracting with the State"
 msgstr "Contrataciones con el Estado"

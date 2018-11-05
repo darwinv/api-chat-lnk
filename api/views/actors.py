@@ -1261,7 +1261,7 @@ class ContactListView(ListCreateAPIView):
             data['seller'] = Parameter.objects.get(parameter='platform_seller').value
             #TODO: Usar constantes. Eliminar numeros magicos
             data['latitude'] = '-12.1000244'
-            data['longitude'] = '76.9701127'
+            data['longitude'] = '-76.9701127'
             data['type_contact'] = 1
         # eliminamos contraseña para contacto en caso de envio
         elif 'type_contact' in data:
