@@ -375,7 +375,6 @@ class QueryDetailClientView(APIView):
                 # envio de notificacion push
                 Notification.fcm_send_data(user_id=specialist_id,
                                            data=data_notif_push)
-            # import pdb; pdb.set_trace()
             requeries = serializer.data['obj_query']['availableRequeries']
 
             data_update = {

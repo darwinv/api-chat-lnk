@@ -315,7 +315,7 @@ class ClientSharePlansView(APIView):
                         "ticker": "",
                         "badge": badge_count,
                         "icon": client_obj.photo,
-                        "type": Params.TYPE_NOTIF["default"],
+                        "type": Params.TYPE_NOTIF["plan"],
                         "queries_pending": dict_pending["queries_pending"],
                         "match_pending": dict_pending["match_pending"]
                     }

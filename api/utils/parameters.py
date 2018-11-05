@@ -22,7 +22,8 @@ class Params:
         "query_answer": 6,
         "match_new": 7,
         "match_declined": 8,
-        "match_success": 9
+        "match_success": 9,
+        "plan": 10
      }
 
     CODE_PREFIX = {
