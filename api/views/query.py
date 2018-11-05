@@ -177,7 +177,11 @@ class QueryListClientView(ListCreateAPIView):
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
             sala = str(user_id) + '-' + str(serializer.data["category"])
-            Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
+            
+            Group('chat-'+str(sala)).send({'text': json.dumps({
+                        "query": serializer.data["obj_query"]["title"],
+                        "messages": lista                        
+                    })})
             return Response(serializer.data, status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
