@@ -277,7 +277,7 @@
     "model": "api.category",
     "pk": 11,
     "fields": {
-      "name": "Organizational psychology",
+      "name": "People Management",
       "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-09.png",
       "description": "Lorem ipsum dolor sit amet, consetetur ut labore et dolore magna aliquyam erat, sed diam voluptuas"
     }
