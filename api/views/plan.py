@@ -309,7 +309,7 @@ class ClientSharePlansView(APIView):
                     dict_pending = NotificationClientSerializer(qset_client).data
                     badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
                     data_notif_push = {
-                        "title": "Se te ha compartido un plan",
+                        "title": "Se te han compartido consultas",
                         "body": display_client_name(client_obj),
                         "sub_text": "",
                         "ticker": "",
@@ -652,7 +652,7 @@ class ActivationPlanView(APIView):
             is_chosen = False
         else:
             is_chosen = True
-        
+
         plan_acquired = self.get_detail_plan(code, client)
         query_set = self.get_object(plan_acquired['id'])
 
