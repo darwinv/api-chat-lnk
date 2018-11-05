@@ -104,7 +104,7 @@ class Payloads:
             "datetime": "",
             "id": 11,
             "image": "http://www.linkup.com.pe/wp-content/uploads/2017/05/Especialidades-09.png",
-            "name": "Psicología Organizacional",
+            "name": "Gestión de Personas",
             "read": read
         }, "c12": {
             "datetime": "",
