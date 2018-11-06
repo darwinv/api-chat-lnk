@@ -23,7 +23,8 @@ class Params:
         "match_new": 7,
         "match_declined": 8,
         "match_success": 9,
-        "plan": 10
+        "plan": 10,
+        "PIN": 11
      }
 
     CODE_PREFIX = {
