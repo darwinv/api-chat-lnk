@@ -1,4 +1,6 @@
 """Vista de Pagos."""
+import sys
+from api.utils.tools import display_specialist_name
 from api.serializers.payment import PaymentSerializer, PaymentSaleSerializer
 from api.serializers.payment import PaymentSalePendingDetailSerializer
 from api.serializers.payment import PaymentMatchSerializer
@@ -9,6 +11,7 @@ from api.utils.validations import Operations
 from api.utils.querysets import get_next_fee_to_pay
 from api.permissions import IsAdminOrSeller, IsAdmin, isAdminBackWrite
 from api.permissions import IsAdminOrSpecialist
+from api.serializers.notification import NotificationClientSerializer
 from api.models import Sale, MonthlyFee, Client, Match, SaleDetail
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
@@ -18,9 +21,12 @@ from rest_framework.generics import ListCreateAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as trans
 from django.db.models import Subquery, Q, OuterRef
-import django_filters.rest_framework
+from api.utils.parameters import Params
 from api.logger import manager
+from fcm.fcm import Notification
+
 logger = manager.setup_log(__name__)
 
 
@@ -72,6 +78,27 @@ class ConfirmDiscountView(APIView):
                                         status__range=(2, 3)).exists()
         if is_client:
             match.status = 5
+            if 'test' not in sys.argv:
+                client_id = match.client_id
+                qset_client = Client.objects.filter(pk=client_id)
+                dict_pending = NotificationClientSerializer(qset_client).data
+                badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                disp_name = display_specialist_name(match)
+                data_notif_push = {
+                    "title": disp_name,
+                    "body": match.subject,
+                    "sub_text": "",
+                    "ticker": trans("successful hiring"),
+                    "badge": badge_count,
+                    "icon": match.category.image,
+                    "type": Params.TYPE_NOTIF["match_success"],
+                    "queries_pending": dict_pending["queries_pending"],
+                    "match_pending": dict_pending["match_pending"],
+                    "match_id": match.id
+                }
+                # envio de notificacion push
+                Notification.fcm_send_data(user_id=client_id,
+                                           data=data_notif_push)
         else:
             match.status = 4
 

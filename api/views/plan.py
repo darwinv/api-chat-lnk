@@ -304,24 +304,27 @@ class ClientSharePlansView(APIView):
                 # Ejecutamos el serializer
                 serializer_data[email_receiver].save()
 
-            if 'test' not in sys.argv:
-                if status_transfer == 1:
-                    dict_pending = NotificationClientSerializer(qset_client).data
-                    badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
-                    data_notif_push = {
-                        "title": "Se te han compartido consultas",
-                        "body": display_client_name(client_obj),
-                        "sub_text": "",
-                        "ticker": "",
-                        "badge": badge_count,
-                        "icon": client_obj.photo,
-                        "type": Params.TYPE_NOTIF["plan"],
-                        "queries_pending": dict_pending["queries_pending"],
-                        "match_pending": dict_pending["match_pending"]
-                    }
-                    # envio de notificacion push
-                    Notification.fcm_send_data(user_id=receiver.id,
-                                               data=data_notif_push)
+                if 'test' not in sys.argv:
+                    if status_transfer == 1:
+                        new_acquired = serializer_data[email_receiver].data["new_acquired_plan"]
+                        reciever_id = serializer_data[email_receiver].data["receiver"]
+                        dict_pending = NotificationClientSerializer(qset_client).data
+                        badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                        data_notif_push = {
+                            "title": "Se te han compartido consultas",
+                            "body": display_client_name(client_obj),
+                            "sub_text": "",
+                            "ticker": "",
+                            "badge": badge_count,
+                            "icon": client_obj.photo,
+                            "plan_id": new_acquired,
+                            "type": Params.TYPE_NOTIF["plan"],
+                            "queries_pending": dict_pending["queries_pending"],
+                            "match_pending": dict_pending["match_pending"]
+                        }
+                        # envio de notificacion push
+                        Notification.fcm_send_data(user_id=reciever_id,
+                                                   data=data_notif_push)
                 if acquired_plan_client.is_chosen:
                     data_plan = {
                         'available_queries': acquired_plan.available_queries
@@ -427,6 +430,9 @@ class ClientEmpowerPlansView(APIView):
         else:
             # Para cada uno de los correos guardados
             for email_receiver in serializer_data:
+                # Ejecutamos el serializer
+                serializer_data[email_receiver].save()
+                receiver_id = serializer_data[email_receiver].data["receiver"]
                 if 'test' not in sys.argv:
                         # Envio de correos notificacion
                         mail = BasicEmailAmazon(subject=str(self.subject), to=email_receiver,
@@ -435,29 +441,27 @@ class ClientEmpowerPlansView(APIView):
                             arguments = {'message':self.default_message, 'link':WEB_HOST}
                         else:
                             arguments = {'message':REGISTRATION_MESSAGE, 'link':REGISTER_LINK}
+
                         mail.sendmail(args=arguments)
-                if status_transfer == 1:
-                    dict_pending = NotificationClientSerializer(qset_client).data
-                    badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
-                    data_notif_push = {
-                        "title": "Se te ha facultado un plan",
-                        "body": display_client_name(client_obj),
-                        "sub_text": "",
-                        "ticker": "",
-                        "badge": badge_count,
-                        "icon": client_obj.photo,
-                        "type": Params.TYPE_NOTIF["default"],
-                        "queries_pending": dict_pending["queries_pending"],
-                        "match_pending": dict_pending["match_pending"]
-                    }
-                    # envio de notificacion push
-                    Notification.fcm_send_data(user_id=receiver.id,
-                                               data=data_notif_push)
 
-
-                # Ejecutamos el serializer
-                serializer_data[email_receiver].save()
-
+                        if status_transfer == 1:
+                            dict_pending = NotificationClientSerializer(qset_client).data
+                            badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
+                            data_notif_push = {
+                                "title": "Se te ha facultado un plan",
+                                "body": display_client_name(client_obj),
+                                "sub_text": "",
+                                "ticker": "",
+                                "badge": badge_count,
+                                "icon": client_obj.photo,
+                                "plan_id": acquired_plan.id,
+                                "type": Params.TYPE_NOTIF["plan"],
+                                "queries_pending": dict_pending["queries_pending"],
+                                "match_pending": dict_pending["match_pending"]
+                            }
+                            # envio de notificacion push
+                            Notification.fcm_send_data(user_id=receiver_id,
+                                                       data=data_notif_push)
             return Response({})
 
 
@@ -561,7 +565,8 @@ class ClientTransferPlansView(APIView):
                         "ticker": "",
                         "badge": badge_count,
                         "icon": sender.photo,
-                        "type": Params.TYPE_NOTIF["default"],
+                        "plan_id": acquired_plan.id,
+                        "type": Params.TYPE_NOTIF["plan"],
                         "queries_pending": dict_pending["queries_pending"],
                         "match_pending": dict_pending["match_pending"]
                     }
