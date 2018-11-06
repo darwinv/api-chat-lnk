@@ -62,8 +62,11 @@ class PaymentSerializer(serializers.ModelSerializer):
         # devolver plan name, validity_months, y query quantity de los productos adquiridos
         # mostrarlos en  la data
         data = {'qset': qsetdetail}
-        # envio codigo pin por correo
+        # envio codigo pin por correo y aviso en push notification
         if fee.sale.status == 1:
+            body = "Revisa tu correo, te enviamos tu codigo PIN"
+            if qsetdetail.count() > 1:
+                body = "Revisa tu correo, te enviamos tus codigos PIN"
             mail = BasicEmailAmazon(
                 subject="Confirmación de pago. Productos comprados",
                 to=fee.sale.client.username, template='email/pin_code')
@@ -73,8 +76,8 @@ class PaymentSerializer(serializers.ModelSerializer):
                 dict_pending = NotificationClientSerializer(qset_client).data
                 badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
                 data_notif_push = {
-                    "title": "Se te ha validado tu pago",
-                    "body": "Revisa tu codigo PIN, en tu Correo",
+                    "title": "Se ha validado tu pago",
+                    "body": body,
                     "sub_text": "",
                     "ticker": "",
                     "badge": badge_count,

@@ -16,12 +16,15 @@ class Params:
         "default": 0,
         "browsable": 1,
         "query_new": 2,
-        "query_declined": 3,
-        "query_derived": 4,
-        "query_answer": 5,
-        "match_new": 6,
-        "match_declined": 7,
-        "match_success": 8
+        "query_requery": 3,
+        "query_declined": 4,
+        "query_derived": 5,
+        "query_answer": 6,
+        "match_new": 7,
+        "match_declined": 8,
+        "match_success": 9,
+        "plan": 10,
+        "PIN": 11
      }
 
     CODE_PREFIX = {

@@ -151,7 +151,12 @@ class MatchDetail(APIView):
     def get(self, request, pk):
         """Detalle."""
         match = self.get_object(pk)
-        serializer = MatchListSpecialistSerializer(match)
+        if request.user.role_id == Params.ROLE_SPECIALIST:
+            serializer = MatchListSpecialistSerializer(match)
+        elif request.user.role_id == Params.ROLE_CLIENT:
+            serializer = MatchListClientSerializer(match)
+        else:
+            serializer = MatchListSpecialistSerializer(match)
         return Response(serializer.data)
 
 
