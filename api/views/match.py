@@ -58,7 +58,7 @@ class MatchListClientView(ListCreateAPIView):
         data = request.data
         user_id = Operations.get_id(self, request)
         context_data = {}
-        
+
         if request.user.role_id == 2:
             data["client"] = user_id
             context_data["seller"] = Client.objects.get(pk=user_id).seller_assigned.id
@@ -157,10 +157,8 @@ class MatchDetail(APIView):
 
 class MatchBackendListView(ListCreateAPIView):
     """Vista Match cliente."""
-
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsAdminOnList, ]
-
 
     def list(self, request):
         """Listado de Matchs."""
