@@ -69,6 +69,19 @@ def get_queries_pending_to_solve(specialist, client=None):
     pending = qs.count()
     return pending
 
+
+def has_chosen_plan(client):
+    """
+        retorna True si el cliente ya tiene plan seleccionado
+        retorna False si el cliente no tiene plan seleccionado
+    """
+    try:
+        QueryPlansAcquired.objects.values('queryplansclient__is_chosen')\
+            .filter(queryplansclient__client=client, is_active = True, queryplansclient__is_chosen = True)[:1].get()
+        return True
+    except QueryPlansAcquired.DoesNotExist:
+        return False
+
 def is_assigned(client=None, contact=None):
     if client is not None and contact is None:
         contact = SellerContact.objects.get(client=client)
