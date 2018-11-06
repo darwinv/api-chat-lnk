@@ -58,7 +58,7 @@ class MatchListClientView(ListCreateAPIView):
         data = request.data
         user_id = Operations.get_id(self, request)
         context_data = {}
-        
+
         if request.user.role_id == 2:
             data["client"] = user_id
             context_data["seller"] = Client.objects.get(pk=user_id).seller_assigned.id
@@ -151,7 +151,13 @@ class MatchDetail(APIView):
     def get(self, request, pk):
         """Detalle."""
         match = self.get_object(pk)
-        serializer = MatchListSpecialistSerializer(match)
+        print(request.user.role_id)
+        if request.user.role_id == Params.ROLE_SPECIALIST:
+            serializer = MatchListSpecialistSerializer(match)
+        elif request.user.role_id == Params.ROLE_CLIENT:
+            serializer = MatchListClientSerializer(match)
+        else:
+            serializer = MatchListSpecialistSerializer(match)
         return Response(serializer.data)
 
 

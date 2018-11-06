@@ -177,10 +177,10 @@ class QueryListClientView(ListCreateAPIView):
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
             sala = str(user_id) + '-' + str(serializer.data["category"])
-            
+
             Group('chat-'+str(sala)).send({'text': json.dumps({
                         "query": serializer.data["obj_query"]["title"],
-                        "messages": lista                        
+                        "messages": lista
                     })})
             return Response(serializer.data, status.HTTP_201_CREATED)
         else:
@@ -365,7 +365,7 @@ class QueryDetailClientView(APIView):
                     "badge": badge_count,
                     "icon": us.photo,
                     "client_id": user_id,
-                    "type": Params.TYPE_NOTIF["query_new"],
+                    "type": Params.TYPE_NOTIF["query_requery"],
                     "category_id": category_id,
                     "queries_pending": dict_pending["queries_pending"],
                     "match_pending": dict_pending["match_pending"],
@@ -375,7 +375,6 @@ class QueryDetailClientView(APIView):
                 # envio de notificacion push
                 Notification.fcm_send_data(user_id=specialist_id,
                                            data=data_notif_push)
-            # import pdb; pdb.set_trace()
             requeries = serializer.data['obj_query']['availableRequeries']
 
             data_update = {
