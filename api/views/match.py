@@ -162,10 +162,8 @@ class MatchDetail(APIView):
 
 class MatchBackendListView(ListCreateAPIView):
     """Vista Match cliente."""
-
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated, IsAdminOnList, ]
-
 
     def list(self, request):
         """Listado de Matchs."""

@@ -5,10 +5,14 @@ from api.models import QueryPlansAcquired, QueryPlansClient, MonthlyFee
 from api.models import QueryPlans, Client, Seller, ProductType
 from api.models import SellerNonBillablePlans, Sale, SaleDetail
 from api.utils.tools import get_date_by_time
+from api.utils.querysets import has_chosen_plan
+from api.serializers.plan import QueryPlansAcquiredSerializer
+from api import pyrebase
 from datetime import datetime, date
 from api.emails import BasicEmailAmazon
 from dateutil.relativedelta import relativedelta
 import random
+import sys
 import string
 
 hoy = date.today()
@@ -102,6 +106,7 @@ class SaleSerializer(serializers.Serializer):
         instance = Sale(**validated_data)
         instance.save()
         sale_detail = {}
+        client = validated_data["client"]
         max_fee_product = 0
         for product in products:
             plan_acquired = {}
@@ -120,6 +125,7 @@ class SaleSerializer(serializers.Serializer):
                         plan_acquired["available_queries"] = 0
                         plan_acquired["queries_to_pay"] = product["plan_id"].query_quantity
                         plan_acquired["status"] = 1
+                        is_chosen = False
                     else:
                         # es plan promocional
                         plan_acquired["available_queries"] = product["plan_id"].query_quantity
@@ -136,6 +142,8 @@ class SaleSerializer(serializers.Serializer):
                             number_month=hoy.month, number_year=hoy.year)
                         plan_promotionals.quantity = plan_promotionals.quantity - 1
                         plan_promotionals.save()
+                        if not has_chosen_plan(validated_data["client"]):
+                            is_chosen = True
                         sale_detail["discount"] = float(product["plan_id"].price)
                     sale_detail["product_type"] = product["product_type"]
                     sale_detail["sale"] = instance
@@ -156,9 +164,12 @@ class SaleSerializer(serializers.Serializer):
                     plan_acquired["query_plans"] = product["plan_id"]
                     plan_acquired["sale_detail"] = instance_sale
                     ins_plan = QueryPlansAcquired.objects.create(**plan_acquired)
-
+                    if is_chosen:
+                        if 'test' not in sys.argv:
+                            ser = QueryPlansAcquiredSerializer(ins_plan)
+                            pyrebase.chosen_plan(client.id, ser.data)
                     QueryPlansClient.objects.create(
-                        acquired_plan=ins_plan, status=1,
+                        acquired_plan=ins_plan, status=1, is_chosen=is_chosen,
                         client=validated_data["client"])
 
         # Crear cuotas
