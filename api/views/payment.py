@@ -1,4 +1,6 @@
 """Vista de Pagos."""
+import sys
+from api.utils.tools import display_specialist_name, display_client_name
 from api.serializers.payment import PaymentSerializer, PaymentSaleSerializer
 from api.serializers.payment import PaymentSalePendingDetailSerializer
 from api.serializers.payment import PaymentMatchSerializer
@@ -9,7 +11,9 @@ from api.utils.validations import Operations
 from api.utils.querysets import get_next_fee_to_pay
 from api.permissions import IsAdminOrSeller, IsAdmin, isAdminBackWrite
 from api.permissions import IsAdminOrSpecialist
-from api.models import Sale, MonthlyFee, Client, Match, SaleDetail
+from api.serializers.notification import NotificationClientSerializer
+from api.serializers.notification import NotificationSpecialistSerializer
+from api.models import Sale, MonthlyFee, Client, Match, SaleDetail, Specialist
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets, serializers
 from rest_framework.views import APIView
@@ -18,9 +22,12 @@ from rest_framework.generics import ListCreateAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as trans
 from django.db.models import Subquery, Q, OuterRef
-import django_filters.rest_framework
+from api.utils.parameters import Params
 from api.logger import manager
+from fcm.fcm import Notification
+
 logger = manager.setup_log(__name__)
 
 
@@ -72,9 +79,55 @@ class ConfirmDiscountView(APIView):
                                         status__range=(2, 3)).exists()
         if is_client:
             match.status = 5
+            disp_name_to_client = display_specialist_name(match)
+            ticker_client = trans("successful hiring")
+            disp_name_to_specialist = display_client_name(client)
+            ticker_specialist = trans("successful hiring")
         else:
             match.status = 4
+            disp_name_to_client = "Sube el recibo de tu pago"
+            ticker_client = "Realiza tu pago, procederemos con tu solicitud"
+            ticker_specialist = "Espera por el pago del cliente"
+            disp_name_to_specialist = "Se autorizo tu solicitud de descuento"
 
+        if 'test' not in sys.argv:
+            client_id = match.client_id
+            specialist_id = match.specialist_id
+            qset_client = Client.objects.filter(pk=client_id)
+            qset_spec = Specialist.objects.filter(pk=specialist_id)
+            dict_pending_cl = NotificationClientSerializer(qset_client).data
+            dict_pending_sp = NotificationSpecialistSerializer(qset_spec).data
+            badge_count = dict_pending_cl["queries_pending"] + dict_pending_cl["match_pending"]
+            badge_count_sp = dict_pending_sp["queries_pending"] + dict_pending_sp["match_pending"]
+
+            data_client = {
+                "title": disp_name_to_client,
+                "body": match.subject,
+                "sub_text": "",
+                "ticker": ticker_client,
+                "badge": badge_count,
+                "icon": match.category.image,
+                "type": Params.TYPE_NOTIF["match_success"],
+                "queries_pending": dict_pending_cl["queries_pending"],
+                "match_pending": dict_pending_cl["match_pending"],
+                "match_id": match.id
+            }
+            data_specialist = {
+                "title": disp_name_to_specialist,
+                "body": match.subject,
+                "sub_text": "",
+                "ticker": ticker_specialist,
+                "badge": badge_count_sp,
+                "icon": match.category.image,
+                "type": Params.TYPE_NOTIF["match_success"],
+                "queries_pending": dict_pending_sp["queries_pending"],
+                "match_pending": dict_pending_sp["match_pending"],
+                "match_id": match.id
+            }
+            # envio de notificacion push
+            Notification.fcm_send_data(user_id=client_id, data=data_client)
+            Notification.fcm_send_data(user_id=specialist_id,
+                                       data=data_specialist)
         match.save()
 
         return Response({"confirmado"}, status.HTTP_200_OK)
