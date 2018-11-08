@@ -25,7 +25,7 @@ class PlanStatusSerializer(serializers.Serializer):
             queryplansclient__is_chosen=True,
             expiration_date__lte=datetime.now().date(),
             queryplansclient__client_id=client)
-        
+
         if obj.exists() is False:  # No hay comprado
             return {"code": 1, "message": "No tiene plan comprado"}
         else:
@@ -338,7 +338,6 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
                                'receiver', instance.receiver)
         instance.status = validated_data.get(
                                'status', instance.status)
-        instance.new_acquired_plan = new_acquired_plan
         instance.save()
         return instance
 
@@ -374,25 +373,25 @@ class QueryPlansShareSerializer(serializers.ModelSerializer):
             new_acquired_plan.is_chosen = False
             new_acquired_plan.status = acquired_plan.status
             new_acquired_plan.save()
-
             # Damos los permisos del plan al usuario
             if 'client' in receiver and receiver['client']:
                 receiver['acquired_plan'] = new_acquired_plan
                 QueryPlansClient.objects.create(**receiver)
 
+        # Actualizo cantidad de consultas
+        acquired_plan.available_queries = acquired_plan.available_queries - count
+        # si no le quedan consultas, pasa a culminado
+        if acquired_plan.available_queries < 1:
+            acquired_plan.status = 5
+        acquired_plan.save()
+
         return new_acquired_plan
 
     def create(self, validated_data):
-
         """Transferir plan de consultas"""
-        acquired_plan = self.context['acquired_plan']
         count = validated_data.get('count_queries')
 
         new_acquired_plan = self.process_plan_share(count)
-
-        # Actualizo cantidad de consultas
-        acquired_plan.available_queries = acquired_plan.available_queries - count
-        acquired_plan.save()
 
         # Crear manejo de plan
         validated_data['new_acquired_plan'] = new_acquired_plan
