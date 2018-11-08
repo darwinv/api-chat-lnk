@@ -25,8 +25,7 @@ class PlanStatusSerializer(serializers.Serializer):
             queryplansclient__is_chosen=True,
             expiration_date__lte=datetime.now().date(),
             queryplansclient__client_id=client)
-
-        # import pdb; pdb.set_trace()
+        
         if obj.exists() is False:  # No hay comprado
             return {"code": 1, "message": "No tiene plan comprado"}
         else:
