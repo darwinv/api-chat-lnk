@@ -851,7 +851,7 @@ class ClientCheckEmailOperationView(APIView):
     """Vista para checkar si un correo puede realizar operacion"""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = (permissions.IsAuthenticated, IsAdminOrClient)
-
+    required = _("required")
 
     def get(self, request):
         client_id = Operations.get_id(self, request)
