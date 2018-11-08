@@ -1259,7 +1259,7 @@ class ContactListView(ListCreateAPIView):
         password = None
         send_email = False
 
-        if request.user.role.id == 4:
+        if user_id and request.user.role.id == 4:
             data['seller'] = user_id
         else:
             data['seller'] = None
