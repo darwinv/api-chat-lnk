@@ -765,12 +765,13 @@ class QueryDeclineView(ListAPIView):
         context["status"] = 1
         context["specialist"] = main_specialist
         context["specialist_declined"] = specialist
+        main_specialist_id = main_specialist.id
         serializer = QueryDeclineSerializer(query, data=request.data,
                                             context=context)
 
         if serializer.is_valid():
             serializer.save()
-            qset_spec = Specialist.objects.filter(pk=main_specialist)
+            qset_spec = Specialist.objects.filter(pk=main_specialist_id)
             dict_pending = NotificationSpecialistSerializer(qset_spec).data
             badge_count = dict_pending["queries_pending"] + dict_pending["match_pending"]
             ser = DeclineReprSerializer(query)
@@ -790,9 +791,9 @@ class QueryDeclineView(ListAPIView):
                     "query_id": ser.data["query_id"]
                 }
                 pyrebase.updateStatusQueryDerive(specialist,
-                                                 main_specialist.id, query)
+                                                 main_specialist_id, query)
                 # envio de notificacion push
-                Notification.fcm_send_data(user_id=main_specialist,
+                Notification.fcm_send_data(user_id=main_specialist_id,
                                            data=data_notif_push)
             return Response(ser.data, status.HTTP_200_OK)
 
