@@ -1211,7 +1211,15 @@ class ContactListView(ListCreateAPIView):
                     se.type_contact,
                     IF (
                         se.type_contact = 1
-                        AND sale.file_url <> "",
+                        AND (
+                            SELECT
+                                sale.id
+                            FROM
+                                api_sale AS sale
+                            WHERE
+                                sale.file_url <> ""
+                            LIMIT 1
+                        ),
                         se.type_contact,
                         2
                     )
@@ -1235,8 +1243,6 @@ class ContactListView(ListCreateAPIView):
                     api_sellercontact AS se
                 LEFT JOIN api_client as cli ON 
                 se.client_id = cli.user_ptr_id
-                LEFT JOIN api_sale AS sale ON 
-                sale.client_id = cli.user_ptr_id
                 WHERE
                     se.type_contact IN (2, 1, 4)
                     and se.created_at > "{}"
