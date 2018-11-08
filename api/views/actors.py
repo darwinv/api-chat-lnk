@@ -1261,21 +1261,30 @@ class ContactListView(ListCreateAPIView):
         required = _("required")
         not_valid = _("not valid")
         data = request.data
-        data["seller"] = Operations.get_id(self, request)
+        user_id = Operations.get_id(self, request)
         password = None
+        send_email = False
+
+        if user_id and request.user.role.id == 4:
+            data['seller'] = user_id
+        else:
+            data['seller'] = None
+
         if data['seller'] is None:
             data['seller'] = Parameter.objects.get(parameter='platform_seller').value
             #TODO: Usar constantes. Eliminar numeros magicos
             data['latitude'] = '-12.1000244'
             data['longitude'] = '-76.9701127'
             data['type_contact'] = 1
+
         # eliminamos contraseña para contacto en caso de envio
-        elif 'type_contact' in data:
+        if 'type_contact' in data or password is None:
             if 'password' in data:
                 del data["password"]
 
             # generamos contraseña random
             if data['type_contact'] != 2:
+                send_email = True
                 password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
                 data["password"] = password
 
@@ -1303,7 +1312,7 @@ class ContactListView(ListCreateAPIView):
                     pyrebase.createCategoriesLisClients(serializer.data['client_id'])
 
                     # envio de contraseña al cliente
-                    if password is not None:
+                    if send_email:
                         mail = BasicEmailAmazon(subject='Envio Credenciales', to=data["email_exact"],
                                                 template='email/send_credentials')
                         credentials = {}
