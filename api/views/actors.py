@@ -1283,7 +1283,7 @@ class ContactListView(ListCreateAPIView):
                 del data["password"]
 
             # generamos contraseña random
-            if data['type_contact'] != 2:
+            if 'type_contact' not in data or data['type_contact'] != 2:
                 send_email = True
                 password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
                 data["password"] = password
