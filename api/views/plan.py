@@ -163,7 +163,6 @@ class ClientPlansDetailView(ListCreateAPIView):
             raise Http404
 
 
-
 class ClientSharePlansView(APIView):
     """Vista para obetener todos los planes de un cliente."""
     authentication_classes = (OAuth2Authentication,)

@@ -84,7 +84,7 @@ class PaymentSerializer(serializers.ModelSerializer):
                     "ticker": "",
                     "badge": badge_count,
                     "icon": 'http://linkup-lb-09-916728193.us-east-1.elb.amazonaws.com/static/dashboard/dist/img/logo_grande.png',
-                    "type": Params.TYPE_NOTIF["default"],
+                    "type": Params.TYPE_NOTIF["PIN"],
                     "queries_pending": dict_pending["queries_pending"],
                     "match_pending": dict_pending["match_pending"]
                 }
