@@ -1,4 +1,5 @@
 """Activacion, modificacion y listado de planes."""
+import json
 from rest_framework import permissions, status
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView
@@ -181,10 +182,13 @@ class ClientSharePlansView(APIView):
         if not 'acquired_plan' in data:
             raise serializers.ValidationError({'acquired_plan': [self.required]})
 
-        if 'client' in data and type(data['client']) is list:
+        if 'client' in data:
             clients = data['client']
-        else:
-            raise serializers.ValidationError({'client': [self.required]})
+            if type(clients) is str:
+                clients = json.loads(clients)
+
+            if type(clients) is not list:
+                raise serializers.ValidationError({'client': [self.required]})
 
         try:
             acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
@@ -353,10 +357,13 @@ class ClientEmpowerPlansView(APIView):
         if not 'acquired_plan' in data:
             raise serializers.ValidationError({'acquired_plan': [self.required]})
 
-        if 'client' in data and type(data['client']) is list:
+        if 'client' in data:
             clients = data['client']
-        else:
-            raise serializers.ValidationError({'client': [self.required]})
+            if type(clients) is str:
+                clients = json.loads(clients)
+
+            if type(clients) is not list:
+                raise serializers.ValidationError({'client': [self.required]})
 
         try:
             acquired_plan = QueryPlansAcquired.objects.get(pk=data['acquired_plan'],
@@ -856,8 +863,7 @@ class ClientCheckEmailOperationView(APIView):
         client_id = Operations.get_id(self, request)
         data = request.query_params
 
-
-        response = True
+        response = {}
         if 'acquired_plan' in data:
             acquired_plan = data['acquired_plan']
         else:

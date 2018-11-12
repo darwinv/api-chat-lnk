@@ -537,7 +537,8 @@ class ChatMessageSerializer(serializers.ModelSerializer):
         """declaracion del modelo y sus campos."""
 
         model = Message
-        fields = ('id', 'code', 'message', 'time_message', 'msg_type', 'viewed', 'content_type', 'file_url',
+        fields = ('id', 'code', 'message', 'time_message', 'msg_type', 'viewed',
+                 'content_type', 'file_url', 'file_preview_url',
                   'query', 'message_reference', 'user_id')
 
     def get_time_message(self, obj):
