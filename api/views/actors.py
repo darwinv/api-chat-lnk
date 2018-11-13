@@ -1272,7 +1272,7 @@ class ContactListView(ListCreateAPIView):
         else:
             data['seller'] = None
 
-        if 'type_contact' in data or 'password' not in data:
+        if 'type_contact' in data or ('password' not in data or (data['password'] is None or data['password'] is '')):
             # eliminamos contraseña para contacto en caso de envio
             if 'password' in data:
                 del data["password"]
