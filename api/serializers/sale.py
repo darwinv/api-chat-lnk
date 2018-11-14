@@ -164,13 +164,17 @@ class SaleSerializer(serializers.Serializer):
                     plan_acquired["query_plans"] = product["plan_id"]
                     plan_acquired["sale_detail"] = instance_sale
                     ins_plan = QueryPlansAcquired.objects.create(**plan_acquired)
-                    if is_chosen:
-                        if 'test' not in sys.argv:
-                            ser = QueryPlansAcquiredSerializer(ins_plan)
-                            pyrebase.chosen_plan(client.id, ser.data)
+
                     QueryPlansClient.objects.create(
                         acquired_plan=ins_plan, status=1, is_chosen=is_chosen,
                         client=validated_data["client"])
+
+                    if is_chosen:
+                        if 'test' not in sys.argv:
+                            ser = QueryPlansAcquiredSerializer(ins_plan)
+                            new_ser = ser.data.copy()
+                            new_ser["is_chosen"] = is_chosen
+                            pyrebase.chosen_plan(client.id, new_ser)
 
         # Crear cuotas
         if validated_data["is_fee"]:

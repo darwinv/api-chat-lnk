@@ -1354,7 +1354,7 @@ class SellerContactNaturalSerializer(BaseSellerContactSerializer):
     nationality_name = serializers.SerializerMethodField()
     residence_country = serializers.PrimaryKeyRelatedField(
         queryset=Countries.objects.all(), required=True)
-    password = serializers.CharField(required=False)
+    password = serializers.CharField(required=False, min_length=6)
 
     class Meta:
         """Meta de Contacto."""

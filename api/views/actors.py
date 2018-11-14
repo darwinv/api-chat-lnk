@@ -1025,6 +1025,7 @@ class SellerClientListView(ListCreateAPIView):
             qpc = QueryPlansClient.objects.filter(client__in=clients,
                                                   acquired_plan__available_queries__gt=0,
                                                   acquired_plan__is_active=True).distinct()
+
             if int(available) == 1:
                 clients = clients.filter(queryplansclient__in=qpc).distinct()
             elif int(available) == 2:
@@ -1258,6 +1259,7 @@ class ContactListView(ListCreateAPIView):
 
     def post(self, request):
         """Redefinido funcion para crear vendedor."""
+
         required = _("required")
         not_valid = _("not valid")
         data = request.data
@@ -1270,15 +1272,8 @@ class ContactListView(ListCreateAPIView):
         else:
             data['seller'] = None
 
-        if data['seller'] is None:
-            data['seller'] = Parameter.objects.get(parameter='platform_seller').value
-            #TODO: Usar constantes. Eliminar numeros magicos
-            data['latitude'] = '-12.1000244'
-            data['longitude'] = '-76.9701127'
-            data['type_contact'] = 1
-
-        # eliminamos contraseña para contacto en caso de envio
-        if 'type_contact' in data or password is None:
+        if 'type_contact' in data or ('password' not in data or (data['password'] is None or data['password'] is '')):
+            # eliminamos contraseña para contacto en caso de envio
             if 'password' in data:
                 del data["password"]
 
@@ -1287,6 +1282,13 @@ class ContactListView(ListCreateAPIView):
                 send_email = True
                 password = ''.join(random.SystemRandom().choice(string.digits) for _ in range(6))
                 data["password"] = password
+
+        if data['seller'] is None:
+            data['seller'] = Parameter.objects.get(parameter='platform_seller').value
+            #TODO: Usar constantes. Eliminar numeros magicos
+            data['latitude'] = '-12.1000244'
+            data['longitude'] = '-76.9701127'
+            data['type_contact'] = 1
 
         if "email_exact" not in data or not data["email_exact"]:
             raise serializers.ValidationError({'email_exact': [required]})
