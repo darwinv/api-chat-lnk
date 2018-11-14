@@ -378,7 +378,7 @@ class MonthlyFeeClientUploadFilesView(APIView):
     def get_object(self, request, pk):
         """Devuelvo la consulta."""
         try:
-            obj = MonthlyFee.objects.get(pk=pk, status=1, fee_order_number=1)
+            obj = MonthlyFee.objects.exclude(fee_order_number=1).get(pk=pk, status=1)
             return obj
         except MonthlyFee.DoesNotExist:
             raise Http404
