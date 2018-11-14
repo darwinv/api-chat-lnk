@@ -440,7 +440,7 @@ class Sale(models.Model):
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
     seller = models.ForeignKey(Seller, null=True, on_delete=models.PROTECT)
     status = models.PositiveIntegerField(choices=Ch.sale_status, default=1)
-    file_url = models.CharField(max_length=500, blank=True)
+    file_url = models.CharField(max_length=500, blank=True)  # file del primer pago
     file_preview_url = models.CharField(max_length=500, blank=True)
 
 class SaleDetail(models.Model):
@@ -527,6 +527,9 @@ class MonthlyFee(models.Model):
     pay_before = models.DateField(null=True)
     status = models.PositiveIntegerField(choices=Ch.fee_status)
 
+    file_url = models.CharField(max_length=500, blank=True, null=True)  # Pago de la cuota
+    file_preview_url = models.CharField(max_length=500, blank=True, null=True)
+
 
 class Payment(models.Model):
     """Pagos."""
@@ -563,7 +566,7 @@ class Match(models.Model):
                                     null=True)
     specialist_payment = models.ForeignKey(Payment, null=True,
                                            on_delete=models.PROTECT)
-    file_url = models.CharField(max_length=500, blank=True)
+    file_url = models.CharField(max_length=500, blank=True)  # pago del especialista
     file_preview_url = models.CharField(max_length=500, blank=True)
 
 

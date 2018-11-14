@@ -81,6 +81,7 @@ class ChoicesAPI:
     fee_status = (
         (1, _('Pending')),
         (2, _('Paid')),
+        (3, _('Checking payment')),
     )
     # venta estado
     sale_status = (
