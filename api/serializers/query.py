@@ -331,7 +331,8 @@ class QueryResponseSerializer(BaseQueryResponseSerializer):
                 str(instance.category.id)
             data_message["code"] = self.context['specialist'].code
             # se busca el mensaje de referencia y se extrae de la respuesta
-            if data_message['message_reference'] is not None and data_message['message_reference'] != 0:
+            
+            if 'message_reference' in data_message and data_message['message_reference'] and data_message['message_reference'] != 0:
                 ms_ref = data_message['message_reference'].id
             Message.objects.create(query=instance, group=group, **data_message)
 
