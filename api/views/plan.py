@@ -942,7 +942,7 @@ class ClientDeleteEmpowerPlansView(ListCreateAPIView):
             else:
                 raise Http404
 
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({})
         else:
             raise serializers.ValidationError({self.not_permission})
 
