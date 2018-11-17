@@ -533,14 +533,16 @@ class ChatMessageSerializer(serializers.ModelSerializer):
     query = serializers.SerializerMethodField()
     message_reference = serializers.SerializerMethodField()
     user_id = serializers.SerializerMethodField()
-
+    group_status = serializers.SerializerMethodField()
+    specialist_id = serializers.SerializerMethodField()
     class Meta:
         """declaracion del modelo y sus campos."""
 
         model = Message
         fields = ('id', 'code', 'message', 'time_message', 'msg_type', 'viewed',
                  'content_type', 'file_url', 'file_preview_url',
-                  'query', 'message_reference', 'user_id')
+                  'query', 'message_reference', 'user_id', 'group_status',
+                  'specialist_id')
 
     def get_time_message(self, obj):
         """Devuelve el tiempo cuando se realizo el mensaje del mensaje."""
@@ -558,12 +560,20 @@ class ChatMessageSerializer(serializers.ModelSerializer):
             return obj["specialist_id"]
         return obj["query__client_id"]
 
+    def get_specialist_id(self, obj):
+        """Devolver id del specialist."""
+        return obj["query__specialist_id"]
+
     def get_message_reference(self, obj):
         if obj['message_reference']:
             ref = Message.objects.get(pk=obj['message_reference'])
             message = ChatMessageReferenceSerializer(ref)
             return message.data
         return None
+
+    def get_group_status(self, obj):
+        """Devuelve el tiempo cuando se realizo el mensaje del mensaje."""
+        return obj['group_status']
 
 
 class ChatMessageReferenceSerializer(serializers.ModelSerializer):
