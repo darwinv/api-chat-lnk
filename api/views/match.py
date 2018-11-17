@@ -425,6 +425,8 @@ class SaleClientUploadFilesView(APIView):
             raise Http404
 
     def put(self, request, pk):
+        import pdb
+        pdb.set_trace()
         """Actualiza el match, subiendo archivos."""
         obj_instance = self.get_object(request, pk)
         files = request.FILES.getlist('file')
