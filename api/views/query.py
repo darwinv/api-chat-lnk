@@ -163,6 +163,8 @@ class QueryListClientView(ListCreateAPIView):
                     "match_pending": dict_pending["match_pending"],
                     "query_id": serializer.data["query_id"]
                 }
+
+
                 # crea nodo de listado de mensajes
                 pyrebase.createListMessageClients(serializer_tmp.data,
                                                   serializer.data["query_id"],
@@ -180,6 +182,8 @@ class QueryListClientView(ListCreateAPIView):
 
             Group('chat-'+str(sala)).send({'text': json.dumps({
                         "query": serializer.data["obj_query"]["title"],
+                        "specialist": serializer_tmp.data[0]['specialist'],
+                        "msg_type": serializer_tmp.data[0]["message"]['msg_type'],
                         "messages": lista
                     })})
             return Response(serializer.data, status.HTTP_201_CREATED)
@@ -433,19 +437,21 @@ class QueryChatSpecialistView(ListAPIView):
         """Listado de queries y sus respectivos mensajes para un cliente."""
         client = self.get_object(pk)
         specialist = Operations.get_id(self, request)
-        if not specialist:
-            raise Http404
+        
+        specialist = Specialist.objects.get(pk=specialist)
 
-        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type', 'viewed',
-                                          'query_id', 'query__client_id', 'message_reference', 'specialist_id', 'content_type', 'file_url')\
+        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 
+            'msg_type', 'viewed', 'query_id', 'query__client_id', 'message_reference', 
+            'specialist_id', 'content_type', 'file_url', 'file_preview_url', 'query__specialist_id')\
                           .annotate(title=F('query__title',), status=F('query__status',),
                                     qualification=F('query__qualification',),
-                                    category_id=F('query__category_id',))\
-                          .filter(query__client_id=client, query__specialist_id=specialist)\
+                                    category_id=F('query__category_id',),\
+                                    group_status=F('group__status',))\
+                          .filter(query__client_id=client, 
+                            query__category_id=specialist.category)\
                           .order_by('-created_at')
 
         serializer = ChatMessageSerializer(queryset, many=True)
-
         # pagination
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -476,15 +482,16 @@ class QueryChatClientView(ListCreateAPIView):
         if not client:
             raise Http404
 
-        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 'msg_type',
-                                         'viewed', 'query_id', 'query__client_id',
-                                         'message_reference', 'specialist_id', 'content_type',
-                                         'file_url', 'file_preview_url')\
-                          .annotate(title=F('query__title',), status=F('query__status',),\
-                                    qualification=F('query__qualification',),\
-                           category_id=F('query__category_id',))\
-                           .filter(query__client_id=client, query__category_id=category)\
-                           .order_by('-created_at')
+        queryset = Message.objects.values('id', 'code', 'message', 'created_at', 
+            'msg_type', 'viewed', 'query_id', 'query__client_id', 'message_reference', 
+            'specialist_id', 'content_type', 'file_url', 'file_preview_url', 'query__specialist_id')\
+                          .annotate(title=F('query__title',), status=F('query__status',),
+                                    qualification=F('query__qualification',),
+                                    category_id=F('query__category_id',),\
+                                    group_status=F('group__status',))\
+                          .filter(query__client_id=client,
+                            query__category_id=category)\
+                          .order_by('-created_at')
 
         serializer = ChatMessageSerializer(queryset, many=True)
 

@@ -649,7 +649,7 @@ class QueryLogs(models.Model):
 
 class GroupMessage(models.Model):
     """Grupo de Mensajes"""
-    status = models.PositiveIntegerField()
+    status = models.PositiveIntegerField()  # 1 action, 2 No action
 
 
 # Para traerse el historico de mensajes de consultas de un especialista que ya
