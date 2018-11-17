@@ -50,7 +50,7 @@ def get_next_fee_to_pay(sale):
     :return: QuerySet
     """
     try:
-        return MonthlyFee.objects.filter(sale=sale, status=1).order_by('pay_before')[0]
+        return MonthlyFee.objects.filter(sale=sale, status__in=[1,3]).order_by('pay_before')[0]
     except IndexError:
         return None
 

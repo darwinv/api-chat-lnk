@@ -192,7 +192,7 @@ class PaymentPendingView(ListCreateAPIView):
 
         fee = MonthlyFee.objects.filter(
                             sale=OuterRef("pk"),
-                            status=1
+                            status__in=[1,3]
                         )
 
         manage_data = Sale.objects.values('created_at',
