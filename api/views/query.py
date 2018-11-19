@@ -178,12 +178,13 @@ class QueryListClientView(ListCreateAPIView):
 
             # -- Aca una vez creada la data, cargar el mensaje directo a
             # -- la sala de chat en channels (usando Groups)
-            sala = str(user_id) + '-' + str(serializer.data["category"])
+            room_channel = str(user_id) + '-' + str(serializer.data["category"])
 
-            Group('chat-'+str(sala)).send({'text': json.dumps({
+            # Se envian el query y sus mensajes por channels
+            Group('chat-'+str(room_channel)).send({'text': json.dumps({
+                        "eventType": 1,
                         "query": serializer.data["obj_query"]["title"],
-                        "specialist": serializer_tmp.data[0]['specialist'],
-                        "msg_type": serializer_tmp.data[0]["message"]['msg_type'],
+                        "specialist": specialist_id,
                         "messages": lista
                     })})
             return Response(serializer.data, status.HTTP_201_CREATED)
@@ -237,9 +238,17 @@ class QueryDetailSpecialistView(APIView):
                                        category_id, lista[-1]["timeMessage"])
 
             # sala es el cliente_id y su la categoria del especialista
-            sala = str(query.client.id) + '-' + str(category_id)
+            room_channel = str(query.client.id) + '-' + str(category_id)
 
-            Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
+
+            # Se envian el query y sus mensajes por channels
+            Group('chat-'+str(room_channel)).send({'text': json.dumps({
+                        "eventType": 1,
+                        "query": serializer.data["obj_query"]["title"],
+                        "specialist": user_id,
+                        "messages": lista
+                    })})
+
             for row in lista:
                 if row['messageReference'] is not None and row['messageReference'] != 0:
                     ms_ref = row['messageReference']
@@ -338,9 +347,16 @@ class QueryDetailClientView(APIView):
                 pyrebase.categories_db(user_id, category_id,
                                        lista[-1]["timeMessage"])
             # sala es el cliente_id y su la categoria del especialista
-            sala = str(query.client.id) + '-' + str(category_id)
+            room_channel = str(query.client.id) + '-' + str(category_id)
 
-            Group('chat-'+str(sala)).send({'text': json.dumps(lista)})
+            # Se envian el query y sus mensajes por channels
+            Group('chat-'+str(room_channel)).send({'text': json.dumps({
+                        "eventType": 1,
+                        "query": serializer.data["obj_query"]["title"],
+                        "specialist": serializer.data["specialist_id"],
+                        "messages": lista
+                    })})
+
             # actualizo el querycurrent del listado de mensajes
             for li in lista:
                 if li['messageReference'] is not None and li['messageReference'] != 0:
@@ -558,7 +574,7 @@ class QueryUploadFilesView(APIView):
         resp = True  # variable bandera
         name_file, extension = os.path.splitext(file.name)
         msg_id = name_file.split("-")[-1]  # obtenemos el ultimo por (-)
-
+        
         try:
             ms = Message.objects.get(pk=int(msg_id))
 
@@ -656,6 +672,13 @@ class QueryAcceptView(APIView):
                                                  query.client.id, pk,
                                                  room)
 
+                room_channel = str(query.client.id) + '-' + str(query.category.id)
+                Group('chat-'+str(room_channel)).send({'text': json.dumps({
+                        "eventType": 2,
+                        "query": pk,
+                        "data": {"status": data["status"]}
+                    })})
+
             # Traemos todas las consultas pendientes por tomar accion por asignadas
             # a este especialista
             # msgs_pendings = Query.objects.filter(status=1, specialist=specialist)
@@ -688,6 +711,14 @@ class DeclineRequeryView(APIView):
             # import pdb; pdb.set_trace()
             if 'test' not in sys.argv:
                 pyrebase.update_status_group_messages(msgs, 2)
+
+                room_channel = str(query.client.id) + '-' + str(query.category.id)
+                Group('chat-'+str(room_channel)).send({'text': json.dumps({
+                        "eventType": 2,
+                        "query": query.id,
+                        "data": {"status": 4}
+                    })})
+
         success = queries.update(status=4)
         if success:
             return Response({}, status.HTTP_200_OK)
@@ -743,6 +774,14 @@ class QueryDeriveView(APIView):
 
                 pyrebase.updateStatusQueryDerive(specialist,
                                                  data["specialist"], query)
+
+                room_channel = str(query.client.id) + '-' + str(query.category.id)
+                Group('chat-'+str(room_channel)).send({'text': json.dumps({
+                        "eventType": 2,
+                        "query": pk,
+                        "data": {"specialist": data["specialist"]}
+                    })})
+
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -804,6 +843,14 @@ class QueryDeclineView(ListAPIView):
                 # envio de notificacion push
                 Notification.fcm_send_data(user_id=main_specialist_id,
                                            data=data_notif_push)
+
+                room_channel = str(query.client.id) + '-' + str(query.category.id)
+                Group('chat-'+str(room_channel)).send({'text': json.dumps({
+                        "eventType": 2,
+                        "query": pk,
+                        "data": {"specialist": main_specialist_id}
+                    })})
+
             return Response(ser.data, status.HTTP_200_OK)
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
