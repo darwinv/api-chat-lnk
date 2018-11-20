@@ -542,7 +542,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
         fields = ('id', 'code', 'message', 'time_message', 'msg_type', 'viewed',
                  'content_type', 'file_url', 'file_preview_url',
                   'query', 'message_reference', 'user_id', 'group_status',
-                  'specialist_id')
+                  'specialist_id', 'uploaded')
 
     def get_time_message(self, obj):
         """Devuelve el tiempo cuando se realizo el mensaje del mensaje."""
