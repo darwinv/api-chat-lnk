@@ -374,7 +374,7 @@ urlpatterns = [
     url(r'^clients/sales/have-payment-pending/$',
         payment.ClientHaveSalePending.as_view(), name='payment-pending-sale-client'),
 
-    url(r'^clients/sales/detail/$',
+    url(r'^clients/sales/detail/(?P<sale_id>[0-9]+)/$',
         payment.ClientSaleDetail.as_view(), name='payment-sale-client'),
 
     url(r'^pending/data/$',
