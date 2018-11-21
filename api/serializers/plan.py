@@ -203,6 +203,7 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
     price = serializers.SerializerMethodField()
     fee = serializers.SerializerMethodField()
     is_fee = serializers.SerializerMethodField()
+    sale = serializers.SerializerMethodField()
 
     class Meta:
         """declaracion del modelo y sus campos."""
@@ -212,7 +213,7 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
                   'validity_months', 'query_quantity', 'queries_to_pay',
                   'available_queries', 'expiration_date', 'activation_date',
                   'transfer', 'share', 'empower', 'owner',
-                  'price', 'fee', 'is_fee', 'status')
+                  'price', 'fee', 'is_fee', 'status', 'sale')
 
     def get_transfer(self, obj):
         if 'queryplansclient__transfer' in obj:
@@ -257,6 +258,12 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
         fee = get_next_fee_to_pay(obj['sale'])
         serializer = FeeSerializer(fee)
         return serializer.data
+
+    def get_sale(self, obj):
+        if 'sale' in obj:
+            return obj['sale']
+        else:
+            return None
 
 
 class QueryPlansTransferSerializer(serializers.ModelSerializer):
