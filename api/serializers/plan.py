@@ -256,8 +256,11 @@ class QueryPlansAcquiredDetailSerializer(serializers.ModelSerializer):
     def get_fee(self, obj):
         """Devuelve sale detail."""
         fee = get_next_fee_to_pay(obj['sale'])
-        serializer = FeeSerializer(fee)
-        return serializer.data
+        if fee:
+            serializer = FeeSerializer(fee)
+            return serializer.data
+        else:
+            return None
 
     def get_sale(self, obj):
         if 'sale' in obj:
