@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as trans
 from api.models import Payment, MonthlyFee, Sale, SaleDetail, Match, Client
 from api.models import QueryPlansAcquired, SellerContact, User, MatchProduct
-from api.models import Specialist
+from api.models import Specialist, ContactVisit
 from api.utils.tools import get_date_by_time
 from api.utils.querysets import get_next_fee_to_pay
 from datetime import datetime, date
@@ -507,3 +507,23 @@ class SaleContactoDetailSerializer(serializers.ModelSerializer):
         if type(obj) is dict:
             return str(obj['created_at'])
         return str(obj.created_at)
+
+class ContactVisitSerializer(serializers.Serializer):
+    objections = serializers.SerializerMethodField()
+
+    class Meta:
+        """Meta de Vendedor."""
+        model = ContactVisit
+        fields = (
+            'type_visit', 'created_at', 'sale', 'objections')
+
+    def get_objections(self, obj):
+
+        seller = SellerContact.objects.get(pk=pk)
+        serializer = ObjectionsContactSerializer(seller);
+        return serializer.data["objections"]
+
+    def get_sale(self, obj):
+
+        serializer = SaleWithFeeSerializer(obj.sale)
+        return serializer.data

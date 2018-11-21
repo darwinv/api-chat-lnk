@@ -14,22 +14,32 @@ from api.models import Sale, SaleDetail, QueryPlansAcquired, QueryPlansClient
 from api.models import MonthlyFee, Client, SellerContact
 from api import pyrebase
 from api.utils.querysets import is_assigned
-
+from django.utils.translation import ugettext_lazy as _
 
 class CreatePurchase(APIView):
     """Vista para crear compra."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated]
+    required = _("required")
 
     def post(self, request):
         """metodo para crear compra."""
-
         # user_id = Operations.get_id(self, request)
         extra = {}
         data = request.data
         client = Client.objects.get(pk=data['client'])
+
         if request.user.role_id == 4:
             # Si es vendedor, se usa su id como el que efectuo la venta
+            if 'latitude' in request.data:
+                latitude = request.data["latitude"]
+            else:
+                raise serializers.ValidationError({'latitude': [self.required]})
+            if 'longitude' in request.data:
+                longitude = request.data["longitude"]
+            else:
+                raise serializers.ValidationError({'longitude': [self.required]})
+
             user_id = Operations.get_id(self, request)
             data['seller'] = user_id
         elif request.user.role_id == 1 or request.user.role_id == 2:
@@ -42,13 +52,37 @@ class CreatePurchase(APIView):
 
             contact = SellerContact.objects.get(client=client)
             if is_assigned(client=client, contact=contact):
-                if 'latitude' in data:
-                    contact.latitude = data['latitude']
-                if 'longitude' in data:
-                    contact.longitude = data['longitude']
-
                 contact.is_assigned = False
                 contact.save()
+
+            try:
+
+                pending_visit = ContactVisit.objects.get(contact=contact, sale=None)
+                pending_visit.sale = serializer["id"]
+                if 'latitude' in data:
+                    pending_visit.latitude = data['latitude']
+                if 'longitude' in data:
+                    pending_visit.longitude = data['longitude']
+                pending_visit.save()
+
+            except ContactVisit.DoesNotExist:
+
+
+                visit_instance = ContactVisit.objects.create(contact=instance,
+                                    type_visit=1111,
+                                    latitude=validated_data["latitude"],
+                                    longitude=validated_data["longitude"],
+                                    other_objection=validated_data["other_objection"])
+
+                
+
+            
+
+            
+
+
+
+
 
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

@@ -1141,6 +1141,67 @@ class DetailObjectionsNotEfecctive(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
+class GetVisits(APITestCase):
+    """Devolver listado de visitas."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_contact']
+
+
+    # Prueba para verificar la insercion de cliente natural
+    def setUp(self):
+        """Setup."""
+        self.client = APIClient()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer RCOM8gcbsOv56QFlcCJpgDENETGCLr')
+        self.valid_payload = {
+            'first_name': 'darwin',
+            'last_name': 'vasquez',
+            'type_contact': 2,
+            'type_client': 'n',
+            'civil_state': 's',
+            'birthdate': '1990-09-19',
+            "address": {
+                "street": "esteban camere",
+                "department": 1,
+                "province": 1,
+                "district": 1
+            },
+            'sex': 'm',
+            'document_type': 2,
+            'document_number': '144013012',
+            'email_exact': 'darwin.vasqz@gmail.com',
+            'telephone': '921471559',
+            'cellphone': '921471559',
+            'activity_description': 'Loremp iptsum',
+            'level_instruction': 1,
+            'institute': 'UNEFA',
+            'profession': "Administrador",
+            'ocupation': 1,
+            "objection": [1,2],
+            "latitude": "-12.0431800",
+            "longitude": "-77.0282400",
+            'about': 'iptsum aabout',
+            'seller': 2,
+            'nationality': 1,
+            'residence_country': 1
+        }
+
+    def test_get_all_visitors(self):
+        """Get objections."""
+
+        data = self.valid_payload
+        contact = self.client.post(
+            reverse('contacts'),
+            data=json.dumps(data),
+            content_type='application/json'
+        )
+
+        import pdb
+        pdb.set_trace()
+        response = client.get(reverse('visits-contact',
+                                   kwargs={'pk': self.contact.id}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 class GetObjections(APITestCase):
     """Devolver listado de objeciones."""
 

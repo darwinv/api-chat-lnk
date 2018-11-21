@@ -276,6 +276,9 @@ urlpatterns = [
     # Contactos crear y listar en mapa
     url(r'^contacts/$', actors.ContactListView.as_view(), name='contacts'),
 
+    # Visitas del contacto
+    url(r'^visits/contacts/(?P<pk>[0-9]+)/$', actors.ContactVisitListView.as_view(), name='visits-contact'),
+
     # detalle de contacto
     url(r'^objections/contacts/(?P<pk>[0-9]+)/$',
         actors.ContactObjectionsDetailView.as_view(),
