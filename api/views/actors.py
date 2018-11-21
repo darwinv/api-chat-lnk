@@ -589,7 +589,7 @@ class ClientDetailView(APIView):
     """Detalle del Cliente, GET/PUT/Delete."""
 
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (permissions.IsAuthenticated, IsAdminOrOwner)
+    permission_classes = (permissions.IsAuthenticated,)
 
     # permission_classes = [permissions.IsAuthenticated, TokenHasScope]
 

@@ -184,6 +184,7 @@ class QueryListClientView(ListCreateAPIView):
             Group('chat-'+str(room_channel)).send({'text': json.dumps({
                         "eventType": 1,
                         "query": serializer.data["obj_query"]["title"],
+                        "status": serializer.data["obj_query"]["status"],
                         "specialist": specialist_id,
                         "messages": lista
                     })})
@@ -245,6 +246,7 @@ class QueryDetailSpecialistView(APIView):
             Group('chat-'+str(room_channel)).send({'text': json.dumps({
                         "eventType": 1,
                         "query": serializer.data["obj_query"]["title"],
+                        "status": serializer.data["obj_query"]["status"],
                         "specialist": user_id,
                         "messages": lista
                     })})
@@ -353,6 +355,7 @@ class QueryDetailClientView(APIView):
             Group('chat-'+str(room_channel)).send({'text': json.dumps({
                         "eventType": 1,
                         "query": serializer.data["obj_query"]["title"],
+                        "status": serializer.data["obj_query"]["status"],
                         "specialist": serializer.data["specialist_id"],
                         "messages": lista
                     })})
@@ -500,7 +503,8 @@ class QueryChatClientView(ListCreateAPIView):
 
         queryset = Message.objects.values('id', 'code', 'message', 'created_at', 
             'msg_type', 'viewed', 'query_id', 'query__client_id', 'message_reference', 
-            'specialist_id', 'content_type', 'file_url', 'file_preview_url', 'query__specialist_id')\
+            'specialist_id', 'content_type', 'file_url', 'file_preview_url', 'query__specialist_id',
+            'uploaded')\
                           .annotate(title=F('query__title',), status=F('query__status',),
                                     qualification=F('query__qualification',),
                                     category_id=F('query__category_id',),\
@@ -607,6 +611,7 @@ class QueryUploadFilesView(APIView):
 
         if resp is False:
             if 'test' not in sys.argv:
+                ms_status = 5
                 if ms:
                     pyrebase.mark_failed_file(room=ms.room, message_id=ms.id)
                     logger.error("file dont put, room:{} -m:{} ".format(ms.room, ms.id))
@@ -626,6 +631,18 @@ class QueryUploadFilesView(APIView):
                 print(r)
                 ms.uploaded = ms_status
                 ms.save()
+
+        if 'test' not in sys.argv:
+            if ms:
+                query = ms.query
+                room_channel = str(query.client.id) + '-' + str(query.category.id)
+                Group('chat-'+str(room_channel)).send({'text': json.dumps({
+                        "eventType": 3,
+                        "message": ms.id,
+                        "filePreviewUrl": url_thumb,
+                        "fileUrl": url,
+                        "uploaded": ms_status
+                    })})
 
 
 class QueryMessageView(APIView):
