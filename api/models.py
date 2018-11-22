@@ -458,7 +458,7 @@ class ObjectionsList(models.Model):
     contact = models.ForeignKey(SellerContact, on_delete=models.PROTECT)
 
     objection = models.ForeignKey(Objection, on_delete=models.PROTECT)    
-    contact_visit = models.ForeignKey(ContactVisit, on_delete=models.PROTECT)
+    contact_visit = models.ForeignKey(ContactVisit, on_delete=models.PROTECT, null=True)
 
 class SaleDetail(models.Model):
     """Detalle de Venta."""

@@ -12,7 +12,7 @@ from fcm.fcm import Notification
 from api.emails import BasicEmailAmazon
 from dateutil.relativedelta import relativedelta
 from rest_framework.validators import UniqueValidator
-from api.serializers.actors import ClientSerializer
+from api.serializers.actors import ClientSerializer, ObjectionsContactSerializer
 from api.serializers.plan import QueryPlansAcquiredSerializer
 from api.serializers.fee import FeeSerializer
 from api.serializers.match import MatchListSpecialistSerializer
@@ -508,20 +508,22 @@ class SaleContactoDetailSerializer(serializers.ModelSerializer):
             return str(obj['created_at'])
         return str(obj.created_at)
 
-class ContactVisitSerializer(serializers.Serializer):
+class ContactVisitSerializer(serializers.ModelSerializer):
     objections = serializers.SerializerMethodField()
+    sale = serializers.SerializerMethodField()
 
     class Meta:
         """Meta de Vendedor."""
         model = ContactVisit
-        fields = (
-            'type_visit', 'created_at', 'sale', 'objections')
+        fields = ('type_visit', 'created_at', 'sale', 'objections')
 
     def get_objections(self, obj):
+        serializer = ObjectionsContactSerializer(obj);
 
-        seller = SellerContact.objects.get(pk=pk)
-        serializer = ObjectionsContactSerializer(seller);
-        return serializer.data["objections"]
+        if "objections" in serializer.data:
+            return serializer.data["objections"]
+        else:
+            return None
 
     def get_sale(self, obj):
 

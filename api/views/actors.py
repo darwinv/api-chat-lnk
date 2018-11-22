@@ -1172,17 +1172,17 @@ class SellerDetailByID(APIView):
     #         return self.get_paginated_response(serializer.data)
     #     return Response(serializer.data)
 
-class ContactVisitListView(APIView):
+class ContactVisitListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
 
     def get(self, request, pk):
-        visits = ContactVisit.objects.all()
+        visits = ContactVisit.objects.filter(contact=pk)
 
         page = self.paginate_queryset(visits)
         if page is not None:
             serializer = ContactVisitSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-        serializer = AssociateSpecialistSerializer(specialists, many=True)
+        serializer = ContactVisitSerializer(specialists, many=True)
         return Response(serializer.data)
 
 class ContactListView(ListCreateAPIView):

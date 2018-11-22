@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='objectionslist',
             name='contact_visit',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, to='api.ContactVisit'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='api.ContactVisit'),
             preserve_default=False,
         ),
     ]

@@ -11,10 +11,11 @@ from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from api.permissions import IsAdminOrSeller
 from api.models import Sale, SaleDetail, QueryPlansAcquired, QueryPlansClient
-from api.models import MonthlyFee, Client, SellerContact
+from api.models import MonthlyFee, Client, SellerContact, ContactVisit
 from api import pyrebase
 from api.utils.querysets import is_assigned
 from django.utils.translation import ugettext_lazy as _
+from rest_framework import serializers
 
 class CreatePurchase(APIView):
     """Vista para crear compra."""
@@ -31,12 +32,12 @@ class CreatePurchase(APIView):
 
         if request.user.role_id == 4:
             # Si es vendedor, se usa su id como el que efectuo la venta
-            if 'latitude' in request.data:
-                latitude = request.data["latitude"]
+            if 'latitude' in data:
+                latitude = data["latitude"]
             else:
                 raise serializers.ValidationError({'latitude': [self.required]})
-            if 'longitude' in request.data:
-                longitude = request.data["longitude"]
+            if 'longitude' in data:
+                longitude = data["longitude"]
             else:
                 raise serializers.ValidationError({'longitude': [self.required]})
 
@@ -55,34 +56,28 @@ class CreatePurchase(APIView):
                 contact.is_assigned = False
                 contact.save()
 
-            try:
-
-                pending_visit = ContactVisit.objects.get(contact=contact, sale=None)
-                pending_visit.sale = serializer["id"]
-                if 'latitude' in data:
+            if request.user.role_id == 4:
+                # Guardar la visita del Vendedor
+                try:
+                    # Si es una compra anterior sin compra se actualiza la visita
+                    pending_visit = ContactVisit.objects.get(contact=contact, sale=None)
+                    pending_visit.sale = Sale.objects.get(pk=serializer.data["id"])
                     pending_visit.latitude = data['latitude']
-                if 'longitude' in data:
                     pending_visit.longitude = data['longitude']
-                pending_visit.save()
+                    pending_visit.save()
 
-            except ContactVisit.DoesNotExist:
+                except ContactVisit.DoesNotExist:
+                    if data["products"][0]["is_billable"] and len(data["products"])==1:
+                        # Si solo compra un promocional
+                        type_visit = 4
+                    else:
+                        type_visit = 1
 
-
-                visit_instance = ContactVisit.objects.create(contact=instance,
-                                    type_visit=1111,
-                                    latitude=validated_data["latitude"],
-                                    longitude=validated_data["longitude"],
-                                    other_objection=validated_data["other_objection"])
-
-                
-
-            
-
-            
-
-
-
-
+                    visit_instance = ContactVisit.objects.create(contact=contact,
+                                        type_visit=type_visit,
+                                        latitude=data['latitude'],
+                                        longitude=data['longitude'],
+                                        sale=Sale.objects.get(pk=serializer.data["id"]))
 
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
