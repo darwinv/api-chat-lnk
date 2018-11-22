@@ -1211,3 +1211,27 @@ class GetObjections(APITestCase):
         """Get objections."""
         response = client.get(reverse('objections'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class PostVisitNoEffective(APITestCase):
+    """Devolver listado de objeciones."""
+
+    fixtures = ['data', 'data2', 'data3']
+
+    def setUp(self):
+        pass
+
+    def test_get_all_objectios(self):
+        """Get objections."""
+        data = {
+                "latitude":"-72.1111111",
+                "longitude":"-12.213213",
+                "other_objection":"",
+                "objection": [1,2]
+            }
+        response = client.post(reverse('visits-contact-noeffective',
+                                kwargs={'pk': 11}),
+                                data= data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+

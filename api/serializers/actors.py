@@ -1302,11 +1302,8 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         instance = self.Meta.model(**validated_data)
         # creo el listado de objeciones si es no efectivo
 
-        
-
-
         if validated_data["type_contact"] == 2:
-            instance.save()            
+            instance.save()
             if "other_objection" in validated_data:
                 other_objection = validated_data["other_objection"]
             else:
