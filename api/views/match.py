@@ -443,7 +443,7 @@ class SaleClientUploadFilesView(APIView):
             arch = list(data.values())
 
         for file in arch:
-            if fee.fee_order_number == 1
+            if fee.fee_order_number == 1:
                 resp = upload_file(file=file, obj_instance=obj_instance)
                 if resp is False:
                     errors_list.append(file.name)
