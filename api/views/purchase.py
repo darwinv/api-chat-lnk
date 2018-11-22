@@ -103,6 +103,7 @@ class ContactNoEffectivePurchase(APIView):
     """Vista para crear compra."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated]
+    required = _("required")
 
     def post(self, request):
         """metodo para crear compra."""
@@ -110,6 +111,17 @@ class ContactNoEffectivePurchase(APIView):
         data = request.data
         user_id = Operations.get_id(self, request)
         if request.user.role_id == 4:
+            # Si es vendedor, se usa su id como el que efectuo la venta
+            if 'latitude' in data:
+                latitude = data["latitude"]
+            else:
+                raise serializers.ValidationError({'latitude': [self.required]})
+
+            if 'longitude' in data:
+                longitude = data["longitude"]
+            else:
+                raise serializers.ValidationError({'longitude': [self.required]})
+
             # Si es vendedor, se usa su id como el que efectuo la venta
             data['seller'] = user_id
         elif request.user.role_id == 1 or request.user.role_id == 2:

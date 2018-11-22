@@ -1190,6 +1190,57 @@ class ContactVisitListView(ListCreateAPIView):
         serializer = ContactVisitSerializer(specialists, many=True)
         return Response(serializer.data)
 
+
+class ContactVisitNoEffectiveView(APIView):
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrSeller)
+    required = _("required")
+
+    def post(self, request, pk):
+        data = request.data
+        seller = Operations.get_id(self, request)
+        
+
+        if 'other_objection' in data:
+            other_objection = data["other_objection"]
+        else:
+            other_objection = None
+        
+        
+        data["seller"] = seller
+        data["contact"] = pk
+        data["type_visit"] = 2
+        data["other_objection"] = other_objection
+
+        serializer = ContactVisitSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
+        # if "other_objection" in validated_data:
+        #         other_objection = validated_data["other_objection"]
+        #     else:
+        #         other_objection = None
+            
+        #     visit_instance = ContactVisit.objects.create(contact=instance,
+        #                             type_visit=validated_data["type_contact"],
+        #                             latitude=validated_data["latitude"],
+        #                             longitude=validated_data["longitude"],
+        #                             other_objection=other_objection,
+        #                                 seller=instance.seller)
+        #     if 'objection_list' in locals():
+        #         for objection in objection_list:
+        #             # objection_obj = Objection.objects.get(pk=objection)
+        #             ObjectionsList.objects.create(contact=instance,
+        #                                          contact_visit=visit_instance,
+        #                                           objection=objection)
+
+
 class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""
 
