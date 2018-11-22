@@ -862,7 +862,7 @@ class SpecialistMessagesListView(ListCreateAPIView):
 # Vista para el detalle del especialista, actualizacion y borrado
 class SpecialistDetailView(APIView):
     authentication_classes = (OAuth2Authentication,)
-    permission_classes = (IsAdminOrOwner,)
+    permission_classes = (IsAdminOrSpecialist,)
 
     def get_object(self, pk):
         try:

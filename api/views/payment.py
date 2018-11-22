@@ -295,3 +295,24 @@ class ClientHaveSalePending(ListCreateAPIView):
 
         serializer = SaleContactoDetailSerializer(sale)
         return Response(serializer.data)
+
+class ClientSaleDetail(ListCreateAPIView):
+    """Vista de detalle de venta."""
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    required = _("required")
+
+    def get(self, request):
+        """Detalle."""
+        """Detalle de venta para contacto efectivo, devuelve ventas con
+        paginacion para un cliente dado"""
+        data = request.query_params
+        if 'sale_id' not in data:
+            raise serializers.ValidationError({'sale id': [self.required]})
+
+        sale_id = data['sale_id']
+
+        sale = Sale.objects.get(pk=sale_id)
+
+        serializer = SaleContactoDetailSerializer(sale)
+        return Response(serializer.data)
