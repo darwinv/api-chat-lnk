@@ -521,12 +521,16 @@ class ContactVisitSerializer(serializers.ModelSerializer):
     def get_objections(self, obj):
         serializer = ObjectionsContactSerializer(obj);
 
-        if "objections" in serializer.data:
+        if "objections" in serializer.data and len(serializer.data["objections"])>1:
             return serializer.data["objections"]
         else:
             return None
 
     def get_sale(self, obj):
-
-        serializer = SaleWithFeeSerializer(obj.sale)
-        return serializer.data
+        
+        if obj.sale:
+            serializer = SaleContactoDetailSerializer(obj.sale)
+            return serializer.data
+        else:
+            return None
+        
