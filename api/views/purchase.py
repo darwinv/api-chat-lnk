@@ -58,21 +58,26 @@ class CreatePurchase(APIView):
 
             if request.user.role_id == 4:
                 # Guardar la visita del Vendedor
-                if data["products"][0]["is_billable"] and len(data["products"])==1:
+                if not data["products"][0]["is_billable"] and len(data["products"])==1:
                     # Si solo compra un promocional
                     type_visit = 4
                 else:
                     type_visit = 1
 
-                try:
-                    # Si es una compra anterior sin compra se actualiza la visita
-                    pending_visit = ContactVisit.objects.get(contact=contact, sale=None)
+
+                # Si es una compra anterior sin compra se actualiza la visita
+                pending_visits = ContactVisit.objects.filter(contact=contact, type_visit=1,
+                                                sale=None).order_by('-created_at')
+
+                if pending_visits:
+                    pending_visit = pending_visits[0]  # Tomar ultima visita con compra sin sale
+
                     pending_visit.sale = Sale.objects.get(pk=serializer.data["id"])
                     pending_visit.latitude = data['latitude']
                     pending_visit.longitude = data['longitude']
                     pending_visit.save()
 
-                except ContactVisit.DoesNotExist:
+                else:
                     visit_instance = ContactVisit.objects.create(contact=contact,
                                         type_visit=type_visit,
                                         latitude=data['latitude'],

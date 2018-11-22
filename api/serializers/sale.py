@@ -144,6 +144,8 @@ class SaleSerializer(serializers.Serializer):
                         plan_promotionals.save()
                         if not has_chosen_plan(validated_data["client"]):
                             is_chosen = True
+                        else:
+                            is_chosen = False
                         sale_detail["discount"] = float(product["plan_id"].price)
                     sale_detail["product_type"] = product["product_type"]
                     sale_detail["sale"] = instance
