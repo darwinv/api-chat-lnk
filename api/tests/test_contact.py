@@ -1194,11 +1194,8 @@ class GetVisits(APITestCase):
             data=json.dumps(data),
             content_type='application/json'
         )
-
-        import pdb
-        pdb.set_trace()
         response = client.get(reverse('visits-contact',
-                                   kwargs={'pk': self.contact.id}))
+                                   kwargs={'pk': contact.data["id"]}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
