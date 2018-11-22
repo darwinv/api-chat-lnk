@@ -1176,7 +1176,11 @@ class ContactVisitListView(ListCreateAPIView):
     authentication_classes = (OAuth2Authentication,)
 
     def get(self, request, pk):
+        type_visit = request.query_params.get('type_visit', None)
         visits = ContactVisit.objects.filter(contact=pk)
+        
+        if type_visit:
+            visits = visits.filter(type_visit=type_visit)
 
         page = self.paginate_queryset(visits)
         if page is not None:
