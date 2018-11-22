@@ -57,45 +57,53 @@ class CreatePurchase(APIView):
                 contact.save()
 
             if request.user.role_id == 4:
-                # Guardar la visita del Vendedor
-                if not data["products"][0]["is_billable"] and len(data["products"])==1:
-                    # Si solo compra un promocional
-                    type_visit = 4
-                else:
-                    type_visit = 1
+                generate_visit_new_sale(data, contact, serializer.data["id"])
 
-
-                # Si es una compra anterior sin compra se actualiza la visita
-                pending_visits = ContactVisit.objects.filter(contact=contact, type_visit=1,
-                                                sale=None).order_by('-created_at')
-
-                if pending_visits:
-                    pending_visit = pending_visits[0]  # Tomar ultima visita con compra sin sale
-
-                    pending_visit.sale = Sale.objects.get(pk=serializer.data["id"])
-                    pending_visit.latitude = data['latitude']
-                    pending_visit.longitude = data['longitude']
-                    pending_visit.save()
-
-                else:
-                    visit_instance = ContactVisit.objects.create(contact=contact,
-                                        type_visit=type_visit,
-                                        latitude=data['latitude'],
-                                        longitude=data['longitude'],
-                                        sale=Sale.objects.get(pk=serializer.data["id"]))
-
-                if type_visit == 4 and contact.type_contact == 2:
-                    contact.type_contact = 4
-                    contact.save()
 
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+def generate_visit_new_sale(data, contact, sale_id):
+    
+    # Guardar la visita del Vendedor
+    if not data["products"][0]["is_billable"] and len(data["products"])==1:
+        # Si solo compra un promocional
+        type_visit = 4
+    else:
+        type_visit = 1
+
+
+    # Si es una compra anterior sin compra se actualiza la visita
+    pending_visits = ContactVisit.objects.filter(contact=contact, type_visit=1,
+                                    sale=None).order_by('-created_at')
+
+    if pending_visits:
+        pending_visit = pending_visits[0]  # Tomar ultima visita con compra sin sale
+
+        pending_visit.sale = Sale.objects.get(pk=sale_id)
+        pending_visit.latitude = data['latitude']
+        pending_visit.longitude = data['longitude']
+        pending_visit.seller = contact.seller
+
+        pending_visit.save()
+
+    else:
+        visit_instance = ContactVisit.objects.create(contact=contact,
+                            type_visit=type_visit,
+                            latitude=data['latitude'],
+                            longitude=data['longitude'],
+                            sale=Sale.objects.get(pk=sale_id),
+                            seller=contact.seller)
+
+    if type_visit == 4 and contact.type_contact == 2:
+        contact.type_contact = 4
+        contact.save()
 
 class ContactNoEffectivePurchase(APIView):
     """Vista para crear compra."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated]
+    required = _("required")
 
     def post(self, request):
         """metodo para crear compra."""
@@ -103,6 +111,17 @@ class ContactNoEffectivePurchase(APIView):
         data = request.data
         user_id = Operations.get_id(self, request)
         if request.user.role_id == 4:
+            # Si es vendedor, se usa su id como el que efectuo la venta
+            if 'latitude' in data:
+                latitude = data["latitude"]
+            else:
+                raise serializers.ValidationError({'latitude': [self.required]})
+
+            if 'longitude' in data:
+                longitude = data["longitude"]
+            else:
+                raise serializers.ValidationError({'longitude': [self.required]})
+
             # Si es vendedor, se usa su id como el que efectuo la venta
             data['seller'] = user_id
         elif request.user.role_id == 1 or request.user.role_id == 2:
@@ -131,6 +150,9 @@ class ContactNoEffectivePurchase(APIView):
 
                 contact.is_assigned = False
                 contact.save()
+
+            if request.user.role_id == 4:
+                generate_visit_new_sale(data, contact, serializer.data["id"])
 
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

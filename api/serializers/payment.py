@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import ugettext as trans
 from api.models import Payment, MonthlyFee, Sale, SaleDetail, Match, Client
 from api.models import QueryPlansAcquired, SellerContact, User, MatchProduct
-from api.models import Specialist, ContactVisit
+from api.models import Specialist, ContactVisit, Objection, ObjectionsList
 from api.utils.tools import get_date_by_time
 from api.utils.querysets import get_next_fee_to_pay
 from datetime import datetime, date
@@ -500,8 +500,11 @@ class SaleContactoDetailSerializer(serializers.ModelSerializer):
     def get_fee(self, obj):
         """Devuelve sale detail."""
         fee = get_next_fee_to_pay(obj.id)
-        serializer = FeeSerializer(fee)
-        return serializer.data
+        if fee:
+            serializer = FeeSerializer(fee)
+            return serializer.data
+        else:
+            return None
 
     def get_created_at(self, obj):
         """Devuelve created_at."""
@@ -510,18 +513,22 @@ class SaleContactoDetailSerializer(serializers.ModelSerializer):
         return str(obj.created_at)
 
 class ContactVisitSerializer(serializers.ModelSerializer):
-    objections = serializers.SerializerMethodField()
+    objection = serializers.SerializerMethodField()
     sale = serializers.SerializerMethodField()
+    objections = serializers.SerializerMethodField()
+    objection = serializers.ListField(child=serializers.PrimaryKeyRelatedField(
+        queryset=Objection.objects.all()), write_only=True, required=False)
 
     class Meta:
         """Meta de Vendedor."""
         model = ContactVisit
-        fields = ('type_visit', 'created_at', 'sale', 'objections')
+        fields = ('type_visit', 'created_at', 'sale', 'objection','seller',
+                    'contact','type_visit','other_objection', 'latitude',
+                    'longitude', 'objections')
 
     def get_objections(self, obj):
         serializer = ObjectionsContactSerializer(obj);
-
-        if "objections" in serializer.data and len(serializer.data["objections"])>1:
+        if "objections" in serializer.data and len(serializer.data["objections"])>0:
             return serializer.data["objections"]
         else:
             return None
@@ -533,4 +540,48 @@ class ContactVisitSerializer(serializers.ModelSerializer):
             return serializer.data
         else:
             return None
+
+    def get_created_at(self, obj):
+        """Devuelve created_at."""
+        if type(obj) is dict:
+            return str(obj['created_at'])
+        return str(obj.created_at)            
+
+    def validate(self, data):
+        """Validate."""
+        required = _("required")
+        # si reside en peru la direccion es obligatoria.
+        if 'latitude' in data:
+            latitude = data["latitude"]
+        else:
+            raise serializers.ValidationError({'latitude': [required]})
+        if 'longitude' in data:
+            longitude = data["longitude"]
+        else:
+            raise serializers.ValidationError({'longitude': [required]})
+
+        if 'objection' not in data and 'other_objection' not in data:
+            raise serializers.ValidationError(
+                _('the objection is required'))
         
+        return data
+
+    def create(self, validated_data):
+        """Redefinido metodo de crear visita."""        
+
+        if 'objection' in validated_data:
+            objection_list = validated_data.pop('objection')
+
+
+        instance = self.Meta.model(**validated_data)
+        instance.save()
+        
+        if 'objection_list' in locals():
+            for objection in objection_list:
+                # objection_obj = Objection.objects.get(pk=objection)
+                ObjectionsList.objects.create(contact=instance.contact,
+                                             contact_visit=instance,
+                                              objection=objection)
+        
+        return instance
+

@@ -311,7 +311,14 @@ class ClientSaleDetail(ListCreateAPIView):
             raise serializers.ValidationError({'sale id': [self.required]})
 
         try:
-            sale = Sale.objects.get(client=request.user.id, pk=sale_id)
+            if request.user.role_id == 1: # admin
+                sale = Sale.objects.get(pk=sale_id)
+            elif request.user.role_id == 2: # client
+                sale = Sale.objects.get(client=request.user.id, pk=sale_id)
+            elif request.user.role_id == 4: # seller
+                sale = Sale.objects.get(Q(seller=request.user.id) | 
+                                        Q(client__seller_assigned=request.user.id),
+                                        pk=sale_id)
         except Sale.DoesNotExist:
             return Response({})
 

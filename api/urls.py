@@ -81,6 +81,10 @@ urlpatterns = [
         plan.PlansNonBillableSellerView.as_view(),
         name='seller-plans-nonbillable'),
 
+    url(r'^seller/plans-nonbillable/contact/(?P<pk>[0-9]+)/$',
+        plan.PlansNonBillableSellerByContactView.as_view(),
+        name='seller-plans-nonbillable-by-contact'),
+
     # # Envio de codigo de verificar al correo
     url(r'^send-code-password/$', actors.SendCodePassword.as_view(),
         name='send-code-password'),
@@ -278,6 +282,10 @@ urlpatterns = [
 
     # Visitas del contacto
     url(r'^visits/contacts/(?P<pk>[0-9]+)/$', actors.ContactVisitListView.as_view(), name='visits-contact'),
+    # Visitas del contacto no efectiva
+    url(r'^visits/noteffective/contacts/(?P<pk>[0-9]+)/$', 
+        actors.ContactVisitNoEffectiveView.as_view(), name='visits-contact-noeffective'),
+    
 
     # detalle de contacto
     url(r'^objections/contacts/(?P<pk>[0-9]+)/$',

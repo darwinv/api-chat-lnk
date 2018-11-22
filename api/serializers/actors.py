@@ -203,6 +203,8 @@ class ClientSerializer(serializers.ModelSerializer):
     seller_assigned = serializers.PrimaryKeyRelatedField(
         queryset=Seller.objects.all(), required=False, allow_null=True)
 
+    contact = serializers.SerializerMethodField()
+
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -220,7 +222,7 @@ class ClientSerializer(serializers.ModelSerializer):
             'ocupation_name', 'about', 'nationality', 'nationality_name',
             "residence_country", "commercial_reason", "foreign_address",
             "residence_country_name", "status", "code_cellphone",
-            "code_telephone", "role", "seller_assigned")
+            "code_telephone", "role", "seller_assigned", "contact")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -261,6 +263,13 @@ class ClientSerializer(serializers.ModelSerializer):
             return _(obj.get_ocupation_display())
         return None
 
+    def get_contact(self, obj):
+        """Devuelve contacto id."""
+        try:
+            return SellerContact.objects.get(client=obj.id).id
+        except SellerContact.DoesNotExist:
+            return None
+        
     def validate_document_number(self, value):
         """Validar Numero de Documento."""
         data = self.get_initial()
@@ -1019,6 +1028,11 @@ class ListObjectionsSerializer(serializers.ModelSerializer):
         """Devuelve nacionalidad del cliente."""
         return _(str(obj.objection))
 
+class ContactVisitSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        """Meta de Vendedor."""
+        model = ContactVisit
+        fields = ('type_visit', 'created_at', 'longitude', 'latitude')
 
 class SellerContactSerializer(serializers.ModelSerializer):
     """Serializer Contacto."""
@@ -1026,13 +1040,14 @@ class SellerContactSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     document = serializers.SerializerMethodField()
     display_type_contact = serializers.IntegerField(read_only=True)
+    contactvisit_set = ContactVisitSimpleSerializer(many=True)
 
     class Meta:
         """ Model Contacto."""
         model = SellerContact
         fields = ('id', 'photo', 'name', 'document_type',
                   'type_contact', 'latitude', 'longitude',
-                  'type_client', 'document', 'display_type_contact')
+                  'type_client', 'document', 'display_type_contact', 'contactvisit_set')
 
     def get_name(self, obj):
         """Devuelve nombre del cliente."""
@@ -1287,11 +1302,8 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         instance = self.Meta.model(**validated_data)
         # creo el listado de objeciones si es no efectivo
 
-        
-
-
         if validated_data["type_contact"] == 2:
-            instance.save()            
+            instance.save()
             if "other_objection" in validated_data:
                 other_objection = validated_data["other_objection"]
             else:
@@ -1301,7 +1313,8 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
                                     type_visit=validated_data["type_contact"],
                                     latitude=validated_data["latitude"],
                                     longitude=validated_data["longitude"],
-                                    other_objection=other_objection)
+                                    other_objection=other_objection,
+                                        seller=instance.seller)
             if 'objection_list' in locals():
                 for objection in objection_list:
                     # objection_obj = Objection.objects.get(pk=objection)
@@ -1339,6 +1352,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             else:
                 raise serializers.ValidationError(serializer_client.errors)
         return instance
+
 
 
 class SellerContactNaturalSerializer(BaseSellerContactSerializer):

@@ -1032,6 +1032,7 @@ class SellerClientListView(ListCreateAPIView):
             elif int(available) == 2:
                 clients = clients.exclude(queryplansclient__in=qpc).distinct()
 
+
         serializer = ClientSerializer(clients, many=True)
         # pagination
         page = self.paginate_queryset(clients)
@@ -1188,6 +1189,57 @@ class ContactVisitListView(ListCreateAPIView):
             return self.get_paginated_response(serializer.data)
         serializer = ContactVisitSerializer(specialists, many=True)
         return Response(serializer.data)
+
+
+class ContactVisitNoEffectiveView(APIView):
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrSeller)
+    required = _("required")
+
+    def post(self, request, pk):
+        data = request.data
+        seller = Operations.get_id(self, request)
+        
+
+        if 'other_objection' in data:
+            other_objection = data["other_objection"]
+        else:
+            other_objection = None
+        
+        
+        data["seller"] = seller
+        data["contact"] = pk
+        data["type_visit"] = 2
+        data["other_objection"] = other_objection
+
+        serializer = ContactVisitSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
+        # if "other_objection" in validated_data:
+        #         other_objection = validated_data["other_objection"]
+        #     else:
+        #         other_objection = None
+            
+        #     visit_instance = ContactVisit.objects.create(contact=instance,
+        #                             type_visit=validated_data["type_contact"],
+        #                             latitude=validated_data["latitude"],
+        #                             longitude=validated_data["longitude"],
+        #                             other_objection=other_objection,
+        #                                 seller=instance.seller)
+        #     if 'objection_list' in locals():
+        #         for objection in objection_list:
+        #             # objection_obj = Objection.objects.get(pk=objection)
+        #             ObjectionsList.objects.create(contact=instance,
+        #                                          contact_visit=visit_instance,
+        #                                           objection=objection)
+
 
 class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""
@@ -1351,15 +1403,16 @@ class ContactObjectionsDetailView(APIView):
 
     def get_object(self, pk):
         """Obtener Objeto."""
-        try:
-            return SellerContact.objects.get(pk=pk)
-        except SellerContact.DoesNotExist:
+        visits = ContactVisit.objects.filter(contact=pk, type_visit=2).order_by('-created_at')
+        if visits:
+            return visits[0]
+        else:
             raise Http404
 
     def get(self, request, pk):
         """Obtener Vendedor."""
-        seller = self.get_object(pk)
-        serializer = ObjectionsContactSerializer(seller)
+        visit = self.get_object(pk)
+        serializer = ContactVisitSerializer(visit)
         return Response(serializer.data)
 
 

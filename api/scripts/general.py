@@ -18,7 +18,8 @@ def update_visits():
                                         type_visit=type_contact,
                                         latitude=contact.latitude,
                                         longitude=contact.longitude,
-                                        sale=sale)
+                                        sale=sale,
+                                        seller=contact.seller)
 
                 
         else:
@@ -26,7 +27,8 @@ def update_visits():
                                         type_visit=contact.type_contact,
                                         latitude=contact.latitude,
                                         longitude=contact.longitude,
-                                        other_objection=contact.other_objection)
+                                        other_objection=contact.other_objection,
+                                        seller=contact.seller)
         
             objections = ObjectionsList.objects.filter(contact=contact)
 

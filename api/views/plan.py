@@ -11,7 +11,7 @@ from api.serializers.plan import QueryPlansClientSerializer
 from api.serializers.plan import QueryPlansTransferSerializer, QueryPlansShareSerializer, QueryPlansEmpowerSerializer
 from api.serializers.notification import NotificationClientSerializer
 from api.models import QueryPlans, Client, QueryPlansManage
-from api.models import SellerNonBillablePlans
+from api.models import SellerNonBillablePlans, SellerContact
 from api.models import QueryPlansAcquired, QueryPlansClient
 from api.permissions import IsAdminOrClient, IsSeller
 from api.utils.validations import Operations
@@ -1033,3 +1033,43 @@ class PlansNonBillableSellerView(APIView):
         plans = QueryPlansSerializer(q_plans, many=True)
         duct["plans"] = plans.data
         return Response(duct)
+
+class PlansNonBillableSellerByContactView(APIView):
+    """Vista para crear planes no facturables."""
+
+    authentication_classes = (OAuth2Authentication,)
+    permission_classes = (permissions.IsAuthenticated, IsSeller)
+    affirmative = _("affirmative")
+    denied = _("denied")
+
+    def get(self, request, pk):
+        """Devolver Planes."""
+        duct = {}
+        user_id = Operations.get_id(self, request)
+        result = self.can_receive_contact(user_id, pk)
+
+        if result:
+            return Response({"status": self.affirmative}, status.HTTP_200_OK)
+        else:
+            return Response({"status": self.denied}, status.HTTP_400_BAD_REQUEST)
+
+    def can_receive_contact(self, seller_id, contact_id):
+        # Valida si contacto puede recibir promocional
+        hoy = datetime.now()
+        try:
+            prom = SellerNonBillablePlans.objects.get(seller_id=seller_id,
+                                                      number_month=hoy.month,
+                                                      number_year=hoy.year)
+            quantity = prom.quantity
+        except SellerNonBillablePlans.DoesNotExist:
+            quantity = 0
+
+
+        promitionals = SellerContact.objects.filter(pk=contact_id,
+                                client__sale__saledetail__is_billable=False)
+        
+        if quantity>0 and not promitionals:
+            # disponible de regalar y contacto no tiene promocionales
+            return True
+        else:
+            return False

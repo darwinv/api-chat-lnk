@@ -559,6 +559,24 @@ class GetPromocionalPlans(APITestCase):
         response = self.client.get(reverse('seller-plans-nonbillable'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+
+class GetPromocionalPlansByContact(APITestCase):
+    """Devolver  los  planes promocionales de un vendedor."""
+
+    fixtures = ['data', 'data2', 'data3', 'test_promotional_plans']
+
+    def setUp(self):
+        """Setup."""
+        # credenciales de vendedor
+        self.client.credentials(
+            HTTP_AUTHORIZATION='Bearer kEphPGlavEforKavpDzuZSgK0zpoXS')
+
+    def test_get_seller_plans(self):
+        """devolver todos los planes pertenecientes al vendedor."""
+        response = self.client.get(reverse('seller-plans-nonbillable-by-contact',
+                                kwargs={'pk': 11}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
 class GetCheckEmailForOperationPlans(APITestCase):
     """Devolver 404 si no existe, devuelve 200 si existe y 400 status si
     no es valido para operacion."""
