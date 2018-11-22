@@ -429,7 +429,11 @@ class SaleClientUploadFilesView(APIView):
         """Actualiza el match, subiendo archivos."""
         obj_instance = self.get_object(request, pk)
 
-        fee = MonthlyFee.objects.filter(status=1, sale=obj_instance).order_by('pay_before')[0]
+        fees = MonthlyFee.objects.filter(status=1, sale=obj_instance).order_by('pay_before')
+        if fees.count() > 0:
+            fee = fees[0]
+        else:
+            fee = None
 
         files = request.FILES.getlist('file')
         if len(files) == 0:
@@ -443,7 +447,7 @@ class SaleClientUploadFilesView(APIView):
             arch = list(data.values())
 
         for file in arch:
-            if fee.fee_order_number == 1:
+            if not fee or fee.fee_order_number == 1:
                 resp = upload_file(file=file, obj_instance=obj_instance)
                 if resp is False:
                     errors_list.append(file.name)
@@ -467,8 +471,9 @@ class SaleClientUploadFilesView(APIView):
             email_exact=obj_instance.client.email_exact).exclude(
                 type_contact=3).update(type_contact=1)
 
-        fee.status = 3
-        fee.save()
+        if fee:
+            fee.status = 3
+            fee.save()
 
         return Response({}, status.HTTP_200_OK)
 
