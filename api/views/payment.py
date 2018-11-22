@@ -302,17 +302,18 @@ class ClientSaleDetail(ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     required = _("required")
 
-    def get(self, request):
+    def get(self, request, sale_id):
         """Detalle."""
         """Detalle de venta para contacto efectivo, devuelve ventas con
         paginacion para un cliente dado"""
         data = request.query_params
-        if 'sale_id' not in data:
+        if not sale_id:
             raise serializers.ValidationError({'sale id': [self.required]})
 
-        sale_id = data['sale_id']
+        sale = Sale.objects.get(client=request.user.id, pk=sale_id)
 
-        sale = Sale.objects.get(pk=sale_id)
-
-        serializer = SaleContactoDetailSerializer(sale)
-        return Response(serializer.data)
+        if sale:
+            serializer = SaleContactoDetailSerializer(sale)
+            return Response(serializer.data)
+        else:
+            return Response({})
