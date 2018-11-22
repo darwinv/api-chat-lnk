@@ -1032,7 +1032,7 @@ class SellerClientListView(ListCreateAPIView):
             elif int(available) == 2:
                 clients = clients.exclude(queryplansclient__in=qpc).distinct()
 
-        
+
         serializer = ClientSerializer(clients, many=True)
         # pagination
         page = self.paginate_queryset(clients)
@@ -1352,15 +1352,16 @@ class ContactObjectionsDetailView(APIView):
 
     def get_object(self, pk):
         """Obtener Objeto."""
-        try:
-            return SellerContact.objects.get(pk=pk)
-        except SellerContact.DoesNotExist:
+        visits = ContactVisit.objects.filter(contact=pk, type_visit=2).order_by('-created_at')
+        if visits:
+            return visits[0]
+        else:
             raise Http404
 
     def get(self, request, pk):
         """Obtener Vendedor."""
-        seller = self.get_object(pk)
-        serializer = ObjectionsContactSerializer(seller)
+        visit = self.get_object(pk)
+        serializer = ContactVisitSerializer(visit)
         return Response(serializer.data)
 
 

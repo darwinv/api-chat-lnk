@@ -520,8 +520,7 @@ class ContactVisitSerializer(serializers.ModelSerializer):
 
     def get_objections(self, obj):
         serializer = ObjectionsContactSerializer(obj);
-
-        if "objections" in serializer.data and len(serializer.data["objections"])>1:
+        if "objections" in serializer.data and len(serializer.data["objections"])>0:
             return serializer.data["objections"]
         else:
             return None

@@ -1310,7 +1310,8 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
                                     type_visit=validated_data["type_contact"],
                                     latitude=validated_data["latitude"],
                                     longitude=validated_data["longitude"],
-                                    other_objection=other_objection)
+                                    other_objection=other_objection,
+                                        seller=instance.seller)
             if 'objection_list' in locals():
                 for objection in objection_list:
                     # objection_obj = Objection.objects.get(pk=objection)

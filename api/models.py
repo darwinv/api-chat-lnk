@@ -448,11 +448,13 @@ class ContactVisit(models.Model):
     sale = models.ForeignKey(Sale, on_delete=models.PROTECT, null=True)
     type_visit = models.PositiveIntegerField(max_length=1,
                                    choices=Ch.contact_visit_type_visit)
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     latitude = models.CharField(max_length=45, blank=True)
     longitude = models.CharField(max_length=45, blank=True)
     other_objection = models.CharField(max_length=150, null=True, blank=True)
 
+    seller = models.ForeignKey(Seller, null=True, on_delete=models.PROTECT)
+    
 class ObjectionsList(models.Model):
     """Lista de objeciones."""
     contact = models.ForeignKey(SellerContact, on_delete=models.PROTECT)
