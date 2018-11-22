@@ -116,7 +116,7 @@ class ClientPlansView(ListCreateAPIView):
             expiration_date__gte=datetime.now().date()).order_by('id').values(
                   'id', 'plan_name', 'is_active',
                   'validity_months', 'query_quantity',
-                  'available_queries', 'expiration_date').annotate(
+                  'available_queries', 'expiration_date', 'queries_to_pay').annotate(
                   is_chosen=F('queryplansclient__is_chosen')).order_by('id')
         if plan is not None:
             return plan
