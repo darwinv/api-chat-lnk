@@ -428,6 +428,9 @@ class SaleClientUploadFilesView(APIView):
     def put(self, request, pk):
         """Actualiza el match, subiendo archivos."""
         obj_instance = self.get_object(request, pk)
+
+        fee = MonthlyFee.objects.filter(status=1, sale=obj_instance).order_by('pay_before')[0]
+
         files = request.FILES.getlist('file')
         if len(files) == 0:
             raise serializers.ValidationError(
@@ -440,10 +443,14 @@ class SaleClientUploadFilesView(APIView):
             arch = list(data.values())
 
         for file in arch:
-            resp = upload_file(file=file, obj_instance=obj_instance)
-            if resp is False:
-                errors_list.append(file.name)
-
+            if fee.fee_order_number == 1
+                resp = upload_file(file=file, obj_instance=obj_instance)
+                if resp is False:
+                    errors_list.append(file.name)
+            else:
+                resp = upload_file(file=file, obj_instance=fee)
+                if resp is False:
+                    errors_list.append(file.name)
         if errors_list:
             raise serializers.ValidationError(
                 {"files_failed": errors_list})
@@ -460,10 +467,7 @@ class SaleClientUploadFilesView(APIView):
             email_exact=obj_instance.client.email_exact).exclude(
                 type_contact=3).update(type_contact=1)
 
-        fee = MonthlyFee.objects.filter(status=1, sale=obj_instance).order_by('pay_before')[0]
         fee.status = 3
-        fee.file_url = obj_instance.file_url
-        fee.file_preview_url = obj_instance.file_preview_url
         fee.save()
 
         return Response({}, status.HTTP_200_OK)
