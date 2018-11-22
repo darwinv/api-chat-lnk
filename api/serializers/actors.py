@@ -1028,6 +1028,11 @@ class ListObjectionsSerializer(serializers.ModelSerializer):
         """Devuelve nacionalidad del cliente."""
         return _(str(obj.objection))
 
+class ContactVisitSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        """Meta de Vendedor."""
+        model = ContactVisit
+        fields = ('type_visit', 'created_at', 'longitude', 'latitude')
 
 class SellerContactSerializer(serializers.ModelSerializer):
     """Serializer Contacto."""
@@ -1035,13 +1040,14 @@ class SellerContactSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     document = serializers.SerializerMethodField()
     display_type_contact = serializers.IntegerField(read_only=True)
+    contactvisit_set = ContactVisitSimpleSerializer(many=True)
 
     class Meta:
         """ Model Contacto."""
         model = SellerContact
         fields = ('id', 'photo', 'name', 'document_type',
                   'type_contact', 'latitude', 'longitude',
-                  'type_client', 'document', 'display_type_contact')
+                  'type_client', 'document', 'display_type_contact', 'contactvisit_set')
 
     def get_name(self, obj):
         """Devuelve nombre del cliente."""
