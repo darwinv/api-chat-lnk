@@ -1054,6 +1054,7 @@ class PlansNonBillableSellerByContactView(APIView):
             return Response({"status": self.denied}, status.HTTP_400_BAD_REQUEST)
 
     def can_receive_contact(self, seller_id, contact_id):
+        # Valida si contacto puede recibir promocional
         hoy = datetime.now()
         try:
             prom = SellerNonBillablePlans.objects.get(seller_id=seller_id,

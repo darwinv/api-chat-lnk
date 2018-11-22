@@ -1032,6 +1032,7 @@ class SellerClientListView(ListCreateAPIView):
             elif int(available) == 2:
                 clients = clients.exclude(queryplansclient__in=qpc).distinct()
 
+        
         serializer = ClientSerializer(clients, many=True)
         # pagination
         page = self.paginate_queryset(clients)
