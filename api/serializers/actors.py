@@ -8,6 +8,7 @@ from api.models import User, Client, Countries, SellerContact
 from api.models import Address, Department, EconomicSector, Sale
 from api.models import Province, District, Specialist, Ciiu, Parameter
 from api.models import Seller, LevelInstruction, ObjectionsList, Objection
+from api.models import ContactVisit
 from django.utils.translation import ugettext_lazy as _
 from api.api_choices_models import ChoicesAPI as c
 from dateutil.relativedelta import relativedelta
@@ -22,6 +23,7 @@ from api.utils.querysets import get_queries_pending_to_solve
 from django.contrib.auth import password_validation
 from api.utils import tools
 from collections import OrderedDict
+
 
 class SpecialistMessageListCustomSerializer(serializers.Serializer):
     """Serializador para devolver datos customizados de un queryset dado."""
@@ -1086,14 +1088,13 @@ class ObjectionsContactSerializer(serializers.ModelSerializer):
 
     def to_representation(self, obj):
         data = {}
-        if obj.type_contact == 2:
-            objections = ListObjectionsSerializer(
-                obj.objectionslist_set.all(), many=True).data
-            data["objections"] = objections
-            if obj.other_objection:
-                other = OrderedDict()
-                other['name'] = obj.other_objection
-                data["objections"].append(other)
+        objections = ListObjectionsSerializer(
+            obj.objectionslist_set.all(), many=True).data
+        data["objections"] = objections
+        if obj.other_objection:
+            other = OrderedDict()
+            other['name'] = obj.other_objection
+            data["objections"].append(other)
         return data
 
 
@@ -1286,14 +1287,28 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
         instance = self.Meta.model(**validated_data)
         # creo el listado de objeciones si es no efectivo
 
+        
+
+
         if validated_data["type_contact"] == 2:
-            instance.save()
+            instance.save()            
+            if "other_objection" in validated_data:
+                other_objection = validated_data["other_objection"]
+            else:
+                other_objection = None
+            
+            visit_instance = ContactVisit.objects.create(contact=instance,
+                                    type_visit=validated_data["type_contact"],
+                                    latitude=validated_data["latitude"],
+                                    longitude=validated_data["longitude"],
+                                    other_objection=other_objection)
             if 'objection_list' in locals():
                 for objection in objection_list:
                     # objection_obj = Objection.objects.get(pk=objection)
                     ObjectionsList.objects.create(contact=instance,
+                                                 contact_visit=visit_instance,
                                                   objection=objection)
-        else:
+        else:            
             # registro de cliente si es efectivo
             data_client = self.get_initial()
             data_client['username'] = data_client['email_exact']
@@ -1314,6 +1329,12 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
                 serializer_client.save()
                 instance.client = Client.objects.get(pk=serializer_client.data['id'])
                 instance.save()
+
+                ContactVisit.objects.create(contact=instance,
+                                        type_visit=validated_data["type_contact"],
+                                        latitude=validated_data["latitude"],
+                                        longitude=validated_data["longitude"])
+            
                 self.context['client_id'] = serializer_client.data['id']
             else:
                 raise serializers.ValidationError(serializer_client.errors)
@@ -1590,6 +1611,8 @@ class ChangeEmailSerializer(serializers.ModelSerializer):
         instance.email = email_exact
         instance.save()
         return instance
+
+
 
 
 # AddressSerializer

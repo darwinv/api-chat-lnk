@@ -11,25 +11,36 @@ from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from api.permissions import IsAdminOrSeller
 from api.models import Sale, SaleDetail, QueryPlansAcquired, QueryPlansClient
-from api.models import MonthlyFee, Client, SellerContact
+from api.models import MonthlyFee, Client, SellerContact, ContactVisit
 from api import pyrebase
 from api.utils.querysets import is_assigned
-
+from django.utils.translation import ugettext_lazy as _
+from rest_framework import serializers
 
 class CreatePurchase(APIView):
     """Vista para crear compra."""
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated]
+    required = _("required")
 
     def post(self, request):
         """metodo para crear compra."""
-
         # user_id = Operations.get_id(self, request)
         extra = {}
         data = request.data
         client = Client.objects.get(pk=data['client'])
+
         if request.user.role_id == 4:
             # Si es vendedor, se usa su id como el que efectuo la venta
+            if 'latitude' in data:
+                latitude = data["latitude"]
+            else:
+                raise serializers.ValidationError({'latitude': [self.required]})
+            if 'longitude' in data:
+                longitude = data["longitude"]
+            else:
+                raise serializers.ValidationError({'longitude': [self.required]})
+
             user_id = Operations.get_id(self, request)
             data['seller'] = user_id
         elif request.user.role_id == 1 or request.user.role_id == 2:
@@ -42,13 +53,31 @@ class CreatePurchase(APIView):
 
             contact = SellerContact.objects.get(client=client)
             if is_assigned(client=client, contact=contact):
-                if 'latitude' in data:
-                    contact.latitude = data['latitude']
-                if 'longitude' in data:
-                    contact.longitude = data['longitude']
-
                 contact.is_assigned = False
                 contact.save()
+
+            if request.user.role_id == 4:
+                # Guardar la visita del Vendedor
+                try:
+                    # Si es una compra anterior sin compra se actualiza la visita
+                    pending_visit = ContactVisit.objects.get(contact=contact, sale=None)
+                    pending_visit.sale = Sale.objects.get(pk=serializer.data["id"])
+                    pending_visit.latitude = data['latitude']
+                    pending_visit.longitude = data['longitude']
+                    pending_visit.save()
+
+                except ContactVisit.DoesNotExist:
+                    if data["products"][0]["is_billable"] and len(data["products"])==1:
+                        # Si solo compra un promocional
+                        type_visit = 4
+                    else:
+                        type_visit = 1
+
+                    visit_instance = ContactVisit.objects.create(contact=contact,
+                                        type_visit=type_visit,
+                                        latitude=data['latitude'],
+                                        longitude=data['longitude'],
+                                        sale=Sale.objects.get(pk=serializer.data["id"]))
 
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

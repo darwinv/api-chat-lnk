@@ -4,7 +4,7 @@
 from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, UpdateAPIView
 from rest_framework.generics import ListAPIView
-from api.models import User, Client, Specialist, Seller, Query
+from api.models import User, Client, Specialist, Seller, Query, ContactVisit
 from api.models import SellerContact, SpecialistMessageList, SpecialistMessageList_sp
 from api.models import RecoveryPassword, Declinator, QueryPlansManage, Parameter
 from rest_framework.response import Response
@@ -25,6 +25,7 @@ from api.serializers.actors import SellerSerializer, SellerContactBusinessSerial
 from api.serializers.actors import MediaSerializer, ChangePasswordSerializer, SpecialistMessageListCustomSerializer
 from api.serializers.actors import ChangeEmailSerializer, ChangePassword
 from api.serializers.actors import ObjectionsContactSerializer
+from api.serializers.payment import ContactVisitSerializer
 from api.serializers.query import QuerySerializer, QueryCustomSerializer
 from api.serializers.plan import QueryPlansShareSerializer, QueryPlansTransferSerializer
 from api.serializers.plan import QueryPlansEmpowerSerializer
@@ -1171,6 +1172,18 @@ class SellerDetailByID(APIView):
     #         return self.get_paginated_response(serializer.data)
     #     return Response(serializer.data)
 
+class ContactVisitListView(ListCreateAPIView):
+    authentication_classes = (OAuth2Authentication,)
+
+    def get(self, request, pk):
+        visits = ContactVisit.objects.filter(contact=pk)
+
+        page = self.paginate_queryset(visits)
+        if page is not None:
+            serializer = ContactVisitSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = ContactVisitSerializer(specialists, many=True)
+        return Response(serializer.data)
 
 class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""

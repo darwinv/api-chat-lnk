@@ -275,13 +275,10 @@ class SellerContact(models.Model):
     commercial_reason = models.CharField(max_length=150, null=True)
     agent_firstname = models.CharField(max_length=150, null=True)
     agent_lastname = models.CharField(max_length=150, null=True)
-    sex = models.CharField(max_length=1, choices=Ch.client_sex, blank=True)
-    latitude = models.CharField(max_length=45, blank=True)
-    longitude = models.CharField(max_length=45, blank=True)
+    sex = models.CharField(max_length=1, choices=Ch.client_sex, blank=True)    
     created_at = models.DateTimeField(auto_now_add=True)
     position = models.CharField(max_length=150, null=True)
     ruc = models.CharField(max_length=40, null=True, blank=True)
-    other_objection = models.CharField(max_length=150, null=True, blank=True)
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT)
     economic_sector = models.ForeignKey(EconomicSector,
                                         on_delete=models.PROTECT, null=True)
@@ -298,15 +295,17 @@ class SellerContact(models.Model):
 
     is_assigned = models.BooleanField(default=False)
 
+    latitude = models.CharField(max_length=45, blank=True)
+    longitude = models.CharField(max_length=45, blank=True)
+    other_objection = models.CharField(max_length=150, null=True, blank=True)
+
     # def __str__(self):
     #     """Nombre del Contacto."""
     #     return self.first_name
 
 
-class ObjectionsList(models.Model):
-    """Lista de objeciones."""
-    objection = models.ForeignKey(Objection, on_delete=models.PROTECT)
-    contact = models.ForeignKey(SellerContact, on_delete=models.PROTECT)
+
+
 
 
 class ContractType(models.Model):
@@ -442,6 +441,24 @@ class Sale(models.Model):
     status = models.PositiveIntegerField(choices=Ch.sale_status, default=1)
     file_url = models.CharField(max_length=500, blank=True)  # file del primer pago
     file_preview_url = models.CharField(max_length=500, blank=True)
+
+class ContactVisit(models.Model):
+    """Lista de objeciones."""
+    contact = models.ForeignKey(SellerContact, on_delete=models.PROTECT)
+    sale = models.ForeignKey(Sale, on_delete=models.PROTECT, null=True)
+    type_visit = models.PositiveIntegerField(max_length=1,
+                                   choices=Ch.contact_visit_type_visit)    
+    created_at = models.DateField(auto_now_add=True)
+    latitude = models.CharField(max_length=45, blank=True)
+    longitude = models.CharField(max_length=45, blank=True)
+    other_objection = models.CharField(max_length=150, null=True, blank=True)
+
+class ObjectionsList(models.Model):
+    """Lista de objeciones."""
+    contact = models.ForeignKey(SellerContact, on_delete=models.PROTECT)
+
+    objection = models.ForeignKey(Objection, on_delete=models.PROTECT)    
+    contact_visit = models.ForeignKey(ContactVisit, on_delete=models.PROTECT, null=True)
 
 class SaleDetail(models.Model):
     """Detalle de Venta."""
