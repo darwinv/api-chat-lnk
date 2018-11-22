@@ -203,6 +203,8 @@ class ClientSerializer(serializers.ModelSerializer):
     seller_assigned = serializers.PrimaryKeyRelatedField(
         queryset=Seller.objects.all(), required=False, allow_null=True)
 
+    contact = serializers.SerializerMethodField()
+
     class Meta:
         """declaracion del modelo y sus campos."""
 
@@ -220,7 +222,7 @@ class ClientSerializer(serializers.ModelSerializer):
             'ocupation_name', 'about', 'nationality', 'nationality_name',
             "residence_country", "commercial_reason", "foreign_address",
             "residence_country_name", "status", "code_cellphone",
-            "code_telephone", "role", "seller_assigned")
+            "code_telephone", "role", "seller_assigned", "contact")
 
     def get_level_instruction_name(self, obj):
         """Devuelve nivel de instrucción."""
@@ -261,6 +263,13 @@ class ClientSerializer(serializers.ModelSerializer):
             return _(obj.get_ocupation_display())
         return None
 
+    def get_contact(self, obj):
+        """Devuelve contacto id."""
+        try:
+            return SellerContact.objects.get(client=obj.id).id
+        except SellerContact.DoesNotExist:
+            return None
+        
     def validate_document_number(self, value):
         """Validar Numero de Documento."""
         data = self.get_initial()
@@ -1339,6 +1348,7 @@ class BaseSellerContactSerializer(serializers.ModelSerializer):
             else:
                 raise serializers.ValidationError(serializer_client.errors)
         return instance
+
 
 
 class SellerContactNaturalSerializer(BaseSellerContactSerializer):
