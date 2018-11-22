@@ -316,7 +316,9 @@ class ClientSaleDetail(ListCreateAPIView):
             elif request.user.role_id == 2: # client
                 sale = Sale.objects.get(client=request.user.id, pk=sale_id)
             elif request.user.role_id == 4: # seller
-                sale = Sale.objects.get(seller=request.user.id, pk=sale_id)
+                sale = Sale.objects.get(Q(seller=request.user.id) | 
+                                        Q(client__seller_assigned=request.user.id),
+                                        pk=sale_id)
         except Sale.DoesNotExist:
             return Response({})
 
