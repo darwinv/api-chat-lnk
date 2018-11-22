@@ -138,7 +138,7 @@ class QueryPlansAcquiredSerializer(serializers.ModelSerializer):
         model = QueryPlansAcquired
         fields = ('id', 'plan_name', 'is_chosen', 'is_active',
                   'validity_months', 'query_quantity',
-                  'available_queries', 'expiration_date')
+                  'available_queries', 'expiration_date', 'queries_to_pay')
 
         # extra_kwargs = {
         #         'is_chosen': {'write_only': True},
