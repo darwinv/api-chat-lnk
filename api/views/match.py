@@ -373,41 +373,42 @@ class SpecialistMatchUploadFilesView(APIView):
             return Response(serializer.data, status.HTTP_200_OK)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-class MonthlyFeeClientUploadFilesView(APIView):
-    """subir voucher para cuota"""
-    def get_object(self, request, pk):
-        """Devuelvo la consulta."""
-        try:
-            obj = MonthlyFee.objects.exclude(fee_order_number=1).get(pk=pk, status=1)
-            return obj
-        except MonthlyFee.DoesNotExist:
-            raise Http404
+# Ahora se usa SaleClientUploadFilesView para todo :]
+# class MonthlyFeeClientUploadFilesView(APIView):
+#     """subir voucher para cuota"""
+#     def get_object(self, request, pk):
+#         """Devuelvo la consulta."""
+#         try:
+#             obj = MonthlyFee.objects.exclude(fee_order_number=1).get(pk=pk, status=1)
+#             return obj
+#         except MonthlyFee.DoesNotExist:
+#             raise Http404
 
-    def put(self, request, pk):
-        """Actualiza el match, subiendo archivos."""
-        obj_instance = self.get_object(request, pk)
-        files = request.FILES.getlist('file')
-        if len(files) == 0:
-            raise serializers.ValidationError(
-                {"file": _("required")})
-        errors_list = []
-        if files:
-            arch = files
-        else:
-            data = request.data.dict()
-            arch = list(data.values())
+#     def put(self, request, pk):
+#         """Actualiza el match, subiendo archivos."""
+#         obj_instance = self.get_object(request, pk)
+#         files = request.FILES.getlist('file')
+#         if len(files) == 0:
+#             raise serializers.ValidationError(
+#                 {"file": _("required")})
+#         errors_list = []
+#         if files:
+#             arch = files
+#         else:
+#             data = request.data.dict()
+#             arch = list(data.values())
 
-        for file in arch:
-            obj_instance.status = 3
-            resp = upload_file(file=file, obj_instance=obj_instance)
-            if resp is False:
-                errors_list.append(file.name)
+#         for file in arch:
+#             obj_instance.status = 3
+#             resp = upload_file(file=file, obj_instance=obj_instance)
+#             if resp is False:
+#                 errors_list.append(file.name)
 
-        if errors_list:
-            raise serializers.ValidationError(
-                {"files_failed": errors_list})
+#         if errors_list:
+#             raise serializers.ValidationError(
+#                 {"files_failed": errors_list})
 
-        return Response({}, status.HTTP_200_OK)
+#         return Response({}, status.HTTP_200_OK)
         
 class SaleClientUploadFilesView(APIView):
     """Subida de archivos para la consultas."""
@@ -459,10 +460,11 @@ class SaleClientUploadFilesView(APIView):
             email_exact=obj_instance.client.email_exact).exclude(
                 type_contact=3).update(type_contact=1)
 
-        MonthlyFee.objects.filter(
-            fee_order_number=1, status=1, sale=obj_instance).update(status=3,
-                file_url=obj_instance.file_url,
-                file_preview_url=obj_instance.file_preview_url)
+        fee = MonthlyFee.objects.filter(status=1, sale=obj_instance).order_by('pay_before')[0]
+        fee.status = 3
+        fee.file_url = obj_instance.file_url
+        fee.file_preview_url = obj_instance.file_preview_url
+        fee.save()
 
         return Response({}, status.HTTP_200_OK)
 

@@ -227,8 +227,8 @@ urlpatterns = [
     url(r'^clients/sales/upload_files/(?P<pk>[0-9]+)/$',
         match.SaleClientUploadFilesView.as_view(), name='client-sale-files'),
 
-    url(r'^clients/monthlyfee/upload_files/(?P<pk>[0-9]+)/$',
-        match.MonthlyFeeClientUploadFilesView.as_view(), name='client-monthlyfee-files'),
+    # url(r'^clients/monthlyfee/upload_files/(?P<pk>[0-9]+)/$',
+    #     match.MonthlyFeeClientUploadFilesView.as_view(), name='client-monthlyfee-files'),
 
 
     # Listado de matchs para el especialista
