@@ -310,10 +310,10 @@ class ClientSaleDetail(ListCreateAPIView):
         if not sale_id:
             raise serializers.ValidationError({'sale id': [self.required]})
 
-        sale = Sale.objects.get(client=request.user.id, pk=sale_id)
-
-        if sale:
-            serializer = SaleContactoDetailSerializer(sale)
-            return Response(serializer.data)
-        else:
+        try:
+            sale = Sale.objects.get(client=request.user.id, pk=sale_id)
+        except Sale.DoesNotExist:
             return Response({})
+
+        serializer = SaleContactoDetailSerializer(sale)
+        return Response(serializer.data)
