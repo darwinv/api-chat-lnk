@@ -11,7 +11,7 @@ from django.http import Http404
 from rest_framework.pagination import PageNumberPagination
 from api.permissions import IsAdminOrSeller
 from api.models import Sale, SaleDetail, QueryPlansAcquired, QueryPlansClient
-from api.models import MonthlyFee, Client, SellerContact, ContactVisit
+from api.models import MonthlyFee, Client, SellerContact, ContactVisit, Role
 from api import pyrebase
 from api.utils.querysets import is_assigned
 from django.utils.translation import ugettext_lazy as _
@@ -190,18 +190,26 @@ class PurchaseDetail(APIView):
         query_plan_client = QueryPlansClient.objects.filter(acquired_plan__in=query_plans)
         monthly_fee = MonthlyFee.objects.filter(sale=sale)
 
-        visit = ContactVisit.objects.get(sale=sale)
-        visit.sale = None
-        visit.type_visit = 2
-        visit.other_objection = 'Compra de plan de consulta cancelada:\n'
-        for plan in query_plans:
-            visit.other_objection += plan.plan_name + '\n'
+        cancelled_by = Role.objects.get(id=request.user.role_id).name
 
-        visit.save()
+        try:
+            visit = ContactVisit.objects.get(sale=sale)
+            visit.sale = None
+            visit.type_visit = 2
+            visit.other_objection = 'Compra de plan de consulta cancelada por el '
+            visit.other_objection += _(cancelled_by) + '.\n'
+            visit.other_objection += 'Productos:\n'
+            for plan in query_plans:
+                visit.other_objection += ' - ' + plan.plan_name + '\n'
+
+            visit.save()
+            visit_id = visit.id
+        except ContactVisit.DoesNotExist:
+            visit_id = None
 
         monthly_fee.delete()
         query_plan_client.delete()
         query_plans.delete()
         sale_detail.delete()
         sale.delete()
-        return Response({'visit':visit.id})
+        return Response({'visit':visit_id})

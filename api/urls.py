@@ -285,6 +285,10 @@ urlpatterns = [
     # Visitas del contacto no efectiva
     url(r'^visits/noteffective/contacts/(?P<pk>[0-9]+)/$', 
         actors.ContactVisitNoEffectiveView.as_view(), name='visits-contact-noeffective'),
+    # Actualizacion de visitas
+    url(r'^visits/update/(?P<pk>[0-9]+)/$', 
+        actors.ContactVisitUpdate.as_view(), name='visit-update'),
+
 
     # detalle de contacto
     url(r'^objections/contacts/(?P<pk>[0-9]+)/$',
