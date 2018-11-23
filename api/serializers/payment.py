@@ -105,7 +105,8 @@ class PaymentSerializer(serializers.ModelSerializer):
             Sale.objects.filter(pk=fee.sale_id).update(status=3)
 
         for detail in qsetdetail:
-            qacd = QueryPlansAcquired.objects.get(sale_detail=detail)
+            qacd = QueryPlansAcquired.objects.get(sale_detail=detail,
+                queryplansclient__owner=True)
             qpclient = qacd.queryplansclient_set.get()
 
             # debo chequear si es por cuotas o no
@@ -395,23 +396,11 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
             'contract', 'product_type', 'sale', 'product_type_name',
             'plan', 'match')
 
-    # def get_attribute_product(self, obj):
-    #     """Devuelve client."""
-    #     if obj.product_type.id == 1:
-    #         plan = QueryPlansAcquired.objects.get(sale_detail=obj.id)
-    #         sale = QueryPlansAcquiredSerializer(plan)
-    #         return sale.data
-    #     elif obj.product_type_id == 2:
-    #         match = Match.objects.get(sale_detail=obj.id)
-    #         sale = MatchListSpecialistSerializer(match)
-    #         return sale.data
-    #     else:
-    #         return None
-
     def get_plan(self, obj):
         """Devolver data del plan si el producto lo es."""
         if obj.product_type.id == 1:
-            plan = QueryPlansAcquired.objects.get(sale_detail=obj.id)
+            plan = QueryPlansAcquired.objects.get(sale_detail=obj.id,
+                queryplansclient__owner=True)
             sale = QueryPlansAcquiredSerializer(plan)
             return sale.data
         else:
@@ -518,7 +507,8 @@ class ContactVisitSerializer(serializers.ModelSerializer):
     objections = serializers.SerializerMethodField()
     objection = serializers.ListField(child=serializers.PrimaryKeyRelatedField(
         queryset=Objection.objects.all()), write_only=True, required=False)
-
+    created_at = serializers.ListField(child=serializers.PrimaryKeyRelatedField(
+        queryset=Objection.objects.all()), write_only=True, required=False)
     class Meta:
         """Meta de Vendedor."""
         model = ContactVisit

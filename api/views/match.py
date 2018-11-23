@@ -30,6 +30,8 @@ from api.logger import manager
 from api import pyrebase
 from fcm.fcm import Notification
 from api.utils.querysets import is_assigned
+from api.views.purchase import generate_visit_new_sale
+
 logger = manager.setup_log(__name__)
 
 
@@ -38,7 +40,7 @@ class MatchListClientView(ListCreateAPIView):
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated]
-
+    required = _("required")
     def list(self, request):
         """Listado de Matchs."""
         user_id = Operations.get_id(self, request)
@@ -59,6 +61,19 @@ class MatchListClientView(ListCreateAPIView):
         user_id = Operations.get_id(self, request)
         context_data = {}
 
+        if request.user.role_id == 4:
+            # Si es vendedor, se usa su id como el que efectuo la venta
+            if 'latitude' in data:
+                latitude = data["latitude"]
+            else:
+                raise serializers.ValidationError({'latitude': [self.required]})
+
+            if 'longitude' in data:
+                longitude = data["longitude"]
+            else:
+                raise serializers.ValidationError({'longitude': [self.required]})
+
+        
         if request.user.role_id == 2:
             data["client"] = user_id
             context_data["seller"] = Client.objects.get(pk=user_id).seller_assigned.id
@@ -130,6 +145,9 @@ class MatchListClientView(ListCreateAPIView):
                 # envio de notificacion push
                 Notification.fcm_send_data(user_id=specialist_id,
                                            data=data_notif_push)
+            
+            if request.user.role_id == 4:
+                generate_visit_new_sale(data, contact, serializer.data["id"], True)
 
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
