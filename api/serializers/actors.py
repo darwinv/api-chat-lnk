@@ -1047,13 +1047,12 @@ class SellerContactSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     document = serializers.SerializerMethodField()
     display_type_contact = serializers.IntegerField(read_only=True)
-    # contactvisit_set = ContactVisitSimpleSerializer(many=True)
     contactvisit_set = serializers.SerializerMethodField()
     class Meta:
         """ Model Contacto."""
         model = SellerContact
         fields = ('id', 'photo', 'name', 'document_type',
-                  'type_contact', 'latitude', 'longitude',
+                  'type_contact',
                   'type_client', 'document', 'display_type_contact', 'contactvisit_set')
 
     def get_name(self, obj):
