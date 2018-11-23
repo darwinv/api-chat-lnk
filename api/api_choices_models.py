@@ -21,7 +21,7 @@ class ChoicesAPI:
         (2, _('Activate')),
         (3, _('Reject')),
         (4, _('Deactivated')),
-    )
+    )    
 
     # Client Model
     client_type_client = (
@@ -197,4 +197,9 @@ class ChoicesAPI:
         (1, _('Effective')),
         (2, _('Non Effective')),
         (4, _('Promotional')),
+    )
+
+    category_status = (
+        (1, _('Enabled')),
+        (2, _('Disabled')),
     )

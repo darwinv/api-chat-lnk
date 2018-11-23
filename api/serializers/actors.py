@@ -1029,10 +1029,17 @@ class ListObjectionsSerializer(serializers.ModelSerializer):
         return _(str(obj.objection))
 
 class ContactVisitSimpleSerializer(serializers.ModelSerializer):
+    created_at = serializers.SerializerMethodField()
     class Meta:
         """Meta de Vendedor."""
         model = ContactVisit
         fields = ('type_visit', 'created_at', 'longitude', 'latitude')
+
+    def get_created_at(self, obj):
+        """Devuelve created_at."""
+        if type(obj) is dict:
+            return str(obj['created_at'])
+        return str(obj.created_at)
 
 class SellerContactSerializer(serializers.ModelSerializer):
     """Serializer Contacto."""
@@ -1040,13 +1047,12 @@ class SellerContactSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     document = serializers.SerializerMethodField()
     display_type_contact = serializers.IntegerField(read_only=True)
-    contactvisit_set = ContactVisitSimpleSerializer(many=True)
-
+    contactvisit_set = serializers.SerializerMethodField()
     class Meta:
         """ Model Contacto."""
         model = SellerContact
         fields = ('id', 'photo', 'name', 'document_type',
-                  'type_contact', 'latitude', 'longitude',
+                  'type_contact',
                   'type_client', 'document', 'display_type_contact', 'contactvisit_set')
 
     def get_name(self, obj):
@@ -1062,6 +1068,12 @@ class SellerContactSerializer(serializers.ModelSerializer):
             return obj.ruc
         else:
             return obj.document_number
+
+    def get_contactvisit_set(self, obj):
+        """Devuelvo el documento."""
+
+        contact_visit = ContactVisitSimpleSerializer(obj)
+        return contact_visit.data
 
 
 class SellerFilterContactSerializer(serializers.ModelSerializer):
