@@ -40,7 +40,7 @@ class MatchListClientView(ListCreateAPIView):
 
     authentication_classes = (OAuth2Authentication,)
     permission_classes = [permissions.IsAuthenticated]
-
+    required = _("required")
     def list(self, request):
         """Listado de Matchs."""
         user_id = Operations.get_id(self, request)
