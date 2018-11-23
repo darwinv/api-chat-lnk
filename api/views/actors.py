@@ -1197,6 +1197,14 @@ class ContactVisitNoEffectiveView(APIView):
     permission_classes = (permissions.IsAuthenticated, IsAdminOrSeller)
     required = _("required")
 
+    def get_object(self, contact_id, visit_id):
+        """Obtener Objeto."""
+        visit = ContactVisit.objects.get(pk=visit_id, contact=contact_id)
+        if visit:
+            return visit
+        else:
+            raise Http404
+
     def post(self, request, pk):
         data = dict(request.data)
         seller = Operations.get_id(self, request)        
@@ -1205,8 +1213,7 @@ class ContactVisitNoEffectiveView(APIView):
             other_objection = data["other_objection"]
         else:
             other_objection = None
-        
-        
+
         data["seller"] = seller
         data["contact"] = pk
         data["type_visit"] = 2
@@ -1237,6 +1244,21 @@ class ContactVisitNoEffectiveView(APIView):
         #             ObjectionsList.objects.create(contact=instance,
         #                                          contact_visit=visit_instance,
         #                                           objection=objection)
+
+    def put(self, request, pk):
+        data = dict(request.data)
+
+        visit_id = data['id']
+        visit = self.get_object(pk, visit_id)
+
+        if 'other_objection' in data:
+            data["other_objection"] = visit.other_objection + '\n' + data["other_objection"]
+
+        serializer = ContactVisitSerializer(visit, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+
+        return Response(serializer.data)
 
 
 class ContactListView(ListCreateAPIView):
