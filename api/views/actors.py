@@ -1319,24 +1319,29 @@ class ContactListView(ListCreateAPIView):
                 se.id,
                 se.photo,
                 se.document_type,
-                se.type_contact,
-                se.latitude,
-                se.longitude,
+                se.type_contact,                
                 se.type_client,
                 se.first_name,
                 se.last_name,
                 se.agent_firstname,
                 se.agent_lastname,
                 se.ruc,
-                se.document_number
+                se.document_number,
+
+                cv.type_visit,
+                cv.created_at,
+                cv.longitude,
+                cv.latitude
                 FROM
                     api_sellercontact AS se
                 LEFT JOIN api_client as cli ON 
                 se.client_id = cli.user_ptr_id
+                INNER JOIN api_contactvisit AS cv ON
+                se.id = cv.contact_id
                 WHERE
                     se.type_contact IN (2, 1, 4)
-                    and se.created_at > "{}"
-                    and se.created_at < "{}"
+                    and cv.created_at > "{}"
+                    and cv.created_at < "{}"
 
                     and se.is_assigned = {}
                     and se.seller_id={}
