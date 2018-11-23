@@ -411,11 +411,14 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     def get_match(self, obj):
         """Devolver data del match si el producto lo es."""
         if obj.product_type.id == 2:
-            match = Match.objects.get(sale_detail=obj.id)
-            sale = MatchListSpecialistSerializer(match)
-            return sale.data
-        else:
-            return None
+            try:
+                match = Match.objects.get(sale_detail=obj.id)
+                sale = MatchListSpecialistSerializer(match)
+                return sale.data
+            except Match.DoesNotExist:
+                pass
+        
+        return None
 
     def get_product_type_name(self, obj):
         """Devuelve product_type."""
