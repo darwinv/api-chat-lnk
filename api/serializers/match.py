@@ -222,7 +222,7 @@ class MatchListClientSerializer(serializers.ModelSerializer):
                 "specialist": specialist, "category_image": obj.category.image,
                 "file": files, "status": obj.status,
                 "declined_motive": obj.declined_motive,
-                "sale":sale, "price":obj.price}
+                "sale": sale, "price":obj.price}
 
 
 

@@ -30,7 +30,6 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     monthly_fee = serializers.PrimaryKeyRelatedField(
         queryset=MonthlyFee.objects.all(), required=True)
-
     operation_number = serializers.CharField(validators=[UniqueValidator(
         queryset=Payment.objects.all())], required=False, allow_null = True, allow_blank=True)
 
@@ -399,21 +398,27 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
     def get_plan(self, obj):
         """Devolver data del plan si el producto lo es."""
         if obj.product_type.id == 1:
-            plan = QueryPlansAcquired.objects.get(sale_detail=obj.id,
-                queryplansclient__owner=True)
-            sale = QueryPlansAcquiredSerializer(plan)
-            return sale.data
-        else:
-            return None
+            try:
+                plan = QueryPlansAcquired.objects.get(sale_detail=obj.id,
+                    queryplansclient__owner=True)
+                sale = QueryPlansAcquiredSerializer(plan)
+                return sale.data
+            except QueryPlansAcquired.DoesNotExist:
+                pass
+        
+        return None
 
     def get_match(self, obj):
         """Devolver data del match si el producto lo es."""
         if obj.product_type.id == 2:
-            match = Match.objects.get(sale_detail=obj.id)
-            sale = MatchListSpecialistSerializer(match)
-            return sale.data
-        else:
-            return None
+            try:
+                match = Match.objects.get(sale_detail=obj.id)
+                sale = MatchListSpecialistSerializer(match)
+                return sale.data
+            except Match.DoesNotExist:
+                pass
+        
+        return None
 
     def get_product_type_name(self, obj):
         """Devuelve product_type."""
@@ -507,8 +512,7 @@ class ContactVisitSerializer(serializers.ModelSerializer):
     objections = serializers.SerializerMethodField()
     objection = serializers.ListField(child=serializers.PrimaryKeyRelatedField(
         queryset=Objection.objects.all()), write_only=True, required=False)
-    created_at = serializers.ListField(child=serializers.PrimaryKeyRelatedField(
-        queryset=Objection.objects.all()), write_only=True, required=False)
+    created_at = serializers.SerializerMethodField()
     class Meta:
         """Meta de Vendedor."""
         model = ContactVisit

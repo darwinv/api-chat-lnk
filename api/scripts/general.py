@@ -8,11 +8,20 @@ def update_visits():
     for contact in SellerContact.objects.all():
 
         if contact.type_contact != 2:
+            type_contact_auxiliar = 0
             for sale in Sale.objects.filter(client=contact.client):
                 
                 type_contact = contact.type_contact
                 if type_contact == 3:
                     type_contact = 1
+
+                if type_contact==4 and type_contact_auxiliar == 0:
+                    type_contact=4
+                else:
+                    type_contact=1
+                
+
+
 
                 visit = ContactVisit.objects.create(contact=contact,
                                         type_visit=type_contact,

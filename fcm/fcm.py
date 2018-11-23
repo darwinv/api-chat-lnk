@@ -25,12 +25,13 @@ class Notification:
         # funcion para enviar a IOS, con  notification message
         result_ios = push.notify_topic_subscribers(
             topic_name=topic_ios, message_title=title_ios,
-            message_body=body_ios, data_message=data)
+            message_body=body_ios, data_message=data, badge=data["badge"])
         # do not raise errors, pyfcm will raise exceptions if response
         # status will # be anything but 200
         # import pdb; pdb.set_trace()
         print(user_id)
         print(data)
+        print(body_ios)
         print(result)
         print(result_ios)
         return result
