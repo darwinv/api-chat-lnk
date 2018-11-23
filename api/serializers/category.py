@@ -13,7 +13,7 @@ class CategorySerializer(serializers.ModelSerializer):
         """Modelo Category y sus campos."""
 
         model = Category
-        fields = ('id', 'name', 'image', 'description')
+        fields = ('id', 'name', 'image', 'description','order','status')
 
     def get_name(self, obj):
         """Devuelve el nombre de la especialidad."""

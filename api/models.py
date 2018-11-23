@@ -338,6 +338,8 @@ class Category(models.Model):
     variable_commission = models.DecimalField(max_digits=10, decimal_places=2,
                                               null=True)
     contract = models.ForeignKey(Contract, on_delete=models.PROTECT, null=True)
+    status = models.PositiveIntegerField(choices=Ch.category_status, default=1)
+    order = models.PositiveIntegerField()
 
     def __str__(self):
         """Repr."""
