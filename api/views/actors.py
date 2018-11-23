@@ -1178,7 +1178,7 @@ class ContactVisitListView(ListCreateAPIView):
 
     def get(self, request, pk):
         type_visit = request.query_params.get('type_visit', None)
-        visits = ContactVisit.objects.filter(contact=pk).order_by("created_at")
+        visits = ContactVisit.objects.filter(contact=pk).order_by("-created_at")
         
         if type_visit:
             visits = visits.filter(type_visit=type_visit)
