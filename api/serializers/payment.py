@@ -403,7 +403,7 @@ class PaymentSaleDetailSerializer(serializers.ModelSerializer):
                     queryplansclient__owner=True)
                 sale = QueryPlansAcquiredSerializer(plan)
                 return sale.data
-            except ParameterSeller.DoesNotExist:
+            except QueryPlansAcquired.DoesNotExist:
                 pass
         
         return None
