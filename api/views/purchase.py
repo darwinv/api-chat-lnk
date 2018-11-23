@@ -181,17 +181,27 @@ class PurchaseDetail(APIView):
             raise Http404
 
     def delete(self, request, pk):
+        """ Borra compra de planes de consulta """
         sale = self.get_object(request, pk)
 
         sale_detail = SaleDetail.objects.filter(sale=sale)
 
-        query_plan = QueryPlansAcquired.objects.filter(sale_detail__in=sale_detail)
-        query_plan_client = QueryPlansClient.objects.filter(acquired_plan__in=query_plan)
+        query_plans = QueryPlansAcquired.objects.filter(sale_detail__in=sale_detail)
+        query_plan_client = QueryPlansClient.objects.filter(acquired_plan__in=query_plans)
         monthly_fee = MonthlyFee.objects.filter(sale=sale)
+
+        visit = ContactVisit.objects.get(sale=sale)
+        visit.sale = None
+        visit.type_visit = 2
+        visit.other_objection = 'Compra de plan de consulta cancelada:\n'
+        for plan in query_plans:
+            visit.other_objection += plan.plan_name + '\n'
+
+        visit.save()
 
         monthly_fee.delete()
         query_plan_client.delete()
-        query_plan.delete()
+        query_plans.delete()
         sale_detail.delete()
         sale.delete()
-        return Response({})
+        return Response({'visit':visit.id})

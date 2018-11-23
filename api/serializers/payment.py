@@ -543,14 +543,14 @@ class ContactVisitSerializer(serializers.ModelSerializer):
         # si reside en peru la direccion es obligatoria.
         if 'latitude' in data:
             latitude = data["latitude"]
-        else:
+        elif not self.partial:
             raise serializers.ValidationError({'latitude': [required]})
         if 'longitude' in data:
             longitude = data["longitude"]
-        else:
+        elif not self.partial:
             raise serializers.ValidationError({'longitude': [required]})
 
-        if 'objection' not in data and 'other_objection' not in data:
+        if not self.partial and 'objection' not in data and 'other_objection' not in data:
             raise serializers.ValidationError(
                 _('the objection is required'))
         
@@ -570,8 +570,26 @@ class ContactVisitSerializer(serializers.ModelSerializer):
             for objection in objection_list:
                 # objection_obj = Objection.objects.get(pk=objection)
                 ObjectionsList.objects.create(contact=instance.contact,
-                                             contact_visit=instance,
+                                              contact_visit=instance,
                                               objection=objection)
         
         return instance
 
+    def update(self, instance, validated_data):
+        """Redefinido metodo de crear visita."""        
+
+        if 'objection' in validated_data:
+            objection_list = validated_data.pop('objection')
+
+        if 'objection_list' in locals():
+            for objection in objection_list:
+                obj = ObjectionsList.objects.filter(contact=instance.contact,
+                                                   contact_visit=instance,
+                                                   objection=objection)
+
+                if not obj.exists():
+                    ObjectionsList.objects.create(contact=instance.contact,
+                                                  contact_visit=instance,
+                                                  objection=objection)
+        
+        return instance
