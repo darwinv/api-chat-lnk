@@ -1265,7 +1265,6 @@ class ContactListView(ListCreateAPIView):
     """Vista para Contacto No Efectivo."""
 
     authentication_classes = (OAuth2Authentication,)
-    #permission_classes = (permissions.IsAuthenticated, IsSeller)
     # aca se debe colocar el serializer para listar todos
     serializer_class = SellerContactNaturalSerializer
     queryset = SellerContact.objects.all()
@@ -1273,6 +1272,13 @@ class ContactListView(ListCreateAPIView):
     def get(self, request):
         """Devolver contactos del vendedor."""
         seller = Operations.get_id(self, request)
+
+        if not seller:
+            response = {
+                "detail": "Las credenciales de autenticación no se proveyeron."
+            }
+            return Response(response, status=status.HTTP_401_UNAUTHORIZED)
+
         date_start = self.request.query_params.get('date_start', None)
         date_end = self.request.query_params.get('date_end', None)
         assignment_type = int(self.request.query_params.get('assignment_type', '1'))
