@@ -12,7 +12,7 @@ class CategoryListView(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
         # Category.objects.all()
-        specialities = Category.objects.all()  # filter(specialist__type_specialist='m')
+        specialities = Category.objects.filter(status=1).order_by("order")  # filter(specialist__type_specialist='m')
         serializer = CategorySerializer(specialities, many=True)
         return Response(serializer.data)
 
