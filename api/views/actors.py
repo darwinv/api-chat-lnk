@@ -1198,9 +1198,8 @@ class ContactVisitNoEffectiveView(APIView):
     required = _("required")
 
     def post(self, request, pk):
-        data = request.data
-        seller = Operations.get_id(self, request)
-        
+        data = dict(request.data)
+        seller = Operations.get_id(self, request)        
 
         if 'other_objection' in data:
             other_objection = data["other_objection"]
@@ -1214,7 +1213,6 @@ class ContactVisitNoEffectiveView(APIView):
         data["other_objection"] = other_objection
 
         serializer = ContactVisitSerializer(data=data)
-
         if serializer.is_valid():
             serializer.save()
 

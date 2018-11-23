@@ -57,16 +57,16 @@ class CreatePurchase(APIView):
                 contact.save()
 
             if request.user.role_id == 4:
-                generate_visit_new_sale(data, contact, serializer.data["id"])
+                generate_visit_new_sale(data, contact, serializer.data["id"], data["products"][0]["is_billable"])
 
 
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-def generate_visit_new_sale(data, contact, sale_id):
+def generate_visit_new_sale(data, contact, sale_id, is_billable):
     
     # Guardar la visita del Vendedor
-    if not data["products"][0]["is_billable"] and len(data["products"])==1:
+    if not is_billable and len(data["products"])==1:
         # Si solo compra un promocional
         type_visit = 4
     else:
@@ -152,7 +152,7 @@ class ContactNoEffectivePurchase(APIView):
                 contact.save()
 
             if request.user.role_id == 4:
-                generate_visit_new_sale(data, contact, serializer.data["id"])
+                generate_visit_new_sale(data, contact, serializer.data["id"], data["products"][0]["is_billable"])
 
             return Response(serializer.data, status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

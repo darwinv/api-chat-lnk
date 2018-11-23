@@ -518,7 +518,8 @@ class ContactVisitSerializer(serializers.ModelSerializer):
     objections = serializers.SerializerMethodField()
     objection = serializers.ListField(child=serializers.PrimaryKeyRelatedField(
         queryset=Objection.objects.all()), write_only=True, required=False)
-
+    created_at = serializers.ListField(child=serializers.PrimaryKeyRelatedField(
+        queryset=Objection.objects.all()), write_only=True, required=False)
     class Meta:
         """Meta de Vendedor."""
         model = ContactVisit
