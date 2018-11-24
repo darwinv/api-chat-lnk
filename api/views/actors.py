@@ -1246,10 +1246,11 @@ class ContactVisitUpdate(APIView):
 
     def get_object(self, pk):
         """Obtener Objeto."""
-        visit = ContactVisit.objects.get(pk=pk)
-        if visit:
+
+        try:
+            visit = ContactVisit.objects.get(pk=pk)
             return visit
-        else:
+        except ContactVisit.DoesNotExist:
             raise Http404
 
     def put(self, request, pk):
