@@ -38,7 +38,7 @@ def get_query_set_plan():
     :return: QuerySet
     """
     return QueryPlansAcquired.objects.values('id', 'is_active', 'plan_name',
-                                              'query_quantity', 'available_queries',
+                                              'query_quantity', 'available_queries', 'queries_to_pay',
                                               'validity_months','expiration_date','sale_detail__price')\
             .annotate(price=F('sale_detail__price'), is_chosen=F('queryplansclient__is_chosen'))
 
