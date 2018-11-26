@@ -1484,13 +1484,20 @@ class ContactFilterView(ListAPIView):
         type_contact = self.request.query_params.get('type_contact', None)
         if type_contact is not None:
             if int(type_contact) == 1:
-                contacts = contacts.annotate(files_count=Count('client__sale__file_url')).filter(
+                contacts = contacts.exclude(client__sale__file_url="").annotate(files_count=Count('client__sale__file_url')).filter(
                     type_contact=1, files_count__gt=0
                 )
             elif int(type_contact) == 2:
                 contacts = contacts.annotate(files_count=Count('client__sale__file_url')).filter(
-                   Q (type_contact=2) | Q(type_contact=1, files_count=0)
+                   Q (type_contact=2) | Q(
+                        Q (files_count=0) | Q(client__sale__file_url=""), 
+                            type_contact=1
+
+                    )
                 )
+
+                client__sale__file_url=""
+
             elif int(type_contact) == 4:
                 contacts = contacts.filter(type_contact=4)
 

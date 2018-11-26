@@ -29,9 +29,9 @@ class Notification:
         # do not raise errors, pyfcm will raise exceptions if response
         # status will # be anything but 200
         # import pdb; pdb.set_trace()
-        print(user_id)
-        print(data)
-        print(body_ios)
-        print(result)
-        print(result_ios)
+        # print(user_id)
+        # print(data)
+        # print(body_ios)
+        # print(result)
+        # print(result_ios)
         return result
