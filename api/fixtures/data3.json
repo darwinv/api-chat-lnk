@@ -3,13 +3,13 @@
     "model": "oauth2_provider.application",
     "pk": 1,
     "fields": {
-      "client_id": "FUN5EkBD0iQo80i0JY0lF41Z0rjA0QtWKkV0BE02",
-      "user": null,
+      "client_id": "K1WBnpF9a8RozklxAXkiHOUPAXZYIWdlYrL6Np3d",
+      "user": 1,
       "redirect_uris": "",
       "client_type": "public",
       "authorization_grant_type": "password",
-      "client_secret": "P7pj3QcE6G0hlS00UzJOJ8SRLlTGHYS0ESGr7QzlyK0uMsc4osaaStB6wS0GGxAelKjXv6xJ7p0Go8R5el2KaVlcM4050IeplkY2CW0xaOc9NI1f0KS9DoWxD0UbG4T0",
-      "name": "",
+      "client_secret": "ZgXZu9cwBBaREMIUKE4fFxAFp0DcVY9Zhc77OgURjscoEL8sJuC33uqQ3IHmgX78sGfy1tR6vMaov7Bp1gVfHYEDQLgU1JGZ8zSrsGL4ePIhlJLw8HPmIHOcVk3Y45Cw",
+      "name": "cliente_enova",
       "skip_authorization": false,
       "created": "2017-10-02T21:19:16.205Z",
       "updated": "2017-10-02T21:19:16.205Z"

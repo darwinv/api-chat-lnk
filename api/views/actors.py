@@ -1179,7 +1179,7 @@ class ContactVisitListView(ListCreateAPIView):
     def get(self, request, pk):
         type_visit = request.query_params.get('type_visit', None)
         visits = ContactVisit.objects.filter(contact=pk).order_by("-created_at")
-        
+
         if type_visit:
             visits = visits.filter(type_visit=type_visit)
 
@@ -1199,7 +1199,7 @@ class ContactVisitNoEffectiveView(APIView):
 
     def post(self, request, pk):
         data = dict(request.data)
-        seller = Operations.get_id(self, request)        
+        seller = Operations.get_id(self, request)
 
         if 'other_objection' in data:
             other_objection = data["other_objection"]
@@ -1218,12 +1218,12 @@ class ContactVisitNoEffectiveView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        
+
         # if "other_objection" in validated_data:
         #         other_objection = validated_data["other_objection"]
         #     else:
         #         other_objection = None
-            
+
         #     visit_instance = ContactVisit.objects.create(contact=instance,
         #                             type_visit=validated_data["type_contact"],
         #                             latitude=validated_data["latitude"],
@@ -1297,12 +1297,12 @@ class ContactListView(ListCreateAPIView):
         if date_end:
             date_end = datetime.strptime(date_end, '%Y-%m-%d')
             date_end = date_end + timedelta(days=1)
-        else:            
+        else:
             date_end = today + timedelta(days=1)
             date_end = date_end.strftime('%Y-%m-%d')
 
         if date_start is None:
-            date_start = today.strftime('%Y-%m-%d')          
+            date_start = today.strftime('%Y-%m-%d')
 
         if assignment_type and assignment_type == 2: # Mis Asignados
             is_assigned = 1
@@ -1334,7 +1334,7 @@ class ContactListView(ListCreateAPIView):
                 se.id,
                 se.photo,
                 se.document_type,
-                se.type_contact,                
+                se.type_contact,
                 se.type_client,
                 se.first_name,
                 se.last_name,
@@ -1349,7 +1349,7 @@ class ContactListView(ListCreateAPIView):
                 cv.latitude
                 FROM
                     api_sellercontact AS se
-                LEFT JOIN api_client as cli ON 
+                LEFT JOIN api_client as cli ON
                 se.client_id = cli.user_ptr_id
                 INNER JOIN api_contactvisit AS cv ON
                 se.id = cv.contact_id
@@ -1363,7 +1363,7 @@ class ContactListView(ListCreateAPIView):
                 """.format(date_start, date_end, is_assigned, seller))
 
         serializer = SellerContactSerializer(contacts, many=True)
-        
+
         return Response(serializer.data)
 
     def post(self, request):
@@ -1490,7 +1490,7 @@ class ContactFilterView(ListAPIView):
             elif int(type_contact) == 2:
                 contacts = contacts.annotate(files_count=Count('client__sale__file_url')).filter(
                    Q (type_contact=2) | Q(
-                        Q (files_count=0) | Q(client__sale__file_url=""), 
+                        Q (files_count=0) | Q(client__sale__file_url=""),
                             type_contact=1
 
                     )
